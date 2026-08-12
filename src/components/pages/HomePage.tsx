@@ -29,7 +29,7 @@ export function HomePage() {
 
     <HomePageBackground>
       {/* <DynamicBackground/> */}
-      <HomePageBodyTheme />
+      {/*<HomePageBodyTheme />*/}
 
       {/* <HomePageGradientAnchors /> */}
 
