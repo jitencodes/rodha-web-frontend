@@ -56,7 +56,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: "clat",
-    name: "Law",
+    name: "CLAT",
     menuLabel: "Law (CLAT)",
     fullName: "Common Law Admission Test",
     slug: "clat",
@@ -73,8 +73,8 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: "banking",
-    name: "Banking",
-    menuLabel: "Banking & Government Exams",
+    name: "SSC",
+    menuLabel: "Banking &s Government Exams",
     fullName: "Banking & Government Exams (including SSC)",
     slug: "banking",
     subHeading: "SSC & Government Exams",
@@ -140,6 +140,19 @@ export const HEADER_NAV = [
       {
         label: "Free Resources",
         href: "/resources",
+      },
+    ],
+  },
+  {
+    label: "Test Series",
+    children: [
+      {
+        label: "CAT + OMETs",
+        href: "/test-series/clat-omets",
+      },
+      {
+        label: "IPMAT",
+        href: "/test-series/ipmat",
       },
     ],
   },

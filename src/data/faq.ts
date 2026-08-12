@@ -22,7 +22,7 @@ export interface FAQItem {
 
 export const FAQ_ITEMS_PER_PAGE = 10;
 
-export const FAQ_DATA_HOME: FAQItem[] = [
+export const FAQ_DATA: FAQItem[] = [
   // ─── General ───
   {
     id: "gen-1",
@@ -281,52 +281,45 @@ export const FAQ_DATA_HOME: FAQItem[] = [
   },
 ];
 
-export const FAQ_DATA: FAQItem[] = [
+export const FAQ_DATA_HOME: FAQItem[] = [
   // ─── General ───
   {
     id: "gen-1",
-    category: "general",
-    question: "What is Rodha?",
-    answer:
-      "Rodha is India's trusted platform for MBA (CAT + GDPI), Integrated Programs (IPMAT), Law (CLAT), Banking & Government Exams, and Skill House. We combine expert mentorship, structured courses, rigorous test series, and personalised guidance to help students crack competitive exams and build careers.",
-  },
-  {
-    id: "gen-2",
     category: "general",
     question: "What exams does Rodha prepare students for?",
     answer:
       "Rodha runs five verticals: MBA entrance (CAT, SNAP, XAT, NMAT, CMAT, MAT and MAH-CET, including GDPI preparation), IPMAT and integrated management programmes, CLAT and law entrances, SSC and government exams, and Rodha SkillHouse for career and pre-MBA skills. Every vertical is taught by subject specialists on the same live-class and mentorship model.",
   },
   {
-    id: "gen-3",
+    id: "gen-2",
     category: "general",
     question: "Is Rodha's online coaching good enough on its own?",
     answer:
-      "Rodha is built to be your only source of preparation. You get live classes with recordings, full-length mock tests with video solutions, previous year papers, structured study material and a mentor you can actually reach. Students preparing entirely at home with Rodha’s CAT, OMETs IPMAT programmes have converted the IIMs and now through our CLAT and SSC vertical we gear up to help aspirants convert NLUs and government roles as well.",
+      "Rodha is built to be your only source of preparation. You get live classes with recordings, full-length mock tests with video solutions, previous year papers, structured study material and a mentor you can actually reach. Students preparing entirely at home with Rodha's CAT, OMETs and IPMAT programmes have converted the IIMs, and now through our CLAT and SSC verticals we gear up to help aspirants convert NLUs and government roles as well.",
+  },
+  {
+    id: "gen-3",
+    category: "general",
+    question: "How do Rodha's online classes actually run?",
+    answer:
+      "Live classes run on a fixed weekly schedule, with every class recorded and available within 2 hours. You get structured study material, one-on-one mentorship where your mentor reviews your mock performance and adjusts your plan, and doubt-solving between sessions. A missed class is never a lost class.",
   },
   {
     id: "gen-4",
     category: "general",
-    question: "How do Rodha's online classes actually run?",
+    question: "How is Rodha different from other online coaching?",
     answer:
-      "Live classes on a fixed weekly schedule, every one of them recorded and available within 2 hours. You get structured study material, a one-on-one mentorship who reviews your mock performance and adjusts your plan, and doubt-solving between sessions. A missed class is never a lost class.",
+      "Two things. First, personalised mentorship rather than being left with a video library. You are directly connected to the faculty who teach in the classes through our Rodha Panchayat. Second, the teaching itself: Rodha began as a free CAT YouTube classroom and grew because of how concepts were explained, particularly in Quant. That same teaching is what's inside the paid course, with the structure, testing, resources and accountability that free content can't provide.",
   },
   {
     id: "gen-5",
-    category: "general",
-    question: "How is Rodha different from other online coaching?",
-    answer:
-      "Two things. First, personalised mentorship, rather than being left with a video library you are directly connected to the faculty who teach in the classes through our Rodha Panchayat. Second, the teaching itself: Rodha began as a free CAT YouTube classroom and grew because of how concepts were explained, particularly in Quant. That same teaching is what's inside the paid course, with the structure, testing, resources and accountability that free content can't provide.",
-  },
-  {
-    id: "gen-6",
     category: "general",
     question: "What's included in the test series?",
     answer:
       "Full-length mocks in the exact exam interface, sectional tests, topic-level practice sets, and every previous year paper with solutions. Each mock returns a detailed analysis — percentile projection, time per question, accuracy by topic, and where you lost marks you should have had.",
   },
   {
-    id: "gen-7",
+    id: "gen-6",
     category: "general",
     question: "What do courses cost, and what if I need to withdraw?",
     answer:

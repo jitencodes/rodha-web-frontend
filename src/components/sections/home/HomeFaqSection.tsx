@@ -22,7 +22,7 @@ export function HomeFAQSection() {
 
                 <AccordionV2
                 // key={`${activeCategory}-${safePage}-${query}`}
-                items={FAQ_DATA_HOME.slice(0,4).map(({ id, question, answer }) => ({
+                items={FAQ_DATA_HOME.map(({ id, question, answer }) => ({
                     id,
                     question,
                     answer,
