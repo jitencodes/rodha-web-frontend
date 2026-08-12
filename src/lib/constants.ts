@@ -157,10 +157,6 @@ export const HEADER_NAV = [
     ],
   },
   {
-    label: "Test Series",
-    href: "/test-series",
-  },
-  {
     label: "Contact",
     href: "/contact",
   },
