@@ -74,7 +74,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "banking",
     name: "SSC",
-    menuLabel: "Banking &s Government Exams",
+    menuLabel: "Banking & SSC Exams",
     fullName: "Banking & Government Exams (including SSC)",
     slug: "banking",
     subHeading: "SSC & Government Exams",
