@@ -56,7 +56,7 @@ export function HomePage() {
           decorativeImage="/assets/images/about us/award.png"
           primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
 
-          secondaryAction={{ label: "Explore Courses", href: "/mba" }}
+          secondaryAction={{ label: "Explore Courses", href: "/cat" }}
 
           className="reveal-child reveal-delay-1"
 

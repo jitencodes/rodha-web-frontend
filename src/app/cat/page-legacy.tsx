@@ -49,7 +49,7 @@ export default function MBAPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(categoryBreadcrumbJsonLd("mba")),
+          __html: JSON.stringify(categoryBreadcrumbJsonLd("cat")),
         }}
       />
       <Container>
@@ -87,7 +87,7 @@ export default function MBAPage() {
         <Container>
           <SectionHeader
             title="Results That Inspire"
-            viewAllHref="/mba#results"
+            viewAllHref="/cat#results"
             viewAllLabel="View All Results"
             align="left"
           />
@@ -118,7 +118,7 @@ export default function MBAPage() {
         <Container>
           <SectionHeader
             title="Our MBA Courses"
-            viewAllHref="/mba#courses"
+            viewAllHref="/cat#courses"
             viewAllLabel="View All Courses"
             align="left"
           />
@@ -239,7 +239,7 @@ export default function MBAPage() {
         title="Ready to Crack CAT & Convert GDPI?"
         subtitle="Join thousands of serious aspirants and start your MBA journey today."
         primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
-        secondaryAction={{ label: "Explore Courses", href: "/mba#courses" }}
+        secondaryAction={{ label: "Explore Courses", href: "/cat#courses" }}
       />
     </>
   );

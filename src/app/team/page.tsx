@@ -86,7 +86,7 @@ export default function TeamPage() {
         <CTABand
           title="Be a Part of Our Mission"
           subtitle="Join thousands of successful students who trusted Rodha for their exam preparation journey."
-          primaryAction={{ label: "Explore Programs", href: "/mba" }}
+          primaryAction={{ label: "Explore Programs", href: "/cat" }}
           secondaryAction={{ label: "Book Free Counselling", href: "/contact" }}
           decorativeImage="/assets/images/meet the team/Cta-left.png"
         />

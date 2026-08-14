@@ -25,7 +25,7 @@ export const CATEGORIES: Category[] = [
     name: "MBA",
     menuLabel: "MBA (CAT + GDPI)",
     fullName: "MBA — CAT & GDPI",
-    slug: "mba",
+    slug: "cat",
     subHeading: "CAT & MBA Entrance",
     description:
       "CAT, SNAP, XAT, NMAT and GDPI coaching for the IIMs and India's top B-schools.",
@@ -162,6 +162,12 @@ export const HEADER_NAV = [
   },
 ] as const;
 
+/** Public path for a category id (`mba` → `/cat`). */
+export function getCategoryPath(categoryId: string): string {
+  const category = CATEGORIES.find((item) => item.id === categoryId);
+  return `/${category?.slug ?? categoryId}`;
+}
+
 export const NAV_ITEMS = {
   global: [
     { label: "Home", href: "/" },
@@ -169,7 +175,7 @@ export const NAV_ITEMS = {
       label: "Courses",
       href: "#",
       children: [
-        { label: "MBA Courses", href: "/mba" },
+        { label: "MBA Courses", href: "/cat" },
         { label: "Integrated Programs", href: "/ipmat" },
         { label: "Law Courses", href: "/clat" },
         { label: "Banking & Government", href: "/banking" },
@@ -183,10 +189,10 @@ export const NAV_ITEMS = {
   ],
   categories: {
     mba: [
-      { label: "Overview", href: "/mba" },
-      { label: "Courses", href: "/mba#courses" },
-      { label: "Faculty", href: "/mba#faculty" },
-      { label: "Results", href: "/mba#results" },
+      { label: "Overview", href: "/cat" },
+      { label: "Courses", href: "/cat#courses" },
+      { label: "Faculty", href: "/cat#faculty" },
+      { label: "Results", href: "/cat#results" },
     ],
     ipmat: [
       { label: "Overview", href: "/ipmat" },

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
-import { CATEGORIES } from "@/lib/constants";
+import { CATEGORIES, getCategoryPath } from "@/lib/constants";
 import type { Course } from "@/lib/types";
 
 interface CourseCardProps {
@@ -105,7 +105,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
             )}
           </div>
           <Link
-            href={`/${course.category}/courses/${course.slug}`}
+            href={`${getCategoryPath(course.category)}/courses/${course.slug}`}
             className="text-body-sm font-semibold text-white hover:text-white/80 transition-colors"
           >
             Enroll →

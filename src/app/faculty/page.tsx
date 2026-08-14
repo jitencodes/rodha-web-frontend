@@ -39,7 +39,7 @@ export default function FacultyPage() {
           title="Ready to Begin Your Journey?"
           subtitle="Book a Demo Class or Explore our Courses."
           primaryAction={{ label: "Book a Demo Class", href: "/contact" }}
-          secondaryAction={{ label: "Explore Courses", href: "/mba" }}
+          secondaryAction={{ label: "Explore Courses", href: "/cat" }}
           className="reveal-child reveal-delay-1"
         />
       </RevealGroup>

@@ -50,11 +50,11 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ---
 
-## Category Landings `/mba` `/ipmat` `/clat` `/banking` `/skillhouse`
+## Category Landings `/cat` `/ipmat` `/clat` `/banking` `/skillhouse`
 
 | Section | Status |
 |---------|--------|
-| MBA `/mba` homepage-theme alignment | Complete — peach/white rhythm; `SectionHeaderV2`; dual result marquees; light V2 cards; `CTABandV2Decorative`; hero unchanged; other categories still dark |
+| MBA `/cat` homepage-theme alignment | Complete — peach/white rhythm; `SectionHeaderV2`; dual result marquees; light V2 cards; `CTABandV2Decorative`; hero unchanged; other categories still dark |
 | Category hero | Complete (all five via `CategoryHeroSection`; MBA uses `CategoryHeroSectionV2`) |
 | Courses overview | Complete (MBA: light `CourseCardV2` + posters; others: dark `CourseCard`) |
 | Star faculty | Complete (MBA: premium white `FacultyCardV2` + profile cutouts; others: `FacultyCard`) |
@@ -67,7 +67,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | SEO intro copy | Partial (per-page metadata; longer SEO blocks TBD) |
 | Match `cat landing page Ui.png` | Complete (structure); MBA now follows locked homepage theme |
 | MBA section order | Complete — Hero → Results → Courses → Test Series → Faculty → Testimonials → CTA → Stories → App Promo |
-| Taxonomy / switcher | Complete — short trigger + full menu labels; `/cat` & `/gdpi` redirect to `/mba` |
+| Taxonomy / switcher | Complete — short trigger + full menu labels; public MBA URL is `/cat`; `/mba` & `/gdpi` redirect to `/cat` |
 | SEO structured data | Complete — Organization, category BreadcrumbList, FAQPage JSON-LD |
 
 ---

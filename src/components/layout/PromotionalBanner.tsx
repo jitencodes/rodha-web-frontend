@@ -36,7 +36,7 @@ export function PromotionalBanner({ className }: PromotionalBannerProps) {
   <span aria-hidden="true">🔥 </span>
   <span>110 days to CAT 2026. Rodha&apos;s Accelerator batch is now open </span>
   <Link
-    href="/mba"
+    href="/cat"
     className="font-semibold text-orange-500 hover:text-orange-400 underline underline-offset-2 sm:no-underline transition-colors"
   >
     Enroll Now

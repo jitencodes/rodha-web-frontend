@@ -96,7 +96,7 @@ export function HeroSection({ title, subtitle, children, className }: HeroSectio
 
             <div className="mt-6 flex flex-col sm:flex-row items-start gap-3">
               <Link
-                href="/mba"
+                href="/cat"
                 className="btn-primary btn-primary-premium premium-border-glow glow-accent-orange text-body px-6 py-2.5 rounded-[6px]"
               >
                 Explore Courses

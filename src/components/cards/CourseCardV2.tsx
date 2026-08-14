@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
+import { getCategoryPath } from "@/lib/constants";
 import type { Course } from "@/lib/types";
 
 interface CourseCardV2Props {
@@ -16,7 +17,7 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
     ? Math.round(((course.originalPrice! - course.price) / course.originalPrice!) * 100)
     : 0;
 
-  const detailsHref = `/${course.category}/courses/${course.slug}`;
+  const detailsHref = `${getCategoryPath(course.category)}/courses/${course.slug}`;
   const posterSrc =
     course.thumbnail ||
     course.facultyImage ||

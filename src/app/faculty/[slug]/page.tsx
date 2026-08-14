@@ -9,7 +9,7 @@ import { FacultyResultsSection } from "@/components/sections/FacultyResultsSecti
 import { CTABand } from "@/components/sections/CTABand";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { faculty, getFacultyBySlug } from "@/data/faculty";
-import { EXTERNAL_URLS } from "@/lib/constants";
+import { EXTERNAL_URLS, getCategoryPath } from "@/lib/constants";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/structured-data";
 
 interface FacultyDetailPageProps {
@@ -44,7 +44,7 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
     notFound();
   }
 
-  const categoryHref = `/${member.categories[0] ?? "mba"}`;
+  const categoryHref = getCategoryPath(member.categories[0] ?? "mba");
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Faculty", href: "/faculty" },

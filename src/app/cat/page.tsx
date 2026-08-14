@@ -51,7 +51,7 @@ export default function MBAPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(categoryBreadcrumbJsonLd("mba")),
+          __html: JSON.stringify(categoryBreadcrumbJsonLd("cat")),
         }}
       />
 
@@ -282,7 +282,7 @@ export default function MBAPage() {
         backgroundImage="/assets/images/background/cta background image.JPG"
         decorativeImage="/assets/images/about us/award.png"
         primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
-        secondaryAction={{ label: "Explore Courses", href: "/mba#courses" }}
+        secondaryAction={{ label: "Explore Courses", href: "/cat#courses" }}
       />
 
       {/* Stories — white */}

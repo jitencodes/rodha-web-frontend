@@ -45,7 +45,7 @@ const LEGAL_LINKS = [
 ];
 
 const PREFERRED_ACTIVE_LABEL: Record<string, string> = {
-  "/mba": "MBA (CAT + GDPI)",
+  "/cat": "MBA (CAT + GDPI)",
   "/blog": "Blog",
   "/contact": "Contact Us",
   "/faq": "FAQ",
@@ -109,7 +109,7 @@ export function Footer() {
   const activeLabel = getActiveFooterLabel(pathname, hash);
   const examLinks = CATEGORIES.map((c) => ({ label: c.menuLabel, href: `/${c.slug}` }));
   
-const isHomePage = pathname === "/" || "/mba";
+  const isHomePage = pathname === "/" || pathname === "/cat";
 const footerTheme = isHomePage
 ? {
     heading: "text-slate-900",

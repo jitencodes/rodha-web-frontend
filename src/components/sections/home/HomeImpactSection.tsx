@@ -63,7 +63,7 @@ export function HomeImpactSection() {
                   and transformations.
                 </p>
                 <Link
-                  href="/mba#results"
+                  href="/cat#results"
                   className="mt-5 inline-flex items-center gap-2 btn-secondary text-body-sm px-5 py-2.5 rounded-[6px] bg-white border-orange-500/30 text-neutral-900 hover:border-orange-500/60"
                 >
                   Explore Our Results

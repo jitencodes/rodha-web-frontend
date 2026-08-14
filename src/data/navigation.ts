@@ -6,7 +6,7 @@ export const mainNavigation: NavItem[] = [
     label: "Courses",
     href: "#",
     children: [
-      { label: "MBA (CAT + GDPI)", href: "/mba" },
+      { label: "MBA (CAT + GDPI)", href: "/cat" },
       { label: "Integrated Programs", href: "/ipmat" },
       { label: "Law (CLAT)", href: "/clat" },
       { label: "Banking & Government", href: "/banking" },
@@ -21,11 +21,11 @@ export const mainNavigation: NavItem[] = [
 
 export const categoryNavigation: Record<CategoryId, NavItem[]> = {
   mba: [
-    { label: "Overview", href: "/mba" },
-    { label: "Courses", href: "/mba#courses" },
-    { label: "Faculty", href: "/mba#faculty" },
-    { label: "Results", href: "/mba#results" },
-    { label: "FAQ", href: "/mba#faqs" },
+    { label: "Overview", href: "/cat" },
+    { label: "Courses", href: "/cat#courses" },
+    { label: "Faculty", href: "/cat#faculty" },
+    { label: "Results", href: "/cat#results" },
+    { label: "FAQ", href: "/cat#faqs" },
   ],
   ipmat: [
     { label: "Overview", href: "/ipmat" },
@@ -59,7 +59,7 @@ export const categoryNavigation: Record<CategoryId, NavItem[]> = {
 
 export const footerNavigation = {
   courses: [
-    { label: "MBA (CAT + GDPI)", href: "/mba" },
+    { label: "MBA (CAT + GDPI)", href: "/cat" },
     { label: "Integrated Programs", href: "/ipmat" },
     { label: "Law (CLAT)", href: "/clat" },
     { label: "Banking & Government", href: "/banking" },

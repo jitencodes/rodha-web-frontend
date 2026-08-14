@@ -13,23 +13,23 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/cat",
-        destination: "/mba",
+        source: "/mba",
+        destination: "/cat",
         permanent: true,
       },
       {
-        source: "/cat/:path*",
-        destination: "/mba/:path*",
+        source: "/mba/:path*",
+        destination: "/cat/:path*",
         permanent: true,
       },
       {
         source: "/gdpi",
-        destination: "/mba",
+        destination: "/cat",
         permanent: true,
       },
       {
         source: "/gdpi/:path*",
-        destination: "/mba/:path*",
+        destination: "/cat/:path*",
         permanent: true,
       },
     ];

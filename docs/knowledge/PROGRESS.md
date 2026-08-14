@@ -70,6 +70,7 @@ Update this file after every meaningful implementation task.
 - **MBA homepage-theme alignment (2026-08-13):** `/mba` only — peach/white alternating sections, `SectionHeaderV2`, dual-row results marquees (`TopperCardV2` + light `ResultsStatsPanel`), light `CourseCardV2`/`TestSeriesCardV2`/`FacultyCardV2`, `CTABandV2Decorative` (image-left), polished `HomeAppPromotionSection`. Hero + other dark category pages unchanged.
 - **MBA section polish (2026-08-13):** Fixed `section-header-badge` white text under `.home-on-light`; results row 2 container-width; compact no-image program cards; centered badge headers; peach test-series cards; faculty bottom CTA; dark testimonials restored.
 - **MBA faculty cards premium (2026-08-14):** `FacultyCardV2` matched to `TopperCardV2` layout (white variant + `.border-image-gradient-t-light`); MBA marquee uses `getMbaStarFaculty()` with cutouts from `rodha faculty profile` matched by name.
+- **MBA route → `/cat` (2026-08-14):** Category landing moved from `/mba` to `/cat`; `CATEGORIES` slug `cat`; nav/footer/switcher/links updated; `/mba` & `/gdpi` redirect to `/cat`; `getCategoryPath()` maps category id → public path.
 
 ---
 

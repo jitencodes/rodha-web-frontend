@@ -16,8 +16,14 @@ Format:
 
 ---
 
+### 2026-08-14 — MBA public route is `/cat`
+- **Decision:** Move the MBA category landing from `/mba` to `/cat`. Keep internal category id `mba` for data; set `CATEGORIES[].slug` to `cat`. Add `getCategoryPath()` for course/faculty links. Permanent redirects: `/mba` and `/gdpi` (and nested paths) → `/cat`.
+- **Rationale:** Product wants the CAT URL as the primary MBA entry; header switcher/footer already key off `slug`.
+- **Alternatives considered:** Rename category id to `cat` across all data; keep dual `/mba` and `/cat` pages without redirect.
+- **Consequences:** Nav, footer, exam switcher, CTAs, and course detail paths resolve under `/cat`; old `/mba` bookmarks redirect.
+
 ### 2026-08-13 — MBA theme alignment without global migration
-- **Decision:** Align only `/mba` to the locked homepage black/white/cream/orange system. Introduce MBA-scoped light cards (`CourseCardV2`, `TestSeriesCardV2`, `FacultyCardV2`) and `CTABandV2Decorative` (duplicated from `CTABandV2` with image-left / content-right). Add optional `variant="light"` on `ResultsStatsPanel` (default `"dark"`). Do not restyle shared dark cards or homepage `CTABandV2`.
+- **Decision:** Align only the MBA category landing (now `/cat`) to the locked homepage black/white/cream/orange system. Introduce MBA-scoped light cards (`CourseCardV2`, `TestSeriesCardV2`, `FacultyCardV2`) and `CTABandV2Decorative` (duplicated from `CTABandV2` with image-left / content-right). Add optional `variant="light"` on `ResultsStatsPanel` (default `"dark"`). Do not restyle shared dark cards or homepage `CTABandV2`.
 - **Rationale:** Homepage is locked; other category pages still depend on the dark theme. Scoped forks/variants avoid unintended regressions.
 - **Alternatives considered:** Global theme token flip; mutating shared `CourseCard`/`FacultyCard`/`CTABand` in place.
 - **Consequences:** MBA and other category landings diverge visually until those pages are migrated individually.
