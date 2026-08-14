@@ -324,7 +324,7 @@
       border-color: rgba(249, 115, 22, 0.45);
       background-color: color-mix(in srgb, var(--bg-secondary) 96%, white);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42), 0 0 18px rgba(249, 115, 22, 0.08);
-      transform: translateY(-4px);
+      /* transform: translateY(-4px); */
     }
   }
 
@@ -1016,8 +1016,12 @@ background-size: cover;
     color: #0a0a0a;
   }
 
-  .home-on-light .section-header p {
+  .home-on-light .section-header p:not(.section-header-badge) {
     color: #737373;
+  }
+
+  .home-on-light .section-header-badge {
+    color: #ffffff;
   }
 
   .home-on-light .home-light-body {
@@ -1204,6 +1208,20 @@ background-size: cover;
     #2a170b 56%,
     transparent 68%,
     #2f1b0f 90%
+  ) 1;
+}
+
+/* White-card variant of the student/topper detail border */
+.border-image-gradient-t-light {
+  border-top: 1px solid;
+  border-image: linear-gradient(
+    90deg,
+    #ffe8d6 0%,
+    #f06b23 22%,
+    #ffd4b8 40%,
+    #e8e0d8 56%,
+    transparent 70%,
+    #ffe8d6 92%
   ) 1;
 }
 

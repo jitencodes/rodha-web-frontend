@@ -5,6 +5,8 @@ import type { ResultStat } from "@/lib/types";
 interface ResultsStatsPanelProps {
   stats: ResultStat[];
   className?: string;
+  /** Light cream surface for homepage-aligned category pages. Default keeps dark category look. */
+  variant?: "dark" | "light";
 }
 
 function iconForStat(label: string): string {
@@ -20,11 +22,20 @@ function iconForStat(label: string): string {
 }
 
 /** Homepage-matching stats sidebar used next to topper carousels */
-export function ResultsStatsPanel({ stats, className }: ResultsStatsPanelProps) {
+export function ResultsStatsPanel({
+  stats,
+  className,
+  variant = "dark",
+}: ResultsStatsPanelProps) {
+  const isLight = variant === "light";
+
   return (
     <div
       className={cn(
-        "card-base premium-border-glow shine-sweep shine-sweep-hover ambient-results shrink-0 lg:w-[210px] xl:w-[230px] p-5 md:p-6 flex flex-row lg:flex-col gap-5 lg:gap-7 justify-center rounded-[6px] bg-linear-to-br from-orange-500/25 via-bg-secondary to-bg-tertiary border-orange-500/35",
+        "premium-border-glow shine-sweep shine-sweep-hover ambient-results shrink-0 lg:w-[210px] xl:w-[230px] p-5 md:p-6 flex flex-row lg:flex-col gap-5 lg:gap-7 justify-center rounded-[6px]",
+        isLight
+          ? "border border-[#FFEAD6] bg-[#FFF3E8]"
+          : "card-base bg-linear-to-br from-orange-500/25 via-bg-secondary to-bg-tertiary border-orange-500/35",
         className
       )}
     >
@@ -38,11 +49,23 @@ export function ResultsStatsPanel({ stats, className }: ResultsStatsPanelProps) 
             className="w-10 h-10 object-contain shrink-0 mt-0.5"
           />
           <div>
-            <div className="text-[30px] md:text-[34px] font-bold text-orange-500 leading-none glow-text-orange">
+            <div
+              className={cn(
+                "text-[30px] md:text-[34px] font-bold text-orange-500 leading-none",
+                !isLight && "glow-text-orange"
+              )}
+            >
               {stat.value}
               {stat.suffix}
             </div>
-            <p className="mt-1.5 text-body text-text-muted">{stat.label}</p>
+            <p
+              className={cn(
+                "mt-1.5 text-body",
+                isLight ? "text-neutral-600" : "text-text-muted"
+              )}
+            >
+              {stat.label}
+            </p>
           </div>
         </div>
       ))}

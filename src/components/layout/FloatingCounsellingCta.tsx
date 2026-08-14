@@ -100,7 +100,8 @@ export function FloatingCounsellingCta() {
     };
   }, [pathname]);
 
-  const isVisible = !hideFloating && !isOpen;
+  // const isVisible = !hideFloating && !isOpen;
+  const isVisible = true;
 
   return (
     <div

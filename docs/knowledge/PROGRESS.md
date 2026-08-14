@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-07-27 (dropdown menu UX)
+**Last updated:** 2026-08-14 (MBA faculty premium cards)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -67,6 +67,9 @@ Update this file after every meaningful implementation task.
 - **App promo light typography (2026-07-24):** `HomeAppPromotionSection` uses `home-on-light` black heading/body copy; orange accent on "Rodha App" only; glowing Rodha logo title icon; light-theme store buttons.
 - **Homepage bottom orange gradient ramp (2026-07-24):** Light plateau through Results only; cream→orange ramp spans full App Promo (`--home-bottom-warm-start` → `--home-bottom-orange-peak`); orange→dark completes through CTA; neutral gray stops removed.
 - **Dropdown menu UX (2026-07-27):** Hero counselling form dropdown no longer clipped (`HomeHeroShell` overflow-visible); shared `.dropdown-option` hover/active styles on `DropdownSelect`, header exam switcher, and contact/lead forms.
+- **MBA homepage-theme alignment (2026-08-13):** `/mba` only — peach/white alternating sections, `SectionHeaderV2`, dual-row results marquees (`TopperCardV2` + light `ResultsStatsPanel`), light `CourseCardV2`/`TestSeriesCardV2`/`FacultyCardV2`, `CTABandV2Decorative` (image-left), polished `HomeAppPromotionSection`. Hero + other dark category pages unchanged.
+- **MBA section polish (2026-08-13):** Fixed `section-header-badge` white text under `.home-on-light`; results row 2 container-width; compact no-image program cards; centered badge headers; peach test-series cards; faculty bottom CTA; dark testimonials restored.
+- **MBA faculty cards premium (2026-08-14):** `FacultyCardV2` matched to `TopperCardV2` layout (white variant + `.border-image-gradient-t-light`); MBA marquee uses `getMbaStarFaculty()` with cutouts from `rodha faculty profile` matched by name.
 
 ---
 

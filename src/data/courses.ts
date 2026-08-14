@@ -638,21 +638,23 @@ export const courses: Course[] = [
 export const mbaCourses: Course[] = [
   {
     id: "cat-complete-2026",
-    title: "CAT 2026 Complete Program",
+    language: "hinglish",
+    caourseCount: 12,
+    title: "CAT 2026 Crash Course",
     slug: "cat-2026-complete-program",
     category: "mba",
     features: [],
     highlights: [],
     enrollmentUrl: "",
 
-    badge: "For First-Time Aspirants",
+    badge: "Package",
     badgeType: "audience",
 
     description:
       "Complete CAT preparation covering Quant, VARC, DILR and OMETs.",
 
     shortDescription:
-      "Complete CAT preparation with live mentorship.",
+      "Complete Package for Quant, LRDI, VARC, Omets (XAT, SNAP, NMAT)",
 
     duration: "12 Months",
     mode: "Live + Recorded",
@@ -677,6 +679,7 @@ export const mbaCourses: Course[] = [
       "Performance Analytics",
     ],
 
+    thumbnail: "/assets/images/courses/cat 2026 crash course.jpg",
     facultyImage: "/assets/images/profiles/male-1.png",
 
     showFaculty: true,
@@ -685,7 +688,9 @@ export const mbaCourses: Course[] = [
   {
     id: "cat-pro-2026",
 
-    title: "CAT 2026 Pro Program",
+    title: "CAT 2026 R8",
+    language: "hinglish",
+    caourseCount: 4,
 
     slug: "cat-2026-pro-program",
 
@@ -694,7 +699,7 @@ export const mbaCourses: Course[] = [
     highlights: [],
     enrollmentUrl: "",
 
-    badge: "For Working Professionals",
+    badge: "Package",
 
     badgeType: "audience",
 
@@ -702,7 +707,7 @@ export const mbaCourses: Course[] = [
       "Weekend-friendly CAT preparation with complete syllabus coverage.",
 
     shortDescription:
-      "Designed for working professionals.",
+      "R8 Batch | Zero to Zenith DILR Fast Paced by Apoorv Sir & Ravi Sir for CAT 2026",
 
     duration: "10 Months",
 
@@ -714,9 +719,9 @@ export const mbaCourses: Course[] = [
 
     studentsEnrolled: "Weekend Batches",
 
-    price: 19999,
+    price: 13500,
 
-    originalPrice: 27999,
+    originalPrice: 14999,
 
     detailsLabel: "View Details",
 
@@ -729,6 +734,7 @@ export const mbaCourses: Course[] = [
       "Sectional & Topic Tests",
     ],
 
+    thumbnail: "/assets/images/courses/cat 2026 R8 fast paced batch.jpg",
     facultyImage: "/assets/images/profiles/male-2.png",
 
     showFaculty: true,
@@ -737,18 +743,20 @@ export const mbaCourses: Course[] = [
   {
     id: "cat-crash-2026",
 
-    title: "CAT 2026 Crash Course",
+    title: "CAT 2026 R8 Fast Batch",
+    language: "Hindi | English",
+    caourseCount: 6,
 
     slug: "cat-2026-crash-course",
     description: "",
-    shortDescription: "",
+    shortDescription: "R8 Batch | Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
 
     category: "mba",
     features: [],
     highlights: [],
     enrollmentUrl: "",
 
-    badge: "Fast-Track Revision",
+    badge: "Package",
 
     badgeType: "audience",
 
@@ -762,7 +770,7 @@ export const mbaCourses: Course[] = [
 
     studentsEnrolled: "Ideal for Repeaters",
 
-    price: 9999,
+    price: 13500,
 
     originalPrice: 14999,
 
@@ -776,6 +784,7 @@ export const mbaCourses: Course[] = [
       "Last Mile Preparation",
     ],
 
+    thumbnail: "/assets/images/courses/cat 2026 Quant R8 fast paced.jpg",
     facultyImage: "/assets/images/profiles/female-1.png",
 
     showFaculty: true,
@@ -784,18 +793,20 @@ export const mbaCourses: Course[] = [
   {
     id: "cat-foundation-2026",
 
-    title: "CAT 2026 Foundation Program",
+    title: "Rodha CAT Accelerator",
+    language: "Hinglish | English",
+    caourseCount: 5,
 
     slug: "cat-2026-foundation-program",
     description: "",
-    shortDescription: "",
+    shortDescription: "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
 
     category: "mba",
     features: [],
     highlights: [],
     enrollmentUrl: "",
 
-    badge: "For Early Starters",
+    badge: "Package",
 
     badgeType: "audience",
 
@@ -809,9 +820,9 @@ export const mbaCourses: Course[] = [
 
     studentsEnrolled: "College Students",
 
-    price: 14999,
+    price: 9999,
 
-    originalPrice: 19999,
+    originalPrice: 8999,
 
     detailsLabel: "View Details",
 
@@ -823,6 +834,7 @@ export const mbaCourses: Course[] = [
       "Long-term Mentorship",
     ],
 
+    thumbnail: "/assets/images/courses/cat 2026 accelerator.jpg",
     facultyImage: "/assets/images/profiles/male-3.png",
 
     showFaculty: true,

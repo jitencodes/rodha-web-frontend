@@ -41,12 +41,17 @@ export function SectionHeaderV2({
     >
       <div className={cn(hasSplitIntro && "lg:col-span-7")}>
         {label && (
-          <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
+          <p className="text-body-sm uppercase tracking-wider !text-orange-400 font-semibold mb-2">
             {label}
           </p>
         )}
         {badge && (
-          <p className="text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit mx-auto font-semibold mb-5 md:mb-6.5">
+          <p
+            className={cn(
+              "section-header-badge text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit font-semibold mb-5 md:mb-6.5",
+              align === "center" && "mx-auto"
+            )}
+          >
             {badge}
           </p>
         )}

@@ -29,6 +29,8 @@ export interface Course {
   id: string;
   title: string;
   slug: string;
+  language?: string;
+  caourseCount?: number;
   category: CategoryId;
   description: string;
   shortDescription: string;

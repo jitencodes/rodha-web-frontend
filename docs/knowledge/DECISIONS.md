@@ -16,6 +16,12 @@ Format:
 
 ---
 
+### 2026-08-13 — MBA theme alignment without global migration
+- **Decision:** Align only `/mba` to the locked homepage black/white/cream/orange system. Introduce MBA-scoped light cards (`CourseCardV2`, `TestSeriesCardV2`, `FacultyCardV2`) and `CTABandV2Decorative` (duplicated from `CTABandV2` with image-left / content-right). Add optional `variant="light"` on `ResultsStatsPanel` (default `"dark"`). Do not restyle shared dark cards or homepage `CTABandV2`.
+- **Rationale:** Homepage is locked; other category pages still depend on the dark theme. Scoped forks/variants avoid unintended regressions.
+- **Alternatives considered:** Global theme token flip; mutating shared `CourseCard`/`FacultyCard`/`CTABand` in place.
+- **Consequences:** MBA and other category landings diverge visually until those pages are migrated individually.
+
 ### 2026-07-24 — Homepage gradient transition fix (hero-only canvas)
 - **Decision:** Scope `HeroNeuralCanvas` to `#site-hero` via `HomeHeroShell`; remove full-rect canvas bg glows and dark vignette (particles/lines only); delete `HomeTopZone`. Anchor `--home-hero-blend-start` at hero bottom, `--home-orange-peak` at categories bottom, `--home-light-start` at impact top. Use proportional `calc()` stops between anchors in `body.home-gradient-page`. Homepage header transparent with backdrop blur.
 - **Rationale:** Canvas fills and bottom fade mask created visible seams inside Categories; warm blend starting at 72% hero height misaligned with section boundaries.

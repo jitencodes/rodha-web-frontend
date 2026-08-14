@@ -54,18 +54,19 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Section | Status |
 |---------|--------|
-| Category hero | Complete (all five via `CategoryHeroSection`; MBA reuses CAT premium PNG trust icons) |
-| Courses overview | Complete (all five) |
-| Star faculty | Complete (all five) |
-| Test series promo | Complete (MBA/Banking/Skill House reuse CAT PNG card icons) |
-| Results & toppers | Complete (all five via `ResultsStatsPanel` + toppers carousel) |
-| Demo / webinar CTA | Complete (resource cards on all five) |
-| Testimonials | Complete (all five; category-filtered via `getTestimonialsByCategory`; autoplay carousel with reduced-motion pause) |
-| Resources teaser | Complete (all five) |
-| Category FAQ | Complete (all five; category-specific FAQs) |
+| MBA `/mba` homepage-theme alignment | Complete — peach/white rhythm; `SectionHeaderV2`; dual result marquees; light V2 cards; `CTABandV2Decorative`; hero unchanged; other categories still dark |
+| Category hero | Complete (all five via `CategoryHeroSection`; MBA uses `CategoryHeroSectionV2`) |
+| Courses overview | Complete (MBA: light `CourseCardV2` + posters; others: dark `CourseCard`) |
+| Star faculty | Complete (MBA: premium white `FacultyCardV2` + profile cutouts; others: `FacultyCard`) |
+| Test series promo | Complete (MBA: light `TestSeriesCardV2`; others reuse dark cards) |
+| Results & toppers | Complete (MBA: light stats + dual `TopperCardV2` marquees; others: `ResultsStatsPanel` + `TopperCard`) |
+| Demo / webinar CTA | Complete (resource cards on non-MBA; MBA stories + app promo) |
+| Testimonials | Complete (MBA light cards/fades; others dark) |
+| Resources teaser | Complete (legacy/non-MBA; MBA uses stories section) |
+| Category FAQ | Complete (non-MBA; MBA FAQ deferred in current live page) |
 | SEO intro copy | Partial (per-page metadata; longer SEO blocks TBD) |
-| Match `cat landing page Ui.png` | Complete (structure); dedicated hero photos pending for non-MBA |
-| MBA section order | Complete — Hero → Results → Courses → Faculty → Test Series → Testimonials → Resources → FAQs → CTA |
+| Match `cat landing page Ui.png` | Complete (structure); MBA now follows locked homepage theme |
+| MBA section order | Complete — Hero → Results → Courses → Test Series → Faculty → Testimonials → CTA → Stories → App Promo |
 | Taxonomy / switcher | Complete — short trigger + full menu labels; `/cat` & `/gdpi` redirect to `/mba` |
 | SEO structured data | Complete — Organization, category BreadcrumbList, FAQPage JSON-LD |
 

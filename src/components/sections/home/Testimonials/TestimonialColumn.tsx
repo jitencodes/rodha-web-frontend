@@ -1,4 +1,4 @@
-import { TestimonialCard } from "@/components/cards/TestimonialCard";
+import type { CSSProperties } from "react";
 import { VerticalMarquee } from "@/components/ui/VerticalMarquee";
 import { Testimonial } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -8,23 +8,23 @@ function TestimonialColumn({
   testimonials,
   direction,
   className,
+  fadeFrom = "var(--background, #0A0A0A)",
 }: {
   testimonials: Testimonial[];
   direction: "up" | "down";
   className?: string;
+  /** CSS color used for top/bottom fades. Default keeps dark category pages. */
+  fadeFrom?: string;
 }) {
+  const fadeStyle = { "--testimonial-fade": fadeFrom } as CSSProperties;
+
   return (
     <div
-      className={cn(
-        "relative h-full overflow-hidden",
-        className
-      )}
+      className={cn("relative h-full overflow-hidden", className)}
+      style={fadeStyle}
     >
-      {/* Top Fade */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-28 bg-gradient-to-b from-background via-background/80 to-transparent" />
-
-      {/* Bottom Fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-28 bg-gradient-to-b from-[var(--testimonial-fade)] via-[color-mix(in_srgb,var(--testimonial-fade)_80%,transparent)] to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-[var(--testimonial-fade)] via-[color-mix(in_srgb,var(--testimonial-fade)_80%,transparent)] to-transparent" />
 
       <VerticalMarquee
         speed={36}

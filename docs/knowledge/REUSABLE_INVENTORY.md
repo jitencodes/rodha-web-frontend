@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-07-24 (counselling modal dialog)
+**Last updated:** 2026-08-13 (MBA homepage-theme alignment)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -52,6 +52,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
 | CTABand | `CTABand.tsx` (optional `backgroundImage`, `titleAccent`, `secondaryOutline` for home variant; counselling `/contact` actions open modal) |
+| CTABandV2 | `CTABandV2.tsx` (locked homepage full-bleed image CTA) |
+| CTABandV2Decorative | `CTABandV2Decorative.tsx` (MBA image-left / content-right decorative variant; homepage unchanged) |
 | CultureSection | `CultureSection.tsx` |
 | AdvisorsSection | `AdvisorsSection.tsx` |
 | FacultyFiltersBar | `FacultyFiltersBar.tsx` |
@@ -82,10 +84,11 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ImpactStatBadge | `home/ImpactStatBadge.tsx` |
 | ImpactStatsRow | `home/ImpactStatsRow.tsx` |
 | HomeResultsSection | `home/HomeResultsSection.tsx` |
-| HomeAppPromotionSection | `home/HomeAppPromotionSection.tsx` |
+| HomeAppPromotionSection | `home/HomeAppPromotionSection.tsx` (optional eyebrow/title/description/className/mockupSrc; enriched copy + checklist) |
 | LegalPageLayout | `LegalPageLayout.tsx` |
-| ResultsStatsPanel | `ResultsStatsPanel.tsx` |
+| ResultsStatsPanel | `ResultsStatsPanel.tsx` (optional `variant?: "dark" \| "light"`; default dark for other categories) |
 | SectionHeader | `SectionHeader.tsx` |
+| SectionHeaderV2 | `SectionHeaderV2.tsx` (locked homepage / MBA light headers) |
 | TeamHeroSection | `TeamHeroSection.tsx` |
 | TrustBar | `TrustBar.tsx` |
 
@@ -96,8 +99,10 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AdvisorCard | `AdvisorCard.tsx` |
 | BlogCard | `BlogCard.tsx` |
 | CourseCard | `CourseCard.tsx` |
+| CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; View Details → course slug) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
 | FacultyCard | `FacultyCard.tsx` |
+| FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white: TopperCardV2 layout, image + light gradient detail border; no ratings) |
 | FacultyExpertCard | `FacultyExpertCard.tsx` |
 | FacultyListingCard | `FacultyListingCard.tsx` |
 | FacultyStatCard | `FacultyStatCard.tsx` |
@@ -114,7 +119,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ResultStatCard | `ResultStatCard.tsx` |
 | TestimonialCard | `TestimonialCard.tsx` |
 | TestSeriesCard | `TestSeriesCard.tsx` |
+| TestSeriesCardV2 | `TestSeriesCardV2.tsx` (MBA light theme) |
 | TopperCard | `TopperCard.tsx` |
+| TopperCardV2 | `TopperCardV2.tsx` (homepage + MBA results) |
 | TopperCardAlternate | `TopperCardAlternate.tsx` |
 | ValuePropCard | `ValuePropCard.tsx`
 
