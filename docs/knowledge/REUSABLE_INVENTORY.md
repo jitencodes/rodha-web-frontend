@@ -17,7 +17,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Badge | `Badge.tsx` |
 | Breadcrumb | `Breadcrumb.tsx` |
 | Button | `Button.tsx` |
-| Carousel | `Carousel.tsx` |
+| Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
 | DropdownSelect | `DropdownSelect.tsx` |
@@ -32,6 +32,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` |
 | Textarea | `Textarea.tsx` |
+| InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop with gap-aligned repeated sets) |
 
 ## Layout — `src/components/layout/`
 
@@ -120,9 +121,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ResultStatCard | `ResultStatCard.tsx` |
 | TestimonialCard | `TestimonialCard.tsx` |
 | TestSeriesCard | `TestSeriesCard.tsx` |
-| TestSeriesCardV2 | `TestSeriesCardV2.tsx` (MBA light theme) |
+| TestSeriesCardV2 | `TestSeriesCardV2.tsx` (MBA light theme; optional full-card poster image) |
 | TopperCard | `TopperCard.tsx` |
-| TopperCardV2 | `TopperCardV2.tsx` (homepage + MBA results) |
+| TopperCardV2 | `TopperCardV2.tsx` (homepage + MBA results; supports AIR, percentile, or conversion result metric) |
 | TopperCardAlternate | `TopperCardAlternate.tsx` |
 | ValuePropCard | `ValuePropCard.tsx`
 
@@ -185,6 +186,7 @@ rodha-logo.webp (official brand), rodha-logo.svg, rodha-logo-white.svg, rodha-lo
 **Faculty listing hero:** `images/faculty/listings page/hero-faulty.png`  
 **Faculty detail:** `images/faculty/detail/results-podium.png` (results banner); achievements reuse `images/icons/rank.png`; hero decoration reuses listing `hero-faulty.png`  
 **Courses / faculty / results / blog:** JPG assets under `images/courses`, `images/faculty`, `images/results`, `images/blog` (legacy)  
+**CAT 2025 students:** 46 optimized WebP portraits under `images/category/cat/students/`, named by student slug and shared by result/testimonial records
 **Placeholders:** hero-illustration, course-thumbnail, faculty-avatar, blog-thumbnail, topper-photo  
 **Meet the Team (`images/meet the team/`):**  
 - Hero: `team hero.png`  

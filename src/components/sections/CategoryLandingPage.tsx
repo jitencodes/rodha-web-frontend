@@ -10,6 +10,7 @@ import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { TestSeriesCardV2 } from "@/components/cards/TestSeriesCardV2";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
+import { Carousel } from "@/components/ui/Carousel";
 import { AccordionV2 } from "@/components/ui/AccordionV2";
 import { CategoryHeroSectionV2 } from "@/components/sections/home/HeroSections/CategoryHeroSectionV2";
 import Typewritter from "@/components/Typewriter";
@@ -42,10 +43,7 @@ function sectionSurface(theme: string | undefined) {
 
 export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
   const facultyMembers = getCategoryFaculty(category);
-  const courses =
-    category.featuredCourses.length > 0
-      ? category.featuredCourses
-      : category.courses.slice(0, 4);
+  const courses = category.courses;
   const results = category.results;
   const testimonials = category.testimonials;
   const resultsRow1 = results;
@@ -72,18 +70,20 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         headline={
           <>
             {category.hero.title}{" "}
-            <span className="text-orange-500 glow-text-orange">
-              <Typewritter words={[category.hero.accent]} />
+            <span className="text-orange-500 glow-text-orange"> <br />
+              <Typewritter
+                words={
+                  Array.isArray(category.hero.accent)
+                    ? category.hero.accent
+                    : [category.hero.accent]
+                }
+              />
             </span>
           </>
         }
         subtitle={category.hero.subtitle}
-        heroImageSrc={category.hero.image}
-        heroImageAlt={category.hero.imageAlt}
-        features={category.heroFeatures}
         quickStats={category.quickStats}
         primaryCta={category.hero.primaryCta}
-        secondaryCta={category.hero.secondaryCta}
       />
 
       <section
@@ -151,16 +151,16 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             className="mx-auto lg:!mb-10"
           />
           <RevealGroup>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:gap-5">
+            <Carousel showArrows>
               {courses.map((course, index) => (
                 <div
                   key={course.id}
-                  className={`reveal-child reveal-delay-${(index % 4) + 1}`}
+                  className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
                 >
                   <CourseCardV2 course={course} className="h-full bg-white" />
                 </div>
               ))}
-            </div>
+            </Carousel>
           </RevealGroup>
         </Container>
       </section>

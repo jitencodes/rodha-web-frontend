@@ -21,19 +21,16 @@
       },
       "hero": {
         "eyebrow": "CAT 2026 · MBA Entrance",
-        "title": "MBA Prep That Transforms Aspirants into",
-        "accent": "Top B-school Converts",
+        "title": "India's most trusted CAT and MBA online coaching that turns aspirants into",
+        "accent": [
+          "99%ilers",
+          "BLACKI Converts",
+          "Top Bschool Converts."
+        ],
         "subtitle": "Crack CAT with expert guidance, exam-level mock tests, and a structured preparation plan designed to help you secure your dream B-school.",
-        "image": "/assets/images/hero/cat-hero.jpg",
-        "imageAlt": "MBA aspirant preparing for CAT and top B-school admissions",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        },
-        "secondaryCta": {
-          "label": "Explore Test Series",
-          "href": "https://thinkexam.com",
-          "external": true
         }
       },
       "sectionCopy": {
@@ -46,7 +43,6 @@
         "facultyTitle": "Star Faculty for MBA",
         "facultySubtitle": "Learn from mentors who have guided thousands to top B-schools.",
         "testimonialSubtitle": "Real stories from Rodha MBA aspirants",
-        "storiesTitle": "Watch how they did it.",
         "storiesSubtitle": "They were exactly where you are today — hear their stories, in their own words."
       },
       "cta": {
@@ -61,17 +57,6 @@
           "href": "/category/cat#courses"
         }
       },
-      "sectionOrder": [
-        "results",
-        "courses",
-        "test-series",
-        "faculty",
-        "testimonials",
-        "cta",
-        "stories",
-        "app-promo",
-        "faqs"
-      ],
       "sectionThemes": {
         "results": "white",
         "courses": "beige",
@@ -83,28 +68,6 @@
         "app-promo": "beige",
         "faqs": "white"
       },
-      "heroFeatures": [
-        {
-          "id": "live-classes",
-          "label": "150+ Hours Live Classes",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        },
-        {
-          "id": "practice",
-          "label": "5000+ Practice Questions",
-          "icon": "/assets/images/icons/ts-topic.png"
-        },
-        {
-          "id": "mocks",
-          "label": "50+ Full Length Mock Tests",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "mentorship",
-          "label": "Personalised Mentorship",
-          "icon": "/assets/images/icons/selection.png"
-        }
-      ],
       "quickStats": [
         {
           "id": "selections",
@@ -113,28 +76,11 @@
           "icon": "/assets/images/icons/selection.png"
         },
         {
-          "id": "iim-calls",
-          "value": "250+",
-          "label": "IIM Calls in 2024",
+          "id": "cat-aspirants",
+          "prefix": "Trusted by",
+          "value": "5,00,000+",
+          "label": "CAT Aspirants",
           "icon": "/assets/images/icons/CAT-icon.png"
-        },
-        {
-          "id": "satisfaction",
-          "value": "98.7%",
-          "label": "Student Satisfaction",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "excellence",
-          "value": "15+",
-          "label": "Years Of Excellence",
-          "icon": "/assets/images/icons/rank.png"
-        },
-        {
-          "id": "rating",
-          "value": "4.8/5",
-          "label": "Google Rating",
-          "icon": "/assets/images/icons/cat-icon-3d.png"
         }
       ],
       "resultStats": [
@@ -151,71 +97,40 @@
       ],
       "testSeries": [
         {
-          "id": "cat-mocks",
-          "value": "20+",
-          "title": "CAT Mocks",
-          "description": "Full-length tests with AI analytics & percentile prediction.",
+          "id": "package-a",
+          "value": "30",
+          "title": "Package A — CAT Mocks",
+          "description": "30 full-length CAT mocks.",
           "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-mocks.png"
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "image": "/assets/images/category/cat/mocks/2.png"
         },
         {
-          "id": "sectional-tests",
-          "value": "60+",
-          "title": "Sectional Tests",
-          "description": "Topic-weighted sectional papers to fix weak areas.",
+          "id": "package-b",
+          "value": "105",
+          "title": "Package B — CAT Sectionals",
+          "description": "105 CAT sectionals across VARC, LRDI, and QA.",
           "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-sectional.png"
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "image": "/assets/images/category/cat/mocks/3.png"
         },
         {
-          "id": "topic-tests",
-          "value": "200+",
-          "title": "Topic Tests",
-          "description": "Micro-tests with instant, detailed solutions.",
+          "id": "package-c",
+          "value": "135",
+          "title": "Package C — CAT Mocks + Sectionals",
+          "description": "30 full-length CAT mocks and 105 CAT sectionals.",
           "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-topic.png"
+          "icon": "/assets/images/icons/ts-topic.png",
+          "image": "/assets/images/category/cat/mocks/4.png"
         },
         {
-          "id": "mini-mocks",
-          "value": "40+",
-          "title": "Mini Mocks",
-          "description": "Timed 30–45 min drills to build exam stamina.",
+          "id": "package-d",
+          "value": "135+",
+          "title": "Package D — CAT Mocks + Sectionals + OMETs",
+          "description": "CAT mocks, sectionals, and OMET preparation for NMAT, SNAP, and XAT.",
           "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        }
-      ],
-      "resources": [
-        {
-          "id": "free-resources",
-          "title": "Free MBA Resources",
-          "description": "Access curated formulas, previous papers, and strategy guides — free for every aspirant.",
-          "ctaLabel": "Access Now",
-          "href": "/blog",
-          "icon": "/assets/icons/download.svg"
-        },
-        {
-          "id": "free-demo",
-          "title": "Attend a Free Demo",
-          "description": "Experience a live CAT class with our star faculty before you enroll.",
-          "ctaLabel": "Book Your Demo",
-          "href": "/contact",
-          "icon": "/assets/icons/play.svg"
-        },
-        {
-          "id": "webinars",
-          "title": "Upcoming Webinars",
-          "description": "Join free webinars on exam strategy, percentile targeting, and IIM interview prep.",
-          "ctaLabel": "Register Now",
-          "href": "/blog",
-          "icon": "/assets/icons/calendar.svg"
-        },
-        {
-          "id": "counsellor",
-          "title": "Talk to a Counsellor",
-          "description": "Get a personalised preparation roadmap mapped to your profile and timeline.",
-          "ctaLabel": "Contact Now",
-          "href": "/contact",
-          "icon": "/assets/icons/phone.svg",
-          "highlighted": true
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "image": "/assets/images/category/cat/mocks/5.png"
         }
       ],
       "faqs": [
@@ -262,474 +177,925 @@
       ],
       "courses": [
         {
-          "id": "cat-complete-2026",
-          "title": "CAT 2026 Complete Program",
-          "slug": "cat-2026-complete-program",
+          "id": "cat-2026-r9-crash-course",
+          "title": "Rodha CAT 2026 Crash Course",
+          "slug": "Rodha cat-2026-r9-crash-course",
+          "language": "Hinglish",
+          "caourseCount": 12,
           "category": "mba",
-          "description": "Complete CAT preparation covering Quantitative Aptitude, VARC, and DILR with 500+ hours of live and recorded classes.",
-          "shortDescription": "Complete CAT prep with live mentorship and mock tests.",
-          "price": 24999,
-          "originalPrice": 34999,
-          "duration": "12 Months",
-          "mode": "Live + Recorded",
-          "classCount": "500+",
-          "studentsEnrolled": "500+ IIM Converts",
-          "features": [
-            "500+ hours of live classes",
-            "50+ full-length mock tests",
-            "Sectional tests & topic-wise practice",
-            "One-on-one mentorship sessions",
-            "Doubt-clearing workshops"
-          ],
-          "highlights": [
-            "IIM-A/B/C focused strategy",
-            "Personalized study plan",
-            "Performance analytics"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-complete",
-          "thumbnail": "/assets/images/courses/cat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-1.png",
-          "isPopular": true,
-          "badge": "Bestseller"
-        },
-        {
-          "id": "cat-pro-2026",
-          "title": "CAT 2026 Pro Program",
-          "slug": "cat-2026-pro-program",
-          "category": "mba",
-          "description": "Advanced CAT track for serious aspirants targeting 99+ percentile with intensive mocks and mentor reviews.",
-          "shortDescription": "Advanced CAT prep for 99+ percentile targets.",
+          "description": "Complete Package for Quant, LRDI, VARC, Omets (XAT, SNAP, NMAT)",
+          "shortDescription": "Complete Package for Quant, LRDI, VARC, Omets (XAT, SNAP, NMAT)",
           "price": 19999,
-          "originalPrice": 27999,
-          "duration": "10 Months",
+          "originalPrice": 21999,
+          "duration": "Crash Course",
           "mode": "Live + Recorded",
-          "classCount": "400+",
-          "studentsEnrolled": "350+ 99 Percentilers",
-          "features": [
-            "400+ hours of live classes",
-            "40+ full-length mock tests",
-            "Weekly mentor reviews",
-            "Advanced DILR workshops",
-            "GDPI add-on discount"
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/CAT-2026-R9-Batch-CRASH-COURSE-RODHA-6a5240f3d6493f282f8fb2db",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "Full VARC, DILR & Quant — Live + Recorded",
+            "OMETs: NMAT, SNAP and XAT",
+            "30 Rodha CAT Mocks",
+            "105 Sectional Tests",
+            "Rodha Buddy and Rodha Panchayat access"
           ],
-          "highlights": [
-            "99+ percentile focus",
-            "High-intensity practice",
-            "Mentor feedback loops"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-pro",
-          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
-          "facultyImage": "/assets/images/profiles/male-2.png",
-          "badge": "Trending"
+          "thumbnail": "/assets/images/courses/cat 2026 crash course.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/CAT-2026-R9-Batch-CRASH-COURSE-RODHA-6a5240f3d6493f282f8fb2db"
         },
         {
-          "id": "cat-crash-2026",
-          "title": "CAT 2026 Crash Course",
-          "slug": "cat-2026-crash-course",
+          "id": "rodha-cat-accelerator-2026",
+          "title": "Rodha CAT 2026 Accelerator Course",
+          "slug": "rodha-cat-accelerator-2026",
+          "language": "Hinglish | English",
+          "caourseCount": 5,
           "category": "mba",
-          "description": "High-intensity short-duration CAT revision program focused on mocks, weak areas, and last-mile strategy.",
-          "shortDescription": "Fast-track revision for the final stretch before CAT.",
-          "price": 9999,
-          "originalPrice": 14999,
-          "duration": "3 Months",
-          "mode": "Live",
-          "classCount": "120+",
-          "studentsEnrolled": "Ideal for Final Stretch",
-          "features": [
-            "120+ hours of crash classes",
-            "25+ full-length mocks",
-            "Rapid revision modules",
-            "Daily doubt support",
-            "Percentile improvement plan"
-          ],
-          "highlights": [
-            "Last-mile strategy",
-            "Mock-heavy schedule",
-            "Quick concept refreshers"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-crash",
-          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
-          "facultyImage": "/assets/images/profiles/female-1.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "cat-foundation-2026",
-          "title": "CAT 2026 Foundation Program",
-          "slug": "cat-2026-foundation-program",
-          "category": "mba",
-          "description": "Beginner-friendly CAT foundation that builds Quant, Verbal, and Reasoning fundamentals from the ground up.",
-          "shortDescription": "Start-from-basics CAT prep for first-time aspirants.",
-          "price": 14999,
-          "originalPrice": 19999,
-          "duration": "14 Months",
-          "mode": "Live + Recorded",
-          "classCount": "350+",
-          "studentsEnrolled": "Built for Beginners",
-          "features": [
-            "350+ concept classes",
-            "Foundational Quant & Verbal",
-            "Guided practice sheets",
-            "Milestone mentor check-ins",
-            "Early mock exposure"
-          ],
-          "highlights": [
-            "Zero-to-hero path",
-            "Concept first approach",
-            "Long runway to CAT"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-foundation",
-          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
-          "facultyImage": "/assets/images/profiles/male-3.png",
-          "badge": "Starter"
-        },
-        {
-          "id": "gdpi-masterclass-2026",
-          "title": "GDPI Masterclass 2026",
-          "slug": "gdpi-masterclass-2026",
-          "category": "mba",
-          "description": "Master Group Discussions and Personal Interviews with mock sessions and expert feedback.",
-          "shortDescription": "Ace your B-school GD/PI with mock sessions & expert feedback.",
-          "price": 6999,
-          "originalPrice": 9999,
-          "duration": "2 Months",
-          "mode": "Live",
-          "classCount": "40+",
-          "studentsEnrolled": "85% Conversion",
-          "features": [
-            "Mock GD sessions",
-            "Personal interview practice",
-            "Current affairs bootcamp",
-            "Profile-building guidance"
-          ],
-          "highlights": [
-            "85% conversion rate",
-            "IIM-specific preparation"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-masterclass-2026",
-          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-2.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "gdpi-intensive-2026",
-          "title": "GDPI Intensive Bootcamp",
-          "slug": "gdpi-intensive-bootcamp-2026",
-          "category": "mba",
-          "description": "High-intensity 3-week bootcamp for shortlisted aspirants with daily mocks and debriefs.",
-          "shortDescription": "Daily mocks and debriefs for call conversion season.",
-          "price": 4999,
-          "originalPrice": 7999,
-          "duration": "3 Weeks",
-          "mode": "Live",
-          "classCount": "21+",
-          "studentsEnrolled": "Fast Conversion Track",
-          "features": [
-            "Daily GD & PI mocks",
-            "WAT writing labs",
-            "B-school-specific briefs",
-            "Personal feedback reports"
-          ],
-          "highlights": [
-            "Call-season ready",
-            "Personalised debriefs"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-intensive-2026",
-          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-4.png",
-          "badge": "Trending"
-        },
-        {
-          "id": "gdpi-wat-pi-2026",
-          "title": "WAT + PI Focus Program",
-          "slug": "gdpi-wat-pi-focus-2026",
-          "category": "mba",
-          "description": "Deep-dive into Written Ability Tests and Personal Interviews for IIM and top B-school formats.",
-          "shortDescription": "Focused WAT and PI coaching for shortlist conversion.",
-          "price": 3999,
-          "originalPrice": 5999,
-          "duration": "4 Weeks",
-          "mode": "Live + Recorded",
-          "classCount": "24+",
-          "studentsEnrolled": "WAT Masters",
-          "features": [
-            "40+ WAT prompts",
-            "12 mock interviews",
-            "Story framework workshops",
-            "Evaluator feedback"
-          ],
-          "highlights": [
-            "Essay frameworks",
-            "Profile storytelling"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-wat-pi-2026",
-          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-3.png",
-          "badge": "New"
-        },
-        {
-          "id": "gdpi-iim-calls-2026",
-          "title": "IIM Calls Conversion Program",
-          "slug": "gdpi-iim-calls-2026",
-          "category": "mba",
-          "description": "End-to-end conversion program tailored for IIM-A/B/C/L/K/I shortlists and similar formats.",
-          "shortDescription": "IIM-specific GDPI conversion with alumni mentors.",
+          "description": "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
+          "shortDescription": "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
           "price": 8999,
-          "originalPrice": 12999,
-          "duration": "6 Weeks",
-          "mode": "Live",
-          "classCount": "36+",
-          "studentsEnrolled": "IIM Convert Focus",
-          "features": [
-            "IIM-format GD panels",
-            "Alumni mentor sessions",
-            "Case discussion practice",
-            "Offer negotiation tips"
+          "originalPrice": 9999,
+          "duration": "Valid till CAT 2026",
+          "mode": "Live + Recorded",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/Rodha-CATX-6a720d6442d894118f9117d0",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "100 hours of concept capsules",
+            "180+ LRDI sets",
+            "1500+ Quant questions",
+            "300+ Reading Comprehensions",
+            "Weekly live sessions with Ravi Sir and KD Sir"
           ],
-          "highlights": [
-            "Alumni mentors",
-            "IIM-A/B/C focus"
+          "thumbnail": "/assets/images/courses/cat 2026 accelerator.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/Rodha-CATX-6a720d6442d894118f9117d0"
+        },
+        {
+          "id": "cat-2026-r8-varc-fast-paced",
+          "title": "Rodha 2026 R8 VARC Batch",
+          "slug": "cat-2026-r8-varc-fast-paced",
+          "language": "Hinglish",
+          "caourseCount": 5,
+          "category": "mba",
+          "description": "Zero to Zenith VARC Fast Paced by KD Sir & Nikita Ma'am for CAT 2026",
+          "shortDescription": "Zero to Zenith VARC Fast Paced by KD Sir & Nikita Ma'am for CAT 2026",
+          "price": 13499,
+          "originalPrice": 14999,
+          "duration": "Fast Paced",
+          "mode": "Live + Recorded",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-VARC-Fast-Paced-Course-for-CAT-2026-6a29c314f071f9999ac8c350",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "Live and recorded VARC classes",
+            "400+ Reading Comprehensions",
+            "35 VARC sectional tests",
+            "Five physical booklets",
+            "Rodha Buddy and Rodha Panchayat access"
           ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-iim-calls-2026",
-          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-5.png",
-          "badge": "Bestseller"
+          "thumbnail": "/assets/images/courses/R8 zero to zenith.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-VARC-Fast-Paced-Course-for-CAT-2026-6a29c314f071f9999ac8c350"
+        },
+        {
+          "id": "cat-2026-r8-comprehensive-fast-paced",
+          "title": "CAT 2026 R8 Basic to Advanced Fast Paced",
+          "slug": "cat-2026-r8-comprehensive-fast-paced",
+          "language": "Hinglish",
+          "caourseCount": 12,
+          "category": "mba",
+          "description": "Course of Quantitative Aptitude, Logical Reasoning & Data Interpretation, Verbal Ability & Reading Comprehension – All In One",
+          "shortDescription": "Course of Quantitative Aptitude, Logical Reasoning & Data Interpretation, Verbal Ability & Reading Comprehension – All In One",
+          "price": 24999,
+          "originalPrice": 35499,
+          "duration": "Comprehensive Batch",
+          "mode": "Live + Recorded",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/R8-Hinglish-Comprehensive-Batch-for-CAT-2026-Basic-to-Advanced-Fast-Paced-Courses-All-In-One-6a29c1d4847de72d152cd9fe",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "Quant, LRDI and VARC — basics to advanced",
+            "12 physical booklets",
+            "30 Rodha CAT Mocks",
+            "105 sectional tests",
+            "Complete OMET preparation"
+          ],
+          "thumbnail": "/assets/images/courses/R8 Varac lrdi quants.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/R8-Hinglish-Comprehensive-Batch-for-CAT-2026-Basic-to-Advanced-Fast-Paced-Courses-All-In-One-6a29c1d4847de72d152cd9fe"
+        },
+        {
+          "id": "cat-2026-r8-dilr-fast-paced",
+          "title": "Rodha 2026 R8 DILR Batch",
+          "slug": "cat-2026-r8-dilr-fast-paced",
+          "language": "Hinglish",
+          "caourseCount": 4,
+          "category": "mba",
+          "description": "Zero to Zenith DILR Fast Paced by Apoorv Sir & Ravi Sir for CAT 2026",
+          "shortDescription": "Zero to Zenith DILR Fast Paced by Apoorv Sir & Ravi Sir for CAT 2026",
+          "price": 13499,
+          "originalPrice": 14999,
+          "duration": "Fast Paced",
+          "mode": "Live + Recorded",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-DILR-Fast-Paced-Course-for-CAT-2026-6a29c47a879a568ecf2333e1",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "Live and recorded DILR classes",
+            "300+ high-quality DILR sets",
+            "35 DILR sectional tests",
+            "Three physical booklets",
+            "Rodha Buddy and Rodha Panchayat access"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 R8 fast paced batch.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-DILR-Fast-Paced-Course-for-CAT-2026-6a29c47a879a568ecf2333e1"
+        },
+        {
+          "id": "cat-2026-r8-quants-fast-paced",
+          "title": "Rodha 2026 R8 Quants Batch",
+          "slug": "cat-2026-r8-quants-fast-paced",
+          "language": "Hinglish",
+          "caourseCount": 6,
+          "category": "mba",
+          "description": "Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
+          "shortDescription": "Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
+          "price": 13499,
+          "originalPrice": 14999,
+          "duration": "Fast Paced",
+          "mode": "Live + Recorded",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-Quants-Fast-Paced-Course-CAT-2026-6a29c3bd847de72d152cdafa",
+          "badge": "Package",
+          "badgeType": "audience",
+          "detailsLabel": "View Details",
+          "details": [
+            "Live and recorded Quants classes",
+            "2000+ high-quality Quant questions",
+            "35 Quants sectional tests",
+            "Four physical booklets",
+            "Rodha Buddy and Rodha Panchayat access"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 Quant R8 fast paced.jpg",
+          "showFaculty": true,
+          "externalLink": "https://www.rodha.co.in/courses/R8-Batch--Zero-to-Zenith-Quants-Fast-Paced-Course-CAT-2026-6a29c3bd847de72d152cdafa"
         }
       ],
       "facultyIds": [
         "faculty-profile-ravi",
         "faculty-profile-kd",
+        "faculty-profile-swapnil",
         "faculty-profile-apoorv",
         "faculty-profile-brijesh",
-        "faculty-profile-himanshu",
-        "faculty-profile-neeraj",
-        "faculty-profile-sanchit",
-        "faculty-profile-shrikant",
-        "faculty-profile-swapnil",
-        "faculty-profile-tarun",
-        "faculty-profile-abhishek-gupta",
-        "faculty-profile-abhishek-dubey",
-        "faculty-profile-ananya",
-        "faculty-profile-divya",
-        "faculty-profile-kirti",
         "faculty-profile-nikita",
-        "faculty-profile-rupal",
-        "faculty-profile-sharwari"
+        "faculty-profile-sharwari",
+        "faculty-profile-abhishek-gupta",
+        "faculty-profile-tarun"
       ],
       "results": [
         {
-          "id": "r1",
-          "name": "Arjun Patel",
-          "exam": "CAT 2024",
-          "rank": 5,
+          "id": "cat-result-1",
+          "name": "Siddhant Misra",
+          "exam": "CAT 2025",
+          "percentile": 99.97,
           "college": "IIM Ahmedabad",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-4.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/siddhant-misra.webp",
+          "category": "mba"
         },
         {
-          "id": "r3",
-          "name": "Priya Gupta",
-          "exam": "CAT 2024",
-          "rank": 22,
+          "id": "cat-result-2",
+          "name": "Rohit Kumar Jha",
+          "exam": "CAT 2025",
+          "percentile": 99.8,
+          "college": "IIM Ahmedabad",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-3",
+          "name": "Varul Sharma",
+          "exam": "CAT 2025",
+          "percentile": 99.65,
+          "college": "IIM Ahmedabad",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/varul-sharma.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-4",
+          "name": "Shriya Yadav",
+          "exam": "CAT 2025",
+          "percentile": 99.18,
+          "college": "IIM Ahmedabad",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-5",
+          "name": "Aditi Pandey",
+          "exam": "CAT 2025",
+          "percentile": 99.63,
           "college": "IIM Bangalore",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/female-4.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
+          "category": "mba"
         },
         {
-          "id": "r6",
-          "name": "Rohan Mehta",
-          "exam": "CAT 2024",
-          "rank": 18,
+          "id": "cat-result-6",
+          "name": "Om Yadav",
+          "exam": "CAT 2025",
+          "percentile": 98.67,
+          "college": "IIM Bangalore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/om-yadav.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-7",
+          "name": "Sakshi Mishra",
+          "exam": "CAT 2025",
+          "percentile": 97.98,
+          "college": "IIM Bangalore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-8",
+          "name": "Bhupesh Bansal",
+          "exam": "CAT 2025",
+          "percentile": 99.8,
           "college": "IIM Calcutta",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-6.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
+          "category": "mba"
         },
         {
-          "id": "r7",
-          "name": "Ananya Desai",
-          "exam": "CAT 2024",
-          "rank": 31,
-          "college": "FMS Delhi",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/female-2.png"
+          "id": "cat-result-9",
+          "name": "Varun Kumar",
+          "exam": "CAT 2025",
+          "percentile": 98.81,
+          "college": "IIM Calcutta",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/varun-kumar.webp",
+          "category": "mba"
         },
         {
-          "id": "r8",
-          "name": "Kabir Nair",
-          "exam": "CAT 2024",
-          "rank": 44,
+          "id": "cat-result-10",
+          "name": "Akshat Yadav",
+          "exam": "CAT 2025",
+          "percentile": 98.8,
+          "college": "IIM Calcutta",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-11",
+          "name": "Manan Jain",
+          "exam": "CAT 2025",
+          "percentile": 99.35,
           "college": "IIM Lucknow",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-1.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/manan-jain.webp",
+          "category": "mba"
         },
         {
-          "id": "r9",
-          "name": "Ishita Verma",
-          "exam": "CAT 2024",
-          "rank": 9,
+          "id": "cat-result-12",
+          "name": "Siddhi Gothi",
+          "exam": "CAT 2025",
+          "percentile": 99.01,
+          "college": "IIM Lucknow",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/siddhi-gothi.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-13",
+          "name": "Om Kesharwani",
+          "exam": "CAT 2025",
+          "percentile": 98.81,
+          "college": "IIM Lucknow",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-14",
+          "name": "Ujjwal Singhal",
+          "exam": "CAT 2025",
+          "percentile": 98.92,
           "college": "IIM Kozhikode",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/female-3.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
+          "category": "mba"
         },
         {
-          "id": "r10",
-          "name": "Aarav Kapoor",
-          "exam": "GDPI 2024",
-          "rank": 1,
-          "score": "Converted",
-          "college": "IIM Ahmedabad",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-4.png"
+          "id": "cat-result-15",
+          "name": "Aanand Yadav",
+          "exam": "CAT 2025",
+          "percentile": 97.92,
+          "college": "IIM Kozhikode",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
+          "category": "mba"
         },
         {
-          "id": "r11",
-          "name": "Diya Banerjee",
-          "exam": "GDPI 2024",
-          "rank": 2,
-          "score": "Converted",
-          "college": "IIM Bangalore",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/female-4.png"
+          "id": "cat-result-16",
+          "name": "Emama Islam",
+          "exam": "CAT 2025",
+          "percentile": 97.08,
+          "college": "IIM Kozhikode",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/emama-islam.webp",
+          "category": "mba"
         },
         {
-          "id": "r12",
-          "name": "Harsh Vardhan",
-          "exam": "GDPI 2024",
-          "rank": 3,
-          "score": "Converted",
-          "college": "IIM Calcutta",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-5.png"
+          "id": "cat-result-17",
+          "name": "Zarish Khan",
+          "exam": "CAT 2025",
+          "percentile": 98.98,
+          "college": "IIM Indore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/zarish-khan.webp",
+          "category": "mba"
         },
         {
-          "id": "r20",
-          "name": "Manav Oberoi",
-          "exam": "GDPI 2024",
-          "rank": 4,
-          "score": "Converted",
-          "college": "IIM Lucknow",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-3.png"
+          "id": "cat-result-18",
+          "name": "Amit Kumar Sahu",
+          "exam": "CAT 2025",
+          "percentile": 97.6,
+          "college": "IIM Indore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
+          "category": "mba"
         },
         {
-          "id": "r21",
-          "name": "Naina Chopra",
-          "exam": "GDPI 2024",
-          "rank": 5,
-          "score": "Converted",
-          "college": "XLRI Jamshedpur",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/female-2.png"
+          "id": "cat-result-19",
+          "name": "Supreet Kaur",
+          "exam": "CAT 2025",
+          "percentile": 97.04,
+          "college": "IIM Indore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/supreet-kaur.webp",
+          "category": "mba"
         },
         {
-          "id": "r22",
-          "name": "Ishan Reddy",
-          "exam": "GDPI 2024",
-          "rank": 6,
-          "score": "Converted",
+          "id": "cat-result-20",
+          "name": "Dhananjay Tanwar",
+          "exam": "CAT 2025",
+          "percentile": 99.1,
           "college": "FMS Delhi",
-          "year": 2024,
-          "category": "mba",
-          "image": "/assets/images/profiles/male-6.png"
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-21",
+          "name": "Prithvi Shetty",
+          "exam": "CAT 2025",
+          "percentile": 99.39,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-22",
+          "name": "Amrit Singh",
+          "exam": "CAT 2025",
+          "percentile": 98.92,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/amrit-singh.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-23",
+          "name": "Vedant Khanna",
+          "exam": "CAT 2025",
+          "percentile": 98.78,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-24",
+          "name": "Manav Pathak",
+          "exam": "CAT 2025",
+          "percentile": 99.32,
+          "college": "XLRI",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/manav-pathak.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-25",
+          "name": "Vansh Batra",
+          "exam": "CAT 2025",
+          "percentile": 98.94,
+          "college": "XLRI",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/vansh-batra.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-26",
+          "name": "Angela Bhardwaj",
+          "exam": "CAT 2025",
+          "percentile": 98.71,
+          "college": "XLRI",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-27",
+          "name": "Rishabh Jain",
+          "exam": "CAT 2025",
+          "percentile": 99.91,
+          "college": "MDI Gurgaon",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/rishabh-jain.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-28",
+          "name": "Ram Khandelwal",
+          "exam": "CAT 2025",
+          "percentile": 99.79,
+          "college": "MDI Gurgaon",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ram-khandelwal.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-29",
+          "name": "Adyatan Mishra",
+          "exam": "CAT 2025",
+          "percentile": 99.39,
+          "college": "MDI Gurgaon",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-30",
+          "name": "Ankita Bhattacharya",
+          "exam": "CAT 2025",
+          "percentile": 97.1,
+          "college": "IIFT",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-31",
+          "name": "Devansh Kumar",
+          "exam": "CAT 2025",
+          "score": "Converted",
+          "college": "IIFT",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/devansh-kumar.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-32",
+          "name": "Aditya Giri Goswami",
+          "exam": "CAT 2025",
+          "percentile": 95.79,
+          "college": "IIT Bombay",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-33",
+          "name": "Sai Krishna Ajith",
+          "exam": "CAT 2025",
+          "percentile": 98.42,
+          "college": "SIBM Pune",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-34",
+          "name": "Sujit Kumar Patjoshi",
+          "exam": "CAT 2025",
+          "percentile": 96.54,
+          "college": "SIBM Pune",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-35",
+          "name": "Nitin Sharma",
+          "exam": "CAT 2025",
+          "percentile": 98.91,
+          "college": "SCMHRD",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/nitin-sharma.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-36",
+          "name": "Shahid Ahmed N",
+          "exam": "CAT 2025",
+          "percentile": 98.83,
+          "college": "SCMHRD",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/shahid-ahmed-n.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-37",
+          "name": "Raghav Pant",
+          "exam": "CAT 2025",
+          "percentile": 98.37,
+          "college": "SCMHRD",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/raghav-pant.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-38",
+          "name": "Amit Chaurasia",
+          "exam": "CAT 2025",
+          "percentile": 98.76,
+          "college": "NMIMS Mumbai",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-39",
+          "name": "Ayush Kumar Singh",
+          "exam": "CAT 2025",
+          "percentile": 98.68,
+          "college": "NMIMS Mumbai",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
+          "category": "mba"
+        },
+        {
+          "id": "cat-result-40",
+          "name": "Laksh Mohan",
+          "exam": "CAT 2025",
+          "percentile": 97.52,
+          "college": "NMIMS Mumbai",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/laksh-mohan.webp",
+          "category": "mba"
         }
       ],
       "testimonials": [
         {
-          "id": "t1",
-          "name": "Arjun Patel",
-          "exam": "CAT Student",
-          "score": "99.5 %ile",
+          "id": "cat-testimonial-1",
+          "name": "Rohit Kumar Jha",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "99.8 %ile",
           "college": "IIM Ahmedabad",
-          "quote": "Rodha's structured approach and personal mentorship transformed my preparation. The mock analysis sessions were invaluable.",
-          "image": "/assets/images/profiles/male-4.png",
-          "year": 2024,
+          "quote": "This would not have been possible without Rodha. The dedicated faculty and high-quality resources played a crucial role in my journey. From not receiving a single interview call for 2 years to finally converting IIM Ahmedabad this year, the transformation has been incredible. I am truly grateful for the guidance and support I received throughout.",
+          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
+          "productCategory": "GDPI / WAT-PI; Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t2",
-          "name": "Priya Gupta",
-          "exam": "CAT Student",
-          "score": "99.1 %ile",
+          "id": "cat-testimonial-2",
+          "name": "Parikshit Agarwal",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "99.89 %ile",
+          "college": "IIM Ahmedabad",
+          "quote": "The in-depth content coverage provided by Rodha is nothing short of phenomenal. High weightage topics like Algebra and Arithmetic are covered in extensive detail. After having taken the course, I strongly believe this course is suitable for anyone who is willing to work hard and score more than 99 percentile.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Comprehensive Batch",
+          "reviewNote": "Photo consent declined - text only",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-3",
+          "name": "Monil",
+          "exam": "GDPI",
+          "score": "Converted",
           "college": "IIM Bangalore",
-          "quote": "VARC finally clicked after Rodha's reading drills. Mentors reviewed every mock and kept me accountable till exam day.",
-          "image": "/assets/images/profiles/female-4.png",
-          "year": 2024,
+          "quote": "Rodha was my primary source for CAT preparation. Ravi sir made Quant and LRDI flawlessly easy and KD sir made VARC a cakewalk. Sectionals of Rodha were top notch and had very good brainstorming questions which helped to open my mind beyond PYQs. During my GDPI preparation, mentors at Rodha were so helpful, especially Arihanta. All mentors helped beyond timelines and that gave me confidence to crack interviews.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Test Series / Mocks; GDPI / WAT-PI",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t3",
-          "name": "Rohan Mehta",
-          "exam": "CAT Student",
-          "score": "98.8 %ile",
+          "id": "cat-testimonial-4",
+          "name": "Om Yadav",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "98.67 %ile",
+          "college": "IIM Bangalore",
+          "quote": "Rodha has been a crucial part of my successful CAT journey. The conceptual clarity provided by Ravi Sir, Sanchit Sir, and the other faculty members, along with the top-notch content at Rodha, helped me achieve the required percentile in CAT. Their constant motivation and guidance kept me going throughout the preparation phase until I finally secured admission to my dream college.",
+          "image": "/assets/images/category/cat/students/om-yadav.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-5",
+          "name": "Anushka Gwalia",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "Converted",
           "college": "IIM Calcutta",
-          "quote": "DILR used to scare me. The step-by-step set frameworks and weekly mentor reviews changed that completely.",
-          "image": "/assets/images/profiles/male-6.png",
-          "year": 2024,
+          "quote": "Rodha went above and beyond just a coaching institution. It helped me not just clear my first competitive exam but also guided me through the mind blocks I faced along the way. All the teachers and mentors I interacted with shaped my thought process so as to face the challenge in front of me rather than just performing for the sake of it. Thank you to every single person in this team for making my dream come true!",
+          "image": "/assets/images/category/cat/students/anushka-gwalia.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t4",
-          "name": "Ananya Desai",
-          "exam": "CAT Student",
-          "score": "98.4 %ile",
+          "id": "cat-testimonial-6",
+          "name": "Varun Kumar",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "98.81 %ile",
+          "college": "IIM Calcutta",
+          "quote": "I needed support to structure my preparation with proper expert guidance, and trusting Ravi Sir, the team, and choosing Rodha turned out to be the right decision. The classes, early topic-wise tests, monthly planning, focus sessions by Ravi Sir, and strategy sessions by subject experts provided constant direction and made the entire journey far more structured, manageable, and effective.",
+          "image": "/assets/images/category/cat/students/varun-kumar.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-7",
+          "name": "Manish Kumar Chandra",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "Converted",
+          "college": "IIM Lucknow",
+          "quote": "The depth and rigor of Rodha's CAT preparation program are truly impressive. Beyond the excellent study materials, Ravi sir instilled the essential mindset for acing the exam and honed our ability to tackle questions effectively. The resources provided were more than sufficient. After attempting CAT multiple times, it was Ravi sir's motivation that finally pushed me to take calculated risks and achieve my best.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-8",
+          "name": "Om Kesharwani",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "98.81 %ile",
+          "college": "IIM Lucknow",
+          "quote": "The precious guidance of Ravi sir has been exceptional and it has helped me in CAT really well. As a person who was transforming his career from defence to MBA, guidance of Ravi sir has been really harsh yet true and beneficial for us. The no-nonsense attitude of the Rodha team was always a splash of cold reality to prepare us warriors to face the upcoming battle.",
+          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-9",
+          "name": "Richa Singh Visen",
+          "exam": "R7 / Comprehensive Batch",
+          "score": "Converted",
+          "college": "IIM Kozhikode",
+          "quote": "Rodha was my first exposure to CAT prep, and my last too. I took all the guidance provided by the faculty members to heart and worked on it to the best of my ability. I am truly thankful to all my teachers for their constant support in this journey. It could not have been possible without you all.",
+          "image": "/assets/images/category/cat/students/richa-singh-visen.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-10",
+          "name": "Shashi Kant Shekhar",
+          "exam": "GDPI",
+          "score": "Converted",
+          "college": "IIM Kozhikode",
+          "quote": "This was my first attempt at CAT, which I gave without having any information about GDPI. When I got to know about the GDPI stage I was very confused and had no idea how to approach it, but then I joined Rodha which really helped me navigate the GDPI stage and convert my call.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "GDPI / WAT-PI",
+          "reviewNote": "Original testimonial said 'convert IIM Indore'; confirm whether IIM Kozhikode is correct.",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-11",
+          "name": "Zarish Khan",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "98.98 %ile",
+          "college": "IIM Indore",
+          "quote": "Rodha has been pivotal in my CAT journey. The in-depth class videos, topic tests, and booster classes played a significant role in strengthening my concepts and building a solid knowledge base. Ravi Sir has been a constant source of support throughout this journey. Tarun Sir's quant video solutions for topic tests and mocks were truly a game changer - from clarifying fundamentals to demonstrating multiple problem-solving approaches. I am really grateful to be a part of the Rodha family.",
+          "image": "/assets/images/category/cat/students/zarish-khan.webp",
+          "productCategory": "Test Series / Mocks; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-12",
+          "name": "Dushyant",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "Converted",
+          "college": "IIM Indore",
+          "quote": "Ravi sir is the best teacher when it comes to CAT preparation. Throughout the year, I felt like I was back in school. The hand-holding throughout the year really helped me. Divya bhaiya, during the GDPI course, was also a great help. Whether it was live sessions or the mentors, they all helped me clarify my doubts and prepare for my interviews.",
+          "image": "/assets/images/category/cat/students/dushyant.webp",
+          "productCategory": "GDPI / WAT-PI; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-13",
+          "name": "Dhananjay Tanwar",
+          "exam": "R5 / Comprehensive Batch",
+          "score": "99.1 %ile",
           "college": "FMS Delhi",
-          "quote": "Evening batches fit my job schedule perfectly. Recordings plus mentorship meant I never fell behind.",
-          "image": "/assets/images/profiles/female-2.png",
-          "year": 2024,
+          "quote": "The coaching was thorough and exactly what I needed. Ravi Sir's LRDI & Quants sessions were the difference-maker. Structured, rigorous, and no shortcuts. Totally worth it.",
+          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t9",
-          "name": "Vikram Singh",
-          "exam": "GDPI Candidate",
-          "score": "Converted",
-          "college": "IIM Bangalore",
-          "quote": "From CAT prep to GDPI conversion, Rodha was with me at every step. Their mock sessions gave me the edge.",
-          "image": "/assets/images/profiles/male-5.png",
-          "year": 2024,
+          "id": "cat-testimonial-14",
+          "name": "Prithvi Shetty",
+          "exam": "R8 + GDPI Pro / Comprehensive Batch",
+          "score": "99.39 %ile",
+          "college": "SPJIMR",
+          "quote": "I am a student of the R8 crash course + OMETs + MHCET + GDPI PRO + Pre-MBA course. I am grateful to the entire team ranging from teachers and mentors to support staff who spared no expense in guiding and supporting us in our journey. After 4 years of work ex, an MBA for me was an important reskilling point, and during my gap year when I had to navigate a lot of uncertainty you folks were the light at the end of the tunnel. Thank you.",
+          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
+          "productCategory": "GDPI / WAT-PI; Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t10",
-          "name": "Diya Banerjee",
-          "exam": "GDPI Candidate",
+          "id": "cat-testimonial-15",
+          "name": "Mohammad Arham Afaque",
+          "exam": "R3 / QA",
           "score": "Converted",
-          "college": "IIM Bangalore",
-          "quote": "The WAT frameworks and PI story workshops helped me sound authentic instead of rehearsed.",
-          "image": "/assets/images/profiles/female-4.png",
-          "year": 2024,
+          "college": "SPJIMR",
+          "quote": "Despite being an engineer, quants was an Achilles heel for me. However, through Rodha's course and under the guidance of Ravi sir, I was able to develop the speed and conceptual clarity required to score well, and this helped me ace the CAT exam along with other entrance exams like XAT, SNAP and NMAT.",
+          "image": "/assets/images/category/cat/students/mohammad-arham-afaque.webp",
+          "productCategory": "Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t11",
-          "name": "Aarav Kapoor",
-          "exam": "GDPI Candidate",
-          "score": "Converted",
-          "college": "IIM Ahmedabad",
-          "quote": "Alumni mentors who had sat on the other side of the table coached me into a confident convert.",
-          "image": "/assets/images/profiles/male-4.png",
-          "year": 2024,
+          "id": "cat-testimonial-16",
+          "name": "Vansh Batra",
+          "exam": "R7 / Comprehensive Batch",
+          "score": "98.94 %ile",
+          "college": "XLRI",
+          "quote": "I gave CAT in 2024 as well; the lack of proper structure in my preparation made it a disaster. For my 2025 attempt I joined Rodha's R-7 batch, and it was truly a game changer. The mocks and daily live classes fueled my stamina for the D-Day and it actually worked. All I want to say is thank you to the whole team, especially Swapnil Sir and KD Sir.",
+          "image": "/assets/images/category/cat/students/vansh-batra.webp",
+          "productCategory": "Test Series / Mocks; Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         },
         {
-          "id": "t12",
-          "name": "Naina Chopra",
-          "exam": "GDPI Candidate",
+          "id": "cat-testimonial-17",
+          "name": "Manav Pathak",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "99.32 %ile",
+          "college": "XLRI",
+          "quote": "Rodha has been a cornerstone of my CAT preparation: motivation, studies, every aspect of it. Ravi Sir's sessions kept me going when it mattered most. KD Sir's classes made learning genuinely fun. But my special mention goes to Abhishek Sir and his LRDI workshop, it gave real structure to my thinking. Converted my best call: XLRI Jamshedpur. Thank you, Rodha. For everything.",
+          "image": "/assets/images/category/cat/students/manav-pathak.webp",
+          "productCategory": "GDPI / WAT-PI; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-18",
+          "name": "Varun Choudhary",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "99.01 %ile",
+          "college": "MDI Gurgaon",
+          "quote": "Earlier I thought that it wouldn't be possible for me to prepare and convert alongside my job, but because of the correct guidance of the teachers, their support and teaching methods, I was able to achieve a good score and college. They boosted our morale at every turn and kept us focused and on track. I really thank the team for the support - this journey has been amazing and I learned a lot from all the mentors and teachers.",
+          "image": "/assets/images/category/cat/students/varun-choudhary.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-19",
+          "name": "Akshat Tiwari",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "96 %ile",
+          "college": "MDI Gurgaon",
+          "quote": "Rodha has always been a bit personal to me because of Ravi sir. I always loved the teaching style of all the faculties, especially Tarun sir - he wasn't teaching mainly in my batch, but watching all his video solutions felt like I had attended all his classes too. All together, Rodha has helped me in an evolution that will definitely help me in this competitive world.",
+          "image": "/assets/images/category/cat/students/akshat-tiwari.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-20",
+          "name": "Ankita Bhattacharya",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "97.1 %ile",
+          "college": "IIFT",
+          "quote": "Rodha has been an integral part of my CAT & OMET preparation. The in-depth classes and extensive mocks really helped me. The hard work that the entire Rodha team has put in has inspired me to work harder. I am really grateful to the entire team, faculty and mentors for their constant support and guidance throughout my journey.",
+          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
+          "productCategory": "Test Series / Mocks; Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-21",
+          "name": "Palak Garg",
+          "exam": "R1 / Comprehensive Batch",
+          "score": "98 %ile",
+          "college": "IIFT",
+          "quote": "RODHA has been the most important part of my MBA journey. The mentors of both CAT preparation and GDPI were amazing and very helpful. The content and classes were comprehensive. There was no need to buy mocks from another institution - RODHA is enough if you're sincerely completing everything.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Test Series / Mocks; GDPI / WAT-PI; Comprehensive Batch",
+          "reviewNote": "Photo consent declined - text only",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-22",
+          "name": "Aditya Giri Goswami",
+          "exam": "R3 / Comprehensive Batch",
+          "score": "95.79 %ile",
+          "college": "IIT Bombay",
+          "quote": "I just wanted to take a moment to thank the entire Rodha team for their role in my CAT and GDPI journey. What really stood out for me was the amount of practice material and the strong focus on problem-solving. It wasn't just about learning concepts, but about building the right approach to tackle questions. One thing that stayed with me was what Ravi Sir said in the last month before CAT - that from that point, it's all about mindset. The GDPI sessions were on point; I felt confident enough to drive my interviews the way I wanted and it led me to a b-school where I truly belong.",
+          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
+          "productCategory": "GDPI / WAT-PI; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-23",
+          "name": "Sujit Kumar Patjoshi",
+          "exam": "R5 / Comprehensive Batch",
+          "score": "96.54 %ile",
+          "college": "SIBM Pune",
+          "quote": "I thank the Rodha team for the structured guidance and in-depth lessons in all subjects. The content and questions were enormous in both quality and quantity. Special thanks to Tarun sir and KD sir for their detailed, practical guidance on what to expect and how to approach each and every situation.",
+          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
+          "productCategory": "Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-24",
+          "name": "Atmodeep Sen",
+          "exam": "R5",
           "score": "Converted",
-          "college": "XLRI Jamshedpur",
-          "quote": "Daily GD panels rebuilt my confidence. Feedback was specific, actionable, and kind.",
-          "image": "/assets/images/profiles/female-2.png",
-          "year": 2024,
+          "college": "SCMHRD",
+          "quote": "Rodha has been a constant guiding light throughout the turbulent journey of preparing for entrance exams - from conducting detailed, in-depth classes to patiently clearing every doubt in each session. Beyond academics, Rodha taught us how to manage time effectively in mocks, strategize every step with precision, and push ourselves beyond our limits to achieve a high percentile.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Test Series / Mocks; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-25",
+          "name": "Sayali Kulkarni",
+          "exam": "R1 & GDPI Plus",
+          "score": "Converted",
+          "college": "SCMHRD",
+          "quote": "RODHA played a key role in my CAT and OMET prep with structured learning, quality mocks, and strong mentor support, which boosted my confidence and performance. Their mock interviews and personalized feedback helped me communicate better and present my profile confidently.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Test Series / Mocks; GDPI / WAT-PI; Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-26",
+          "name": "Anubhav Jha",
+          "exam": "R7",
+          "score": "Converted",
+          "college": "NMIMS Mumbai",
+          "quote": "The Rodha CAT & OMET program helped me clear my concepts so I could approach entrance tests knowing what I was doing. The structured curriculum and quality practice sets provided essential preparation for getting accepted into NMIMS Mumbai. Plus, the ongoing guidance I received throughout the preparation was an important aspect of maintaining focus and discipline.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
+          "category": "mba"
+        },
+        {
+          "id": "cat-testimonial-27",
+          "name": "Rhythm Mehta",
+          "exam": "R5",
+          "score": "Converted",
+          "college": "NMIMS Mumbai",
+          "quote": "Rodha played a big role in helping me convert NMIMS Mumbai through NMAT. Swapnil sir was amazing with Quants - his support, teaching style, and guidance made a huge difference in my preparation. Ravi sir's LR classes were equally helpful and really helped clear my concepts. I'm truly grateful for their mentorship and constant support throughout the journey.",
+          "image": "/assets/images/placeholders/topper-photo.svg",
+          "productCategory": "Crash / OMETs; Comprehensive Batch",
+          "year": 2025,
           "category": "mba"
         }
       ],
@@ -782,148 +1148,6 @@
           "student": "Student Success Story",
           "subtitle": "CAT Journey"
         }
-      ],
-      "featuredCourseIds": [
-        "cat-complete-2026",
-        "cat-pro-2026",
-        "cat-crash-2026",
-        "cat-foundation-2026"
-      ],
-      "featuredCourses": [
-        {
-          "id": "cat-complete-2026",
-          "language": "hinglish",
-          "caourseCount": 12,
-          "title": "CAT 2026 Crash Course",
-          "slug": "cat-2026-complete-program",
-          "category": "mba",
-          "features": [],
-          "highlights": [],
-          "enrollmentUrl": "",
-          "badge": "Package",
-          "badgeType": "audience",
-          "description": "Complete CAT preparation covering Quant, VARC, DILR and OMETs.",
-          "shortDescription": "Complete Package for Quant, LRDI, VARC, Omets (XAT, SNAP, NMAT)",
-          "duration": "12 Months",
-          "mode": "Live + Recorded",
-          "classCount": "900+",
-          "totalHours": "900+ Hrs",
-          "studentsEnrolled": "500+ Selections",
-          "price": 24999,
-          "originalPrice": 34999,
-          "detailsLabel": "View Details",
-          "details": [
-            "Full VARC, DILR & Quant — Live + Recorded",
-            "OMETs: NMAT, SNAP, XAT & CMAT",
-            "20+ Full Length Mock Tests",
-            "Personalised Mentorship",
-            "GDPI / WAT / PI Preparation",
-            "Performance Analytics"
-          ],
-          "thumbnail": "/assets/images/courses/cat 2026 crash course.jpg",
-          "facultyImage": "/assets/images/profiles/male-1.png",
-          "showFaculty": true
-        },
-        {
-          "id": "cat-pro-2026",
-          "title": "CAT 2026 R8",
-          "language": "hinglish",
-          "caourseCount": 4,
-          "slug": "cat-2026-pro-program",
-          "category": "mba",
-          "features": [],
-          "highlights": [],
-          "enrollmentUrl": "",
-          "badge": "Package",
-          "badgeType": "audience",
-          "description": "Weekend-friendly CAT preparation with complete syllabus coverage.",
-          "shortDescription": "R8 Batch | Zero to Zenith DILR Fast Paced by Apoorv Sir & Ravi Sir for CAT 2026",
-          "duration": "10 Months",
-          "mode": "Live + Recorded",
-          "classCount": "700+",
-          "totalHours": "700+ Hrs",
-          "studentsEnrolled": "Weekend Batches",
-          "price": 13500,
-          "originalPrice": 14999,
-          "detailsLabel": "View Details",
-          "details": [
-            "Complete CAT Syllabus",
-            "OMET Preparation",
-            "Weekend Live Classes",
-            "15+ Full Length Mocks",
-            "Weekly Strategy Sessions",
-            "Sectional & Topic Tests"
-          ],
-          "thumbnail": "/assets/images/courses/cat 2026 R8 fast paced batch.jpg",
-          "facultyImage": "/assets/images/profiles/male-2.png",
-          "showFaculty": true
-        },
-        {
-          "id": "cat-crash-2026",
-          "title": "CAT 2026 R8 Fast Batch",
-          "language": "Hindi | English",
-          "caourseCount": 6,
-          "slug": "cat-2026-crash-course",
-          "description": "",
-          "shortDescription": "R8 Batch | Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
-          "category": "mba",
-          "features": [],
-          "highlights": [],
-          "enrollmentUrl": "",
-          "badge": "Package",
-          "badgeType": "audience",
-          "duration": "4 Months",
-          "mode": "Live",
-          "classCount": "250+",
-          "totalHours": "250+ Hrs",
-          "studentsEnrolled": "Ideal for Repeaters",
-          "price": 13500,
-          "originalPrice": 14999,
-          "detailsLabel": "View Details",
-          "details": [
-            "Fast-track Revision",
-            "OMET Sessions",
-            "10+ Full Length Mocks",
-            "Exam Strategy",
-            "Last Mile Preparation"
-          ],
-          "thumbnail": "/assets/images/courses/cat 2026 Quant R8 fast paced.jpg",
-          "facultyImage": "/assets/images/profiles/female-1.png",
-          "showFaculty": true
-        },
-        {
-          "id": "cat-foundation-2026",
-          "title": "Rodha CAT Accelerator",
-          "language": "Hinglish | English",
-          "caourseCount": 5,
-          "slug": "cat-2026-foundation-program",
-          "description": "",
-          "shortDescription": "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
-          "category": "mba",
-          "features": [],
-          "highlights": [],
-          "enrollmentUrl": "",
-          "badge": "Package",
-          "badgeType": "audience",
-          "duration": "14 Months",
-          "mode": "Live + Recorded",
-          "classCount": "1000+",
-          "totalHours": "1000+ Hrs",
-          "studentsEnrolled": "College Students",
-          "price": 9999,
-          "originalPrice": 8999,
-          "detailsLabel": "View Details",
-          "details": [
-            "Build Fundamentals",
-            "Concept-first Teaching",
-            "OMET Preparation",
-            "Sectional Tests",
-            "Long-term Mentorship"
-          ],
-          "thumbnail": "/assets/images/courses/cat 2026 accelerator.jpg",
-          "facultyImage": "/assets/images/profiles/male-3.png",
-          "showFaculty": true
-        }
       ]
     },
     {
@@ -950,16 +1174,9 @@
         "title": "Ace IPMAT on Your",
         "accent": "First Attempt",
         "subtitle": "Integrated Programs preparation for IIM Indore & Rohtak — with expert mentorship, pattern-matched mocks, and a clear path to your early MBA journey.",
-        "image": "/assets/images/hero/cat-hero.jpg",
-        "imageAlt": "Integrated Programs aspirant preparing for IIM Indore and Rohtak",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        },
-        "secondaryCta": {
-          "label": "Explore Test Series",
-          "href": "https://thinkexam.com",
-          "external": true
         }
       },
       "sectionCopy": {
@@ -972,7 +1189,6 @@
         "facultyTitle": "Star Faculty for IPMAT",
         "facultySubtitle": "Learn from mentors who understand the demands of school and entrance preparation.",
         "testimonialSubtitle": "Real stories from Rodha IPMAT aspirants",
-        "storiesTitle": "See what focused preparation can do.",
         "storiesSubtitle": "Student journeys that turn early ambition into IIM opportunities."
       },
       "cta": {
@@ -987,17 +1203,6 @@
           "href": "/category/ipmat#courses"
         }
       },
-      "sectionOrder": [
-        "results",
-        "courses",
-        "test-series",
-        "faculty",
-        "testimonials",
-        "cta",
-        "stories",
-        "app-promo",
-        "faqs"
-      ],
       "sectionThemes": {
         "results": "white",
         "courses": "beige",
@@ -1009,28 +1214,6 @@
         "app-promo": "beige",
         "faqs": "white"
       },
-      "heroFeatures": [
-        {
-          "id": "live-classes",
-          "label": "200+ Hours Live Classes",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        },
-        {
-          "id": "practice",
-          "label": "4000+ Practice Questions",
-          "icon": "/assets/images/icons/ts-topic.png"
-        },
-        {
-          "id": "mocks",
-          "label": "25+ Full Length Mock Tests",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "mentorship",
-          "label": "Personalised Mentorship",
-          "icon": "/assets/images/icons/selection.png"
-        }
-      ],
       "quickStats": [
         {
           "id": "selections",
@@ -1127,41 +1310,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "resources": [
-        {
-          "id": "free-resources",
-          "title": "Free IPMAT Resources",
-          "description": "Access aptitude notes, previous papers, and strategy guides — free for every aspirant.",
-          "ctaLabel": "Access Now",
-          "href": "/blog",
-          "icon": "/assets/icons/download.svg"
-        },
-        {
-          "id": "free-demo",
-          "title": "Attend a Free Demo",
-          "description": "Experience a live IPMAT class with our star faculty before you enroll.",
-          "ctaLabel": "Book Your Demo",
-          "href": "/contact",
-          "icon": "/assets/icons/play.svg"
-        },
-        {
-          "id": "webinars",
-          "title": "Upcoming Webinars",
-          "description": "Join free webinars on IPMAT strategy, Indore vs Rohtak patterns, and interviews.",
-          "ctaLabel": "Register Now",
-          "href": "/blog",
-          "icon": "/assets/icons/calendar.svg"
-        },
-        {
-          "id": "counsellor",
-          "title": "Talk to a Counsellor",
-          "description": "Get a personalised IPMAT roadmap mapped to your Class 11/12 timeline.",
-          "ctaLabel": "Contact Now",
-          "href": "/contact",
-          "icon": "/assets/icons/phone.svg",
-          "highlighted": true
         }
       ],
       "faqs": [
@@ -1415,127 +1563,7 @@
           "category": "ipmat"
         }
       ],
-      "stories": [],
-      "featuredCourseIds": [
-        "ipmat-complete-2026",
-        "ipmat-pro-2026",
-        "ipmat-crash-2026",
-        "ipmat-foundation-2026"
-      ],
-      "featuredCourses": [
-        {
-          "id": "ipmat-complete-2026",
-          "title": "IPMAT 2026 Complete Program",
-          "slug": "ipmat-2026-complete-program",
-          "category": "ipmat",
-          "description": "Intensive IPMAT preparation for IIM Indore & Rohtak with focused problem-solving sessions.",
-          "shortDescription": "Intensive IPMAT prep for IIM Indore & Rohtak admissions.",
-          "price": 19999,
-          "originalPrice": 27999,
-          "duration": "10 Months",
-          "mode": "Live + Recorded",
-          "classCount": "350+",
-          "studentsEnrolled": "200+ Selections",
-          "features": [
-            "350+ hours of live classes",
-            "20+ mock tests",
-            "Aptitude & verbal training",
-            "Interview preparation"
-          ],
-          "highlights": [
-            "IIM Indore focused",
-            "Previous year paper analysis"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026",
-          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-3.png",
-          "badge": "Trending"
-        },
-        {
-          "id": "ipmat-pro-2026",
-          "title": "IPMAT 2026 Pro Program",
-          "slug": "ipmat-2026-pro-program",
-          "category": "ipmat",
-          "description": "Advanced IPMAT track for Class 12 aspirants targeting IIM Indore with intensive mocks.",
-          "shortDescription": "Advanced IPMAT prep for serious Indore/Rohtak targets.",
-          "price": 16999,
-          "originalPrice": 22999,
-          "duration": "8 Months",
-          "mode": "Live + Recorded",
-          "classCount": "280+",
-          "studentsEnrolled": "150+ Shortlists",
-          "features": [
-            "280+ hours of live classes",
-            "15+ full-length mocks",
-            "Weekly mentor reviews",
-            "Indore & Rohtak pattern drills"
-          ],
-          "highlights": [
-            "Pattern-matched mocks",
-            "Board + IPMAT balance"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-pro",
-          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-1.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "ipmat-crash-2026",
-          "title": "IPMAT 2026 Crash Course",
-          "slug": "ipmat-2026-crash-course",
-          "category": "ipmat",
-          "description": "Short-duration IPMAT revision focused on mocks, weak areas, and last-mile strategy.",
-          "shortDescription": "Fast-track revision for the final stretch before IPMAT.",
-          "price": 7999,
-          "originalPrice": 11999,
-          "duration": "3 Months",
-          "mode": "Live",
-          "classCount": "90+",
-          "studentsEnrolled": "Ideal for Final Stretch",
-          "features": [
-            "90+ crash classes",
-            "12+ full-length mocks",
-            "Rapid Quant & Verbal revision",
-            "Daily doubt support"
-          ],
-          "highlights": [
-            "Last-mile strategy",
-            "Mock-heavy schedule"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-crash",
-          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-1.png",
-          "badge": "Starter"
-        },
-        {
-          "id": "ipmat-foundation-2026",
-          "title": "IPMAT 2026 Foundation Program",
-          "slug": "ipmat-2026-foundation-program",
-          "category": "ipmat",
-          "description": "Class 11–friendly foundation that builds aptitude and verbal skills from the ground up.",
-          "shortDescription": "Start-from-basics IPMAT prep for early starters.",
-          "price": 14999,
-          "originalPrice": 19999,
-          "duration": "14 Months",
-          "mode": "Live + Recorded",
-          "classCount": "300+",
-          "studentsEnrolled": "Built for Class 11",
-          "features": [
-            "300+ concept classes",
-            "Foundational Quant & Verbal",
-            "Guided practice sheets",
-            "Early mock exposure"
-          ],
-          "highlights": [
-            "Long runway to IPMAT",
-            "Concept-first approach"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-foundation",
-          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-2.png",
-          "badge": "New"
-        }
-      ]
+      "stories": []
     },
     {
       "id": "clat",
@@ -1561,16 +1589,9 @@
         "title": "Law Prep That Opens Doors to",
         "accent": "Top NLUs",
         "subtitle": "Strategic legal reasoning workshops, mock tests, and daily current affairs built to help serious aspirants crack CLAT and secure seats at leading National Law Universities.",
-        "image": "/assets/images/hero/cat-hero.jpg",
-        "imageAlt": "Law aspirant preparing for top National Law Universities",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        },
-        "secondaryCta": {
-          "label": "Explore Test Series",
-          "href": "https://thinkexam.com",
-          "external": true
         }
       },
       "sectionCopy": {
@@ -1583,7 +1604,6 @@
         "facultyTitle": "Star Faculty for Law",
         "facultySubtitle": "Learn legal reasoning and exam strategy from experienced mentors.",
         "testimonialSubtitle": "Real stories from Rodha CLAT aspirants",
-        "storiesTitle": "Watch NLU ambitions become outcomes.",
         "storiesSubtitle": "Focused practice and mentorship, told through successful student journeys."
       },
       "cta": {
@@ -1598,17 +1618,6 @@
           "href": "/category/clat#courses"
         }
       },
-      "sectionOrder": [
-        "results",
-        "courses",
-        "test-series",
-        "faculty",
-        "testimonials",
-        "cta",
-        "stories",
-        "app-promo",
-        "faqs"
-      ],
       "sectionThemes": {
         "results": "white",
         "courses": "beige",
@@ -1620,28 +1629,6 @@
         "app-promo": "beige",
         "faqs": "white"
       },
-      "heroFeatures": [
-        {
-          "id": "live-classes",
-          "label": "300+ Hours Live Classes",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        },
-        {
-          "id": "practice",
-          "label": "3000+ Practice Questions",
-          "icon": "/assets/images/icons/ts-topic.png"
-        },
-        {
-          "id": "mocks",
-          "label": "30+ Full Length Mock Tests",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "legal",
-          "label": "Legal Reasoning Workshops",
-          "icon": "/assets/images/icons/selection.png"
-        }
-      ],
       "quickStats": [
         {
           "id": "selections",
@@ -1738,41 +1725,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "resources": [
-        {
-          "id": "free-resources",
-          "title": "Free CLAT Resources",
-          "description": "Access legal principle notes, previous papers, and strategy guides — free for every aspirant.",
-          "ctaLabel": "Access Now",
-          "href": "/blog",
-          "icon": "/assets/icons/download.svg"
-        },
-        {
-          "id": "free-demo",
-          "title": "Attend a Free Demo",
-          "description": "Experience a live CLAT class with our legal experts before you enroll.",
-          "ctaLabel": "Book Your Demo",
-          "href": "/contact",
-          "icon": "/assets/icons/play.svg"
-        },
-        {
-          "id": "webinars",
-          "title": "Upcoming Webinars",
-          "description": "Join free webinars on CLAT strategy, NLU preferences, and legal aptitude.",
-          "ctaLabel": "Register Now",
-          "href": "/blog",
-          "icon": "/assets/icons/calendar.svg"
-        },
-        {
-          "id": "counsellor",
-          "title": "Talk to a Counsellor",
-          "description": "Get a personalised NLU roadmap mapped to your timeline and target colleges.",
-          "ctaLabel": "Contact Now",
-          "href": "/contact",
-          "icon": "/assets/icons/phone.svg",
-          "highlighted": true
         }
       ],
       "faqs": [
@@ -2026,128 +1978,7 @@
           "category": "clat"
         }
       ],
-      "stories": [],
-      "featuredCourseIds": [
-        "clat-foundation-2026",
-        "clat-complete-2026",
-        "clat-crash-2026",
-        "clat-repeater-2026"
-      ],
-      "featuredCourses": [
-        {
-          "id": "clat-foundation-2026",
-          "title": "CLAT 2026 Foundation Course",
-          "slug": "clat-2026-foundation",
-          "category": "clat",
-          "description": "Comprehensive CLAT preparation covering Legal Reasoning, English, Current Affairs, and more.",
-          "shortDescription": "Complete CLAT prep for top National Law Universities.",
-          "price": 17999,
-          "originalPrice": 24999,
-          "duration": "10 Months",
-          "mode": "Live + Recorded",
-          "classCount": "400+",
-          "studentsEnrolled": "300+ NLU Selections",
-          "features": [
-            "400+ hours of live classes",
-            "30+ mock tests",
-            "Legal reasoning workshops",
-            "Current affairs daily updates"
-          ],
-          "highlights": [
-            "NLU-focused strategy",
-            "Comprehensive test series"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-foundation-2026",
-          "thumbnail": "/assets/images/courses/clat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-2.png",
-          "badge": "New"
-        },
-        {
-          "id": "clat-complete-2026",
-          "title": "CLAT 2026 Complete Program",
-          "slug": "clat-2026-complete-program",
-          "category": "clat",
-          "description": "Full-length CLAT preparation with legal reasoning depth, GK mastery, and mock analytics.",
-          "shortDescription": "Complete CLAT prep with mocks and mentorship.",
-          "price": 21999,
-          "originalPrice": 29999,
-          "duration": "12 Months",
-          "mode": "Live + Recorded",
-          "classCount": "450+",
-          "studentsEnrolled": "Top NLU Focus",
-          "features": [
-            "450+ hours of live classes",
-            "35+ full-length mocks",
-            "Legal principle workshops",
-            "One-on-one mentor check-ins"
-          ],
-          "highlights": [
-            "NLSIU/NALSAR strategy",
-            "All-India ranking analytics"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-complete-2026",
-          "thumbnail": "/assets/images/courses/clat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-1.png",
-          "isPopular": true,
-          "badge": "Bestseller"
-        },
-        {
-          "id": "clat-crash-2026",
-          "title": "CLAT 2026 Crash Course",
-          "slug": "clat-2026-crash-course",
-          "category": "clat",
-          "description": "Intensive crash course focused on mocks, current affairs, and legal reasoning polish.",
-          "shortDescription": "Last-mile CLAT revision for serious rank aspirants.",
-          "price": 8999,
-          "originalPrice": 12999,
-          "duration": "3 Months",
-          "mode": "Live",
-          "classCount": "100+",
-          "studentsEnrolled": "Rank Improvers",
-          "features": [
-            "100+ crash classes",
-            "20+ full-length mocks",
-            "Daily current affairs",
-            "Rapid legal reasoning drills"
-          ],
-          "highlights": [
-            "Mock-heavy plan",
-            "GK + Legal polish"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-crash-2026",
-          "thumbnail": "/assets/images/courses/clat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-5.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "clat-repeater-2026",
-          "title": "CLAT 2026 Repeater Program",
-          "slug": "clat-2026-repeater-program",
-          "category": "clat",
-          "description": "Targeted repeater batch with diagnostics, weak-area workshops, and rank improvement strategy.",
-          "shortDescription": "Specialized repeater track for NLU rank upgrades.",
-          "price": 15999,
-          "originalPrice": 21999,
-          "duration": "8 Months",
-          "mode": "Live + Recorded",
-          "classCount": "320+",
-          "studentsEnrolled": "Repeater Specialists",
-          "features": [
-            "Diagnostic weak-area plan",
-            "25+ mocks with analytics",
-            "Mentor accountability calls",
-            "NLU preference counselling"
-          ],
-          "highlights": [
-            "Rank jump focus",
-            "Personal diagnostics"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-repeater-2026",
-          "thumbnail": "/assets/images/courses/clat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-4.png",
-          "badge": "Trending"
-        }
-      ]
+      "stories": []
     },
     {
       "id": "banking",
@@ -2173,16 +2004,9 @@
         "title": "Government Exam Prep That Delivers",
         "accent": "Real Results",
         "subtitle": "Expert mentorship for IBPS, SBI, RBI, SSC and related government exams — with live classes, focused practice, and exam-ready mocks.",
-        "image": "/assets/images/hero/cat-hero.jpg",
-        "imageAlt": "Banking and government exam aspirant preparing with Rodha",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        },
-        "secondaryCta": {
-          "label": "Explore Test Series",
-          "href": "https://thinkexam.com",
-          "external": true
         }
       },
       "sectionCopy": {
@@ -2195,7 +2019,6 @@
         "facultyTitle": "Star Faculty for Banking & SSC",
         "facultySubtitle": "Learn from mentors who make complex aptitude concepts clear and practical.",
         "testimonialSubtitle": "Real stories from Rodha banking and SSC aspirants",
-        "storiesTitle": "See preparation become selection.",
         "storiesSubtitle": "Real learner journeys powered by consistency, analytics, and mentorship."
       },
       "cta": {
@@ -2210,17 +2033,6 @@
           "href": "/category/banking#courses"
         }
       },
-      "sectionOrder": [
-        "results",
-        "courses",
-        "test-series",
-        "faculty",
-        "testimonials",
-        "cta",
-        "stories",
-        "app-promo",
-        "faqs"
-      ],
       "sectionThemes": {
         "results": "white",
         "courses": "beige",
@@ -2232,28 +2044,6 @@
         "app-promo": "beige",
         "faqs": "white"
       },
-      "heroFeatures": [
-        {
-          "id": "live-classes",
-          "label": "150+ Hours Live Classes",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        },
-        {
-          "id": "practice",
-          "label": "5000+ Practice Questions",
-          "icon": "/assets/images/icons/ts-topic.png"
-        },
-        {
-          "id": "mocks",
-          "label": "50+ Full Length Mock Tests",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "mentorship",
-          "label": "Personalised Mentorship",
-          "icon": "/assets/images/icons/selection.png"
-        }
-      ],
       "quickStats": [
         {
           "id": "selections",
@@ -2350,41 +2140,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "resources": [
-        {
-          "id": "free-resources",
-          "title": "Free Banking Resources",
-          "description": "Access curated formulas, previous papers, and strategy guides — free for every aspirant.",
-          "ctaLabel": "Access Now",
-          "href": "/blog",
-          "icon": "/assets/icons/download.svg"
-        },
-        {
-          "id": "free-demo",
-          "title": "Attend a Free Demo",
-          "description": "Experience a live banking class with our star faculty before you enroll.",
-          "ctaLabel": "Book Your Demo",
-          "href": "/contact",
-          "icon": "/assets/icons/play.svg"
-        },
-        {
-          "id": "webinars",
-          "title": "Upcoming Webinars",
-          "description": "Join free webinars on banking exam strategy, SSC patterns, and interview prep.",
-          "ctaLabel": "Register Now",
-          "href": "/blog",
-          "icon": "/assets/icons/calendar.svg"
-        },
-        {
-          "id": "counsellor",
-          "title": "Talk to a Counsellor",
-          "description": "Get a personalised preparation roadmap mapped to your target exams and timeline.",
-          "ctaLabel": "Contact Now",
-          "href": "/contact",
-          "icon": "/assets/icons/phone.svg",
-          "highlighted": true
         }
       ],
       "faqs": [
@@ -2630,128 +2385,7 @@
           "category": "banking"
         }
       ],
-      "stories": [],
-      "featuredCourseIds": [
-        "banking-complete-2026",
-        "banking-ssc-2026",
-        "banking-crash-2026",
-        "banking-foundation-2026"
-      ],
-      "featuredCourses": [
-        {
-          "id": "banking-complete-2026",
-          "title": "Banking Complete Program 2026",
-          "slug": "banking-complete-program-2026",
-          "category": "banking",
-          "description": "Complete banking exam preparation covering Quant, Reasoning, English and GA for IBPS, SBI and RBI.",
-          "shortDescription": "Complete banking prep with live mentorship and mocks.",
-          "price": 14999,
-          "originalPrice": 19999,
-          "duration": "8 Months",
-          "mode": "Live + Recorded",
-          "classCount": "300+",
-          "studentsEnrolled": "2,000+ Selects",
-          "features": [
-            "300+ hours of live classes",
-            "40+ full-length mock tests",
-            "Sectional tests & topic practice",
-            "One-on-one mentorship sessions"
-          ],
-          "highlights": [
-            "IBPS/SBI focused",
-            "Interview guidance"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-complete-2026",
-          "thumbnail": "/assets/images/courses/cat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/male-1.png",
-          "isPopular": true,
-          "badge": "Bestseller"
-        },
-        {
-          "id": "banking-ssc-2026",
-          "title": "SSC Complete Program 2026",
-          "slug": "ssc-complete-program-2026",
-          "category": "banking",
-          "description": "Targeted SSC CGL/CHSL preparation with quant foundations, reasoning drills, and mock analytics.",
-          "shortDescription": "SSC CGL & CHSL prep with mocks and mentorship.",
-          "price": 12999,
-          "originalPrice": 17999,
-          "duration": "8 Months",
-          "mode": "Live + Recorded",
-          "classCount": "280+",
-          "studentsEnrolled": "SSC Rank Focus",
-          "features": [
-            "280+ hours of live classes",
-            "35+ full-length mocks",
-            "Tier-I and Tier-II strategy",
-            "Daily practice sheets"
-          ],
-          "highlights": [
-            "SSC pattern matched",
-            "Speed + accuracy drills"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/ssc-complete-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
-          "facultyImage": "/assets/images/profiles/male-2.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "banking-crash-2026",
-          "title": "Banking Crash Course 2026",
-          "slug": "banking-crash-course-2026",
-          "category": "banking",
-          "description": "High-intensity short-duration banking revision focused on mocks and weak-area repair.",
-          "shortDescription": "Fast-track banking revision for the final stretch.",
-          "price": 7999,
-          "originalPrice": 11999,
-          "duration": "3 Months",
-          "mode": "Live",
-          "classCount": "100+",
-          "studentsEnrolled": "Final Stretch",
-          "features": [
-            "100+ crash classes",
-            "20+ full-length mocks",
-            "Rapid revision modules",
-            "Daily doubt support"
-          ],
-          "highlights": [
-            "Mock-heavy schedule",
-            "Last-mile strategy"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-crash-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
-          "facultyImage": "/assets/images/profiles/female-1.png",
-          "badge": "Trending"
-        },
-        {
-          "id": "banking-foundation-2026",
-          "title": "Banking Foundation Program 2026",
-          "slug": "banking-foundation-program-2026",
-          "category": "banking",
-          "description": "Beginner-friendly foundation that builds Quant, Reasoning and English from the ground up.",
-          "shortDescription": "Start-from-basics banking & SSC prep.",
-          "price": 9999,
-          "originalPrice": 14999,
-          "duration": "10 Months",
-          "mode": "Live + Recorded",
-          "classCount": "250+",
-          "studentsEnrolled": "Built for Beginners",
-          "features": [
-            "250+ concept classes",
-            "Foundational Quant & Reasoning",
-            "Guided practice sheets",
-            "Early mock exposure"
-          ],
-          "highlights": [
-            "Zero-to-hero path",
-            "Concept first"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-foundation-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
-          "facultyImage": "/assets/images/profiles/male-3.png",
-          "badge": "Starter"
-        }
-      ]
+      "stories": []
     },
     {
       "id": "skillhouse",
@@ -2777,16 +2411,9 @@
         "title": "Skills That Launch",
         "accent": "Meaningful Careers",
         "subtitle": "Skill House builds career-ready capabilities with mentorship, projects, and structured practice — so you grow beyond exams into professional impact.",
-        "image": "/assets/images/hero/cat-hero.jpg",
-        "imageAlt": "Skill House learner building career-ready skills with Rodha",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        },
-        "secondaryCta": {
-          "label": "Explore Assessments",
-          "href": "https://thinkexam.com",
-          "external": true
         }
       },
       "sectionCopy": {
@@ -2799,7 +2426,6 @@
         "facultyTitle": "Mentors at Skill House",
         "facultySubtitle": "Learn from practitioners who connect concepts to real workplace outcomes.",
         "testimonialSubtitle": "Real stories from Skill House learners",
-        "storiesTitle": "Watch learning turn into career confidence.",
         "storiesSubtitle": "Practical projects and mentorship, reflected in learner outcomes."
       },
       "cta": {
@@ -2814,17 +2440,6 @@
           "href": "/category/skillhouse#courses"
         }
       },
-      "sectionOrder": [
-        "results",
-        "courses",
-        "test-series",
-        "faculty",
-        "testimonials",
-        "cta",
-        "stories",
-        "app-promo",
-        "faqs"
-      ],
       "sectionThemes": {
         "results": "white",
         "courses": "beige",
@@ -2836,28 +2451,6 @@
         "app-promo": "beige",
         "faqs": "white"
       },
-      "heroFeatures": [
-        {
-          "id": "live-classes",
-          "label": "100+ Hours Live Classes",
-          "icon": "/assets/images/icons/ts-mini-mocks.png"
-        },
-        {
-          "id": "practice",
-          "label": "Project-Based Learning",
-          "icon": "/assets/images/icons/ts-topic.png"
-        },
-        {
-          "id": "mocks",
-          "label": "Industry Capstones",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "mentorship",
-          "label": "Personalised Mentorship",
-          "icon": "/assets/images/icons/selection.png"
-        }
-      ],
       "quickStats": [
         {
           "id": "learners",
@@ -2954,41 +2547,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "resources": [
-        {
-          "id": "free-resources",
-          "title": "Free Skill House Resources",
-          "description": "Access curated templates, guides, and starter kits — free for every learner.",
-          "ctaLabel": "Access Now",
-          "href": "/blog",
-          "icon": "/assets/icons/download.svg"
-        },
-        {
-          "id": "free-demo",
-          "title": "Attend a Free Demo",
-          "description": "Experience a live Skill House session with our mentors before you enroll.",
-          "ctaLabel": "Book Your Demo",
-          "href": "/contact",
-          "icon": "/assets/icons/play.svg"
-        },
-        {
-          "id": "webinars",
-          "title": "Upcoming Webinars",
-          "description": "Join free webinars on career pathways, skill stacks, and industry trends.",
-          "ctaLabel": "Register Now",
-          "href": "/blog",
-          "icon": "/assets/icons/calendar.svg"
-        },
-        {
-          "id": "counsellor",
-          "title": "Talk to a Counsellor",
-          "description": "Get a personalised learning roadmap mapped to your career goals.",
-          "ctaLabel": "Contact Now",
-          "href": "/contact",
-          "icon": "/assets/icons/phone.svg",
-          "highlighted": true
         }
       ],
       "faqs": [
@@ -3234,128 +2792,7 @@
           "category": "skillhouse"
         }
       ],
-      "stories": [],
-      "featuredCourseIds": [
-        "skillhouse-foundation-2026",
-        "skillhouse-pro-2026",
-        "skillhouse-comms-2026",
-        "skillhouse-leadership-2026"
-      ],
-      "featuredCourses": [
-        {
-          "id": "skillhouse-foundation-2026",
-          "title": "Skill House Foundation Program",
-          "slug": "skillhouse-foundation-2026",
-          "category": "skillhouse",
-          "description": "Foundational career-skills program covering communication, problem-solving, and digital literacy.",
-          "shortDescription": "Build career-ready foundations with mentorship.",
-          "price": 9999,
-          "originalPrice": 14999,
-          "duration": "4 Months",
-          "mode": "Live + Recorded",
-          "classCount": "80+",
-          "studentsEnrolled": "Career Starters",
-          "features": [
-            "80+ live sessions",
-            "Portfolio starter projects",
-            "Mentor check-ins",
-            "Peer learning circles"
-          ],
-          "highlights": [
-            "Career foundations",
-            "Portfolio first"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-foundation-2026",
-          "thumbnail": "/assets/images/courses/cat-2026.jpg",
-          "facultyImage": "/assets/images/profiles/female-2.png",
-          "badge": "New"
-        },
-        {
-          "id": "skillhouse-pro-2026",
-          "title": "Skill House Pro Program",
-          "slug": "skillhouse-pro-program-2026",
-          "category": "skillhouse",
-          "description": "Advanced Skill House track with industry capstones, mentorship, and role-aligned assessments.",
-          "shortDescription": "Advanced skills with capstones and mentor reviews.",
-          "price": 17999,
-          "originalPrice": 24999,
-          "duration": "6 Months",
-          "mode": "Live + Recorded",
-          "classCount": "120+",
-          "studentsEnrolled": "Pro Track",
-          "features": [
-            "120+ live sessions",
-            "Industry capstone projects",
-            "Weekly mentor reviews",
-            "Career readiness workshops"
-          ],
-          "highlights": [
-            "Capstone focused",
-            "Industry mentors"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-pro-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
-          "facultyImage": "/assets/images/profiles/male-4.png",
-          "isPopular": true,
-          "badge": "Bestseller"
-        },
-        {
-          "id": "skillhouse-comms-2026",
-          "title": "Professional Communication Lab",
-          "slug": "skillhouse-comms-lab-2026",
-          "category": "skillhouse",
-          "description": "Intensive communication lab for presentations, interviews, and workplace writing.",
-          "shortDescription": "Communication skills for interviews and the workplace.",
-          "price": 6999,
-          "originalPrice": 9999,
-          "duration": "8 Weeks",
-          "mode": "Live",
-          "classCount": "32+",
-          "studentsEnrolled": "Comms Lab",
-          "features": [
-            "32+ live practice sessions",
-            "Mock interviews",
-            "Presentation clinics",
-            "Writing feedback loops"
-          ],
-          "highlights": [
-            "Interview ready",
-            "Presentation polish"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-comms-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
-          "facultyImage": "/assets/images/profiles/female-3.png",
-          "badge": "Popular"
-        },
-        {
-          "id": "skillhouse-leadership-2026",
-          "title": "Leadership Essentials",
-          "slug": "skillhouse-leadership-2026",
-          "category": "skillhouse",
-          "description": "Leadership essentials covering collaboration, decision-making, and personal branding.",
-          "shortDescription": "Leadership skills for early professionals.",
-          "price": 8999,
-          "originalPrice": 12999,
-          "duration": "10 Weeks",
-          "mode": "Live + Recorded",
-          "classCount": "40+",
-          "studentsEnrolled": "Leadership Track",
-          "features": [
-            "40+ live sessions",
-            "Team project simulations",
-            "Personal branding labs",
-            "Mentor accountability"
-          ],
-          "highlights": [
-            "Team leadership",
-            "Personal brand"
-          ],
-          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-leadership-2026",
-          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
-          "facultyImage": "/assets/images/profiles/male-5.png",
-          "badge": "Trending"
-        }
-      ]
+      "stories": []
     }
   ]
 }

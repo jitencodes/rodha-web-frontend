@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import type { CategoryHeroFeature, CategoryQuickStat } from "@/lib/types";
+import type { CategoryQuickStat } from "@/lib/types";
 import { CounsellingCtaAction } from "../../CounsellingCtaAction";
 import { HeroVideoEmbed } from "../HeroVideoEmbed";
 import { HomeHeroShell } from "../HomeHeroShell";
@@ -18,12 +18,8 @@ interface CategoryHeroSectionV2Props {
   eyebrow?: string;
   headline: ReactNode;
   subtitle: string;
-  heroImageSrc: string;
-  heroImageAlt: string;
-  features: CategoryHeroFeature[];
   quickStats: CategoryQuickStat[];
   primaryCta: CategoryHeroCta;
-  secondaryCta: CategoryHeroCta;
   className?: string;
 }
 
@@ -67,9 +63,13 @@ export function CategoryHeroSectionV2({
   eyebrow,
   headline,
   subtitle,
+  quickStats,
   primaryCta,
   className,
 }: CategoryHeroSectionV2Props) {
+  const selectionStat = quickStats[0];
+  const aspirantStat = quickStats[1];
+
   return (
     <HomeHeroShell className={cn(className)}>
       <Container data-home-zone="hero">
@@ -82,7 +82,7 @@ export function CategoryHeroSectionV2({
                 {eyebrow ?? `${categoryName} Entrance`}
               </p>
 
-              <h1 className="text-[32px] sm:text-[38px] md:text-[40px] lg:text-[3rem] font-bold leading-[1.4] tracking-tight">
+              <h1 className="text-[32px] sm:text-[38px] md:text-[40px] font-bold leading-[1.4] tracking-tight">
                 {headline}
               </h1>
 
@@ -154,9 +154,9 @@ export function CategoryHeroSectionV2({
             </svg>
             <div>
               <p className="text-lg md:text-2xl font-semibold font-montserrat">
-                10,000+
+                {selectionStat?.value}
               </p>
-              <p className="text-sm">Selections</p>
+              <p className="text-sm">{selectionStat?.label}</p>
             </div>
           </div>
           <div className="flex gap-4.5 items-center">
@@ -176,10 +176,15 @@ export function CategoryHeroSectionV2({
               />
             </svg>
             <div>
+              {aspirantStat?.prefix && (
+                <p className="text-[10px] font-semibold uppercase tracking-wide h-0 -translate-y-2.5">
+                  {aspirantStat.prefix}
+                </p>
+              )}
               <p className="text-lg md:text-2xl font-semibold font-montserrat">
-                5,00,000+
+                {aspirantStat?.value}
               </p>
-              <p className="text-sm">Students Trusted</p>
+              <p className="text-sm">{aspirantStat?.label}</p>
             </div>
           </div>
         </div>

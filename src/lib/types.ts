@@ -43,6 +43,7 @@ export interface Course {
   features: string[];
   highlights: string[];
   enrollmentUrl: string;
+  externalLink?: string;
   image?: string;
   thumbnail?: string;
   /** Faculty portrait shown on the right of featured course cards */
@@ -162,6 +163,8 @@ export interface Testimonial {
   college: string;
   quote: string;
   image?: string;
+  productCategory?: string;
+  reviewNote?: string;
   year: number;
   category: CategoryId;
 }
@@ -252,6 +255,7 @@ export interface CategoryQuickStat {
   value: string;
   label: string;
   icon: string;
+  prefix?: string;
 }
 
 export interface TestSeriesItem {
@@ -261,6 +265,7 @@ export interface TestSeriesItem {
   features?: string[];
   href: string;
   icon: string;
+  image?: string;
   value: string;
 }
 
@@ -296,12 +301,9 @@ export interface CategoryLandingMetadata {
 export interface CategoryLandingHero {
   eyebrow: string;
   title: string;
-  accent: string;
+  accent: string | string[];
   subtitle: string;
-  image: string;
-  imageAlt: string;
   primaryCta: CategoryCta;
-  secondaryCta: CategoryCta;
 }
 
 export interface CategoryLandingSectionCopy {
@@ -314,7 +316,6 @@ export interface CategoryLandingSectionCopy {
   facultyTitle: string;
   facultySubtitle: string;
   testimonialSubtitle: string;
-  storiesTitle: string;
   storiesSubtitle: string;
 }
 
@@ -337,17 +338,12 @@ export interface CategoryLandingConfig extends Category {
   hero: CategoryLandingHero;
   sectionCopy: CategoryLandingSectionCopy;
   cta: CategoryLandingCta;
-  sectionOrder: string[];
   sectionThemes: Record<string, CategorySectionTheme>;
-  heroFeatures: CategoryHeroFeature[];
   quickStats: CategoryQuickStat[];
   resultStats: ResultStat[];
   testSeries: TestSeriesItem[];
-  resources: ResourceItem[];
   faqs: FaqItem[];
   courses: Course[];
-  featuredCourseIds: string[];
-  featuredCourses: Course[];
   facultyIds: string[];
   results: TopperResult[];
   testimonials: Testimonial[];

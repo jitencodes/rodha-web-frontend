@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-16 (theme + dynamic category rollout)
+**Last updated:** 2026-08-17 (CAT category content refresh)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -27,6 +27,12 @@ Update this file after every meaningful implementation task.
   - Scoped mixed-theme tokens (`section-white/beige/cream`, `brand-orange`) + `docs/style.md`; homepage `/` and `/legacy-homepage` composition preserved
   - Live non-reference pages restyled with white/beige/dark alternation (About, Contact, Blog, FAQ, Team, Faculty listing/detail, Legal)
   - Path helpers, Header/MobileNav active slug under `/category/...`, Footer/nav/CTA/link surfaces updated
+- **CAT category content refresh (2026-08-17):**
+  - Updated CAT hero headline, three rotating conversion outcomes, and data-driven selection/aspirant stats
+  - Added 40 CAT 2025 student results and 27 curated testimonials; downloaded, validated, and optimized 46 supplied Drive portraits (text-only entries retain the placeholder)
+  - Added four supplied CAT mock-package card images and limited CAT faculty to the nine supplied faculty profiles
+  - Replaced the CAT course catalog with six current Rodha offerings and exact external course URLs; category course sections use a responsive slider with four desktop cards, arrow controls, mouse dragging, and touch swiping
+  - Removed unused legacy category JSON fields (`sectionOrder`, `heroFeatures`, `resources`, `featuredCourseIds`, and unused hero/story fields)
 
 ---
 

@@ -38,7 +38,6 @@ export function InfiniteMarquee({
   direction = "left",
   pauseOnHover = true,
   gap = 20,
-  
 }: InfiniteMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -128,30 +127,21 @@ export function InfiniteMarquee({
       <div
         ref={trackRef}
         className={cn("flex w-max will-change-transform", itemClassName)}
-        style={{ gap }}
       >
-        <div
+        {[0, 1, 2].map((setIndex) => (
+          <div
+            key={setIndex}
             className="flex shrink-0"
-            style={{ gap }}
-        >
-        {React.Children.map(children, (child, index) => (
-            <div key={index} className="shrink-0">
-            {child}
-            </div>
+            style={{ gap, paddingRight: gap }}
+            aria-hidden={setIndex > 0 || undefined}
+          >
+            {React.Children.map(children, (child, index) => (
+              <div key={`${setIndex}-${index}`} className="shrink-0">
+                {child}
+              </div>
+            ))}
+          </div>
         ))}
-        </div>
-
-        <div
-            className="flex shrink-0"
-            style={{ gap }}
-            aria-hidden
-        >
-        {React.Children.map(children, (child, index) => (
-            <div key={`clone-${index}`} className="shrink-0">
-            {child}
-            </div>
-        ))}
-        </div>
       </div>
     </div>
   );

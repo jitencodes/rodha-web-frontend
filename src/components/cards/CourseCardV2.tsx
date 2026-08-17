@@ -18,6 +18,8 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
     : 0;
 
   const detailsHref = `${getCategoryPath(course.category)}/courses/${course.slug}`;
+  const courseHref = course.externalLink || detailsHref;
+  const isExternal = Boolean(course.externalLink);
   const posterSrc =
     course.thumbnail ||
     course.facultyImage ||
@@ -51,7 +53,7 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-5 md:p-6">
+      <div className="flex flex-1 flex-col p-5 md:p-6 justify-between">
         <h3 className="text-h4 font-montserrat font-medium leading-tight text-neutral-900">
           {course.title}
         </h3>
@@ -61,12 +63,11 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
             {course.shortDescription || course.description}
           </p>
         )}
-        <div className="mt-2 text-caption leading-relaxed text-neutral-500">
+        <div className="mt-2 text-caption leading-relaxed text-neutral-500 flex items-center gap-1 justify-between capitalize">
           <span>{course.caourseCount} Courses</span>
+          <span>{course.language}</span>
         </div>
-
-
-        <div className="mt-3 flex flex-wrap items-end gap-x-3 gap-y-1">
+        <div className="mt-5 flex flex-wrap items-end gap-x-3 gap-y-1">
           <span className="text-[1.4rem] font-bold leading-none text-neutral-900">
             {formatPrice(course.price)}
           </span>
@@ -82,9 +83,11 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
           )}
         </div>
 
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-2">
           <Link
-            href={detailsHref}
+            href={courseHref}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
             className="inline-flex items-center gap-2 hover:gap-3 transition-all duration-300 text-body-sm font-semibold text-orange-500 hover:text-orange-500/80"
           >
             {course.detailsLabel || "View Details"}

@@ -16,6 +16,22 @@ Format:
 
 ---
 
+### 2026-08-17 — Category course catalog is canonical
+- **Decision:** Render `category.courses` directly in the shared category course slider and remove the duplicate `featuredCourses` JSON collection. Use the reusable `Carousel` with responsive 1/2/4-card sizing, desktop arrow controls, mouse pointer dragging, and native touch swiping.
+- **Rationale:** Every configured course should appear, duplicated course collections were drifting out of sync, and users need deliberate slider controls instead of automatic continuous motion.
+- **Alternatives considered:** Keep a four-card grid; maintain separate `courses` and `featuredCourses`; use a continuously moving marquee.
+- **Consequences:** All category verticals receive the same responsive course-slider behavior; CAT course cards use direct Rodha course URLs while internal detail routes remain available for courses without an external link.
+
+---
+
+### 2026-08-17 — Category content schema follows rendered sections
+- **Decision:** Keep category-specific hero stats, typewriter phrases, test-series posters, result records, testimonials, and faculty selections in `category-landings.json`; make the shared hero and cards consume those values. Remove legacy category fields that the current landing template does not render.
+- **Rationale:** Each vertical needs independent content without duplicating or changing the shared page layout.
+- **Alternatives considered:** Hardcode CAT content in components; preserve unused legacy blocks for hypothetical future sections.
+- **Consequences:** Other verticals retain their current presentation and can adopt poster images or rotating hero phrases through the same optional data fields; removed sections must be reintroduced explicitly if the layout later needs them.
+
+---
+
 ### 2026-08-16 — Dynamic `/category/[slug]` + sitewide mixed theme
 - **Decision:** Canonical category URLs live under `/category/[category_slug]` (courses at `/category/[category_slug]/courses/[slug]`). One JSON source (`src/data/category-landings.json`) owns full category landing content. All five verticals render through shared `CategoryLandingPage` (CAT V2 mixed-theme stack). Old top-level category paths permanently redirect straight to `/category/...` (including `/mba` and `/gdpi` → `/category/cat`, no chains). Scoped section tokens (`section-white/beige/cream`, `brand-orange`) + `docs/style.md` document the mixed dark/beige/white contract without flipping global dark defaults, so `/` and `/legacy-homepage` stay unchanged.
 - **Rationale:** One template + one content file scales five verticals; redirects preserve bookmarks; scoped tokens avoid homepage regression.
