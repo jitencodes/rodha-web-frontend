@@ -9,7 +9,7 @@
 | Task type | Read first |
 |-----------|------------|
 | Any task | This index → [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) → [PROGRESS.md](PROGRESS.md) |
-| New UI / screen | [UI_STANDARDS.md](UI_STANDARDS.md) → [DESIGN_TOKENS.md](DESIGN_TOKENS.md) → [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
+| New UI / screen | [UI_STANDARDS.md](UI_STANDARDS.md) → [DESIGN_TOKENS.md](DESIGN_TOKENS.md) → [`../style.md`](../style.md) → [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
 | New component | [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) → [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
 | Architecture / structure | [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) → [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) |
 | Forms / redirects / SEO | [API_STANDARDS.md](API_STANDARDS.md) |
@@ -34,6 +34,7 @@
 | [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) | Clean architecture, reuse, performance, refactoring |
 | [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) | Project tree and where new files belong |
 | [DESIGN_TOKENS.md](DESIGN_TOKENS.md) | Colors, typography, radius, shadows, utility classes |
+| [../style.md](../style.md) | Mixed-theme section rules, alternating backgrounds, V2 component guidance |
 | [UI_STANDARDS.md](UI_STANDARDS.md) | Pixel-perfect UI, responsive tiers, mockup paths |
 | [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) | Component folders, Server/Client, composition |
 | [CODING_STANDARDS.md](CODING_STANDARDS.md) | TypeScript, imports, React patterns |

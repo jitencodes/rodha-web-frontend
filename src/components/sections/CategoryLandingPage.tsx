@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { ResultsStatsPanel } from "@/components/sections/ResultsStatsPanel";
@@ -11,84 +10,88 @@ import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { TestSeriesCardV2 } from "@/components/cards/TestSeriesCardV2";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
-import { mbaCourses } from "@/data/courses";
-import { getMbaStarFaculty } from "@/data/faculty";
-import { getResultsByCategory } from "@/data/results";
-import { getTestimonialsByCategory } from "@/data/testimonials";
-import {
-  MBA_HERO_FEATURES,
-  MBA_QUICK_STATS,
-  MBA_RESULT_STATS,
-  MBA_TEST_SERIES,
-} from "@/data/mba-landing";
-import { EXTERNAL_URLS } from "@/lib/constants";
-import { categoryBreadcrumbJsonLd } from "@/lib/structured-data";
+import { AccordionV2 } from "@/components/ui/AccordionV2";
 import { CategoryHeroSectionV2 } from "@/components/sections/home/HeroSections/CategoryHeroSectionV2";
 import Typewritter from "@/components/Typewriter";
 import TestimonialColumn from "@/components/sections/home/Testimonials/TestimonialColumn";
 import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
-import { mbaStudentStories } from "@/data/youttube-stories";
 import { StoriesModal } from "@/components/layout/VideoModal";
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
-import { HomeFAQSection } from "@/components/sections/home/HomeFaqSection";
+import {
+  getCategoryFaculty,
+} from "@/data/category-landings";
+import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
+import type { CategoryLandingConfig } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "MBA Preparation (CAT + GDPI) — Rodha",
-  description:
-    "Comprehensive MBA preparation covering CAT and GDPI. Live classes, mock tests, and personalized study plans for IIM admissions.",
-};
+interface CategoryLandingPageProps {
+  category: CategoryLandingConfig;
+}
 
-export default function MBAPage() {
-  const mbaFaculty = getMbaStarFaculty();
-  const mbaResults = getResultsByCategory("mba");
-  const mbaTestimonials = getTestimonialsByCategory("mba");
-  const resultsRow1 = mbaResults;
-  const resultsRow2 = [...mbaResults].reverse();
+function sectionSurface(theme: string | undefined) {
+  switch (theme) {
+    case "beige":
+      return "bg-section-beige home-on-light";
+    case "white":
+      return "bg-section-white home-on-light";
+    default:
+      return "";
+  }
+}
+
+export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
+  const facultyMembers = getCategoryFaculty(category);
+  const courses =
+    category.featuredCourses.length > 0
+      ? category.featuredCourses
+      : category.courses.slice(0, 4);
+  const results = category.results;
+  const testimonials = category.testimonials;
+  const resultsRow1 = results;
+  const resultsRow2 = [...results].reverse();
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(categoryBreadcrumbJsonLd("cat")),
+          __html: JSON.stringify(categoryBreadcrumbJsonLd(category.slug)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqPageJsonLd(category.faqs)),
         }}
       />
 
       <CategoryHeroSectionV2
-        categoryName="MBA"
+        categoryName={category.name}
+        eyebrow={category.hero.eyebrow}
         headline={
           <>
-            MBA Prep That Transforms Aspirants into{" "}
+            {category.hero.title}{" "}
             <span className="text-orange-500 glow-text-orange">
-              <Typewritter
-                words={[
-                  "Top B school converts.",
-                  "99 percentiers.",
-                  "The Top 1%.",
-                  "IIM Converts.",
-                ]}
-              />
+              <Typewritter words={[category.hero.accent]} />
             </span>
           </>
         }
-        subtitle="Crack CAT with expert guidance, exam-level mock tests, and a structured preparation plan designed to help you secure your dream B-school."
-        heroImageSrc="/assets/images/hero/cat-hero.jpg"
-        heroImageAlt="MBA aspirant preparing for CAT and top B-school admissions"
-        features={MBA_HERO_FEATURES}
-        quickStats={MBA_QUICK_STATS}
-        primaryCta={{ label: "Explore Courses", href: "#courses" }}
-        secondaryCta={{
-          label: "Explore Test Series",
-          href: EXTERNAL_URLS.thinkExam,
-          external: true,
-        }}
+        subtitle={category.hero.subtitle}
+        heroImageSrc={category.hero.image}
+        heroImageAlt={category.hero.imageAlt}
+        features={category.heroFeatures}
+        quickStats={category.quickStats}
+        primaryCta={category.hero.primaryCta}
+        secondaryCta={category.hero.secondaryCta}
       />
 
-      {/* Results — white */}
       <section
         id="results"
-        className="home-section-spacing home-on-light relative overflow-hidden bg-white"
+        className={cn(
+          "home-section-spacing relative overflow-hidden",
+          sectionSurface(category.sectionThemes.results)
+        )}
       >
         <Container>
           <SectionHeaderV2
@@ -100,7 +103,7 @@ export default function MBAPage() {
           <RevealGroup>
             <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:gap-5">
               <ResultsStatsPanel
-                stats={MBA_RESULT_STATS}
+                stats={category.resultStats}
                 variant="light"
                 className="reveal-child reveal-delay-1"
               />
@@ -119,33 +122,37 @@ export default function MBAPage() {
             </div>
           </RevealGroup>
 
-          <div className="mt-5 overflow-hidden">
-            <InfiniteMarquee speed={32} direction="left" gap={20}>
-              {resultsRow2.map((topper) => (
-                <TopperCardV2 key={`row2-${topper.id}`} topper={topper} />
-              ))}
-            </InfiniteMarquee>
-          </div>
+          {resultsRow2.length > 0 && (
+            <div className="mt-5 overflow-hidden">
+              <InfiniteMarquee speed={32} direction="left" gap={20}>
+                {resultsRow2.map((topper) => (
+                  <TopperCardV2 key={`row2-${topper.id}`} topper={topper} />
+                ))}
+              </InfiniteMarquee>
+            </div>
+          )}
         </Container>
       </section>
 
-      {/* Courses — white */}
       <section
         id="courses"
         data-home-zone="courses"
-        className="home-section-spacing home-on-light relative bg-[#FFF3E8]"
+        className={cn(
+          "home-section-spacing relative",
+          sectionSurface(category.sectionThemes.courses)
+        )}
       >
         <Container>
           <SectionHeaderV2
-            badge="MBA Programs"
-            title="Flagship CAT 2026 Programs"
-            subtitle="Pick the track that fits you. Explore what's included in every course."
+            badge={category.sectionCopy.coursesBadge}
+            title={category.sectionCopy.coursesTitle}
+            subtitle={category.sectionCopy.coursesSubtitle}
             align="center"
             className="mx-auto lg:!mb-10"
           />
           <RevealGroup>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:gap-5">
-              {mbaCourses?.map((course, index) => (
+              {courses.map((course, index) => (
                 <div
                   key={course.id}
                   className={`reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -158,28 +165,36 @@ export default function MBAPage() {
         </Container>
       </section>
 
-      {/* Test Series — white + peach cards */}
       <section
         id="test-series"
         data-home-zone="test-series"
-        className="home-section-spacing home-on-light relative bg-white"
+        className={cn(
+          "home-section-spacing relative",
+          sectionSurface(category.sectionThemes["test-series"])
+        )}
       >
         <Container>
           <SectionHeaderV2
-            badge="MBA Test Series"
+            badge={category.sectionCopy.testSeriesBadge}
             title={
               <>
-                Practice like it&apos;s{" "}
-                <span className="text-orange-500">the real exam.</span>
+                {category.sectionCopy.testSeriesTitle.includes("real exam") ? (
+                  <>
+                    Practice like it&apos;s{" "}
+                    <span className="text-orange-500">the real exam.</span>
+                  </>
+                ) : (
+                  category.sectionCopy.testSeriesTitle
+                )}
               </>
             }
-            subtitle="Identify your strengths, fix your weak areas, and walk into CAT with confidence."
+            subtitle={category.sectionCopy.testSeriesSubtitle}
             align="center"
             className="mx-auto lg:!mb-10"
           />
           <RevealGroup>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-              {MBA_TEST_SERIES.map((item, index) => (
+              {category.testSeries.map((item, index) => (
                 <TestSeriesCardV2
                   key={item.id}
                   item={item}
@@ -191,23 +206,25 @@ export default function MBAPage() {
         </Container>
       </section>
 
-      {/* Faculty — peach + white cards */}
       <section
         id="faculty"
-        className="home-section-spacing home-on-light relative bg-[#FFF3E8]"
+        className={cn(
+          "home-section-spacing relative",
+          sectionSurface(category.sectionThemes.faculty)
+        )}
       >
         <Container>
           <SectionHeaderV2
             badge="Star Faculty"
-            title="Star Faculty for MBA"
-            subtitle="Learn from mentors who have guided thousands to top B-schools."
+            title={category.sectionCopy.facultyTitle}
+            subtitle={category.sectionCopy.facultySubtitle}
             align="center"
             className="mx-auto lg:!mb-10"
           />
         </Container>
         <RevealGroup>
           <InfiniteMarquee speed={35} direction="left" gap={20}>
-            {mbaFaculty.map((member, index) => (
+            {facultyMembers.map((member, index) => (
               <div
                 key={member.id}
                 className={`reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -229,12 +246,11 @@ export default function MBAPage() {
         </Container>
       </section>
 
-      {/* Testimonials — dark (old black theme) */}
       <section id="testimonials" className="home-section-spacing relative">
         <Container>
           <SectionHeader
             title="What Our Students Say"
-            subtitle="Real stories from Rodha MBA aspirants"
+            subtitle={category.sectionCopy.testimonialSubtitle}
             align="center"
             className="mx-auto lg:!mb-10"
           />
@@ -243,17 +259,17 @@ export default function MBAPage() {
             <div className="testimonial-marquee relative mt-4 overflow-hidden lg:h-[580px]">
               <div className="hidden h-full grid-cols-1 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
                 <TestimonialColumn
-                  testimonials={mbaTestimonials.filter((_, i) => i % 3 === 0)}
+                  testimonials={testimonials.filter((_, i) => i % 3 === 0)}
                   direction="down"
                   fadeFrom="#0A0A0A"
                 />
                 <TestimonialColumn
-                  testimonials={mbaTestimonials.filter((_, i) => i % 3 === 1)}
+                  testimonials={testimonials.filter((_, i) => i % 3 === 1)}
                   direction="up"
                   fadeFrom="#0A0A0A"
                 />
                 <TestimonialColumn
-                  testimonials={mbaTestimonials.filter((_, i) => i % 3 === 2)}
+                  testimonials={testimonials.filter((_, i) => i % 3 === 2)}
                   direction="down"
                   className="hidden lg:block"
                   fadeFrom="#0A0A0A"
@@ -261,7 +277,7 @@ export default function MBAPage() {
               </div>
               <div className="block md:hidden">
                 <InfiniteMarquee speed={35}>
-                  {mbaTestimonials.map((testimonial, index) => (
+                  {testimonials.map((testimonial, index) => (
                     <div
                       key={testimonial.id}
                       className={`snap-start shrink-0 reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -277,49 +293,87 @@ export default function MBAPage() {
       </section>
 
       <CTABandV2Decorative
-        title="Ready to Crack CAT & Convert GDPI?"
-        subtitle="Join thousands of serious aspirants and start your MBA journey today."
+        title={category.cta.title}
+        subtitle={category.cta.subtitle}
         backgroundImage="/assets/images/background/cta background image.JPG"
         decorativeImage="/assets/images/about us/award.png"
-        primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
-        secondaryAction={{ label: "Explore Courses", href: "/cat#courses" }}
+        primaryAction={category.cta.primaryAction}
+        secondaryAction={category.cta.secondaryAction}
       />
 
-      {/* Stories — white */}
+      {category.stories.length > 0 && (
+        <section
+          data-home-zone="stories"
+          className={cn(
+            "home-section-spacing relative",
+            sectionSurface(category.sectionThemes.stories)
+          )}
+        >
+          <Container>
+            <SectionHeaderV2
+              badge="Still not convinced?"
+              title={
+                <>
+                  Watch how they{" "}
+                  <span className="text-orange-500">Did it.</span>
+                </>
+              }
+              subtitle={category.sectionCopy.storiesSubtitle}
+              align="center"
+              className="mx-auto lg:!mb-10"
+            />
+          </Container>
+          <RevealGroup>
+            <InfiniteMarquee speed={35}>
+              {category.stories.map((story) => (
+                <YoutubeStoryCard
+                  key={story.id}
+                  youtubeId={story.youtubeId}
+                  student={story.student}
+                  subtitle={story.subtitle}
+                />
+              ))}
+            </InfiniteMarquee>
+          </RevealGroup>
+        </section>
+      )}
+
+      <HomeAppPromotionSection />
+
       <section
-        data-home-zone="stories"
-        className="home-section-spacing home-on-light relative bg-white"
+        id="faqs"
+        className={cn(
+          "home-section-spacing relative overflow-hidden",
+          sectionSurface(category.sectionThemes.faqs)
+        )}
       >
         <Container>
           <SectionHeaderV2
-            badge="Still not convinced?"
-            title={
-              <>
-                Watch how they{" "}
-                <span className="text-orange-500">Did it.</span>
-              </>
-            }
-            subtitle="They were exactly where you are today — hear their stories, in their own words."
-            align="center"
+            title="Frequently Asked Questions"
             className="mx-auto lg:!mb-10"
+            align="center"
+            badge="GOOD TO KNOW"
           />
+          <AccordionV2
+            items={category.faqs.map(({ id, question, answer }) => ({
+              id,
+              question,
+              answer,
+            }))}
+            iconVariant="plus"
+            className="mx-auto"
+          />
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/faq"
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline inline-flex"
+            >
+              View All FAQs
+            </Link>
+          </div>
         </Container>
-        <RevealGroup>
-          <InfiniteMarquee speed={35}>
-            {mbaStudentStories.map((story) => (
-              <YoutubeStoryCard
-                key={story.id}
-                youtubeId={story.youtubeId}
-                student={story.student}
-                subtitle={story.subtitle}
-              />
-            ))}
-          </InfiniteMarquee>
-        </RevealGroup>
       </section>
 
-      <HomeAppPromotionSection />
-      <HomeFAQSection/>
       <StoriesModal />
     </>
   );

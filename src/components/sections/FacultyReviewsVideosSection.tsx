@@ -21,7 +21,7 @@ export function FacultyReviewsVideosSection({
   if (!hasReviews && !hasVideos) return null;
 
   return (
-    <section className={cn("section-spacing", className)}>
+    <section className={cn("home-section-spacing bg-section-white home-on-light", className)}>
       <div className="container-rodha">
         <RevealGroup>
           <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-4 md:gap-5 items-stretch">

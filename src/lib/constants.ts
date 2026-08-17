@@ -162,10 +162,10 @@ export const HEADER_NAV = [
   },
 ] as const;
 
-/** Public path for a category id (`mba` → `/cat`). */
+/** Public path for a category id (`mba` → `/category/cat`). */
 export function getCategoryPath(categoryId: string): string {
   const category = CATEGORIES.find((item) => item.id === categoryId);
-  return `/${category?.slug ?? categoryId}`;
+  return `/category/${category?.slug ?? categoryId}`;
 }
 
 export const NAV_ITEMS = {
@@ -175,11 +175,11 @@ export const NAV_ITEMS = {
       label: "Courses",
       href: "#",
       children: [
-        { label: "MBA Courses", href: "/cat" },
-        { label: "Integrated Programs", href: "/ipmat" },
-        { label: "Law Courses", href: "/clat" },
-        { label: "Banking & Government", href: "/banking" },
-        { label: "Skill House", href: "/skillhouse" },
+        { label: "MBA Courses", href: "/category/cat" },
+        { label: "Integrated Programs", href: "/category/ipmat" },
+        { label: "Law Courses", href: "/category/clat" },
+        { label: "Banking & Government", href: "/category/banking" },
+        { label: "Skill House", href: "/category/skillhouse" },
       ],
     },
     { label: "Faculty", href: "/faculty" },
@@ -189,34 +189,34 @@ export const NAV_ITEMS = {
   ],
   categories: {
     mba: [
-      { label: "Overview", href: "/cat" },
-      { label: "Courses", href: "/cat#courses" },
-      { label: "Faculty", href: "/cat#faculty" },
-      { label: "Results", href: "/cat#results" },
+      { label: "Overview", href: "/category/cat" },
+      { label: "Courses", href: "/category/cat#courses" },
+      { label: "Faculty", href: "/category/cat#faculty" },
+      { label: "Results", href: "/category/cat#results" },
     ],
     ipmat: [
-      { label: "Overview", href: "/ipmat" },
-      { label: "Courses", href: "/ipmat#courses" },
-      { label: "Faculty", href: "/ipmat#faculty" },
-      { label: "Results", href: "/ipmat#results" },
+      { label: "Overview", href: "/category/ipmat" },
+      { label: "Courses", href: "/category/ipmat#courses" },
+      { label: "Faculty", href: "/category/ipmat#faculty" },
+      { label: "Results", href: "/category/ipmat#results" },
     ],
     clat: [
-      { label: "Overview", href: "/clat" },
-      { label: "Courses", href: "/clat#courses" },
-      { label: "Faculty", href: "/clat#faculty" },
-      { label: "Results", href: "/clat#results" },
+      { label: "Overview", href: "/category/clat" },
+      { label: "Courses", href: "/category/clat#courses" },
+      { label: "Faculty", href: "/category/clat#faculty" },
+      { label: "Results", href: "/category/clat#results" },
     ],
     banking: [
-      { label: "Overview", href: "/banking" },
-      { label: "Courses", href: "/banking#courses" },
-      { label: "Faculty", href: "/banking#faculty" },
-      { label: "Results", href: "/banking#results" },
+      { label: "Overview", href: "/category/banking" },
+      { label: "Courses", href: "/category/banking#courses" },
+      { label: "Faculty", href: "/category/banking#faculty" },
+      { label: "Results", href: "/category/banking#results" },
     ],
     skillhouse: [
-      { label: "Overview", href: "/skillhouse" },
-      { label: "Courses", href: "/skillhouse#courses" },
-      { label: "Faculty", href: "/skillhouse#faculty" },
-      { label: "Results", href: "/skillhouse#results" },
+      { label: "Overview", href: "/category/skillhouse" },
+      { label: "Courses", href: "/category/skillhouse#courses" },
+      { label: "Faculty", href: "/category/skillhouse#faculty" },
+      { label: "Results", href: "/category/skillhouse#results" },
     ],
   },
 } as const;

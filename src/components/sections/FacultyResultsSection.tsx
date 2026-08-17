@@ -18,7 +18,7 @@ export function FacultyResultsSection({
   if (!stats?.length) return null;
 
   return (
-    <section className={cn("section-spacing", className)}>
+    <section className={cn("home-section-spacing bg-section-beige home-on-light", className)}>
       <div className="container-rodha">
         <RevealGroup>
           <div

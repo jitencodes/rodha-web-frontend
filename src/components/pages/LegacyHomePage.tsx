@@ -89,7 +89,7 @@ export function LegacyHomePage() {
           <SectionHeader
             title="Featured Courses"
             subtitle="Handpicked for your success"
-            viewAllHref="/cat"
+            viewAllHref="/category/cat"
             viewAllLabel="View All Courses"
             align="left"
           />
@@ -211,7 +211,7 @@ export function LegacyHomePage() {
           title="Ready to Achieve Your Dream?"
           subtitle="Join thousands of successful students on their journey to top colleges."
           primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
-          secondaryAction={{ label: "Explore Courses", href: "/cat" }}
+          secondaryAction={{ label: "Explore Courses", href: "/category/cat" }}
           className="reveal-child reveal-delay-1"
         />
       </RevealGroup>

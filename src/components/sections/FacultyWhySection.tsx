@@ -6,7 +6,7 @@ import { FACULTY_WHY_PROPS } from "@/data/faculty";
 
 export function FacultyWhySection() {
   return (
-    <section className="section-spacing bg-bg-secondary">
+    <section className="home-section-spacing bg-bg-primary">
       <Container>
         <SectionHeader
           title={

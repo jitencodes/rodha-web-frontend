@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const categorySlugs = ["cat", "ipmat", "clat", "banking", "skillhouse"] as const;
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -14,24 +16,36 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/mba",
-        destination: "/cat",
+        destination: "/category/cat",
         permanent: true,
       },
       {
         source: "/mba/:path*",
-        destination: "/cat/:path*",
+        destination: "/category/cat/:path*",
         permanent: true,
       },
       {
         source: "/gdpi",
-        destination: "/cat",
+        destination: "/category/cat",
         permanent: true,
       },
       {
         source: "/gdpi/:path*",
-        destination: "/cat/:path*",
+        destination: "/category/cat/:path*",
         permanent: true,
       },
+      ...categorySlugs.flatMap((slug) => [
+        {
+          source: `/${slug}`,
+          destination: `/category/${slug}`,
+          permanent: true,
+        },
+        {
+          source: `/${slug}/:path*`,
+          destination: `/category/${slug}/:path*`,
+          permanent: true,
+        },
+      ]),
     ];
   },
 };

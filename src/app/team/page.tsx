@@ -3,11 +3,11 @@ import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Carousel } from "@/components/ui/Carousel";
-import { SectionHeader } from "@/components/sections/SectionHeader";
+import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { TeamHeroSection } from "@/components/sections/TeamHeroSection";
 import { AdvisorsSection } from "@/components/sections/AdvisorsSection";
 import { CultureSection } from "@/components/sections/CultureSection";
-import { CTABand } from "@/components/sections/CTABand";
+import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { LeadershipCard } from "@/components/cards/LeadershipCard";
 import { FacultyExpertCard } from "@/components/cards/FacultyExpertCard";
 import { leadership, LEADERSHIP_INTRO } from "@/data/team";
@@ -22,24 +22,26 @@ export const metadata: Metadata = {
 export default function TeamPage() {
   return (
     <>
-      <Container>
-        <Breadcrumb
-          items={[
-            { label: "Home", href: "/" },
-            { label: "About Us", href: "/about" },
-            { label: "Meet the Team" },
-          ]}
-        />
-      </Container>
+      <div className="bg-section-white home-on-light">
+        <Container>
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "About Us", href: "/about" },
+              { label: "Meet the Team" },
+            ]}
+          />
+        </Container>
+      </div>
 
       <TeamHeroSection />
 
-      <section className="section-spacing bg-bg-secondary">
+      <section className="home-section-spacing bg-section-beige home-on-light">
         <Container>
-          <SectionHeader
-            label="Leadership Team"
+          <SectionHeaderV2
+            badge="Leadership Team"
             title="Guided by Vision. Driven by Purpose."
-            description={LEADERSHIP_INTRO}
+            subtitle={LEADERSHIP_INTRO}
           />
           <Carousel>
             {leadership.map((member) => (
@@ -51,10 +53,10 @@ export default function TeamPage() {
         </Container>
       </section>
 
-      <section className="section-spacing bg-bg-secondary">
+      <section className="home-section-spacing bg-section-white home-on-light">
         <Container>
-          <SectionHeader
-            label="Our Faculty Experts"
+          <SectionHeaderV2
+            badge="Our Faculty Experts"
             title="Learn from India's Top Educators"
             viewAllHref="/faculty"
             viewAllLabel="View All Faculty"
@@ -71,7 +73,10 @@ export default function TeamPage() {
             ))}
           </Carousel>
           <div className="mt-5 flex justify-center md:hidden">
-            <Link href="/faculty" className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline">
+            <Link
+              href="/faculty"
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline"
+            >
               View All Faculty
             </Link>
           </div>
@@ -82,15 +87,14 @@ export default function TeamPage() {
 
       <CultureSection />
 
-      <section className="bg-bg-secondary">
-        <CTABand
-          title="Be a Part of Our Mission"
-          subtitle="Join thousands of successful students who trusted Rodha for their exam preparation journey."
-          primaryAction={{ label: "Explore Programs", href: "/cat" }}
-          secondaryAction={{ label: "Book Free Counselling", href: "/contact" }}
-          decorativeImage="/assets/images/meet the team/Cta-left.png"
-        />
-      </section>
+      <CTABandV2Decorative
+        title="Be a Part of Our Mission"
+        subtitle="Join thousands of successful students who trusted Rodha for their exam preparation journey."
+        backgroundImage="/assets/images/background/cta background image.JPG"
+        decorativeImage="/assets/images/meet the team/Cta-left.png"
+        primaryAction={{ label: "Explore Programs", href: "/category/cat" }}
+        secondaryAction={{ label: "Book Free Counselling", href: "/contact" }}
+      />
     </>
   );
 }

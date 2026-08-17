@@ -352,7 +352,7 @@ export const resultBanners: ResultBanner[] = [
       "250+ BLACKI Conversions",
 
     cta: "View CAT Results",
-    href: "/cat#results",
+    href: "/category/cat#results",
 
     backgroundClass:
       "bg-gradient-to-br from-[#0C2D4A] via-[#103C63] to-[#164E7A]",
@@ -375,7 +375,7 @@ export const resultBanners: ResultBanner[] = [
       "25% Conversion Rate in a span of first year",
 
     cta: "Explore Results",
-    href: "/ipmat#results",
+    href: "/category/ipmat#results",
 
     backgroundClass:
       "bg-gradient-to-br from-[#2A1408] via-[#4A2108] to-[#7C320C]",
@@ -400,7 +400,7 @@ export const resultBanners: ResultBanner[] = [
 
     cta: "View GDPI Results",
 
-    href: "/cat#results",
+    href: "/category/cat#results",
 
     backgroundClass:
       "bg-gradient-to-br from-[#26103A] via-[#3A165A] to-[#5A2390]",
@@ -424,7 +424,7 @@ export const resultBanners: ResultBanner[] = [
 
     cta: "View CLAT Results",
 
-    href: "/law/clat",
+    href: "/category/clat",
 
     backgroundClass:
       "bg-gradient-to-br from-[#0F3A2A] via-[#17543C] to-[#227D56]",

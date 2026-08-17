@@ -38,7 +38,7 @@ export function FacultyInfoCardsSection({
   if (!hasAboutOrPhilosophy && !hasExpertise) return null;
 
   return (
-    <section className={cn("section-spacing relative z-10", className)}>
+    <section className={cn("home-section-spacing bg-section-white home-on-light relative z-10", className)}>
       <div className="container-rodha">
         <RevealGroup>
           <div

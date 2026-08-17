@@ -5,7 +5,7 @@ import { Container } from "@/components/layout/Container";
 import { FacultyListingCard } from "@/components/cards/FacultyListingCard";
 import { Pagination } from "@/components/ui/Pagination";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { SectionHeader } from "@/components/sections/SectionHeader";
+import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import {
   FacultyFiltersBar,
   type FacultyFiltersState,
@@ -68,10 +68,10 @@ export function FacultyListingClient({ faculty: allFaculty }: FacultyListingClie
     <>
       <FeaturedFacultySection members={featuredMembers} />
 
-      <section className="section-spacing">
+      <section className="home-section-spacing bg-section-beige home-on-light">
         <Container>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-2">
-            <SectionHeader
+            <SectionHeaderV2
               title="All Faculty"
               subtitle={`${filtered.length} Faculty Member${filtered.length === 1 ? "" : "s"}`}
               align="left"

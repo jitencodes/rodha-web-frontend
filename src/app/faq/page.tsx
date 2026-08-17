@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
-import { CTABand } from "@/components/sections/CTABand";
+import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
+import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { faqPageJsonLd } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/data/faq";
@@ -19,18 +20,15 @@ export default function FAQPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(FAQ_DATA)) }}
       />
-      <section className="bg-hero-gradient section-spacing pt-8 md:pt-10">
+      <section className="home-section-spacing-lg bg-section-white home-on-light pt-8 md:pt-10">
         <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-h1 md:text-[40px] font-bold tracking-tight">
-              Frequently Asked{" "}
-              <span className="text-orange-500">Questions</span>
-            </h1>
-            <p className="mt-3 text-body-lg text-text-muted max-w-xl mx-auto">
-              Find answers to common questions about our programs, payments,
-              mentorship, and test series.
-            </p>
-          </div>
+          <SectionHeaderV2
+            badge="GOOD TO KNOW"
+            title="Frequently Asked Questions"
+            subtitle="Find answers to common questions about our programs, payments, mentorship, and test series."
+            align="center"
+            className="mx-auto max-w-3xl"
+          />
 
           <div className="mt-8 md:mt-10">
             <FAQClient />
@@ -38,9 +36,11 @@ export default function FAQPage() {
         </Container>
       </section>
 
-      <CTABand
+      <CTABandV2Decorative
         title="Still Have Questions?"
         subtitle="Our team is here to help you find the right program for your goals."
+        backgroundImage="/assets/images/background/cta background image.JPG"
+        decorativeImage="/assets/images/about us/award.png"
         primaryAction={{ label: "Contact Us", href: "/contact" }}
         secondaryAction={{ label: "Ask Rodha Buddy", href: EXTERNAL_URLS.rodhaBuddy }}
       />

@@ -19,10 +19,13 @@ Before implementing any approved screen:
 
 ## Theme
 
-- Dark theme only for Phase 1 marketing site
-- Primary accent: orange `#F97316`
+- Mixed theme for Phase 1 marketing site: alternating **dark**, **beige (`#FFF3E8`)**, and **white** section surfaces
+- Primary accent: orange `#F97316` / brand orange `#F06B23`
+- Reference pages: Homepage `/` and category landings via `/category/[slug]` (CAT reference composition)
+- Full rules: [`docs/style.md`](../../docs/style.md)
 - Use design tokens — see [DESIGN_TOKENS.md](DESIGN_TOKENS.md)
 - Prefer utility classes and shared components over inline styles
+- Do not flip the global body to a single light theme
 
 ---
 

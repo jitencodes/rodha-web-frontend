@@ -21,7 +21,7 @@ rodha-web-frontend/
 │   │   ├── globals.css     # Design tokens + utility classes
 │   │   ├── about/, team/, faculty/, blog/, contact/, faq/
 │   │   ├── privacy-policy/, terms-and-conditions/, refund-policy/, disclaimer/
-│   │   └── cat/, ipmat/, gdpi/, clat/
+│   │   └── category/[category_slug]/
 │   │       └── courses/[slug]/
 │   ├── components/
 │   │   ├── ui/             # Primitives (Button, Input, Modal, …)

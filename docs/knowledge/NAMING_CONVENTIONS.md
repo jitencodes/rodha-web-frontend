@@ -36,8 +36,8 @@
 | Page | Path |
 |------|------|
 | Home | `/` |
-| Category | `/cat`, `/ipmat`, `/gdpi`, `/clat` |
-| Course detail | `/[category]/courses/[slug]` |
+| Category | `/category/[category_slug]` (e.g. `/category/cat`) |
+| Course detail | `/category/[category_slug]/courses/[slug]` |
 | Faculty | `/faculty`, `/faculty/[slug]` |
 | Blog | `/blog`, `/blog/[slug]` |
 

@@ -50,32 +50,31 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ---
 
-## Category Landings `/cat` `/ipmat` `/clat` `/banking` `/skillhouse`
+## Category Landings `/category/[category_slug]`
 
 | Section | Status |
 |---------|--------|
-| MBA `/cat` homepage-theme alignment | Complete — peach/white rhythm; `SectionHeaderV2`; dual result marquees; light V2 cards; `CTABandV2Decorative`; hero unchanged; other categories still dark |
-| Category hero | Complete (all five via `CategoryHeroSection`; MBA uses `CategoryHeroSectionV2`) |
-| Courses overview | Complete (MBA: light `CourseCardV2` + posters; others: dark `CourseCard`) |
-| Star faculty | Complete (MBA: premium white `FacultyCardV2` + profile cutouts; others: `FacultyCard`) |
-| Test series promo | Complete (MBA: light `TestSeriesCardV2`; others reuse dark cards) |
-| Results & toppers | Complete (MBA: light stats + dual `TopperCardV2` marquees; others: `ResultsStatsPanel` + `TopperCard`) |
-| Demo / webinar CTA | Complete (resource cards on non-MBA; MBA stories + app promo) |
-| Testimonials | Complete (MBA light cards/fades; others dark) |
-| Resources teaser | Complete (legacy/non-MBA; MBA uses stories section) |
-| Category FAQ | Complete (non-MBA; MBA FAQ deferred in current live page) |
-| SEO intro copy | Partial (per-page metadata; longer SEO blocks TBD) |
-| Match `cat landing page Ui.png` | Complete (structure); MBA now follows locked homepage theme |
-| MBA section order | Complete — Hero → Results → Courses → Test Series → Faculty → Testimonials → CTA → Stories → App Promo |
-| Taxonomy / switcher | Complete — short trigger + full menu labels; public MBA URL is `/cat`; `/mba` & `/gdpi` redirect to `/cat` |
+| Dynamic JSON-driven landings | Complete — `category-landings.json` + `CategoryLandingPage` for all five verticals |
+| MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island |
+| Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template (content differs via JSON) |
+| Category hero | Complete (`CategoryHeroSectionV2` on all five) |
+| Courses overview | Complete (`CourseCardV2`) |
+| Star faculty | Complete (`FacultyCardV2`) |
+| Test series promo | Complete (`TestSeriesCardV2`) |
+| Results & toppers | Complete (light stats + dual `TopperCardV2` marquees) |
+| Testimonials | Complete (dark island) |
+| Stories / app promo / FAQ | Complete |
+| SEO intro copy | Partial (per-page metadata from JSON; longer SEO blocks TBD) |
+| Taxonomy / switcher | Complete — public paths `/category/{slug}`; `/cat|mba|gdpi|…` permanent redirect |
 | SEO structured data | Complete — Organization, category BreadcrumbList, FAQPage JSON-LD |
 
 ---
 
-## Course Detail `/[category]/courses/[slug]`
+## Course Detail `/category/[category_slug]/courses/[slug]`
 
 | Feature | Status |
 |---------|--------|
+| Placeholder shell | Complete (mixed-theme; validates category + course from JSON) |
 | Course hero | Not Started |
 | Curriculum accordion | Not Started |
 | Faculty for course | Not Started |
@@ -91,14 +90,14 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Page | Status | Notes |
 |------|--------|-------|
-| About `/about` | Not Started | Placeholder |
-| Team `/team` | Complete | Hero + leadership/faculty carousels + advisors + culture + CTA; mockup-aligned |
-| Faculty listing `/faculty` | Complete | Vertical listing cards, header-style filters in All Faculty, 4-col hero stats; mockup-aligned |
-| Faculty detail `/faculty/[slug]` | Complete | Pixel mock: hero + info/courses/achievements/reviews/videos/results; full detail for 3 featured; empty sections hidden |
-| Blog listing `/blog` | Not Started | Placeholder (data + BlogCard exist) |
-| Blog detail `/blog/[slug]` | Not Started | Placeholder |
-| Contact `/contact` | Not Started | ContactForm exists; page stub |
-| FAQ `/faq` | Complete | Search + category pills + Accordion + Pagination + CTABand |
+| About `/about` | Partial | Mixed-theme shell; content still placeholder |
+| Team `/team` | Complete | Hero + leadership/faculty carousels + advisors + culture + CTA; light section shells |
+| Faculty listing `/faculty` | Complete | Vertical listing cards, header-style filters in All Faculty, 4-col hero stats; mixed theme |
+| Faculty detail `/faculty/[slug]` | Complete | Dark hero + light alternating body sections + decorative CTA |
+| Blog listing `/blog` | Partial | Mixed-theme shell; content still placeholder |
+| Blog detail `/blog/[slug]` | Partial | Mixed-theme shell; content still placeholder |
+| Contact `/contact` | Partial | Beige shell + dark form island (matches dark `input-base`); ContactForm exists |
+| FAQ `/faq` | Complete | Search + category pills + AccordionV2 + Pagination + CTABand |
 | Privacy `/privacy-policy` | Complete | LegalPageLayout + structured content |
 | Terms `/terms-and-conditions` | Complete | LegalPageLayout + structured content |
 | Refund `/refund-policy` | Complete | LegalPageLayout + structured content |

@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <section className="section-spacing">
+    <section className="home-section-spacing-lg bg-section-white home-on-light">
       <Container>
-        <h1 className="text-h1 md:text-hero font-bold">About <span className="text-gradient-orange">Rodha</span></h1>
-        <p className="mt-4 text-body-lg text-text-muted max-w-2xl">
+        <h1 className="home-light-heading text-h1 md:text-hero font-bold">About <span className="text-gradient-orange">Rodha</span></h1>
+        <p className="home-light-body mt-4 text-body-lg max-w-2xl">
           Our mission is to make quality competitive exam preparation accessible to every aspirant across India.
         </p>
-        <p className="mt-8 text-text-dimmed">Full content coming soon...</p>
+        <p className="home-light-muted mt-8">Full content coming soon...</p>
       </Container>
     </section>
   );

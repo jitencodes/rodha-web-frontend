@@ -280,6 +280,80 @@ export interface FaqItem {
   answer: string;
 }
 
+export type CategorySectionTheme = "dark" | "beige" | "white";
+
+export interface CategoryCta {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+export interface CategoryLandingMetadata {
+  title: string;
+  description: string;
+}
+
+export interface CategoryLandingHero {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  subtitle: string;
+  image: string;
+  imageAlt: string;
+  primaryCta: CategoryCta;
+  secondaryCta: CategoryCta;
+}
+
+export interface CategoryLandingSectionCopy {
+  coursesBadge: string;
+  coursesTitle: string;
+  coursesSubtitle: string;
+  testSeriesBadge: string;
+  testSeriesTitle: string;
+  testSeriesSubtitle: string;
+  facultyTitle: string;
+  facultySubtitle: string;
+  testimonialSubtitle: string;
+  storiesTitle: string;
+  storiesSubtitle: string;
+}
+
+export interface CategoryLandingCta {
+  title: string;
+  subtitle: string;
+  primaryAction: CategoryCta;
+  secondaryAction: CategoryCta;
+}
+
+export interface StudentStory {
+  id: string;
+  youtubeId: string;
+  student: string;
+  subtitle: string;
+}
+
+export interface CategoryLandingConfig extends Category {
+  metadata: CategoryLandingMetadata;
+  hero: CategoryLandingHero;
+  sectionCopy: CategoryLandingSectionCopy;
+  cta: CategoryLandingCta;
+  sectionOrder: string[];
+  sectionThemes: Record<string, CategorySectionTheme>;
+  heroFeatures: CategoryHeroFeature[];
+  quickStats: CategoryQuickStat[];
+  resultStats: ResultStat[];
+  testSeries: TestSeriesItem[];
+  resources: ResourceItem[];
+  faqs: FaqItem[];
+  courses: Course[];
+  featuredCourseIds: string[];
+  featuredCourses: Course[];
+  facultyIds: string[];
+  results: TopperResult[];
+  testimonials: Testimonial[];
+  stories: StudentStory[];
+}
+
 export interface LeadershipMember {
   id: string;
   name: string;

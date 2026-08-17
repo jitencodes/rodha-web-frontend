@@ -51,7 +51,7 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
             return (
               <Link
                 key={cat.id}
-                href={`/${cat.slug}`}
+                href={`/category/${cat.slug}`}
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "block py-2.5 text-body font-medium transition-colors",

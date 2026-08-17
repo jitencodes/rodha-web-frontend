@@ -15,9 +15,11 @@ interface HeaderProps {
 }
 
 function getActiveCategoryId(pathname: string): CategoryId | null {
-  const segment = pathname.split("/").filter(Boolean)[0];
-  if (!segment) return null;
-  const match = CATEGORIES.find((cat) => cat.slug === segment);
+  const segments = pathname.split("/").filter(Boolean);
+  const categorySlug =
+    segments[0] === "category" ? segments[1] : segments[0];
+  if (!categorySlug) return null;
+  const match = CATEGORIES.find((cat) => cat.slug === categorySlug);
   return match?.id ?? null;
 }
 
@@ -202,7 +204,7 @@ export function Header({ className }: HeaderProps) {
                     return (
                       <Link
                         key={cat.id}
-                        href={`/${cat.slug}`}
+                        href={`/category/${cat.slug}`}
                         role="option"
                         aria-selected={isActive}
                         onClick={() => setExamOpen(false)}

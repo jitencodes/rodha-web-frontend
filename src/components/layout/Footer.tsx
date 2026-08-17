@@ -45,11 +45,32 @@ const LEGAL_LINKS = [
 ];
 
 const PREFERRED_ACTIVE_LABEL: Record<string, string> = {
-  "/cat": "MBA (CAT + GDPI)",
+  "/category/cat": "MBA (CAT + GDPI)",
   "/blog": "Blog",
   "/contact": "Contact Us",
   "/faq": "FAQ",
   "/team": "Meet the Team",
+};
+
+type FooterTheme = {
+  heading: string;
+  muted: string;
+  dimmed: string;
+  social: string;
+  divider: string;
+  link: string;
+  activeLink: string;
+};
+
+const LIGHT_FOOTER_THEME: FooterTheme = {
+  heading: "text-slate-900",
+  muted: "text-slate-500 hover:text-orange-500",
+  dimmed: "text-slate-500",
+  link: "text-slate-600 hover:text-orange-500",
+  activeLink: "text-orange-600 font-medium",
+  social:
+    "border-slate-300 text-slate-700 hover:border-orange-500 hover:text-orange-500",
+  divider: "border-slate-200",
 };
 
 function normalizePath(path: string): string {
@@ -70,7 +91,7 @@ function getActiveFooterLabel(pathname: string, currentHash: string): string | n
   const hash = currentHash || "";
 
   const allLinks = [
-    ...CATEGORIES.map((c) => ({ label: c.menuLabel, href: `/${c.slug}` })),
+    ...CATEGORIES.map((c) => ({ label: c.menuLabel, href: `/category/${c.slug}` })),
     ...QUICK_LINKS,
     ...RESOURCES_LINKS,
     ...LEGAL_LINKS,
@@ -93,6 +114,43 @@ function getActiveFooterLabel(pathname: string, currentHash: string): string | n
   return matches[0].label;
 }
 
+function FooterColumn({
+  title,
+  links,
+  activeLabel,
+  theme,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  activeLabel: string | null;
+  theme: FooterTheme;
+}) {
+  return (
+    <div className="text-left">
+      <h4 className={cn("text-body font-semibold mb-4", theme.heading)}>
+        {title}
+      </h4>
+      <ul className="space-y-2.5">
+        {links.map((item) => {
+          const isActive = activeLabel === item.label;
+          return (
+            <li key={item.label}>
+              <Link
+                href={item.href}
+                className={cn(
+                  "text-body-sm transition-colors",
+                  isActive ? theme.activeLink : theme.link
+                )}
+              >
+                {item.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export function Footer() {
   const pathname = usePathname();
@@ -107,102 +165,18 @@ export function Footer() {
   }, [pathname]);
 
   const activeLabel = getActiveFooterLabel(pathname, hash);
-  const examLinks = CATEGORIES.map((c) => ({ label: c.menuLabel, href: `/${c.slug}` }));
-  
-  const isHomePage = pathname === "/" || pathname === "/cat";
-const footerTheme = isHomePage
-? {
-    heading: "text-slate-900",
-    body: "text-slate-600",
-    muted: "text-slate-500 hover:text-orange-500",
-    dimmed: "text-slate-500",
+  const examLinks = CATEGORIES.map((c) => ({
+    label: c.menuLabel,
+    href: `/category/${c.slug}`,
+  }));
+  const isCategoryRoute = pathname.startsWith("/category/");
+  const footerTheme = LIGHT_FOOTER_THEME;
 
-    link: "text-slate-600 hover:text-orange-500",
-    activeLink: "text-orange-600 font-medium",
-
-    social:
-      "border-slate-300 text-slate-700 hover:border-orange-500 hover:text-orange-500",
-
-    divider: "border-slate-200",
-  }
-: {
-    heading: "text-text-primary",
-    body: "text-text-secondary",
-    muted: "text-text-muted",
-    dimmed: "text-text-dimmed",
-
-    link: "text-text-dimmed hover:text-orange-400",
-    activeLink: "text-orange-400 font-medium",
-
-    social:
-      "border-white/40 text-white hover:border-orange-500 hover:text-orange-400",
-
-    divider: "border-border-default",
-  };
-
-function FooterColumn({
-  title,
-  links,
-  activeLabel,
-  }: {
-  title: string;
-  links: { label: string; href: string }[];
-  activeLabel: string | null;
-  }) {
-  return (
-    <div className="text-left">
-      <h4
-            className={cn(
-              "text-body font-semibold mb-4",
-              footerTheme.heading
-            )}
-          >{title}</h4>
-      <ul className="space-y-2.5">
-        {links.map((item) => {
-          return (
-            <li
-                key={item.label}
-                className={cn(
-                  "flex items-start gap-2.5 text-body-sm",
-                  footerTheme.muted
-                )}
-              >
-              <Link
-                href={item.href}
-                className={cn(
-                  "text-body-sm transition-colors",
-                )}
-              >
-                {item.label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
   return (
     <footer
-      data-home-zone={isHomePage ? "footer" : undefined}
-      className={cn(
-        "relative",
-        // isHomePage
-        //   ? "bg-[#0a0a0a] border-t border-transparent"
-        //   : "bg-bg-primary border-t border-border-default",
-       "bg-[#FCFAF8] border-t-[10px] border-[#F06B23]")}
+      data-home-zone={pathname === "/" || isCategoryRoute ? "footer" : undefined}
+      className="relative bg-section-cream border-t-[10px] border-brand-orange"
     >
-      {!isHomePage && (
-        <div
-          className="pointer-events-none absolute inset-0 opacity-40"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(249,115,22,0.08) 0%, transparent 70%)",
-          }}
-        />
-      )}
-
       <div className="container-rodha relative py-10 md:py-12">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">
           <div className="col-span-2 sm:col-span-3 lg:col-span-2 text-left">
@@ -237,7 +211,10 @@ function FooterColumn({
                   aria-label={link.platform}
                 >
                   <Icon
-                    src={SOCIAL_ICON_PATHS[link.icon] || "/assets/icons/external-link.svg"}
+                    src={
+                      SOCIAL_ICON_PATHS[link.icon] ||
+                      "/assets/icons/external-link.svg"
+                    }
                     size={14}
                     className="text-current"
                   />
@@ -246,17 +223,29 @@ function FooterColumn({
             </div>
           </div>
 
-          <FooterColumn title="Courses" links={examLinks} activeLabel={activeLabel} />
-          <FooterColumn title="Quick Links" links={QUICK_LINKS} activeLabel={activeLabel} />
-          <FooterColumn title="Resources" links={RESOURCES_LINKS} activeLabel={activeLabel} />
+          <FooterColumn
+            title="Courses"
+            links={examLinks}
+            activeLabel={activeLabel}
+            theme={footerTheme}
+          />
+          <FooterColumn
+            title="Quick Links"
+            links={QUICK_LINKS}
+            activeLabel={activeLabel}
+            theme={footerTheme}
+          />
+          <FooterColumn
+            title="Resources"
+            links={RESOURCES_LINKS}
+            activeLabel={activeLabel}
+            theme={footerTheme}
+          />
 
           <div className="col-span-2 sm:col-span-1 text-left">
-          <h4
-            className={cn(
-              "text-body font-semibold mb-4",
-              footerTheme.heading
-            )}
-          >Contact Us</h4>
+            <h4 className={cn("text-body font-semibold mb-4", footerTheme.heading)}>
+              Contact Us
+            </h4>
             <ul className="space-y-3">
               <li
                 className={cn(
@@ -264,7 +253,11 @@ function FooterColumn({
                   footerTheme.muted
                 )}
               >
-                <Icon src="/assets/icons/phone.svg" size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <Icon
+                  src="/assets/icons/phone.svg"
+                  size={16}
+                  className="text-orange-400 mt-0.5 shrink-0"
+                />
                 <span>{CONTACT_INFO.phone}</span>
               </li>
               <li
@@ -273,13 +266,15 @@ function FooterColumn({
                   footerTheme.muted
                 )}
               >
-                <Icon src="/assets/icons/email.svg" size={16} className="text-orange-400 mt-0.5 shrink-0" />
-                <a href={`mailto:${CONTACT_INFO.email}`} className={cn(
-                  "transition-colors",
-                  isHomePage
-                    ? "hover:text-orange-600"
-                    : "hover:text-orange-400"
-                )}>
+                <Icon
+                  src="/assets/icons/email.svg"
+                  size={16}
+                  className="text-orange-400 mt-0.5 shrink-0"
+                />
+                <a
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="transition-colors hover:text-orange-600"
+                >
                   {CONTACT_INFO.email}
                 </a>
               </li>
@@ -289,7 +284,11 @@ function FooterColumn({
                   footerTheme.muted
                 )}
               >
-                <Icon src="/assets/icons/location.svg" size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <Icon
+                  src="/assets/icons/location.svg"
+                  size={16}
+                  className="text-orange-400 mt-0.5 shrink-0"
+                />
                 <span>{CONTACT_INFO.address}</span>
               </li>
             </ul>
@@ -297,12 +296,7 @@ function FooterColumn({
         </div>
       </div>
 
-      <div
-        className={cn(
-          "border-t",
-          footerTheme.divider
-        )}
-      >
+      <div className={cn("border-t", footerTheme.divider)}>
         <div className="container-rodha py-5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p
             className={cn(
@@ -319,8 +313,10 @@ function FooterColumn({
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "flex items-start gap-2.5",
-                  footerTheme.muted
+                  "text-caption transition-colors",
+                  activeLabel === item.label
+                    ? footerTheme.activeLink
+                    : footerTheme.link
                 )}
               >
                 {item.label}
@@ -335,8 +331,18 @@ function FooterColumn({
         className="fixed bottom-4 right-4 z-40 w-9 h-9 shrink-0 flex items-center justify-center rounded-full bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-orange md:bottom-6 md:right-6"
         aria-label="Scroll to top"
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 15l7-7 7 7"
+          />
         </svg>
       </button>
     </footer>

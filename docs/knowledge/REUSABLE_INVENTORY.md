@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-13 (MBA homepage-theme alignment)
+**Last updated:** 2026-08-16 (theme + dynamic category rollout)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -50,6 +50,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Component | File |
 |-----------|------|
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
+| CategoryLandingPage | `CategoryLandingPage.tsx` (JSON-driven CAT V2 stack for `/category/[slug]`) |
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
 | CTABand | `CTABand.tsx` (optional `backgroundImage`, `titleAccent`, `secondaryOutline` for home variant; counselling `/contact` actions open modal) |
 | CTABandV2 | `CTABandV2.tsx` (locked homepage full-bleed image CTA) |
@@ -155,20 +156,16 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File |
 |--------|------|
 | blog | `blog.ts` |
-| banking-landing | `banking-landing.ts` |
-| clat-landing | `clat-landing.ts` |
-| courses | `courses.ts` |
+| category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
+| courses | `courses.ts` (homepage / legacy) |
 | faculty | `faculty.ts` |
 | faq | `faq.ts` |
-| ipmat-landing | `ipmat-landing.ts` |
 | legal | `legal.ts` |
-| mba-landing | `mba-landing.ts` |
 | navigation | `navigation.ts` |
-| results | `results.ts` |
-| skillhouse-landing | `skillhouse-landing.ts` |
+| results | `results.ts` (homepage / legacy) |
 | team | `team.ts` |
 | home-impact | `home-impact.ts` |
-| testimonials | `testimonials.ts` |
+| testimonials | `testimonials.ts` (homepage / legacy) |
 
 ---
 

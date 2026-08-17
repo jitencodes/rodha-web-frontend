@@ -9,14 +9,14 @@ interface CultureSectionProps {
 
 export function CultureSection({ className }: CultureSectionProps) {
   return (
-    <section className={cn("section-spacing bg-bg-secondary", className)}>
+    <section className={cn("home-section-spacing bg-section-white home-on-light", className)}>
       <div className="container-rodha">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 lg:items-center">
           <div className="lg:col-span-4 xl:col-span-3">
             <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
               Our Culture
             </p>
-            <h2 className="text-h2 md:text-h1 font-bold text-text-primary leading-tight">
+            <h2 className="home-light-heading text-h2 md:text-h1 font-bold leading-tight">
               We Believe in More Than Just{" "}
               <span className="relative inline-block text-orange-500">
                 Teaching
@@ -32,8 +32,8 @@ export function CultureSection({ className }: CultureSectionProps) {
                   key={value.id}
                   className={cn(
                     "flex flex-col gap-3 sm:px-4 lg:px-5",
-                    index % 2 === 1 && "sm:border-l sm:border-border-default",
-                    index > 0 && "lg:border-l lg:border-border-default"
+                    index % 2 === 1 && "sm:border-l sm:border-section-beige",
+                    index > 0 && "lg:border-l lg:border-section-beige"
                   )}
                 >
                   <div className="relative w-10 h-10 md:w-11 md:h-11 shrink-0">
@@ -46,10 +46,10 @@ export function CultureSection({ className }: CultureSectionProps) {
                     />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-body font-semibold text-text-primary">
+                    <h3 className="home-light-heading text-body font-semibold">
                       {value.title}
                     </h3>
-                    <p className="mt-1.5 text-body-sm text-text-muted leading-relaxed">
+                    <p className="home-light-body mt-1.5 text-body-sm leading-relaxed">
                       {value.description}
                     </p>
                   </div>

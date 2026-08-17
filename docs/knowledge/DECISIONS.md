@@ -16,11 +16,17 @@ Format:
 
 ---
 
+### 2026-08-16 — Dynamic `/category/[slug]` + sitewide mixed theme
+- **Decision:** Canonical category URLs live under `/category/[category_slug]` (courses at `/category/[category_slug]/courses/[slug]`). One JSON source (`src/data/category-landings.json`) owns full category landing content. All five verticals render through shared `CategoryLandingPage` (CAT V2 mixed-theme stack). Old top-level category paths permanently redirect straight to `/category/...` (including `/mba` and `/gdpi` → `/category/cat`, no chains). Scoped section tokens (`section-white/beige/cream`, `brand-orange`) + `docs/style.md` document the mixed dark/beige/white contract without flipping global dark defaults, so `/` and `/legacy-homepage` stay unchanged.
+- **Rationale:** One template + one content file scales five verticals; redirects preserve bookmarks; scoped tokens avoid homepage regression.
+- **Alternatives considered:** Keep five static route trees; global light-theme flip; dual V1 dark + V2 light templates per category.
+- **Consequences:** Internal id `mba` remains distinct from public slug `cat`; Header/MobileNav active state reads the slug under `/category/...`; content pages adopt alternating light shells with intentional dark islands (hero, testimonials, dark cards).
+
 ### 2026-08-14 — MBA public route is `/cat`
 - **Decision:** Move the MBA category landing from `/mba` to `/cat`. Keep internal category id `mba` for data; set `CATEGORIES[].slug` to `cat`. Add `getCategoryPath()` for course/faculty links. Permanent redirects: `/mba` and `/gdpi` (and nested paths) → `/cat`.
 - **Rationale:** Product wants the CAT URL as the primary MBA entry; header switcher/footer already key off `slug`.
 - **Alternatives considered:** Rename category id to `cat` across all data; keep dual `/mba` and `/cat` pages without redirect.
-- **Consequences:** Nav, footer, exam switcher, CTAs, and course detail paths resolve under `/cat`; old `/mba` bookmarks redirect.
+- **Consequences:** Superseded 2026-08-16 — canonical path is now `/category/cat`; `/cat` redirects there.
 
 ### 2026-08-13 — MBA theme alignment without global migration
 - **Decision:** Align only the MBA category landing (now `/cat`) to the locked homepage black/white/cream/orange system. Introduce MBA-scoped light cards (`CourseCardV2`, `TestSeriesCardV2`, `FacultyCardV2`) and `CTABandV2Decorative` (duplicated from `CTABandV2` with image-left / content-right). Add optional `variant="light"` on `ResultsStatsPanel` (default `"dark"`). Do not restyle shared dark cards or homepage `CTABandV2`.

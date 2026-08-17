@@ -13,7 +13,7 @@ export function AdvisorsSection({ className }: AdvisorsSectionProps) {
   const useCarousel = advisors.length > 3;
 
   return (
-    <section className={cn("section-spacing bg-bg-secondary", className)}>
+    <section className={cn("home-section-spacing bg-section-beige home-on-light", className)}>
       <div className="container-rodha">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 lg:items-center">
           <div className="lg:col-span-3 xl:col-span-3">

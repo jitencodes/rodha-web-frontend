@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Accordion } from "@/components/ui/Accordion";
+import { AccordionV2 } from "@/components/ui/AccordionV2";
 import { Pagination } from "@/components/ui/Pagination";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ export function FAQClient() {
           onClear={() => handleSearchChange("")}
           placeholder="Search questions..."
           aria-label="Search FAQ questions"
+          className="bg-white! text-neutral-900! border-section-beige! placeholder:text-neutral-400!"
         />
       </div>
 
@@ -72,7 +73,7 @@ export function FAQClient() {
                   "shrink-0 rounded-full px-4 py-2 text-body-sm font-medium transition-colors whitespace-nowrap border",
                   isActive
                     ? "bg-orange-500 text-white border-orange-500"
-                    : "bg-bg-surface text-text-muted border-border-default hover:text-text-primary hover:border-border-hover"
+                    : "bg-white text-neutral-600 border-section-beige hover:text-neutral-900 hover:border-orange-300"
                 )}
               >
                 {category.label}
@@ -82,7 +83,7 @@ export function FAQClient() {
         </div>
       </div>
 
-      <p className="text-center text-body-sm text-text-dimmed">
+      <p className="home-light-muted text-center text-body-sm">
         Showing {pageItems.length} of {filtered.length} question
         {filtered.length === 1 ? "" : "s"}
         {activeCategory !== "all" &&
@@ -90,20 +91,19 @@ export function FAQClient() {
       </p>
 
       {pageItems.length > 0 ? (
-        <Accordion
+        <AccordionV2
           key={`${activeCategory}-${safePage}-${query}`}
           items={pageItems.map(({ id, question, answer }) => ({
             id,
             question,
             answer,
           }))}
-          iconVariant="plus"
           className="mx-auto max-w-3xl"
         />
       ) : (
-        <div className="card-base mx-auto max-w-3xl px-6 py-12 text-center">
-          <p className="text-h4 font-semibold text-text-primary">No results found</p>
-          <p className="mt-2 text-body text-text-muted">
+        <div className="mx-auto max-w-3xl rounded-[6px] border border-section-beige bg-white px-6 py-12 text-center shadow-sm">
+          <p className="text-h4 font-semibold text-neutral-900">No results found</p>
+          <p className="mt-2 text-body text-neutral-500">
             Try a different keyword or browse another category.
           </p>
           <button

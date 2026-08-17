@@ -1,0 +1,3361 @@
+{
+  "categories": [
+    {
+      "id": "mba",
+      "name": "MBA",
+      "menuLabel": "MBA (CAT + GDPI)",
+      "fullName": "MBA — CAT & GDPI",
+      "slug": "cat",
+      "subHeading": "CAT & MBA Entrance",
+      "description": "CAT, SNAP, XAT, NMAT and GDPI coaching for the IIMs and India's top B-schools.",
+      "color": "#F97316",
+      "accentColor": "from-orange-500/25 to-orange-900/10",
+      "icon": "/assets/images/icons/exam/mba logo.png",
+      "image": "/assets/images/icons/exam/mba infographic.png",
+      "illustrationImage": "/assets/images/icons/exam/mba-3d.png",
+      "courseCount": "175+",
+      "selectionCount": "1,300+",
+      "metadata": {
+        "title": "MBA Preparation (CAT + GDPI) — Rodha",
+        "description": "Comprehensive MBA preparation covering CAT and GDPI. Live classes, mock tests, and personalized study plans for IIM admissions."
+      },
+      "hero": {
+        "eyebrow": "CAT 2026 · MBA Entrance",
+        "title": "MBA Prep That Transforms Aspirants into",
+        "accent": "Top B-school Converts",
+        "subtitle": "Crack CAT with expert guidance, exam-level mock tests, and a structured preparation plan designed to help you secure your dream B-school.",
+        "image": "/assets/images/hero/cat-hero.jpg",
+        "imageAlt": "MBA aspirant preparing for CAT and top B-school admissions",
+        "primaryCta": {
+          "label": "Explore Courses",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore Test Series",
+          "href": "https://thinkexam.com",
+          "external": true
+        }
+      },
+      "sectionCopy": {
+        "coursesBadge": "MBA Programs",
+        "coursesTitle": "Flagship CAT 2026 Programs",
+        "coursesSubtitle": "Pick the track that fits you. Explore what's included in every course.",
+        "testSeriesBadge": "MBA Test Series",
+        "testSeriesTitle": "Practice like it's the real exam.",
+        "testSeriesSubtitle": "Identify your strengths, fix your weak areas, and walk into CAT with confidence.",
+        "facultyTitle": "Star Faculty for MBA",
+        "facultySubtitle": "Learn from mentors who have guided thousands to top B-schools.",
+        "testimonialSubtitle": "Real stories from Rodha MBA aspirants",
+        "storiesTitle": "Watch how they did it.",
+        "storiesSubtitle": "They were exactly where you are today — hear their stories, in their own words."
+      },
+      "cta": {
+        "title": "Don't know where to start? Talk to our Team",
+        "subtitle": "Join thousands of serious aspirants and start your MBA journey today.",
+        "primaryAction": {
+          "label": "Book Free Counselling",
+          "href": "/contact"
+        },
+        "secondaryAction": {
+          "label": "Explore Courses",
+          "href": "/category/cat#courses"
+        }
+      },
+      "sectionOrder": [
+        "results",
+        "courses",
+        "test-series",
+        "faculty",
+        "testimonials",
+        "cta",
+        "stories",
+        "app-promo",
+        "faqs"
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
+      "heroFeatures": [
+        {
+          "id": "live-classes",
+          "label": "150+ Hours Live Classes",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        },
+        {
+          "id": "practice",
+          "label": "5000+ Practice Questions",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mocks",
+          "label": "50+ Full Length Mock Tests",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "mentorship",
+          "label": "Personalised Mentorship",
+          "icon": "/assets/images/icons/selection.png"
+        }
+      ],
+      "quickStats": [
+        {
+          "id": "selections",
+          "value": "10,000+",
+          "label": "Selections",
+          "icon": "/assets/images/icons/selection.png"
+        },
+        {
+          "id": "iim-calls",
+          "value": "250+",
+          "label": "IIM Calls in 2024",
+          "icon": "/assets/images/icons/CAT-icon.png"
+        },
+        {
+          "id": "satisfaction",
+          "value": "98.7%",
+          "label": "Student Satisfaction",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "excellence",
+          "value": "15+",
+          "label": "Years Of Excellence",
+          "icon": "/assets/images/icons/rank.png"
+        },
+        {
+          "id": "rating",
+          "value": "4.8/5",
+          "label": "Google Rating",
+          "icon": "/assets/images/icons/cat-icon-3d.png"
+        }
+      ],
+      "resultStats": [
+        {
+          "label": "Selections",
+          "value": "10,000",
+          "suffix": "+"
+        },
+        {
+          "label": "Top 100 Ranks",
+          "value": "250",
+          "suffix": "+"
+        }
+      ],
+      "testSeries": [
+        {
+          "id": "cat-mocks",
+          "value": "20+",
+          "title": "CAT Mocks",
+          "description": "Full-length tests with AI analytics & percentile prediction.",
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "sectional-tests",
+          "value": "60+",
+          "title": "Sectional Tests",
+          "description": "Topic-weighted sectional papers to fix weak areas.",
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-sectional.png"
+        },
+        {
+          "id": "topic-tests",
+          "value": "200+",
+          "title": "Topic Tests",
+          "description": "Micro-tests with instant, detailed solutions.",
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mini-mocks",
+          "value": "40+",
+          "title": "Mini Mocks",
+          "description": "Timed 30–45 min drills to build exam stamina.",
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        }
+      ],
+      "resources": [
+        {
+          "id": "free-resources",
+          "title": "Free MBA Resources",
+          "description": "Access curated formulas, previous papers, and strategy guides — free for every aspirant.",
+          "ctaLabel": "Access Now",
+          "href": "/blog",
+          "icon": "/assets/icons/download.svg"
+        },
+        {
+          "id": "free-demo",
+          "title": "Attend a Free Demo",
+          "description": "Experience a live CAT class with our star faculty before you enroll.",
+          "ctaLabel": "Book Your Demo",
+          "href": "/contact",
+          "icon": "/assets/icons/play.svg"
+        },
+        {
+          "id": "webinars",
+          "title": "Upcoming Webinars",
+          "description": "Join free webinars on exam strategy, percentile targeting, and IIM interview prep.",
+          "ctaLabel": "Register Now",
+          "href": "/blog",
+          "icon": "/assets/icons/calendar.svg"
+        },
+        {
+          "id": "counsellor",
+          "title": "Talk to a Counsellor",
+          "description": "Get a personalised preparation roadmap mapped to your profile and timeline.",
+          "ctaLabel": "Contact Now",
+          "href": "/contact",
+          "icon": "/assets/icons/phone.svg",
+          "highlighted": true
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "When should I start preparing for CAT 2026?",
+          "answer": "Eight to twelve months is the honest answer for a first attempt from scratch. Starting earlier mostly buys you more mock cycles, and mocks are where percentiles actually move. If you're inside four months, take a crash course built for the time you have rather than a full syllabus course you won't finish. CAT 2026 is on 29 November, and registration closes 15 September."
+        },
+        {
+          "id": "faq-2",
+          "question": "Which Rodha CAT 2026 batch should I join?",
+          "answer": "The content is identical across every comprehensive batch. What differs is the start date, the pace and the language. Choose by language first — Hinglish (R2, R3, R5, R6, R7, R8) or Complete English (R4). Then by pace: R8 is fast-tracked, R6 is high-intensity, the rest run standard. If you're inside four months, take the Crash Course instead. And you're not locked in — you can switch batches up to three times a year."
+        },
+        {
+          "id": "faq-3",
+          "question": "Can I prepare for CAT while working or studying full-time?",
+          "answer": "Yes. Every live class is recorded and stays available in your account, so a missed session is never a lost session. Batches run 10–12 classes a week across different timings, and you can switch batches up to three times if your schedule changes. Doubts don't wait for the next class either — Rodha Buddy answers them 24×7."
+        },
+        {
+          "id": "faq-4",
+          "question": "How do I access the course after I enroll?",
+          "answer": "Everything unlocks immediately. Create an account with the email you're enrolling with, and the batch appears under My Courses on the Rodha app or at www.rodha.co.in. Inside you'll find live classes on schedule, recordings of every session, study material and your practice sets. Your test series runs at mocks.rodha.co.in, and doubt-solving lives in the Rodha Buddy app at buddy.rodha.co.in. Your 12 physical booklets are couriered to your doorstep — the one part of the course that doesn't arrive by login. Access for all the batch runs until 10 January 2027, covering CAT and the OMET season that follows."
+        },
+        {
+          "id": "faq-5",
+          "question": "How does doubt-solving and mentorship work?",
+          "answer": "Two ways, both included. Rodha Buddy is a dedicated doubt-solving app where Rodha mentors answer 24×7 — so a question at 1am on a Quant problem doesn't wait until the next class. Rodha Panchayat is the opposite end of the spectrum: face-to-face Google Meet sessions with the faculty who teach you, where your doubts get answered personally. Each subject has its own dedicated faculty — Quant with Ravi Sir, Swapanil Sir and Apoorv Sir; LRDI with Ravi Sir, Swapanil Sir, Apoorv Sir and Abhishek Sir; and VARC with KD Sir, Nikita Ma'am and Brijesh Sir — so you're learning each section from a specialist rather than one generalist across all three."
+        },
+        {
+          "id": "faq-6",
+          "question": "What practice material and test series do I get?",
+          "answer": "30 RCMs (Rodha CAT Mock Tests) with detailed video solutions and in-depth performance analysis, plus 105 sectional tests across Quant, LRDI and VARC, and topic-wise practice tests. For practice volume: 2,000+ Quant questions, 300+ LRDI sets and 400+ RCs. You also get Concept Capsules for quick revision and the CAT Countdown Series from September 2026."
+        },
+        {
+          "id": "faq-7",
+          "question": "Does the course cover XAT, SNAP and NMAT too?",
+          "answer": "Yes, and at no extra cost. Complete OMET courses for XAT, SNAP and NMAT — worth ₹12,000 — are included in every comprehensive batch, along with OMET mock tests with full analysis and dedicated strategy sessions for each exam. One enrollment covers your whole MBA entrance season, not just CAT."
+        },
+        {
+          "id": "faq-8",
+          "question": "What do the courses cost, and can I get a refund?",
+          "answer": "Comprehensive batches are ₹24,999 (from ₹40,000) and the Crash Course is ₹19,999. Discount code DREAMBIG26 takes up to 10% off. Refunds are not available after enrollment — which is exactly why the free course exists. Rodha's Free Material includes live class recordings and strategy sessions, so you can judge the teaching properly before you spend anything."
+        }
+      ],
+      "courses": [
+        {
+          "id": "cat-complete-2026",
+          "title": "CAT 2026 Complete Program",
+          "slug": "cat-2026-complete-program",
+          "category": "mba",
+          "description": "Complete CAT preparation covering Quantitative Aptitude, VARC, and DILR with 500+ hours of live and recorded classes.",
+          "shortDescription": "Complete CAT prep with live mentorship and mock tests.",
+          "price": 24999,
+          "originalPrice": 34999,
+          "duration": "12 Months",
+          "mode": "Live + Recorded",
+          "classCount": "500+",
+          "studentsEnrolled": "500+ IIM Converts",
+          "features": [
+            "500+ hours of live classes",
+            "50+ full-length mock tests",
+            "Sectional tests & topic-wise practice",
+            "One-on-one mentorship sessions",
+            "Doubt-clearing workshops"
+          ],
+          "highlights": [
+            "IIM-A/B/C focused strategy",
+            "Personalized study plan",
+            "Performance analytics"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-complete",
+          "thumbnail": "/assets/images/courses/cat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "cat-pro-2026",
+          "title": "CAT 2026 Pro Program",
+          "slug": "cat-2026-pro-program",
+          "category": "mba",
+          "description": "Advanced CAT track for serious aspirants targeting 99+ percentile with intensive mocks and mentor reviews.",
+          "shortDescription": "Advanced CAT prep for 99+ percentile targets.",
+          "price": 19999,
+          "originalPrice": 27999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "400+",
+          "studentsEnrolled": "350+ 99 Percentilers",
+          "features": [
+            "400+ hours of live classes",
+            "40+ full-length mock tests",
+            "Weekly mentor reviews",
+            "Advanced DILR workshops",
+            "GDPI add-on discount"
+          ],
+          "highlights": [
+            "99+ percentile focus",
+            "High-intensity practice",
+            "Mentor feedback loops"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-pro",
+          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "cat-crash-2026",
+          "title": "CAT 2026 Crash Course",
+          "slug": "cat-2026-crash-course",
+          "category": "mba",
+          "description": "High-intensity short-duration CAT revision program focused on mocks, weak areas, and last-mile strategy.",
+          "shortDescription": "Fast-track revision for the final stretch before CAT.",
+          "price": 9999,
+          "originalPrice": 14999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "120+",
+          "studentsEnrolled": "Ideal for Final Stretch",
+          "features": [
+            "120+ hours of crash classes",
+            "25+ full-length mocks",
+            "Rapid revision modules",
+            "Daily doubt support",
+            "Percentile improvement plan"
+          ],
+          "highlights": [
+            "Last-mile strategy",
+            "Mock-heavy schedule",
+            "Quick concept refreshers"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-crash",
+          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "cat-foundation-2026",
+          "title": "CAT 2026 Foundation Program",
+          "slug": "cat-2026-foundation-program",
+          "category": "mba",
+          "description": "Beginner-friendly CAT foundation that builds Quant, Verbal, and Reasoning fundamentals from the ground up.",
+          "shortDescription": "Start-from-basics CAT prep for first-time aspirants.",
+          "price": 14999,
+          "originalPrice": 19999,
+          "duration": "14 Months",
+          "mode": "Live + Recorded",
+          "classCount": "350+",
+          "studentsEnrolled": "Built for Beginners",
+          "features": [
+            "350+ concept classes",
+            "Foundational Quant & Verbal",
+            "Guided practice sheets",
+            "Milestone mentor check-ins",
+            "Early mock exposure"
+          ],
+          "highlights": [
+            "Zero-to-hero path",
+            "Concept first approach",
+            "Long runway to CAT"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/cat-2026-foundation",
+          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "badge": "Starter"
+        },
+        {
+          "id": "gdpi-masterclass-2026",
+          "title": "GDPI Masterclass 2026",
+          "slug": "gdpi-masterclass-2026",
+          "category": "mba",
+          "description": "Master Group Discussions and Personal Interviews with mock sessions and expert feedback.",
+          "shortDescription": "Ace your B-school GD/PI with mock sessions & expert feedback.",
+          "price": 6999,
+          "originalPrice": 9999,
+          "duration": "2 Months",
+          "mode": "Live",
+          "classCount": "40+",
+          "studentsEnrolled": "85% Conversion",
+          "features": [
+            "Mock GD sessions",
+            "Personal interview practice",
+            "Current affairs bootcamp",
+            "Profile-building guidance"
+          ],
+          "highlights": [
+            "85% conversion rate",
+            "IIM-specific preparation"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-masterclass-2026",
+          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "gdpi-intensive-2026",
+          "title": "GDPI Intensive Bootcamp",
+          "slug": "gdpi-intensive-bootcamp-2026",
+          "category": "mba",
+          "description": "High-intensity 3-week bootcamp for shortlisted aspirants with daily mocks and debriefs.",
+          "shortDescription": "Daily mocks and debriefs for call conversion season.",
+          "price": 4999,
+          "originalPrice": 7999,
+          "duration": "3 Weeks",
+          "mode": "Live",
+          "classCount": "21+",
+          "studentsEnrolled": "Fast Conversion Track",
+          "features": [
+            "Daily GD & PI mocks",
+            "WAT writing labs",
+            "B-school-specific briefs",
+            "Personal feedback reports"
+          ],
+          "highlights": [
+            "Call-season ready",
+            "Personalised debriefs"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-intensive-2026",
+          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-4.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "gdpi-wat-pi-2026",
+          "title": "WAT + PI Focus Program",
+          "slug": "gdpi-wat-pi-focus-2026",
+          "category": "mba",
+          "description": "Deep-dive into Written Ability Tests and Personal Interviews for IIM and top B-school formats.",
+          "shortDescription": "Focused WAT and PI coaching for shortlist conversion.",
+          "price": 3999,
+          "originalPrice": 5999,
+          "duration": "4 Weeks",
+          "mode": "Live + Recorded",
+          "classCount": "24+",
+          "studentsEnrolled": "WAT Masters",
+          "features": [
+            "40+ WAT prompts",
+            "12 mock interviews",
+            "Story framework workshops",
+            "Evaluator feedback"
+          ],
+          "highlights": [
+            "Essay frameworks",
+            "Profile storytelling"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-wat-pi-2026",
+          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-3.png",
+          "badge": "New"
+        },
+        {
+          "id": "gdpi-iim-calls-2026",
+          "title": "IIM Calls Conversion Program",
+          "slug": "gdpi-iim-calls-2026",
+          "category": "mba",
+          "description": "End-to-end conversion program tailored for IIM-A/B/C/L/K/I shortlists and similar formats.",
+          "shortDescription": "IIM-specific GDPI conversion with alumni mentors.",
+          "price": 8999,
+          "originalPrice": 12999,
+          "duration": "6 Weeks",
+          "mode": "Live",
+          "classCount": "36+",
+          "studentsEnrolled": "IIM Convert Focus",
+          "features": [
+            "IIM-format GD panels",
+            "Alumni mentor sessions",
+            "Case discussion practice",
+            "Offer negotiation tips"
+          ],
+          "highlights": [
+            "Alumni mentors",
+            "IIM-A/B/C focus"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/gdpi-iim-calls-2026",
+          "thumbnail": "/assets/images/courses/gdpi-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-5.png",
+          "badge": "Bestseller"
+        }
+      ],
+      "facultyIds": [
+        "faculty-profile-ravi",
+        "faculty-profile-kd",
+        "faculty-profile-apoorv",
+        "faculty-profile-brijesh",
+        "faculty-profile-himanshu",
+        "faculty-profile-neeraj",
+        "faculty-profile-sanchit",
+        "faculty-profile-shrikant",
+        "faculty-profile-swapnil",
+        "faculty-profile-tarun",
+        "faculty-profile-abhishek-gupta",
+        "faculty-profile-abhishek-dubey",
+        "faculty-profile-ananya",
+        "faculty-profile-divya",
+        "faculty-profile-kirti",
+        "faculty-profile-nikita",
+        "faculty-profile-rupal",
+        "faculty-profile-sharwari"
+      ],
+      "results": [
+        {
+          "id": "r1",
+          "name": "Arjun Patel",
+          "exam": "CAT 2024",
+          "rank": 5,
+          "college": "IIM Ahmedabad",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-4.png"
+        },
+        {
+          "id": "r3",
+          "name": "Priya Gupta",
+          "exam": "CAT 2024",
+          "rank": 22,
+          "college": "IIM Bangalore",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/female-4.png"
+        },
+        {
+          "id": "r6",
+          "name": "Rohan Mehta",
+          "exam": "CAT 2024",
+          "rank": 18,
+          "college": "IIM Calcutta",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-6.png"
+        },
+        {
+          "id": "r7",
+          "name": "Ananya Desai",
+          "exam": "CAT 2024",
+          "rank": 31,
+          "college": "FMS Delhi",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/female-2.png"
+        },
+        {
+          "id": "r8",
+          "name": "Kabir Nair",
+          "exam": "CAT 2024",
+          "rank": 44,
+          "college": "IIM Lucknow",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-1.png"
+        },
+        {
+          "id": "r9",
+          "name": "Ishita Verma",
+          "exam": "CAT 2024",
+          "rank": 9,
+          "college": "IIM Kozhikode",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/female-3.png"
+        },
+        {
+          "id": "r10",
+          "name": "Aarav Kapoor",
+          "exam": "GDPI 2024",
+          "rank": 1,
+          "score": "Converted",
+          "college": "IIM Ahmedabad",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-4.png"
+        },
+        {
+          "id": "r11",
+          "name": "Diya Banerjee",
+          "exam": "GDPI 2024",
+          "rank": 2,
+          "score": "Converted",
+          "college": "IIM Bangalore",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/female-4.png"
+        },
+        {
+          "id": "r12",
+          "name": "Harsh Vardhan",
+          "exam": "GDPI 2024",
+          "rank": 3,
+          "score": "Converted",
+          "college": "IIM Calcutta",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-5.png"
+        },
+        {
+          "id": "r20",
+          "name": "Manav Oberoi",
+          "exam": "GDPI 2024",
+          "rank": 4,
+          "score": "Converted",
+          "college": "IIM Lucknow",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-3.png"
+        },
+        {
+          "id": "r21",
+          "name": "Naina Chopra",
+          "exam": "GDPI 2024",
+          "rank": 5,
+          "score": "Converted",
+          "college": "XLRI Jamshedpur",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/female-2.png"
+        },
+        {
+          "id": "r22",
+          "name": "Ishan Reddy",
+          "exam": "GDPI 2024",
+          "rank": 6,
+          "score": "Converted",
+          "college": "FMS Delhi",
+          "year": 2024,
+          "category": "mba",
+          "image": "/assets/images/profiles/male-6.png"
+        }
+      ],
+      "testimonials": [
+        {
+          "id": "t1",
+          "name": "Arjun Patel",
+          "exam": "CAT Student",
+          "score": "99.5 %ile",
+          "college": "IIM Ahmedabad",
+          "quote": "Rodha's structured approach and personal mentorship transformed my preparation. The mock analysis sessions were invaluable.",
+          "image": "/assets/images/profiles/male-4.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t2",
+          "name": "Priya Gupta",
+          "exam": "CAT Student",
+          "score": "99.1 %ile",
+          "college": "IIM Bangalore",
+          "quote": "VARC finally clicked after Rodha's reading drills. Mentors reviewed every mock and kept me accountable till exam day.",
+          "image": "/assets/images/profiles/female-4.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t3",
+          "name": "Rohan Mehta",
+          "exam": "CAT Student",
+          "score": "98.8 %ile",
+          "college": "IIM Calcutta",
+          "quote": "DILR used to scare me. The step-by-step set frameworks and weekly mentor reviews changed that completely.",
+          "image": "/assets/images/profiles/male-6.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t4",
+          "name": "Ananya Desai",
+          "exam": "CAT Student",
+          "score": "98.4 %ile",
+          "college": "FMS Delhi",
+          "quote": "Evening batches fit my job schedule perfectly. Recordings plus mentorship meant I never fell behind.",
+          "image": "/assets/images/profiles/female-2.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t9",
+          "name": "Vikram Singh",
+          "exam": "GDPI Candidate",
+          "score": "Converted",
+          "college": "IIM Bangalore",
+          "quote": "From CAT prep to GDPI conversion, Rodha was with me at every step. Their mock sessions gave me the edge.",
+          "image": "/assets/images/profiles/male-5.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t10",
+          "name": "Diya Banerjee",
+          "exam": "GDPI Candidate",
+          "score": "Converted",
+          "college": "IIM Bangalore",
+          "quote": "The WAT frameworks and PI story workshops helped me sound authentic instead of rehearsed.",
+          "image": "/assets/images/profiles/female-4.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t11",
+          "name": "Aarav Kapoor",
+          "exam": "GDPI Candidate",
+          "score": "Converted",
+          "college": "IIM Ahmedabad",
+          "quote": "Alumni mentors who had sat on the other side of the table coached me into a confident convert.",
+          "image": "/assets/images/profiles/male-4.png",
+          "year": 2024,
+          "category": "mba"
+        },
+        {
+          "id": "t12",
+          "name": "Naina Chopra",
+          "exam": "GDPI Candidate",
+          "score": "Converted",
+          "college": "XLRI Jamshedpur",
+          "quote": "Daily GD panels rebuilt my confidence. Feedback was specific, actionable, and kind.",
+          "image": "/assets/images/profiles/female-2.png",
+          "year": 2024,
+          "category": "mba"
+        }
+      ],
+      "stories": [
+        {
+          "id": "1",
+          "youtubeId": "W1dLmx5-tH4",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "2",
+          "youtubeId": "Dk09Or1eQ5c",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "3",
+          "youtubeId": "62NI1zySIA0",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "4",
+          "youtubeId": "TWmU8776d_8",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "5",
+          "youtubeId": "h5GH3pCfKkU",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "6",
+          "youtubeId": "Y-1dF-Mtg1I",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "7",
+          "youtubeId": "nklApzpkmJ8",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        },
+        {
+          "id": "8",
+          "youtubeId": "HSKQJtHKB5I",
+          "student": "Student Success Story",
+          "subtitle": "CAT Journey"
+        }
+      ],
+      "featuredCourseIds": [
+        "cat-complete-2026",
+        "cat-pro-2026",
+        "cat-crash-2026",
+        "cat-foundation-2026"
+      ],
+      "featuredCourses": [
+        {
+          "id": "cat-complete-2026",
+          "language": "hinglish",
+          "caourseCount": 12,
+          "title": "CAT 2026 Crash Course",
+          "slug": "cat-2026-complete-program",
+          "category": "mba",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "",
+          "badge": "Package",
+          "badgeType": "audience",
+          "description": "Complete CAT preparation covering Quant, VARC, DILR and OMETs.",
+          "shortDescription": "Complete Package for Quant, LRDI, VARC, Omets (XAT, SNAP, NMAT)",
+          "duration": "12 Months",
+          "mode": "Live + Recorded",
+          "classCount": "900+",
+          "totalHours": "900+ Hrs",
+          "studentsEnrolled": "500+ Selections",
+          "price": 24999,
+          "originalPrice": 34999,
+          "detailsLabel": "View Details",
+          "details": [
+            "Full VARC, DILR & Quant — Live + Recorded",
+            "OMETs: NMAT, SNAP, XAT & CMAT",
+            "20+ Full Length Mock Tests",
+            "Personalised Mentorship",
+            "GDPI / WAT / PI Preparation",
+            "Performance Analytics"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 crash course.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "showFaculty": true
+        },
+        {
+          "id": "cat-pro-2026",
+          "title": "CAT 2026 R8",
+          "language": "hinglish",
+          "caourseCount": 4,
+          "slug": "cat-2026-pro-program",
+          "category": "mba",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "",
+          "badge": "Package",
+          "badgeType": "audience",
+          "description": "Weekend-friendly CAT preparation with complete syllabus coverage.",
+          "shortDescription": "R8 Batch | Zero to Zenith DILR Fast Paced by Apoorv Sir & Ravi Sir for CAT 2026",
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "700+",
+          "totalHours": "700+ Hrs",
+          "studentsEnrolled": "Weekend Batches",
+          "price": 13500,
+          "originalPrice": 14999,
+          "detailsLabel": "View Details",
+          "details": [
+            "Complete CAT Syllabus",
+            "OMET Preparation",
+            "Weekend Live Classes",
+            "15+ Full Length Mocks",
+            "Weekly Strategy Sessions",
+            "Sectional & Topic Tests"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 R8 fast paced batch.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "showFaculty": true
+        },
+        {
+          "id": "cat-crash-2026",
+          "title": "CAT 2026 R8 Fast Batch",
+          "language": "Hindi | English",
+          "caourseCount": 6,
+          "slug": "cat-2026-crash-course",
+          "description": "",
+          "shortDescription": "R8 Batch | Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
+          "category": "mba",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "",
+          "badge": "Package",
+          "badgeType": "audience",
+          "duration": "4 Months",
+          "mode": "Live",
+          "classCount": "250+",
+          "totalHours": "250+ Hrs",
+          "studentsEnrolled": "Ideal for Repeaters",
+          "price": 13500,
+          "originalPrice": 14999,
+          "detailsLabel": "View Details",
+          "details": [
+            "Fast-track Revision",
+            "OMET Sessions",
+            "10+ Full Length Mocks",
+            "Exam Strategy",
+            "Last Mile Preparation"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 Quant R8 fast paced.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "showFaculty": true
+        },
+        {
+          "id": "cat-foundation-2026",
+          "title": "Rodha CAT Accelerator",
+          "language": "Hinglish | English",
+          "caourseCount": 5,
+          "slug": "cat-2026-foundation-program",
+          "description": "",
+          "shortDescription": "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
+          "category": "mba",
+          "features": [],
+          "highlights": [],
+          "enrollmentUrl": "",
+          "badge": "Package",
+          "badgeType": "audience",
+          "duration": "14 Months",
+          "mode": "Live + Recorded",
+          "classCount": "1000+",
+          "totalHours": "1000+ Hrs",
+          "studentsEnrolled": "College Students",
+          "price": 9999,
+          "originalPrice": 8999,
+          "detailsLabel": "View Details",
+          "details": [
+            "Build Fundamentals",
+            "Concept-first Teaching",
+            "OMET Preparation",
+            "Sectional Tests",
+            "Long-term Mentorship"
+          ],
+          "thumbnail": "/assets/images/courses/cat 2026 accelerator.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "showFaculty": true
+        }
+      ]
+    },
+    {
+      "id": "ipmat",
+      "name": "IPMAT",
+      "menuLabel": "Integrated Programs (IPMAT)",
+      "fullName": "Integrated Programme in Management Aptitude Test",
+      "slug": "ipmat",
+      "subHeading": "IPMAT & Integrated MBA",
+      "description": "IPMAT Indore, Rohtak and JIPMAT prep starts straight after class 12.",
+      "color": "#A855F7",
+      "accentColor": "from-purple-500/25 to-purple-900/10",
+      "icon": "/assets/images/icons/exam/ipmat logo.png",
+      "image": "/assets/images/icons/exam/ipmat infographic.png",
+      "illustrationImage": "/assets/images/icons/exam/ipmat-3d.png",
+      "courseCount": "40+",
+      "selectionCount": "200+",
+      "metadata": {
+        "title": "Integrated Programs (IPMAT) — Rodha",
+        "description": "Integrated Programs coaching for IPMAT — IIM Indore, Rohtak and other top B-schools. Structured preparation with expert faculty."
+      },
+      "hero": {
+        "eyebrow": "IPMAT 2026 · Integrated MBA",
+        "title": "Ace IPMAT on Your",
+        "accent": "First Attempt",
+        "subtitle": "Integrated Programs preparation for IIM Indore & Rohtak — with expert mentorship, pattern-matched mocks, and a clear path to your early MBA journey.",
+        "image": "/assets/images/hero/cat-hero.jpg",
+        "imageAlt": "Integrated Programs aspirant preparing for IIM Indore and Rohtak",
+        "primaryCta": {
+          "label": "Explore Courses",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore Test Series",
+          "href": "https://thinkexam.com",
+          "external": true
+        }
+      },
+      "sectionCopy": {
+        "coursesBadge": "IPMAT Programs",
+        "coursesTitle": "Integrated Programs for Every Timeline",
+        "coursesSubtitle": "Build aptitude, verbal ability, and interview confidence with the right preparation track.",
+        "testSeriesBadge": "IPMAT Test Series",
+        "testSeriesTitle": "Practice for Indore, Rohtak and beyond.",
+        "testSeriesSubtitle": "Pattern-matched tests and analytics help you improve speed, accuracy, and confidence.",
+        "facultyTitle": "Star Faculty for IPMAT",
+        "facultySubtitle": "Learn from mentors who understand the demands of school and entrance preparation.",
+        "testimonialSubtitle": "Real stories from Rodha IPMAT aspirants",
+        "storiesTitle": "See what focused preparation can do.",
+        "storiesSubtitle": "Student journeys that turn early ambition into IIM opportunities."
+      },
+      "cta": {
+        "title": "Ready to Start Your IPMAT Journey?",
+        "subtitle": "Build an early path to the IIMs with structured preparation and expert guidance.",
+        "primaryAction": {
+          "label": "Book Free Counselling",
+          "href": "/contact"
+        },
+        "secondaryAction": {
+          "label": "Explore Courses",
+          "href": "/category/ipmat#courses"
+        }
+      },
+      "sectionOrder": [
+        "results",
+        "courses",
+        "test-series",
+        "faculty",
+        "testimonials",
+        "cta",
+        "stories",
+        "app-promo",
+        "faqs"
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
+      "heroFeatures": [
+        {
+          "id": "live-classes",
+          "label": "200+ Hours Live Classes",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        },
+        {
+          "id": "practice",
+          "label": "4000+ Practice Questions",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mocks",
+          "label": "25+ Full Length Mock Tests",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "mentorship",
+          "label": "Personalised Mentorship",
+          "icon": "/assets/images/icons/selection.png"
+        }
+      ],
+      "quickStats": [
+        {
+          "id": "selections",
+          "value": "2,000+",
+          "label": "Selections",
+          "icon": "/assets/images/icons/selection.png"
+        },
+        {
+          "id": "iim-indore",
+          "value": "40+",
+          "label": "IIM Indore Selections in 2024",
+          "icon": "/assets/images/icons/ipmat-icon-3d.png"
+        },
+        {
+          "id": "satisfaction",
+          "value": "97.8%",
+          "label": "Student Satisfaction",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "excellence",
+          "value": "10+",
+          "label": "Years Of Excellence",
+          "icon": "/assets/images/icons/rank.png"
+        },
+        {
+          "id": "rating",
+          "value": "4.8/5",
+          "label": "Google Rating",
+          "icon": "/assets/images/icons/CAT-icon.png"
+        }
+      ],
+      "resultStats": [
+        {
+          "label": "Selections",
+          "value": "2,000",
+          "suffix": "+"
+        },
+        {
+          "label": "Top 50 Ranks",
+          "value": "80",
+          "suffix": "+"
+        }
+      ],
+      "testSeries": [
+        {
+          "id": "ipmat-mocks",
+          "title": "IPMAT Mocks",
+          "description": "Full-length mocks designed for IIM Indore and Rohtak patterns.",
+          "features": [
+            "15+ Full Length Mocks",
+            "Pattern Matching",
+            "Detailed Analytics"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "value": ""
+        },
+        {
+          "id": "aptitude-tests",
+          "title": "Aptitude Tests",
+          "description": "Strengthen Quant and Logical Reasoning with sectional intensity.",
+          "features": [
+            "50+ Aptitude Sets",
+            "Timed Practice",
+            "Concept Maps"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "value": ""
+        },
+        {
+          "id": "verbal-tests",
+          "title": "Verbal Ability Tests",
+          "description": "Build RC accuracy, grammar, and verbal reasoning for IPMAT.",
+          "features": [
+            "40+ Verbal Sets",
+            "RC Speed Drills",
+            "Error Logs"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-topic.png",
+          "value": ""
+        },
+        {
+          "id": "mini-mocks",
+          "title": "Mini Mocks",
+          "description": "Short simulations for daily stamina and quick revision cycles.",
+          "features": [
+            "30+ Mini Mocks",
+            "Speed Drills",
+            "Smart Revision"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "value": ""
+        }
+      ],
+      "resources": [
+        {
+          "id": "free-resources",
+          "title": "Free IPMAT Resources",
+          "description": "Access aptitude notes, previous papers, and strategy guides — free for every aspirant.",
+          "ctaLabel": "Access Now",
+          "href": "/blog",
+          "icon": "/assets/icons/download.svg"
+        },
+        {
+          "id": "free-demo",
+          "title": "Attend a Free Demo",
+          "description": "Experience a live IPMAT class with our star faculty before you enroll.",
+          "ctaLabel": "Book Your Demo",
+          "href": "/contact",
+          "icon": "/assets/icons/play.svg"
+        },
+        {
+          "id": "webinars",
+          "title": "Upcoming Webinars",
+          "description": "Join free webinars on IPMAT strategy, Indore vs Rohtak patterns, and interviews.",
+          "ctaLabel": "Register Now",
+          "href": "/blog",
+          "icon": "/assets/icons/calendar.svg"
+        },
+        {
+          "id": "counsellor",
+          "title": "Talk to a Counsellor",
+          "description": "Get a personalised IPMAT roadmap mapped to your Class 11/12 timeline.",
+          "ctaLabel": "Contact Now",
+          "href": "/contact",
+          "icon": "/assets/icons/phone.svg",
+          "highlighted": true
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "What is the best time to start IPMAT preparation?",
+          "answer": "Most aspirants begin in Class 11 or early Class 12. A 10–12 month runway helps build Quant and Verbal foundations while balancing board exams. Rodha’s Complete Program is designed for this timeline."
+        },
+        {
+          "id": "faq-2",
+          "question": "Is IPMAT Indore different from IPMAT Rohtak?",
+          "answer": "Yes. Patterns, section weights, and interview stages differ. Our curriculum covers both, with dedicated mocks and strategy sessions for each institute."
+        },
+        {
+          "id": "faq-3",
+          "question": "Does Rodha provide mock tests for IPMAT?",
+          "answer": "Yes. You get full-length mocks, aptitude sets, verbal tests, and mini mocks with detailed analytics aligned to Indore and Rohtak formats."
+        },
+        {
+          "id": "faq-4",
+          "question": "Can Class 11 students join IPMAT batches?",
+          "answer": "Absolutely. Early starters get concept mastery and longer mock exposure. Mentors also help plan around school exams so neither track suffers."
+        },
+        {
+          "id": "faq-5",
+          "question": "Is interview preparation included?",
+          "answer": "Yes. Shortlisted aspirants receive interview guidance and profile-building support as part of the IPMAT journey toward IIM Indore and Rohtak."
+        },
+        {
+          "id": "faq-6",
+          "question": "How do I enroll in an IPMAT course?",
+          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For a personalised plan, book a free counselling call first."
+        }
+      ],
+      "courses": [
+        {
+          "id": "ipmat-complete-2026",
+          "title": "IPMAT 2026 Complete Program",
+          "slug": "ipmat-2026-complete-program",
+          "category": "ipmat",
+          "description": "Intensive IPMAT preparation for IIM Indore & Rohtak with focused problem-solving sessions.",
+          "shortDescription": "Intensive IPMAT prep for IIM Indore & Rohtak admissions.",
+          "price": 19999,
+          "originalPrice": 27999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "350+",
+          "studentsEnrolled": "200+ Selections",
+          "features": [
+            "350+ hours of live classes",
+            "20+ mock tests",
+            "Aptitude & verbal training",
+            "Interview preparation"
+          ],
+          "highlights": [
+            "IIM Indore focused",
+            "Previous year paper analysis"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "ipmat-pro-2026",
+          "title": "IPMAT 2026 Pro Program",
+          "slug": "ipmat-2026-pro-program",
+          "category": "ipmat",
+          "description": "Advanced IPMAT track for Class 12 aspirants targeting IIM Indore with intensive mocks.",
+          "shortDescription": "Advanced IPMAT prep for serious Indore/Rohtak targets.",
+          "price": 16999,
+          "originalPrice": 22999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "280+",
+          "studentsEnrolled": "150+ Shortlists",
+          "features": [
+            "280+ hours of live classes",
+            "15+ full-length mocks",
+            "Weekly mentor reviews",
+            "Indore & Rohtak pattern drills"
+          ],
+          "highlights": [
+            "Pattern-matched mocks",
+            "Board + IPMAT balance"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-pro",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "ipmat-crash-2026",
+          "title": "IPMAT 2026 Crash Course",
+          "slug": "ipmat-2026-crash-course",
+          "category": "ipmat",
+          "description": "Short-duration IPMAT revision focused on mocks, weak areas, and last-mile strategy.",
+          "shortDescription": "Fast-track revision for the final stretch before IPMAT.",
+          "price": 7999,
+          "originalPrice": 11999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "90+",
+          "studentsEnrolled": "Ideal for Final Stretch",
+          "features": [
+            "90+ crash classes",
+            "12+ full-length mocks",
+            "Rapid Quant & Verbal revision",
+            "Daily doubt support"
+          ],
+          "highlights": [
+            "Last-mile strategy",
+            "Mock-heavy schedule"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-crash",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "badge": "Starter"
+        },
+        {
+          "id": "ipmat-foundation-2026",
+          "title": "IPMAT 2026 Foundation Program",
+          "slug": "ipmat-2026-foundation-program",
+          "category": "ipmat",
+          "description": "Class 11–friendly foundation that builds aptitude and verbal skills from the ground up.",
+          "shortDescription": "Start-from-basics IPMAT prep for early starters.",
+          "price": 14999,
+          "originalPrice": 19999,
+          "duration": "14 Months",
+          "mode": "Live + Recorded",
+          "classCount": "300+",
+          "studentsEnrolled": "Built for Class 11",
+          "features": [
+            "300+ concept classes",
+            "Foundational Quant & Verbal",
+            "Guided practice sheets",
+            "Early mock exposure"
+          ],
+          "highlights": [
+            "Long runway to IPMAT",
+            "Concept-first approach"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-foundation",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "New"
+        }
+      ],
+      "facultyIds": [
+        "faculty-nishant",
+        "faculty-1",
+        "faculty-3",
+        "faculty-4",
+        "faculty-12"
+      ],
+      "results": [
+        {
+          "id": "r2",
+          "name": "Sneha Rao",
+          "exam": "IPMAT 2024",
+          "rank": 12,
+          "college": "IIM Indore",
+          "year": 2024,
+          "category": "ipmat",
+          "image": "/assets/images/profiles/female-3.png"
+        },
+        {
+          "id": "r5",
+          "name": "Meera Krishnan",
+          "exam": "IPMAT 2024",
+          "rank": 3,
+          "college": "IIM Rohtak",
+          "year": 2024,
+          "category": "ipmat",
+          "image": "/assets/images/profiles/female-1.png"
+        },
+        {
+          "id": "r14",
+          "name": "Nikhil Joshi",
+          "exam": "IPMAT 2024",
+          "rank": 8,
+          "college": "IIM Indore",
+          "year": 2024,
+          "category": "ipmat",
+          "image": "/assets/images/profiles/male-2.png"
+        },
+        {
+          "id": "r15",
+          "name": "Tara Iyer",
+          "exam": "IPMAT 2024",
+          "rank": 21,
+          "college": "IIM Rohtak",
+          "year": 2024,
+          "category": "ipmat",
+          "image": "/assets/images/profiles/female-2.png"
+        },
+        {
+          "id": "r16",
+          "name": "Yash Kapadia",
+          "exam": "IPMAT 2024",
+          "rank": 35,
+          "college": "IIM Ranchi",
+          "year": 2024,
+          "category": "ipmat",
+          "image": "/assets/images/profiles/male-6.png"
+        }
+      ],
+      "testimonials": [
+        {
+          "id": "t5",
+          "name": "Sneha Rao",
+          "exam": "IPMAT Aspirant",
+          "score": "AIR 12",
+          "college": "IIM Indore (IPM)",
+          "quote": "The IPMAT crash course was exactly what I needed. Focused content, great faculty, and the right strategy.",
+          "image": "/assets/images/profiles/female-3.png",
+          "year": 2024,
+          "category": "ipmat"
+        },
+        {
+          "id": "t6",
+          "name": "Meera Krishnan",
+          "exam": "IPMAT Aspirant",
+          "score": "AIR 3",
+          "college": "IIM Rohtak",
+          "quote": "Balancing boards and IPMAT felt impossible until Rodha gave me a clear weekly plan and mentor check-ins.",
+          "image": "/assets/images/profiles/female-1.png",
+          "year": 2024,
+          "category": "ipmat"
+        },
+        {
+          "id": "t7",
+          "name": "Nikhil Joshi",
+          "exam": "IPMAT Aspirant",
+          "score": "AIR 8",
+          "college": "IIM Indore",
+          "quote": "Pattern-matched mocks for Indore and Rohtak made a huge difference. I walked into the exam knowing the tempo.",
+          "image": "/assets/images/profiles/male-2.png",
+          "year": 2024,
+          "category": "ipmat"
+        },
+        {
+          "id": "t8",
+          "name": "Tara Iyer",
+          "exam": "IPMAT Aspirant",
+          "score": "AIR 21",
+          "college": "IIM Rohtak",
+          "quote": "Quant concepts were taught crystal clear. The mini mocks kept my speed sharp every single week.",
+          "image": "/assets/images/profiles/female-2.png",
+          "year": 2024,
+          "category": "ipmat"
+        }
+      ],
+      "stories": [],
+      "featuredCourseIds": [
+        "ipmat-complete-2026",
+        "ipmat-pro-2026",
+        "ipmat-crash-2026",
+        "ipmat-foundation-2026"
+      ],
+      "featuredCourses": [
+        {
+          "id": "ipmat-complete-2026",
+          "title": "IPMAT 2026 Complete Program",
+          "slug": "ipmat-2026-complete-program",
+          "category": "ipmat",
+          "description": "Intensive IPMAT preparation for IIM Indore & Rohtak with focused problem-solving sessions.",
+          "shortDescription": "Intensive IPMAT prep for IIM Indore & Rohtak admissions.",
+          "price": 19999,
+          "originalPrice": 27999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "350+",
+          "studentsEnrolled": "200+ Selections",
+          "features": [
+            "350+ hours of live classes",
+            "20+ mock tests",
+            "Aptitude & verbal training",
+            "Interview preparation"
+          ],
+          "highlights": [
+            "IIM Indore focused",
+            "Previous year paper analysis"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "ipmat-pro-2026",
+          "title": "IPMAT 2026 Pro Program",
+          "slug": "ipmat-2026-pro-program",
+          "category": "ipmat",
+          "description": "Advanced IPMAT track for Class 12 aspirants targeting IIM Indore with intensive mocks.",
+          "shortDescription": "Advanced IPMAT prep for serious Indore/Rohtak targets.",
+          "price": 16999,
+          "originalPrice": 22999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "280+",
+          "studentsEnrolled": "150+ Shortlists",
+          "features": [
+            "280+ hours of live classes",
+            "15+ full-length mocks",
+            "Weekly mentor reviews",
+            "Indore & Rohtak pattern drills"
+          ],
+          "highlights": [
+            "Pattern-matched mocks",
+            "Board + IPMAT balance"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-pro",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "ipmat-crash-2026",
+          "title": "IPMAT 2026 Crash Course",
+          "slug": "ipmat-2026-crash-course",
+          "category": "ipmat",
+          "description": "Short-duration IPMAT revision focused on mocks, weak areas, and last-mile strategy.",
+          "shortDescription": "Fast-track revision for the final stretch before IPMAT.",
+          "price": 7999,
+          "originalPrice": 11999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "90+",
+          "studentsEnrolled": "Ideal for Final Stretch",
+          "features": [
+            "90+ crash classes",
+            "12+ full-length mocks",
+            "Rapid Quant & Verbal revision",
+            "Daily doubt support"
+          ],
+          "highlights": [
+            "Last-mile strategy",
+            "Mock-heavy schedule"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-crash",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "badge": "Starter"
+        },
+        {
+          "id": "ipmat-foundation-2026",
+          "title": "IPMAT 2026 Foundation Program",
+          "slug": "ipmat-2026-foundation-program",
+          "category": "ipmat",
+          "description": "Class 11–friendly foundation that builds aptitude and verbal skills from the ground up.",
+          "shortDescription": "Start-from-basics IPMAT prep for early starters.",
+          "price": 14999,
+          "originalPrice": 19999,
+          "duration": "14 Months",
+          "mode": "Live + Recorded",
+          "classCount": "300+",
+          "studentsEnrolled": "Built for Class 11",
+          "features": [
+            "300+ concept classes",
+            "Foundational Quant & Verbal",
+            "Guided practice sheets",
+            "Early mock exposure"
+          ],
+          "highlights": [
+            "Long runway to IPMAT",
+            "Concept-first approach"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ipmat-2026-foundation",
+          "thumbnail": "/assets/images/courses/ipmat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "New"
+        }
+      ]
+    },
+    {
+      "id": "clat",
+      "name": "CLAT",
+      "menuLabel": "Law (CLAT)",
+      "fullName": "Common Law Admission Test",
+      "slug": "clat",
+      "subHeading": "CLAT & Law Entrance",
+      "description": "CLAT, AILET, SLAT coaching built for a seat at the NLUs and other Top Law Schools.",
+      "color": "#D97706",
+      "accentColor": "from-amber-600/25 to-amber-900/10",
+      "icon": "/assets/images/icons/exam/clat logo.png",
+      "image": "/assets/images/icons/exam/clat infographic.png",
+      "illustrationImage": "/assets/images/icons/exam/clat-icon-3d.png",
+      "courseCount": "50+",
+      "selectionCount": "300+",
+      "metadata": {
+        "title": "Law (CLAT) Preparation — Rodha",
+        "description": "Law preparation for CLAT and top National Law Universities. Legal reasoning, English, current affairs, and more."
+      },
+      "hero": {
+        "eyebrow": "CLAT 2026 · Law Entrance",
+        "title": "Law Prep That Opens Doors to",
+        "accent": "Top NLUs",
+        "subtitle": "Strategic legal reasoning workshops, mock tests, and daily current affairs built to help serious aspirants crack CLAT and secure seats at leading National Law Universities.",
+        "image": "/assets/images/hero/cat-hero.jpg",
+        "imageAlt": "Law aspirant preparing for top National Law Universities",
+        "primaryCta": {
+          "label": "Explore Courses",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore Test Series",
+          "href": "https://thinkexam.com",
+          "external": true
+        }
+      },
+      "sectionCopy": {
+        "coursesBadge": "Law Programs",
+        "coursesTitle": "CLAT Programs Built for Top NLU Goals",
+        "coursesSubtitle": "Choose a complete, foundation, crash, or repeater track for your preparation stage.",
+        "testSeriesBadge": "CLAT Test Series",
+        "testSeriesTitle": "Reason, read and respond like exam day.",
+        "testSeriesSubtitle": "Train legal reasoning, current affairs, and comprehension with realistic tests.",
+        "facultyTitle": "Star Faculty for Law",
+        "facultySubtitle": "Learn legal reasoning and exam strategy from experienced mentors.",
+        "testimonialSubtitle": "Real stories from Rodha CLAT aspirants",
+        "storiesTitle": "Watch NLU ambitions become outcomes.",
+        "storiesSubtitle": "Focused practice and mentorship, told through successful student journeys."
+      },
+      "cta": {
+        "title": "Ready to Target a Top NLU?",
+        "subtitle": "Start your CLAT preparation with expert guidance and exam-ready practice.",
+        "primaryAction": {
+          "label": "Book Free Counselling",
+          "href": "/contact"
+        },
+        "secondaryAction": {
+          "label": "Explore Courses",
+          "href": "/category/clat#courses"
+        }
+      },
+      "sectionOrder": [
+        "results",
+        "courses",
+        "test-series",
+        "faculty",
+        "testimonials",
+        "cta",
+        "stories",
+        "app-promo",
+        "faqs"
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
+      "heroFeatures": [
+        {
+          "id": "live-classes",
+          "label": "300+ Hours Live Classes",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        },
+        {
+          "id": "practice",
+          "label": "3000+ Practice Questions",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mocks",
+          "label": "30+ Full Length Mock Tests",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "legal",
+          "label": "Legal Reasoning Workshops",
+          "icon": "/assets/images/icons/selection.png"
+        }
+      ],
+      "quickStats": [
+        {
+          "id": "selections",
+          "value": "3,000+",
+          "label": "Selections",
+          "icon": "/assets/images/icons/selection.png"
+        },
+        {
+          "id": "nlu",
+          "value": "60+",
+          "label": "NLU Selections in 2024",
+          "icon": "/assets/images/icons/clat-icon-3d.png"
+        },
+        {
+          "id": "satisfaction",
+          "value": "97.5%",
+          "label": "Student Satisfaction",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "excellence",
+          "value": "10+",
+          "label": "Years Of Excellence",
+          "icon": "/assets/images/icons/rank.png"
+        },
+        {
+          "id": "rating",
+          "value": "4.7/5",
+          "label": "Google Rating",
+          "icon": "/assets/images/icons/CAT-icon.png"
+        }
+      ],
+      "resultStats": [
+        {
+          "label": "Selections",
+          "value": "3,000",
+          "suffix": "+"
+        },
+        {
+          "label": "Top 100 Ranks",
+          "value": "100",
+          "suffix": "+"
+        }
+      ],
+      "testSeries": [
+        {
+          "id": "clat-mocks",
+          "title": "CLAT Mocks",
+          "description": "Full-length mocks that mirror the real CLAT pattern and difficulty.",
+          "features": [
+            "20+ Full Length Mocks",
+            "Detailed Analytics",
+            "All-India Rank"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "value": ""
+        },
+        {
+          "id": "legal-reasoning",
+          "title": "Legal Reasoning Tests",
+          "description": "Sharpen principles of law, fact application, and passage-based reasoning.",
+          "features": [
+            "40+ Legal Reasoning Tests",
+            "Principle-Fact Drills",
+            "Error Analysis"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "value": ""
+        },
+        {
+          "id": "current-affairs",
+          "title": "Current Affairs Tests",
+          "description": "Stay exam-ready with GK and current affairs quizzes aligned to CLAT.",
+          "features": [
+            "Daily CA Quizzes",
+            "Monthly Compilations",
+            "Static GK Mix"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-topic.png",
+          "value": ""
+        },
+        {
+          "id": "english-comp",
+          "title": "English & Comprehension",
+          "description": "Build reading speed, vocabulary, and grammar accuracy for CLAT English.",
+          "features": [
+            "30+ RC Sets",
+            "Grammar Practice",
+            "Vocab Boosters"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "value": ""
+        }
+      ],
+      "resources": [
+        {
+          "id": "free-resources",
+          "title": "Free CLAT Resources",
+          "description": "Access legal principle notes, previous papers, and strategy guides — free for every aspirant.",
+          "ctaLabel": "Access Now",
+          "href": "/blog",
+          "icon": "/assets/icons/download.svg"
+        },
+        {
+          "id": "free-demo",
+          "title": "Attend a Free Demo",
+          "description": "Experience a live CLAT class with our legal experts before you enroll.",
+          "ctaLabel": "Book Your Demo",
+          "href": "/contact",
+          "icon": "/assets/icons/play.svg"
+        },
+        {
+          "id": "webinars",
+          "title": "Upcoming Webinars",
+          "description": "Join free webinars on CLAT strategy, NLU preferences, and legal aptitude.",
+          "ctaLabel": "Register Now",
+          "href": "/blog",
+          "icon": "/assets/icons/calendar.svg"
+        },
+        {
+          "id": "counsellor",
+          "title": "Talk to a Counsellor",
+          "description": "Get a personalised NLU roadmap mapped to your timeline and target colleges.",
+          "ctaLabel": "Contact Now",
+          "href": "/contact",
+          "icon": "/assets/icons/phone.svg",
+          "highlighted": true
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "What is the best time to start CLAT preparation?",
+          "answer": "Ideally 10–12 months before the exam. Early starters can build legal reasoning and reading habits deeply, while later batches focus on mocks and current affairs. Rodha offers Foundation and Complete tracks for every timeline."
+        },
+        {
+          "id": "faq-2",
+          "question": "How is legal reasoning taught at Rodha?",
+          "answer": "We teach principle-fact application through workshops, passage-based practice, and guided discussions — so you learn to reason like a lawyer without needing prior law background."
+        },
+        {
+          "id": "faq-3",
+          "question": "Does Rodha provide mock tests for CLAT?",
+          "answer": "Yes. You get full-length CLAT mocks, legal reasoning tests, current affairs quizzes, and English practice with detailed analytics via our test platform."
+        },
+        {
+          "id": "faq-4",
+          "question": "Is current affairs coverage included?",
+          "answer": "Yes. Daily updates, monthly compilations, and timed quizzes keep you aligned with the CLAT GK pattern throughout your preparation."
+        },
+        {
+          "id": "faq-5",
+          "question": "Can Class 11 and 12 students join CLAT batches?",
+          "answer": "Absolutely. Our Foundation and Complete programs are designed for school students balancing board exams with NLU preparation."
+        },
+        {
+          "id": "faq-6",
+          "question": "How do I enroll in a CLAT course?",
+          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance on NLU targets, book a free counselling call first."
+        }
+      ],
+      "courses": [
+        {
+          "id": "clat-foundation-2026",
+          "title": "CLAT 2026 Foundation Course",
+          "slug": "clat-2026-foundation",
+          "category": "clat",
+          "description": "Comprehensive CLAT preparation covering Legal Reasoning, English, Current Affairs, and more.",
+          "shortDescription": "Complete CLAT prep for top National Law Universities.",
+          "price": 17999,
+          "originalPrice": 24999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "400+",
+          "studentsEnrolled": "300+ NLU Selections",
+          "features": [
+            "400+ hours of live classes",
+            "30+ mock tests",
+            "Legal reasoning workshops",
+            "Current affairs daily updates"
+          ],
+          "highlights": [
+            "NLU-focused strategy",
+            "Comprehensive test series"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-foundation-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-2.png",
+          "badge": "New"
+        },
+        {
+          "id": "clat-complete-2026",
+          "title": "CLAT 2026 Complete Program",
+          "slug": "clat-2026-complete-program",
+          "category": "clat",
+          "description": "Full-length CLAT preparation with legal reasoning depth, GK mastery, and mock analytics.",
+          "shortDescription": "Complete CLAT prep with mocks and mentorship.",
+          "price": 21999,
+          "originalPrice": 29999,
+          "duration": "12 Months",
+          "mode": "Live + Recorded",
+          "classCount": "450+",
+          "studentsEnrolled": "Top NLU Focus",
+          "features": [
+            "450+ hours of live classes",
+            "35+ full-length mocks",
+            "Legal principle workshops",
+            "One-on-one mentor check-ins"
+          ],
+          "highlights": [
+            "NLSIU/NALSAR strategy",
+            "All-India ranking analytics"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-complete-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "clat-crash-2026",
+          "title": "CLAT 2026 Crash Course",
+          "slug": "clat-2026-crash-course",
+          "category": "clat",
+          "description": "Intensive crash course focused on mocks, current affairs, and legal reasoning polish.",
+          "shortDescription": "Last-mile CLAT revision for serious rank aspirants.",
+          "price": 8999,
+          "originalPrice": 12999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "100+",
+          "studentsEnrolled": "Rank Improvers",
+          "features": [
+            "100+ crash classes",
+            "20+ full-length mocks",
+            "Daily current affairs",
+            "Rapid legal reasoning drills"
+          ],
+          "highlights": [
+            "Mock-heavy plan",
+            "GK + Legal polish"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-crash-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-5.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "clat-repeater-2026",
+          "title": "CLAT 2026 Repeater Program",
+          "slug": "clat-2026-repeater-program",
+          "category": "clat",
+          "description": "Targeted repeater batch with diagnostics, weak-area workshops, and rank improvement strategy.",
+          "shortDescription": "Specialized repeater track for NLU rank upgrades.",
+          "price": 15999,
+          "originalPrice": 21999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "320+",
+          "studentsEnrolled": "Repeater Specialists",
+          "features": [
+            "Diagnostic weak-area plan",
+            "25+ mocks with analytics",
+            "Mentor accountability calls",
+            "NLU preference counselling"
+          ],
+          "highlights": [
+            "Rank jump focus",
+            "Personal diagnostics"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-repeater-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-4.png",
+          "badge": "Trending"
+        }
+      ],
+      "facultyIds": [
+        "faculty-5",
+        "faculty-8",
+        "faculty-9",
+        "faculty-10"
+      ],
+      "results": [
+        {
+          "id": "r4",
+          "name": "Vikram Singh",
+          "exam": "CLAT 2024",
+          "rank": 7,
+          "college": "NLSIU Bangalore",
+          "year": 2024,
+          "category": "clat",
+          "image": "/assets/images/profiles/male-5.png"
+        },
+        {
+          "id": "r13",
+          "name": "Aditi Menon",
+          "exam": "CLAT 2024",
+          "rank": 18,
+          "college": "NALSAR Hyderabad",
+          "year": 2024,
+          "category": "clat",
+          "image": "/assets/images/profiles/female-1.png"
+        },
+        {
+          "id": "r17",
+          "name": "Pooja Raut",
+          "exam": "CLAT 2024",
+          "rank": 42,
+          "college": "NUJS Kolkata",
+          "year": 2024,
+          "category": "clat",
+          "image": "/assets/images/profiles/female-3.png"
+        },
+        {
+          "id": "r18",
+          "name": "Samarth Jain",
+          "exam": "CLAT 2024",
+          "rank": 55,
+          "college": "NLIU Bhopal",
+          "year": 2024,
+          "category": "clat",
+          "image": "/assets/images/profiles/male-1.png"
+        },
+        {
+          "id": "r19",
+          "name": "Kritika Shah",
+          "exam": "CLAT 2024",
+          "rank": 63,
+          "college": "RMLNLU Lucknow",
+          "year": 2024,
+          "category": "clat",
+          "image": "/assets/images/profiles/female-4.png"
+        }
+      ],
+      "testimonials": [
+        {
+          "id": "t13",
+          "name": "Aditi Menon",
+          "exam": "CLAT Student",
+          "score": "AIR 18",
+          "college": "NALSAR Hyderabad",
+          "quote": "Legal reasoning workshops demystified principle-fact questions. Current affairs updates were spot on.",
+          "image": "/assets/images/profiles/female-1.png",
+          "year": 2024,
+          "category": "clat"
+        },
+        {
+          "id": "t14",
+          "name": "Meera Krishnan",
+          "exam": "CLAT Student",
+          "score": "AIR 28",
+          "college": "NLSIU Bangalore",
+          "quote": "The legal reasoning workshops and daily current affairs updates made all the difference in my CLAT prep.",
+          "image": "/assets/images/profiles/female-3.png",
+          "year": 2024,
+          "category": "clat"
+        },
+        {
+          "id": "t15",
+          "name": "Vikram Singh",
+          "exam": "CLAT Student",
+          "score": "AIR 7",
+          "college": "NLSIU Bangalore",
+          "quote": "Mocks mirrored the real paper so well that exam day felt familiar. Mentors kept my confidence high.",
+          "image": "/assets/images/profiles/male-5.png",
+          "year": 2024,
+          "category": "clat"
+        },
+        {
+          "id": "t16",
+          "name": "Pooja Raut",
+          "exam": "CLAT Student",
+          "score": "AIR 42",
+          "college": "NUJS Kolkata",
+          "quote": "As a Class 12 student, the schedule respected my boards while still pushing CLAT ranks higher each month.",
+          "image": "/assets/images/profiles/female-3.png",
+          "year": 2024,
+          "category": "clat"
+        }
+      ],
+      "stories": [],
+      "featuredCourseIds": [
+        "clat-foundation-2026",
+        "clat-complete-2026",
+        "clat-crash-2026",
+        "clat-repeater-2026"
+      ],
+      "featuredCourses": [
+        {
+          "id": "clat-foundation-2026",
+          "title": "CLAT 2026 Foundation Course",
+          "slug": "clat-2026-foundation",
+          "category": "clat",
+          "description": "Comprehensive CLAT preparation covering Legal Reasoning, English, Current Affairs, and more.",
+          "shortDescription": "Complete CLAT prep for top National Law Universities.",
+          "price": 17999,
+          "originalPrice": 24999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "400+",
+          "studentsEnrolled": "300+ NLU Selections",
+          "features": [
+            "400+ hours of live classes",
+            "30+ mock tests",
+            "Legal reasoning workshops",
+            "Current affairs daily updates"
+          ],
+          "highlights": [
+            "NLU-focused strategy",
+            "Comprehensive test series"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-foundation-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-2.png",
+          "badge": "New"
+        },
+        {
+          "id": "clat-complete-2026",
+          "title": "CLAT 2026 Complete Program",
+          "slug": "clat-2026-complete-program",
+          "category": "clat",
+          "description": "Full-length CLAT preparation with legal reasoning depth, GK mastery, and mock analytics.",
+          "shortDescription": "Complete CLAT prep with mocks and mentorship.",
+          "price": 21999,
+          "originalPrice": 29999,
+          "duration": "12 Months",
+          "mode": "Live + Recorded",
+          "classCount": "450+",
+          "studentsEnrolled": "Top NLU Focus",
+          "features": [
+            "450+ hours of live classes",
+            "35+ full-length mocks",
+            "Legal principle workshops",
+            "One-on-one mentor check-ins"
+          ],
+          "highlights": [
+            "NLSIU/NALSAR strategy",
+            "All-India ranking analytics"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-complete-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "clat-crash-2026",
+          "title": "CLAT 2026 Crash Course",
+          "slug": "clat-2026-crash-course",
+          "category": "clat",
+          "description": "Intensive crash course focused on mocks, current affairs, and legal reasoning polish.",
+          "shortDescription": "Last-mile CLAT revision for serious rank aspirants.",
+          "price": 8999,
+          "originalPrice": 12999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "100+",
+          "studentsEnrolled": "Rank Improvers",
+          "features": [
+            "100+ crash classes",
+            "20+ full-length mocks",
+            "Daily current affairs",
+            "Rapid legal reasoning drills"
+          ],
+          "highlights": [
+            "Mock-heavy plan",
+            "GK + Legal polish"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-crash-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-5.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "clat-repeater-2026",
+          "title": "CLAT 2026 Repeater Program",
+          "slug": "clat-2026-repeater-program",
+          "category": "clat",
+          "description": "Targeted repeater batch with diagnostics, weak-area workshops, and rank improvement strategy.",
+          "shortDescription": "Specialized repeater track for NLU rank upgrades.",
+          "price": 15999,
+          "originalPrice": 21999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "320+",
+          "studentsEnrolled": "Repeater Specialists",
+          "features": [
+            "Diagnostic weak-area plan",
+            "25+ mocks with analytics",
+            "Mentor accountability calls",
+            "NLU preference counselling"
+          ],
+          "highlights": [
+            "Rank jump focus",
+            "Personal diagnostics"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/clat-repeater-2026",
+          "thumbnail": "/assets/images/courses/clat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-4.png",
+          "badge": "Trending"
+        }
+      ]
+    },
+    {
+      "id": "banking",
+      "name": "SSC",
+      "menuLabel": "Banking & SSC Exams",
+      "fullName": "Banking & Government Exams (including SSC)",
+      "slug": "banking",
+      "subHeading": "SSC & Government Exams",
+      "description": "SSC coaching built to help you achieve your dream government job.",
+      "color": "#65831d",
+      "accentColor": "from-lime-700/25 to-lime-900/10",
+      "icon": "/assets/images/icons/exam/ssc logo.png",
+      "image": "/assets/images/icons/exam/ssc infographic.png",
+      "illustrationImage": "/assets/images/icons/exam/banking-3d.png",
+      "courseCount": "30+",
+      "selectionCount": "500+",
+      "metadata": {
+        "title": "Banking & Government Exams — Rodha",
+        "description": "Prepare for banking, SSC, and government exams with expert mentorship, live classes, and high-quality mock tests."
+      },
+      "hero": {
+        "eyebrow": "Banking & SSC 2026",
+        "title": "Government Exam Prep That Delivers",
+        "accent": "Real Results",
+        "subtitle": "Expert mentorship for IBPS, SBI, RBI, SSC and related government exams — with live classes, focused practice, and exam-ready mocks.",
+        "image": "/assets/images/hero/cat-hero.jpg",
+        "imageAlt": "Banking and government exam aspirant preparing with Rodha",
+        "primaryCta": {
+          "label": "Explore Courses",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore Test Series",
+          "href": "https://thinkexam.com",
+          "external": true
+        }
+      },
+      "sectionCopy": {
+        "coursesBadge": "Banking & SSC Programs",
+        "coursesTitle": "Preparation Tracks for Every Government Goal",
+        "coursesSubtitle": "Build strong fundamentals, exam speed, and confidence across banking and SSC exams.",
+        "testSeriesBadge": "Banking Test Series",
+        "testSeriesTitle": "Turn daily practice into selection.",
+        "testSeriesSubtitle": "Full mocks, sectional tests, and targeted drills reveal exactly what to improve.",
+        "facultyTitle": "Star Faculty for Banking & SSC",
+        "facultySubtitle": "Learn from mentors who make complex aptitude concepts clear and practical.",
+        "testimonialSubtitle": "Real stories from Rodha banking and SSC aspirants",
+        "storiesTitle": "See preparation become selection.",
+        "storiesSubtitle": "Real learner journeys powered by consistency, analytics, and mentorship."
+      },
+      "cta": {
+        "title": "Ready for Your Government Career?",
+        "subtitle": "Prepare with focused classes, realistic mocks, and mentors who keep you accountable.",
+        "primaryAction": {
+          "label": "Book Free Counselling",
+          "href": "/contact"
+        },
+        "secondaryAction": {
+          "label": "Explore Courses",
+          "href": "/category/banking#courses"
+        }
+      },
+      "sectionOrder": [
+        "results",
+        "courses",
+        "test-series",
+        "faculty",
+        "testimonials",
+        "cta",
+        "stories",
+        "app-promo",
+        "faqs"
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
+      "heroFeatures": [
+        {
+          "id": "live-classes",
+          "label": "150+ Hours Live Classes",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        },
+        {
+          "id": "practice",
+          "label": "5000+ Practice Questions",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mocks",
+          "label": "50+ Full Length Mock Tests",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "mentorship",
+          "label": "Personalised Mentorship",
+          "icon": "/assets/images/icons/selection.png"
+        }
+      ],
+      "quickStats": [
+        {
+          "id": "selections",
+          "value": "5,000+",
+          "label": "Selections",
+          "icon": "/assets/images/icons/selection.png"
+        },
+        {
+          "id": "banking-ssc",
+          "value": "500+",
+          "label": "Banking & SSC Selects",
+          "icon": "/assets/images/icons/CAT-icon.png"
+        },
+        {
+          "id": "satisfaction",
+          "value": "98%",
+          "label": "Student Satisfaction",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "excellence",
+          "value": "15+",
+          "label": "Years Of Excellence",
+          "icon": "/assets/images/icons/rank.png"
+        },
+        {
+          "id": "rating",
+          "value": "4.8/5",
+          "label": "Google Rating",
+          "icon": "/assets/images/icons/cat-icon-3d.png"
+        }
+      ],
+      "resultStats": [
+        {
+          "label": "Selections",
+          "value": "5,000",
+          "suffix": "+"
+        },
+        {
+          "label": "Top Ranks",
+          "value": "200",
+          "suffix": "+"
+        }
+      ],
+      "testSeries": [
+        {
+          "id": "banking-mocks",
+          "title": "Banking Mocks",
+          "description": "Full-length mocks designed to mirror IBPS, SBI and RBI exam patterns.",
+          "features": [
+            "20+ Full Length Mocks",
+            "Detailed Analytics",
+            "All-India Percentile"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "value": ""
+        },
+        {
+          "id": "sectional-tests",
+          "title": "Sectional Tests",
+          "description": "Sharpen Quant, Reasoning & English with focused sectional practice.",
+          "features": [
+            "60+ Sectional Tests",
+            "Timed Practice",
+            "Topic Weightage Maps"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "value": ""
+        },
+        {
+          "id": "topic-tests",
+          "title": "Topic Tests",
+          "description": "Build depth with micro-tests after every concept class.",
+          "features": [
+            "200+ Topic Tests",
+            "Instant Solutions",
+            "Weak Area Tracking"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-topic.png",
+          "value": ""
+        },
+        {
+          "id": "ssc-mocks",
+          "title": "SSC Mini Mocks",
+          "description": "Quick simulations for SSC CGL, CHSL and related government exams.",
+          "features": [
+            "40+ Mini Mocks",
+            "Speed Drills",
+            "Smart Revision Sets"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "value": ""
+        }
+      ],
+      "resources": [
+        {
+          "id": "free-resources",
+          "title": "Free Banking Resources",
+          "description": "Access curated formulas, previous papers, and strategy guides — free for every aspirant.",
+          "ctaLabel": "Access Now",
+          "href": "/blog",
+          "icon": "/assets/icons/download.svg"
+        },
+        {
+          "id": "free-demo",
+          "title": "Attend a Free Demo",
+          "description": "Experience a live banking class with our star faculty before you enroll.",
+          "ctaLabel": "Book Your Demo",
+          "href": "/contact",
+          "icon": "/assets/icons/play.svg"
+        },
+        {
+          "id": "webinars",
+          "title": "Upcoming Webinars",
+          "description": "Join free webinars on banking exam strategy, SSC patterns, and interview prep.",
+          "ctaLabel": "Register Now",
+          "href": "/blog",
+          "icon": "/assets/icons/calendar.svg"
+        },
+        {
+          "id": "counsellor",
+          "title": "Talk to a Counsellor",
+          "description": "Get a personalised preparation roadmap mapped to your target exams and timeline.",
+          "ctaLabel": "Contact Now",
+          "href": "/contact",
+          "icon": "/assets/icons/phone.svg",
+          "highlighted": true
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "Which exams does Banking & Government cover?",
+          "answer": "Rodha covers major banking exams (IBPS, SBI, RBI) and government exams including SSC CGL, CHSL and related competitive tests — with shared foundations and exam-specific mocks."
+        },
+        {
+          "id": "faq-2",
+          "question": "What is the best time to start preparation?",
+          "answer": "Ideally 6–12 months before your target exam. Early starters build concepts deeply; later batches focus on mocks and revision."
+        },
+        {
+          "id": "faq-3",
+          "question": "Are classes live or recorded?",
+          "answer": "Most programs include live interactive classes plus full recordings so you can revise anytime."
+        },
+        {
+          "id": "faq-4",
+          "question": "Does Rodha provide mock tests?",
+          "answer": "Yes. You get full-length mocks, sectional tests, topic tests, and SSC mini mocks with detailed analytics."
+        },
+        {
+          "id": "faq-5",
+          "question": "Can working professionals join?",
+          "answer": "Absolutely. Evening and weekend-friendly schedules, recordings, and flexible mentorship make preparation workable alongside a full-time job."
+        },
+        {
+          "id": "faq-6",
+          "question": "How do I enroll?",
+          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance, book a free counselling call first."
+        }
+      ],
+      "courses": [
+        {
+          "id": "banking-complete-2026",
+          "title": "Banking Complete Program 2026",
+          "slug": "banking-complete-program-2026",
+          "category": "banking",
+          "description": "Complete banking exam preparation covering Quant, Reasoning, English and GA for IBPS, SBI and RBI.",
+          "shortDescription": "Complete banking prep with live mentorship and mocks.",
+          "price": 14999,
+          "originalPrice": 19999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "300+",
+          "studentsEnrolled": "2,000+ Selects",
+          "features": [
+            "300+ hours of live classes",
+            "40+ full-length mock tests",
+            "Sectional tests & topic practice",
+            "One-on-one mentorship sessions"
+          ],
+          "highlights": [
+            "IBPS/SBI focused",
+            "Interview guidance"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-complete-2026",
+          "thumbnail": "/assets/images/courses/cat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "banking-ssc-2026",
+          "title": "SSC Complete Program 2026",
+          "slug": "ssc-complete-program-2026",
+          "category": "banking",
+          "description": "Targeted SSC CGL/CHSL preparation with quant foundations, reasoning drills, and mock analytics.",
+          "shortDescription": "SSC CGL & CHSL prep with mocks and mentorship.",
+          "price": 12999,
+          "originalPrice": 17999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "280+",
+          "studentsEnrolled": "SSC Rank Focus",
+          "features": [
+            "280+ hours of live classes",
+            "35+ full-length mocks",
+            "Tier-I and Tier-II strategy",
+            "Daily practice sheets"
+          ],
+          "highlights": [
+            "SSC pattern matched",
+            "Speed + accuracy drills"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ssc-complete-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "banking-crash-2026",
+          "title": "Banking Crash Course 2026",
+          "slug": "banking-crash-course-2026",
+          "category": "banking",
+          "description": "High-intensity short-duration banking revision focused on mocks and weak-area repair.",
+          "shortDescription": "Fast-track banking revision for the final stretch.",
+          "price": 7999,
+          "originalPrice": 11999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "100+",
+          "studentsEnrolled": "Final Stretch",
+          "features": [
+            "100+ crash classes",
+            "20+ full-length mocks",
+            "Rapid revision modules",
+            "Daily doubt support"
+          ],
+          "highlights": [
+            "Mock-heavy schedule",
+            "Last-mile strategy"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-crash-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "banking-foundation-2026",
+          "title": "Banking Foundation Program 2026",
+          "slug": "banking-foundation-program-2026",
+          "category": "banking",
+          "description": "Beginner-friendly foundation that builds Quant, Reasoning and English from the ground up.",
+          "shortDescription": "Start-from-basics banking & SSC prep.",
+          "price": 9999,
+          "originalPrice": 14999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "250+",
+          "studentsEnrolled": "Built for Beginners",
+          "features": [
+            "250+ concept classes",
+            "Foundational Quant & Reasoning",
+            "Guided practice sheets",
+            "Early mock exposure"
+          ],
+          "highlights": [
+            "Zero-to-hero path",
+            "Concept first"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-foundation-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "badge": "Starter"
+        }
+      ],
+      "facultyIds": [
+        "faculty-banking-1",
+        "faculty-banking-2"
+      ],
+      "results": [
+        {
+          "id": "r23",
+          "name": "Kavya Nair",
+          "exam": "IBPS PO 2024",
+          "rank": 18,
+          "score": "Selected",
+          "college": "SBI PO",
+          "year": 2024,
+          "category": "banking",
+          "image": "/assets/images/profiles/female-1.png"
+        },
+        {
+          "id": "r24",
+          "name": "Harsh Malhotra",
+          "exam": "SSC CGL 2024",
+          "rank": 42,
+          "score": "Selected",
+          "college": "SSC CGL",
+          "year": 2024,
+          "category": "banking",
+          "image": "/assets/images/profiles/male-2.png"
+        },
+        {
+          "id": "r25",
+          "name": "Ritu Desai",
+          "exam": "SBI Clerk 2024",
+          "rank": 9,
+          "score": "Selected",
+          "college": "SBI",
+          "year": 2024,
+          "category": "banking",
+          "image": "/assets/images/profiles/female-3.png"
+        },
+        {
+          "id": "r26",
+          "name": "Aman Joshi",
+          "exam": "IBPS Clerk 2024",
+          "rank": 31,
+          "score": "Selected",
+          "college": "IBPS",
+          "year": 2024,
+          "category": "banking",
+          "image": "/assets/images/profiles/male-4.png"
+        }
+      ],
+      "testimonials": [
+        {
+          "id": "t17",
+          "name": "Kavya Nair",
+          "exam": "Banking Student",
+          "score": "IBPS PO",
+          "college": "SBI PO",
+          "quote": "Sectional mocks and mentor reviews made banking Quant feel manageable. Cleared IBPS on my first serious attempt.",
+          "image": "/assets/images/profiles/female-1.png",
+          "year": 2024,
+          "category": "banking"
+        },
+        {
+          "id": "t18",
+          "name": "Harsh Malhotra",
+          "exam": "SSC Student",
+          "score": "AIR 42",
+          "college": "SSC CGL",
+          "quote": "The SSC track respected my job hours while still pushing speed and accuracy every week.",
+          "image": "/assets/images/profiles/male-2.png",
+          "year": 2024,
+          "category": "banking"
+        },
+        {
+          "id": "t19",
+          "name": "Ritu Desai",
+          "exam": "Banking Student",
+          "score": "SBI Clerk",
+          "college": "SBI",
+          "quote": "Reasoning drills and mini mocks were exactly what I needed before the real paper.",
+          "image": "/assets/images/profiles/female-3.png",
+          "year": 2024,
+          "category": "banking"
+        },
+        {
+          "id": "t20",
+          "name": "Aman Joshi",
+          "exam": "Banking Student",
+          "score": "IBPS Clerk",
+          "college": "IBPS",
+          "quote": "Foundation to crash track progression kept me consistent from basics to exam day.",
+          "image": "/assets/images/profiles/male-4.png",
+          "year": 2024,
+          "category": "banking"
+        }
+      ],
+      "stories": [],
+      "featuredCourseIds": [
+        "banking-complete-2026",
+        "banking-ssc-2026",
+        "banking-crash-2026",
+        "banking-foundation-2026"
+      ],
+      "featuredCourses": [
+        {
+          "id": "banking-complete-2026",
+          "title": "Banking Complete Program 2026",
+          "slug": "banking-complete-program-2026",
+          "category": "banking",
+          "description": "Complete banking exam preparation covering Quant, Reasoning, English and GA for IBPS, SBI and RBI.",
+          "shortDescription": "Complete banking prep with live mentorship and mocks.",
+          "price": 14999,
+          "originalPrice": 19999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "300+",
+          "studentsEnrolled": "2,000+ Selects",
+          "features": [
+            "300+ hours of live classes",
+            "40+ full-length mock tests",
+            "Sectional tests & topic practice",
+            "One-on-one mentorship sessions"
+          ],
+          "highlights": [
+            "IBPS/SBI focused",
+            "Interview guidance"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-complete-2026",
+          "thumbnail": "/assets/images/courses/cat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/male-1.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "banking-ssc-2026",
+          "title": "SSC Complete Program 2026",
+          "slug": "ssc-complete-program-2026",
+          "category": "banking",
+          "description": "Targeted SSC CGL/CHSL preparation with quant foundations, reasoning drills, and mock analytics.",
+          "shortDescription": "SSC CGL & CHSL prep with mocks and mentorship.",
+          "price": 12999,
+          "originalPrice": 17999,
+          "duration": "8 Months",
+          "mode": "Live + Recorded",
+          "classCount": "280+",
+          "studentsEnrolled": "SSC Rank Focus",
+          "features": [
+            "280+ hours of live classes",
+            "35+ full-length mocks",
+            "Tier-I and Tier-II strategy",
+            "Daily practice sheets"
+          ],
+          "highlights": [
+            "SSC pattern matched",
+            "Speed + accuracy drills"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/ssc-complete-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
+          "facultyImage": "/assets/images/profiles/male-2.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "banking-crash-2026",
+          "title": "Banking Crash Course 2026",
+          "slug": "banking-crash-course-2026",
+          "category": "banking",
+          "description": "High-intensity short-duration banking revision focused on mocks and weak-area repair.",
+          "shortDescription": "Fast-track banking revision for the final stretch.",
+          "price": 7999,
+          "originalPrice": 11999,
+          "duration": "3 Months",
+          "mode": "Live",
+          "classCount": "100+",
+          "studentsEnrolled": "Final Stretch",
+          "features": [
+            "100+ crash classes",
+            "20+ full-length mocks",
+            "Rapid revision modules",
+            "Daily doubt support"
+          ],
+          "highlights": [
+            "Mock-heavy schedule",
+            "Last-mile strategy"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-crash-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
+          "facultyImage": "/assets/images/profiles/female-1.png",
+          "badge": "Trending"
+        },
+        {
+          "id": "banking-foundation-2026",
+          "title": "Banking Foundation Program 2026",
+          "slug": "banking-foundation-program-2026",
+          "category": "banking",
+          "description": "Beginner-friendly foundation that builds Quant, Reasoning and English from the ground up.",
+          "shortDescription": "Start-from-basics banking & SSC prep.",
+          "price": 9999,
+          "originalPrice": 14999,
+          "duration": "10 Months",
+          "mode": "Live + Recorded",
+          "classCount": "250+",
+          "studentsEnrolled": "Built for Beginners",
+          "features": [
+            "250+ concept classes",
+            "Foundational Quant & Reasoning",
+            "Guided practice sheets",
+            "Early mock exposure"
+          ],
+          "highlights": [
+            "Zero-to-hero path",
+            "Concept first"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/banking-foundation-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
+          "facultyImage": "/assets/images/profiles/male-3.png",
+          "badge": "Starter"
+        }
+      ]
+    },
+    {
+      "id": "skillhouse",
+      "name": "Skill House",
+      "menuLabel": "Skill House",
+      "fullName": "Skill House",
+      "slug": "skillhouse",
+      "subHeading": "Career & Pre-MBA Skills",
+      "description": "Job-ready courses for future managers on AI, Excel, Case Competitions and more.",
+      "color": "#F97316",
+      "accentColor": "from-orange-500/25 to-orange-900/10",
+      "icon": "/assets/images/icons/exam/skill house logo.png",
+      "image": "/assets/images/icons/exam/skill infographic.png",
+      "illustrationImage": "/assets/images/icons/exam/skillhouse-3d.png",
+      "courseCount": "20+",
+      "selectionCount": "1,000+",
+      "metadata": {
+        "title": "Skill House — Rodha",
+        "description": "Skill House career-skills programs with expert mentorship, project-based learning, and industry-aligned practice."
+      },
+      "hero": {
+        "eyebrow": "Skill House · Career Learning",
+        "title": "Skills That Launch",
+        "accent": "Meaningful Careers",
+        "subtitle": "Skill House builds career-ready capabilities with mentorship, projects, and structured practice — so you grow beyond exams into professional impact.",
+        "image": "/assets/images/hero/cat-hero.jpg",
+        "imageAlt": "Skill House learner building career-ready skills with Rodha",
+        "primaryCta": {
+          "label": "Explore Courses",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore Assessments",
+          "href": "https://thinkexam.com",
+          "external": true
+        }
+      },
+      "sectionCopy": {
+        "coursesBadge": "Skill House Programs",
+        "coursesTitle": "Practical Programs for Career Momentum",
+        "coursesSubtitle": "Build communication, leadership, and role-ready skills through applied learning.",
+        "testSeriesBadge": "Skill Assessments",
+        "testSeriesTitle": "Practice, build and prove your skills.",
+        "testSeriesSubtitle": "Assessments, labs, and mini projects turn learning into visible progress.",
+        "facultyTitle": "Mentors at Skill House",
+        "facultySubtitle": "Learn from practitioners who connect concepts to real workplace outcomes.",
+        "testimonialSubtitle": "Real stories from Skill House learners",
+        "storiesTitle": "Watch learning turn into career confidence.",
+        "storiesSubtitle": "Practical projects and mentorship, reflected in learner outcomes."
+      },
+      "cta": {
+        "title": "Ready to Build Career-Ready Skills?",
+        "subtitle": "Choose a practical learning track and start creating work you can show.",
+        "primaryAction": {
+          "label": "Book Free Counselling",
+          "href": "/contact"
+        },
+        "secondaryAction": {
+          "label": "Explore Courses",
+          "href": "/category/skillhouse#courses"
+        }
+      },
+      "sectionOrder": [
+        "results",
+        "courses",
+        "test-series",
+        "faculty",
+        "testimonials",
+        "cta",
+        "stories",
+        "app-promo",
+        "faqs"
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
+      "heroFeatures": [
+        {
+          "id": "live-classes",
+          "label": "100+ Hours Live Classes",
+          "icon": "/assets/images/icons/ts-mini-mocks.png"
+        },
+        {
+          "id": "practice",
+          "label": "Project-Based Learning",
+          "icon": "/assets/images/icons/ts-topic.png"
+        },
+        {
+          "id": "mocks",
+          "label": "Industry Capstones",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "mentorship",
+          "label": "Personalised Mentorship",
+          "icon": "/assets/images/icons/selection.png"
+        }
+      ],
+      "quickStats": [
+        {
+          "id": "learners",
+          "value": "10,000+",
+          "label": "Learners",
+          "icon": "/assets/images/icons/selection.png"
+        },
+        {
+          "id": "placements",
+          "value": "1,000+",
+          "label": "Career Outcomes",
+          "icon": "/assets/images/icons/CAT-icon.png"
+        },
+        {
+          "id": "satisfaction",
+          "value": "98%",
+          "label": "Student Satisfaction",
+          "icon": "/assets/images/icons/ts-mocks.png"
+        },
+        {
+          "id": "excellence",
+          "value": "15+",
+          "label": "Years Of Excellence",
+          "icon": "/assets/images/icons/rank.png"
+        },
+        {
+          "id": "rating",
+          "value": "4.8/5",
+          "label": "Google Rating",
+          "icon": "/assets/images/icons/cat-icon-3d.png"
+        }
+      ],
+      "resultStats": [
+        {
+          "label": "Learners",
+          "value": "10,000",
+          "suffix": "+"
+        },
+        {
+          "label": "Career Outcomes",
+          "value": "1,000",
+          "suffix": "+"
+        }
+      ],
+      "testSeries": [
+        {
+          "id": "skill-assessments",
+          "title": "Skill Assessments",
+          "description": "Benchmark your progress with role-aligned skill assessments.",
+          "features": [
+            "20+ Assessments",
+            "Detailed Analytics",
+            "Skill Gap Reports"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "value": ""
+        },
+        {
+          "id": "practice-labs",
+          "title": "Practice Labs",
+          "description": "Hands-on labs to apply concepts in real-world scenarios.",
+          "features": [
+            "60+ Lab Sessions",
+            "Timed Challenges",
+            "Mentor Feedback"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "value": ""
+        },
+        {
+          "id": "topic-drills",
+          "title": "Topic Drills",
+          "description": "Build depth with focused drills after every module.",
+          "features": [
+            "200+ Topic Drills",
+            "Instant Solutions",
+            "Weak Area Tracking"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-topic.png",
+          "value": ""
+        },
+        {
+          "id": "mini-projects",
+          "title": "Mini Projects",
+          "description": "Short projects that build portfolio-ready artefacts.",
+          "features": [
+            "40+ Mini Projects",
+            "Portfolio Templates",
+            "Peer Reviews"
+          ],
+          "href": "https://thinkexam.com",
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "value": ""
+        }
+      ],
+      "resources": [
+        {
+          "id": "free-resources",
+          "title": "Free Skill House Resources",
+          "description": "Access curated templates, guides, and starter kits — free for every learner.",
+          "ctaLabel": "Access Now",
+          "href": "/blog",
+          "icon": "/assets/icons/download.svg"
+        },
+        {
+          "id": "free-demo",
+          "title": "Attend a Free Demo",
+          "description": "Experience a live Skill House session with our mentors before you enroll.",
+          "ctaLabel": "Book Your Demo",
+          "href": "/contact",
+          "icon": "/assets/icons/play.svg"
+        },
+        {
+          "id": "webinars",
+          "title": "Upcoming Webinars",
+          "description": "Join free webinars on career pathways, skill stacks, and industry trends.",
+          "ctaLabel": "Register Now",
+          "href": "/blog",
+          "icon": "/assets/icons/calendar.svg"
+        },
+        {
+          "id": "counsellor",
+          "title": "Talk to a Counsellor",
+          "description": "Get a personalised learning roadmap mapped to your career goals.",
+          "ctaLabel": "Contact Now",
+          "href": "/contact",
+          "icon": "/assets/icons/phone.svg",
+          "highlighted": true
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "What is Skill House?",
+          "answer": "Skill House is Rodha’s career-skills vertical — practical programs that build professional capabilities alongside exam preparation pathways."
+        },
+        {
+          "id": "faq-2",
+          "question": "Who should join Skill House programs?",
+          "answer": "Students and early professionals who want portfolio-ready skills, mentorship, and structured practice beyond traditional exam prep."
+        },
+        {
+          "id": "faq-3",
+          "question": "Are classes live or recorded?",
+          "answer": "Most programs include live interactive classes plus recordings so you can revise and catch up anytime."
+        },
+        {
+          "id": "faq-4",
+          "question": "Is mentorship included?",
+          "answer": "Yes. Mentors help you plan milestones, review projects, and stay accountable through one-on-one guidance."
+        },
+        {
+          "id": "faq-5",
+          "question": "Can working professionals join?",
+          "answer": "Absolutely. Evening and weekend-friendly schedules make Skill House workable alongside a full-time role."
+        },
+        {
+          "id": "faq-6",
+          "question": "How do I enroll?",
+          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance, book a free counselling call first."
+        }
+      ],
+      "courses": [
+        {
+          "id": "skillhouse-foundation-2026",
+          "title": "Skill House Foundation Program",
+          "slug": "skillhouse-foundation-2026",
+          "category": "skillhouse",
+          "description": "Foundational career-skills program covering communication, problem-solving, and digital literacy.",
+          "shortDescription": "Build career-ready foundations with mentorship.",
+          "price": 9999,
+          "originalPrice": 14999,
+          "duration": "4 Months",
+          "mode": "Live + Recorded",
+          "classCount": "80+",
+          "studentsEnrolled": "Career Starters",
+          "features": [
+            "80+ live sessions",
+            "Portfolio starter projects",
+            "Mentor check-ins",
+            "Peer learning circles"
+          ],
+          "highlights": [
+            "Career foundations",
+            "Portfolio first"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-foundation-2026",
+          "thumbnail": "/assets/images/courses/cat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-2.png",
+          "badge": "New"
+        },
+        {
+          "id": "skillhouse-pro-2026",
+          "title": "Skill House Pro Program",
+          "slug": "skillhouse-pro-program-2026",
+          "category": "skillhouse",
+          "description": "Advanced Skill House track with industry capstones, mentorship, and role-aligned assessments.",
+          "shortDescription": "Advanced skills with capstones and mentor reviews.",
+          "price": 17999,
+          "originalPrice": 24999,
+          "duration": "6 Months",
+          "mode": "Live + Recorded",
+          "classCount": "120+",
+          "studentsEnrolled": "Pro Track",
+          "features": [
+            "120+ live sessions",
+            "Industry capstone projects",
+            "Weekly mentor reviews",
+            "Career readiness workshops"
+          ],
+          "highlights": [
+            "Capstone focused",
+            "Industry mentors"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-pro-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
+          "facultyImage": "/assets/images/profiles/male-4.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "skillhouse-comms-2026",
+          "title": "Professional Communication Lab",
+          "slug": "skillhouse-comms-lab-2026",
+          "category": "skillhouse",
+          "description": "Intensive communication lab for presentations, interviews, and workplace writing.",
+          "shortDescription": "Communication skills for interviews and the workplace.",
+          "price": 6999,
+          "originalPrice": 9999,
+          "duration": "8 Weeks",
+          "mode": "Live",
+          "classCount": "32+",
+          "studentsEnrolled": "Comms Lab",
+          "features": [
+            "32+ live practice sessions",
+            "Mock interviews",
+            "Presentation clinics",
+            "Writing feedback loops"
+          ],
+          "highlights": [
+            "Interview ready",
+            "Presentation polish"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-comms-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
+          "facultyImage": "/assets/images/profiles/female-3.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "skillhouse-leadership-2026",
+          "title": "Leadership Essentials",
+          "slug": "skillhouse-leadership-2026",
+          "category": "skillhouse",
+          "description": "Leadership essentials covering collaboration, decision-making, and personal branding.",
+          "shortDescription": "Leadership skills for early professionals.",
+          "price": 8999,
+          "originalPrice": 12999,
+          "duration": "10 Weeks",
+          "mode": "Live + Recorded",
+          "classCount": "40+",
+          "studentsEnrolled": "Leadership Track",
+          "features": [
+            "40+ live sessions",
+            "Team project simulations",
+            "Personal branding labs",
+            "Mentor accountability"
+          ],
+          "highlights": [
+            "Team leadership",
+            "Personal brand"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-leadership-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
+          "facultyImage": "/assets/images/profiles/male-5.png",
+          "badge": "Trending"
+        }
+      ],
+      "facultyIds": [
+        "faculty-skill-1",
+        "faculty-skill-2"
+      ],
+      "results": [
+        {
+          "id": "r27",
+          "name": "Sara Ali",
+          "exam": "Skill House 2024",
+          "rank": 1,
+          "score": "Placed",
+          "college": "Product Associate",
+          "year": 2024,
+          "category": "skillhouse",
+          "image": "/assets/images/profiles/female-2.png"
+        },
+        {
+          "id": "r28",
+          "name": "Nikhil Bose",
+          "exam": "Skill House 2024",
+          "rank": 2,
+          "score": "Placed",
+          "college": "Business Analyst",
+          "year": 2024,
+          "category": "skillhouse",
+          "image": "/assets/images/profiles/male-5.png"
+        },
+        {
+          "id": "r29",
+          "name": "Tanya Gill",
+          "exam": "Skill House 2024",
+          "rank": 3,
+          "score": "Placed",
+          "college": "Marketing Associate",
+          "year": 2024,
+          "category": "skillhouse",
+          "image": "/assets/images/profiles/female-4.png"
+        },
+        {
+          "id": "r30",
+          "name": "Omar Sheikh",
+          "exam": "Skill House 2024",
+          "rank": 4,
+          "score": "Placed",
+          "college": "Operations Lead",
+          "year": 2024,
+          "category": "skillhouse",
+          "image": "/assets/images/profiles/male-1.png"
+        }
+      ],
+      "testimonials": [
+        {
+          "id": "t21",
+          "name": "Sara Ali",
+          "exam": "Skill House Learner",
+          "score": "Placed",
+          "college": "Product Associate",
+          "quote": "Capstone projects and mentor feedback gave me a portfolio I could actually talk about in interviews.",
+          "image": "/assets/images/profiles/female-2.png",
+          "year": 2024,
+          "category": "skillhouse"
+        },
+        {
+          "id": "t22",
+          "name": "Nikhil Bose",
+          "exam": "Skill House Learner",
+          "score": "Placed",
+          "college": "Business Analyst",
+          "quote": "Communication lab sessions transformed how I present ideas. Interviews felt natural after weeks of practice.",
+          "image": "/assets/images/profiles/male-5.png",
+          "year": 2024,
+          "category": "skillhouse"
+        },
+        {
+          "id": "t23",
+          "name": "Tanya Gill",
+          "exam": "Skill House Learner",
+          "score": "Placed",
+          "college": "Marketing Associate",
+          "quote": "Skill House balanced structure with creativity. Mentors helped me ship projects on deadlines.",
+          "image": "/assets/images/profiles/female-4.png",
+          "year": 2024,
+          "category": "skillhouse"
+        },
+        {
+          "id": "t24",
+          "name": "Omar Sheikh",
+          "exam": "Skill House Learner",
+          "score": "Placed",
+          "college": "Operations Lead",
+          "quote": "Leadership essentials taught me frameworks I still use weekly at work.",
+          "image": "/assets/images/profiles/male-1.png",
+          "year": 2024,
+          "category": "skillhouse"
+        }
+      ],
+      "stories": [],
+      "featuredCourseIds": [
+        "skillhouse-foundation-2026",
+        "skillhouse-pro-2026",
+        "skillhouse-comms-2026",
+        "skillhouse-leadership-2026"
+      ],
+      "featuredCourses": [
+        {
+          "id": "skillhouse-foundation-2026",
+          "title": "Skill House Foundation Program",
+          "slug": "skillhouse-foundation-2026",
+          "category": "skillhouse",
+          "description": "Foundational career-skills program covering communication, problem-solving, and digital literacy.",
+          "shortDescription": "Build career-ready foundations with mentorship.",
+          "price": 9999,
+          "originalPrice": 14999,
+          "duration": "4 Months",
+          "mode": "Live + Recorded",
+          "classCount": "80+",
+          "studentsEnrolled": "Career Starters",
+          "features": [
+            "80+ live sessions",
+            "Portfolio starter projects",
+            "Mentor check-ins",
+            "Peer learning circles"
+          ],
+          "highlights": [
+            "Career foundations",
+            "Portfolio first"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-foundation-2026",
+          "thumbnail": "/assets/images/courses/cat-2026.jpg",
+          "facultyImage": "/assets/images/profiles/female-2.png",
+          "badge": "New"
+        },
+        {
+          "id": "skillhouse-pro-2026",
+          "title": "Skill House Pro Program",
+          "slug": "skillhouse-pro-program-2026",
+          "category": "skillhouse",
+          "description": "Advanced Skill House track with industry capstones, mentorship, and role-aligned assessments.",
+          "shortDescription": "Advanced skills with capstones and mentor reviews.",
+          "price": 17999,
+          "originalPrice": 24999,
+          "duration": "6 Months",
+          "mode": "Live + Recorded",
+          "classCount": "120+",
+          "studentsEnrolled": "Pro Track",
+          "features": [
+            "120+ live sessions",
+            "Industry capstone projects",
+            "Weekly mentor reviews",
+            "Career readiness workshops"
+          ],
+          "highlights": [
+            "Capstone focused",
+            "Industry mentors"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-pro-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-pro.jpg",
+          "facultyImage": "/assets/images/profiles/male-4.png",
+          "isPopular": true,
+          "badge": "Bestseller"
+        },
+        {
+          "id": "skillhouse-comms-2026",
+          "title": "Professional Communication Lab",
+          "slug": "skillhouse-comms-lab-2026",
+          "category": "skillhouse",
+          "description": "Intensive communication lab for presentations, interviews, and workplace writing.",
+          "shortDescription": "Communication skills for interviews and the workplace.",
+          "price": 6999,
+          "originalPrice": 9999,
+          "duration": "8 Weeks",
+          "mode": "Live",
+          "classCount": "32+",
+          "studentsEnrolled": "Comms Lab",
+          "features": [
+            "32+ live practice sessions",
+            "Mock interviews",
+            "Presentation clinics",
+            "Writing feedback loops"
+          ],
+          "highlights": [
+            "Interview ready",
+            "Presentation polish"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-comms-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-crash.jpg",
+          "facultyImage": "/assets/images/profiles/female-3.png",
+          "badge": "Popular"
+        },
+        {
+          "id": "skillhouse-leadership-2026",
+          "title": "Leadership Essentials",
+          "slug": "skillhouse-leadership-2026",
+          "category": "skillhouse",
+          "description": "Leadership essentials covering collaboration, decision-making, and personal branding.",
+          "shortDescription": "Leadership skills for early professionals.",
+          "price": 8999,
+          "originalPrice": 12999,
+          "duration": "10 Weeks",
+          "mode": "Live + Recorded",
+          "classCount": "40+",
+          "studentsEnrolled": "Leadership Track",
+          "features": [
+            "40+ live sessions",
+            "Team project simulations",
+            "Personal branding labs",
+            "Mentor accountability"
+          ],
+          "highlights": [
+            "Team leadership",
+            "Personal brand"
+          ],
+          "enrollmentUrl": "https://rodha.graphy.com/courses/skillhouse-leadership-2026",
+          "thumbnail": "/assets/images/courses/cat-2026-foundation.jpg",
+          "facultyImage": "/assets/images/profiles/male-5.png",
+          "badge": "Trending"
+        }
+      ]
+    }
+  ]
+}

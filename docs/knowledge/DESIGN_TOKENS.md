@@ -26,6 +26,11 @@ Do not hardcode hex colors or magic spacing when a token or utility class exists
 | `bg-tertiary` | `#1A1A1A` |
 | `bg-surface` | `#1E1E1E` |
 | `bg-hover` | `#252525` |
+| `section-white` / `.bg-section-white` | `#FFFFFF` |
+| `section-beige` / `.bg-section-beige` | `#FFF3E8` |
+| `section-beige-border` / `.border-section-beige` | `#FFEAD6` |
+| `section-cream` / `.bg-section-cream` | `#FFFBF5` |
+| `brand-orange` | `#F06B23` |
 
 ### Text
 | Token | Hex |
@@ -72,12 +77,14 @@ Font: Inter (`--font-inter` via `next/font`).
 | Token | Value |
 |-------|-------|
 | `rounded-sm` | 4px |
-| `rounded` / default | 8px |
-| `rounded-md` | 12px |
-| `rounded-lg` | 16px |
-| `rounded-xl` | 24px |
+| `rounded` / default | 6px |
+| `rounded-md` | 6px |
+| `rounded-lg` | 8px |
+| `rounded-xl` | 12px |
 | `shadow-orange` | orange CTA glow |
 | `shadow-orange-lg` | large orange glow |
+
+Mixed-theme docs: [`docs/style.md`](../../docs/style.md)
 
 ---
 

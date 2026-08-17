@@ -106,7 +106,7 @@ export function ExamCard({ category, className, onCounsellingSelect }: ExamCardP
   }
 
   return (
-    <Link href={`/${category.slug}`} className={cardClassName} style={cardStyle}>
+    <Link href={`/category/${category.slug}`} className={cardClassName} style={cardStyle}>
       {content}
     </Link>
   );

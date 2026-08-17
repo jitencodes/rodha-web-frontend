@@ -100,7 +100,7 @@ export function ExamCardV2({
 
   return (
     <Link
-      href={`/${category.slug}`}
+      href={`/category/${category.slug}`}
       className={cardClassName}
       style={cardStyle}
     >

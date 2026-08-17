@@ -21,7 +21,7 @@ export function FacultyAchievementsPublicationsSection({
   if (!hasAchievements && !hasPublications) return null;
 
   return (
-    <section className={cn("section-spacing bg-bg-secondary/40", className)}>
+    <section className={cn("home-section-spacing bg-bg-primary", className)}>
       <div className="container-rodha">
         <RevealGroup>
           <div className="grid grid-cols-1 lg:grid-cols-[48%_52%] gap-4 md:gap-5 items-stretch">

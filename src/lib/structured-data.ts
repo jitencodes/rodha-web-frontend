@@ -49,7 +49,7 @@ export function categoryBreadcrumbJsonLd(categorySlug: string): JsonLd {
     { label: "Home", href: "/" },
     {
       label: category?.menuLabel ?? categorySlug,
-      href: category ? `/${category.slug}` : undefined,
+      href: category ? `/category/${category.slug}` : undefined,
     },
   ]);
 }

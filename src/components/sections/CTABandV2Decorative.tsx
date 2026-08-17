@@ -62,7 +62,7 @@ export function CTABandV2Decorative({
     <section
       id="site-footer-cta"
       data-home-zone="cta"
-      className={cn("home-section-spacing pt-6 md:pt-8 bg-[#FFF3E8]", className)}
+      className={cn("home-section-spacing pt-6 md:pt-8 bg-section-beige", className)}
     >
       <div className="container-rodha">
         <div

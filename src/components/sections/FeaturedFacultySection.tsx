@@ -1,7 +1,7 @@
 import { Container } from "@/components/layout/Container";
 import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { SectionHeader } from "@/components/sections/SectionHeader";
+import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { FacultyListingCard } from "@/components/cards/FacultyListingCard";
 import type { Faculty } from "@/lib/types";
 
@@ -13,9 +13,9 @@ export function FeaturedFacultySection({ members }: FeaturedFacultySectionProps)
   if (members.length === 0) return null;
 
   return (
-    <section className="section-spacing pt-8 md:pt-10 pb-6 md:pb-8 bg-bg-secondary">
+    <section className="home-section-spacing bg-section-white home-on-light pt-8 md:pt-10 pb-6 md:pb-8">
       <Container>
-        <SectionHeader
+        <SectionHeaderV2
           label="Featured Faculty"
           title={
             <>

@@ -6,10 +6,10 @@ import { FacultyCoursesSection } from "@/components/sections/FacultyCoursesSecti
 import { FacultyAchievementsPublicationsSection } from "@/components/sections/FacultyAchievementsPublicationsSection";
 import { FacultyReviewsVideosSection } from "@/components/sections/FacultyReviewsVideosSection";
 import { FacultyResultsSection } from "@/components/sections/FacultyResultsSection";
-import { CTABand } from "@/components/sections/CTABand";
+import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { faculty, getFacultyBySlug } from "@/data/faculty";
-import { EXTERNAL_URLS, getCategoryPath } from "@/lib/constants";
+import { getCategoryPath } from "@/lib/constants";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/structured-data";
 
 interface FacultyDetailPageProps {
@@ -87,15 +87,13 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
       <FacultyResultsSection faculty={member} />
 
       <RevealGroup>
-        <CTABand
+        <CTABandV2Decorative
           title="Take the Next Step Towards Success"
           subtitle="Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion."
+          backgroundImage="/assets/images/background/cta background image.JPG"
+          decorativeImage="/assets/images/about us/award.png"
           primaryAction={{ label: "Explore Courses →", href: categoryHref }}
           secondaryAction={{ label: "Book a Demo →", href: "/contact" }}
-          tertiaryAction={{
-            label: "Ask Rodha Buddy",
-            href: EXTERNAL_URLS.rodhaBuddy,
-          }}
           className="reveal-child reveal-delay-1"
         />
       </RevealGroup>
