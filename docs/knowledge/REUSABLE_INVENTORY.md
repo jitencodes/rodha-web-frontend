@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-16 (theme + dynamic category rollout)
+**Last updated:** 2026-08-20 (Faculty detail light mixed-theme)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -20,18 +20,18 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
-| DropdownSelect | `DropdownSelect.tsx` |
-| Input | `Input.tsx` |
+| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`) |
+| Input | `Input.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | CounsellingCtaButton | `CounsellingCtaButton.tsx` |
 | Modal | `Modal.tsx` |
-| Pagination | `Pagination.tsx` |
+| Pagination | `Pagination.tsx` (optional `basePath`+`query` for URL-based navigation; `variant?: "dark" \| "light"`) |
 | Rating | `Rating.tsx` |
 | RevealGroup | `RevealGroup.tsx` |
-| SearchInput | `SearchInput.tsx` |
+| SearchInput | `SearchInput.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | Select | `Select.tsx` |
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` |
-| Textarea | `Textarea.tsx` |
+| Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
 | InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop with gap-aligned repeated sets) |
 
 ## Layout — `src/components/layout/`
@@ -55,13 +55,13 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
 | CTABand | `CTABand.tsx` (optional `backgroundImage`, `titleAccent`, `secondaryOutline` for home variant; counselling `/contact` actions open modal) |
 | CTABandV2 | `CTABandV2.tsx` (locked homepage full-bleed image CTA) |
-| CTABandV2Decorative | `CTABandV2Decorative.tsx` (MBA image-left / content-right decorative variant; homepage unchanged) |
+| CTABandV2Decorative | `CTABandV2Decorative.tsx` (MBA image-left / content-right decorative variant; optional `tertiaryAction` e.g. Rodha Buddy; homepage unchanged) |
 | CultureSection | `CultureSection.tsx` |
 | AdvisorsSection | `AdvisorsSection.tsx` |
 | FacultyFiltersBar | `FacultyFiltersBar.tsx` |
 | FacultyHeroSection | `FacultyHeroSection.tsx` |
-| FacultyDetailHeroSection | `FacultyDetailHeroSection.tsx` |
-| FacultyInfoCardsSection | `FacultyInfoCardsSection.tsx` |
+| FacultyDetailHeroSection | `FacultyDetailHeroSection.tsx` (dark 2-col hero + breadcrumb + stat cards) |
+| FacultyInfoCardsSection | `FacultyInfoCardsSection.tsx` (3 light cards: About / Philosophy / Expertise) |
 | FacultyCoursesSection | `FacultyCoursesSection.tsx` |
 | FacultyAchievementsPublicationsSection | `FacultyAchievementsPublicationsSection.tsx` |
 | FacultyReviewsVideosSection | `FacultyReviewsVideosSection.tsx` |
@@ -93,13 +93,30 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | SectionHeaderV2 | `SectionHeaderV2.tsx` (locked homepage / MBA light headers) |
 | TeamHeroSection | `TeamHeroSection.tsx` |
 | TrustBar | `TrustBar.tsx` |
+| AboutHeroSection | `about/AboutHeroSection.tsx` |
+| AboutMissionVisionSection | `about/AboutMissionVisionSection.tsx` |
+| AboutJourneyTimeline | `about/AboutJourneyTimeline.tsx` (horizontal on `md+`, vertical on mobile) |
+| AboutDifferentiatorsSection | `about/AboutDifferentiatorsSection.tsx` |
+| AboutImpactSection | `about/AboutImpactSection.tsx` |
+| AboutMentorsSection | `about/AboutMentorsSection.tsx` (`FacultyCardV2` + `Carousel`; CAT faculty) |
+| AboutTestimonialSection | `about/AboutTestimonialSection.tsx` |
+| AboutFinalCtaSection | `about/AboutFinalCtaSection.tsx` |
+| ContactHeroSection | `contact/ContactHeroSection.tsx` |
+| ContactInfoStrip | `contact/ContactInfoStrip.tsx` |
+| ContactOfficeSupportSection | `contact/ContactOfficeSupportSection.tsx` (Google Maps iframe) |
+| ContactCtaSection | `contact/ContactCtaSection.tsx` |
+| ContactFaqSection | `contact/ContactFaqSection.tsx` (`AccordionV2`) |
+| ContactBuddyCtaSection | `contact/ContactBuddyCtaSection.tsx` |
+| BlogHeroSection | `blog/BlogHeroSection.tsx` (light hero with breadcrumb, eyebrow, heading, hero-blog image) |
+| BlogCategories | `blog/BlogCategories.tsx` (category badge links to `/blog?category=…`; optional `activeCategory`) |
+| ShareBlog | `blog/ShareBlog.tsx` (client; Copy Link, WhatsApp, Facebook, X, LinkedIn share buttons; `url`+`title` props) |
 
 ## Cards — `src/components/cards/`
 
 | Component | File |
 |-----------|------|
 | AdvisorCard | `AdvisorCard.tsx` |
-| BlogCard | `BlogCard.tsx` |
+| BlogCard | `BlogCard.tsx` (`variant?: "overlay" \| "article"`; overlay = dark legacy homepage card; article = light listing/detail card with category link, calendar/clock meta) |
 | CourseCard | `CourseCard.tsx` |
 | CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; View Details → course slug) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
@@ -107,14 +124,14 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white: TopperCardV2 layout, image + light gradient detail border; no ratings) |
 | FacultyExpertCard | `FacultyExpertCard.tsx` |
 | FacultyListingCard | `FacultyListingCard.tsx` |
-| FacultyStatCard | `FacultyStatCard.tsx` |
-| FacultyInfoCard | `FacultyInfoCard.tsx` |
-| FacultyCourseCard | `FacultyCourseCard.tsx` |
-| FacultyAchievementCard | `FacultyAchievementCard.tsx` |
-| FacultyPublicationCard | `FacultyPublicationCard.tsx` |
-| FacultyReviewCard | `FacultyReviewCard.tsx` |
-| FacultyVideoCard / FacultyVideosPanel | `FacultyVideoCard.tsx` |
-| FacultyResultStatCard | `FacultyResultStatCard.tsx` |
+| FacultyStatCard | `FacultyStatCard.tsx` (dark hero stat; `FacultyIcon` / react-icons) |
+| FacultyInfoCard | `FacultyInfoCard.tsx` (light-theme card; quote variant) |
+| FacultyCourseCard | `FacultyCourseCard.tsx` (light-theme; `FacultyIcon`) |
+| FacultyAchievementCard | `FacultyAchievementCard.tsx` (light-theme + trophy illustration) |
+| FacultyPublicationCard | `FacultyPublicationCard.tsx` (light-theme publication rows) |
+| FacultyReviewCard | `FacultyReviewCard.tsx` (light-theme review list) |
+| FacultyVideoCard / FacultyVideosPanel | `FacultyVideoCard.tsx` (light-theme; play via `FacultyIcon`) |
+| FacultyResultStatCard | `FacultyResultStatCard.tsx` (orange value + optional description) |
 | FeatureCard | `FeatureCard.tsx` |
 | LeadershipCard | `LeadershipCard.tsx` |
 | ResourceCard | `ResourceCard.tsx` |
@@ -131,7 +148,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Component | File |
 |-----------|------|
-| ContactForm | `ContactForm.tsx` |
+| ContactForm | `ContactForm.tsx` (light/dark `variant`; +91 phone chrome matching counselling; prefix icons; stub submit) |
 | LeadCaptureForm | `LeadCaptureForm.tsx` |
 | NewsletterSignup | `NewsletterSignup.tsx` |
 
@@ -148,6 +165,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File | Role |
 |--------|------|------|
 | constants | `constants.ts` | Site config, categories, trust metrics, value props |
+| faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | structured-data | `structured-data.ts` | Server-rendered JSON-LD helpers (Organization, Breadcrumb, FAQ, Person) |
 | types | `types.ts` | Shared domain types |
 | utils | `utils.ts` | `cn()` helper |
@@ -157,9 +175,11 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File |
 |--------|------|
 | blog | `blog.ts` |
+| about | `about.ts` |
+| contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
 | category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
 | courses | `courses.ts` (homepage / legacy) |
-| faculty | `faculty.ts` |
+| faculty | `faculty.ts` (+ `getFacultyHonorific`, `withFacultyDetailDefaults`, `getFacultyBySlug` merged detail) |
 | faq | `faq.ts` |
 | legal | `legal.ts` |
 | navigation | `navigation.ts` |

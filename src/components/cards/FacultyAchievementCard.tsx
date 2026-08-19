@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Icon } from "@/components/ui/Icon";
+import { FacultyIcon } from "@/lib/faculty-icons";
 import { FACULTY_ACHIEVEMENT_IMAGE } from "@/data/faculty";
 
 interface FacultyAchievementCardProps {
@@ -9,6 +9,9 @@ interface FacultyAchievementCardProps {
   illustration?: string;
   className?: string;
 }
+
+const LIGHT_CARD =
+  "rounded-xl border border-section-beige bg-white shadow-sm shadow-orange-500/5";
 
 export function FacultyAchievementCard({
   title = "Achievements & Credentials",
@@ -19,20 +22,17 @@ export function FacultyAchievementCard({
   return (
     <div
       className={cn(
-        "card-base card-premium-hover premium-border-glow hover-shine relative overflow-hidden flex flex-col rounded-xl bg-bg-secondary p-5 md:p-6 h-full",
+        "card-premium-hover hover-shine relative overflow-hidden flex flex-col p-5 md:p-6 h-full",
+        LIGHT_CARD,
         className
       )}
     >
-      <h3 className="text-h4 font-semibold text-text-primary relative z-10">{title}</h3>
+      <h3 className="text-h4 font-semibold text-neutral-900 relative z-10">{title}</h3>
 
       <ul className="mt-4 space-y-3 relative z-10 pr-[28%] md:pr-[32%]">
         {items.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-body-sm text-text-secondary">
-            <Icon
-              src="/assets/icons/check.svg"
-              size={14}
-              className="text-orange-500 mt-0.5 shrink-0"
-            />
+          <li key={item} className="flex items-start gap-2.5 text-body-sm text-neutral-600">
+            <FacultyIcon name="check" size={14} className="text-orange-500 mt-0.5" />
             <span className="leading-relaxed">{item}</span>
           </li>
         ))}

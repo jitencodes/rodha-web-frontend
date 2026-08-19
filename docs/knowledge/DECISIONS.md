@@ -14,9 +14,29 @@ Format:
 
 ---
 
+### 2026-08-20 — Faculty detail light mixed-theme + data defaults
+- **Decision:** Upgrade `/faculty/[slug]` in place: keep dark hero (aligned with Faculty listing / Blog / category landings); convert body to white/beige mixed theme with local light card classes (no global `.card-base` change). Split About / Philosophy / Expertise into three cards. Add `withFacultyDetailDefaults()` so all ~36 faculty slugs render complete pages; rich authored entries (Nishant, Anand, Neha) override defaults. Icon keys in JSON resolved via `src/lib/faculty-icons.tsx` (`react-icons`). Extend `CTABandV2Decorative` with optional `tertiaryAction` for faculty detail Rodha Buddy CTA only.
+- **Rationale:** Reference layout requires three info cards and light surfaces; sparse faculty entries broke detail pages; scoped light styling avoids homepage/category regressions.
+- **Alternatives considered:** Light hero for entire page; per-faculty page files; storing React icon components in JSON.
+- **Consequences:** `getFacultyBySlug` always returns merged detail data; listing page unchanged; `react-icons` added as dependency.
+
 ---
 
-### 2026-08-17 — Category course catalog is canonical
+### 2026-08-19 — Blog pages use article BlogCard variant, URL-driven filters, static HTML content
+- **Decision:** Build `/blog` listing and `/blog/[slug]` detail from the approved blog UI reference screens. Add `variant="article"` to `BlogCard` (white card with category link badge, calendar/clock meta) while keeping the legacy `variant="overlay"` (dark overlay card) as the default so the frozen legacy homepage is unaffected. Category filtering and search are URL-driven (`/blog?category=ipmat&q=…`), server-rendered. Blog content is static trusted HTML rendered via `dangerouslySetInnerHTML` + `.blog-prose` CSS — no markdown library. `Pagination` extended with `basePath`/`query` URL mode and `variant="light"`. Sidebar replaces the reference's "On This Page" with reusable `BlogCategories` + `ShareBlog` components. No author UI, no newsletter section.
+- **Rationale:** URL-driven filtering allows SSR/SSG and shareable filtered views. Static HTML content keeps the stack simple until a CMS is introduced (Phase 2). Overlay vs article variants avoid a risky refactor of the legacy card.
+- **Alternatives considered:** Client-side filtering with `useState`; markdown-to-HTML library; single card component with CSS-only theme switch.
+- **Consequences:** `BlogPost` type has deprecated compat fields (`excerpt`, `image`, `publishedAt`, `author`) for the legacy homepage; these should be removed when legacy is retired. Blog thumbnails reuse `hero-blog.png` and placeholder SVG until dedicated images arrive.
+
+---
+
+### 2026-08-17 — About and Contact pages use page-local data and CAT faculty cards
+- **Decision:** Ship full mixed-theme `/about` and `/contact` layouts from the supplied UI references. Keep canonical routes `/about` and `/contact` (no `/about-us`). Reuse CAT `FacultyCardV2` plus `Carousel` on About. Keep Footer `CONTACT_INFO` unchanged and store Contact page phone/email/address/map in `src/data/contact.ts`. Add optional `variant="light"` on `Input` / `Textarea` / `DropdownSelect` (default remains dark). Contact form keeps counselling +91 phone chrome and stub submit.
+- **Rationale:** Header/Footer/homepage/category pages are locked; Contact page numbers differ from current footer placeholders; counselling modal must stay intact.
+- **Alternatives considered:** Redirect `/about-us`; mutate global `CONTACT_INFO`; new faculty card; reuse homepage `ImpactGrowthTimeline` / `CTABandV2Decorative` for mismatched mocks.
+- **Consequences:** About hero uses the team-hero photograph until a dedicated building asset arrives; form backend remains TODO; Footer contact details can be updated later without restyling Contact.
+
+---
 - **Decision:** Render `category.courses` directly in the shared category course slider and remove the duplicate `featuredCourses` JSON collection. Use the reusable `Carousel` with responsive 1/2/4-card sizing, desktop arrow controls, mouse pointer dragging, and native touch swiping.
 - **Rationale:** Every configured course should appear, duplicated course collections were drifting out of sync, and users need deliberate slider controls instead of automatic continuous motion.
 - **Alternatives considered:** Keep a four-card grid; maintain separate `courses` and `featuredCourses`; use a continuously moving marquee.
@@ -281,3 +301,11 @@ Format:
 - **Rationale:** Current codebase convention; avoids circular re-exports.
 - **Alternatives considered:** Barrel files per folder.
 - **Consequences:** Prefer `@/components/ui/Button` style imports unless a later decision changes this.
+
+---
+
+### 2026-08-19 — Theme alignment: FacultyCardV2 as canonical faculty card + light shared primitives
+- **Decision:** `FacultyCardV2` is now the only faculty card used on Faculty listing, Team, About, and Category pages. `SearchInput` gains `variant="light"`. `DropdownSelect` light menu (white bg, dark text) when `variant="light"`. `Input`/`Textarea` prefix padding increased to `pl-11`. `BlogCard` article variant uses unified orange badge + orange-tinted shadow. Contact form stays dark with Name|Phone same row. Blog listing uses dark hero. Old `FacultyListingCard` / `FacultyExpertCard` files kept but unused.
+- **Rationale:** Align all content pages to the locked category-page design system without affecting homepage or dark-page patterns.
+- **Alternatives considered:** Keeping per-page card styles; adding light variant to `FacultyListingCard`.
+- **Consequences:** Dark defaults preserved for counselling/FAQ/other forms. Homepage unchanged. Old card files can be deleted in a future cleanup pass.

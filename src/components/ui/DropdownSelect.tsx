@@ -17,6 +17,9 @@ interface DropdownSelectProps {
   "aria-label"?: string;
   className?: string;
   triggerClassName?: string;
+  prefixIcon?: React.ReactNode;
+  /** Default stays dark for counselling and existing filters. */
+  variant?: "dark" | "light";
 }
 
 export function DropdownSelect({
@@ -28,6 +31,8 @@ export function DropdownSelect({
   "aria-label": ariaLabel,
   className,
   triggerClassName,
+  prefixIcon,
+  variant = "dark",
 }: DropdownSelectProps) {
   const resolvedAriaLabel = ariaLabel ?? label;
   const [open, setOpen] = useState(false);
@@ -35,6 +40,7 @@ export function DropdownSelect({
 
   const selected = options.find((opt) => opt.value === value);
   const displayLabel = selected?.label ?? placeholder;
+  const isLight = variant === "light";
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -56,7 +62,12 @@ export function DropdownSelect({
   return (
     <div ref={ref} className={cn("relative", className)}>
       {label && (
-        <label className="block text-body-sm font-medium text-text-secondary mb-1.5">
+        <label
+          className={cn(
+            "block text-body-sm font-medium mb-1.5",
+            isLight ? "text-neutral-700" : "text-text-secondary"
+          )}
+        >
           {label}
         </label>
       )}
@@ -67,17 +78,25 @@ export function DropdownSelect({
         aria-label={resolvedAriaLabel}
         onClick={() => setOpen(!open)}
         className={cn(
-          "flex items-center justify-between gap-2 h-9 w-full min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] bg-bg-tertiary transition-colors whitespace-nowrap",
-          value
-            ? "text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400"
-            : "text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
+          "flex items-center justify-between gap-2 h-9 w-full min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap",
+          isLight
+            ? "bg-white text-neutral-900 border-neutral-200 hover:border-orange-500/60"
+            : "bg-bg-tertiary text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
           triggerClassName
         )}
       >
-        <span className="truncate">{displayLabel}</span>
+        <span className="flex min-w-0 items-center gap-2.5">
+          {prefixIcon && (
+            <span className={cn("shrink-0 translate-y-[2px]", isLight ? "text-neutral-400" : "text-text-dimmed")}>
+              {prefixIcon}
+            </span>
+          )}
+          <span className="truncate">{displayLabel}</span>
+        </span>
         <svg
           className={cn(
-            "h-3.5 w-3.5 shrink-0 text-text-secondary transition-transform",
+            "h-3.5 w-3.5 shrink-0 transition-transform",
+            isLight ? "text-neutral-500" : "text-text-secondary",
             open && "rotate-180"
           )}
           fill="none"
@@ -94,7 +113,12 @@ export function DropdownSelect({
         <div
           role="listbox"
           aria-label={resolvedAriaLabel}
-          className="dropdown-menu absolute top-full left-0 right-0 mt-2 min-w-full max-h-60 overflow-y-auto z-[100] animate-[dropdown-in_180ms_var(--ease-premium)]"
+          className={cn(
+            "absolute top-full left-0 right-0 mt-2 min-w-full max-h-60 overflow-y-auto z-[100] animate-[dropdown-in_180ms_var(--ease-premium)]",
+            isLight
+              ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
+              : "dropdown-menu"
+          )}
         >
           {options.map((option) => {
             const isActive = option.value === value;
@@ -109,8 +133,16 @@ export function DropdownSelect({
                   setOpen(false);
                 }}
                 className={cn(
-                  "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
-                  isActive && "dropdown-option--active"
+                  isLight
+                    ? cn(
+                        "block w-full text-left px-4 py-2.5 text-body-sm text-neutral-700 transition-colors cursor-pointer",
+                        "hover:bg-orange-500/10 hover:text-orange-600",
+                        isActive && "bg-orange-500/10 text-orange-600 font-medium"
+                      )
+                    : cn(
+                        "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
+                        isActive && "dropdown-option--active"
+                      )
                 )}
               >
                 {option.label}

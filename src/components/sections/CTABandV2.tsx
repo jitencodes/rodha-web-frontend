@@ -161,6 +161,29 @@ export function CTABandV2({
                   />
                 </>
               )}
+              {tertiaryAction && (
+                <a
+                  href={tertiaryAction.href}
+                  target={
+                    tertiaryAction.href.startsWith("http") ? "_blank" : undefined
+                  }
+                  rel={
+                    tertiaryAction.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  className="btn-outlined-premium premium-border-glow glow-accent-silver shine-sweep shine-sweep-outline inline-flex items-center justify-center gap-2 text-body-sm px-5 py-2.5 rounded-[6px] whitespace-nowrap border border-white text-white bg-transparent hover:bg-white/10 transition-colors font-semibold w-full sm:w-auto"
+                >
+                  {hasBuddy && (
+                    <Icon
+                      src="/assets/icons/ai-buddy.svg"
+                      size={16}
+                      className="text-orange-400"
+                    />
+                  )}
+                  {tertiaryAction.label}
+                </a>
+              )}
             </div>
           </div>
         </div>

@@ -91,3 +91,27 @@ export function personJsonLd(person: {
     },
   };
 }
+
+export function blogPostingJsonLd(post: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  publishedDate: string;
+}): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    url: `${SITE_URL}${post.url}`,
+    image: post.image ? `${SITE_URL}${post.image}` : undefined,
+    datePublished: post.publishedDate,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/assets/images/rodha-logo.webp`,
+    },
+  };
+}

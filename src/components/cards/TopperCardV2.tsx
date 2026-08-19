@@ -8,7 +8,7 @@ interface TopperCardV2Props {
 }
 
 export function TopperCardV2({ topper, className }: TopperCardV2Props) {
-  const metricLabel =
+  const metricLabel = topper.batch.length > 0 ? topper.batch.join(", ") :
     topper.percentile !== undefined ? "%ile" : topper.score ? "Result" : "AIR";
   const metricValue = topper.percentile ?? topper.score ?? topper.rank;
 
@@ -52,7 +52,7 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
         <h4 className="text-base leading-6 font-bold mt-2 text-text-primary truncate">
           {topper.name}
         </h4>
-        <p className="text-sm text-[#7C5F4D] truncate mt-0.5">{topper.college}</p>
+        <p className="text-sm text-[#cda68e] truncate mt-0.5">{topper.college}</p>
       </div>
     </div>
   );

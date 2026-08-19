@@ -61,7 +61,7 @@ export function AccordionV2({
               )}
             >
               <div className="overflow-hidden">
-                <p className="text-sm text-text-muted leading-relaxed">
+                <p className="text-sm text-[#696969] leading-relaxed">
                   {item.answer}
                 </p>
               </div>

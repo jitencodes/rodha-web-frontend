@@ -25,38 +25,36 @@ export function LeadershipCard({ member, className }: LeadershipCardProps) {
   return (
     <article
       className={cn(
-        "card-base card-premium-hover hover-shine relative overflow-hidden flex flex-row items-stretch min-w-[280px] w-[300px] md:w-[340px] min-h-[190px] rounded-[6px]",
+        "relative overflow-hidden flex flex-col w-[240px] md:w-[260px] shrink-0 rounded-[6px] border border-section-beige bg-white shadow-sm hover-shine",
         className
       )}
     >
-      <div className="relative w-[48%] min-h-[190px] shrink-0 bg-bg-tertiary">
+      <div className="relative h-[200px] shrink-0 bg-[#FFF8F1]">
         <Image
           src={member.image}
           alt={member.name}
           fill
           className="object-contain object-bottom"
-          sizes="160px"
+          sizes="260px"
         />
       </div>
 
-      <div className="relative z-10 flex-1 p-3 md:p-3.5 flex flex-col min-w-0">
-        <h3 className="text-body font-semibold text-text-primary leading-snug">
+      <div className="flex-1 p-4 flex flex-col min-w-0">
+        <h3 className="text-body font-semibold text-neutral-900 leading-snug">
           {member.name}
         </h3>
-        <p className="mt-1 text-body-sm text-orange-400 font-medium">{member.role}</p>
+        <p className="mt-1 text-body-sm text-orange-500 font-medium">{member.role}</p>
 
-        <div className="mt-2 pt-2 border-t border-border-default">
-          <p className="text-body-sm text-text-muted leading-relaxed line-clamp-3">
-            {member.bio}
-          </p>
-        </div>
+        <p className="mt-2 text-body-sm text-neutral-600 leading-relaxed line-clamp-3">
+          {member.bio}
+        </p>
 
         {member.linkedIn && (
           <a
             href={member.linkedIn}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-auto self-end inline-flex items-center justify-center w-8 h-8 rounded-full bg-transparent border border-white text-white hover:border-orange-400 hover:text-orange-400 transition-colors"
+            className="mt-3 self-end inline-flex items-center justify-center w-8 h-8 rounded-full border border-neutral-300 text-neutral-500 hover:border-orange-400 hover:text-orange-500 transition-colors"
             aria-label={`${member.name} on LinkedIn`}
           >
             <LinkedInIcon className="w-3.5 h-3.5" />

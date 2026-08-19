@@ -90,13 +90,13 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Page | Status | Notes |
 |------|--------|-------|
-| About `/about` | Partial | Mixed-theme shell; content still placeholder |
-| Team `/team` | Complete | Hero + leadership/faculty carousels + advisors + culture + CTA; light section shells |
-| Faculty listing `/faculty` | Complete | Vertical listing cards, header-style filters in All Faculty, 4-col hero stats; mixed theme |
-| Faculty detail `/faculty/[slug]` | Complete | Dark hero + light alternating body sections + decorative CTA |
-| Blog listing `/blog` | Partial | Mixed-theme shell; content still placeholder |
-| Blog detail `/blog/[slug]` | Partial | Mixed-theme shell; content still placeholder |
-| Contact `/contact` | Partial | Beige shell + dark form island (matches dark `input-base`); ContactForm exists |
+| About `/about` | Complete | Theme-aligned: quote repositioned, larger icons, timeline bounded, 3D stats, shorter testimonial |
+| Team `/team` | Complete | Theme-aligned: breadcrumb in hero, vertical light LeadershipCard, FacultyCardV2 experts, black Advisors title |
+| Faculty listing `/faculty` | Complete | Theme-aligned: FacultyCardV2 grid, light SearchInput/DropdownSelect/Pagination/reset |
+| Faculty detail `/faculty/[slug]` | Complete | Dark hero + light mixed-theme body; full JSON-driven sections for all faculty; 3-button CTA |
+| Blog listing `/blog` | Complete | Theme-aligned: dark hero, SectionHeaderV2, white sections, orange badges/shadows/icons |
+| Blog detail `/blog/[slug]` | Complete | Theme-aligned: white body, beige sidebar, SectionHeaderV2 Related, orange badges/icons |
+| Contact `/contact` | Complete | Theme-aligned: dark compact form, left breadcrumb, overlapping info strip, unified office card |
 | FAQ `/faq` | Complete | Search + category pills + AccordionV2 + Pagination + CTABand |
 | Privacy `/privacy-policy` | Complete | LegalPageLayout + structured content |
 | Terms `/terms-and-conditions` | Complete | LegalPageLayout + structured content |
@@ -109,7 +109,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Form | UI | Validation | Backend |
 |------|----|------------|---------|
-| ContactForm | Partial | Partial | Not Started |
+| ContactForm | Complete | Partial | Not Started |
 | LeadCaptureForm | Partial | Partial | Not Started |
 | NewsletterSignup | Partial | Partial | Not Started |
 

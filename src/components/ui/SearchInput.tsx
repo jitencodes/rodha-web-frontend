@@ -6,14 +6,19 @@ import { cn } from "@/lib/utils";
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onClear?: () => void;
   value?: string;
+  variant?: "dark" | "light";
 }
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  ({ className, onClear, value, ...props }, ref) => {
+  ({ className, onClear, value, variant = "dark", ...props }, ref) => {
+    const isLight = variant === "light";
     return (
       <div className="relative">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-dimmed"
+          className={cn(
+            "absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4",
+            isLight ? "text-neutral-400" : "text-text-dimmed"
+          )}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -25,13 +30,22 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           ref={ref}
           type="search"
           value={value}
-          className={cn("input-base pl-10 pr-10", className)}
+          className={cn(
+            "input-base pl-11 pr-10",
+            isLight && "!bg-white text-neutral-600 !border-[#fee8dd] hover:text-neutral-900 hover:!border-orange-300",
+            className
+          )}
           {...props}
         />
         {value && onClear && (
           <button
             onClick={onClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dimmed hover:text-text-primary transition-colors"
+            className={cn(
+              "absolute right-3 top-1/2 -translate-y-1/2 transition-colors",
+              isLight
+                ? "text-neutral-400 hover:text-neutral-700"
+                : "text-text-dimmed hover:text-text-primary"
+            )}
             aria-label="Clear search"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

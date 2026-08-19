@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { SectionHeader } from "@/components/sections/SectionHeader";
+import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { FacultyCourseCard } from "@/components/cards/FacultyCourseCard";
+import { getFacultyHonorific } from "@/data/faculty";
+import { getCategoryPath } from "@/lib/constants";
 import type { Faculty } from "@/lib/types";
 
 interface FacultyCoursesSectionProps {
@@ -16,28 +18,20 @@ export function FacultyCoursesSection({
   const courses = faculty.coursesTaught;
   if (!courses?.length) return null;
 
-  const firstName = faculty.name.split(" ")[0];
-  const femaleFirst = new Set([
-    "Neha",
-    "Megha",
-    "Sana",
-    "Riya",
-    "Priya",
-    "Aisha",
-  ]);
-  const honorific = femaleFirst.has(firstName)
-    ? `${firstName} Ma'am`
-    : `${firstName} Sir`;
+  const honorific = getFacultyHonorific(faculty);
+  const viewAllHref = getCategoryPath(faculty.categories[0] ?? "mba");
 
   return (
-    <section className={cn("home-section-spacing bg-section-beige home-on-light", className)}>
+    <section
+      className={cn("home-section-spacing bg-section-beige home-on-light", className)}
+    >
       <div className="container-rodha">
         <RevealGroup>
           <div className="reveal-child reveal-delay-1">
-            <SectionHeader
+            <SectionHeaderV2
               title={`Courses Taught by ${honorific}`}
-              viewAllHref="https://youtube.com/@rodha"
-              viewAllLabel="View All Courses →"
+              viewAllHref={viewAllHref}
+              viewAllLabel="View All Courses"
             />
           </div>
 

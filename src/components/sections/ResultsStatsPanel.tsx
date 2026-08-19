@@ -60,7 +60,7 @@ export function ResultsStatsPanel({
             </div>
             <p
               className={cn(
-                "mt-1.5 text-body",
+                "mt-1.5 text-sm",
                 isLight ? "text-neutral-600" : "text-text-muted"
               )}
             >

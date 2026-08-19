@@ -10,6 +10,8 @@ interface CTABandV2DecorativeProps {
   subtitle?: string;
   primaryAction: { label: string; href: string };
   secondaryAction?: { label: string; href: string };
+  /** Optional third CTA (e.g. Ask Rodha Buddy on faculty detail) */
+  tertiaryAction?: { label: string; href: string };
   decorativeImage: string;
   backgroundImage?: string;
   secondaryOutline?: "white" | "orange";
@@ -53,11 +55,14 @@ export function CTABandV2Decorative({
   subtitle,
   primaryAction,
   secondaryAction,
+  tertiaryAction,
   decorativeImage,
   backgroundImage,
   secondaryOutline = "white",
   className,
 }: CTABandV2DecorativeProps) {
+  const hasBuddy = Boolean(tertiaryAction && /buddy/i.test(tertiaryAction.label));
+
   return (
     <section
       id="site-footer-cta"
@@ -145,7 +150,7 @@ export function CTABandV2Decorative({
                   <div
                     className={cn(
                       "flex w-full shrink-0 flex-col gap-3",
-                      "sm:w-auto sm:flex-row sm:items-center",
+                      "sm:w-auto sm:flex-row sm:flex-wrap sm:items-center",
                       "mt-2 md:mt-1",
                       "cta-actions-reveal"
                     )}
@@ -160,6 +165,30 @@ export function CTABandV2Decorative({
                         action={secondaryAction}
                         outline={secondaryOutline}
                       />
+                    )}
+
+                    {tertiaryAction && (
+                      <a
+                        href={tertiaryAction.href}
+                        target={
+                          tertiaryAction.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          tertiaryAction.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className="btn-outlined-premium premium-border-glow glow-accent-silver shine-sweep shine-sweep-outline inline-flex items-center justify-center gap-2 text-body-sm px-5 py-2.5 rounded-[6px] whitespace-nowrap border border-white text-white bg-transparent hover:bg-white/10 transition-colors font-semibold w-full sm:w-auto"
+                      >
+                        {hasBuddy && (
+                          <Icon
+                            src="/assets/icons/ai-buddy.svg"
+                            size={16}
+                            className="text-orange-400"
+                          />
+                        )}
+                        {tertiaryAction.label}
+                      </a>
                     )}
                   </div>
                 </div>

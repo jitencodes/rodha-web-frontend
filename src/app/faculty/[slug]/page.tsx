@@ -9,8 +9,10 @@ import { FacultyResultsSection } from "@/components/sections/FacultyResultsSecti
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { faculty, getFacultyBySlug } from "@/data/faculty";
-import { getCategoryPath } from "@/lib/constants";
+import { EXTERNAL_URLS, getCategoryPath } from "@/lib/constants";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/structured-data";
+import { CTABandV2 } from "@/components/sections/CTABandV2";
+import { HomeHeroShell } from "@/components/sections/home/HomeHeroShell";
 
 interface FacultyDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -73,8 +75,9 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
           ),
         }}
       />
-
-      <FacultyDetailHeroSection faculty={member} />
+      <HomeHeroShell className="!py-0 !bg-bg-primary">
+        <FacultyDetailHeroSection faculty={member} />
+      </HomeHeroShell>
 
       <FacultyInfoCardsSection faculty={member} />
 
@@ -86,17 +89,21 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
 
       <FacultyResultsSection faculty={member} />
 
-      <RevealGroup>
-        <CTABandV2Decorative
-          title="Take the Next Step Towards Success"
-          subtitle="Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion."
+      <CTABandV2
+          title={member.cta?.title ?? "Take the Next Step Towards Success"}
+          subtitle={
+            member.cta?.description ??
+            "Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion."
+          }
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award.png"
           primaryAction={{ label: "Explore Courses →", href: categoryHref }}
           secondaryAction={{ label: "Book a Demo →", href: "/contact" }}
+          tertiaryAction={{
+            label: "Ask Rodha Buddy",
+            href: EXTERNAL_URLS.rodhaBuddy,
+          }}
           className="reveal-child reveal-delay-1"
         />
-      </RevealGroup>
     </>
   );
 }

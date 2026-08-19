@@ -1,13 +1,18 @@
 ﻿import type {
   Faculty,
   FacultyCourseTaught,
+  FacultyHeroStat,
   FacultyPublication,
   FacultyResultStat,
   FacultyReview,
   FacultyVideo,
   TeamHeroStat,
   ValueProp,
+  CategoryId,
 } from "@/lib/types";
+import { blogPosts } from "@/data/blog";
+import { testimonials } from "@/data/testimonials";
+import { getCategoryPath } from "@/lib/constants";
 
 const FACULTY_HERO_IMAGE = "/assets/images/faculty/listings page/hero-faulty.png";
 export const FACULTY_DETAIL_DECORATION = FACULTY_HERO_IMAGE;
@@ -22,7 +27,6 @@ export function facultyProfileImage(filename: string): string {
 }
 
 const BLOG_THUMB = "/assets/images/blog/hero-blog.png";
-const COURSE_ICON = "/assets/icons/book.svg";
 const VIDEO_THUMB = "/assets/images/placeholders/course-thumbnail.svg";
 
 /** Official Rodha YouTube course / playlist links */
@@ -38,7 +42,7 @@ function detailCourses(
   items: Array<Omit<FacultyCourseTaught, "icon"> & { icon?: string }>
 ): FacultyCourseTaught[] {
   return items.map((item) => ({
-    icon: COURSE_ICON,
+    icon: "book",
     ...item,
   }));
 }
@@ -65,7 +69,7 @@ const NISHANT_RESULT_STATS: FacultyResultStat[] = [
   { id: "cat-percentile", value: "650+", label: "99+%ile in CAT" },
   { id: "iim-calls", value: "1,100+", label: "IIM Calls" },
   { id: "ipmat-top", value: "250+", label: "IPMAT Top 100" },
-  { id: "other-bschools", value: "500+", label: "Other Top B-school Selections" },
+  { id: "other-bschools", value: "500+", label: "Top B-school Selections" },
 ];
 
 const SAMPLE_REVIEWS: FacultyReview[] = [
@@ -477,7 +481,7 @@ export const faculty: Faculty[] = [
       { id: "cat-p", value: "480+", label: "99+%ile in CAT" },
       { id: "iim", value: "820+", label: "IIM Calls" },
       { id: "ipmat", value: "180+", label: "IPMAT Top 100" },
-      { id: "other", value: "350+", label: "Other Top B-school Selections" },
+      { id: "other", value: "350+", label: "Top B-school Selections" },
     ],
     categories: ["mba", "ipmat"],
     featured: true,
@@ -654,7 +658,7 @@ export const faculty: Faculty[] = [
       { id: "cat-p", value: "520+", label: "99+%ile in CAT" },
       { id: "iim", value: "760+", label: "IIM Calls" },
       { id: "ipmat", value: "140+", label: "IPMAT Top 100" },
-      { id: "other", value: "290+", label: "Other Top B-school Selections" },
+      { id: "other", value: "290+", label: "Top B-school Selections" },
     ],
     categories: ["mba", "ipmat"],
     featured: true,
@@ -911,7 +915,7 @@ export const faculty: Faculty[] = [
     slug: "brijesh",
     title: "VARC",
     qualification: "CAT Verbal Mentor",
-    specialization: ["VARC"],
+    specialization: ["VARC Specialist "],
     experience: "15+ Years Exp.",
     bio: "Builds reading stamina and RC accuracy for serious CAT aspirants.",
     image: facultyProfileImage("Brijesh Sir.png"),
@@ -954,7 +958,7 @@ export const faculty: Faculty[] = [
     slug: "sanchit",
     title: "Quant Faculty",
     qualification: "CAT Quant Mentor",
-    specialization: ["Quantitative Aptitude", "Geometry"],
+    specialization: ["QA & DILR Specialist"],
     experience: "8+ Years Exp.",
     bio: "Helps aspirants convert weak Quant topics into scoring strengths.",
     image: facultyProfileImage("Sanchit Sir.png"),
@@ -1225,5 +1229,317 @@ export function getMbaStarFaculty(): Faculty[] {
 }
 
 export function getFacultyBySlug(slug: string): Faculty | undefined {
-  return faculty.find((f) => f.slug === slug);
+  const member = faculty.find((f) => f.slug === slug);
+  return member ? withFacultyDetailDefaults(member) : undefined;
+}
+
+const FEMALE_FIRST_NAMES = new Set([
+  "Neha",
+  "Megha",
+  "Sana",
+  "Kirti",
+  "Nikita",
+  "Rupal",
+  "Sharwari",
+  "Ananya",
+  "Divya",
+  "Priya",
+  "Aisha",
+  "Riya",
+]);
+
+const BLOG_CATEGORIES_BY_FACULTY: Record<CategoryId, string[]> = {
+  mba: ["mba-cat", "study-tips", "career-guidance", "exam-updates"],
+  ipmat: ["ipmat", "study-tips", "exam-updates"],
+  clat: ["clat", "study-tips"],
+  banking: ["banking", "study-tips"],
+  skillhouse: ["career-guidance", "study-tips"],
+};
+
+const EXAM_LABEL_BY_CATEGORY: Record<CategoryId, string> = {
+  mba: "For CAT 2025",
+  ipmat: "For IPMAT 2025",
+  clat: "For CLAT 2025",
+  banking: "For Banking Exams 2025",
+  skillhouse: "For Skill House",
+};
+
+const DEFAULT_RESULT_STATS: Record<CategoryId, FacultyResultStat[]> = {
+  mba: [
+    { id: "cat-p", value: "450+", label: "CAT", description: "99+%ile in CAT" },
+    { id: "iim", value: "800+", label: "IIM Calls", description: "Documented IIM calls" },
+    { id: "ipmat", value: "180+", label: "IPMAT", description: "IPMAT Top 100" },
+    { id: "other", value: "350+", label: "B-School", description: "top B-school selections" },
+  ],
+  ipmat: [
+    { id: "ipmat-top", value: "120+", label: "IPMAT", description: "Top 100 ranks" },
+    { id: "iim-ipm", value: "200+", label: "IIM IPM", description: "IIM IPM selections" },
+    { id: "other", value: "150+", label: "Integrated", description: "Other integrated program calls" },
+    { id: "percentile", value: "95+", label: "Percentile", description: "95+ percentile outcomes" },
+  ],
+  clat: [
+    { id: "clat-top", value: "80+", label: "CLAT", description: "Top NLU selections" },
+    { id: "nlu", value: "150+", label: "NLU Calls", description: "National law university calls" },
+    { id: "percentile", value: "120+", label: "Top Ranks", description: "All-India top ranks" },
+    { id: "other", value: "90+", label: "Law Schools", description: "Other premier law schools" },
+  ],
+  banking: [
+    { id: "selections", value: "500+", label: "Selections", description: "Banking exam selections" },
+    { id: "ibps", value: "300+", label: "IBPS", description: "IBPS PO/Clerk selections" },
+    { id: "sbi", value: "180+", label: "SBI", description: "SBI PO/Clerk selections" },
+    { id: "rrb", value: "120+", label: "RRB", description: "RRB exam selections" },
+  ],
+  skillhouse: [
+    { id: "learners", value: "2,000+", label: "Learners", description: "Skill program completions" },
+    { id: "placements", value: "85%", label: "Outcomes", description: "Career-ready outcomes" },
+    { id: "projects", value: "50+", label: "Projects", description: "Hands-on capstone projects" },
+    { id: "rating", value: "4.8", label: "Rating", description: "Average learner rating" },
+  ],
+};
+
+function normalizeHeroStatIcons(stats: FacultyHeroStat[]): FacultyHeroStat[] {
+  return stats.map((stat) => {
+    let icon = stat.icon;
+    if (icon.includes("top-faculty") || icon.includes("guidance")) icon = "experience";
+    else if (icon.includes("users")) icon = "students";
+    else if (icon.includes("result-oriented") || icon.includes("rank")) icon = "selections";
+    return { ...stat, icon };
+  });
+}
+
+/** Honorific label e.g. "Nishant Sir" or "Neha Ma'am" */
+export function getFacultyHonorific(member: Faculty): string {
+  const firstName = member.name.split(" ")[0];
+  const suffix =
+    member.honorificSuffix ??
+    (FEMALE_FIRST_NAMES.has(firstName) ? "Ma'am" : "Sir");
+  return `${firstName} ${suffix}`;
+}
+
+function defaultHeroStats(member: Faculty): FacultyHeroStat[] {
+  const expYears = parseExperienceYears(member.experience);
+  return [
+    {
+      id: "exp",
+      value: expYears > 0 ? `${expYears}+` : member.experience.replace(/\s*Exp\.?$/i, ""),
+      label: "Years of Experience",
+      icon: "experience",
+    },
+    {
+      id: "mentored",
+      value: member.studentsMentored ?? "5,000+",
+      label: "Students Mentored",
+      icon: "students",
+    },
+    {
+      id: "selections",
+      value: "500+",
+      label: "Selections",
+      icon: "selections",
+    },
+  ];
+}
+
+function defaultAchievements(member: Faculty): string[] {
+  const honorific = getFacultyHonorific(member);
+  return [
+    `${member.experience} mentoring aspirants in ${member.specialization.slice(0, 2).join(" & ") || member.title}`,
+    member.qualification,
+    `Guided ${member.studentsMentored ?? "thousands of"} students across ${member.categories.map((c) => c.toUpperCase()).join(", ")} programs`,
+    `Recognised ${member.title} at Rodha — trusted by ${honorific}'s learners for structured, exam-ready pedagogy`,
+    member.bio,
+  ].filter(Boolean);
+}
+
+function defaultCourses(member: Faculty): FacultyCourseTaught[] {
+  const cat = member.categories[0] ?? "mba";
+  const examLabel = EXAM_LABEL_BY_CATEGORY[cat];
+  const subject = member.specialization[0] ?? member.title;
+  const categoryHref = getCategoryPath(cat);
+
+  const templates = [
+    {
+      id: `${member.id}-course-1`,
+      title: `${subject} Foundation Course`,
+      subtitle: examLabel,
+      lectures: "80+ Lectures",
+      enrolled: "1,200+ Enrolled",
+      href: categoryHref,
+    },
+    {
+      id: `${member.id}-course-2`,
+      title: `${member.title} Mastery Program`,
+      subtitle: examLabel,
+      lectures: "60+ Lectures",
+      enrolled: "900+ Enrolled",
+      href: YT_QUANT_PLAYLIST,
+    },
+    {
+      id: `${member.id}-course-3`,
+      title: `Advanced ${subject}`,
+      subtitle: examLabel,
+      lectures: "45+ Lectures",
+      enrolled: "750+ Enrolled",
+      href: YT_LRDI_PLAYLIST,
+    },
+    {
+      id: `${member.id}-course-4`,
+      title: `${subject} Booster Series`,
+      subtitle: examLabel,
+      lectures: "30+ Lectures",
+      enrolled: "600+ Enrolled",
+      href: YT_BOOSTER_COURSE,
+    },
+  ];
+
+  return detailCourses(templates);
+}
+
+function formatPublicationMeta(item: FacultyPublication): string {
+  if (item.type && item.date) {
+    const parts = [item.type, item.category ?? "Rodha", item.date].filter(Boolean);
+    return parts.join(" • ");
+  }
+  return item.meta;
+}
+
+function defaultPublications(member: Faculty): FacultyPublication[] {
+  const cat = member.categories[0] ?? "mba";
+  const blogCats = BLOG_CATEGORIES_BY_FACULTY[cat];
+  const posts = blogPosts
+    .filter((p) => blogCats.includes(p.category))
+    .slice(0, 3);
+
+  if (posts.length === 0) {
+    return detailPublications([
+      {
+        id: `${member.id}-pub-1`,
+        title: `Exam Strategy Insights by ${member.name}`,
+        meta: "Blog • Rodha • 2024",
+        type: "Blog",
+        category: "Rodha",
+        date: "2024",
+        href: "/blog",
+      },
+      {
+        id: `${member.id}-pub-2`,
+        title: `How to Master ${member.specialization[0] ?? member.title}`,
+        meta: "Blog • Rodha • 2024",
+        type: "Blog",
+        category: "Rodha",
+        date: "2024",
+        href: "/blog",
+      },
+      {
+        id: `${member.id}-pub-3`,
+        title: `${member.title} — Tips for Aspirants`,
+        meta: "Video • Rodha • 2024",
+        type: "Video",
+        category: "Rodha",
+        date: "2024",
+        href: YT_CHANNEL,
+      },
+    ]).map((p) => ({ ...p, meta: formatPublicationMeta(p) }));
+  }
+
+  return posts.map((post) => {
+    const pub: FacultyPublication = {
+      id: `${member.id}-pub-${post.slug}`,
+      title: post.title,
+      thumbnail: post.thumbnail || BLOG_THUMB,
+      href: `/blog/${post.slug}`,
+      type: "Blog",
+      category: "Rodha",
+      date: post.publishedDate,
+      meta: "",
+    };
+    pub.meta = formatPublicationMeta(pub);
+    return pub;
+  });
+}
+
+function defaultReviews(member: Faculty): FacultyReview[] {
+  const cat = member.categories[0] ?? "mba";
+  const categoryTestimonials = testimonials.filter((t) => t.category === cat);
+
+  const source =
+    categoryTestimonials.length >= 3 ? categoryTestimonials : testimonials;
+
+  return source.slice(0, 3).map((t, i) => ({
+    id: `${member.id}-rev-${i}`,
+    name: t.name,
+    quote: t.quote,
+    rating: 5,
+    avatar: t.image,
+  }));
+}
+
+function defaultVideos(member: Faculty): FacultyVideo[] {
+  const subject = member.specialization[0] ?? member.title;
+  return detailVideos([
+    {
+      id: `${member.id}-vid-1`,
+      title: `${subject} — Concept Clarity Session`,
+      duration: "12:30",
+      href: YT_QUANT_FULL_COURSE,
+    },
+    {
+      id: `${member.id}-vid-2`,
+      title: `${member.title} — Problem-Solving Demo`,
+      duration: "14:15",
+      href: YT_BOOSTER_COURSE,
+    },
+    {
+      id: `${member.id}-vid-3`,
+      title: `Exam Strategy with ${member.name.split(" ")[0]}`,
+      duration: "10:45",
+      href: YT_CHANNEL,
+    },
+  ]);
+}
+
+function defaultResultStats(member: Faculty): FacultyResultStat[] {
+  const cat = member.categories[0] ?? "mba";
+  return DEFAULT_RESULT_STATS[cat] ?? DEFAULT_RESULT_STATS.mba;
+}
+
+/** Merge listing fields with generated detail-page defaults; authored detail fields win. */
+export function withFacultyDetailDefaults(member: Faculty): Faculty {
+  const honorific = getFacultyHonorific(member);
+
+  const merged: Faculty = {
+    ...member,
+    designation: member.designation ?? member.qualification,
+    badgeLabel: member.badgeLabel ?? member.title,
+    about:
+      member.about ??
+      `${member.bio}\n\n${honorific} brings ${member.experience} of expertise in ${member.specialization.slice(0, 3).join(", ") || member.title}, helping aspirants build accuracy, speed, and exam temperament.`,
+    philosophy:
+      member.philosophy ??
+      `Every aspirant deserves clarity, structure, and mentorship that converts effort into results — that's the Rodha way with ${honorific}.`,
+    expertiseTags: member.expertiseTags ?? [...member.specialization],
+    reviewCountLabel:
+      member.reviewCountLabel ??
+      (member.studentsMentored ? `${member.studentsMentored} Students` : "500+ Students"),
+    heroStats: normalizeHeroStatIcons(member.heroStats ?? defaultHeroStats(member)),
+    achievements: member.achievements ?? defaultAchievements(member),
+    coursesTaught: member.coursesTaught ?? defaultCourses(member),
+    publications: (member.publications ?? defaultPublications(member)).map((p) => ({
+      ...p,
+      meta: p.meta || formatPublicationMeta(p),
+    })),
+    reviews: member.reviews ?? defaultReviews(member),
+    videos: (member.videos ?? defaultVideos(member)).map((v) => ({
+      ...v,
+      href: v.href ?? YT_CHANNEL,
+    })),
+    resultStats: member.resultStats ?? defaultResultStats(member),
+    cta: member.cta ?? {
+      title: "Take the Next Step Towards Success",
+      description:
+        "Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion.",
+    },
+  };
+
+  return merged;
 }

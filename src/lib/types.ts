@@ -83,9 +83,13 @@ export interface FacultyCourseTaught {
 export interface FacultyPublication {
   id: string;
   title: string;
+  /** Display fallback when type/category/date are omitted */
   meta: string;
   thumbnail: string;
   href?: string;
+  type?: string;
+  date?: string;
+  category?: string;
 }
 
 export interface FacultyReview {
@@ -108,6 +112,7 @@ export interface FacultyResultStat {
   id: string;
   value: string;
   label: string;
+  description?: string;
 }
 
 export interface Faculty {
@@ -138,21 +143,36 @@ export interface Faculty {
   videos?: FacultyVideo[];
   resultStats?: FacultyResultStat[];
   reviewCountLabel?: string;
+  honorificSuffix?: "Sir" | "Ma'am";
+  cta?: {
+    title: string;
+    description: string;
+  };
 }
 
 export interface BlogPost {
   id: string;
-  title: string;
   slug: string;
-  excerpt: string;
-  content: string;
+  title: string;
   category: string;
-  tags: string[];
-  author: string;
-  publishedAt: string;
+  thumbnail: string;
+  shortDescription: string;
+  content: string;
+  publishedDate: string;
   readTime: string;
-  image?: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords?: string[];
+  tags?: string[];
   featured?: boolean;
+  /** @deprecated kept for legacy homepage compat */
+  excerpt?: string;
+  /** @deprecated kept for legacy homepage compat */
+  image?: string;
+  /** @deprecated kept for legacy homepage compat */
+  publishedAt?: string;
+  /** @deprecated kept for legacy homepage compat */
+  author?: string;
 }
 
 export interface Testimonial {
@@ -172,6 +192,7 @@ export interface Testimonial {
 export interface TopperResult {
   id: string;
   name: string;
+  batch: string[];
   exam: string;
   rank?: number;
   percentile?: number;

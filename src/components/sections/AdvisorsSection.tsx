@@ -20,7 +20,7 @@ export function AdvisorsSection({ className }: AdvisorsSectionProps) {
             <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
               Our Advisors
             </p>
-            <h2 className="text-h2 md:text-h1 font-bold text-text-primary leading-tight">
+            <h2 className="text-h2 md:text-h1 font-bold text-neutral-900 leading-tight">
               Guided by Industry
               <br className="hidden lg:block" />{" "}
               <span className="lg:inline">Leaders</span>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { TEAM_HERO, TEAM_HERO_STATS } from "@/data/team";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface TeamHeroSectionProps {
   className?: string;
@@ -35,7 +36,15 @@ export function TeamHeroSection({ className }: TeamHeroSectionProps) {
         />
       </div>
 
-      <div className="container-rodha relative z-10 py-8 md:py-10 lg:py-12 lg:min-h-[460px] flex flex-col justify-center">
+      <div className="container-rodha relative z-10 py-6 md:py-8 lg:py-10 lg:min-h-[460px] flex flex-col justify-center">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "About Us", href: "/about" },
+            { label: "Meet the Team" },
+          ]}
+          className="py-0 pb-4 md:pb-5"
+        />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           <div className="lg:col-span-6 xl:col-span-5">
             <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">

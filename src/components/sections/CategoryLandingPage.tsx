@@ -86,7 +86,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         primaryCta={category.hero.primaryCta}
       />
 
-      <section
+      {category.id !== "skillhouse" && <section
         id="results"
         className={cn(
           "home-section-spacing relative overflow-hidden",
@@ -109,7 +109,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
               />
               <div className="min-w-0 flex-1 overflow-hidden">
                 <InfiniteMarquee speed={32} direction="right" gap={20}>
-                  {resultsRow1.map((topper, index) => (
+                  {resultsRow1.slice(0, 19).map((topper, index) => (
                     <div
                       key={`row1-${topper.id}`}
                       className={`reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -125,14 +125,14 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           {resultsRow2.length > 0 && (
             <div className="mt-5 overflow-hidden">
               <InfiniteMarquee speed={32} direction="left" gap={20}>
-                {resultsRow2.map((topper) => (
+                {resultsRow2.slice(19, 39).map((topper) => (
                   <TopperCardV2 key={`row2-${topper.id}`} topper={topper} />
                 ))}
               </InfiniteMarquee>
             </div>
           )}
         </Container>
-      </section>
+      </section>}
 
       <section
         id="courses"
@@ -165,7 +165,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>
 
-      <section
+      {category.id !== "skillhouse" && <section
         id="test-series"
         data-home-zone="test-series"
         className={cn(
@@ -204,7 +204,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             </div>
           </RevealGroup>
         </Container>
-      </section>
+      </section>}
 
       <section
         id="faculty"

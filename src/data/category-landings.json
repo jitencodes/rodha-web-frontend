@@ -57,17 +57,6 @@
           "href": "/category/cat#courses"
         }
       },
-      "sectionThemes": {
-        "results": "white",
-        "courses": "beige",
-        "test-series": "white",
-        "faculty": "beige",
-        "testimonials": "dark",
-        "cta": "beige",
-        "stories": "white",
-        "app-promo": "beige",
-        "faqs": "white"
-      },
       "quickStats": [
         {
           "id": "selections",
@@ -85,16 +74,27 @@
       ],
       "resultStats": [
         {
-          "label": "Selections",
-          "value": "10,000",
+          "label": "99.50+ %ile CAT 2025",
+          "value": "40",
           "suffix": "+"
         },
         {
-          "label": "Top 100 Ranks",
-          "value": "250",
+          "label": "BLACKI Converts",
+          "value": "210",
           "suffix": "+"
         }
       ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
       "testSeries": [
         {
           "id": "package-a",
@@ -377,257 +377,12 @@
           "college": "IIM Ahmedabad",
           "year": 2025,
           "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-2",
-          "name": "Rohit Kumar Jha",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-3",
-          "name": "Varul Sharma",
-          "exam": "CAT 2025",
-          "percentile": 99.65,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varul-sharma.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-4",
-          "name": "Shriya Yadav",
-          "exam": "CAT 2025",
-          "percentile": 99.18,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-5",
-          "name": "Aditi Pandey",
-          "exam": "CAT 2025",
-          "percentile": 99.63,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-6",
-          "name": "Om Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.67,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-yadav.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-7",
-          "name": "Sakshi Mishra",
-          "exam": "CAT 2025",
-          "percentile": 97.98,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-8",
-          "name": "Bhupesh Bansal",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-9",
-          "name": "Varun Kumar",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varun-kumar.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-10",
-          "name": "Akshat Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-11",
-          "name": "Manan Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.35,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manan-jain.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-12",
-          "name": "Siddhi Gothi",
-          "exam": "CAT 2025",
-          "percentile": 99.01,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/siddhi-gothi.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-13",
-          "name": "Om Kesharwani",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-14",
-          "name": "Ujjwal Singhal",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-15",
-          "name": "Aanand Yadav",
-          "exam": "CAT 2025",
-          "percentile": 97.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-16",
-          "name": "Emama Islam",
-          "exam": "CAT 2025",
-          "percentile": 97.08,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/emama-islam.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-17",
-          "name": "Zarish Khan",
-          "exam": "CAT 2025",
-          "percentile": 98.98,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/zarish-khan.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-18",
-          "name": "Amit Kumar Sahu",
-          "exam": "CAT 2025",
-          "percentile": 97.6,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-19",
-          "name": "Supreet Kaur",
-          "exam": "CAT 2025",
-          "percentile": 97.04,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/supreet-kaur.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-20",
-          "name": "Dhananjay Tanwar",
-          "exam": "CAT 2025",
-          "percentile": 99.1,
-          "college": "FMS Delhi",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-21",
-          "name": "Prithvi Shetty",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-22",
-          "name": "Amrit Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amrit-singh.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-23",
-          "name": "Vedant Khanna",
-          "exam": "CAT 2025",
-          "percentile": 98.78,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-24",
-          "name": "Manav Pathak",
-          "exam": "CAT 2025",
-          "percentile": 99.32,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manav-pathak.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-25",
-          "name": "Vansh Batra",
-          "exam": "CAT 2025",
-          "percentile": 98.94,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vansh-batra.webp",
-          "category": "mba"
-        },
-        {
-          "id": "cat-result-26",
-          "name": "Angela Bhardwaj",
-          "exam": "CAT 2025",
-          "percentile": 98.71,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": [
+            "R1",
+            "QA",
+            "LRDI"
+          ]
         },
         {
           "id": "cat-result-27",
@@ -637,17 +392,65 @@
           "college": "MDI Gurgaon",
           "year": 2025,
           "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": []
         },
         {
-          "id": "cat-result-28",
-          "name": "Ram Khandelwal",
+          "id": "cat-result-2",
+          "name": "Rohit Kumar Jha",
           "exam": "CAT 2025",
-          "percentile": 99.79,
-          "college": "MDI Gurgaon",
+          "percentile": 99.8,
+          "college": "IIM Ahmedabad",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/ram-khandelwal.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
+          "category": "mba",
+          "batch": [
+            "R3"
+          ]
+        },
+        {
+          "id": "cat-result-8",
+          "name": "Bhupesh Bansal",
+          "exam": "CAT 2025",
+          "percentile": 99.8,
+          "college": "IIM Calcutta",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-3",
+          "name": "Varul Sharma",
+          "exam": "CAT 2025",
+          "percentile": 99.65,
+          "college": "IIM Ahmedabad",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/varul-sharma.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-5",
+          "name": "Aditi Pandey",
+          "exam": "CAT 2025",
+          "percentile": 99.63,
+          "college": "IIM Bangalore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-21",
+          "name": "Prithvi Shetty",
+          "exam": "CAT 2025",
+          "percentile": 99.39,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
+          "category": "mba",
+          "batch": []
         },
         {
           "id": "cat-result-29",
@@ -657,57 +460,98 @@
           "college": "MDI Gurgaon",
           "year": 2025,
           "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": []
         },
         {
-          "id": "cat-result-30",
-          "name": "Ankita Bhattacharya",
+          "id": "cat-result-11",
+          "name": "Manan Jain",
           "exam": "CAT 2025",
-          "percentile": 97.1,
-          "college": "IIFT",
+          "percentile": 99.35,
+          "college": "IIM Lucknow",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/manan-jain.webp",
+          "category": "mba",
+          "batch": []
         },
         {
-          "id": "cat-result-31",
-          "name": "Devansh Kumar",
+          "id": "cat-result-24",
+          "name": "Manav Pathak",
           "exam": "CAT 2025",
-          "score": "Converted",
-          "college": "IIFT",
+          "percentile": 99.32,
+          "college": "XLRI",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/devansh-kumar.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/manav-pathak.webp",
+          "category": "mba",
+          "batch": [
+            "R3"
+          ]
         },
         {
-          "id": "cat-result-32",
-          "name": "Aditya Giri Goswami",
+          "id": "cat-result-4",
+          "name": "Shriya Yadav",
           "exam": "CAT 2025",
-          "percentile": 95.79,
-          "college": "IIT Bombay",
+          "percentile": 99.18,
+          "college": "IIM Ahmedabad",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
+          "category": "mba",
+          "batch": []
         },
         {
-          "id": "cat-result-33",
-          "name": "Sai Krishna Ajith",
+          "id": "cat-result-20",
+          "name": "Dhananjay Tanwar",
           "exam": "CAT 2025",
-          "percentile": 98.42,
-          "college": "SIBM Pune",
+          "percentile": 99.1,
+          "college": "FMS Delhi",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
+          "category": "mba",
+          "batch": []
         },
         {
-          "id": "cat-result-34",
-          "name": "Sujit Kumar Patjoshi",
+          "id": "cat-result-17",
+          "name": "Zarish Khan",
           "exam": "CAT 2025",
-          "percentile": 96.54,
-          "college": "SIBM Pune",
+          "percentile": 98.98,
+          "college": "IIM Indore",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/zarish-khan.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-25",
+          "name": "Vansh Batra",
+          "exam": "CAT 2025",
+          "percentile": 98.94,
+          "college": "XLRI",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/vansh-batra.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-14",
+          "name": "Ujjwal Singhal",
+          "exam": "CAT 2025",
+          "percentile": 98.92,
+          "college": "IIM Kozhikode",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-22",
+          "name": "Amrit Singh",
+          "exam": "CAT 2025",
+          "percentile": 98.92,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/amrit-singh.webp",
+          "category": "mba",
+          "batch": []
         },
         {
           "id": "cat-result-35",
@@ -717,27 +561,63 @@
           "college": "SCMHRD",
           "year": 2025,
           "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": [
+            "R1",
+            "Comprehensive Batch"
+          ]
         },
         {
-          "id": "cat-result-36",
-          "name": "Shahid Ahmed N",
+          "id": "cat-result-9",
+          "name": "Varun Kumar",
           "exam": "CAT 2025",
-          "percentile": 98.83,
-          "college": "SCMHRD",
+          "percentile": 98.81,
+          "college": "IIM Calcutta",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/shahid-ahmed-n.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/varun-kumar.webp",
+          "category": "mba",
+          "batch": [
+            "R1",
+            "Comprehensive Batch"
+          ]
         },
         {
-          "id": "cat-result-37",
-          "name": "Raghav Pant",
+          "id": "cat-result-13",
+          "name": "Om Kesharwani",
           "exam": "CAT 2025",
-          "percentile": 98.37,
-          "college": "SCMHRD",
+          "percentile": 98.81,
+          "college": "IIM Lucknow",
           "year": 2025,
-          "image": "/assets/images/category/cat/students/raghav-pant.webp",
-          "category": "mba"
+          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
+          "category": "mba",
+          "batch": [
+            "R3",
+            "Comprehensive Batch"
+          ]
+        },
+        {
+          "id": "cat-result-10",
+          "name": "Akshat Yadav",
+          "exam": "CAT 2025",
+          "percentile": 98.8,
+          "college": "IIM Calcutta",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
+          "category": "mba",
+          "batch": [
+            "R3"
+          ]
+        },
+        {
+          "id": "cat-result-23",
+          "name": "Vedant Khanna",
+          "exam": "CAT 2025",
+          "percentile": 98.78,
+          "college": "SPJIMR",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
+          "category": "mba",
+          "batch": []
         },
         {
           "id": "cat-result-38",
@@ -747,7 +627,23 @@
           "college": "NMIMS Mumbai",
           "year": 2025,
           "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-26",
+          "name": "Angela Bhardwaj",
+          "exam": "CAT 2025",
+          "percentile": 98.71,
+          "college": "XLRI",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
+          "category": "mba",
+          "batch": [
+            "R7",
+            "QA",
+            "LRDI"
+          ]
         },
         {
           "id": "cat-result-39",
@@ -757,7 +653,79 @@
           "college": "NMIMS Mumbai",
           "year": 2025,
           "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-6",
+          "name": "Om Yadav",
+          "exam": "CAT 2025",
+          "percentile": 98.67,
+          "college": "IIM Bangalore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/om-yadav.webp",
+          "category": "mba",
+          "batch": [
+            "R1",
+            "Comprehensive Batch"
+          ]
+        },
+        {
+          "id": "cat-result-33",
+          "name": "Sai Krishna Ajith",
+          "exam": "CAT 2025",
+          "percentile": 98.42,
+          "college": "SIBM Pune",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-37",
+          "name": "Raghav Pant",
+          "exam": "CAT 2025",
+          "percentile": 98.37,
+          "college": "SCMHRD",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/raghav-pant.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-7",
+          "name": "Sakshi Mishra",
+          "exam": "CAT 2025",
+          "percentile": 97.98,
+          "college": "IIM Bangalore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
+          "category": "mba",
+          "batch": [
+            "R1"
+          ]
+        },
+        {
+          "id": "cat-result-15",
+          "name": "Aanand Yadav",
+          "exam": "CAT 2025",
+          "percentile": 97.92,
+          "college": "IIM Kozhikode",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-18",
+          "name": "Amit Kumar Sahu",
+          "exam": "CAT 2025",
+          "percentile": 97.6,
+          "college": "IIM Indore",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
+          "category": "mba",
+          "batch": []
         },
         {
           "id": "cat-result-40",
@@ -767,7 +735,58 @@
           "college": "NMIMS Mumbai",
           "year": 2025,
           "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-          "category": "mba"
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-30",
+          "name": "Ankita Bhattacharya",
+          "exam": "CAT 2025",
+          "percentile": 97.1,
+          "college": "IIFT",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
+          "category": "mba",
+          "batch": [
+            "R1"
+          ]
+        },
+        {
+          "id": "cat-result-16",
+          "name": "Emama Islam",
+          "exam": "CAT 2025",
+          "percentile": 97.08,
+          "college": "IIM Kozhikode",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/emama-islam.webp",
+          "category": "mba",
+          "batch": [
+            "R1"
+          ]
+        },
+        {
+          "id": "cat-result-34",
+          "name": "Sujit Kumar Patjoshi",
+          "exam": "CAT 2025",
+          "percentile": 96.54,
+          "college": "SIBM Pune",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
+          "category": "mba",
+          "batch": []
+        },
+        {
+          "id": "cat-result-32",
+          "name": "Aditya Giri Goswami",
+          "exam": "CAT 2025",
+          "percentile": 95.79,
+          "college": "IIT Bombay",
+          "year": 2025,
+          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
+          "category": "mba",
+          "batch": [
+            "R3"
+          ]
         }
       ],
       "testimonials": [
@@ -1166,17 +1185,21 @@
       "courseCount": "40+",
       "selectionCount": "200+",
       "metadata": {
-        "title": "Integrated Programs (IPMAT) — Rodha",
-        "description": "Integrated Programs coaching for IPMAT — IIM Indore, Rohtak and other top B-schools. Structured preparation with expert faculty."
+        "title": "IPMAT Online Coaching 2026 | Live Classes & Mock Tests | Rodha",
+        "description": "Crack IPMAT 2026 with Rodha's online IPMAT coaching - live classes, exam-level mock tests, previous year papers and mentorship from expert faculty. Start free today."
       },
       "hero": {
-        "eyebrow": "IPMAT 2026 · Integrated MBA",
-        "title": "Ace IPMAT on Your",
-        "accent": "First Attempt",
-        "subtitle": "Integrated Programs preparation for IIM Indore & Rohtak — with expert mentorship, pattern-matched mocks, and a clear path to your early MBA journey.",
+        "eyebrow": "Your Gateway to the IIMs",
+        "title": "IPMAT Online Coaching That Takes You Straight to",
+        "accent": "IIM Indore",
+        "subtitle": "Prepare for IPMAT 2026, JIPMAT and India's top BBA entrances with live online classes, exam-level mock tests, previous year papers and personal mentorship from India's most trusted IPMAT faculty.",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Book a Free Counselling",
+          "href": "/contact"
         }
       },
       "sectionCopy": {
@@ -1192,52 +1215,41 @@
         "storiesSubtitle": "Student journeys that turn early ambition into IIM opportunities."
       },
       "cta": {
-        "title": "Ready to Start Your IPMAT Journey?",
+        "title": "Ready to Crack IPMAT and Convert Your IIM?",
         "subtitle": "Build an early path to the IIMs with structured preparation and expert guidance.",
         "primaryAction": {
-          "label": "Book Free Counselling",
-          "href": "/contact"
+          "label": "Explore Courses",
+          "href": "#courses"
         },
         "secondaryAction": {
-          "label": "Explore Courses",
-          "href": "/category/ipmat#courses"
+          "label": "Book a Free Counselling",
+          "href": "/contact"
         }
-      },
-      "sectionThemes": {
-        "results": "white",
-        "courses": "beige",
-        "test-series": "white",
-        "faculty": "beige",
-        "testimonials": "dark",
-        "cta": "beige",
-        "stories": "white",
-        "app-promo": "beige",
-        "faqs": "white"
       },
       "quickStats": [
         {
-          "id": "selections",
-          "value": "2,000+",
-          "label": "Selections",
+          "id": "youtube-subscribers",
+          "value": "30K+",
+          "label": "YouTube Subscribers",
           "icon": "/assets/images/icons/selection.png"
         },
         {
-          "id": "iim-indore",
-          "value": "40+",
-          "label": "IIM Indore Selections in 2024",
+          "id": "selection-rate",
+          "value": "25%",
+          "label": "Selection Rate",
           "icon": "/assets/images/icons/ipmat-icon-3d.png"
         },
         {
-          "id": "satisfaction",
-          "value": "97.8%",
-          "label": "Student Satisfaction",
-          "icon": "/assets/images/icons/ts-mocks.png"
+          "id": "best-rank",
+          "value": "AIR 4, AIR 11",
+          "label": "Best IPMAT Ranks",
+          "icon": "/assets/images/icons/rank.png"
         },
         {
-          "id": "excellence",
-          "value": "10+",
-          "label": "Years Of Excellence",
-          "icon": "/assets/images/icons/rank.png"
+          "id": "iim-converted",
+          "value": "10",
+          "label": "IIMs Converted",
+          "icon": "/assets/images/icons/ts-mocks.png"
         },
         {
           "id": "rating",
@@ -1258,6 +1270,49 @@
           "suffix": "+"
         }
       ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "When should I start preparing for IPMAT 2027?",
+          "answer": "Now, if you're in Class 11. IPMAT 2027 is roughly nine to ten months out, which is the sweet spot - long enough to build quant and verbal from fundamentals, short enough that you'll actually stay serious about it. The students who struggle aren't the ones who lack ability; they're the ones who start in the last three months and then have to choose between board exams and IPMAT preparation. Start now and you never face that choice. A realistic IPMAT 2027 plan looks like: fundamentals until December, timed practice from January, and mocks every week in the final stretch."
+        },
+        {
+          "id": "faq-2",
+          "question": "I'm in Class 10 or just entering Class 11 - is it too early to start IPMAT 2028 preparation?",
+          "answer": "It isn't too early, and a two-year runway is genuinely the strongest position you can be in. IPMAT 2028 preparation from Class 10 doesn't mean grinding mocks for two years - it means getting Class 9-10 maths genuinely solid and building a reading habit while you still have the time to do it slowly. Those two things are what separate a 99 percentiler from everyone else, and neither can be crammed. Students who start in Class 10 usually spend year one on fundamentals and reading, then move to exam-format practice in year two."
+        },
+        {
+          "id": "faq-3",
+          "question": "Which Rodha batch should I join for IPMAT 2027 or IPMAT 2028?",
+          "answer": "Pick by how much runway you have, not by price. If you're targeting IPMAT 2027, the comprehensive online batch covers the full syllabus live with enough time for a proper revision cycle. If you're targeting IPMAT 2028, the two-year track paces the same material across a longer period so it never collides with your school year. Not sure yet? Start with the free course - you'll know within two weeks whether our teaching works for you, and it costs nothing to find out. Every class is online and recorded, so your city doesn't decide your faculty."
+        },
+        {
+          "id": "faq-4",
+          "question": "Can I prepare for IPMAT 2027 while handling Class 12 boards?",
+          "answer": "Yes, and this is the real challenge of IPMAT rather than the syllabus itself. The overlap is your advantage: much of IPMAT quant sits on the same Class 9-12 foundation your school maths is already building, so the two reinforce each other if you plan them together. What makes it work practically is that classes are live but recorded - a school test week never costs you a topic, you just catch up. IPMAT preparation at home only fails when doubts pile up, so get them answered the same week rather than saving them for later."
+        },
+        {
+          "id": "faq-5",
+          "question": "What is the IPMAT syllabus and when should I start Quant and Verbal?",
+          "answer": "Quantitative Ability and Verbal Ability are the core, with IIM Rohtak's paper also testing Logical Reasoning. The maths sits around Class 9-12 level - arithmetic, algebra, geometry, numbers, modern maths - so nothing in it is beyond you; the difficulty is doing it accurately under a clock. Start both sections together from day one. The most common mistake in IPMAT preparation is treating verbal as something to handle at the end: IPMAT quant preparation responds to months of practice, but IPMAT verbal ability preparation depends on reading speed and comprehension, which only improve slowly over a long period. With a 2027 or 2028 timeline you have exactly the runway that rewards starting verbal early."
+        },
+        {
+          "id": "faq-6",
+          "question": "How do mock tests and previous year papers fit into a 2027 or 2028 plan?",
+          "answer": "Differently at each stage, which is the point of starting early. In year one you're building concepts, so topic tests matter more than full mocks. Once fundamentals are in place, full-length IPMAT mock tests in exam conditions become the thing that actually moves your score, because IPMAT punishes hesitation as much as it punishes error. IPMAT previous year papers are worth more here than in most exams - the paper has a recognisable personality and the same topics return in familiar shapes. Take the free IPMAT mock test early, even if you feel unready; an honest baseline in Class 11 is far more useful than a flattering one in Class 12."
+        }
+      ],
+      "sectionThemes": {
+        "results": "white",
+        "courses": "beige",
+        "test-series": "white",
+        "faculty": "beige",
+        "testimonials": "dark",
+        "cta": "beige",
+        "stories": "white",
+        "app-promo": "beige",
+        "faqs": "white"
+      },
       "testSeries": [
         {
           "id": "ipmat-mocks",
@@ -1310,38 +1365,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "faqs": [
-        {
-          "id": "faq-1",
-          "question": "What is the best time to start IPMAT preparation?",
-          "answer": "Most aspirants begin in Class 11 or early Class 12. A 10–12 month runway helps build Quant and Verbal foundations while balancing board exams. Rodha’s Complete Program is designed for this timeline."
-        },
-        {
-          "id": "faq-2",
-          "question": "Is IPMAT Indore different from IPMAT Rohtak?",
-          "answer": "Yes. Patterns, section weights, and interview stages differ. Our curriculum covers both, with dedicated mocks and strategy sessions for each institute."
-        },
-        {
-          "id": "faq-3",
-          "question": "Does Rodha provide mock tests for IPMAT?",
-          "answer": "Yes. You get full-length mocks, aptitude sets, verbal tests, and mini mocks with detailed analytics aligned to Indore and Rohtak formats."
-        },
-        {
-          "id": "faq-4",
-          "question": "Can Class 11 students join IPMAT batches?",
-          "answer": "Absolutely. Early starters get concept mastery and longer mock exposure. Mentors also help plan around school exams so neither track suffers."
-        },
-        {
-          "id": "faq-5",
-          "question": "Is interview preparation included?",
-          "answer": "Yes. Shortlisted aspirants receive interview guidance and profile-building support as part of the IPMAT journey toward IIM Indore and Rohtak."
-        },
-        {
-          "id": "faq-6",
-          "question": "How do I enroll in an IPMAT course?",
-          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For a personalised plan, book a free counselling call first."
         }
       ],
       "courses": [
@@ -1459,11 +1482,9 @@
         }
       ],
       "facultyIds": [
-        "faculty-nishant",
-        "faculty-1",
-        "faculty-3",
-        "faculty-4",
-        "faculty-12"
+        "faculty-profile-sanchit",
+        "faculty-profile-brijesh",
+        "faculty-profile-sharwari"
       ],
       "results": [
         {
@@ -1581,16 +1602,21 @@
       "courseCount": "50+",
       "selectionCount": "300+",
       "metadata": {
-        "title": "Law (CLAT) Preparation — Rodha",
-        "description": "Law preparation for CLAT and top National Law Universities. Legal reasoning, English, current affairs, and more."
+        "title": "CLAT 2027 Online Coaching | Live Classes & Mock Tests | Rodha CLAT",
+        "description": "Crack CLAT 2027 with Rodha - live online classes by NLU toppers (AIR 60, 197, 334), 20 full-length mock tests, 300+ practice tests and a completely free Neenv batch."
       },
       "hero": {
-        "eyebrow": "CLAT 2026 · Law Entrance",
-        "title": "Law Prep That Opens Doors to",
-        "accent": "Top NLUs",
-        "subtitle": "Strategic legal reasoning workshops, mock tests, and daily current affairs built to help serious aspirants crack CLAT and secure seats at leading National Law Universities.",
+        "eyebrow": "Start Your NLU Journey Here",
+        "title": "CLAT 2027 Online Coaching - Taught by Real NLU Toppers",
+        "accent": "",
+        "subtitle": "Prepare for CLAT 2027 and AILET with live online classes, 20 full-length mock tests, 4,000+ practice questions and mentorship from faculty who cracked CLAT themselves - AIR 60, AIR 197 and AIR 334.",
+        "supportingLine": "Faculties from Top NLUs | Mentored AIR 2, 5 & 7",
         "primaryCta": {
-          "label": "Explore Courses",
+          "label": "Enrol for Free",
+          "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Explore CLAT Courses",
           "href": "#courses"
         }
       },
@@ -1599,8 +1625,8 @@
         "coursesTitle": "CLAT Programs Built for Top NLU Goals",
         "coursesSubtitle": "Choose a complete, foundation, crash, or repeater track for your preparation stage.",
         "testSeriesBadge": "CLAT Test Series",
-        "testSeriesTitle": "Reason, read and respond like exam day.",
-        "testSeriesSubtitle": "Train legal reasoning, current affairs, and comprehension with realistic tests.",
+        "testSeriesTitle": "20 Full-Length Mocks. 100 Sectional Tests. 300+ Practice Tests.",
+        "testSeriesSubtitle": "Prepare with 20 full-length CLAT 2027 mock tests, 100 sectional tests, 300+ topic-wise practice tests and 4,000+ curated questions.",
         "facultyTitle": "Star Faculty for Law",
         "facultySubtitle": "Learn legal reasoning and exam strategy from experienced mentors.",
         "testimonialSubtitle": "Real stories from Rodha CLAT aspirants",
@@ -1673,6 +1699,43 @@
           "suffix": "+"
         }
       ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "Who is this programme for?",
+          "answer": "The Sampoorna Batch is designed for students preparing for CLAT, AILET, and other law entrances."
+        },
+        {
+          "id": "faq-2",
+          "question": "Will there be any mentorship?",
+          "answer": "Yes. The Sampoorna batch has personalised 1:1 mentorship with the faculties taking the course."
+        },
+        {
+          "id": "faq-3",
+          "question": "Are sessions live or recorded?",
+          "answer": "Sessions are conducted live on our portal, and you can also access the recordings anytime."
+        },
+        {
+          "id": "faq-4",
+          "question": "Do I need any prior knowledge to join?",
+          "answer": "No. Our batches start from the basics across all five sections: Legal Reasoning, English, Current Affairs, Logical Reasoning and Quantitative Techniques."
+        },
+        {
+          "id": "faq-5",
+          "question": "How do I enrol?",
+          "answer": "Click Enrol for Free and complete the registration. For help, WhatsApp us or email contactus@rodha.co.in."
+        },
+        {
+          "id": "faq-6",
+          "question": "What is the best time to start CLAT preparation?",
+          "answer": "Ideally 10–12 months before the exam. Early starters can build legal reasoning and reading habits deeply, while later batches focus on mocks and current affairs. Rodha offers Foundation and Complete tracks for every timeline."
+        },
+        {
+          "id": "faq-7",
+          "question": "Can Class 11 and 12 students join CLAT batches?",
+          "answer": "Absolutely. Our Foundation and Complete programs are designed for school students balancing board exams with NLU preparation."
+        }
+      ],
       "testSeries": [
         {
           "id": "clat-mocks",
@@ -1725,38 +1788,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "faqs": [
-        {
-          "id": "faq-1",
-          "question": "What is the best time to start CLAT preparation?",
-          "answer": "Ideally 10–12 months before the exam. Early starters can build legal reasoning and reading habits deeply, while later batches focus on mocks and current affairs. Rodha offers Foundation and Complete tracks for every timeline."
-        },
-        {
-          "id": "faq-2",
-          "question": "How is legal reasoning taught at Rodha?",
-          "answer": "We teach principle-fact application through workshops, passage-based practice, and guided discussions — so you learn to reason like a lawyer without needing prior law background."
-        },
-        {
-          "id": "faq-3",
-          "question": "Does Rodha provide mock tests for CLAT?",
-          "answer": "Yes. You get full-length CLAT mocks, legal reasoning tests, current affairs quizzes, and English practice with detailed analytics via our test platform."
-        },
-        {
-          "id": "faq-4",
-          "question": "Is current affairs coverage included?",
-          "answer": "Yes. Daily updates, monthly compilations, and timed quizzes keep you aligned with the CLAT GK pattern throughout your preparation."
-        },
-        {
-          "id": "faq-5",
-          "question": "Can Class 11 and 12 students join CLAT batches?",
-          "answer": "Absolutely. Our Foundation and Complete programs are designed for school students balancing board exams with NLU preparation."
-        },
-        {
-          "id": "faq-6",
-          "question": "How do I enroll in a CLAT course?",
-          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance on NLU targets, book a free counselling call first."
         }
       ],
       "courses": [
@@ -1981,56 +2012,61 @@
       "stories": []
     },
     {
-      "id": "banking",
+      "id": "ssc",
       "name": "SSC",
-      "menuLabel": "Banking & SSC Exams",
-      "fullName": "Banking & Government Exams (including SSC)",
-      "slug": "banking",
+      "menuLabel": "Government Exams (SSC)",
+      "fullName": "Staff Selection Commission",
+      "slug": "ssc",
       "subHeading": "SSC & Government Exams",
-      "description": "SSC coaching built to help you achieve your dream government job.",
-      "color": "#65831d",
-      "accentColor": "from-lime-700/25 to-lime-900/10",
+      "description": "SSC CGL, CHSL, CPO and other government exam preparation with structured learning and expert guidance.",
+      "color": "#2563EB",
+      "accentColor": "from-blue-500/25 to-blue-900/10",
       "icon": "/assets/images/icons/exam/ssc logo.png",
       "image": "/assets/images/icons/exam/ssc infographic.png",
-      "illustrationImage": "/assets/images/icons/exam/banking-3d.png",
-      "courseCount": "30+",
-      "selectionCount": "500+",
+      "illustrationImage": "/assets/images/icons/exam/ssc-icon-3d.png",
+      "courseCount": "50+",
+      "selectionCount": "300+",
       "metadata": {
-        "title": "Banking & Government Exams — Rodha",
-        "description": "Prepare for banking, SSC, and government exams with expert mentorship, live classes, and high-quality mock tests."
+        "title": "SSC Preparation | SSC CGL, CHSL & CPO Coaching | Rodha",
+        "description": "Complete SSC preparation for CGL, CHSL, CPO and more with expert faculty, structured practice, live classes, tests and personalised support from Rodha."
       },
       "hero": {
-        "eyebrow": "Banking & SSC 2026",
-        "title": "Government Exam Prep That Delivers",
-        "accent": "Real Results",
-        "subtitle": "Expert mentorship for IBPS, SBI, RBI, SSC and related government exams — with live classes, focused practice, and exam-ready mocks.",
+        "eyebrow": "Welcome to RODHA SSC Exam Preparation",
+        "title": "Crack SSC. Build Your Government Career with RODHA.",
+        "accent": "",
+        "subtitle": "Complete SSC preparation under one roof — Maths, Reasoning, English & General Awareness — backed by expert faculty, structured practice and personalised support.",
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        }
+        },
+        "secondaryCta": {
+          "label": "Watch Free Demo Classes",
+          "href": "#free-classes"
+        },
+        "supportingLine": "Learn. Practice. Analyse. Improve. Get Selected."
       },
       "sectionCopy": {
-        "coursesBadge": "Banking & SSC Programs",
-        "coursesTitle": "Preparation Tracks for Every Government Goal",
-        "coursesSubtitle": "Build strong fundamentals, exam speed, and confidence across banking and SSC exams.",
-        "testSeriesBadge": "Banking Test Series",
-        "testSeriesTitle": "Turn daily practice into selection.",
-        "testSeriesSubtitle": "Full mocks, sectional tests, and targeted drills reveal exactly what to improve.",
-        "facultyTitle": "Star Faculty for Banking & SSC",
-        "facultySubtitle": "Learn from mentors who make complex aptitude concepts clear and practical.",
-        "testimonialSubtitle": "Real stories from Rodha banking and SSC aspirants",
-        "storiesSubtitle": "Real learner journeys powered by consistency, analytics, and mentorship."
+        "coursesBadge": "SSC Programs",
+        "coursesTitle": "Complete SSC Preparation (CGL, CHSL, CPO ....)",
+        "coursesSubtitle": "Build the concepts, practice consistently and prepare for SSC exams with structured courses and expert guidance.",
+        "testSeriesBadge": "SSC Test Series",
+        "testSeriesTitle": "Practice with exam-focused tests.",
+        "testSeriesSubtitle": "Train with thousands of questions, RODHA Worksheets and timer-based tests aligned with the exam pattern.",
+        "facultyTitle": "Learn From Faculty Who Know the Exam",
+        "facultySubtitle": "The right teacher can change the way you approach a subject. Meet the educators behind RODHA SSC's preparation ecosystem.",
+        "testimonialSubtitle": "Real stories from Rodha SSC aspirants",
+        "storiesSubtitle": "Focused preparation, consistent practice and expert guidance through successful student journeys."
       },
       "cta": {
-        "title": "Ready for Your Government Career?",
-        "subtitle": "Prepare with focused classes, realistic mocks, and mentors who keep you accountable.",
+        "title": "Your Selection Won't Happen by Chance.",
+        "subtitle": "It takes the right strategy, consistent practice, expert guidance and the discipline to keep going. Start your SSC preparation with RODHA today.",
         "primaryAction": {
-          "label": "Book Free Counselling",
-          "href": "/contact"
+          "label": "Explore SSC Courses",
+          "href": "#courses"
         },
         "secondaryAction": {
-          "label": "Explore Courses",
-          "href": "/category/banking#courses"
+          "label": "Start With Free Classes",
+          "href": "#free-classes"
         }
       },
       "sectionThemes": {
@@ -2046,46 +2082,88 @@
       },
       "quickStats": [
         {
-          "id": "selections",
-          "value": "5,000+",
-          "label": "Selections",
+          "id": "youtube-community",
+          "value": "850+",
+          "prefix": "Free",
+          "label": "In-depth Sessions",
           "icon": "/assets/images/icons/selection.png"
         },
         {
-          "id": "banking-ssc",
-          "value": "500+",
-          "label": "Banking & SSC Selects",
-          "icon": "/assets/images/icons/CAT-icon.png"
-        },
-        {
-          "id": "satisfaction",
-          "value": "98%",
-          "label": "Student Satisfaction",
-          "icon": "/assets/images/icons/ts-mocks.png"
-        },
-        {
-          "id": "excellence",
-          "value": "15+",
-          "label": "Years Of Excellence",
+          "id": "learning",
+          "prefix": "Structured",
+          "value": "600+",
+          "label": "Hours of Teaching",
           "icon": "/assets/images/icons/rank.png"
         },
         {
-          "id": "rating",
-          "value": "4.8/5",
-          "label": "Google Rating",
-          "icon": "/assets/images/icons/cat-icon-3d.png"
+          "id": "practice",
+          "value": "1000s+",
+          "label": "Questions, Worksheets & Exam-Pattern Tests",
+          "icon": "/assets/images/icons/CAT-icon.png"
         }
       ],
       "resultStats": [
         {
           "label": "Selections",
-          "value": "5,000",
+          "value": "3,000",
           "suffix": "+"
         },
         {
-          "label": "Top Ranks",
-          "value": "200",
+          "label": "Top 100 Ranks",
+          "value": "100",
           "suffix": "+"
+        }
+      ],
+      "faqs": [
+        {
+          "id": "faq-1",
+          "question": "Which SSC exams does RODHA prepare students for?",
+          "answer": "RODHA SSC provides preparation for major exams including SSC CGL, SSC CHSL and SSC CPO, covering the core subjects required for these examinations."
+        },
+        {
+          "id": "faq-2",
+          "question": "Which subjects are covered?",
+          "answer": "Our comprehensive batches cover Quantitative Aptitude, General Intelligence & Reasoning, English Language and General Awareness."
+        },
+        {
+          "id": "faq-3",
+          "question": "Are RODHA SSC classes available in Hindi?",
+          "answer": "Yes. RODHA offers bilingual Hindi + English preparation through its Foundation offering, while the SSC Prime Batch is designed specifically for English-medium aspirants."
+        },
+        {
+          "id": "faq-4",
+          "question": "Is the Prime Batch completely in English?",
+          "answer": "Yes. The Prime Batch is designed as a 100% English-medium preparation ecosystem, including teaching, study material, tests and doubt support."
+        },
+        {
+          "id": "faq-5",
+          "question": "Are classes live or recorded?",
+          "answer": "RODHA offers live classes along with recording access, allowing students to revise and rewatch classes at their convenience."
+        },
+        {
+          "id": "faq-6",
+          "question": "What study material is provided?",
+          "answer": "Students get structured study resources including RODHA Worksheets, topic-wise practice, PYQs, tests, revision sessions and other exam-oriented material."
+        },
+        {
+          "id": "faq-7",
+          "question": "Does RODHA provide doubt support?",
+          "answer": "Yes. Students have access to dedicated doubt-clearing support and faculty mentorship depending on the program."
+        },
+        {
+          "id": "faq-8",
+          "question": "Can I buy only one subject?",
+          "answer": "Yes. Subject-wise courses are available for students who want focused preparation for a particular section."
+        },
+        {
+          "id": "faq-9",
+          "question": "Is there any free content available?",
+          "answer": "Yes. RODHA SSC provides free classes, strategy sessions and exam-related content through its YouTube channel, along with a free SSC course."
+        },
+        {
+          "id": "faq-10",
+          "question": "How do I choose between Foundation and Prime?",
+          "answer": "Choose Foundation if you prefer bilingual Hindi + English learning. Choose Prime if you want a completely English-medium SSC preparation ecosystem."
         }
       ],
       "testSeries": [
@@ -2140,38 +2218,6 @@
           "href": "https://thinkexam.com",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
           "value": ""
-        }
-      ],
-      "faqs": [
-        {
-          "id": "faq-1",
-          "question": "Which exams does Banking & Government cover?",
-          "answer": "Rodha covers major banking exams (IBPS, SBI, RBI) and government exams including SSC CGL, CHSL and related competitive tests — with shared foundations and exam-specific mocks."
-        },
-        {
-          "id": "faq-2",
-          "question": "What is the best time to start preparation?",
-          "answer": "Ideally 6–12 months before your target exam. Early starters build concepts deeply; later batches focus on mocks and revision."
-        },
-        {
-          "id": "faq-3",
-          "question": "Are classes live or recorded?",
-          "answer": "Most programs include live interactive classes plus full recordings so you can revise anytime."
-        },
-        {
-          "id": "faq-4",
-          "question": "Does Rodha provide mock tests?",
-          "answer": "Yes. You get full-length mocks, sectional tests, topic tests, and SSC mini mocks with detailed analytics."
-        },
-        {
-          "id": "faq-5",
-          "question": "Can working professionals join?",
-          "answer": "Absolutely. Evening and weekend-friendly schedules, recordings, and flexible mentorship make preparation workable alongside a full-time job."
-        },
-        {
-          "id": "faq-6",
-          "question": "How do I enroll?",
-          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance, book a free counselling call first."
         }
       ],
       "courses": [
@@ -2403,17 +2449,21 @@
       "courseCount": "20+",
       "selectionCount": "1,000+",
       "metadata": {
-        "title": "Skill House — Rodha",
-        "description": "Skill House career-skills programs with expert mentorship, project-based learning, and industry-aligned practice."
+        "title": "Pre-MBA Course Online | Excel, AI & Finance Skills | Rodha Skill House",
+        "description": "Become MBA-ready with Rodha Skill House — live online classes in Excel, AI tools, finance and communication, plus 1:1 mentorship from IIM Ahmedabad alumni and ex-McKinsey, BCG and Bain consultants."
       },
       "hero": {
         "eyebrow": "Skill House · Career Learning",
-        "title": "Skills That Launch",
-        "accent": "Meaningful Careers",
-        "subtitle": "Skill House builds career-ready capabilities with mentorship, projects, and structured practice — so you grow beyond exams into professional impact.",
+        "title": "The Pre-MBA Course That Makes You MBA-Ready",
+        "accent": "From Day One",
+        "subtitle": "Master Excel, AI tools, finance fundamentals, business communication and CV building through live online classes and 1:1 career mentorship from IIM Ahmedabad alumni and ex-McKinsey, BCG and Bain consultants.",
         "primaryCta": {
-          "label": "Explore Courses",
+          "label": "Explore Programs",
           "href": "#courses"
+        },
+        "secondaryCta": {
+          "label": "Book a Free Counselling",
+          "href": "/contact"
         }
       },
       "sectionCopy": {
@@ -2444,7 +2494,7 @@
         "results": "white",
         "courses": "beige",
         "test-series": "white",
-        "faculty": "beige",
+        "faculty": "white",
         "testimonials": "dark",
         "cta": "beige",
         "stories": "white",
@@ -2453,21 +2503,21 @@
       },
       "quickStats": [
         {
-          "id": "learners",
-          "value": "10,000+",
-          "label": "Learners",
+          "id": "subscribers",
+          "value": "80+",
+          "label": "Hours of Ai Learning",
           "icon": "/assets/images/icons/selection.png"
         },
         {
-          "id": "placements",
-          "value": "1,000+",
-          "label": "Career Outcomes",
+          "id": "mentors",
+          "value": "Top B-Schools",
+          "label": "Mentors from Top B-Schools",
           "icon": "/assets/images/icons/CAT-icon.png"
         },
         {
-          "id": "satisfaction",
-          "value": "98%",
-          "label": "Student Satisfaction",
+          "id": "live-classes",
+          "value": "50+",
+          "label": "Hours of Live Classes",
           "icon": "/assets/images/icons/ts-mocks.png"
         },
         {
@@ -2552,33 +2602,33 @@
       "faqs": [
         {
           "id": "faq-1",
-          "question": "What is Skill House?",
-          "answer": "Skill House is Rodha’s career-skills vertical — practical programs that build professional capabilities alongside exam preparation pathways."
+          "question": "Who are these programs for?",
+          "answer": "Rodha Skillhouse programs are designed for incoming MBA students who want to hit the ground running, MBA aspirants building their profile, and working managers who want to leverage AI in their daily work."
         },
         {
           "id": "faq-2",
-          "question": "Who should join Skill House programs?",
-          "answer": "Students and early professionals who want portfolio-ready skills, mentorship, and structured practice beyond traditional exam prep."
+          "question": "Are sessions live or recorded?",
+          "answer": "Sessions are primarily conducted live to ensure real-time interaction with mentors. Recordings are provided for revision. The key value is in attending live sessions."
         },
         {
           "id": "faq-3",
-          "question": "Are classes live or recorded?",
-          "answer": "Most programs include live interactive classes plus recordings so you can revise and catch up anytime."
+          "question": "Will I receive a certificate after completion?",
+          "answer": "Yes. You receive a certificate of completion upon finishing the program. BLFP students also earn skill-specific badges based on participation and assessments."
         },
         {
           "id": "faq-4",
-          "question": "Is mentorship included?",
-          "answer": "Yes. Mentors help you plan milestones, review projects, and stay accountable through one-on-one guidance."
+          "question": "Do I need prior knowledge or technical skills?",
+          "answer": "No prior knowledge is required for either program. BLFP builds from the basics in Excel, Power BI, AI tools, and finance. AI for Managers requires no coding background."
         },
         {
           "id": "faq-5",
-          "question": "Can working professionals join?",
-          "answer": "Absolutely. Evening and weekend-friendly schedules make Skill House workable alongside a full-time role."
+          "question": "Is there a community after the program?",
+          "answer": "Yes. BLFP students get lifetime access to an exclusive alumni and learner community. You'll stay connected with mentors and peers long after the program ends."
         },
         {
           "id": "faq-6",
           "question": "How do I enroll?",
-          "answer": "Choose a program on this page, click Enroll, and complete signup on our learning platform. For guidance, book a free counselling call first."
+          "answer": "Choose a program on this page, click Enroll, on any program listed on this page, choose your course, and complete the checkout on Rodha Skillhouse. For help, WhatsApp us or email contactus@rodha.co.in."
         }
       ],
       "courses": [
@@ -2792,7 +2842,38 @@
           "category": "skillhouse"
         }
       ],
-      "stories": []
+      "stories": [
+        {
+          "id": "1",
+          "youtubeId": "BW7eNYMN3DQ",
+          "student": "Student Success Story",
+          "subtitle": "Skill House Journey"
+        },
+        {
+          "id": "2",
+          "youtubeId": "o--Q4drwTG0",
+          "student": "Sarvesh Kumar",
+          "subtitle": "Skill House Journey"
+        },
+        {
+          "id": "4",
+          "youtubeId": "kXOV9AehqCo",
+          "student": "Student Success Story",
+          "subtitle": "Skill House Journey"
+        },
+        {
+          "id": "5",
+          "youtubeId": "nU1PXvs24so",
+          "student": "Student Success Story",
+          "subtitle": "Skill House Journey"
+        },
+        {
+          "id": "3",
+          "youtubeId": "6BOLdyjK72k",
+          "student": "Student Success Story",
+          "subtitle": "Skill House Journey"
+        }
+      ]
     }
   ]
 }

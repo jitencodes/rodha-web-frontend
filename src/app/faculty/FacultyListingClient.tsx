@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Container } from "@/components/layout/Container";
-import { FacultyListingCard } from "@/components/cards/FacultyListingCard";
+import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import { Pagination } from "@/components/ui/Pagination";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
@@ -68,7 +68,7 @@ export function FacultyListingClient({ faculty: allFaculty }: FacultyListingClie
     <>
       <FeaturedFacultySection members={featuredMembers} />
 
-      <section className="home-section-spacing bg-section-beige home-on-light">
+      <section className="home-section-spacing bg-section-white home-on-light">
         <Container>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-2">
             <SectionHeaderV2
@@ -87,27 +87,27 @@ export function FacultyListingClient({ faculty: allFaculty }: FacultyListingClie
 
           {pageItems.length > 0 ? (
             <RevealGroup>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {pageItems.map((member, index) => (
                   <div
                     key={member.id}
                     className={`reveal-child reveal-delay-${(index % 4) + 1}`}
                   >
-                    <FacultyListingCard faculty={member} />
+                    <FacultyCardV2 faculty={member} className="w-full" />
                   </div>
                 ))}
               </div>
             </RevealGroup>
           ) : (
-            <div className="card-base px-6 py-12 text-center">
-              <p className="text-h4 font-semibold text-text-primary">No faculty found</p>
-              <p className="mt-2 text-body text-text-muted">
+            <div className="rounded-xl border border-section-beige bg-white px-6 py-12 text-center shadow-sm">
+              <p className="text-h4 font-semibold text-neutral-900">No faculty found</p>
+              <p className="mt-2 text-body text-neutral-500">
                 Try adjusting your search or filter criteria.
               </p>
               <button
                 type="button"
                 onClick={handleReset}
-                className="btn-secondary btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline mt-5 text-body-sm px-5 py-2.5"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-[6px] border border-orange-500 bg-orange-500/10 px-5 py-2.5 text-body-sm font-medium text-orange-600 hover:bg-orange-500/20 transition-colors"
               >
                 Clear filters
               </button>
@@ -119,6 +119,7 @@ export function FacultyListingClient({ faculty: allFaculty }: FacultyListingClie
               currentPage={safePage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}
+              variant="light"
               className="mt-8 md:mt-10"
             />
           )}

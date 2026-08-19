@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-17 (CAT category content refresh)
+**Last updated:** 2026-08-20 (Faculty detail light mixed-theme + full data defaults)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -33,6 +33,35 @@ Update this file after every meaningful implementation task.
   - Added four supplied CAT mock-package card images and limited CAT faculty to the nine supplied faculty profiles
   - Replaced the CAT course catalog with six current Rodha offerings and exact external course URLs; category course sections use a responsive slider with four desktop cards, arrow controls, mouse dragging, and touch swiping
   - Removed unused legacy category JSON fields (`sectionOrder`, `heroFeatures`, `resources`, `featuredCourseIds`, and unused hero/story fields)
+- **About Us `/about` + Contact Us `/contact` (2026-08-17):**
+  - About: dark hero, mission/vision, journey timeline, differentiators, impact stats, CAT `FacultyCardV2` carousel, featured testimonials, light counselling CTA
+  - Contact: dark form hero (counselling +91 phone chrome), channel strip, office map, support hours, FAQ accordion, Rodha Buddy CTA
+  - Page-specific contact details in `src/data/contact.ts` so Footer `CONTACT_INFO` stays unchanged
+- **Blog listing `/blog` + detail `/blog/[slug]` (2026-08-19):**
+  - Listing: light hero with breadcrumb/eyebrow/heading, URL-driven category filters + search, featured post (article variant), latest posts grid (4-col), pagination, CTABandV2Decorative. No newsletter.
+  - Detail: breadcrumb, category badge link, title, description, date/readTime, hero image, HTML blog body with `.blog-prose` styles, sticky sidebar with reusable `BlogCategories` + `ShareBlog` (copy, WhatsApp, Facebook, X, LinkedIn), related posts grid, CTABandV2Decorative.
+  - 16 blog posts across 7 categories with HTML content in `src/data/blog.ts`; `BlogPost` type updated (backward compat for legacy homepage overlay cards).
+  - `BlogCard` article variant (white card, category link badge, calendar/clock meta); overlay variant preserved for legacy homepage.
+  - `Pagination` supports URL-based navigation (`basePath` + `query`) and `variant="light"` for light backgrounds.
+  - `blogPostingJsonLd` added to `structured-data.ts`; detail pages have full OG/Twitter/canonical meta + BreadcrumbList + BlogPosting JSON-LD.
+  - No author UI, no "On This Page", no newsletter section.
+- **Theme alignment pass (2026-08-19):**
+  - `SearchInput` now has `variant?: "dark" | "light"` with stronger `pl-11` icon clearance
+  - `DropdownSelect` light menu (white bg, dark text, orange hover) when `variant="light"`
+  - `Input` / `Textarea` prefix padding increased to `pl-11`
+  - `BlogCard` article variant: unified orange badge, orange-tinted shadow, orange meta icons
+  - Faculty listing + featured: `FacultyCardV2` replaces `FacultyListingCard`; light filters/dropdowns/pagination/reset
+  - Team: breadcrumb moved into dark hero; `LeadershipCard` vertical light; `FacultyCardV2` for experts; Advisors title black
+  - About: quote card repositioned into hero image plane (bottom-right); Mission/Vision icon enlarged + black bg removed; timeline connector bounded/visible; differentiators title aligned; 3D impact icons for all stats; testimonial shorter
+  - Contact: dark compact form (Name|Phone row); breadcrumb in left column; overlapping unified info strip; office/map unified card; support hours simplified + holidays line; Why Contact star header
+  - Blog listing: dark hero; `SectionHeaderV2` for Featured/Latest; both sections white
+  - Blog detail: white article body; beige sidebar cards; `SectionHeaderV2` for Related; orange badges/icons
+- **Faculty detail `/faculty/[slug]` light mixed-theme (2026-08-20):**
+  - Dark 2-column hero (portrait + copy/stats); breadcrumb in hero; decorative third column removed
+  - Body: white/beige alternating sections with light cards (`border-section-beige`, white surfaces)
+  - Three-column About / Teaching Philosophy / Subject Expertise; `SectionHeaderV2` on courses + results
+  - `withFacultyDetailDefaults()` + `getFacultyHonorific()` — every faculty slug gets full section data from JSON defaults
+  - `react-icons` via `src/lib/faculty-icons.tsx`; `CTABandV2Decorative` optional `tertiaryAction` (Rodha Buddy on detail)
 
 ---
 
@@ -55,7 +84,10 @@ Update this file after every meaningful implementation task.
 - [ ] App promotion store URLs (mockup asset integrated)
 
 ### Screens
-- [ ] About / Blog / Contact / Course detail (content depth; mixed-theme shells done)
+- [x] About `/about`
+- [x] Blog listing `/blog` + detail `/blog/[slug]`
+- [ ] Course detail (content depth; mixed-theme shells done)
+- [x] Contact `/contact`
 - [x] Faculty listing `/faculty`
 - [x] Faculty detail `/faculty/[slug]`
 - [x] Meet the Team `/team`

@@ -11,6 +11,9 @@ interface FacultyPublicationCardProps {
   className?: string;
 }
 
+const LIGHT_CARD =
+  "rounded-xl border border-section-beige bg-white shadow-sm shadow-orange-500/5";
+
 export function FacultyPublicationCard({
   title = "Publications / Content",
   items,
@@ -21,27 +24,28 @@ export function FacultyPublicationCard({
   return (
     <div
       className={cn(
-        "card-base card-premium-hover premium-border-glow hover-shine flex flex-col rounded-xl bg-bg-secondary p-5 md:p-6 h-full",
+        "card-premium-hover hover-shine flex flex-col p-5 md:p-6 h-full",
+        LIGHT_CARD,
         className
       )}
     >
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-h4 font-semibold text-text-primary">{title}</h3>
+        <h3 className="text-h4 font-semibold text-neutral-900">{title}</h3>
         {viewAllHref && (
           <Link
             href={viewAllHref}
-            className="btn-view-all text-caption text-orange-400 hover:text-orange-300 whitespace-nowrap"
+            className="btn-view-all text-caption text-orange-500 hover:text-orange-600 whitespace-nowrap"
           >
             {viewAllLabel}
           </Link>
         )}
       </div>
 
-      <ul className="mt-4 flex flex-col divide-y divide-border-default">
+      <ul className="mt-4 flex flex-col divide-y divide-section-beige">
         {items.map((item) => {
           const content = (
             <>
-              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-bg-tertiary">
+              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-section-beige">
                 <Image
                   src={item.thumbnail}
                   alt=""
@@ -51,10 +55,10 @@ export function FacultyPublicationCard({
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-body-sm font-medium text-text-primary leading-snug line-clamp-2">
+                <p className="text-body-sm font-medium text-neutral-900 leading-snug line-clamp-2">
                   {item.title}
                 </p>
-                <p className="mt-1 text-caption text-text-dimmed">{item.meta}</p>
+                <p className="mt-1 text-caption text-neutral-500">{item.meta}</p>
               </div>
             </>
           );
@@ -67,7 +71,7 @@ export function FacultyPublicationCard({
               <li key={item.id}>
                 <Link
                   href={item.href}
-                  className={cn(rowClass, "hover:bg-white/[0.03] -mx-2 px-2 rounded-md")}
+                  className={cn(rowClass, "hover:bg-section-beige -mx-2 px-2 rounded-md")}
                 >
                   {content}
                 </Link>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/layout/Container";
-import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Carousel } from "@/components/ui/Carousel";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { TeamHeroSection } from "@/components/sections/TeamHeroSection";
@@ -9,7 +8,7 @@ import { AdvisorsSection } from "@/components/sections/AdvisorsSection";
 import { CultureSection } from "@/components/sections/CultureSection";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { LeadershipCard } from "@/components/cards/LeadershipCard";
-import { FacultyExpertCard } from "@/components/cards/FacultyExpertCard";
+import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import { leadership, LEADERSHIP_INTRO } from "@/data/team";
 import { faculty } from "@/data/faculty";
 
@@ -22,18 +21,6 @@ export const metadata: Metadata = {
 export default function TeamPage() {
   return (
     <>
-      <div className="bg-section-white home-on-light">
-        <Container>
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: "About Us", href: "/about" },
-              { label: "Meet the Team" },
-            ]}
-          />
-        </Container>
-      </div>
-
       <TeamHeroSection />
 
       <section className="home-section-spacing bg-section-beige home-on-light">
@@ -42,6 +29,7 @@ export default function TeamPage() {
             badge="Leadership Team"
             title="Guided by Vision. Driven by Purpose."
             subtitle={LEADERSHIP_INTRO}
+            align="center"
           />
           <Carousel>
             {leadership.map((member) => (
@@ -66,9 +54,9 @@ export default function TeamPage() {
             {faculty.map((member) => (
               <div
                 key={member.id}
-                className="snap-start shrink-0 w-[210px] sm:w-[220px] md:w-[230px]"
+                className="snap-start shrink-0"
               >
-                <FacultyExpertCard faculty={member} className="w-full" />
+                <FacultyCardV2 faculty={member} />
               </div>
             ))}
           </Carousel>
@@ -91,7 +79,7 @@ export default function TeamPage() {
         title="Be a Part of Our Mission"
         subtitle="Join thousands of successful students who trusted Rodha for their exam preparation journey."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/meet the team/Cta-left.png"
+        decorativeImage="/assets/images/about us/award.png"
         primaryAction={{ label: "Explore Programs", href: "/category/cat" }}
         secondaryAction={{ label: "Book Free Counselling", href: "/contact" }}
       />

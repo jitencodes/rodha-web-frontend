@@ -86,7 +86,7 @@ export function CategoryHeroSectionV2({
                 {headline}
               </h1>
 
-              <p className="mt-2 lg:mt-5 mb-8 text-body-lg text-white leading-relaxed">
+              <p className="mt-2 lg:mt-5 mb-8 text-sm text-white leading-relaxed">
                 {subtitle}
               </p>
               <div className="mt-3 flex flex-col sm:flex-row items-start gap-3">

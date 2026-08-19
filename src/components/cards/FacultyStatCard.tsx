@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Icon } from "@/components/ui/Icon";
+import { FacultyIcon } from "@/lib/faculty-icons";
 import type { FacultyHeroStat } from "@/lib/types";
 
 interface FacultyStatCardProps {
@@ -16,7 +16,7 @@ export function FacultyStatCard({ stat, className }: FacultyStatCardProps) {
       )}
     >
       <div className="text-orange-500 transition-[transform,filter] duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(249,115,22,0.3)]">
-        <Icon src={stat.icon} size={22} />
+        <FacultyIcon name={stat.icon} size={22} />
       </div>
       <div className="text-h4 md:text-h3 font-bold text-text-primary leading-none">
         {stat.value}

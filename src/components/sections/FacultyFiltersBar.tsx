@@ -40,6 +40,7 @@ export function FacultyFiltersBar({
           onClear={() => update({ query: "" })}
           placeholder="Search faculty..."
           aria-label="Search faculty"
+          variant="light"
         />
       </div>
 
@@ -50,6 +51,7 @@ export function FacultyFiltersBar({
           onChange={(subject) => update({ subject })}
           placeholder="All Subjects"
           aria-label="Filter by subject"
+          variant="light"
           className="w-full sm:w-auto sm:min-w-[160px]"
         />
         <DropdownSelect
@@ -58,13 +60,14 @@ export function FacultyFiltersBar({
           onChange={(experience) => update({ experience })}
           placeholder="All Experience"
           aria-label="Filter by experience"
+          variant="light"
           className="w-full sm:w-auto sm:min-w-[160px]"
         />
 
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 text-body-sm font-medium text-text-muted border border-white/30 rounded-[6px] bg-transparent hover:border-orange-500/60 hover:text-orange-400 transition-colors whitespace-nowrap"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 text-body-sm font-medium text-neutral-600 border border-neutral-300 rounded-[6px] bg-white hover:border-orange-500/60 hover:text-orange-500 transition-colors whitespace-nowrap"
         >
           <svg
             className="h-4 w-4"
@@ -84,7 +87,7 @@ export function FacultyFiltersBar({
         </button>
 
         <div className="flex items-center gap-2 sm:ml-auto w-full sm:w-auto">
-          <span className="text-body-sm text-text-dimmed whitespace-nowrap shrink-0">
+          <span className="text-body-sm text-neutral-600 whitespace-nowrap shrink-0">
             Sort by:
           </span>
           <DropdownSelect
@@ -95,6 +98,7 @@ export function FacultyFiltersBar({
             value={filters.sort}
             onChange={(sort) => update({ sort: sort as FacultySortKey })}
             aria-label="Sort faculty"
+            variant="light"
             className="flex-1 sm:flex-initial sm:min-w-[200px]"
           />
         </div>

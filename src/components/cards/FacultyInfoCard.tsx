@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Icon } from "@/components/ui/Icon";
+import { FacultyIcon } from "@/lib/faculty-icons";
 
 interface FacultyInfoCardProps {
   title: string;
@@ -7,6 +7,9 @@ interface FacultyInfoCardProps {
   variant?: "default" | "quote";
   className?: string;
 }
+
+const LIGHT_CARD =
+  "rounded-xl border border-section-beige bg-white shadow-sm shadow-orange-500/5";
 
 export function FacultyInfoCard({
   title,
@@ -17,20 +20,17 @@ export function FacultyInfoCard({
   return (
     <div
       className={cn(
-        "card-base card-premium-hover premium-border-glow hover-shine flex flex-col rounded-xl bg-bg-secondary p-5 md:p-6 h-full min-h-0",
+        "card-premium-hover hover-shine flex flex-col p-5 md:p-6 h-full min-h-0",
+        LIGHT_CARD,
         className
       )}
     >
-      <h3 className="text-h4 font-semibold text-text-primary">{title}</h3>
+      <h3 className="text-h4 font-semibold text-neutral-900">{title}</h3>
       <div className="mt-3 flex-1 min-h-0">
         {variant === "quote" ? (
           <div className="relative">
-            <Icon
-              src="/assets/icons/quote.svg"
-              size={28}
-              className="text-orange-500 mb-2"
-            />
-            <p className="text-body text-text-secondary italic leading-relaxed">
+            <FacultyIcon name="quote" size={28} className="text-orange-500 mb-2" />
+            <p className="text-body text-neutral-600 italic leading-relaxed">
               {children}
             </p>
           </div>

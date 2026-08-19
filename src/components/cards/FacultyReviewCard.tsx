@@ -10,6 +10,9 @@ interface FacultyReviewCardProps {
   className?: string;
 }
 
+const LIGHT_CARD =
+  "rounded-xl border border-section-beige bg-white shadow-sm shadow-orange-500/5";
+
 export function FacultyReviewCard({
   rating,
   reviewCountLabel,
@@ -19,20 +22,21 @@ export function FacultyReviewCard({
   return (
     <div
       className={cn(
-        "card-base card-premium-hover premium-border-glow hover-shine flex flex-col rounded-xl bg-bg-secondary p-5 md:p-6 h-full",
+        "card-premium-hover hover-shine flex flex-col p-5 md:p-6 h-full",
+        LIGHT_CARD,
         className
       )}
     >
-      <h3 className="text-h4 font-semibold text-text-primary">Student Reviews</h3>
+      <h3 className="text-h4 font-semibold text-neutral-900">Student Reviews</h3>
 
       <div className="mt-4 flex items-end gap-3">
-        <span className="text-[40px] md:text-[48px] font-bold text-text-primary leading-none">
+        <span className="text-[40px] md:text-[48px] font-bold text-neutral-900 leading-none">
           {rating.toFixed(1)}
         </span>
         <div className="pb-1">
           <Rating value={Math.round(rating)} size="sm" />
           {reviewCountLabel && (
-            <p className="mt-1 text-caption text-text-dimmed">{reviewCountLabel}</p>
+            <p className="mt-1 text-caption text-neutral-500">{reviewCountLabel}</p>
           )}
         </div>
       </div>
@@ -40,7 +44,7 @@ export function FacultyReviewCard({
       <ul className="mt-5 space-y-4 max-h-[280px] overflow-y-auto pr-1">
         {reviews.map((review) => (
           <li key={review.id} className="flex gap-3">
-            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-bg-tertiary">
+            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-section-beige">
               <Image
                 src={review.avatar || "/assets/images/placeholders/faculty-avatar.svg"}
                 alt=""
@@ -51,12 +55,12 @@ export function FacultyReviewCard({
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-body-sm font-medium text-text-primary truncate">
+                <p className="text-body-sm font-medium text-neutral-900 truncate">
                   {review.name}
                 </p>
                 <Rating value={review.rating} size="sm" className="shrink-0" />
               </div>
-              <p className="mt-1 text-caption text-text-muted leading-relaxed line-clamp-3">
+              <p className="mt-1 text-caption text-neutral-600 leading-relaxed line-clamp-3">
                 {review.quote}
               </p>
             </div>

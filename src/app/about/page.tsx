@@ -1,21 +1,40 @@
 import type { Metadata } from "next";
-import { Container } from "@/components/layout/Container";
+import { AboutHeroSection } from "@/components/sections/about/AboutHeroSection";
+import { AboutMissionVisionSection } from "@/components/sections/about/AboutMissionVisionSection";
+import { AboutJourneyTimeline } from "@/components/sections/about/AboutJourneyTimeline";
+import { AboutDifferentiatorsSection } from "@/components/sections/about/AboutDifferentiatorsSection";
+import { AboutImpactSection } from "@/components/sections/about/AboutImpactSection";
+import { AboutMentorsSection } from "@/components/sections/about/AboutMentorsSection";
+import { AboutTestimonialSection } from "@/components/sections/about/AboutTestimonialSection";
+import { AboutFinalCtaSection } from "@/components/sections/about/AboutFinalCtaSection";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "About Us — Rodha",
-  description: "Learn about Rodha's mission to democratize competitive exam preparation through expert mentorship and proven strategies.",
+  description:
+    "Learn about Rodha's mission to democratize competitive exam preparation through expert mentorship, proven strategies, and real results.",
 };
+
+const aboutBreadcrumb = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+];
 
 export default function AboutPage() {
   return (
-    <section className="home-section-spacing-lg bg-section-white home-on-light">
-      <Container>
-        <h1 className="home-light-heading text-h1 md:text-hero font-bold">About <span className="text-gradient-orange">Rodha</span></h1>
-        <p className="home-light-body mt-4 text-body-lg max-w-2xl">
-          Our mission is to make quality competitive exam preparation accessible to every aspirant across India.
-        </p>
-        <p className="home-light-muted mt-8">Full content coming soon...</p>
-      </Container>
-    </section>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(aboutBreadcrumb)) }}
+      />
+      <AboutHeroSection />
+      <AboutMissionVisionSection />
+      <AboutJourneyTimeline />
+      <AboutDifferentiatorsSection />
+      <AboutImpactSection />
+      <AboutMentorsSection />
+      <AboutTestimonialSection />
+      <AboutFinalCtaSection />
+    </>
   );
 }

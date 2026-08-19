@@ -3,10 +3,9 @@ import { cn } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { Tag } from "@/components/ui/Tag";
-import { Icon } from "@/components/ui/Icon";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { FacultyStatCard } from "@/components/cards/FacultyStatCard";
-import { FACULTY_DETAIL_DECORATION } from "@/data/faculty";
+import { FacultyIcon } from "@/lib/faculty-icons";
 import type { Faculty } from "@/lib/types";
 
 interface FacultyDetailHeroSectionProps {
@@ -25,9 +24,9 @@ export function FacultyDetailHeroSection({
 
   return (
     <section
-      className={cn("relative overflow-hidden bg-bg-primary", className)}
+      className={cn("relative overflow-hidden", className)}
     >
-      <div
+      {/* <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
@@ -35,7 +34,7 @@ export function FacultyDetailHeroSection({
         }}
         aria-hidden
       />
-      <div className="hero-atmosphere" aria-hidden />
+      <div className="hero-atmosphere" aria-hidden /> */}
 
       <div className="container-rodha relative z-10 py-5 md:py-7 lg:py-8">
         <Breadcrumb
@@ -48,14 +47,14 @@ export function FacultyDetailHeroSection({
         />
 
         <RevealGroup>
-          <div className="grid grid-cols-1 lg:grid-cols-[28%_42%_30%] gap-8 lg:gap-6 items-end lg:items-center">
-            <div className="reveal-child reveal-delay-1 relative mx-auto lg:mx-0 w-full max-w-[280px] lg:max-w-none h-[280px] sm:h-[320px] lg:h-[380px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] gap-8 lg:gap-10 items-end lg:items-center">
+            <div className="reveal-child reveal-delay-1 relative mx-auto lg:mx-0 w-full max-w-[300px] lg:max-w-none h-[280px] sm:h-[320px] lg:h-[400px]">
               <Image
                 src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
                 alt={faculty.name}
                 fill
                 className="object-contain object-bottom"
-                sizes="(max-width: 1024px) 280px, 28vw"
+                sizes="(max-width: 1024px) 300px, 38vw"
                 fetchPriority="high"
               />
             </div>
@@ -76,7 +75,7 @@ export function FacultyDetailHeroSection({
 
               {faculty.rating != null && (
                 <div className="mt-3 flex items-center justify-center lg:justify-start gap-2 text-body text-text-primary">
-                  <Icon src="/assets/icons/star.svg" size={16} className="text-accent-yellow" />
+                  <FacultyIcon name="star" size={16} className="text-accent-yellow" />
                   <span className="font-semibold">{faculty.rating.toFixed(1)}</span>
                   {faculty.reviewCountLabel && (
                     <span className="text-text-dimmed">
@@ -111,34 +110,6 @@ export function FacultyDetailHeroSection({
                   ))}
                 </div>
               )}
-            </div>
-
-            <div className="reveal-child reveal-delay-3 relative hidden lg:block h-[340px] xl:h-[380px]">
-              <div
-                className="pointer-events-none absolute inset-[10%] rounded-full bg-orange-500/20 blur-3xl ambient-drift"
-                aria-hidden
-              />
-              <Image
-                src={FACULTY_DETAIL_DECORATION}
-                alt=""
-                fill
-                className="object-contain object-bottom ambient-drift"
-                sizes="30vw"
-              />
-            </div>
-
-            <div className="reveal-child reveal-delay-3 relative lg:hidden mx-auto w-full max-w-[220px] h-[180px]">
-              <div
-                className="pointer-events-none absolute inset-[15%] rounded-full bg-orange-500/15 blur-2xl"
-                aria-hidden
-              />
-              <Image
-                src={FACULTY_DETAIL_DECORATION}
-                alt=""
-                fill
-                className="object-contain object-bottom ambient-drift"
-                sizes="220px"
-              />
             </div>
           </div>
         </RevealGroup>
