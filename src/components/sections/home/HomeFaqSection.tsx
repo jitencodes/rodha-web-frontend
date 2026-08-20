@@ -18,7 +18,7 @@ export function HomeFAQSection() {
           align="center"
           badge="GOOD TO KNOW"
         />
-        <div className="space-y-6 md:space-y-8">
+        <div className="space-y-6 md:space-y-8 max-w-4xl mx-auto">
 
                 <AccordionV2
                 // key={`${activeCategory}-${safePage}-${query}`}

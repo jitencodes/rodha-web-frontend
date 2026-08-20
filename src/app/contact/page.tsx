@@ -34,8 +34,8 @@ export default function ContactPage() {
       <ContactInfoStrip />
       <ContactOfficeSupportSection />
       <ContactCtaSection />
+      {/* <ContactBuddyCtaSection /> */}
       <ContactFaqSection />
-      <ContactBuddyCtaSection />
     </>
   );
 }

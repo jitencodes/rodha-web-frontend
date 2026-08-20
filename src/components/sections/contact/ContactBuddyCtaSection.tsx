@@ -2,6 +2,7 @@ import { Container } from "@/components/layout/Container";
 import { Icon } from "@/components/ui/Icon";
 import { CONTACT_BUDDY, CONTACT_CHANNELS } from "@/data/contact";
 import { cn } from "@/lib/utils";
+import { CounsellingCtaAction } from "../CounsellingCtaAction";
 
 interface ContactBuddyCtaSectionProps {
   className?: string;
@@ -31,15 +32,16 @@ export function ContactBuddyCtaSection({ className }: ContactBuddyCtaSectionProp
                 {CONTACT_BUDDY.description}
               </p>
             </div>
-            <a
-              href={CONTACT_CHANNELS.buddyHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary btn-primary-premium premium-border-glow glow-accent-orange inline-flex items-center justify-center gap-2 text-body px-6 py-3 rounded-[6px] whitespace-nowrap shrink-0"
-            >
-              Chat Now with Rodha Buddy
-              <Icon src="/assets/icons/arrow-right.svg" size={14} />
-            </a>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
+              <CounsellingCtaAction
+                action={{ label: "Book Free Counselling", href: "/contact" }}
+                className="btn-primary btn-primary-premium premium-border-glow glow-accent-orange text-body-sm px-5 py-2.5 rounded-[6px] whitespace-nowrap text-center"
+              />
+              <CounsellingCtaAction
+                action={{ label: "Explore Courses", href: "/category/cat" }}
+                className="btn-outlined-premium premium-border-glow glow-accent-silver shine-sweep shine-sweep-outline inline-flex items-center justify-center text-body-sm px-5 py-2.5 rounded-[6px] whitespace-nowrap bg-transparent border border-white text-white hover:bg-white/10"
+              />
+            </div>
           </div>
         </div>
       </Container>

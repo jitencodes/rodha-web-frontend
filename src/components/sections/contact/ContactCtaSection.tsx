@@ -13,7 +13,7 @@ export function ContactCtaSection({ className }: ContactCtaSectionProps) {
       <Container>
         <div className="relative overflow-hidden rounded-[8px] border border-orange-500/30 bg-bg-secondary px-5 py-8 md:px-8 md:py-10">
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.28)_0%,transparent_70%)]"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.28)_0%,transparent_50%)]"
             aria-hidden
           />
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">

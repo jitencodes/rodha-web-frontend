@@ -41,20 +41,21 @@
         "testSeriesTitle": "Practice like it's the real exam.",
         "testSeriesSubtitle": "Identify your strengths, fix your weak areas, and walk into CAT with confidence.",
         "facultyTitle": "Star Faculty for MBA",
+        "facultyBadge": "Meet The Mentors",
         "facultySubtitle": "Learn from mentors who have guided thousands to top B-schools.",
         "testimonialSubtitle": "Real stories from Rodha MBA aspirants",
         "storiesSubtitle": "They were exactly where you are today — hear their stories, in their own words."
       },
       "cta": {
-        "title": "Don't know where to start? Talk to our Team",
+        "title": "Still Confused? Don’t know where to start?",
         "subtitle": "Join thousands of serious aspirants and start your MBA journey today.",
         "primaryAction": {
           "label": "Book Free Counselling",
           "href": "/contact"
         },
         "secondaryAction": {
-          "label": "Explore Courses",
-          "href": "/category/cat#courses"
+          "label": "Contact Us",
+          "href": "/contact"
         }
       },
       "quickStats": [
@@ -168,11 +169,6 @@
           "id": "faq-7",
           "question": "Does the course cover XAT, SNAP and NMAT too?",
           "answer": "Yes, and at no extra cost. Complete OMET courses for XAT, SNAP and NMAT — worth ₹12,000 — are included in every comprehensive batch, along with OMET mock tests with full analysis and dedicated strategy sessions for each exam. One enrollment covers your whole MBA entrance season, not just CAT."
-        },
-        {
-          "id": "faq-8",
-          "question": "What do the courses cost, and can I get a refund?",
-          "answer": "Comprehensive batches are ₹24,999 (from ₹40,000) and the Crash Course is ₹19,999. Discount code DREAMBIG26 takes up to 10% off. Refunds are not available after enrollment — which is exactly why the free course exists. Rodha's Free Material includes live class recordings and strategy sessions, so you can judge the teaching properly before you spend anything."
         }
       ],
       "courses": [
@@ -1210,6 +1206,7 @@
         "testSeriesTitle": "Practice for Indore, Rohtak and beyond.",
         "testSeriesSubtitle": "Pattern-matched tests and analytics help you improve speed, accuracy, and confidence.",
         "facultyTitle": "Star Faculty for IPMAT",
+        "facultyBadge": "Meet The Mentors",
         "facultySubtitle": "Learn from mentors who understand the demands of school and entrance preparation.",
         "testimonialSubtitle": "Real stories from Rodha IPMAT aspirants",
         "storiesSubtitle": "Student journeys that turn early ambition into IIM opportunities."
@@ -1628,6 +1625,7 @@
         "testSeriesTitle": "20 Full-Length Mocks. 100 Sectional Tests. 300+ Practice Tests.",
         "testSeriesSubtitle": "Prepare with 20 full-length CLAT 2027 mock tests, 100 sectional tests, 300+ topic-wise practice tests and 4,000+ curated questions.",
         "facultyTitle": "Star Faculty for Law",
+        "facultyBadge": "Meet The Mentors",
         "facultySubtitle": "Learn legal reasoning and exam strategy from experienced mentors.",
         "testimonialSubtitle": "Real stories from Rodha CLAT aspirants",
         "storiesSubtitle": "Focused practice and mentorship, told through successful student journeys."
@@ -2053,6 +2051,7 @@
         "testSeriesTitle": "Practice with exam-focused tests.",
         "testSeriesSubtitle": "Train with thousands of questions, RODHA Worksheets and timer-based tests aligned with the exam pattern.",
         "facultyTitle": "Learn From Faculty Who Know the Exam",
+        "facultyBadge": "Meet The Mentors",
         "facultySubtitle": "The right teacher can change the way you approach a subject. Meet the educators behind RODHA SSC's preparation ecosystem.",
         "testimonialSubtitle": "Real stories from Rodha SSC aspirants",
         "storiesSubtitle": "Focused preparation, consistent practice and expert guidance through successful student journeys."
@@ -2474,6 +2473,7 @@
         "testSeriesTitle": "Practice, build and prove your skills.",
         "testSeriesSubtitle": "Assessments, labs, and mini projects turn learning into visible progress.",
         "facultyTitle": "Mentors at Skill House",
+        "facultyBadge": "Meet The Mentors",
         "facultySubtitle": "Learn from practitioners who connect concepts to real workplace outcomes.",
         "testimonialSubtitle": "Real stories from Skill House learners",
         "storiesSubtitle": "Practical projects and mentorship, reflected in learner outcomes."

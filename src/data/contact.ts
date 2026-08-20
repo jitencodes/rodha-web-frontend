@@ -48,10 +48,9 @@ export const CONTACT_CTA = {
 } as const;
 
 export const CONTACT_BUDDY = {
-  eyebrow: "Need instant help?",
-  title: "Chat with Rodha Buddy",
-  description:
-    "Get 24/7 answers on courses, exam strategy, and next steps from Rodha's AI study assistant.",
+  eyebrow: "Need help?",
+  title: "Your Success. Our Commitment.",
+  description: "Book a free counselling session or explore the course that matches your exam goal.",
 } as const;
 
 const CONTACT_FAQ_IDS = ["gen-5", "men-5", "men-3", "crs-4", "prc-5"] as const;

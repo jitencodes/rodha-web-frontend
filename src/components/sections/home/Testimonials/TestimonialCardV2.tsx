@@ -10,7 +10,7 @@ interface TestimonialCardV2Props {
 
 /** Dark testimonial card (MBA testimonials restored to old black theme). */
 export function TestimonialCardV2({ testimonial, className }: TestimonialCardV2Props) {
-  const role = [testimonial.exam, testimonial.college].filter(Boolean).join(" · ");
+  const role = [testimonial.college, testimonial.exam].filter(Boolean).join(" · ");
 
   return (
     <article
@@ -42,7 +42,6 @@ export function TestimonialCardV2({ testimonial, className }: TestimonialCardV2P
             {testimonial.name}
           </h4>
           <p className="mt-0.5 truncate text-caption text-text-dimmed">
-            {testimonial.score ? `${testimonial.score} · ` : ""}
             {role}
           </p>
         </div>

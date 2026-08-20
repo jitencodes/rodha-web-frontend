@@ -328,6 +328,7 @@ export interface CategoryLandingHero {
 }
 
 export interface CategoryLandingSectionCopy {
+  facultyBadge: string | undefined;
   coursesBadge: string;
   coursesTitle: string;
   coursesSubtitle: string;

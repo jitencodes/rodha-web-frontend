@@ -215,7 +215,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
       >
         <Container>
           <SectionHeaderV2
-            badge="Star Faculty"
+            badge={category.sectionCopy.facultyBadge}
             title={category.sectionCopy.facultyTitle}
             subtitle={category.sectionCopy.facultySubtitle}
             align="center"
@@ -296,7 +296,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         title={category.cta.title}
         subtitle={category.cta.subtitle}
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/award.png"
+        decorativeImage="/assets/images/about us/award-to-boy.png"
         primaryAction={category.cta.primaryAction}
         secondaryAction={category.cta.secondaryAction}
       />
@@ -311,7 +311,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         >
           <Container>
             <SectionHeaderV2
-              badge="Still not convinced?"
+              badge="Rodha Success Stories"
               title={
                 <>
                   Watch how they{" "}
@@ -361,7 +361,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
               answer,
             }))}
             iconVariant="plus"
-            className="mx-auto"
+            className="mx-auto max-w-4xl"
           />
           <div className="mt-8 flex justify-center">
             <Link
