@@ -5,7 +5,7 @@ export const courses: Course[] = [
     id: "cat-complete-2026",
     title: "CAT 2026 Complete Program",
     slug: "cat-2026-complete-program",
-    category: "mba",
+    category: "cat",
     description:
       "Complete CAT preparation covering Quantitative Aptitude, VARC, and DILR with 500+ hours of live and recorded classes.",
     shortDescription: "Complete CAT prep with live mentorship and mock tests.",
@@ -33,7 +33,7 @@ export const courses: Course[] = [
     id: "cat-pro-2026",
     title: "CAT 2026 Pro Program",
     slug: "cat-2026-pro-program",
-    category: "mba",
+    category: "cat",
     description:
       "Advanced CAT track for serious aspirants targeting 99+ percentile with intensive mocks and mentor reviews.",
     shortDescription: "Advanced CAT prep for 99+ percentile targets.",
@@ -60,7 +60,7 @@ export const courses: Course[] = [
     id: "cat-crash-2026",
     title: "CAT 2026 Crash Course",
     slug: "cat-2026-crash-course",
-    category: "mba",
+    category: "cat",
     description:
       "High-intensity short-duration CAT revision program focused on mocks, weak areas, and last-mile strategy.",
     shortDescription: "Fast-track revision for the final stretch before CAT.",
@@ -87,7 +87,7 @@ export const courses: Course[] = [
     id: "cat-foundation-2026",
     title: "CAT 2026 Foundation Program",
     slug: "cat-2026-foundation-program",
-    category: "mba",
+    category: "cat",
     description:
       "Beginner-friendly CAT foundation that builds Quant, Verbal, and Reasoning fundamentals from the ground up.",
     shortDescription: "Start-from-basics CAT prep for first-time aspirants.",
@@ -218,7 +218,7 @@ export const courses: Course[] = [
     id: "gdpi-masterclass-2026",
     title: "GDPI Masterclass 2026",
     slug: "gdpi-masterclass-2026",
-    category: "mba",
+    category: "cat",
     description:
       "Master Group Discussions and Personal Interviews with mock sessions and expert feedback.",
     shortDescription: "Ace your B-school GD/PI with mock sessions & expert feedback.",
@@ -244,7 +244,7 @@ export const courses: Course[] = [
     id: "gdpi-intensive-2026",
     title: "GDPI Intensive Bootcamp",
     slug: "gdpi-intensive-bootcamp-2026",
-    category: "mba",
+    category: "cat",
     description:
       "High-intensity 3-week bootcamp for shortlisted aspirants with daily mocks and debriefs.",
     shortDescription: "Daily mocks and debriefs for call conversion season.",
@@ -270,7 +270,7 @@ export const courses: Course[] = [
     id: "gdpi-wat-pi-2026",
     title: "WAT + PI Focus Program",
     slug: "gdpi-wat-pi-focus-2026",
-    category: "mba",
+    category: "cat",
     description:
       "Deep-dive into Written Ability Tests and Personal Interviews for IIM and top B-school formats.",
     shortDescription: "Focused WAT and PI coaching for shortlist conversion.",
@@ -296,7 +296,7 @@ export const courses: Course[] = [
     id: "gdpi-iim-calls-2026",
     title: "IIM Calls Conversion Program",
     slug: "gdpi-iim-calls-2026",
-    category: "mba",
+    category: "cat",
     description:
       "End-to-end conversion program tailored for IIM-A/B/C/L/K/I shortlists and similar formats.",
     shortDescription: "IIM-specific GDPI conversion with alumni mentors.",
@@ -427,7 +427,7 @@ export const courses: Course[] = [
     id: "banking-complete-2026",
     title: "Banking Complete Program 2026",
     slug: "banking-complete-program-2026",
-    category: "banking",
+    category: "ssc",
     description:
       "Complete banking exam preparation covering Quant, Reasoning, English and GA for IBPS, SBI and RBI.",
     shortDescription: "Complete banking prep with live mentorship and mocks.",
@@ -454,7 +454,7 @@ export const courses: Course[] = [
     id: "banking-ssc-2026",
     title: "SSC Complete Program 2026",
     slug: "ssc-complete-program-2026",
-    category: "banking",
+    category: "ssc",
     description:
       "Targeted SSC CGL/CHSL preparation with quant foundations, reasoning drills, and mock analytics.",
     shortDescription: "SSC CGL & CHSL prep with mocks and mentorship.",
@@ -480,7 +480,7 @@ export const courses: Course[] = [
     id: "banking-crash-2026",
     title: "Banking Crash Course 2026",
     slug: "banking-crash-course-2026",
-    category: "banking",
+    category: "ssc",
     description:
       "High-intensity short-duration banking revision focused on mocks and weak-area repair.",
     shortDescription: "Fast-track banking revision for the final stretch.",
@@ -506,7 +506,7 @@ export const courses: Course[] = [
     id: "banking-foundation-2026",
     title: "Banking Foundation Program 2026",
     slug: "banking-foundation-program-2026",
-    category: "banking",
+    category: "ssc",
     description:
       "Beginner-friendly foundation that builds Quant, Reasoning and English from the ground up.",
     shortDescription: "Start-from-basics banking & SSC prep.",
@@ -642,7 +642,7 @@ export const mbaCourses: Course[] = [
     caourseCount: 12,
     title: "CAT 2026 Crash Course",
     slug: "cat-2026-complete-program",
-    category: "mba",
+    category: "cat",
     features: [],
     highlights: [],
     enrollmentUrl: "",
@@ -694,7 +694,7 @@ export const mbaCourses: Course[] = [
 
     slug: "cat-2026-pro-program",
 
-    category: "mba",
+    category: "cat",
     features: [],
     highlights: [],
     enrollmentUrl: "",
@@ -751,7 +751,7 @@ export const mbaCourses: Course[] = [
     description: "",
     shortDescription: "R8 Batch | Zero to Zenith Quants Fast Paced by Ravi Sir for CAT 2026",
 
-    category: "mba",
+    category: "cat",
     features: [],
     highlights: [],
     enrollmentUrl: "",
@@ -801,7 +801,7 @@ export const mbaCourses: Course[] = [
     description: "",
     shortDescription: "The Ultimate Practice Engine for CAT 2026 | Weekly Live Sessions By Ravi Sir & KD Sir",
 
-    category: "mba",
+    category: "cat",
     features: [],
     highlights: [],
     enrollmentUrl: "",

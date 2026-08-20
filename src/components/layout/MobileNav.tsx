@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { CATEGORIES, EXTERNAL_URLS, HEADER_NAV } from "@/lib/constants";
+import { cn, isExternalHref } from "@/lib/utils";
+import {
+  CATEGORIES,
+  EXTERNAL_URLS,
+  HEADER_NAV,
+  getFreeResourceUrl,
+} from "@/lib/constants";
 import type { CategoryId } from "@/lib/types";
 import { usePathname } from "next/navigation";
 
@@ -11,9 +16,42 @@ interface MobileNavProps {
   activeCategoryId?: CategoryId | null;
 }
 
+function MobileNavLink({
+  href,
+  className,
+  children,
+  onClick,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
+  if (isExternalHref(href)) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        onClick={onClick}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
+}
+
 export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const activeCategory = CATEGORIES.find((cat) => cat.id === activeCategoryId);
+  const freeResourceHref = getFreeResourceUrl(activeCategoryId);
   
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   
@@ -70,11 +108,23 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
 
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;
+            const children = hasChildren
+              ? item.children.map((child) => ({
+                  ...child,
+                  href:
+                    child.label === "Free Resources"
+                      ? freeResourceHref
+                      : child.href,
+                }))
+              : [];
+            const itemHref = "href" in item ? item.href : "";
 
             if (hasChildren) {
               const isExpanded = expandedItem === item.label;
-              const isActive = item.children.some((child) =>
-                pathname.startsWith(child.href)
+              const isActive = children.some(
+                (child) =>
+                  !isExternalHref(child.href) &&
+                  pathname.startsWith(child.href)
               );
 
               return (
@@ -124,20 +174,21 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
                   >
                     <div className="overflow-hidden">
                       <div className="flex flex-col pl-4 pb-2">
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.href}
+                        {children.map((child) => (
+                          <MobileNavLink
+                            key={child.label}
                             href={child.href}
                             onClick={() => setIsOpen(false)}
                             className={cn(
                               "py-2 text-body-sm transition-colors",
-                              pathname === child.href
+                              !isExternalHref(child.href) &&
+                                pathname === child.href
                                 ? "text-orange-400"
                                 : "text-text-secondary hover:text-orange-400"
                             )}
                           >
                             {child.label}
-                          </Link>
+                          </MobileNavLink>
                         ))}
                       </div>
                     </div>
@@ -146,12 +197,13 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
               );
             }
 
-            const isActive = pathname === item.href;
+            const isActive =
+              !isExternalHref(itemHref) && pathname === itemHref;
 
             return (
-              <Link
+              <MobileNavLink
                 key={item.label}
-                href={item.href}
+                href={itemHref}
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "block py-3 text-body font-medium transition-colors",
@@ -161,9 +213,9 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
                 )}
               >
                 {item.label}
-              </Link>
+              </MobileNavLink>
             );
-})}
+          })}
 
           <div className="border-t border-border-default my-4" />
 
@@ -175,15 +227,6 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
             onClick={() => setIsOpen(false)}
           >
             Rodha Buddy
-          </a>
-          <a
-            href={EXTERNAL_URLS.graphy}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block py-3 text-center text-body font-medium text-text-secondary hover:text-orange-400"
-            onClick={() => setIsOpen(false)}
-          >
-            Login / Sign Up
           </a>
         </nav>
       </div>

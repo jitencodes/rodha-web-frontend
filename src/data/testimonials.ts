@@ -11,7 +11,7 @@ export const testimonials: Testimonial[] = [
       "Rodha's structured approach and personal mentorship transformed my preparation. The mock analysis sessions were invaluable.",
     image: "/assets/images/profiles/male-4.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t2",
@@ -23,7 +23,7 @@ export const testimonials: Testimonial[] = [
       "VARC finally clicked after Rodha's reading drills. Mentors reviewed every mock and kept me accountable till exam day.",
     image: "/assets/images/profiles/female-4.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t3",
@@ -35,7 +35,7 @@ export const testimonials: Testimonial[] = [
       "DILR used to scare me. The step-by-step set frameworks and weekly mentor reviews changed that completely.",
     image: "/assets/images/profiles/male-6.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t4",
@@ -47,7 +47,7 @@ export const testimonials: Testimonial[] = [
       "Evening batches fit my job schedule perfectly. Recordings plus mentorship meant I never fell behind.",
     image: "/assets/images/profiles/female-2.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t5",
@@ -107,7 +107,7 @@ export const testimonials: Testimonial[] = [
       "From CAT prep to GDPI conversion, Rodha was with me at every step. Their mock sessions gave me the edge.",
     image: "/assets/images/profiles/male-5.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t10",
@@ -119,7 +119,7 @@ export const testimonials: Testimonial[] = [
       "The WAT frameworks and PI story workshops helped me sound authentic instead of rehearsed.",
     image: "/assets/images/profiles/female-4.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t11",
@@ -131,7 +131,7 @@ export const testimonials: Testimonial[] = [
       "Alumni mentors who had sat on the other side of the table coached me into a confident convert.",
     image: "/assets/images/profiles/male-4.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t12",
@@ -143,7 +143,7 @@ export const testimonials: Testimonial[] = [
       "Daily GD panels rebuilt my confidence. Feedback was specific, actionable, and kind.",
     image: "/assets/images/profiles/female-2.png",
     year: 2024,
-    category: "mba",
+    category: "cat",
   },
   {
     id: "t13",
@@ -203,7 +203,7 @@ export const testimonials: Testimonial[] = [
       "Sectional mocks and mentor reviews made banking Quant feel manageable. Cleared IBPS on my first serious attempt.",
     image: "/assets/images/profiles/female-1.png",
     year: 2024,
-    category: "banking",
+    category: "ssc",
   },
   {
     id: "t18",
@@ -215,7 +215,7 @@ export const testimonials: Testimonial[] = [
       "The SSC track respected my job hours while still pushing speed and accuracy every week.",
     image: "/assets/images/profiles/male-2.png",
     year: 2024,
-    category: "banking",
+    category: "ssc",
   },
   {
     id: "t19",
@@ -227,7 +227,7 @@ export const testimonials: Testimonial[] = [
       "Reasoning drills and mini mocks were exactly what I needed before the real paper.",
     image: "/assets/images/profiles/female-3.png",
     year: 2024,
-    category: "banking",
+    category: "ssc",
   },
   {
     id: "t20",
@@ -239,7 +239,7 @@ export const testimonials: Testimonial[] = [
       "Foundation to crash track progression kept me consistent from basics to exam day.",
     image: "/assets/images/profiles/male-4.png",
     year: 2024,
-    category: "banking",
+    category: "ssc",
   },
   {
     id: "t21",

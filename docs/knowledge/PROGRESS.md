@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-20 (IPMAT results + app store URLs)
+**Last updated:** 2026-08-20 (header/footer nav destinations)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -96,6 +96,10 @@ Update this file after every meaningful implementation task.
   - IPMAT cards show AIR rank when present, otherwise an Achiever/Topper placeholder
   - Results section now renders only on CAT and IPMAT landings; CLAT / SSC / Skill House results arrays cleared
   - Rodha App copy + live Play/App Store URLs for Rodha App and Rodha Buddy
+- **Header/footer nav destinations (2026-08-20):**
+  - Removed header login/account control and mobile Login / Sign Up
+  - Removed footer Success Stories; Free Resources now follows the same category-aware URL as the header
+  - Header Test Series points at `https://mocks.rodha.co.in/`; Free Resources uses CAT on home/other pages, IPMAT/CLAT/SSC-specific Graphy courses on those landings, and the CAT free course on CAT + Skill House
 
 ---
 

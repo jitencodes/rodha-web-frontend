@@ -1,5 +1,6 @@
 import type {
   Category,
+  CategoryId,
   ContactInfo,
   SocialLink,
   ValueProp,
@@ -15,7 +16,39 @@ export const EXTERNAL_URLS = {
   graphy: "https://rodha.graphy.com",
   thinkExam: "https://thinkexam.com",
   rodhaBuddy: "https://buddy.rodha.in",
+  testSeries: "https://mocks.rodha.co.in/",
 } as const;
+
+export const CAT_FREE_COURSE_URL =
+  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2026--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-68df9c431bf5c8479d8dd7c3";
+
+export const FREE_RESOURCE_URLS: Record<string, string> = {
+  cat: CAT_FREE_COURSE_URL,
+  skillhouse: CAT_FREE_COURSE_URL,
+  ipmat:
+    "https://ipmat.rodha.co.in/courses/IPMAT-Free-Course-686d1fed89239748a6354ab3",
+  clat: "https://clat.rodha.co.in/courses/FREE-COURSE-CLAT-2027-69edb996e108967589ff4ad7",
+  ssc: "https://ssc.rodha.co.in/courses/SSC-Free-Courses-69b3cfc74c2f7b1e462e3117",
+};
+
+export function getFreeResourceUrl(
+  categoryId?: CategoryId | string | null
+): string {
+  if (categoryId && FREE_RESOURCE_URLS[categoryId]) {
+    return FREE_RESOURCE_URLS[categoryId];
+  }
+  return CAT_FREE_COURSE_URL;
+}
+
+export function getCategoryIdFromPathname(
+  pathname: string
+): CategoryId | null {
+  const segments = pathname.split("/").filter(Boolean);
+  const categorySlug =
+    segments[0] === "category" ? segments[1] : segments[0];
+  if (!categorySlug) return null;
+  return CATEGORIES.find((cat) => cat.slug === categorySlug)?.id ?? null;
+}
 
 export const OFFER_END_DATE = "2026-08-31T23:59:59";
 
@@ -139,22 +172,13 @@ export const HEADER_NAV = [
       },
       {
         label: "Free Resources",
-        href: "/resources",
+        href: CAT_FREE_COURSE_URL,
       },
     ],
   },
   {
     label: "Test Series",
-    children: [
-      {
-        label: "CAT + OMETs",
-        href: "/test-series/clat-omets",
-      },
-      {
-        label: "IPMAT",
-        href: "/test-series/ipmat",
-      },
-    ],
+    href: EXTERNAL_URLS.testSeries,
   },
   {
     label: "Contact",

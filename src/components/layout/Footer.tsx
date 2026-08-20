@@ -10,9 +10,12 @@ import {
   SOCIAL_LINKS,
   SITE_NAME,
   SITE_TAGLINE,
+  CAT_FREE_COURSE_URL,
+  getCategoryIdFromPathname,
+  getFreeResourceUrl,
 } from "@/lib/constants";
 import { Icon } from "@/components/ui/Icon";
-import { cn } from "@/lib/utils";
+import { cn, isExternalHref } from "@/lib/utils";
 
 const SOCIAL_ICON_PATHS: Record<string, string> = {
   instagram: "/assets/icons/instagram.svg",
@@ -33,8 +36,7 @@ const QUICK_LINKS = [
 const RESOURCES_LINKS = [
   { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "/faq" },
-  { label: "Free Resources", href: "/blog" },
-  { label: "Success Stories", href: "/#results" },
+  { label: "Free Resources", href: CAT_FREE_COURSE_URL },
 ];
 
 const LEGAL_LINKS = [
@@ -135,15 +137,29 @@ function FooterColumn({
           const isActive = activeLabel === item.label;
           return (
             <li key={item.label}>
-              <Link
-                href={item.href}
-                className={cn(
-                  "text-body-sm transition-colors",
-                  isActive ? theme.activeLink : theme.link
-                )}
-              >
-                {item.label}
-              </Link>
+              {isExternalHref(item.href) ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "text-body-sm transition-colors",
+                    isActive ? theme.activeLink : theme.link
+                  )}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "text-body-sm transition-colors",
+                    isActive ? theme.activeLink : theme.link
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )}
             </li>
           );
         })}
@@ -169,6 +185,14 @@ export function Footer() {
     label: c.menuLabel,
     href: `/category/${c.slug}`,
   }));
+  const resourceLinks = RESOURCES_LINKS.map((item) =>
+    item.label === "Free Resources"
+      ? {
+          ...item,
+          href: getFreeResourceUrl(getCategoryIdFromPathname(pathname)),
+        }
+      : item
+  );
   const isCategoryRoute = pathname.startsWith("/category/");
   const footerTheme = LIGHT_FOOTER_THEME;
 
@@ -237,7 +261,7 @@ export function Footer() {
           />
           <FooterColumn
             title="Resources"
-            links={RESOURCES_LINKS}
+            links={resourceLinks}
             activeLabel={activeLabel}
             theme={footerTheme}
           />

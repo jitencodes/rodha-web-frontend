@@ -4,29 +4,54 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { CATEGORIES, EXTERNAL_URLS, HEADER_NAV } from "@/lib/constants";
-import type { CategoryId } from "@/lib/types";
+import { cn, isExternalHref } from "@/lib/utils";
+import {
+  CATEGORIES,
+  EXTERNAL_URLS,
+  HEADER_NAV,
+  getCategoryIdFromPathname,
+  getFreeResourceUrl,
+} from "@/lib/constants";
 import { MobileNav } from "./MobileNav";
-import { CircleUserRound, User, UserPlus } from "lucide-react";
 
 interface HeaderProps {
   className?: string;
 }
 
-function getActiveCategoryId(pathname: string): CategoryId | null {
-  const segments = pathname.split("/").filter(Boolean);
-  const categorySlug =
-    segments[0] === "category" ? segments[1] : segments[0];
-  if (!categorySlug) return null;
-  const match = CATEGORIES.find((cat) => cat.slug === categorySlug);
-  return match?.id ?? null;
+function HeaderNavLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  if (isExternalHref(href)) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
 }
 
 export function Header({ className }: HeaderProps) {
   const pathname = usePathname();
-  const activeCategoryId = getActiveCategoryId(pathname);
+  const activeCategoryId = getCategoryIdFromPathname(pathname);
   const activeCategory = CATEGORIES.find((cat) => cat.id === activeCategoryId);
+  const freeResourceHref = getFreeResourceUrl(activeCategoryId);
 
   const [examOpen, setExamOpen] = useState(false);
   const examRef = useRef<HTMLDivElement>(null);
@@ -66,10 +91,24 @@ export function Header({ className }: HeaderProps) {
         <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center min-w-0">
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;
+            const children = hasChildren
+              ? item.children.map((child) => ({
+                  ...child,
+                  href:
+                    child.label === "Free Resources"
+                      ? freeResourceHref
+                      : child.href,
+                }))
+              : [];
+            const itemHref = "href" in item ? item.href : "";
 
             const isActive = hasChildren
-              ? item.children.some((child) => pathname.startsWith(child.href))
-              : pathname === item.href;
+              ? children.some(
+                  (child) =>
+                    !isExternalHref(child.href) &&
+                    pathname.startsWith(child.href)
+                )
+              : !isExternalHref(itemHref) && pathname === itemHref;
 
             if (hasChildren) {
               return (
@@ -123,19 +162,19 @@ export function Header({ className }: HeaderProps) {
                     "
                   >
                     <div className="py-2">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
+                      {children.map((child) => (
+                        <HeaderNavLink
+                          key={child.label}
                           href={child.href}
                           className={cn(
                             "block px-4 py-2.5 text-body-sm transition-colors",
-                            pathname === child.href
+                            !isExternalHref(child.href) && pathname === child.href
                               ? "text-orange-400 bg-orange-500/5"
                               : "text-text-secondary hover:bg-orange-500/10 hover:text-text-primary"
                           )}
                         >
                           {child.label}
-                        </Link>
+                        </HeaderNavLink>
                       ))}
                     </div>
                   </div>
@@ -144,9 +183,9 @@ export function Header({ className }: HeaderProps) {
             }
 
             return (
-              <Link
+              <HeaderNavLink
                 key={item.label}
-                href={item.href}
+                href={itemHref}
                 className={cn(
                   "relative px-2 xl:px-2.5 py-1.5 text-body-sm transition-colors whitespace-nowrap after:absolute after:left-2 after:right-2 after:bottom-0 after:h-0.5 after:origin-left after:rounded-full after:bg-orange-500 after:transition-transform after:duration-300",
                   isActive
@@ -155,7 +194,7 @@ export function Header({ className }: HeaderProps) {
                 )}
               >
                 {item.label}
-              </Link>
+              </HeaderNavLink>
             );
           })}
         </nav>
@@ -237,89 +276,6 @@ export function Header({ className }: HeaderProps) {
           >
             Rodha Buddy
           </a>
-          <div className="relative group shrink-0">
-            <button
-              className="
-                flex items-center justify-center
-                h-9.5
-                w-[51px]
-                rounded-sm
-                border border-white/15
-                backdrop-blur-sm
-                transition-all duration-200
-                hover:border-orange-400/50
-                hover:bg-orange-500/10
-              "
-              aria-label="Account"
-            >
-              <User className="h-5 w-5 text-white group-hover:text-orange-300 transition-colors" />
-
-              <svg
-                className="h-auto w-5.5 text-white/50 transition-transform duration-300 group-hover:rotate-180"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 011.08 1.04l-4.25 4.51a.75.75 0 01-1.08 0l-4.25-4.51a.75.75 0 01.02-1.06z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <div
-              className="
-                invisible
-                absolute
-                right-0
-                top-full
-                z-50
-                mt-2
-                w-72
-                rounded-xl
-                border
-                border-white/10
-                bg-[#121212]/95
-                backdrop-blur-xl
-                opacity-0
-                shadow-2xl
-                transition-all
-                duration-200
-                group-hover:visible
-                group-hover:opacity-100
-              "
-            >
-              <div className="p-2">
-
-                <a
-                  href={EXTERNAL_URLS.graphy}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="
-                    flex items-start gap-3
-                    rounded-lg
-                    px-3
-                    py-2.5
-                    transition-colors
-                    hover:bg-orange-500/10
-                  "
-                >
-                  <User className="mt-0.5 h-5 w-5 text-orange-400 shrink-0" />
-
-                  <div>
-                    <div className="font-medium text-white">
-                      Log In / Sign Up
-                    </div>
-
-                    <div className="text-caption text-white/60 mt-0.5">
-                      Access existing account or create new
-                    </div>
-                  </div>
-                </a>
-
-              </div>
-            </div>
-          </div>
         </div>
 
         <MobileNav activeCategoryId={activeCategoryId} />

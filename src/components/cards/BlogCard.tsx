@@ -19,7 +19,6 @@ const CATEGORY_BADGE: Record<
   "mba-cat": "primary",
   ipmat: "purple",
   clat: "amber",
-  banking: "success",
   ssc: "success",
   "study-tips": "info",
   "career-guidance": "danger",
@@ -29,7 +28,7 @@ const CATEGORY_BADGE: Record<
   IPMAT: "purple",
   GDPI: "info",
   CLAT: "amber",
-  Banking: "success",
+  Ssc: "success",
   "Skill House": "danger",
 };
 
@@ -37,7 +36,6 @@ const CATEGORY_LABEL: Record<string, string> = {
   "mba-cat": "MBA",
   ipmat: "IPMAT",
   clat: "CLAT/Law",
-  banking: "Banking",
   ssc: "SSC",
   "study-tips": "Study Tips",
   "career-guidance": "Career Guidance",

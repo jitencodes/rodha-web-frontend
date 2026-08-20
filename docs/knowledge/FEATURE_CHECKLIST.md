@@ -11,14 +11,14 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Promotional banner + countdown | Complete | Orange-tinted gradient bar, refined countdown pills, v2 alignment |
-| Header — global nav state | Partial | Exam switcher beside logo; verify PRD links |
-| Header — category nav state | Partial | Needs verification vs PRD |
-| Mobile nav | Partial | Exists; test against all breakpoints |
+| Header — global nav state | Partial | Exam switcher; Test Series → mocks.rodha.co.in; Free Resources is category-aware |
+| Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]`; Free Resources uses that vertical's Graphy course |
+| Mobile nav | Partial | Exists; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
 | Counselling modal (lead form) | Complete | Global provider + `HeroCounsellingForm` in `Modal`; site-wide CTABand counselling actions; homepage category cards pre-fill exam |
-| Footer | Partial | v2 5-column layout (brand, courses, quick links, resources, contact); legal in bottom bar; social URLs TBD |
+| Footer | Partial | v2 5-column layout; Success Stories removed; Free Resources category-aware |
 | Rodha Buddy CTA (external) | Partial | Outline orange in header; final URL TBD |
-| Login / Sign Up → Graphy | Partial | Outline button; redirect target TBD |
+| Login / Sign Up → Graphy | Not Started | Removed from header/mobile until a live destination is ready |
 | Promotion popup + lead form | Not Started | Modal + trigger logic |
 
 ---

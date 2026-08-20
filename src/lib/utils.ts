@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function isExternalHref(href: string): boolean {
+  return /^https?:\/\//i.test(href);
+}
+
 export function formatPrice(amount: number): string {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",

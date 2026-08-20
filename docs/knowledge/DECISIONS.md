@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-08-20 — Category-aware Free Resources and mocks.rodha.co.in Test Series
+- **Decision:** Header Test Series is a single external link to `https://mocks.rodha.co.in/`. Free Resources (header Resources dropdown + footer) uses `getFreeResourceUrl()` from the active `/category/[slug]`: CAT and Skill House share the CAT Graphy free course; IPMAT, CLAT, and SSC use their own Graphy free courses; homepage and all other pages use the CAT free course. Login/account was removed from header and mobile nav. Footer Success Stories was removed.
+- **Rationale:** Product supplied live Graphy free-course URLs per vertical and a single mocks portal; leftover login and Success Stories links had no useful destination.
+- **Alternatives considered:** Keep the Test Series dropdown (CAT + IPMAT); leave Free Resources pointing at `/resources` or `/blog`.
+- **Consequences:** External nav items open in a new tab. Nested category course URLs still resolve the parent slug for Free Resources.
+
 ### 2026-08-20 — IPMAT results, homepage CAT/IPMAT carousels, live app store URLs
 - **Decision:** Keep CAT's 35 result cards and add 16 IPMAT cards as the only student-result datasets. Homepage results show two banner slides (CAT, IPMAT) with a max of 10 cards each. IPMAT cards display AIR rank when present and an Achiever/Topper placeholder otherwise. The category results section renders only on CAT and IPMAT. Rodha App / Rodha Buddy store buttons use the supplied Play Store and App Store URLs.
 - **Rationale:** Product supplied IPMAT convert photos and asked to stop showing placeholder CAT students on other verticals and extra homepage result slides.

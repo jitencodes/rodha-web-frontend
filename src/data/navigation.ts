@@ -20,7 +20,7 @@ export const mainNavigation: NavItem[] = [
 ];
 
 export const categoryNavigation: Record<CategoryId, NavItem[]> = {
-  mba: [
+  cat: [
     { label: "Overview", href: "/category/cat" },
     { label: "Courses", href: "/category/cat#courses" },
     { label: "Faculty", href: "/category/cat#faculty" },
@@ -40,7 +40,7 @@ export const categoryNavigation: Record<CategoryId, NavItem[]> = {
     { label: "Faculty", href: "/category/clat#faculty" },
     { label: "FAQ", href: "/category/clat#faqs" },
   ],
-  banking: [
+  ssc: [
     { label: "Overview", href: "/category/banking" },
     { label: "Courses", href: "/category/banking#courses" },
     { label: "Faculty", href: "/category/banking#faculty" },

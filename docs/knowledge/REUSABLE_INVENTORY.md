@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-20 (IPMAT results + app store URLs)
+**Last updated:** 2026-08-20 (header/footer nav destinations)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -39,11 +39,11 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Component | File |
 |-----------|------|
 | Container | `Container.tsx` |
-| Footer | `Footer.tsx` |
+| Footer | `Footer.tsx` (no Success Stories; Free Resources is category-aware) |
 | CounsellingModalProvider | `CounsellingModalProvider.tsx` |
 | FloatingCounsellingCta | `FloatingCounsellingCta.tsx` |
-| Header | `Header.tsx` |
-| MobileNav | `MobileNav.tsx` |
+| Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources by vertical) |
+| MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
 | PromotionalBanner | `PromotionalBanner.tsx` |
 
 ## Sections — `src/components/sections/`

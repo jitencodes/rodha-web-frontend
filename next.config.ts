@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const categorySlugs = ["cat", "ipmat", "clat", "banking", "skillhouse"] as const;
+const categorySlugs = ["cat", "ipmat", "clat", "ssc", "skillhouse"] as const;
 
 const nextConfig: NextConfig = {
   images: {
