@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/Container";
 import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { Carousel } from "@/components/ui/Carousel";
+import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { Button } from "@/components/ui/Button";
 
@@ -117,17 +120,20 @@ export function HomeResultsSection() {
 
                     {/* RIGHT */}
 
-                    <div className="min-w-0 flex-1 overflow-hidden">
-                      <Carousel showArrows className="w-full">
+                    <div
+                      className="min-w-0 flex-1 overflow-hidden"
+                      onPointerDown={(event) => event.stopPropagation()}
+                    >
+                      <InfiniteMarquee
+                        speed={32}
+                        direction="left"
+                        gap={20}
+                        pauseOnHover={false}
+                      >
                         {banner.toppers.map((topper) => (
-                          <div
-                            key={topper.id}
-                            className="w-[204px] shrink-0 snap-start"
-                          >
-                            <TopperCardV2 topper={topper} />
-                          </div>
+                          <TopperCardV2 key={topper.id} topper={topper} />
                         ))}
-                      </Carousel>
+                      </InfiniteMarquee>
                     </div>
                   </div>
                 </div>
