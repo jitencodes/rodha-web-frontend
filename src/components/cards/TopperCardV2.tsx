@@ -8,7 +8,7 @@ interface TopperCardV2Props {
 }
 
 export function TopperCardV2({ topper, className }: TopperCardV2Props) {
-  const metricLabel = topper.batch.length > 0 ? topper.batch.join(", ") :
+  const metricLabel = topper?.batch?.length > 0 ? topper.batch.join(", ") :
     topper.percentile !== undefined ? "%ile" : topper.score ? "Result" : "AIR";
   const metricValue = topper.percentile ?? topper.score ?? topper.rank;
 
