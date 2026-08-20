@@ -1285,8 +1285,7 @@
         "faculty-profile-abhishek-gupta",
         "faculty-profile-tarun"
       ],
-      "results": 
-      [
+      "results": [
         {
           "id": "cat-result-1",
           "name": "Siddhant Misra",
@@ -1296,7 +1295,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/siddhant-misra.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-27",
@@ -1307,7 +1308,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/rishabh-jain.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-2",
@@ -1318,7 +1321,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-8",
@@ -1329,7 +1334,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
           "category": "mba",
-          "batch": ["R2"]
+          "batch": [
+            "R2"
+          ]
         },
         {
           "id": "cat-result-3",
@@ -1340,7 +1347,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/varul-sharma.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-5",
@@ -1351,7 +1360,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aditi-pandey.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-21",
@@ -1362,7 +1373,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
           "category": "mba",
-          "batch": ["R8"]
+          "batch": [
+            "R8"
+          ]
         },
         {
           "id": "cat-result-29",
@@ -1373,7 +1386,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-11",
@@ -1384,7 +1399,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/manan-jain.webp",
           "category": "mba",
-          "batch": ["R5"]
+          "batch": [
+            "R5"
+          ]
         },
         {
           "id": "cat-result-24",
@@ -1395,7 +1412,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/manav-pathak.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-4",
@@ -1406,7 +1425,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/shriya-yadav.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-20",
@@ -1417,7 +1438,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
           "category": "mba",
-          "batch": ["R6"]
+          "batch": [
+            "R6"
+          ]
         },
         {
           "id": "cat-result-17",
@@ -1428,7 +1451,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/zarish-khan.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-25",
@@ -1439,7 +1464,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/vansh-batra.webp",
           "category": "mba",
-          "batch": ["R7"]
+          "batch": [
+            "R7"
+          ]
         },
         {
           "id": "cat-result-14",
@@ -1450,7 +1477,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-22",
@@ -1461,7 +1490,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amrit-singh.webp",
           "category": "mba",
-          "batch": ["R5"]
+          "batch": [
+            "R5"
+          ]
         },
         {
           "id": "cat-result-35",
@@ -1472,7 +1503,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/nitin-sharma.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-9",
@@ -1483,7 +1516,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/varun-kumar.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-13",
@@ -1494,7 +1529,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/om-kesharwani.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-10",
@@ -1505,7 +1542,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/akshat-yadav.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-23",
@@ -1516,7 +1555,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/vedant-khanna.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-38",
@@ -1527,7 +1568,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
           "category": "mba",
-          "batch": ["R5"]
+          "batch": [
+            "R5"
+          ]
         },
         {
           "id": "cat-result-26",
@@ -1538,7 +1581,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
           "category": "mba",
-          "batch": ["R7"]
+          "batch": [
+            "R7"
+          ]
         },
         {
           "id": "cat-result-39",
@@ -1549,7 +1594,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-6",
@@ -1560,7 +1607,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/om-yadav.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-33",
@@ -1571,7 +1620,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-37",
@@ -1582,7 +1633,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/raghav-pant.webp",
           "category": "mba",
-          "batch": ["R8"]
+          "batch": [
+            "R8"
+          ]
         },
         {
           "id": "cat-result-7",
@@ -1593,7 +1646,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-15",
@@ -1604,7 +1659,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aanand-yadav.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-18",
@@ -1615,7 +1672,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         },
         {
           "id": "cat-result-40",
@@ -1626,7 +1685,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/laksh-mohan.webp",
           "category": "mba",
-          "batch": ["CAT Booster"]
+          "batch": [
+            "CAT Booster"
+          ]
         },
         {
           "id": "cat-result-30",
@@ -1637,7 +1698,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-16",
@@ -1648,7 +1711,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/emama-islam.webp",
           "category": "mba",
-          "batch": ["R1"]
+          "batch": [
+            "R1"
+          ]
         },
         {
           "id": "cat-result-34",
@@ -1659,7 +1724,9 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
           "category": "mba",
-          "batch": ["R5"]
+          "batch": [
+            "R5"
+          ]
         },
         {
           "id": "cat-result-32",
@@ -1670,10 +1737,11 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
           "category": "mba",
-          "batch": ["R3"]
+          "batch": [
+            "R3"
+          ]
         }
-      ]
-    ,
+      ],
       "testimonials": [
         {
           "id": "cat-testimonial-1",
@@ -2817,423 +2885,166 @@
       ],
       "results": [
         {
-          "id": "cat-result-1",
-          "name": "Siddhant Misra",
-          "exam": "CAT 2025",
-          "percentile": 99.97,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-27",
-          "name": "Rishabh Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.91,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-2",
-          "name": "Rohit Kumar Jha",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-8",
-          "name": "Bhupesh Bansal",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-3",
-          "name": "Varul Sharma",
-          "exam": "CAT 2025",
-          "percentile": 99.65,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varul-sharma.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-5",
-          "name": "Aditi Pandey",
-          "exam": "CAT 2025",
-          "percentile": 99.63,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-21",
-          "name": "Prithvi Shetty",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-29",
-          "name": "Adyatan Mishra",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-11",
-          "name": "Manan Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.35,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manan-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-24",
-          "name": "Manav Pathak",
-          "exam": "CAT 2025",
-          "percentile": 99.32,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manav-pathak.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-4",
-          "name": "Shriya Yadav",
-          "exam": "CAT 2025",
-          "percentile": 99.18,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-20",
-          "name": "Dhananjay Tanwar",
-          "exam": "CAT 2025",
-          "percentile": 99.1,
-          "college": "FMS Delhi",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-17",
-          "name": "Zarish Khan",
-          "exam": "CAT 2025",
-          "percentile": 98.98,
+          "id": "ipmat-result-1",
+          "name": "Geet Lunkad",
+          "exam": "IPMAT 2026",
           "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/zarish-khan.webp",
-          "category": "mba",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/geet-lunkad.webp",
+          "category": "ipmat",
+          "batch": [],
+          "rank": 4
+        },
+        {
+          "id": "ipmat-result-2",
+          "name": "Shaurya Gupta",
+          "exam": "IPMAT 2026",
+          "college": "IIM Indore, IIM Kozhikode",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/shaurya-gupta.webp",
+          "category": "ipmat",
+          "batch": [],
+          "rank": 11
+        },
+        {
+          "id": "ipmat-result-3",
+          "name": "Aarav Narwal",
+          "exam": "IPMAT 2026",
+          "college": "IIM Sirmaur",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/aarav-narwal.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-25",
-          "name": "Vansh Batra",
-          "exam": "CAT 2025",
-          "percentile": 98.94,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vansh-batra.webp",
-          "category": "mba",
+          "id": "ipmat-result-4",
+          "name": "Agrim Jain",
+          "exam": "IPMAT 2026",
+          "college": "IIM Rohtak",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/agrim-jain.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-14",
-          "name": "Ujjwal Singhal",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
+          "id": "ipmat-result-5",
+          "name": "Akshara Somgade",
+          "exam": "IPMAT 2026",
+          "college": "IIM Sirmaur",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/akshara-somgade.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-6",
+          "name": "Bhavneet Singh",
+          "exam": "IPMAT 2026",
+          "college": "IIM Jammu, IIM Bodh Gaya, IIM Kozhikode BMS, IIM Rohtak",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/bhavneet-singh.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-7",
+          "name": "K D Omm Prakash",
+          "exam": "IPMAT 2026",
           "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-          "category": "mba",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/k-d-omm-prakash.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-22",
-          "name": "Amrit Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amrit-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-35",
-          "name": "Nitin Sharma",
-          "exam": "CAT 2025",
-          "percentile": 98.91,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-9",
-          "name": "Varun Kumar",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varun-kumar.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-13",
-          "name": "Om Kesharwani",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-          "category": "mba",
-          "batch": [
-            "R3",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-10",
-          "name": "Akshat Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-23",
-          "name": "Vedant Khanna",
-          "exam": "CAT 2025",
-          "percentile": 98.78,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-38",
-          "name": "Amit Chaurasia",
-          "exam": "CAT 2025",
-          "percentile": 98.76,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-26",
-          "name": "Angela Bhardwaj",
-          "exam": "CAT 2025",
-          "percentile": 98.71,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-          "category": "mba",
-          "batch": [
-            "R7",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-39",
-          "name": "Ayush Kumar Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.68,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-6",
-          "name": "Om Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.67,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-33",
-          "name": "Sai Krishna Ajith",
-          "exam": "CAT 2025",
-          "percentile": 98.42,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-37",
-          "name": "Raghav Pant",
-          "exam": "CAT 2025",
-          "percentile": 98.37,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/raghav-pant.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-7",
-          "name": "Sakshi Mishra",
-          "exam": "CAT 2025",
-          "percentile": 97.98,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-15",
-          "name": "Aanand Yadav",
-          "exam": "CAT 2025",
-          "percentile": 97.92,
+          "id": "ipmat-result-8",
+          "name": "Krishna Verma",
+          "exam": "IPMAT 2026",
           "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-          "category": "mba",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/krishna-verma.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-18",
-          "name": "Amit Kumar Sahu",
-          "exam": "CAT 2025",
-          "percentile": 97.6,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-          "category": "mba",
+          "id": "ipmat-result-9",
+          "name": "Nandika",
+          "exam": "IPMAT 2026",
+          "college": "IIM Kozhikode, IIM Sambalpur",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/nandika.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-40",
-          "name": "Laksh Mohan",
-          "exam": "CAT 2025",
-          "percentile": 97.52,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-          "category": "mba",
+          "id": "ipmat-result-10",
+          "name": "Parshva Parekh",
+          "exam": "IPMAT 2026",
+          "college": "IIM Indore, IIM Amritsar",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/parshva-parekh.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-30",
-          "name": "Ankita Bhattacharya",
-          "exam": "CAT 2025",
-          "percentile": 97.1,
-          "college": "IIFT",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-16",
-          "name": "Emama Islam",
-          "exam": "CAT 2025",
-          "percentile": 97.08,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/emama-islam.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-34",
-          "name": "Sujit Kumar Patjoshi",
-          "exam": "CAT 2025",
-          "percentile": 96.54,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-          "category": "mba",
+          "id": "ipmat-result-11",
+          "name": "Prashasti Soumya",
+          "exam": "IPMAT 2026",
+          "college": "IIFT Kakinada, IIM Ranchi",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/prashasti-soumya.webp",
+          "category": "ipmat",
           "batch": []
         },
         {
-          "id": "cat-result-32",
-          "name": "Aditya Giri Goswami",
-          "exam": "CAT 2025",
-          "percentile": 95.79,
-          "college": "IIT Bombay",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
+          "id": "ipmat-result-12",
+          "name": "Prince Mishra",
+          "exam": "IPMAT 2026",
+          "college": "IIM Bodh Gaya",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/prince-mishra.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-13",
+          "name": "Sangbarta Das",
+          "exam": "IPMAT 2026",
+          "college": "IIM Amritsar, IIM Sambalpur",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/sangbarta-das.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-14",
+          "name": "Teekshan Jain",
+          "exam": "IPMAT 2026",
+          "college": "IIM Rohtak",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/teekshan-jain.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-15",
+          "name": "Utkarsh Raj",
+          "exam": "IPMAT 2026",
+          "college": "IIM Bangalore (UG - Data Science), SSCBS (BMS)",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/utkarsh-raj.webp",
+          "category": "ipmat",
+          "batch": []
+        },
+        {
+          "id": "ipmat-result-16",
+          "name": "Vedaant Sehgal",
+          "exam": "IPMAT 2026",
+          "college": "NALSAR Hyderabad, IIM Sirmaur",
+          "year": 2026,
+          "image": "/assets/images/category/ipmat/students/vedaant-sehgal.webp",
+          "category": "ipmat",
+          "batch": []
         }
       ],
       "testimonials": [
@@ -3567,52 +3378,46 @@
       ],
       "stories": [
         {
-          "id": "1",
-          "youtubeId": "W1dLmx5-tH4",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-1",
+          "youtubeId": "vHZ7abtaxcM",
+          "student": "Shaurya Gupta",
+          "subtitle": "IIM Indore"
         },
         {
-          "id": "2",
-          "youtubeId": "Dk09Or1eQ5c",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-2",
+          "youtubeId": "C0H8DcI_XIk",
+          "student": "Agrim Jain",
+          "subtitle": "IIM Rohtak"
         },
         {
-          "id": "3",
-          "youtubeId": "62NI1zySIA0",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-3",
+          "youtubeId": "wVh6Lq-4uUg",
+          "student": "Krishna Verma",
+          "subtitle": "IIM Kozhikode"
         },
         {
-          "id": "4",
-          "youtubeId": "TWmU8776d_8",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-4",
+          "youtubeId": "TJrfQ6a29MI",
+          "student": "Nandika",
+          "subtitle": "IIM Kozhikode"
         },
         {
-          "id": "5",
-          "youtubeId": "h5GH3pCfKkU",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-5",
+          "youtubeId": "TGwguesOz5I",
+          "student": "Parshva Parekh",
+          "subtitle": "IIM Indore"
         },
         {
-          "id": "6",
-          "youtubeId": "Y-1dF-Mtg1I",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-6",
+          "youtubeId": "oKgY4KModM8",
+          "student": "Prince Mishra",
+          "subtitle": "IIM Bodh Gaya"
         },
         {
-          "id": "7",
-          "youtubeId": "nklApzpkmJ8",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
-        },
-        {
-          "id": "8",
-          "youtubeId": "HSKQJtHKB5I",
-          "student": "Student Success Story",
-          "subtitle": "CAT Journey"
+          "id": "ipmat-story-7",
+          "youtubeId": "1US7shDDLgw",
+          "student": "Sangbarta Das",
+          "subtitle": "IIM Amritsar"
         }
       ]
     },
@@ -3886,427 +3691,7 @@
         "faculty-profile-kirti",
         "faculty-profile-rupal"
       ],
-      "results": [
-        {
-          "id": "cat-result-1",
-          "name": "Siddhant Misra",
-          "exam": "CAT 2025",
-          "percentile": 99.97,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-27",
-          "name": "Rishabh Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.91,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-2",
-          "name": "Rohit Kumar Jha",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-8",
-          "name": "Bhupesh Bansal",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-3",
-          "name": "Varul Sharma",
-          "exam": "CAT 2025",
-          "percentile": 99.65,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varul-sharma.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-5",
-          "name": "Aditi Pandey",
-          "exam": "CAT 2025",
-          "percentile": 99.63,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-21",
-          "name": "Prithvi Shetty",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-29",
-          "name": "Adyatan Mishra",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-11",
-          "name": "Manan Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.35,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manan-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-24",
-          "name": "Manav Pathak",
-          "exam": "CAT 2025",
-          "percentile": 99.32,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manav-pathak.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-4",
-          "name": "Shriya Yadav",
-          "exam": "CAT 2025",
-          "percentile": 99.18,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-20",
-          "name": "Dhananjay Tanwar",
-          "exam": "CAT 2025",
-          "percentile": 99.1,
-          "college": "FMS Delhi",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-17",
-          "name": "Zarish Khan",
-          "exam": "CAT 2025",
-          "percentile": 98.98,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/zarish-khan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-25",
-          "name": "Vansh Batra",
-          "exam": "CAT 2025",
-          "percentile": 98.94,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vansh-batra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-14",
-          "name": "Ujjwal Singhal",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-22",
-          "name": "Amrit Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amrit-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-35",
-          "name": "Nitin Sharma",
-          "exam": "CAT 2025",
-          "percentile": 98.91,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-9",
-          "name": "Varun Kumar",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varun-kumar.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-13",
-          "name": "Om Kesharwani",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-          "category": "mba",
-          "batch": [
-            "R3",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-10",
-          "name": "Akshat Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-23",
-          "name": "Vedant Khanna",
-          "exam": "CAT 2025",
-          "percentile": 98.78,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-38",
-          "name": "Amit Chaurasia",
-          "exam": "CAT 2025",
-          "percentile": 98.76,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-26",
-          "name": "Angela Bhardwaj",
-          "exam": "CAT 2025",
-          "percentile": 98.71,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-          "category": "mba",
-          "batch": [
-            "R7",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-39",
-          "name": "Ayush Kumar Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.68,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-6",
-          "name": "Om Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.67,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-33",
-          "name": "Sai Krishna Ajith",
-          "exam": "CAT 2025",
-          "percentile": 98.42,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-37",
-          "name": "Raghav Pant",
-          "exam": "CAT 2025",
-          "percentile": 98.37,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/raghav-pant.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-7",
-          "name": "Sakshi Mishra",
-          "exam": "CAT 2025",
-          "percentile": 97.98,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-15",
-          "name": "Aanand Yadav",
-          "exam": "CAT 2025",
-          "percentile": 97.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-18",
-          "name": "Amit Kumar Sahu",
-          "exam": "CAT 2025",
-          "percentile": 97.6,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-40",
-          "name": "Laksh Mohan",
-          "exam": "CAT 2025",
-          "percentile": 97.52,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-30",
-          "name": "Ankita Bhattacharya",
-          "exam": "CAT 2025",
-          "percentile": 97.1,
-          "college": "IIFT",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-16",
-          "name": "Emama Islam",
-          "exam": "CAT 2025",
-          "percentile": 97.08,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/emama-islam.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-34",
-          "name": "Sujit Kumar Patjoshi",
-          "exam": "CAT 2025",
-          "percentile": 96.54,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-32",
-          "name": "Aditya Giri Goswami",
-          "exam": "CAT 2025",
-          "percentile": 95.79,
-          "college": "IIT Bombay",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        }
-      ],
+      "results": [],
       "testimonials": [
         {
           "id": "cat-testimonial-1",
@@ -5308,427 +4693,7 @@
         "faculty-profile-rupal",
         "faculty-profile-abhishek-dubey"
       ],
-      "results": [
-        {
-          "id": "cat-result-1",
-          "name": "Siddhant Misra",
-          "exam": "CAT 2025",
-          "percentile": 99.97,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-27",
-          "name": "Rishabh Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.91,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-2",
-          "name": "Rohit Kumar Jha",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-8",
-          "name": "Bhupesh Bansal",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-3",
-          "name": "Varul Sharma",
-          "exam": "CAT 2025",
-          "percentile": 99.65,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varul-sharma.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-5",
-          "name": "Aditi Pandey",
-          "exam": "CAT 2025",
-          "percentile": 99.63,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-21",
-          "name": "Prithvi Shetty",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-29",
-          "name": "Adyatan Mishra",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-11",
-          "name": "Manan Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.35,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manan-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-24",
-          "name": "Manav Pathak",
-          "exam": "CAT 2025",
-          "percentile": 99.32,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manav-pathak.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-4",
-          "name": "Shriya Yadav",
-          "exam": "CAT 2025",
-          "percentile": 99.18,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-20",
-          "name": "Dhananjay Tanwar",
-          "exam": "CAT 2025",
-          "percentile": 99.1,
-          "college": "FMS Delhi",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-17",
-          "name": "Zarish Khan",
-          "exam": "CAT 2025",
-          "percentile": 98.98,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/zarish-khan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-25",
-          "name": "Vansh Batra",
-          "exam": "CAT 2025",
-          "percentile": 98.94,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vansh-batra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-14",
-          "name": "Ujjwal Singhal",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-22",
-          "name": "Amrit Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amrit-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-35",
-          "name": "Nitin Sharma",
-          "exam": "CAT 2025",
-          "percentile": 98.91,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-9",
-          "name": "Varun Kumar",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varun-kumar.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-13",
-          "name": "Om Kesharwani",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-          "category": "mba",
-          "batch": [
-            "R3",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-10",
-          "name": "Akshat Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-23",
-          "name": "Vedant Khanna",
-          "exam": "CAT 2025",
-          "percentile": 98.78,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-38",
-          "name": "Amit Chaurasia",
-          "exam": "CAT 2025",
-          "percentile": 98.76,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-26",
-          "name": "Angela Bhardwaj",
-          "exam": "CAT 2025",
-          "percentile": 98.71,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-          "category": "mba",
-          "batch": [
-            "R7",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-39",
-          "name": "Ayush Kumar Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.68,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-6",
-          "name": "Om Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.67,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-33",
-          "name": "Sai Krishna Ajith",
-          "exam": "CAT 2025",
-          "percentile": 98.42,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-37",
-          "name": "Raghav Pant",
-          "exam": "CAT 2025",
-          "percentile": 98.37,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/raghav-pant.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-7",
-          "name": "Sakshi Mishra",
-          "exam": "CAT 2025",
-          "percentile": 97.98,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-15",
-          "name": "Aanand Yadav",
-          "exam": "CAT 2025",
-          "percentile": 97.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-18",
-          "name": "Amit Kumar Sahu",
-          "exam": "CAT 2025",
-          "percentile": 97.6,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-40",
-          "name": "Laksh Mohan",
-          "exam": "CAT 2025",
-          "percentile": 97.52,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-30",
-          "name": "Ankita Bhattacharya",
-          "exam": "CAT 2025",
-          "percentile": 97.1,
-          "college": "IIFT",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-16",
-          "name": "Emama Islam",
-          "exam": "CAT 2025",
-          "percentile": 97.08,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/emama-islam.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-34",
-          "name": "Sujit Kumar Patjoshi",
-          "exam": "CAT 2025",
-          "percentile": 96.54,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-32",
-          "name": "Aditya Giri Goswami",
-          "exam": "CAT 2025",
-          "percentile": 95.79,
-          "college": "IIT Bombay",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        }
-      ],
+      "results": [],
       "testimonials": [
         {
           "id": "cat-testimonial-1",
@@ -6370,427 +5335,7 @@
       "facultyIds": [
         "faculty-profile-divya"
       ],
-      "results": [
-        {
-          "id": "cat-result-1",
-          "name": "Siddhant Misra",
-          "exam": "CAT 2025",
-          "percentile": 99.97,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-27",
-          "name": "Rishabh Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.91,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-2",
-          "name": "Rohit Kumar Jha",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-8",
-          "name": "Bhupesh Bansal",
-          "exam": "CAT 2025",
-          "percentile": 99.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-3",
-          "name": "Varul Sharma",
-          "exam": "CAT 2025",
-          "percentile": 99.65,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varul-sharma.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-5",
-          "name": "Aditi Pandey",
-          "exam": "CAT 2025",
-          "percentile": 99.63,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-21",
-          "name": "Prithvi Shetty",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-29",
-          "name": "Adyatan Mishra",
-          "exam": "CAT 2025",
-          "percentile": 99.39,
-          "college": "MDI Gurgaon",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-11",
-          "name": "Manan Jain",
-          "exam": "CAT 2025",
-          "percentile": 99.35,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manan-jain.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-24",
-          "name": "Manav Pathak",
-          "exam": "CAT 2025",
-          "percentile": 99.32,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/manav-pathak.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-4",
-          "name": "Shriya Yadav",
-          "exam": "CAT 2025",
-          "percentile": 99.18,
-          "college": "IIM Ahmedabad",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-20",
-          "name": "Dhananjay Tanwar",
-          "exam": "CAT 2025",
-          "percentile": 99.1,
-          "college": "FMS Delhi",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-17",
-          "name": "Zarish Khan",
-          "exam": "CAT 2025",
-          "percentile": 98.98,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/zarish-khan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-25",
-          "name": "Vansh Batra",
-          "exam": "CAT 2025",
-          "percentile": 98.94,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vansh-batra.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-14",
-          "name": "Ujjwal Singhal",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-22",
-          "name": "Amrit Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.92,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amrit-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-35",
-          "name": "Nitin Sharma",
-          "exam": "CAT 2025",
-          "percentile": 98.91,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-9",
-          "name": "Varun Kumar",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/varun-kumar.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-13",
-          "name": "Om Kesharwani",
-          "exam": "CAT 2025",
-          "percentile": 98.81,
-          "college": "IIM Lucknow",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-          "category": "mba",
-          "batch": [
-            "R3",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-10",
-          "name": "Akshat Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.8,
-          "college": "IIM Calcutta",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        },
-        {
-          "id": "cat-result-23",
-          "name": "Vedant Khanna",
-          "exam": "CAT 2025",
-          "percentile": 98.78,
-          "college": "SPJIMR",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-38",
-          "name": "Amit Chaurasia",
-          "exam": "CAT 2025",
-          "percentile": 98.76,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-26",
-          "name": "Angela Bhardwaj",
-          "exam": "CAT 2025",
-          "percentile": 98.71,
-          "college": "XLRI",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-          "category": "mba",
-          "batch": [
-            "R7",
-            "QA",
-            "LRDI"
-          ]
-        },
-        {
-          "id": "cat-result-39",
-          "name": "Ayush Kumar Singh",
-          "exam": "CAT 2025",
-          "percentile": 98.68,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-6",
-          "name": "Om Yadav",
-          "exam": "CAT 2025",
-          "percentile": 98.67,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/om-yadav.webp",
-          "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
-        },
-        {
-          "id": "cat-result-33",
-          "name": "Sai Krishna Ajith",
-          "exam": "CAT 2025",
-          "percentile": 98.42,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-37",
-          "name": "Raghav Pant",
-          "exam": "CAT 2025",
-          "percentile": 98.37,
-          "college": "SCMHRD",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/raghav-pant.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-7",
-          "name": "Sakshi Mishra",
-          "exam": "CAT 2025",
-          "percentile": 97.98,
-          "college": "IIM Bangalore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-15",
-          "name": "Aanand Yadav",
-          "exam": "CAT 2025",
-          "percentile": 97.92,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-18",
-          "name": "Amit Kumar Sahu",
-          "exam": "CAT 2025",
-          "percentile": 97.6,
-          "college": "IIM Indore",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-40",
-          "name": "Laksh Mohan",
-          "exam": "CAT 2025",
-          "percentile": 97.52,
-          "college": "NMIMS Mumbai",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-30",
-          "name": "Ankita Bhattacharya",
-          "exam": "CAT 2025",
-          "percentile": 97.1,
-          "college": "IIFT",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-16",
-          "name": "Emama Islam",
-          "exam": "CAT 2025",
-          "percentile": 97.08,
-          "college": "IIM Kozhikode",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/emama-islam.webp",
-          "category": "mba",
-          "batch": [
-            "R1"
-          ]
-        },
-        {
-          "id": "cat-result-34",
-          "name": "Sujit Kumar Patjoshi",
-          "exam": "CAT 2025",
-          "percentile": 96.54,
-          "college": "SIBM Pune",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-          "category": "mba",
-          "batch": []
-        },
-        {
-          "id": "cat-result-32",
-          "name": "Aditya Giri Goswami",
-          "exam": "CAT 2025",
-          "percentile": 95.79,
-          "college": "IIT Bombay",
-          "year": 2025,
-          "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-          "category": "mba",
-          "batch": [
-            "R3"
-          ]
-        }
-      ],
+      "results": [],
       "testimonials": [
         {
           "id": "cat-testimonial-1",

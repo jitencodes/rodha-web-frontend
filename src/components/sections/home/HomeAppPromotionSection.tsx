@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { SectionHeaderV2 } from "../SectionHeaderV2";
 
 const BUDDY_APP_MOCKUP_SRC = "/assets/app promotion/app mockup.png";
-const MOCK_APP_MOCKUP_SRC = "/assets/app promotion/mock app mockup.png";
+const MOCK_APP_MOCKUP_SRC = "/assets/app promotion/mock_app_mockup.png";
 
 const storeButtonClassName =
   "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[6px] border border-neutral-300 bg-white text-body-sm font-semibold text-neutral-900 transition-colors hover:border-orange-500 hover:bg-neutral-50 active:bg-neutral-100";
@@ -34,20 +34,24 @@ const APP_DATA = [
       "Get help while you practice and learn",
       "Stay on track with your preparation",
     ],
+    playStoreUrl: "https://play.google.com/store/apps/details?id=com.rodha.rodhabuddy",
+    appStoreUrl: "https://apps.apple.com/in/app/rodha-buddy/id6764226160",
   },
   {
-    id: "mock",
-    name: "Rodha Mock",
-    title: "Practice Smarter with Rodha Mock",
+    id: "app",
+    name: "RODHA APP",
+    title: "Study on the Go with the Rodha App",
     description:
-      "Take mock tests, practice under exam conditions, and understand your performance with focused analysis built for serious preparation.",
-    mockupSrc: BUDDY_APP_MOCKUP_SRC,
-    alt: "Rodha Mock app showing mock test and performance screens",
+      "Carry your whole preparation in your pocket. Watch live classes, catch up on recordings, take tests and revise — on the commute, between lectures, or whenever you find a free hour.",
+    mockupSrc: MOCK_APP_MOCKUP_SRC,
+    alt: "Rodha App showing live classes, recordings and tests on a phone",
     features: [
-      "Take full-length and sectional mock tests",
-      "Practice with an exam-focused test experience",
-      "Track your performance and identify weak areas",
+      "Join live classes and replay recordings anytime",
+      "Practice with tests and revision capsules between classes",
+      "Pick up exactly where you left off across phone and laptop",
     ],
+    playStoreUrl: "https://play.google.com/store/apps/details?id=co.diy14.qmbbw",
+    appStoreUrl: "https://apps.apple.com/in/app/rodha-cat/id6469145034",
   },
 ];
 
@@ -57,7 +61,7 @@ export function HomeAppPromotionSection({
   description,
   className,
   buddyMockupSrc = BUDDY_APP_MOCKUP_SRC,
-  mockMockupSrc = BUDDY_APP_MOCKUP_SRC,
+  mockMockupSrc = MOCK_APP_MOCKUP_SRC,
 }: HomeAppPromotionSectionProps) {
   const heading =
     title ?? (
@@ -164,7 +168,9 @@ export function HomeAppPromotionSection({
 
                     <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
                       <a
-                        href="#"
+                        href={app.playStoreUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={storeButtonClassName}
                         aria-label={`Get ${app.name} on Google Play`}
                       >
@@ -178,7 +184,9 @@ export function HomeAppPromotionSection({
                       </a>
 
                       <a
-                        href="#"
+                        href={app.appStoreUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={storeButtonClassName}
                         aria-label={`Get ${app.name} on App Store`}
                       >

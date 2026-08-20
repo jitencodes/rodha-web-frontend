@@ -38,21 +38,18 @@ export const categoryNavigation: Record<CategoryId, NavItem[]> = {
     { label: "Overview", href: "/category/clat" },
     { label: "Courses", href: "/category/clat#courses" },
     { label: "Faculty", href: "/category/clat#faculty" },
-    { label: "Results", href: "/category/clat#results" },
     { label: "FAQ", href: "/category/clat#faqs" },
   ],
   banking: [
     { label: "Overview", href: "/category/banking" },
     { label: "Courses", href: "/category/banking#courses" },
     { label: "Faculty", href: "/category/banking#faculty" },
-    { label: "Results", href: "/category/banking#results" },
     { label: "FAQ", href: "/category/banking#faqs" },
   ],
   skillhouse: [
     { label: "Overview", href: "/category/skillhouse" },
     { label: "Courses", href: "/category/skillhouse#courses" },
     { label: "Faculty", href: "/category/skillhouse#faculty" },
-    { label: "Results", href: "/category/skillhouse#results" },
     { label: "FAQ", href: "/category/skillhouse#faqs" },
   ],
 };

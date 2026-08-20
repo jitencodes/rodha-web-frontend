@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-08-20 — IPMAT results, homepage CAT/IPMAT carousels, live app store URLs
+- **Decision:** Keep CAT's 35 result cards and add 16 IPMAT cards as the only student-result datasets. Homepage results show two banner slides (CAT, IPMAT) with a max of 10 cards each. IPMAT cards display AIR rank when present and an Achiever/Topper placeholder otherwise. The category results section renders only on CAT and IPMAT. Rodha App / Rodha Buddy store buttons use the supplied Play Store and App Store URLs.
+- **Rationale:** Product supplied IPMAT convert photos and asked to stop showing placeholder CAT students on other verticals and extra homepage result slides.
+- **Alternatives considered:** Keep four homepage result banners; show percentile on IPMAT cards; leave empty result marquees on CLAT/SSC/Skill House.
+- **Consequences:** Other verticals no longer have a `#results` section or Results nav link. IPMAT stories use the seven supplied YouTube interviews. Re-run `node scripts/sync-ipmat-results.mjs` (requires `sharp`) if Drive portraits change.
+
 ### 2026-08-20 — Hero videos + faculty Graphy-id course matching
 - **Decision:** Pass distinct YouTube ids into existing `HeroVideoEmbed` (homepage default + optional `hero.videoId` per category landing). Enrich all 18 faculty from `Rodha Faculty (1).docx` (including the former portrait-only six). Faculty detail courses use authored `courseGraphyIds` resolved against existing `category-landings.json` cards only — never invent course records. Skip doc links with no matching card (CAT R1 comprehensive, COMPLETE OMETS 2026). Empty `courseGraphyIds` hides the courses section (Tarun).
 - **Rationale:** Product supplied new hero videos and an updated faculty sheet with Graphy course links; UI must stay intact while course lists stay accurate to live catalog cards.

@@ -46,8 +46,11 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
   const courses = category.courses;
   const results = category.results;
   const testimonials = category.testimonials;
-  const resultsRow1 = results;
-  const resultsRow2 = [...results].reverse();
+  const showResults =
+    (category.id === "cat" || category.id === "ipmat") && results.length > 0;
+  const resultsMidpoint = Math.ceil(results.length / 2);
+  const resultsRow1 = results.slice(0, resultsMidpoint);
+  const resultsRow2 = results.slice(resultsMidpoint);
 
   return (
     <>
@@ -87,7 +90,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         videoId={category.hero.videoId}
       />
 
-      {category.id !== "skillhouse" && <section
+      {showResults && <section
         id="results"
         className={cn(
           "home-section-spacing relative overflow-hidden",
@@ -110,7 +113,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
               />
               <div className="min-w-0 flex-1 overflow-hidden">
                 <InfiniteMarquee speed={32} direction="right" gap={20}>
-                  {resultsRow1.slice(0, 19).map((topper, index) => (
+                  {resultsRow1.map((topper, index) => (
                     <div
                       key={`row1-${topper.id}`}
                       className={`reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -126,7 +129,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           {resultsRow2.length > 0 && (
             <div className="mt-5 overflow-hidden">
               <InfiniteMarquee speed={32} direction="left" gap={20}>
-                {resultsRow2.slice(19, 39).map((topper) => (
+                {resultsRow2.map((topper) => (
                   <TopperCardV2 key={`row2-${topper.id}`} topper={topper} />
                 ))}
               </InfiniteMarquee>

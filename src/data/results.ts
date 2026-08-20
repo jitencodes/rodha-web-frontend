@@ -385,8 +385,172 @@ export const topResults: TopperResult[] = [
     "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
     "category": "cat",
     "batch": ["R3"]
-  }
+  },
+  {
+    id: "ipmat-result-1",
+    name: "Geet Lunkad",
+    exam: "IPMAT 2026",
+    rank: 4,
+    college: "IIM Indore",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/geet-lunkad.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-2",
+    name: "Shaurya Gupta",
+    exam: "IPMAT 2026",
+    rank: 11,
+    college: "IIM Indore, IIM Kozhikode",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/shaurya-gupta.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-3",
+    name: "Aarav Narwal",
+    exam: "IPMAT 2026",
+    college: "IIM Sirmaur",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/aarav-narwal.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-4",
+    name: "Agrim Jain",
+    exam: "IPMAT 2026",
+    college: "IIM Rohtak",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/agrim-jain.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-5",
+    name: "Akshara Somgade",
+    exam: "IPMAT 2026",
+    college: "IIM Sirmaur",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/akshara-somgade.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-6",
+    name: "Bhavneet Singh",
+    exam: "IPMAT 2026",
+    college: "IIM Jammu, IIM Bodh Gaya, IIM Kozhikode BMS, IIM Rohtak",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/bhavneet-singh.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-7",
+    name: "K D Omm Prakash",
+    exam: "IPMAT 2026",
+    college: "IIM Kozhikode",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/k-d-omm-prakash.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-8",
+    name: "Krishna Verma",
+    exam: "IPMAT 2026",
+    college: "IIM Kozhikode",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/krishna-verma.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-9",
+    name: "Nandika",
+    exam: "IPMAT 2026",
+    college: "IIM Kozhikode, IIM Sambalpur",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/nandika.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-10",
+    name: "Parshva Parekh",
+    exam: "IPMAT 2026",
+    college: "IIM Indore, IIM Amritsar",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/parshva-parekh.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-11",
+    name: "Prashasti Soumya",
+    exam: "IPMAT 2026",
+    college: "IIFT Kakinada, IIM Ranchi",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/prashasti-soumya.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-12",
+    name: "Prince Mishra",
+    exam: "IPMAT 2026",
+    college: "IIM Bodh Gaya",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/prince-mishra.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-13",
+    name: "Sangbarta Das",
+    exam: "IPMAT 2026",
+    college: "IIM Amritsar, IIM Sambalpur",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/sangbarta-das.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-14",
+    name: "Teekshan Jain",
+    exam: "IPMAT 2026",
+    college: "IIM Rohtak",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/teekshan-jain.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-15",
+    name: "Utkarsh Raj",
+    exam: "IPMAT 2026",
+    college: "IIM Bangalore (UG - Data Science), SSCBS (BMS)",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/utkarsh-raj.webp",
+    category: "ipmat",
+    batch: [],
+  },
+  {
+    id: "ipmat-result-16",
+    name: "Vedaant Sehgal",
+    exam: "IPMAT 2026",
+    college: "NALSAR Hyderabad, IIM Sirmaur",
+    year: 2026,
+    image: "/assets/images/category/ipmat/students/vedaant-sehgal.webp",
+    category: "ipmat",
+    batch: [],
+  },
 ]
+
+export const HOME_RESULTS_PER_CAROUSEL = 10;
 
 interface ResultBanner {
   id: string;
@@ -429,8 +593,9 @@ export const resultBanners: ResultBanner[] = [
     backgroundClass:
       "bg-gradient-to-br from-[#0C2D4A] via-[#103C63] to-[#164E7A]",
 
-    // Dynamic student images/cards
-    toppers: topResults.slice(0, 4),
+    toppers: topResults
+      .filter((result) => result.category === "cat")
+      .slice(0, HOME_RESULTS_PER_CAROUSEL),
   },
 
   {
@@ -452,56 +617,9 @@ export const resultBanners: ResultBanner[] = [
     backgroundClass:
       "bg-gradient-to-br from-[#2A1408] via-[#4A2108] to-[#7C320C]",
 
-    // Dynamic student images/cards
-    toppers: topResults.slice(4, 8),
-  },
-
-  {
-    id: "gdpi",
-
-    badge: "GDPI 2025",
-
-    title: "Interview",
-
-    highlight: "Success",
-
-    subtitle: "Final Converts",
-
-    description:
-      "Outstanding interview performances leading to final admissions.",
-
-    cta: "View GDPI Results",
-
-    href: "/category/cat#results",
-
-    backgroundClass:
-      "bg-gradient-to-br from-[#26103A] via-[#3A165A] to-[#5A2390]",
-
-    toppers: topResults.slice(8, 12),
-  },
-
-  {
-    id: "clat",
-
-    badge: "CLAT 2025",
-
-    title: "National",
-
-    highlight: "Rankers",
-
-    subtitle: "NLU Admissions",
-
-    description:
-      "Top CLAT performers securing admissions into premier NLUs.",
-
-    cta: "View CLAT Results",
-
-    href: "/category/clat",
-
-    backgroundClass:
-      "bg-gradient-to-br from-[#0F3A2A] via-[#17543C] to-[#227D56]",
-
-    toppers: topResults.slice(12, 16),
+    toppers: topResults
+      .filter((result) => result.category === "ipmat")
+      .slice(0, HOME_RESULTS_PER_CAROUSEL),
   },
 ];
 

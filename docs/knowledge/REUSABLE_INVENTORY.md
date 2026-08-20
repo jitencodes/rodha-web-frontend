@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-20 (content & SEO migration)
+**Last updated:** 2026-08-20 (IPMAT results + app store URLs)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -88,7 +88,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ImpactStatBadge | `home/ImpactStatBadge.tsx` |
 | ImpactStatsRow | `home/ImpactStatsRow.tsx` |
 | HomeResultsSection | `home/HomeResultsSection.tsx` |
-| HomeAppPromotionSection | `home/HomeAppPromotionSection.tsx` (optional eyebrow/title/description/className/mockupSrc; enriched copy + checklist) |
+| HomeAppPromotionSection | `home/HomeAppPromotionSection.tsx` (Rodha Buddy + Rodha App cards; live Play Store / App Store URLs; optional eyebrow/title/description/className/mockupSrc) |
 | LegalPageLayout | `LegalPageLayout.tsx` |
 | ResultsStatsPanel | `ResultsStatsPanel.tsx` (optional `variant?: "dark" \| "light"`; default dark for other categories) |
 | SectionHeader | `SectionHeader.tsx` |
@@ -142,7 +142,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | TestSeriesCard | `TestSeriesCard.tsx` |
 | TestSeriesCardV2 | `TestSeriesCardV2.tsx` (MBA light theme; optional full-card poster image) |
 | TopperCard | `TopperCard.tsx` |
-| TopperCardV2 | `TopperCardV2.tsx` (homepage + MBA results; supports AIR, percentile, or conversion result metric) |
+| TopperCardV2 | `TopperCardV2.tsx` (homepage + category results; CAT percentile, IPMAT AIR rank, or Achiever/Topper placeholder) |
 | TopperCardAlternate | `TopperCardAlternate.tsx` |
 | ValuePropCard | `ValuePropCard.tsx`
 
@@ -209,11 +209,12 @@ rodha-logo.webp (official brand), rodha-logo.svg, rodha-logo-white.svg, rodha-lo
 **Result stat icons:** images/icons/selection.png, images/icons/rank.png, images/icons/CAT-icon.png  
 **Test series / CAT hero icons:** images/icons/ts-mocks.png, ts-sectional.png, ts-topic.png, ts-mini-mocks.png  
 **Profiles (cutouts):** images/profiles/male-1..6.png, female-1..4.png (faculty, course, topper)  
-**App promotion:** `app promotion/app mockup.png` (homepage app section)  
+**App promotion:** `app promotion/app mockup.png` (Rodha Buddy), `app promotion/mock_app_mockup.png` (Rodha App)  
 **Faculty listing hero:** `images/faculty/listings page/hero-faulty.png`  
 **Faculty detail:** `images/faculty/detail/results-podium.png` (results banner); achievements reuse `images/icons/rank.png`; hero decoration reuses listing `hero-faulty.png`  
 **Courses / faculty / results / blog:** JPG assets under `images/courses`, `images/faculty`, `images/results`, `images/blog` (legacy)  
-**CAT 2025 students:** 46 optimized WebP portraits under `images/category/cat/students/`, named by student slug and shared by result/testimonial records
+**CAT 2025 students:** 46 optimized WebP portraits under `images/category/cat/students/`, named by student slug and shared by result/testimonial records  
+**IPMAT 2026 students:** 16 optimized WebP portraits under `images/category/ipmat/students/`, used on the IPMAT landing and homepage IPMAT results carousel  
 **Placeholders:** hero-illustration, course-thumbnail, faculty-avatar, blog-thumbnail, topper-photo  
 **Meet the Team (`images/meet the team/`):**  
 - Hero: `team hero.png`  

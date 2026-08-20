@@ -204,19 +204,16 @@ export const NAV_ITEMS = {
       { label: "Overview", href: "/category/clat" },
       { label: "Courses", href: "/category/clat#courses" },
       { label: "Faculty", href: "/category/clat#faculty" },
-      { label: "Results", href: "/category/clat#results" },
     ],
     banking: [
       { label: "Overview", href: "/category/banking" },
       { label: "Courses", href: "/category/banking#courses" },
       { label: "Faculty", href: "/category/banking#faculty" },
-      { label: "Results", href: "/category/banking#results" },
     ],
     skillhouse: [
       { label: "Overview", href: "/category/skillhouse" },
       { label: "Courses", href: "/category/skillhouse#courses" },
       { label: "Faculty", href: "/category/skillhouse#faculty" },
-      { label: "Results", href: "/category/skillhouse#results" },
     ],
   },
 } as const;

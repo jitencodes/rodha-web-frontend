@@ -2,15 +2,13 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/Container";
-import { SectionHeader } from "@/components/sections/SectionHeader";
-import { TopperCardAlternate } from "@/components/cards/TopperCardAlternate";
+import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { Button } from "@/components/ui/Button";
 
 import { resultBanners } from "@/data/results";
 import { SectionHeaderV2 } from "../SectionHeaderV2";
-import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 
 export function HomeResultsSection() {
   return (
@@ -119,16 +117,17 @@ export function HomeResultsSection() {
 
                     {/* RIGHT */}
 
-                    <div className="flex overflow-hidden gap-5 justify-items-center">
-
-                      {banner.toppers.map((topper, index) => (
-                        <TopperCardV2
-                          key={topper.id}
-                          topper={topper}
-                          className=""
-                        />
-                      ))}
-
+                    <div className="min-w-0 flex-1 overflow-hidden">
+                      <Carousel showArrows className="w-full">
+                        {banner.toppers.map((topper) => (
+                          <div
+                            key={topper.id}
+                            className="w-[204px] shrink-0 snap-start"
+                          >
+                            <TopperCardV2 topper={topper} />
+                          </div>
+                        ))}
+                      </Carousel>
                     </div>
                   </div>
                 </div>

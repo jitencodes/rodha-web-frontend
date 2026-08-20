@@ -7,10 +7,44 @@ interface TopperCardV2Props {
   className?: string;
 }
 
+function getTopperMetric(topper: TopperResult) {
+  const batchLabel =
+    topper.batch && topper.batch.length > 0 ? topper.batch.join(", ") : undefined;
+
+  if (topper.percentile !== undefined) {
+    return {
+      label: batchLabel ?? "%ile",
+      value: topper.percentile,
+      suffix: "%",
+      numeric: true,
+    };
+  }
+
+  if (topper.rank !== undefined) {
+    return {
+      label: "AIR",
+      value: topper.rank,
+      numeric: true,
+    };
+  }
+
+  if (topper.score) {
+    return {
+      label: batchLabel ?? "Result",
+      value: topper.score,
+      numeric: false,
+    };
+  }
+
+  return {
+    label: "Achiever",
+    value: "Topper",
+    numeric: false,
+  };
+}
+
 export function TopperCardV2({ topper, className }: TopperCardV2Props) {
-  const metricLabel = topper?.batch?.length > 0 ? topper.batch.join(", ") :
-    topper.percentile !== undefined ? "%ile" : topper.score ? "Result" : "AIR";
-  const metricValue = topper.percentile ?? topper.score ?? topper.rank;
+  const metric = getTopperMetric(topper);
 
   return (
     <div
@@ -40,19 +74,27 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
 
       <div className="absolute top-3 left-3 z-10 text-left">
         <span className="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-wide bg-white/70 border border-orange-900/70 text-orange-500 transition-[filter,box-shadow] duration-300 group-hover:brightness-110 group-hover:shadow-orange-lg">
-          {metricLabel}
+          {metric.label}
         </span>
       </div>
 
       <div className="p-3 z-10 text-left border-image-gradient-t">
-        <div className="mt-1.5 text-3xl font-montserrat font-bold text-orange-500 leading-none tabular-nums">
-          {metricValue} {topper.percentile !== undefined && <span className="text-sm text-orange-500">%</span>}
+        <div
+          className={cn(
+            "mt-1.5 font-montserrat font-bold text-orange-500 leading-none",
+            metric.numeric ? "text-3xl tabular-nums" : "text-[28px]"
+          )}
+        >
+          {metric.value}
+          {metric.suffix ? (
+            <span className="text-sm text-orange-500">{metric.suffix}</span>
+          ) : null}
         </div>
         <p className="text-sm text-[#C0C0C0] mt-1 font-medium">{topper.exam}</p>
         <h4 className="text-base leading-6 font-bold mt-2 text-text-primary truncate">
           {topper.name}
         </h4>
-        <p className="text-sm text-[#cda68e] truncate mt-0.5">{topper.college}</p>
+        <p title={topper.college} className="text-sm text-[#cda68e] truncate mt-0.5 max-w-[180px]">{topper.college}</p>
       </div>
     </div>
   );

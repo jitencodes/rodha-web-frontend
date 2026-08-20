@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-20 (hero videos + faculty doc refresh)
+**Last updated:** 2026-08-20 (IPMAT results + app store URLs)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -90,6 +90,12 @@ Update this file after every meaningful implementation task.
   - All 18 faculty profiles enriched from `Rodha Faculty (1).docx` (remaining six: Himanshu, Divya Kumar Garg, Kriti Bhatnagar, Rupal Choudhary, Ananya Singhal, Abhishek Dubey)
   - Faculty detail courses resolve via authored `courseGraphyIds` matched to existing category-landing cards only (skip CAT R1 comprehensive + COMPLETE OMETS 2026 — no cards); Tarun has empty list (no usable links)
   - Category `facultyIds` realigned (CLAT / SSC / Skill House); Skill House carousel shows Divya only
+- **IPMAT results + homepage results trim (2026-08-20):**
+  - Added 16 IPMAT 2026 student results with downloaded Drive portraits; CAT keeps its 35 cards
+  - Homepage results carousel is CAT + IPMAT only (GDPI/CLAT slides removed), max 10 cards each
+  - IPMAT cards show AIR rank when present, otherwise an Achiever/Topper placeholder
+  - Results section now renders only on CAT and IPMAT landings; CLAT / SSC / Skill House results arrays cleared
+  - Rodha App copy + live Play/App Store URLs for Rodha App and Rodha Buddy
 
 ---
 
@@ -97,7 +103,7 @@ Update this file after every meaningful implementation task.
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Homepage vs approved PNG | Partial | Premium polish shipped; app store URLs still TBD |
+| Homepage vs approved PNG | Partial | Premium polish shipped; app store URLs now live on the app promo cards |
 | Header category-state nav | Partial | Exam switcher syncs under `/category/[slug]`; full category-state nav links still TBD |
 | Category hero photography | Partial | Non-MBA landings still share CAT hero photo until dedicated assets arrive |
 
@@ -109,7 +115,7 @@ Update this file after every meaningful implementation task.
 - [ ] Transparent faculty / student PNGs
 - [ ] Dedicated IPMAT / Law / Banking / Skill House hero images
 - [ ] Dedicated leadership / advisor headshots (interim: homepage `profiles/`)
-- [ ] App promotion store URLs (mockup asset integrated)
+- [x] App promotion store URLs (Rodha App + Rodha Buddy Play/App Store links live)
 - [ ] Dynamic faculty result stats (Results Attributed section still static)
 
 ### Screens

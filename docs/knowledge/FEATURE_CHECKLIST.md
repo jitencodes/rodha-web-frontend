@@ -30,8 +30,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Hero (neural canvas + counselling form + YouTube + floating stats) | Complete (hero-only transparent canvas in `HomeHeroShell`) |
 | Choose Your Exam | Complete (`home-section-spacing-lg`; page gradient only — no canvas overlay) |
 | Impact timeline | Complete (3-line heading: students / decade of / momentum.) |
-| Results / toppers | Complete (2-line heading: speak / for themselves.) |
-| App promotion | Partial (app mockup image + Play Store SVG; store links `#` until URLs arrive) |
+| Results / toppers | Complete (CAT + IPMAT slides only; max 10 cards each; 2-line heading: speak / for themselves.) |
+| App promotion | Complete (Rodha Buddy + Rodha App copy; live Play Store / App Store URLs) |
 | CTA Band | Complete (2-line block heading; buttons clear of bg artwork) |
 | Continuous page canvas background | Complete (7-phase warm-orange gradient; body-height anchors incl. footer) |
 
@@ -61,7 +61,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Courses overview | Complete (`CourseCardV2` slider; data-driven courseType chips; filter bar hidden when only one type; CAT 38 / IPMAT 19 / CLAT 2 / SSC 14 / Skill House 2 live offerings) |
 | Star faculty | Complete (`FacultyCardV2`) |
 | Test series promo | Complete (`TestSeriesCardV2`; CAT uses four supplied package posters) |
-| Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT has 40 supplied 2025 student outcomes with portraits) |
+| Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT 35 + IPMAT 16 supplied portraits; section hidden on CLAT / SSC / Skill House) |
 | Testimonials | Complete (dark island; initials for missing photos; blurred-bg contain treatment for real photos; CAT has 27 curated testimonials) |
 | Stories / app promo / FAQ | Complete |
 | SEO intro copy | Partial (per-page metadata from JSON; longer SEO blocks TBD) |
