@@ -14,6 +14,14 @@ Format:
 
 ---
 
+### 2026-08-20 — Category course filter chips + sheet-driven catalog
+- **Decision:** Keep the category course slider and `CourseCardV2` layout unchanged. Add a client `CategoryCoursesSlider` with four light filter chips (All default, Comprehensive, Individual, Crash Course) driven by a new `courseType` field. Replace all five verticals' course records from the supplied sheet, download named thumbnails locally, and keep enrolment on the external Graphy/ThinkExam URLs.
+- **Rationale:** Categories now have mixed course types in one carousel; filtering must not require a new card or slider. Local thumbnails avoid remote `next/image` host config. Mapping: Comprehensive / All-In-One / Program → comprehensive; Individual / Self-Paced / Single Module / Practice Engine → individual; Crash Course → crash; Free and mock packages → All only.
+- **Alternatives considered:** URL query filters like blog; extra chips for Mocks/Free; changing card layout for long titles.
+- **Consequences:** CAT All includes mock packages as well as live batches; CAT test-series posters keep their design but now link to the live ThinkExam package URLs. Re-run `node scripts/sync-category-courses.mjs` when the sheet changes.
+
+---
+
 ### 2026-08-20 — Faculty detail light mixed-theme + data defaults
 - **Decision:** Upgrade `/faculty/[slug]` in place: keep dark hero (aligned with Faculty listing / Blog / category landings); convert body to white/beige mixed theme with local light card classes (no global `.card-base` change). Split About / Philosophy / Expertise into three cards. Add `withFacultyDetailDefaults()` so all ~36 faculty slugs render complete pages; rich authored entries (Nishant, Anand, Neha) override defaults. Icon keys in JSON resolved via `src/lib/faculty-icons.tsx` (`react-icons`). Extend `CTABandV2Decorative` with optional `tertiaryAction` for faculty detail Rodha Buddy CTA only.
 - **Rationale:** Reference layout requires three info cards and light surfaces; sparse faculty entries broke detail pages; scoped light styling avoids homepage/category regressions.

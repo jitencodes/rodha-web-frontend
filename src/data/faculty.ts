@@ -324,7 +324,7 @@ export const faculty: Faculty[] = [
       },
     ]),
     resultStats: NISHANT_RESULT_STATS,
-    categories: ["mba", "ipmat"],
+    categories: ["cat", "ipmat"],
     featured: true,
   },
   {
@@ -483,7 +483,7 @@ export const faculty: Faculty[] = [
       { id: "ipmat", value: "180+", label: "IPMAT Top 100" },
       { id: "other", value: "350+", label: "Top B-school Selections" },
     ],
-    categories: ["mba", "ipmat"],
+    categories: ["cat", "ipmat"],
     featured: true,
   },
   {
@@ -498,7 +498,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/faculty/vishal-gupta.jpg",
     rating: 4.8,
     studentsMentored: "18K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-3",
@@ -660,7 +660,7 @@ export const faculty: Faculty[] = [
       { id: "ipmat", value: "140+", label: "IPMAT Top 100" },
       { id: "other", value: "290+", label: "Top B-school Selections" },
     ],
-    categories: ["mba", "ipmat"],
+    categories: ["cat", "ipmat"],
     featured: true,
   },
   {
@@ -675,7 +675,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/faculty/rahul-sharma.jpg",
     rating: 4.7,
     studentsMentored: "12K+",
-    categories: ["mba", "ipmat"],
+    categories: ["cat", "ipmat"],
   },
   {
     id: "faculty-5",
@@ -704,7 +704,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/male-4.png",
     rating: 4.9,
     studentsMentored: "8K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -719,7 +719,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/female-3.png",
     rating: 4.8,
     studentsMentored: "6K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-8",
@@ -776,7 +776,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/female-1.png",
     rating: 4.8,
     studentsMentored: "5K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-12",
@@ -804,7 +804,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/male-1.png",
     rating: 4.8,
     studentsMentored: "4K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-banking-1",
@@ -818,7 +818,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/male-3.png",
     rating: 4.8,
     studentsMentored: "8K+",
-    categories: ["banking"],
+    categories: ["ssc"],
     featured: true,
   },
   {
@@ -833,7 +833,7 @@ export const faculty: Faculty[] = [
     image: "/assets/images/profiles/female-2.png",
     rating: 4.7,
     studentsMentored: "6K+",
-    categories: ["banking"],
+    categories: ["ssc"],
   },
   {
     id: "faculty-skill-1",
@@ -876,7 +876,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Ravi Sir.png"),
     rating: 4.9,
     studentsMentored: "15K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -891,7 +891,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("KD Sir.png"),
     rating: 4.9,
     studentsMentored: "14K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -906,7 +906,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Appoorv Sir.png"),
     rating: 4.8,
     studentsMentored: "12K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -921,7 +921,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Brijesh Sir.png"),
     rating: 4.8,
     studentsMentored: "10K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -936,7 +936,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Himanshu Sir.png"),
     rating: 4.8,
     studentsMentored: "9K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-neeraj",
@@ -950,7 +950,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Neeraj Sir.png"),
     rating: 4.8,
     studentsMentored: "8K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-sanchit",
@@ -964,7 +964,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Sanchit Sir.png"),
     rating: 4.7,
     studentsMentored: "7K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-shrikant",
@@ -978,7 +978,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Shrikant Sir.png"),
     rating: 4.8,
     studentsMentored: "8K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-swapnil",
@@ -992,7 +992,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Swapanil Sir.png"),
     rating: 4.8,
     studentsMentored: "6K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-tarun",
@@ -1006,7 +1006,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Tarun Sir.png"),
     rating: 4.8,
     studentsMentored: "9K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-abhishek-gupta",
@@ -1020,7 +1020,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Abhishek Gupta Sir.png"),
     rating: 4.9,
     studentsMentored: "11K+",
-    categories: ["mba"],
+    categories: ["cat"],
     featured: true,
   },
   {
@@ -1035,7 +1035,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Abhishek Dubey.png"),
     rating: 4.8,
     studentsMentored: "8K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-ananya",
@@ -1049,7 +1049,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Ananya.png"),
     rating: 4.8,
     studentsMentored: "6K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-divya",
@@ -1063,7 +1063,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Divya.png"),
     rating: 4.8,
     studentsMentored: "7K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-kirti",
@@ -1077,7 +1077,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Kirti.png"),
     rating: 4.7,
     studentsMentored: "5K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-nikita",
@@ -1091,7 +1091,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Nikita Mam.png"),
     rating: 4.8,
     studentsMentored: "6K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-rupal",
@@ -1105,7 +1105,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Rupal.png"),
     rating: 4.8,
     studentsMentored: "5K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
   {
     id: "faculty-profile-sharwari",
@@ -1119,7 +1119,7 @@ export const faculty: Faculty[] = [
     image: facultyProfileImage("Sharwari Mam.png"),
     rating: 4.7,
     studentsMentored: "4K+",
-    categories: ["mba"],
+    categories: ["cat"],
   },
 ];
 
@@ -1223,7 +1223,7 @@ export function getFacultyByCategory(categoryId: string): Faculty[] {
 export function getMbaStarFaculty(): Faculty[] {
   return faculty.filter(
     (f) =>
-      f.categories.includes("mba") &&
+      f.categories.includes("cat") &&
       f.image.includes("rodha faculty profile")
   );
 }
@@ -1234,38 +1234,36 @@ export function getFacultyBySlug(slug: string): Faculty | undefined {
 }
 
 const FEMALE_FIRST_NAMES = new Set([
-  "Neha",
-  "Megha",
-  "Sana",
   "Kirti",
   "Nikita",
   "Rupal",
   "Sharwari",
-  "Ananya",
-  "Divya",
+  "Neha",
+  "Megha",
+  "Sana",
   "Priya",
   "Aisha",
   "Riya",
 ]);
 
 const BLOG_CATEGORIES_BY_FACULTY: Record<CategoryId, string[]> = {
-  mba: ["mba-cat", "study-tips", "career-guidance", "exam-updates"],
+  cat: ["mba-cat", "study-tips", "career-guidance", "exam-updates"],
   ipmat: ["ipmat", "study-tips", "exam-updates"],
   clat: ["clat", "study-tips"],
-  banking: ["banking", "study-tips"],
+  ssc: ["ssc", "study-tips"],
   skillhouse: ["career-guidance", "study-tips"],
 };
 
 const EXAM_LABEL_BY_CATEGORY: Record<CategoryId, string> = {
-  mba: "For CAT 2025",
+  cat: "For CAT 2025",
   ipmat: "For IPMAT 2025",
   clat: "For CLAT 2025",
-  banking: "For Banking Exams 2025",
+  ssc: "For Banking Exams 2025",
   skillhouse: "For Skill House",
 };
 
 const DEFAULT_RESULT_STATS: Record<CategoryId, FacultyResultStat[]> = {
-  mba: [
+  cat: [
     { id: "cat-p", value: "450+", label: "CAT", description: "99+%ile in CAT" },
     { id: "iim", value: "800+", label: "IIM Calls", description: "Documented IIM calls" },
     { id: "ipmat", value: "180+", label: "IPMAT", description: "IPMAT Top 100" },
@@ -1283,7 +1281,7 @@ const DEFAULT_RESULT_STATS: Record<CategoryId, FacultyResultStat[]> = {
     { id: "percentile", value: "120+", label: "Top Ranks", description: "All-India top ranks" },
     { id: "other", value: "90+", label: "Law Schools", description: "Other premier law schools" },
   ],
-  banking: [
+  ssc: [
     { id: "selections", value: "500+", label: "Selections", description: "Banking exam selections" },
     { id: "ibps", value: "300+", label: "IBPS", description: "IBPS PO/Clerk selections" },
     { id: "sbi", value: "180+", label: "SBI", description: "SBI PO/Clerk selections" },
@@ -1352,7 +1350,7 @@ function defaultAchievements(member: Faculty): string[] {
 }
 
 function defaultCourses(member: Faculty): FacultyCourseTaught[] {
-  const cat = member.categories[0] ?? "mba";
+  const cat = member.categories[0] ?? "cat";
   const examLabel = EXAM_LABEL_BY_CATEGORY[cat];
   const subject = member.specialization[0] ?? member.title;
   const categoryHref = getCategoryPath(cat);
@@ -1404,7 +1402,7 @@ function formatPublicationMeta(item: FacultyPublication): string {
 }
 
 function defaultPublications(member: Faculty): FacultyPublication[] {
-  const cat = member.categories[0] ?? "mba";
+  const cat = member.categories[0] ?? "cat";
   const blogCats = BLOG_CATEGORIES_BY_FACULTY[cat];
   const posts = blogPosts
     .filter((p) => blogCats.includes(p.category))
@@ -1459,7 +1457,7 @@ function defaultPublications(member: Faculty): FacultyPublication[] {
 }
 
 function defaultReviews(member: Faculty): FacultyReview[] {
-  const cat = member.categories[0] ?? "mba";
+  const cat = member.categories[0] ?? "cat";
   const categoryTestimonials = testimonials.filter((t) => t.category === cat);
 
   const source =
@@ -1499,8 +1497,8 @@ function defaultVideos(member: Faculty): FacultyVideo[] {
 }
 
 function defaultResultStats(member: Faculty): FacultyResultStat[] {
-  const cat = member.categories[0] ?? "mba";
-  return DEFAULT_RESULT_STATS[cat] ?? DEFAULT_RESULT_STATS.mba;
+  const cat = member.categories[0] ?? "cat";
+  return DEFAULT_RESULT_STATS[cat] ?? DEFAULT_RESULT_STATS.cat;
 }
 
 /** Merge listing fields with generated detail-page defaults; authored detail fields win. */

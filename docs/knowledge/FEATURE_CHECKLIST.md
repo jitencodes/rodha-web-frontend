@@ -58,7 +58,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island; supplied 2025 student, faculty, hero, and mock-package content |
 | Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template (content differs via JSON) |
 | Category hero | Complete (`CategoryHeroSectionV2` on all five) |
-| Courses overview | Complete (`CourseCardV2`; responsive slider shows 1/2/4 cards with desktop arrows, mouse drag, and touch swipe; CAT links to six current external offerings) |
+| Courses overview | Complete (`CourseCardV2` slider unchanged; light All / Comprehensive / Individual / Crash Course chips filter by `courseType`; CAT 38 / IPMAT 19 / CLAT 2 / SSC 14 / Skill House 2 live offerings with downloaded thumbnails and external CTAs) |
 | Star faculty | Complete (`FacultyCardV2`) |
 | Test series promo | Complete (`TestSeriesCardV2`; CAT uses four supplied package posters) |
 | Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT has 40 supplied 2025 student outcomes with portraits) |

@@ -53,7 +53,7 @@ export function HomePage() {
           subtitle="Take the first step towards your success. We'll be with you, all the way."
 
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award.png"
+          decorativeImage="/assets/images/about us/award-to-boy.png"
           primaryAction={{ label: "Book Free Counselling", href: "/contact" }}
 
           secondaryAction={{ label: "Explore Courses", href: "/category/cat" }}

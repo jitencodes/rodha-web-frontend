@@ -39,7 +39,7 @@ export default function FacultyPage() {
           title="Ready to Begin Your Journey?"
           subtitle="Book a Demo Class or Explore our Courses."
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award.png"
+          decorativeImage="/assets/images/about us/award-to-boy.png"
           primaryAction={{ label: "Book a Demo Class", href: "/contact" }}
           secondaryAction={{ label: "Explore Courses", href: "/category/cat" }}
           className="reveal-child reveal-delay-1"

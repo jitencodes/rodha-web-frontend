@@ -1,8 +1,8 @@
 export type CategoryId =
-  | "mba"
+  | "cat"
   | "ipmat"
   | "clat"
-  | "banking"
+  | "ssc"
   | "skillhouse";
 
 export interface Category {
@@ -24,6 +24,8 @@ export interface Category {
   courseCount?: string;
   selectionCount?: string;
 }
+
+export type CourseFilterType = "comprehensive" | "individual" | "crash" | "other";
 
 export interface Course {
   id: string;
@@ -51,6 +53,9 @@ export interface Course {
   badge?: string;
   isPopular?: boolean;
   startDate?: string;
+  /** Filter group on category course carousels */
+  courseType?: CourseFilterType;
+  faculty?: string;
 
   badgeType?: "audience";
 
@@ -288,6 +293,8 @@ export interface TestSeriesItem {
   icon: string;
   image?: string;
   value: string;
+  price: string;
+  offerPrice: string;
 }
 
 export interface ResourceItem {

@@ -54,7 +54,7 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
       </div>
 
       <div className="flex flex-1 flex-col p-5 md:p-6 justify-between">
-        <h3 className="text-h4 font-montserrat font-medium leading-tight text-neutral-900">
+        <h3 className="text-h4 font-montserrat font-medium leading-tight text-neutral-900 line-clamp-2">
           {course.title}
         </h3>
 
@@ -64,12 +64,16 @@ export function CourseCardV2({ course, className }: CourseCardV2Props) {
           </p>
         )}
         <div className="mt-2 text-caption leading-relaxed text-neutral-500 flex items-center gap-1 justify-between capitalize">
-          <span>{course.caourseCount} Courses</span>
-          <span>{course.language}</span>
+          {course.caourseCount != null ? (
+            <span>{course.caourseCount} Courses</span>
+          ) : (
+            <span />
+          )}
+          {course.language ? <span>{course.language}</span> : null}
         </div>
         <div className="mt-5 flex flex-wrap items-end gap-x-3 gap-y-1">
           <span className="text-[1.4rem] font-bold leading-none text-neutral-900">
-            {formatPrice(course.price)}
+            {course.price === 0 ? "FREE" : formatPrice(course.price)}
           </span>
           {hasDiscount && (
             <>

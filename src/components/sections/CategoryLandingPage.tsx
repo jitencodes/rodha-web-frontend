@@ -4,13 +4,12 @@ import { ResultsStatsPanel } from "@/components/sections/ResultsStatsPanel";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
-import { CourseCardV2 } from "@/components/cards/CourseCardV2";
+import { CategoryCoursesSlider } from "@/components/sections/CategoryCoursesSlider";
 import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { TestSeriesCardV2 } from "@/components/cards/TestSeriesCardV2";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
-import { Carousel } from "@/components/ui/Carousel";
 import { AccordionV2 } from "@/components/ui/AccordionV2";
 import { CategoryHeroSectionV2 } from "@/components/sections/home/HeroSections/CategoryHeroSectionV2";
 import Typewritter from "@/components/Typewriter";
@@ -25,6 +24,7 @@ import {
 import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import type { CategoryLandingConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Carousel } from "../ui/Carousel";
 
 interface CategoryLandingPageProps {
   category: CategoryLandingConfig;
@@ -150,22 +150,11 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             align="center"
             className="mx-auto lg:!mb-10"
           />
-          <RevealGroup>
-            <Carousel showArrows>
-              {courses.map((course, index) => (
-                <div
-                  key={course.id}
-                  className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
-                >
-                  <CourseCardV2 course={course} className="h-full bg-white" />
-                </div>
-              ))}
-            </Carousel>
-          </RevealGroup>
+          <CategoryCoursesSlider courses={courses} />
         </Container>
       </section>
 
-      {category.id !== "skillhouse" && <section
+      {(category.id == "cat" || category.id == "ipmat") && <section
         id="test-series"
         data-home-zone="test-series"
         className={cn(
@@ -192,17 +181,20 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             align="center"
             className="mx-auto lg:!mb-10"
           />
-          <RevealGroup>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-              {category.testSeries.map((item, index) => (
+          <Carousel showArrows>
+            {category.testSeries.map((item, index) => (
+              <div
+                key={item.id}
+                className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
+              >
                 <TestSeriesCardV2
                   key={item.id}
                   item={item}
                   className={`reveal-child reveal-delay-${(index % 4) + 1}`}
                 />
-              ))}
-            </div>
-          </RevealGroup>
+              </div>
+            ))}
+          </Carousel>
         </Container>
       </section>}
 

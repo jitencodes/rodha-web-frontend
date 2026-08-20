@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-20 (Faculty detail light mixed-theme)
+**Last updated:** 2026-08-20 (Category course filters + catalog refresh)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -30,7 +30,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | SearchInput | `SearchInput.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | Select | `Select.tsx` |
 | Skeleton | `Skeleton.tsx` |
-| Tag | `Tag.tsx` |
+| Tag | `Tag.tsx` (optional `variant?: "dark" \| "light"`; light matches blog filter pills) |
 | Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
 | InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop with gap-aligned repeated sets) |
 
@@ -52,6 +52,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
 | CategoryLandingPage | `CategoryLandingPage.tsx` (JSON-driven CAT V2 stack for `/category/[slug]`) |
+| CategoryCoursesSlider | `CategoryCoursesSlider.tsx` (client island: All / Comprehensive / Individual / Crash Course chips + existing course carousel) |
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
 | CTABand | `CTABand.tsx` (optional `backgroundImage`, `titleAccent`, `secondaryOutline` for home variant; counselling `/contact` actions open modal) |
 | CTABandV2 | `CTABandV2.tsx` (locked homepage full-bleed image CTA) |

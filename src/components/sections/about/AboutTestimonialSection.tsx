@@ -21,7 +21,7 @@ function FeaturedTestimonial({ testimonial }: { testimonial: Testimonial }) {
       <div className="lg:col-span-5">
         <div className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden rounded-[8px] bg-bg-tertiary">
           <Image
-            src={testimonial.image || "/assets/images/about us/award.png"}
+            src={testimonial.image || "/assets/images/about us/award-to-boy.png"}
             alt={testimonial.name}
             fill
             className="object-cover object-center"

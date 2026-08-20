@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-20 (Faculty detail light mixed-theme + full data defaults)
+**Last updated:** 2026-08-20 (Category course filters + catalog refresh)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -62,6 +62,12 @@ Update this file after every meaningful implementation task.
   - Three-column About / Teaching Philosophy / Subject Expertise; `SectionHeaderV2` on courses + results
   - `withFacultyDetailDefaults()` + `getFacultyHonorific()` — every faculty slug gets full section data from JSON defaults
   - `react-icons` via `src/lib/faculty-icons.tsx`; `CTABandV2Decorative` optional `tertiaryAction` (Rodha Buddy on detail)
+- **Category course catalog + filter chips (2026-08-20):**
+  - Light filter chips above the existing category course slider: All (default), Comprehensive, Individual, Crash Course
+  - Slider and `CourseCardV2` layout unchanged; cards now tolerate FREE pricing and missing included-course counts
+  - Replaced CAT / IPMAT / CLAT / SSC / Skill House course JSON from the latest sheet (titles, copy, prices, CTAs)
+  - Downloaded named thumbnails into `public/assets/images/courses/{cat,ipmat,clat,ssc,skillhouse}/`
+  - CAT mock packages included in the CAT All list; CAT test-series cards now point at the live ThinkExam package URLs
 
 ---
 

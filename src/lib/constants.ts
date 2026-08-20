@@ -21,7 +21,7 @@ export const OFFER_END_DATE = "2026-08-31T23:59:59";
 
 export const CATEGORIES: Category[] = [
   {
-    id: "mba",
+    id: "cat",
     name: "MBA",
     menuLabel: "MBA (CAT + GDPI)",
     fullName: "MBA — CAT & GDPI",
@@ -72,11 +72,11 @@ export const CATEGORIES: Category[] = [
     selectionCount: "300+",
   },
   {
-    id: "banking",
+    id: "ssc",
     name: "SSC",
     menuLabel: "Banking & SSC Exams",
     fullName: "Banking & Government Exams (including SSC)",
-    slug: "banking",
+    slug: "ssc",
     subHeading: "SSC & Government Exams",
     description:
       "SSC coaching built to help you achieve your dream government job.",
