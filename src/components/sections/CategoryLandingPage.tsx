@@ -84,6 +84,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         subtitle={category.hero.subtitle}
         quickStats={category.quickStats}
         primaryCta={category.hero.primaryCta}
+        videoId={category.hero.videoId}
       />
 
       {category.id !== "skillhouse" && <section
@@ -198,7 +199,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
-      <section
+      {category.id !== "skillhouse" && <section
         id="faculty"
         className={cn(
           "home-section-spacing relative",
@@ -236,7 +237,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             </Link>
           </div>
         </Container>
-      </section>
+      </section>}
 
       <section id="testimonials" className="home-section-spacing relative">
         <Container>

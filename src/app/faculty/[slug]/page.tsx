@@ -6,11 +6,11 @@ import { FacultyCoursesSection } from "@/components/sections/FacultyCoursesSecti
 import { FacultyAchievementsPublicationsSection } from "@/components/sections/FacultyAchievementsPublicationsSection";
 import { FacultyReviewsVideosSection } from "@/components/sections/FacultyReviewsVideosSection";
 import { FacultyResultsSection } from "@/components/sections/FacultyResultsSection";
-import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
-import { RevealGroup } from "@/components/ui/RevealGroup";
+import { StoriesModal } from "@/components/layout/VideoModal";
 import { faculty, getFacultyBySlug } from "@/data/faculty";
 import { EXTERNAL_URLS, getCategoryPath } from "@/lib/constants";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/structured-data";
+import { buildPageMetadata } from "@/lib/seo";
 import { CTABandV2 } from "@/components/sections/CTABandV2";
 import { HomeHeroShell } from "@/components/sections/home/HomeHeroShell";
 
@@ -32,10 +32,12 @@ export async function generateMetadata({
     return { title: "Faculty — Rodha" };
   }
 
-  return {
+  return buildPageMetadata({
     title: `${member.name} — Faculty — Rodha`,
     description: member.about ?? member.bio,
-  };
+    path: `/faculty/${member.slug}`,
+    image: member.image,
+  });
 }
 
 export default async function FacultyDetailPage({ params }: FacultyDetailPageProps) {
@@ -46,7 +48,7 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
     notFound();
   }
 
-  const categoryHref = getCategoryPath(member.categories[0] ?? "mba");
+  const categoryHref = getCategoryPath(member.categories[0] ?? "cat");
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Faculty", href: "/faculty" },
@@ -90,20 +92,22 @@ export default async function FacultyDetailPage({ params }: FacultyDetailPagePro
       <FacultyResultsSection faculty={member} />
 
       <CTABandV2
-          title={member.cta?.title ?? "Take the Next Step Towards Success"}
-          subtitle={
-            member.cta?.description ??
-            "Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion."
-          }
-          backgroundImage="/assets/images/background/cta background image.JPG"
-          primaryAction={{ label: "Explore Courses →", href: categoryHref }}
-          secondaryAction={{ label: "Book a Demo →", href: "/contact" }}
-          tertiaryAction={{
-            label: "Ask Rodha Buddy",
-            href: EXTERNAL_URLS.rodhaBuddy,
-          }}
-          className="reveal-child reveal-delay-1"
-        />
+        title={member.cta?.title ?? "Take the Next Step Towards Success"}
+        subtitle={
+          member.cta?.description ??
+          "Explore courses, book a free demo, or ask Rodha Buddy — your AI study companion."
+        }
+        backgroundImage="/assets/images/background/cta background image.JPG"
+        primaryAction={{ label: "Explore Courses →", href: categoryHref }}
+        secondaryAction={{ label: "Book a Demo →", href: "/contact" }}
+        tertiaryAction={{
+          label: "Ask Rodha Buddy",
+          href: EXTERNAL_URLS.rodhaBuddy,
+        }}
+        className="reveal-child reveal-delay-1"
+      />
+
+      <StoriesModal />
     </>
   );
 }

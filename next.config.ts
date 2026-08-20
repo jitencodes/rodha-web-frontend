@@ -46,6 +46,21 @@ const nextConfig: NextConfig = {
           permanent: true,
         },
       ]),
+      {
+        source: "/privacypolicy",
+        destination: "/privacy-policy",
+        permanent: true,
+      },
+      {
+        source: "/termsofuse",
+        destination: "/terms-and-conditions",
+        permanent: true,
+      },
+      {
+        source: "/refundpolicy",
+        destination: "/refund-policy",
+        permanent: true,
+      },
     ];
   },
 };

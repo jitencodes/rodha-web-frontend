@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-20 (Category course filters + catalog refresh)
+**Last updated:** 2026-08-20 (hero videos + faculty doc refresh)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -68,6 +68,28 @@ Update this file after every meaningful implementation task.
   - Replaced CAT / IPMAT / CLAT / SSC / Skill House course JSON from the latest sheet (titles, copy, prices, CTAs)
   - Downloaded named thumbnails into `public/assets/images/courses/{cat,ipmat,clat,ssc,skillhouse}/`
   - CAT mock packages included in the CAT All list; CAT test-series cards now point at the live ThinkExam package URLs
+- **Faculty / Team / Category content cleanup (2026-08-20):**
+  - Removed all dummy faculty; kept 18 real profiles (12 enriched from `Rodha Faculty.docx` + 6 portrait-only)
+  - Faculty detail: publications removed; achievements full-width; reviews from category testimonials (max 3, relevance-matched); YouTube snippets open in `StoriesModal`; courses from landing `faculty` strings via `CategoryCoursesSlider`
+  - Faculty listing: Average Rating hero stat removed; Featured uses `InfiniteMarquee`; Experience filter replaced with Category + derived Subject filters
+  - Team: Faculty Experts + Advisors commented out; new `LovedTeamSection` full-width image carousel (3s autoplay)
+  - Course filter chips are data-driven; filter bar hidden when only one `courseType` exists
+  - Category testimonials: initials for missing photos; blurred-bg + `object-contain` for real photos
+- **SMTP lead forms (2026-08-20):**
+  - `POST /api/leads` + Nodemailer SMTP (Gmail) emails all Contact / Counselling / LeadCapture / Newsletter submissions to `support@rodha.co.in`
+  - Light Rodha HTML template; logo absolute URL `https://rodha.co.in/assets/images/rodha-logo-orange.svg` (from `NEXT_PUBLIC_BASE_URL`, never request Host)
+- **Content & SEO migration (2026-08-20):**
+  - Featured faculty ordered list of 13 (Team + Faculty marquees); Himanshu renamed to Himanshu Kushwaha; 5 others remain in All Faculty only
+  - Replaced 16 dummy blogs with 9 migrated articles from rodha.co.in (full HTML, tables, local images under `public/assets/images/blog/{slug}/`); categories All/MBA/IPMAT/SSC
+  - Legal pages rewritten from live Privacy / Terms / Refund; Disclaimer rebuilt from Terms §11 + Rodha product facts (**legal review flagged**)
+  - FAQ listing rebuilt from Home + 5 vertical FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House (42 items after dedupe)
+  - SEO: `metadataBase`, default OG `og-rodha.png`, favicon/apple icons, `buildPageMetadata` canonicals, `webSiteJsonLd`, BlogPosting author/dateModified, homepage FAQ JSON-LD; Contact FAQ JSON-LD removed (UI hidden)
+  - Redirects: `/privacypolicy`, `/termsofuse`, `/refundpolicy` → new routes
+- **Hero videos + faculty doc refresh (2026-08-20):**
+  - Homepage + five category heroes now pass distinct YouTube ids into existing `HeroVideoEmbed` (`hero.videoId` on category landings)
+  - All 18 faculty profiles enriched from `Rodha Faculty (1).docx` (remaining six: Himanshu, Divya Kumar Garg, Kriti Bhatnagar, Rupal Choudhary, Ananya Singhal, Abhishek Dubey)
+  - Faculty detail courses resolve via authored `courseGraphyIds` matched to existing category-landing cards only (skip CAT R1 comprehensive + COMPLETE OMETS 2026 — no cards); Tarun has empty list (no usable links)
+  - Category `facultyIds` realigned (CLAT / SSC / Skill House); Skill House carousel shows Divya only
 
 ---
 
@@ -88,6 +110,7 @@ Update this file after every meaningful implementation task.
 - [ ] Dedicated IPMAT / Law / Banking / Skill House hero images
 - [ ] Dedicated leadership / advisor headshots (interim: homepage `profiles/`)
 - [ ] App promotion store URLs (mockup asset integrated)
+- [ ] Dynamic faculty result stats (Results Attributed section still static)
 
 ### Screens
 - [x] About `/about`

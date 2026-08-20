@@ -6,6 +6,7 @@ import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Button } from "@/components/ui/Button";
 import { CATEGORIES } from "@/lib/constants";
 import type { LeadFormData } from "@/lib/types";
+import { submitLead } from "@/lib/submit-lead";
 
 interface LeadCaptureFormProps {
   title?: string;
@@ -25,13 +26,33 @@ export function LeadCaptureForm({
     exam: "",
   });
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Implement lead capture
-    await new Promise((r) => setTimeout(r, 1000));
+    setStatus("idle");
+    setErrorMessage("");
+
+    const result = await submitLead({
+      formType: "lead-capture",
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      exam: formData.exam || undefined,
+    });
+
     setLoading(false);
+
+    if (!result.ok) {
+      setStatus("error");
+      setErrorMessage(result.error || "Unable to submit your details.");
+      return;
+    }
+
+    setStatus("success");
+    setFormData({ name: "", phone: "", email: "", exam: "" });
   };
 
   return (
@@ -72,6 +93,14 @@ export function LeadCaptureForm({
         <Button type="submit" loading={loading} fullWidth>
           Book Free Session
         </Button>
+        {status === "success" && (
+          <p className="text-center text-caption text-green-400">
+            Thanks! Our counselling team will reach out shortly.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-center text-caption text-red-400">{errorMessage}</p>
+        )}
       </form>
     </div>
   );

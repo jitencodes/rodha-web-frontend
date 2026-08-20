@@ -1135,6 +1135,31 @@ background-size: cover;
     max-width: 100%;
     height: auto;
   }
+  .blog-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.9375rem;
+    overflow-x: auto;
+    display: block;
+  }
+  .blog-prose thead {
+    background: #fff7ed;
+  }
+  .blog-prose th,
+  .blog-prose td {
+    border: 1px solid #e5e5e5;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .blog-prose th {
+    font-weight: 600;
+    color: #171717;
+  }
+  .blog-prose td {
+    color: #404040;
+  }
 
   .home-hero-shell {
     position: relative;

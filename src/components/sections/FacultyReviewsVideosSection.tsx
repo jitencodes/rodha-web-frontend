@@ -15,7 +15,7 @@ export function FacultyReviewsVideosSection({
 }: FacultyReviewsVideosSectionProps) {
   const reviews = faculty.reviews;
   const videos = faculty.videos;
-  const hasReviews = Boolean(reviews?.length && faculty.rating != null);
+  const hasReviews = Boolean(reviews?.length);
   const hasVideos = Boolean(videos?.length);
 
   if (!hasReviews && !hasVideos) return null;
@@ -26,19 +26,23 @@ export function FacultyReviewsVideosSection({
     >
       <div className="container-rodha">
         <RevealGroup>
-          <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-4 md:gap-5 items-stretch">
+          <div
+            className={cn(
+              "grid grid-cols-1 gap-4 md:gap-5 items-stretch",
+              hasReviews && hasVideos ? "lg:grid-cols-[40%_60%]" : "lg:grid-cols-1"
+            )}
+          >
             {hasReviews && (
               <div className="reveal-child reveal-delay-1 h-full">
-                <FacultyReviewCard
-                  rating={faculty.rating!}
-                  reviewCountLabel={faculty.reviewCountLabel}
-                  reviews={reviews!}
-                />
+                <FacultyReviewCard reviews={reviews!} />
               </div>
             )}
             {hasVideos && (
               <div className="reveal-child reveal-delay-2 h-full">
-                <FacultyVideosPanel videos={videos!} viewAllHref="https://youtube.com/@rodha" />
+                <FacultyVideosPanel
+                  videos={videos!}
+                  viewAllHref="https://youtube.com/@rodha"
+                />
               </div>
             )}
           </div>

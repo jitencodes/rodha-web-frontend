@@ -6,7 +6,7 @@ import { getFacultyHonorific } from "@/data/faculty";
 import type { Faculty } from "@/lib/types";
 
 const LIGHT_TAG =
-  "rounded-md! text-caption bg-white text-neutral-600 border-section-beige hover:border-orange-500/35";
+  "rounded-md! text-caption bg-white hover:text-black text-neutral-600 border-section-beige hover:border-orange-500/35";
 
 interface FacultyInfoCardsSectionProps {
   faculty: Faculty;

@@ -62,6 +62,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: post.metaTitle,
       description: post.metaDescription,
+      images: post.thumbnail ? [`${SITE_URL}${post.thumbnail}`] : undefined,
     },
   };
 }
@@ -104,6 +105,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               url: `/blog/${post.slug}`,
               image: post.thumbnail,
               publishedDate: post.publishedDate,
+              author: post.author,
             })
           ),
         }}

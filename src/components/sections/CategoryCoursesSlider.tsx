@@ -6,8 +6,8 @@ import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { Tag } from "@/components/ui/Tag";
 import {
-  COURSE_FILTERS,
   filterCoursesByType,
+  getVisibleCourseFilters,
   type CourseFilterId,
 } from "@/lib/course-filters";
 import type { Course } from "@/lib/types";
@@ -18,34 +18,45 @@ interface CategoryCoursesSliderProps {
 }
 
 export function CategoryCoursesSlider({ courses }: CategoryCoursesSliderProps) {
-  const [activeFilter, setActiveFilter] = useState<CourseFilterId>("all");
-  const filteredCourses = useMemo(
-    () => filterCoursesByType(courses, activeFilter),
-    [courses, activeFilter]
+  const visibleFilters = useMemo(
+    () => getVisibleCourseFilters(courses),
+    [courses]
   );
+  const showFilterBar = visibleFilters.length > 0;
+
+  const [activeFilter, setActiveFilter] = useState<CourseFilterId>("all");
+
+  const filteredCourses = useMemo(() => {
+    if (!showFilterBar) return courses;
+    return filterCoursesByType(courses, activeFilter);
+  }, [courses, activeFilter, showFilterBar]);
+
+  if (courses.length === 0) return null;
 
   return (
     <div>
-      <div
-        className="mb-6 flex max-w-full justify-center gap-2 overflow-x-auto scrollbar-hide pb-1 md:mb-8"
-        role="tablist"
-        aria-label="Filter courses by type"
-      >
-        {COURSE_FILTERS.map((filter) => {
-          const isActive = activeFilter === filter.id;
-          return (
-            <Tag
-              key={filter.id}
-              variant="light"
-              active={isActive}
-              onClick={() => setActiveFilter(filter.id)}
-              className={cn("shrink-0 px-4 py-2")}
-            >
-              {filter.label}
-            </Tag>
-          );
-        })}
-      </div>
+      {showFilterBar && (
+        <div
+          className="mb-6 flex max-w-full justify-center gap-2 overflow-x-auto scrollbar-hide pb-1 md:mb-8"
+          role="tablist"
+          aria-label="Filter courses by type"
+        >
+          {visibleFilters.map((filter) => {
+            const isActive = activeFilter === filter.id;
+            return (
+              <Tag
+                key={filter.id}
+                variant="light"
+                active={isActive}
+                onClick={() => setActiveFilter(filter.id)}
+                className={cn("shrink-0 px-4 py-2")}
+              >
+                {filter.label}
+              </Tag>
+            );
+          })}
+        </div>
+      )}
 
       {filteredCourses.length === 0 ? (
         <p className="py-10 text-center text-body-sm text-neutral-500">

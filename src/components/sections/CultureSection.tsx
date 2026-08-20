@@ -9,7 +9,7 @@ interface CultureSectionProps {
 
 export function CultureSection({ className }: CultureSectionProps) {
   return (
-    <section className={cn("home-section-spacing bg-section-white home-on-light", className)}>
+    <section className={cn("home-section-spacing bg-section-primary home-on-dark", className)}>
       <div className="container-rodha">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 lg:items-center">
           <div className="lg:col-span-4 xl:col-span-3">

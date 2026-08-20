@@ -23,16 +23,16 @@ Do not build SSO, payment gateways, or Graphy/ThinkExam API clients in Phase 1.
 
 | Form | Fields (summary) | Backend status |
 |------|------------------|----------------|
-| Contact / Inquiry | Name, Phone, Email, Category, Message | TODO — endpoint TBD |
-| Lead capture (promo) | Exam, Name, Mobile, Email, Exam year | TODO |
-| Newsletter | Email | TODO — likely external redirect |
-| Counsellor callback | Name, Phone, Preferred time | TBD |
+| Contact / Inquiry | Name, Phone, Email, Category, Message | **Complete** — `POST /api/leads` → SMTP → `support@rodha.co.in` |
+| Lead capture (promo) | Name, Mobile, Email, Exam | **Complete** — same API (`formType: lead-capture`) |
+| Counselling (hero / modal) | Name, Phone, Exam | **Complete** — same API (`formType: counselling`) |
+| Newsletter | Email | **Complete** — same API (`formType: newsletter`) |
 
 **Rules:**
-- Validate on the client per [PHASE1_PRD.md](../PHASE1_PRD.md) §4
-- Do not invent unverified third-party form endpoints
-- When integrating, prefer a serverless route or documented external service; log the decision in [DECISIONS.md](DECISIONS.md)
-- Existing form components: `ContactForm`, `LeadCaptureForm`, `NewsletterSignup` (stubs)
+- Validate on the client per [PHASE1_PRD.md](../PHASE1_PRD.md) §4; server re-validates in `parseLeadPayload`
+- SMTP via Nodemailer (`src/lib/email/*`); light Rodha HTML template with **absolute** logo URL from `NEXT_PUBLIC_BASE_URL` / `https://rodha.co.in` (never request Host)
+- Prefer server-only `EMAIL_SMTP_*` env vars for secrets; `NEXT_PUBLIC_EMAIL_*` kept as fallback only
+- Existing form components: `ContactForm`, `LeadCaptureForm`, `NewsletterSignup`, `HeroCounsellingForm`
 
 ---
 

@@ -11,10 +11,10 @@ export const CONTACT_HERO = {
 } as const;
 
 export const CONTACT_CHANNELS = {
-  phone: "+91-9394324046",
+  phone: "+91-7982212160",
   phoneHref: "tel:+919394324046",
   phoneHours: "Available 9 AM – 8 PM",
-  whatsapp: "+91-7982212251",
+  whatsapp: "+91-9304491484",
   whatsappHref: "https://wa.me/917982212251",
   whatsappNote: "Chat with us",
   email: "contactus@rodha.co.in",
@@ -53,15 +53,9 @@ export const CONTACT_BUDDY = {
   description: "Book a free counselling session or explore the course that matches your exam goal.",
 } as const;
 
-const CONTACT_FAQ_IDS = ["gen-5", "men-5", "men-3", "crs-4", "prc-5"] as const;
+const CONTACT_FAQ_IDS = ["gen-contact", "gen-5", "gen-6", "gen-3", "gen-4"] as const;
 
 export const CONTACT_FAQS: FaqItem[] = [
-  {
-    id: "contact-1",
-    question: "How do I get in touch with Rodha?",
-    answer:
-      "Use the form on this page, call or WhatsApp us during support hours, or email contactus@rodha.co.in. For instant help, chat with Rodha Buddy anytime.",
-  },
   ...CONTACT_FAQ_IDS.map((id) => FAQ_DATA.find((item) => item.id === id))
     .filter((item): item is (typeof FAQ_DATA)[number] => Boolean(item))
     .map(({ id, question, answer }) => ({ id, question, answer })),

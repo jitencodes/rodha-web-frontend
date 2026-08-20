@@ -6,15 +6,29 @@ interface LegalPageLayoutProps {
   content: LegalPageContent;
 }
 
-function renderBlock(
-  block: string | { type: "list"; items: string[] },
-  key: string
-) {
+type LegalBlock =
+  | string
+  | { type: "list"; items: string[] }
+  | { type: "ordered-list"; items: string[] };
+
+function renderBlock(block: LegalBlock, key: string) {
   if (typeof block === "string") {
     return (
       <p key={key} className="text-body text-neutral-600 leading-relaxed">
         {block}
       </p>
+    );
+  }
+
+  if (block.type === "ordered-list") {
+    return (
+      <ol key={key} className="space-y-2 pl-5 list-decimal">
+        {block.items.map((item) => (
+          <li key={item} className="text-body text-neutral-600 leading-relaxed pl-1">
+            {item}
+          </li>
+        ))}
+      </ol>
     );
   }
 

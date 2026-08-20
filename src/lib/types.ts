@@ -109,8 +109,11 @@ export interface FacultyVideo {
   id: string;
   title: string;
   thumbnail: string;
-  duration: string;
+  /** Omit when duration is unknown — do not invent values */
+  duration?: string;
   href?: string;
+  /** YouTube video id for in-page StoriesModal playback */
+  youtubeId?: string;
 }
 
 export interface FacultyResultStat {
@@ -149,6 +152,11 @@ export interface Faculty {
   resultStats?: FacultyResultStat[];
   reviewCountLabel?: string;
   honorificSuffix?: "Sir" | "Ma'am";
+  /**
+   * Graphy course ids (24-hex from enrollment URLs) matched from the faculty
+   * doc. Resolved against existing category-landing course cards only.
+   */
+  courseGraphyIds?: string[];
   cta?: {
     title: string;
     description: string;
@@ -332,6 +340,8 @@ export interface CategoryLandingHero {
   accent: string | string[];
   subtitle: string;
   primaryCta: CategoryCta;
+  /** YouTube video id for the category hero embed */
+  videoId?: string;
 }
 
 export interface CategoryLandingSectionCopy {

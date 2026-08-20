@@ -1,29 +1,34 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { Container } from "@/components/layout/Container";
-import { Carousel } from "@/components/ui/Carousel";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { TeamHeroSection } from "@/components/sections/TeamHeroSection";
-import { AdvisorsSection } from "@/components/sections/AdvisorsSection";
+import { Container } from "@/components/layout/Container";
+// import { AdvisorsSection } from "@/components/sections/AdvisorsSection";
 import { CultureSection } from "@/components/sections/CultureSection";
+import { LovedTeamSection } from "@/components/sections/LovedTeamSection";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
-import { LeadershipCard } from "@/components/cards/LeadershipCard";
+// import { LeadershipCard } from "@/components/cards/LeadershipCard";
+// import { leadership, LEADERSHIP_INTRO } from "@/data/team";
 import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
-import { leadership, LEADERSHIP_INTRO } from "@/data/team";
-import { faculty } from "@/data/faculty";
+import { getFeaturedFaculty } from "@/data/faculty";
+import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
+import { RevealGroup } from "@/components/ui/RevealGroup";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Meet the Team — Rodha",
   description:
     "Meet the passionate educators, leaders, and advisors behind Rodha — dedicated to helping aspirants achieve their dream B-school and law school admissions.",
-};
+  path: "/team",
+});
+
 
 export default function TeamPage() {
+  const featuredFaculty = getFeaturedFaculty();
+
   return (
     <>
       <TeamHeroSection />
 
-      <section className="home-section-spacing bg-section-beige home-on-light">
+      {/* <section className="home-section-spacing bg-section-beige home-on-light">
         <Container>
           <SectionHeaderV2
             badge="Leadership Team"
@@ -39,39 +44,42 @@ export default function TeamPage() {
             ))}
           </Carousel>
         </Container>
-      </section>
+      </section> */}
 
-      <section className="home-section-spacing bg-section-white home-on-light">
+      {/* Our Faculty Experts — temporarily removed from page render
+      */}
+      <section className="home-section-spacing bg-section-beige home-on-light">
         <Container>
           <SectionHeaderV2
-            badge="Our Faculty Experts"
-            title="Learn from India's Top Educators"
-            viewAllHref="/faculty"
-            viewAllLabel="View All Faculty"
+            badge="Featured Faculty"
+            title={
+              <>
+                Learn from India&apos;s{" "}
+                <span className="text-orange-500">Top Educators</span>
+              </>
+            }
             align="left"
           />
-          <Carousel>
-            {faculty.map((member) => (
+        </Container>
+        <RevealGroup>
+          <InfiniteMarquee speed={35} direction="left" gap={20}>
+            {featuredFaculty.map((m, index) => (
               <div
-                key={member.id}
-                className="snap-start shrink-0"
+                key={m.id}
+                className={`reveal-child reveal-delay-${(index % 4) + 1}`}
               >
-                <FacultyCardV2 faculty={member} />
+                <FacultyCardV2 faculty={m} />
               </div>
             ))}
-          </Carousel>
-          <div className="mt-5 flex justify-center md:hidden">
-            <Link
-              href="/faculty"
-              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline"
-            >
-              View All Faculty
-            </Link>
-          </div>
-        </Container>
+          </InfiniteMarquee>
+        </RevealGroup>
       </section>
 
+      {/* Our Advisors — temporarily removed from page render
       <AdvisorsSection />
+      */}
+
+      <LovedTeamSection />
 
       <CultureSection />
 

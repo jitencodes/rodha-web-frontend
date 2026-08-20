@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
@@ -6,12 +5,14 @@ import { EXTERNAL_URLS } from "@/lib/constants";
 import { faqPageJsonLd } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/data/faq";
 import { FAQClient } from "./FAQClient";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "FAQ — Rodha",
   description:
-    "Frequently asked questions about Rodha's courses, pricing, mentorship programs, test series, and exam preparation approach.",
-};
+    "Frequently asked questions about Rodha's CAT, IPMAT, SSC, CLAT, and Skill House programs, plus general coaching guidance.",
+  path: "/faq",
+});
 
 export default function FAQPage() {
   return (
@@ -25,7 +26,7 @@ export default function FAQPage() {
           <SectionHeaderV2
             badge="GOOD TO KNOW"
             title="Frequently Asked Questions"
-            subtitle="Find answers to common questions about our programs, payments, mentorship, and test series."
+            subtitle="Find answers about Rodha's CAT, IPMAT, SSC, CLAT, and Skill House programs, plus general coaching questions."
             align="center"
             className="mx-auto max-w-3xl"
           />

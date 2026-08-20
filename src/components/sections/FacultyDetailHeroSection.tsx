@@ -73,7 +73,7 @@ export function FacultyDetailHeroSection({
 
               <p className="mt-2 text-body-lg text-text-muted">{designation}</p>
 
-              {faculty.rating != null && (
+              {/* {faculty.rating != null && (
                 <div className="mt-3 flex items-center justify-center lg:justify-start gap-2 text-body text-text-primary">
                   <FacultyIcon name="star" size={16} className="text-accent-yellow" />
                   <span className="font-semibold">{faculty.rating.toFixed(1)}</span>
@@ -83,7 +83,7 @@ export function FacultyDetailHeroSection({
                     </span>
                   )}
                 </div>
-              )}
+              )} */}
 
               {tags.length > 0 && (
                 <div className="mt-4 flex flex-wrap justify-center lg:justify-start gap-2">
@@ -96,7 +96,7 @@ export function FacultyDetailHeroSection({
               )}
 
               {heroStats.length > 0 && (
-                <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
                   {heroStats.map((stat) => (
                     <FacultyStatCard
                       key={stat.id}
@@ -104,7 +104,7 @@ export function FacultyDetailHeroSection({
                       className={
                         heroStats.length === 3
                           ? "last:col-span-2 sm:last:col-span-1"
-                          : undefined
+                          : "min-w-[200px]"
                       }
                     />
                   ))}

@@ -6,6 +6,7 @@ import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Button } from "@/components/ui/Button";
 import { CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { submitLead } from "@/lib/submit-lead";
 
 interface HeroCounsellingFormProps {
   className?: string;
@@ -24,6 +25,8 @@ export function HeroCounsellingForm({
   const [phone, setPhone] = useState("");
   const [exam, setExam] = useState(defaultExam);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [phoneFocused, setPhoneFocused] = useState(false);
 
   const isInline = variant === "inline";
@@ -36,9 +39,28 @@ export function HeroCounsellingForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Implement lead capture
-    await new Promise((r) => setTimeout(r, 1000));
+    setStatus("idle");
+    setErrorMessage("");
+
+    const result = await submitLead({
+      formType: "counselling",
+      name,
+      phone,
+      exam,
+    });
+
     setLoading(false);
+
+    if (!result.ok) {
+      setStatus("error");
+      setErrorMessage(result.error || "Unable to book counselling.");
+      return;
+    }
+
+    setStatus("success");
+    setName("");
+    setPhone("");
+    setExam(defaultExam);
   };
 
   const form = (
@@ -98,6 +120,14 @@ export function HeroCounsellingForm({
         >
           Book Free Counselling Now
         </Button>
+        {status === "success" && (
+          <p className="text-center text-caption text-green-400">
+            Thanks! We received your request and will call you soon.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-center text-caption text-red-400">{errorMessage}</p>
+        )}
       </form>
     </>
   );

@@ -4,14 +4,17 @@ import { FacultyWhySection } from "@/components/sections/FacultyWhySection";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { buildPageMetadata } from "@/lib/seo";
 import { faculty } from "@/data/faculty";
 import { FacultyListingClient } from "./FacultyListingClient";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Our Faculty — Rodha",
   description:
     "Meet Rodha's expert faculty — IIM and NLU alumni mentors across MBA, Law, Banking, IPMAT, and Skill House programs.",
-};
+  path: "/faculty",
+});
+
 
 export default function FacultyPage() {
   return (

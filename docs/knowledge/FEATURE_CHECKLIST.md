@@ -58,11 +58,11 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island; supplied 2025 student, faculty, hero, and mock-package content |
 | Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template (content differs via JSON) |
 | Category hero | Complete (`CategoryHeroSectionV2` on all five) |
-| Courses overview | Complete (`CourseCardV2` slider unchanged; light All / Comprehensive / Individual / Crash Course chips filter by `courseType`; CAT 38 / IPMAT 19 / CLAT 2 / SSC 14 / Skill House 2 live offerings with downloaded thumbnails and external CTAs) |
+| Courses overview | Complete (`CourseCardV2` slider; data-driven courseType chips; filter bar hidden when only one type; CAT 38 / IPMAT 19 / CLAT 2 / SSC 14 / Skill House 2 live offerings) |
 | Star faculty | Complete (`FacultyCardV2`) |
 | Test series promo | Complete (`TestSeriesCardV2`; CAT uses four supplied package posters) |
 | Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT has 40 supplied 2025 student outcomes with portraits) |
-| Testimonials | Complete (dark island; CAT has 27 curated testimonials with consent-aware portraits/placeholders) |
+| Testimonials | Complete (dark island; initials for missing photos; blurred-bg contain treatment for real photos; CAT has 27 curated testimonials) |
 | Stories / app promo / FAQ | Complete |
 | SEO intro copy | Partial (per-page metadata from JSON; longer SEO blocks TBD) |
 | Taxonomy / switcher | Complete — public paths `/category/{slug}`; `/cat|mba|gdpi|…` permanent redirect |
@@ -91,17 +91,17 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Page | Status | Notes |
 |------|--------|-------|
 | About `/about` | Complete | Theme-aligned: quote repositioned, larger icons, timeline bounded, 3D stats, shorter testimonial |
-| Team `/team` | Complete | Theme-aligned: breadcrumb in hero, vertical light LeadershipCard, FacultyCardV2 experts, black Advisors title |
-| Faculty listing `/faculty` | Complete | Theme-aligned: FacultyCardV2 grid, light SearchInput/DropdownSelect/Pagination/reset |
-| Faculty detail `/faculty/[slug]` | Complete | Dark hero + light mixed-theme body; full JSON-driven sections for all faculty; 3-button CTA |
-| Blog listing `/blog` | Complete | Theme-aligned: dark hero, SectionHeaderV2, white sections, orange badges/shadows/icons |
-| Blog detail `/blog/[slug]` | Complete | Theme-aligned: white body, beige sidebar, SectionHeaderV2 Related, orange badges/icons |
+| Team `/team` | Complete | Leadership + Loved Team carousel; Faculty Experts / Advisors commented out of render |
+| Faculty listing `/faculty` | Complete | Real faculty only; InfiniteMarquee featured; Category + Subject filters; 3 hero stats |
+| Faculty detail `/faculty/[slug]` | Complete | All 18 enriched from Faculty doc; courses via `courseGraphyIds` → existing cards only; StoriesModal videos; no publications |
+| Blog listing `/blog` | Complete | 9 migrated articles; filters All/MBA/IPMAT/SSC; real OG thumbnails |
+| Blog detail `/blog/[slug]` | Complete | Full HTML bodies + tables; BlogPosting JSON-LD with author |
 | Contact `/contact` | Complete | Theme-aligned: dark compact form, left breadcrumb, overlapping info strip, unified office card |
-| FAQ `/faq` | Complete | Search + category pills + AccordionV2 + Pagination + CTABand |
-| Privacy `/privacy-policy` | Complete | LegalPageLayout + structured content |
-| Terms `/terms-and-conditions` | Complete | LegalPageLayout + structured content |
-| Refund `/refund-policy` | Complete | LegalPageLayout + structured content |
-| Disclaimer `/disclaimer` | Complete | LegalPageLayout + structured content |
+| FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
+| Privacy `/privacy-policy` | Complete | Migrated from rodha.co.in/privacypolicy (**legal review**) |
+| Terms `/terms-and-conditions` | Complete | Migrated from rodha.co.in/termsofuse |
+| Refund `/refund-policy` | Complete | Migrated from rodha.co.in/refundpolicy (effective 01 Apr 2026) |
+| Disclaimer `/disclaimer` | Complete | From Terms §11 + Rodha product facts (**legal review**) |
 
 ---
 
@@ -109,9 +109,9 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Form | UI | Validation | Backend |
 |------|----|------------|---------|
-| ContactForm | Complete | Partial | Not Started |
-| LeadCaptureForm | Partial | Partial | Not Started |
-| NewsletterSignup | Partial | Partial | Not Started |
+| ContactForm | Complete | Complete | Complete — SMTP `/api/leads` |
+| LeadCaptureForm | Complete | Complete | Complete — SMTP `/api/leads` |
+| NewsletterSignup | Complete | Complete | Complete — SMTP `/api/leads` |
 
 ---
 
@@ -119,12 +119,13 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Item | Status |
 |------|--------|
-| Per-page metadata (basic) | Partial |
-| Open Graph / Twitter | Partial |
-| JSON-LD schemas | Not Started |
+| Per-page metadata (basic) | Complete | `buildPageMetadata` + category JSON titles; canonicals on key routes |
+| Open Graph / Twitter | Complete | Default `og-rodha.png`; blog/faculty use page images |
+| JSON-LD schemas | Partial | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting; Course schema still TBD |
 | sitemap.xml | Not Started |
 | robots.txt | Not Started |
 | Image alt / heading hierarchy | Partial |
+| Favicon / site icons | Complete | `/favicon.png` (+ apple reuse); distinct apple-touch asset missing |
 
 ---
 

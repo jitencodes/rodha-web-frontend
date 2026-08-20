@@ -12,14 +12,14 @@ export const TEAM_HERO = {
   titleHighlight: "Success Story",
   description:
     "We're a passionate team of educators, mentors, and innovators dedicated to transforming how India prepares for competitive exams.",
-  image: `${TEAM_ASSETS}/team hero.png`,
+  image: `${TEAM_ASSETS}/rodha-team-hero.jpg`,
   imageAlt: "Rodha team collaborating in the office",
 };
 
 export const TEAM_HERO_STATS: TeamHeroStat[] = [
   {
     id: "faculty",
-    value: "50+",
+    value: "20+",
     label: "Expert Faculty",
     icon: `${TEAM_ASSETS}/icons/hero-faculty.png`,
   },
@@ -31,7 +31,7 @@ export const TEAM_HERO_STATS: TeamHeroStat[] = [
   },
   {
     id: "students",
-    value: "10,000+",
+    value: "1,00,000+",
     label: "Students Mentored",
     icon: `${TEAM_ASSETS}/icons/hero-student.png`,
   },

@@ -62,7 +62,7 @@ export function FacultyHeroSection({ className }: FacultyHeroSectionProps) {
               {FACULTY_HERO.description}
             </p>
 
-            <div className="mt-7 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div className="mt-7 grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-5">
               {FACULTY_HERO_STATS.map((stat) => (
                 <div key={stat.id} className="flex items-center gap-2.5">
                   <div className="text-orange-500 shrink-0">

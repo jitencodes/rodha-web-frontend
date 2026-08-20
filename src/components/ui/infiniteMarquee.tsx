@@ -49,6 +49,15 @@ export function InfiniteMarquee({
   const lastTimeRef = useRef<number>(0);
 
   const [paused, setPaused] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
 
   const updateWidth = useCallback(() => {
     const track = trackRef.current;
@@ -85,7 +94,7 @@ export function InfiniteMarquee({
       const delta = (time - lastTimeRef.current) / 1000;
       lastTimeRef.current = time;
 
-      if (!paused && widthRef.current > 0) {
+      if (!paused && !prefersReducedMotion && widthRef.current > 0) {
         const distance = speed * delta;
 
         if (direction === "left") {
@@ -115,7 +124,7 @@ export function InfiniteMarquee({
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [speed, paused, direction]);
+  }, [speed, paused, direction, prefersReducedMotion]);
 
   return (
     <div

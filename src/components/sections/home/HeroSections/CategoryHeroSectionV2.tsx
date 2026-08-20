@@ -20,6 +20,7 @@ interface CategoryHeroSectionV2Props {
   subtitle: string;
   quickStats: CategoryQuickStat[];
   primaryCta: CategoryHeroCta;
+  videoId?: string;
   className?: string;
 }
 
@@ -65,6 +66,7 @@ export function CategoryHeroSectionV2({
   subtitle,
   quickStats,
   primaryCta,
+  videoId,
   className,
 }: CategoryHeroSectionV2Props) {
   const selectionStat = quickStats[0];
@@ -101,7 +103,7 @@ export function CategoryHeroSectionV2({
 
           <div className="lg:col-span-6 flex flex-col items-center min-h-0">
             <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-              <HeroVideoEmbed />
+              <HeroVideoEmbed videoId={videoId} />
             </div>
           </div>
         </div>

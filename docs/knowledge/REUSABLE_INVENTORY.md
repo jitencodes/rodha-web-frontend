@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-20 (Category course filters + catalog refresh)
+**Last updated:** 2026-08-20 (content & SEO migration)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -32,7 +32,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` (optional `variant?: "dark" \| "light"`; light matches blog filter pills) |
 | Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
-| InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop with gap-aligned repeated sets) |
+| InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop; respects `prefers-reduced-motion`) |
 
 ## Layout — `src/components/layout/`
 
@@ -52,7 +52,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
 | CategoryLandingPage | `CategoryLandingPage.tsx` (JSON-driven CAT V2 stack for `/category/[slug]`) |
-| CategoryCoursesSlider | `CategoryCoursesSlider.tsx` (client island: All / Comprehensive / Individual / Crash Course chips + existing course carousel) |
+| CategoryCoursesSlider | `CategoryCoursesSlider.tsx` (client island: data-driven courseType chips — hide bar when ≤1 type; existing course carousel) |
+| LovedTeamSection | `LovedTeamSection.tsx` (full-width image-only carousel; autoplay 3s; team CTA assets) |
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
 | CTABand | `CTABand.tsx` (optional `backgroundImage`, `titleAccent`, `secondaryOutline` for home variant; counselling `/contact` actions open modal) |
 | CTABandV2 | `CTABandV2.tsx` (locked homepage full-bleed image CTA) |
@@ -166,8 +167,13 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File | Role |
 |--------|------|------|
 | constants | `constants.ts` | Site config, categories, trust metrics, value props |
+| course-filters | `course-filters.ts` | `getVisibleCourseFilters` / `filterCoursesByType` — data-driven chips |
+| email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
+| submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
-| structured-data | `structured-data.ts` | Server-rendered JSON-LD helpers (Organization, Breadcrumb, FAQ, Person) |
+| initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |
+| structured-data | `structured-data.ts` | Server-rendered JSON-LD helpers (Organization, WebSite, Breadcrumb, FAQ, Person, BlogPosting) |
+| seo | `seo.ts` | `buildPageMetadata` + `DEFAULT_OG_IMAGE` for canonical/OG/Twitter across marketing pages |
 | types | `types.ts` | Shared domain types |
 | utils | `utils.ts` | `cn()` helper |
 
@@ -180,7 +186,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
 | category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
 | courses | `courses.ts` (homepage / legacy) |
-| faculty | `faculty.ts` (+ `getFacultyHonorific`, `withFacultyDetailDefaults`, `getFacultyBySlug` merged detail) |
+| faculty | `faculty.ts` (real profiles only; `selectFacultyReviews`, `getCoursesForFaculty`, `withFacultyDetailDefaults`) |
 | faq | `faq.ts` |
 | legal | `legal.ts` |
 | navigation | `navigation.ts` |

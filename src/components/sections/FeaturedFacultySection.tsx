@@ -1,6 +1,6 @@
 import { Container } from "@/components/layout/Container";
-import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
+import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import type { Faculty } from "@/lib/types";
@@ -14,7 +14,7 @@ export function FeaturedFacultySection({ members }: FeaturedFacultySectionProps)
 
   return (
     <section className="home-section-spacing bg-section-beige home-on-light pt-8 md:pt-10 pb-6 md:pb-8">
-      <Container> 
+      <Container>
         <SectionHeaderV2
           badge="Featured Faculty"
           title={
@@ -25,19 +25,19 @@ export function FeaturedFacultySection({ members }: FeaturedFacultySectionProps)
           }
           align="left"
         />
-        <RevealGroup>
-          <Carousel>
-            {members.map((member, index) => (
-              <div
-                key={member.id}
-                className={`snap-start shrink-0 reveal-child reveal-delay-${(index % 4) + 1}`}
-              >
-                <FacultyCardV2 faculty={member} />
-              </div>
-            ))}
-          </Carousel>
-        </RevealGroup>
       </Container>
+      <RevealGroup>
+        <InfiniteMarquee speed={35} direction="left" gap={20}>
+          {members.map((member, index) => (
+            <div
+              key={member.id}
+              className={`reveal-child reveal-delay-${(index % 4) + 1}`}
+            >
+              <FacultyCardV2 faculty={member} />
+            </div>
+          ))}
+        </InfiniteMarquee>
+      </RevealGroup>
     </section>
   );
 }

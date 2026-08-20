@@ -9,6 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 import { CATEGORIES } from "@/lib/constants";
 import type { ContactFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { submitLead } from "@/lib/submit-lead";
 
 interface ContactFormProps {
   className?: string;
@@ -24,15 +25,36 @@ export function ContactForm({ className, variant = "light" }: ContactFormProps) 
     message: "",
   });
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [phoneFocused, setPhoneFocused] = useState(false);
   const isLight = variant === "light";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Implement form submission
-    await new Promise((r) => setTimeout(r, 1000));
+    setStatus("idle");
+    setErrorMessage("");
+
+    const result = await submitLead({
+      formType: "contact",
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      exam: formData.exam || undefined,
+      message: formData.message || undefined,
+    });
+
     setLoading(false);
+
+    if (!result.ok) {
+      setStatus("error");
+      setErrorMessage(result.error || "Unable to send your message.");
+      return;
+    }
+
+    setStatus("success");
+    setFormData({ name: "", email: "", phone: "", exam: "", message: "" });
   };
 
   return (
@@ -130,13 +152,20 @@ export function ContactForm({ className, variant = "light" }: ContactFormProps) 
           placeholder="Tell us about your requirements..."
           value={formData.message}
           onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-          // prefixIcon={<Icon src="/assets/icons/info.svg" size={16} />}
           rows={2}
           className="min-h-[80px]"
         />
         <Button type="submit" loading={loading} fullWidth>
           Send Message
         </Button>
+        {status === "success" && (
+          <p className="text-center text-caption text-green-600">
+            Thanks! Your message has been sent. Our team will get back to you soon.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-center text-caption text-red-500">{errorMessage}</p>
+        )}
         <p
           className={cn(
             "flex items-center justify-center gap-2 text-caption",

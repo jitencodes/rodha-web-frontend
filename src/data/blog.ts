@@ -1,4 +1,4 @@
-﻿import type { BlogPost } from "@/lib/types";
+import type { BlogPost } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Blog categories
@@ -13,616 +13,1087 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
   { id: "all", label: "All" },
   { id: "mba-cat", label: "MBA" },
   { id: "ipmat", label: "IPMAT" },
-  { id: "clat", label: "CLAT" },
-  { id: "banking", label: "Banking" },
-  { id: "study-tips", label: "Study Tips" },
-  { id: "career-guidance", label: "Career Guidance" },
-  { id: "exam-updates", label: "Exam Updates" },
+  { id: "ssc", label: "SSC" },
 ];
 
 export const BLOG_ITEMS_PER_PAGE = 8;
 
 // ---------------------------------------------------------------------------
-// Blog content helper — minimal trusted HTML for static posts
-// ---------------------------------------------------------------------------
-
-function p(text: string) {
-  return `<p>${text}</p>`;
-}
-
-const getThumbnail = (slug: string) => `/assets/images/blog/${slug}.png`;
-const PLACEHOLDER = "/assets/images/placeholders/blog-thumbnail.svg";
-
-// ---------------------------------------------------------------------------
-// Blog posts
+// Blog posts (migrated from rodha.co.in)
 // ---------------------------------------------------------------------------
 
 export const blogPosts: BlogPost[] = [
   {
-    id: "b1",
-    slug: "cat-2026-exam-pattern-complete-guide",
-    title: "CAT 2026 Exam Pattern: Complete Guide to Syllabus, Sections & Scoring",
+    id: "blog-1",
+    slug: "cat-2026-notification",
+    title: "CAT 2026 Notification Released: Exam Date, Registration, Eligibility, Fees & Important Dates",
     category: "mba-cat",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Everything you need to know about the CAT 2026 exam pattern, section-wise syllabus, marking scheme, and preparation strategy.",
-    content: `
-      <h2>Understanding the CAT 2026 Exam Structure</h2>
-      ${p("The Common Admission Test (CAT) 2026 continues with three sections — Verbal Ability & Reading Comprehension (VARC), Data Interpretation & Logical Reasoning (DILR), and Quantitative Ability (QA). Each section carries equal weight and is timed separately at 40 minutes.")}
-      <h3>Section-wise Breakdown</h3>
-      <ul>
-        <li><strong>VARC:</strong> 24 questions — RC passages, para-jumbles, summary, and odd-sentence-out.</li>
-        <li><strong>DILR:</strong> 20 questions — data sets, caselets, arrangements, and puzzles.</li>
-        <li><strong>QA:</strong> 22 questions — arithmetic, algebra, geometry, number systems, and modern maths.</li>
-      </ul>
-      <h3>Marking Scheme</h3>
-      ${p("MCQs carry +3 for correct and −1 for incorrect answers. TITA (Type In The Answer) questions have no negative marking. A strategic approach to attempt selection is crucial for maximising your score.")}
-      <h3>Preparation Strategy</h3>
-      <ol>
-        <li>Begin with concept clarity — cover fundamentals of each section before mock practice.</li>
-        <li>Take at least 30 full-length mocks in the last 3 months.</li>
-        <li>Analyse every mock — <em>time per question</em> and <em>accuracy by topic</em> matter more than raw scores.</li>
-      </ol>
-      ${p("With consistent practice and the right mentorship, a <strong>99+ percentile</strong> is absolutely achievable. <a href='/category/cat'>Explore Rodha's CAT programs</a> to get started.")}
-    `,
-    publishedDate: "2026-06-15",
-    readTime: "8 min read",
-    metaTitle: "CAT 2026 Exam Pattern — Syllabus, Sections & Scoring | Rodha",
-    metaDescription:
-      "Complete guide to CAT 2026 exam pattern including section-wise syllabus, marking scheme, and preparation strategies from Rodha's expert faculty.",
-    metaKeywords: ["CAT 2026", "CAT exam pattern", "CAT syllabus", "CAT preparation"],
-    tags: ["CAT", "Exam Pattern", "Syllabus"],
-    featured: true,
-    // legacy compat
-    excerpt:
-      "Everything you need to know about the CAT 2026 exam pattern, section-wise syllabus, marking scheme, and preparation strategy.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-06-15",
-    author: "Rodha Team",
-  },
-  {
-    id: "b2",
-    slug: "crack-ipmat-2026-in-6-months",
-    title: "How to Crack IPMAT 2026 in 6 Months: A Proven Strategy",
-    category: "ipmat",
-    thumbnail: getThumbnail("blog-3"),
-    shortDescription:
-      "A month-by-month preparation plan to crack IPMAT and secure admission to IIM Indore or Rohtak.",
-    content: `
-      <h2>Your 6-Month IPMAT Roadmap</h2>
-      ${p("IPMAT (Integrated Programme in Management Aptitude Test) is the gateway to 5-year integrated management programmes at IIM Indore and IIM Rohtak. With the right strategy, six months is more than enough to prepare.")}
-      <h3>Month 1–2: Foundation Building</h3>
-      ${p("Focus on strengthening quantitative aptitude fundamentals — arithmetic, algebra, and geometry. For the verbal section, begin with reading comprehension and vocabulary building.")}
-      <h3>Month 3–4: Advanced Topics & Practice</h3>
-      ${p("Move to advanced problem-solving, probability, permutations, and set theory. Practice at least 50 RC passages and start timed sectional tests.")}
-      <h3>Month 5–6: Mocks & Revision</h3>
-      ${p("Take 2–3 full-length IPMAT mocks per week. Analyse mistakes, revise weak areas, and maintain an error log.")}
-      ${p("<a href='/category/ipmat'>Explore Rodha's IPMAT programs</a> for structured preparation with expert mentors.")}
-    `,
-    publishedDate: "2026-06-10",
-    readTime: "6 min read",
-    metaTitle: "Crack IPMAT 2026 in 6 Months — Preparation Strategy | Rodha",
-    metaDescription:
-      "Month-by-month IPMAT 2026 preparation plan covering quantitative aptitude, verbal ability, and mock test strategy.",
-    metaKeywords: ["IPMAT 2026", "IPMAT preparation", "IIM Indore", "IPMAT strategy"],
-    tags: ["IPMAT", "Strategy"],
-    excerpt: "A month-by-month preparation plan to crack IPMAT and secure admission to IIM Indore or Rohtak.",
-    image: getThumbnail("blog-3"),
-    publishedAt: "2026-06-10",
-    author: "Rodha Team",
-  },
-  {
-    id: "b3",
-    slug: "clat-2026-legal-reasoning-tips",
-    title: "CLAT 2026 Legal Reasoning: Key Topics & Practice Tips",
-    category: "clat",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "Focus on the most important legal reasoning topics and practice strategies for CLAT 2026.",
-    content: `
-      <h2>Mastering Legal Reasoning for CLAT</h2>
-      ${p("Legal reasoning is one of the five sections in CLAT and carries significant weight. The section tests your ability to apply legal principles to factual situations.")}
-      <h3>Key Topics</h3>
-      <ul>
-        <li>Constitutional law principles</li>
-        <li>Contract law basics</li>
-        <li>Criminal law fundamentals</li>
-        <li>Tort law and liability</li>
-        <li>Legal maxims and their applications</li>
-      </ul>
-      <h3>Practice Tips</h3>
-      <ol>
-        <li>Read legal passages daily — start with 2 and increase to 5 per day.</li>
-        <li>Understand the principle-fact-decision framework used in most questions.</li>
-        <li>Practice previous year CLAT papers section-wise.</li>
-      </ol>
-      ${p("<a href='/category/clat'>Explore Rodha's CLAT programs</a> for comprehensive legal reasoning preparation.")}
-    `,
-    publishedDate: "2026-05-28",
-    readTime: "7 min read",
-    metaTitle: "CLAT 2026 Legal Reasoning Tips — Key Topics & Practice | Rodha",
-    metaDescription:
-      "Essential legal reasoning topics and practice strategies for CLAT 2026 from Rodha's law preparation experts.",
-    metaKeywords: ["CLAT 2026", "legal reasoning", "CLAT preparation", "law entrance"],
-    tags: ["CLAT", "Legal Reasoning"],
-    excerpt: "Focus on the most important legal reasoning topics and practice strategies for CLAT 2026.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-05-28",
-    author: "Rodha Team",
-  },
-  {
-    id: "b4",
-    slug: "study-habits-cat-99-percentilers",
-    title: "10 Proven Study Habits of CAT 99 Percentilers",
-    category: "study-tips",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Learn the daily routines, revision tactics, and mock-test strategies that top scorers swear by.",
-    content: `
-      <h2>What Sets 99 Percentilers Apart?</h2>
-      ${p("Scoring above the 99th percentile in CAT isn't just about talent — it's about disciplined habits. Here are ten habits consistently followed by top scorers.")}
-      <ol>
-        <li><strong>Early morning study blocks</strong> — Most toppers study 2–3 hours before the day begins.</li>
-        <li><strong>Concept-first approach</strong> — They master fundamentals before attempting advanced problems.</li>
-        <li><strong>Daily reading habit</strong> — At least 30 minutes of editorial/opinion reading for VARC.</li>
-        <li><strong>Mock analysis > Mock attempts</strong> — They spend more time analysing than taking mocks.</li>
-        <li><strong>Error logs</strong> — Maintaining a record of mistakes and revisiting them weekly.</li>
-        <li><strong>Timed practice</strong> — Every practice session is timed, never open-ended.</li>
-        <li><strong>Peer discussion groups</strong> — Explaining concepts to others strengthens understanding.</li>
-        <li><strong>Selective social media</strong> — Limiting distractions during preparation months.</li>
-        <li><strong>Physical fitness</strong> — Regular exercise to maintain energy and focus.</li>
-        <li><strong>Consistent sleep schedule</strong> — 7–8 hours of quality sleep, non-negotiable.</li>
-      </ol>
-      ${p("Build these habits into your routine and watch your scores climb. <a href='/category/cat'>Start with Rodha's guided CAT preparation</a>.")}
-    `,
-    publishedDate: "2026-05-20",
-    readTime: "4 min read",
-    metaTitle: "10 Study Habits of CAT 99 Percentilers | Rodha",
-    metaDescription:
-      "Discover the daily routines, revision tactics, and strategies used by CAT 99+ percentilers.",
-    metaKeywords: ["CAT preparation", "study habits", "99 percentile", "CAT tips"],
-    tags: ["CAT", "Study Tips"],
-    excerpt: "Learn the daily routines, revision tactics, and mock-test strategies that top scorers swear by.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-05-20",
-    author: "Rodha Team",
-  },
-  {
-    id: "b5",
-    slug: "banking-exams-2026-complete-guide",
-    title: "Banking Exams 2026: Complete Guide to Succeed",
-    category: "banking",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "A comprehensive overview of banking exams in 2026 including IBPS PO, SBI PO, RBI Grade B, and effective preparation strategies.",
-    content: `
-      <h2>Overview of Major Banking Exams in 2026</h2>
-      ${p("Banking exams remain one of the most sought-after competitive exam categories in India. With lakhs of aspirants appearing each year, a structured approach is essential.")}
-      <h3>Key Exams</h3>
-      <ul>
-        <li><strong>IBPS PO:</strong> Preliminary + Mains + Interview for Probationary Officer posts.</li>
-        <li><strong>SBI PO:</strong> India's largest bank — highly competitive with three stages.</li>
-        <li><strong>RBI Grade B:</strong> Premium government role with a comprehensive exam pattern.</li>
-        <li><strong>IBPS Clerk:</strong> Entry-level banking role with massive recruitment numbers.</li>
-      </ul>
-      <h3>Preparation Strategy</h3>
-      ${p("Start with quantitative aptitude and reasoning ability — these sections overlap across exams. Build English language skills through daily reading and grammar practice.")}
-      ${p("<a href='/category/banking'>Explore Rodha's Banking exam programs</a> for expert-led preparation.")}
-    `,
-    publishedDate: "2026-05-14",
-    readTime: "6 min read",
-    metaTitle: "Banking Exams 2026 — Complete Guide | Rodha",
-    metaDescription:
-      "Complete guide to banking exams in 2026 — IBPS PO, SBI PO, RBI Grade B preparation strategies and tips.",
-    metaKeywords: ["banking exams 2026", "IBPS PO", "SBI PO", "RBI Grade B"],
-    tags: ["Banking", "Exam Guide"],
-    excerpt: "A comprehensive overview of banking exams in 2026.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-05-14",
-    author: "Rodha Team",
-  },
-  {
-    id: "b6",
-    slug: "mba-after-graduation-career-opportunities",
-    title: "MBA After Graduation: Career Opportunities Explained",
-    category: "career-guidance",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Explore the diverse career paths an MBA opens up — from consulting and finance to entrepreneurship and tech management.",
-    content: `
-      <h2>Why an MBA After Graduation?</h2>
-      ${p("An MBA is one of the most versatile postgraduate degrees. It equips you with management fundamentals, leadership skills, and an extensive professional network.")}
-      <h3>Top Career Paths After MBA</h3>
-      <ul>
-        <li><strong>Management Consulting:</strong> McKinsey, BCG, Bain — top B-school grads are heavily recruited.</li>
-        <li><strong>Investment Banking & Finance:</strong> Roles at Goldman Sachs, JP Morgan, and domestic banks.</li>
-        <li><strong>Product Management:</strong> Tech companies like Google, Amazon, and startups actively hire MBAs.</li>
-        <li><strong>Entrepreneurship:</strong> The structured thinking and network make MBA founders successful.</li>
-        <li><strong>Marketing & Brand Management:</strong> FMCG giants like HUL, P&G, and Nestlé.</li>
-      </ul>
-      ${p("Your career trajectory depends on the B-school, specialisation, and internship experience. <a href='/category/cat'>Start your MBA journey with Rodha</a>.")}
-    `,
-    publishedDate: "2026-05-10",
-    readTime: "5 min read",
-    metaTitle: "MBA After Graduation — Career Opportunities | Rodha",
-    metaDescription:
-      "Discover career paths after MBA — consulting, finance, product management, entrepreneurship and more.",
-    metaKeywords: ["MBA career", "MBA after graduation", "career opportunities"],
-    tags: ["Career Guidance", "MBA"],
-    excerpt: "Explore the diverse career paths an MBA opens up.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-05-10",
-    author: "Rodha Team",
-  },
-  {
-    id: "b7",
-    slug: "important-exams-2026-dates-eligibility",
-    title: "Important Exams in 2026: Dates, Eligibility & Syllabus",
-    category: "exam-updates",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "Stay updated with key exam dates, eligibility criteria, and syllabus changes for all major competitive exams in 2026.",
-    content: `
-      <h2>2026 Exam Calendar at a Glance</h2>
-      ${p("Staying on top of exam dates and eligibility changes is crucial for aspirants juggling multiple exams. Here's a consolidated view of the major exams in 2026.")}
-      <h3>MBA Entrance Exams</h3>
-      <ul>
-        <li><strong>CAT 2026:</strong> Expected in November. Eligibility — graduation with 50% aggregate.</li>
-        <li><strong>XAT 2027:</strong> January 2027 — register by November 2026.</li>
-        <li><strong>SNAP 2026:</strong> December — multiple test windows.</li>
-      </ul>
-      <h3>Law Entrance Exams</h3>
-      <ul>
-        <li><strong>CLAT 2026:</strong> December — for 5-year and 1-year LLB programmes.</li>
-        <li><strong>AILET 2026:</strong> Separate exam for NLU Delhi.</li>
-      </ul>
-      <h3>Banking Exams</h3>
-      <ul>
-        <li><strong>IBPS PO 2026:</strong> Prelims in October, Mains in November.</li>
-        <li><strong>SBI PO 2026:</strong> Notification expected by April.</li>
-      </ul>
-      ${p("Bookmark this page and check back for updates as official notifications are released.")}
-    `,
-    publishedDate: "2026-05-06",
-    readTime: "5 min read",
-    metaTitle: "Important Exams 2026 — Dates, Eligibility & Syllabus | Rodha",
-    metaDescription:
-      "Key exam dates, eligibility, and syllabus updates for CAT, CLAT, IPMAT, banking, and other competitive exams in 2026.",
-    metaKeywords: ["exam dates 2026", "CAT 2026 date", "CLAT 2026", "IBPS PO 2026"],
-    tags: ["Exam Updates", "Calendar"],
-    excerpt: "Stay updated with key exam dates for 2026.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-05-06",
-    author: "Rodha Team",
-  },
-  {
-    id: "b8",
-    slug: "time-management-tips-exam-preparation",
-    title: "Time Management Tips for Exam Preparation",
-    category: "study-tips",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Master the art of managing your study time effectively with techniques proven by top rankers.",
-    content: `
-      <h2>Why Time Management Matters</h2>
-      ${p("Most aspirants don't fail because of lack of intelligence — they fail because of poor time management. Here's how to structure your day for maximum productivity.")}
-      <h3>The Pomodoro Technique for Exam Prep</h3>
-      ${p("Study in focused 25-minute blocks with 5-minute breaks. After four blocks, take a longer 15–20 minute break. This keeps your mind fresh and prevents burnout.")}
-      <h3>Create a Weekly Study Plan</h3>
-      <ol>
-        <li>Allocate specific subjects to specific days.</li>
-        <li>Reserve 2 days per week exclusively for revision and mock tests.</li>
-        <li>Keep one day lighter for rest and informal learning (podcasts, articles).</li>
-      </ol>
-      <h3>Avoid Common Time Wasters</h3>
-      <ul>
-        <li>Endless note-making without practice</li>
-        <li>Switching between too many resources</li>
-        <li>Over-planning without execution</li>
-      </ul>
-      ${p("A structured routine with Rodha's mentorship can transform your preparation. <a href='/contact'>Get in touch with our counsellors</a>.")}
-    `,
-    publishedDate: "2026-05-03",
-    readTime: "5 min read",
-    metaTitle: "Time Management Tips for Exam Preparation | Rodha",
-    metaDescription:
-      "Effective time management techniques for competitive exam preparation — Pomodoro, weekly planning, and productivity tips.",
-    metaKeywords: ["time management", "study tips", "exam preparation", "productivity"],
-    tags: ["Study Tips", "Productivity"],
-    excerpt: "Master the art of managing your study time effectively.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-05-03",
-    author: "Rodha Team",
-  },
-  {
-    id: "b9",
-    slug: "ipmat-vs-integrated-programs-which-path",
-    title: "IPMAT vs Other Integrated Programs: Which Path Is Right for You?",
-    category: "ipmat",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "A comparative analysis of IPMAT and 5-year integrated programs to help you make an informed decision for your management career.",
-    content: `
-      <h2>Understanding IPMAT</h2>
-      ${p("The Integrated Programme in Management Aptitude Test (IPMAT) is a national-level entrance exam for admission into 5-year Integrated Programmes in Management (IPM) at IIM Indore, IIM Rohtak and other top institutes.")}
-      <h3>Key Differences</h3>
-      ${p("IPMAT focuses on quantitative ability and verbal ability, while other integrated programs like JIPMAT and SET may have different exam patterns and eligibility criteria.")}
-      <ul>
-        <li><strong>Duration:</strong> 5 years (After Class 12)</li>
-        <li><strong>Focus:</strong> Management + Liberal Arts education</li>
-        <li><strong>Top Institutes:</strong> IIM Indore, IIM Rohtak</li>
-      </ul>
-      ${p("<a href='/category/ipmat'>Explore Rodha's IPMAT programs</a> for comprehensive preparation.")}
-    `,
-    publishedDate: "2026-04-28",
-    readTime: "6 min read",
-    metaTitle: "IPMAT vs Integrated Programs — Which Path? | Rodha",
-    metaDescription:
-      "Compare IPMAT with other 5-year integrated management programs — eligibility, exam pattern, and career prospects.",
-    metaKeywords: ["IPMAT", "integrated programs", "IIM Indore", "IPM"],
-    tags: ["IPMAT", "Comparison"],
-    excerpt: "A comparative analysis of IPMAT and 5-year integrated programs.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-04-28",
-    author: "Rodha Team",
-  },
-  {
-    id: "b10",
-    slug: "clat-2026-syllabus-pattern-preparation",
-    title: "CLAT 2026 Syllabus, Pattern & Preparation Tips",
-    category: "clat",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Everything you need to know about CLAT 2026 — complete syllabus breakdown, exam pattern, and expert preparation tips.",
-    content: `
-      <h2>CLAT 2026 Exam Overview</h2>
-      ${p("The Common Law Admission Test (CLAT) is the primary entrance exam for admission to 22 National Law Universities across India. The 2026 edition is expected in December.")}
-      <h3>Exam Pattern</h3>
-      <ul>
-        <li><strong>Duration:</strong> 2 hours</li>
-        <li><strong>Questions:</strong> 150 (MCQ-based)</li>
-        <li><strong>Sections:</strong> English, Current Affairs & GK, Legal Reasoning, Logical Reasoning, Quantitative Techniques</li>
-        <li><strong>Marking:</strong> +1 for correct, −0.25 for incorrect</li>
-      </ul>
-      <h3>Section-wise Preparation</h3>
-      ${p("For English, focus on reading comprehension of 450–500 word passages. For legal reasoning, practise principle-fact based questions from constitutional and contract law.")}
-      ${p("<a href='/category/clat'>Start your CLAT preparation with Rodha</a>.")}
-    `,
-    publishedDate: "2026-04-22",
-    readTime: "7 min read",
-    metaTitle: "CLAT 2026 Syllabus, Pattern & Tips | Rodha",
-    metaDescription:
-      "Complete CLAT 2026 syllabus, exam pattern, and section-wise preparation tips from Rodha's law experts.",
-    metaKeywords: ["CLAT 2026", "CLAT syllabus", "CLAT preparation", "NLU admission"],
-    tags: ["CLAT", "Syllabus", "Preparation"],
-    excerpt: "Everything you need to know about CLAT 2026.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-04-22",
-    author: "Rodha Team",
-  },
-  {
-    id: "b11",
-    slug: "cat-preparation-strategy-6-months-plan",
-    title: "CAT 2026 Preparation Strategy: 6 Months Plan That Works",
-    category: "mba-cat",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "A step-by-step guide to help you navigate your MBA preparation journey with clarity and confidence.",
-    content: `
-      <h2>Your 6-Month CAT Preparation Blueprint</h2>
-      ${p("With six months of focused preparation, you can achieve a strong CAT percentile. Here's a tried-and-tested plan used by Rodha's top scorers.")}
-      <h3>Phase 1: Foundation (Month 1–2)</h3>
-      ${p("Cover all basic concepts in QA, VARC, and DILR. Use textbooks for theory and solve 30+ practice problems per day.")}
-      <h3>Phase 2: Practice & Speed (Month 3–4)</h3>
-      ${p("Focus on speed and accuracy. Start sectional mocks and time-bound practice sets. Target 50 questions per hour.")}
-      <h3>Phase 3: Mocks & Revision (Month 5–6)</h3>
-      ${p("Take 3 full mocks per week. Maintain an error journal. Revise formulas and shortcuts daily.")}
-      ${p("<a href='/category/cat'>Join Rodha's CAT program</a> for expert mentorship throughout your journey.")}
-    `,
-    publishedDate: "2026-04-15",
-    readTime: "8 min read",
-    metaTitle: "CAT 2026 Preparation Strategy — 6 Month Plan | Rodha",
-    metaDescription:
-      "Step-by-step 6-month CAT 2026 preparation plan covering QA, VARC, DILR with mock test strategy.",
-    metaKeywords: ["CAT preparation", "6 month plan", "CAT strategy", "MBA entrance"],
-    tags: ["CAT", "Strategy", "Preparation"],
-    excerpt: "A step-by-step guide to navigate your MBA preparation journey.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-04-15",
-    author: "Rodha Team",
-  },
-  {
-    id: "b12",
-    slug: "top-10-study-habits-toppers-follow",
-    title: "Top 10 Study Habits of Toppers You Should Follow",
-    category: "study-tips",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "Discover the study habits that separate toppers from average students and how you can adopt them.",
-    content: `
-      <h2>Habits That Make Toppers</h2>
-      ${p("What separates a topper from the rest? It's rarely just intelligence — it's discipline, consistency, and smart study habits.")}
-      <ol>
-        <li><strong>Active recall over passive reading</strong> — test yourself instead of re-reading notes.</li>
-        <li><strong>Spaced repetition</strong> — revise at increasing intervals for long-term retention.</li>
-        <li><strong>Teach what you learn</strong> — explaining concepts solidifies understanding.</li>
-        <li><strong>Minimise multi-tasking</strong> — deep focus beats scattered attention.</li>
-        <li><strong>Set daily micro-goals</strong> — small wins build momentum.</li>
-        <li><strong>Use one primary resource per topic</strong> — avoid information overload.</li>
-        <li><strong>Sleep well</strong> — memory consolidation happens during sleep.</li>
-        <li><strong>Exercise regularly</strong> — improves cognitive function and mood.</li>
-        <li><strong>Join a study group</strong> — accountability and diverse perspectives help.</li>
-        <li><strong>Review the day every night</strong> — 10 minutes of reflection before bed.</li>
-      </ol>
-      ${p("Adopt these habits and watch your performance transform.")}
-    `,
-    publishedDate: "2026-04-08",
-    readTime: "5 min read",
-    metaTitle: "Top 10 Study Habits of Toppers | Rodha",
-    metaDescription:
-      "Learn the proven study habits used by exam toppers — active recall, spaced repetition, and more.",
-    metaKeywords: ["study habits", "toppers", "study tips", "exam preparation"],
-    tags: ["Study Tips", "Habits"],
-    excerpt: "Discover the study habits that separate toppers from average students.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-04-08",
-    author: "Rodha Team",
-  },
-  {
-    id: "b13",
-    slug: "how-to-prepare-for-banking-exams-2026",
-    title: "How to Prepare for Banking Exams in 2026",
-    category: "banking",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Step-by-step guide to prepare for IBPS PO, SBI PO, and other banking exams in 2026.",
-    content: `
-      <h2>Getting Started with Banking Exam Preparation</h2>
-      ${p("Banking exams in India are conducted by IBPS, SBI, and RBI, covering roles from clerks to grade-B officers. A methodical approach is key.")}
-      <h3>Core Sections to Master</h3>
-      <ul>
-        <li><strong>Quantitative Aptitude:</strong> Number series, simplification, DI, profit & loss.</li>
-        <li><strong>Reasoning Ability:</strong> Puzzles, seating arrangements, syllogisms, inequalities.</li>
-        <li><strong>English Language:</strong> Reading comprehension, cloze tests, error spotting.</li>
-        <li><strong>General Awareness:</strong> Banking awareness, current affairs (last 6 months).</li>
-      </ul>
-      <h3>Monthly Plan</h3>
-      ${p("Devote months 1–2 to fundamentals, months 3–4 to sectional practice, and months 5–6 to full-length mocks and current affairs revision.")}
-      ${p("<a href='/category/banking'>Explore Rodha's Banking programs</a>.")}
-    `,
-    publishedDate: "2026-04-01",
-    readTime: "6 min read",
-    metaTitle: "How to Prepare for Banking Exams 2026 | Rodha",
-    metaDescription:
-      "Comprehensive banking exam preparation guide for IBPS PO, SBI PO, and RBI Grade B in 2026.",
-    metaKeywords: ["banking exams", "IBPS PO preparation", "SBI PO", "banking"],
-    tags: ["Banking", "Preparation"],
-    excerpt: "Step-by-step guide to prepare for banking exams in 2026.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-04-01",
-    author: "Rodha Team",
-  },
-  {
-    id: "b14",
-    slug: "career-after-clat-opportunities-in-law",
-    title: "Career After CLAT: Opportunities in the Legal Field",
-    category: "career-guidance",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "Explore the wide range of career opportunities available after cracking CLAT and graduating from an NLU.",
-    content: `
-      <h2>What Awaits After CLAT?</h2>
-      ${p("A degree from a National Law University opens doors to some of the most prestigious and lucrative careers in India.")}
-      <h3>Top Career Paths</h3>
-      <ul>
-        <li><strong>Corporate Law:</strong> Join top law firms like AZB, Cyril Amarchand, or Trilegal.</li>
-        <li><strong>Litigation:</strong> Practice in courts — from district courts to the Supreme Court.</li>
-        <li><strong>Judiciary:</strong> Become a judge through competitive judicial service exams.</li>
-        <li><strong>Policy & Government:</strong> Roles in think tanks, ministries, and regulatory bodies.</li>
-        <li><strong>Legal Tech & Startups:</strong> A growing sector combining law and technology.</li>
-      </ul>
-      ${p("The average salary for NLU graduates starts at ₹12–15 LPA, with top performers earning ₹30+ LPA in their first year.")}
-      ${p("<a href='/category/clat'>Prepare for CLAT with Rodha</a>.")}
-    `,
-    publishedDate: "2026-03-25",
-    readTime: "5 min read",
-    metaTitle: "Career After CLAT — Legal Career Opportunities | Rodha",
-    metaDescription:
-      "Discover career paths after CLAT — corporate law, litigation, judiciary, policy, and legal tech opportunities.",
-    metaKeywords: ["career after CLAT", "law career", "NLU placements", "legal career"],
-    tags: ["CLAT", "Career Guidance"],
-    excerpt: "Explore career opportunities after cracking CLAT.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-03-25",
-    author: "Rodha Team",
-  },
-  {
-    id: "b15",
-    slug: "cat-2026-registration-process-guide",
-    title: "CAT 2026 Registration: Step-by-Step Process Guide",
-    category: "exam-updates",
-    thumbnail: getThumbnail("blog-1"),
-    shortDescription:
-      "Complete walkthrough of the CAT 2026 registration process including important dates, documents, and fee details.",
-    content: `
-      <h2>CAT 2026 Registration Guide</h2>
-      ${p("Registration for CAT 2026 is expected to open in August. Here's everything you need to know to complete your registration smoothly.")}
-      <h3>Steps to Register</h3>
-      <ol>
-        <li>Visit the official CAT website and create an account.</li>
-        <li>Fill in personal details, academic information, and work experience.</li>
-        <li>Upload scanned photograph, signature, and category certificate (if applicable).</li>
-        <li>Select test cities (up to 6 preferences).</li>
-        <li>Pay the registration fee — ₹2,400 (General) / ₹1,200 (Reserved categories).</li>
-        <li>Download and save the confirmation page.</li>
-      </ol>
-      <h3>Documents Required</h3>
-      <ul>
-        <li>Class 10 and 12 marksheets</li>
-        <li>Graduation marksheet or enrollment certificate</li>
-        <li>Valid photo ID (Aadhaar / Passport / PAN)</li>
-        <li>Passport-size photograph</li>
-        <li>Digital signature</li>
-      </ul>
-      ${p("Stay updated with <a href='/blog'>Rodha's blog</a> for official date announcements.")}
-    `,
-    publishedDate: "2026-03-18",
-    readTime: "4 min read",
-    metaTitle: "CAT 2026 Registration Process — Step by Step | Rodha",
-    metaDescription:
-      "Complete guide to CAT 2026 registration — steps, documents, fees, and important dates.",
-    metaKeywords: ["CAT 2026 registration", "CAT registration process", "CAT 2026 dates"],
-    tags: ["CAT", "Exam Updates", "Registration"],
-    excerpt: "Complete walkthrough of the CAT 2026 registration process.",
-    image: getThumbnail("blog-1"),
-    publishedAt: "2026-03-18",
-    author: "Rodha Team",
-  },
-  {
-    id: "b16",
-    slug: "ipmat-2026-important-topics-preparation-tips",
-    title: "IPMAT 2026: Most Important Topics & Preparation Tips",
-    category: "ipmat",
-    thumbnail: getThumbnail("blog-4"),
-    shortDescription:
-      "Focus your IPMAT preparation on the topics that matter most — curated list of high-weightage topics and strategies.",
-    content: `
-      <h2>High-Weightage IPMAT Topics</h2>
-      ${p("IPMAT has a consistent pattern of question types. Focusing on high-weightage topics can significantly boost your score.")}
-      <h3>Quantitative Ability — Must-Do Topics</h3>
-      <ul>
-        <li>Number Systems & Divisibility</li>
-        <li>Algebra — Equations & Inequalities</li>
-        <li>Geometry — Triangles, Circles, Coordinate Geometry</li>
-        <li>Arithmetic — Percentages, Profit & Loss, Time & Work</li>
-        <li>Permutations & Combinations</li>
-      </ul>
-      <h3>Verbal Ability — Key Areas</h3>
-      <ul>
-        <li>Reading Comprehension (long and short passages)</li>
-        <li>Para-jumbles and Sentence Completion</li>
-        <li>Vocabulary in Context</li>
-        <li>Grammar & Usage</li>
-      </ul>
-      ${p("Practice these topics with Rodha's curated question banks. <a href='/category/ipmat'>Explore IPMAT programs</a>.")}
-    `,
-    publishedDate: "2026-03-12",
-    readTime: "5 min read",
-    metaTitle: "IPMAT 2026 Important Topics & Tips | Rodha",
-    metaDescription:
-      "High-weightage IPMAT 2026 topics for quantitative ability and verbal ability with preparation tips.",
-    metaKeywords: ["IPMAT 2026", "IPMAT topics", "IPMAT preparation", "IPMAT tips"],
-    tags: ["IPMAT", "Topics", "Preparation"],
-    excerpt: "Focus your IPMAT preparation on the topics that matter most.",
-    image: getThumbnail("blog-4"),
-    publishedAt: "2026-03-12",
-    author: "Rodha Team",
-  },
-];
+    thumbnail: "/assets/images/blog/cat-2026-notification/featured.png",
+    shortDescription: "The CAT 2026 notification is out. Check the exam date, registration schedule, eligibility criteria, application fees, reservation policy, and other important updates.",
+    content: `<p>The CAT 2026 notification has officially been released, giving MBA aspirants all the information they need to start their application journey. Conducted by the Indian Institutes of Management (IIMs), CAT is the entrance exam for admission to 22 IIMs and hundreds of other leading B-schools across India.</p>
+      <p>This year, the exam will be held on Sunday, November 29, 2026, in three sessions. Along with the exam date, the notification also confirms the registration schedule, eligibility criteria, application fees, reservation policy, and important instructions for candidates.</p>
+      <p>If you're planning to appear for the exam, understanding the CAT 2026 notification is the first step. Whether you're preparing through self-study or <a href="/category/cat">CAT online coaching</a>, knowing the latest rules and deadlines can help you plan your preparation better. This guide covers the latest updates, important dates, eligibility requirements, and everything else you need to know before registering.</p>
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+<img src="/assets/images/blog/cat-2026-notification/image-1.png" data-filename="2daa2b0f-2e18-47ec-b79e-d5eda34e1705-1780685839405-2daa2b0f-2e18-47ec-b79e-d5eda34e1705.png" alt="Key CAT 2026 dates and registration details at a glance.">
+      <h2 id="Key-Highlights">CAT 2026 Notification: Key Highlights</h2>
+      <p>The CAT 2026 notification answers most of the questions candidates have before registration begins. Here's a quick overview of the important details.</p>
+
+      <table>
+        <thead>
+          <tr><th>Particular</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Exam Name</td><td>Common Admission Test (CAT) 2026</td></tr>
+          <tr><td>Conducting Body</td><td>Indian Institutes of Management (IIMs)</td></tr>
+          <tr><td>Exam Date</td><td>November 29, 2026 (Sunday)</td></tr>
+          <tr><td>Exam Mode</td><td>Computer-Based Test</td></tr>
+          <tr><td>Number of Sessions</td><td>3</td></tr>
+          <tr><td>Registration Starts</td><td>August 3, 2026 (10:00 AM)</td></tr>
+          <tr><td>Registration Ends</td><td>September 15, 2026 (5:00 PM)</td></tr>
+          <tr><td>Admit Card Release</td><td>November 4, 2026</td></tr>
+          <tr><td>Expected Result</td><td>First Week of January 2027</td></tr>
+          <tr><td>Registration Fee (General)</td><td>₹2,700</td></tr>
+          <tr><td>Registration Fee (SC/ST/PwBD)</td><td>₹1,350</td></tr>
+        </tbody>
+      </table>
+
+      <p>The registration window opens on August 3, 2026, and closes on September 15, 2026. Candidates will be able to download their admit cards from November 4, 2026, while the results are expected in the first week of January 2027.</p>
+
+      <h2 id="Important-Dates">CAT 2026 Important Dates</h2>
+      <p>Keeping track of important deadlines is essential. Missing the registration window or forgetting to download your admit card could delay your MBA plans by an entire year. Here's a complete timeline announced in the <a href="https://www.youtube.com/watch?v=naCumhQy4o8" target="_blank">CAT 2026 notification</a>.</p>
+
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CAT 2026 Notification Release</td><td>July 2026</td></tr>
+          <tr><td>Registration Opens</td><td>August 3, 2026</td></tr>
+          <tr><td>Registration Closes</td><td>September 15, 2026</td></tr>
+          <tr><td>Admit Card Download Begins</td><td>November 4, 2026</td></tr>
+          <tr><td>CAT 2026 Exam</td><td>November 29, 2026</td></tr>
+          <tr><td>Expected Result</td><td>First Week of January 2027</td></tr>
+        </tbody>
+      </table>
+
+      <p>Instead of waiting until the final day, try completing your registration early. This gives you enough time to resolve any issues related to documents, payment, or test city preferences.</p>
+
+      <h2 id="Eligibility">CAT 2026 Eligibility Criteria</h2>
+      <p>Before filling out the application form, make sure you meet the eligibility criteria mentioned in the CAT 2026 notification. The requirements are straightforward, but it's important to understand them carefully to avoid mistakes during registration. Here's who can apply for CAT 2026.</p>
+
+      <h3>Bachelor's Degree Requirement</h3>
+      <p>Candidates must hold a bachelor's degree or an equivalent qualification from a recognized university or institution. The minimum marks required are:</p>
+      <ul class="cm-list">
+        <li>General, EWS, and NC-OBC: 50% or equivalent CGPA</li>
+        <li>SC, ST, and PwBD: 45% or equivalent CGPA</li>
+      </ul>
+      <p>If your university follows a CGPA system, your percentage will be calculated according to your institution's conversion policy. If no conversion formula exists, the percentage will be calculated by dividing the CGPA by the maximum possible CGPA and multiplying it by 100.</p>
+
+      <h3>Can Final-Year Students Apply?</h3>
+      <p>Yes. Students who are currently in the final year of their bachelor's degree or are waiting for their final results are eligible to apply. However, if they receive an admission offer, they must submit a certificate from their university confirming that they have completed all degree requirements within the timeline specified by the respective IIM. While you're waiting for your final results, it's a good time to start preparing with a structured <a href="/blog/cat-sectional-test-strategy-2026" title="">CAT sectional test strategy</a> to strengthen each section before the exam.</p>
+
+      <h3>Are Professional Degree Holders Eligible?</h3>
+      <p>Yes. Candidates who have completed professional qualifications such as:</p>
+      <ul class="cm-list">
+        <li>Chartered Accountant (CA)</li>
+        <li>Company Secretary (CS)</li>
+        <li>Cost and Management Accountant (CMA/ICWA)</li>
+        <li>Fellow of the Institute of Actuaries of India (FIAI)</li>
+      </ul>
+      <p>can also apply, provided they meet the minimum marks required under the CAT 2026 notification.</p>
+
+      <h3>Does Eligibility Guarantee Admission?</h3>
+      <p>No. Meeting the eligibility criteria only makes you eligible to take the CAT exam. It does not guarantee a call from an IIM or admission to an MBA programme. Every IIM has its own selection process and may consider multiple factors, including:</p>
+      <ul class="cm-list">
+        <li>CAT score</li>
+        <li>Academic performance</li>
+        <li>Work experience</li>
+        <li>Personal Interview (PI)</li>
+        <li>Written Ability Test (WAT) or other evaluation criteria</li>
+      </ul>
+      <p>The CAT 2026 notification also states that candidates must maintain a valid email address and mobile number throughout the admission process, as all important communication will be shared through these channels.</p>
+
+      <h2 id="Registration">CAT 2026 Registration Process</h2>
+      <p>Once you've confirmed that you're eligible, the next step is to complete your registration. The CAT application process is entirely online, and while it isn't complicated, even a small mistake can lead to delays or rejection. The CAT 2026 notification outlines each step clearly, so it's important to fill in your details carefully and upload the required documents in the correct format.</p>
+
+      <h3>Step 1: Register on the Official CAT Website</h3>
+      <p>Visit the <a href="https://iimcat.ac.in/per/g06/pub/32842/ASM/WebPortal/1/index.html?32842@@1@@1" target="_blank">official CAT website</a> and create your login using a valid email ID and mobile number. These credentials will be used throughout the admission process, so make sure they're active and accessible.</p>
+
+      <h3>Step 2: Fill in Your Personal and Academic Details</h3>
+      <p>After registration, complete the application form by entering details such as:</p>
+      <ul class="cm-list">
+        <li>Personal information</li>
+        <li>Educational qualifications</li>
+        <li>Work experience (if applicable)</li>
+        <li>Category details</li>
+        <li>Preferred IIM programmes</li>
+      </ul>
+      <p>Double-check your information before moving to the next section, as incorrect details may create issues during admission.</p>
+
+      <h3>Step 3: Upload the Required Documents</h3>
+      <p>Candidates must upload the documents specified in the CAT 2026 notification. These generally include:</p>
+      <ul class="cm-list">
+        <li>Recent passport-size photograph</li>
+        <li>Signature</li>
+        <li>Category certificate (if applicable)</li>
+        <li>PwBD certificate (if applicable)</li>
+      </ul>
+      <p>Candidates applying under reserved categories should ensure that their certificates are valid and uploaded in the prescribed format. Missing or incorrect documents can result in the application being rejected.</p>
+
+      <h3>Step 4: Select Your Preferred Test Cities</h3>
+      <p>During registration, you'll be asked to choose five preferred test cities. Test centre allocation depends on availability, so filling out the application early can improve your chances of getting your preferred location. If none of your selected cities are available, a nearby test city may be allotted.</p>
+
+      <h3>Step 5: Pay the Registration Fee</h3>
+      <p>The final step is to pay the application fee online. Once the payment is successful, your CAT registration will be complete. Before submitting the form, review every section carefully. It's much easier to correct mistakes before submission than after the registration window closes.</p>
+
+      <h2 id="Fees">CAT 2026 Registration Fees</h2>
+      <p>The registration fee depends on the candidate's category. As per the official CAT 2026 notification, the fee has to be paid only once, irrespective of the number of IIMs or participating institutes you apply to.</p>
+
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Registration Fee</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>General, EWS, NC-OBC</td><td>₹2,700</td></tr>
+          <tr><td>SC, ST, PwBD</td><td>₹1,350</td></tr>
+        </tbody>
+      </table>
+
+      <p>Keep the following points in mind:</p>
+      <ul class="cm-list">
+        <li>The registration fee is non-refundable.</li>
+        <li>Payment must be completed online during registration.</li>
+        <li>Reserved category candidates must upload the relevant certificates while submitting the application.</li>
+      </ul>
+
+      <h2 id="Reservation">CAT 2026 Reservation Policy</h2>
+      <p>The CAT 2026 notification follows the reservation policy prescribed by the Government of India. Candidates applying under reserved categories must satisfy both the eligibility and documentation requirements to claim reservation benefits. If you're preparing through self-study or <a href="/category/cat">online courses</a>, it's equally important to stay updated with these requirements to avoid any issues during the application process. The seat reservation is as follows:</p>
+
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Reservation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Scheduled Caste (SC)</td><td>15%</td></tr>
+          <tr><td>Scheduled Tribe (ST)</td><td>7.5%</td></tr>
+          <tr><td>Non-Creamy OBC (NC-OBC)</td><td>27%</td></tr>
+          <tr><td>Economically Weaker Section (EWS)</td><td>Up to 10%</td></tr>
+          <tr><td>Persons with Benchmark Disabilities (PwBD)</td><td>5%</td></tr>
+        </tbody>
+      </table>
+
+      <p>Simply belonging to a reserved category does not guarantee admission. Candidates must also meet the minimum eligibility criteria and perform well throughout the selection process.</p>
+
+      <h2 id="Certificate-Updates">Important Certificate Updates for 2026</h2>
+      <p>The CAT 2026 notification also includes a few important updates regarding category certificates:</p>
+      <ul class="cm-list">
+        <li>NC-OBC certificates must be issued on or after April 1, 2026.</li>
+        <li>EWS certificates must be valid for the academic year 2026-27.</li>
+        <li>Candidates awaiting a fresh certificate can still register by uploading the prescribed undertaking along with the required supporting documents.</li>
+        <li>No category changes will be allowed after the registration deadline.</li>
+      </ul>
+      <p>To avoid unnecessary complications later, it's a good idea to arrange all required documents well before the registration window closes.</p>
+
+      <h2 id="Whats-New">What's New in CAT 2026?</h2>
+      <p>Every year, the CAT notification includes a few updates that candidates should carefully review before registering. While the overall exam pattern remains unchanged, the CAT 2026 notification introduces important clarifications around category certificates, the registration process, and admission guidelines. Understanding these updates early can help you avoid common mistakes during the application process.</p>
+
+      <h3>Updated Category Certificate Requirements</h3>
+      <p>Candidates applying under the NC-OBC or EWS categories should pay special attention to the updated certificate requirements. As per the CAT 2026 notification, NC-OBC certificates must be issued on or after April 1, 2026, while EWS certificates must be valid for the 2026-27 academic year and be based on the financial year 2025-26. These requirements are mandatory for candidates seeking reservation benefits.</p>
+      <p>If you've already applied for a fresh certificate but haven't received it yet, you can still complete your CAT registration. However, you'll need to upload an undertaking, your previous certificate, and proof that you've applied for a new one. Submitting incomplete documents may result in disqualification from the admission process, so it's important to check the requirements carefully before uploading your files.</p>
+
+      <h3>Category Cannot Be Changed Later</h3>
+      <p>One of the key instructions in the CAT 2026 notification is that candidates won't be allowed to change their category after submitting the application form. Whether you're applying under the General, EWS, NC-OBC, SC, ST, or PwBD category, make sure you select the correct option while registering.</p>
+      <p>Before making the payment, review all the details you've entered, including your category and supporting documents. Spending a few extra minutes verifying your application can save you from unnecessary issues later in the admission process.</p>
+
+      <h3>Admission Process Varies Across IIMs</h3>
+      <p>While CAT is the common entrance exam, admissions are conducted independently by each participating IIM. Apart from your CAT score, institutes may also consider factors such as academic performance, work experience, written ability tests, personal interviews, and other evaluation parameters while preparing their final merit list.</p>
+      <p>In addition to the flagship MBA programme, several IIMs also use CAT scores for Executive MBA, PhD, and other management programmes. Before applying, it's a good idea to visit the websites of the institutes you're targeting and review their admission criteria carefully.</p>
+
+      <h2 id="After-Registering">What Should You Do After Registering for CAT 2026?</h2>
+      <p>Completing your registration is just the beginning of your CAT journey. With only a few months left before the exam, the choices you make now can significantly impact your final score. Instead of waiting for the admit card, start preparing as early as possible and follow a structured study plan.</p>
+
+      <h3>Understand the Exam Pattern and Syllabus</h3>
+      <p>Before you begin solving questions, take some time to understand the latest CAT syllabus and exam pattern. Knowing the weightage of different topics, sectional structure, and marking scheme will help you prepare more efficiently and avoid spending time on low-priority areas.</p>
+
+      <h3>Create a Realistic Study Plan</h3>
+      <p>A well-planned study schedule helps you stay consistent throughout your preparation. Divide your time across Quantitative Aptitude, Data Interpretation &amp; Logical Reasoning (DILR), and Verbal Ability &amp; Reading Comprehension (VARC), while also keeping enough time aside for revision and mock test analysis. If VARC is one of your weaker sections, following a structured <a href="/blog/the-2026-cat-varc-preparation-playbook-building-reading-comprehension-speed">CAT VARC preparation</a> plan can help improve both your reading speed and accuracy over time.</p>
+
+      <h3>Start Taking Mock Tests Early</h3>
+      <p>Many students wait until the final month to attempt mock tests, but that's a mistake. Mock tests help you understand the actual exam environment, improve your time management, and identify the areas where you're losing marks.</p>
+      <p>More importantly, analysing each mock is just as valuable as taking it. Review every mistake, understand why it happened, and work on eliminating those errors before your next test.</p>
+
+      <h3>Revise Regularly</h3>
+      <p>Revision is one of the most important parts of CAT preparation. As you learn new concepts, continue revisiting older topics to ensure you don't forget them. Maintaining short notes, revising formulas regularly, and solving previous years' questions can help strengthen your fundamentals.</p>
+      <p>A consistent revision schedule also boosts confidence and reduces exam-day stress, especially during the final few weeks before CAT. If you're short on time, a structured <a href="https://www.youtube.com/watch?v=BzrEV1f-Hyo" target="_blank">CAT 2026 crash course</a> can also help you revise key concepts and focus on high-weightage topics before the exam.</p>
+
+      <h2 id="Why-Rodha">Why Prepare for CAT 2026 With Rodha?</h2>
+      <p>Cracking CAT requires more than completing the syllabus. It demands consistent practice, smart preparation, regular feedback, and a strategy that evolves with your progress. That's where the right mentorship can make a real difference.</p>
+      <p><a href="/" target="_blank">Rodha</a> offers a structured CAT preparation programme designed to help aspirants build strong fundamentals while improving their speed and accuracy. The platform combines live classes, recorded lectures, topic-wise practice, sectional tests, and full-length mock exams to ensure students are prepared for every stage of the exam.</p>
+      <p>What sets Rodha apart is its focus on learning from mistakes. Detailed mock analysis, personalised mentorship, doubt-solving sessions, and exam strategies help students understand not just what went wrong, but how to improve in the next attempt. Whether you're starting your preparation now or looking to push your mock scores higher, Rodha provides the guidance, resources, and support needed to prepare with confidence.</p>
+      <p>Explore all our <a href="/category/cat">CAT courses</a> here!</p>
+
+      <h2 id="FAQs">FAQs on CAT 2026 Notification</h2>
+
+      <h3>When will CAT 2026 be conducted?</h3>
+      <p>CAT 2026 will be held on November 29, 2026, in three sessions at test centres across India. Candidates should download their admit cards before the exam date.</p>
+
+      <h3>When does CAT 2026 registration begin?</h3>
+      <p>The registration window opens on August 3, 2026, at 10:00 AM and closes on September 15, 2026, at 5:00 PM. Applications submitted after the deadline won't be accepted.</p>
+
+      <h3>Who can apply for CAT 2026?</h3>
+      <p>Graduates with the required minimum marks, final-year students, and candidates holding eligible professional qualifications such as CA, CS, CMA, or FIAI can apply.</p>
+
+      <h3>What is the CAT 2026 registration fee?</h3>
+      <p>The registration fee is ₹2,700 for General, EWS, and NC-OBC candidates, and ₹1,350 for SC, ST, and PwBD candidates.</p>
+
+      <h3>Can I change my category after submitting the application?</h3>
+      <p>No. Once the application is submitted, the selected category cannot be changed. Candidates should verify all details carefully before completing their registration.</p>
+
+    </div>`,
+    publishedDate: "2026-07-15",
+    readTime: "12 min read",
+    metaTitle: "CAT 2026 Notification Released: Exam Date, Registration, Eligibility & Fees",
+    metaDescription: "The CAT 2026 notification is out. Check the exam date, registration schedule, eligibility criteria, application fees, reservation policy, and other important updates.",
+    
+    tags: ["mba-cat","rodha"],
+    featured: true,
+    author: "Team Rodha",
+    excerpt: "The CAT 2026 notification is out. Check the exam date, registration schedule, eligibility criteria, application fees, reservation policy, and other important updates.",
+    image: "/assets/images/blog/cat-2026-notification/featured.png",
+    publishedAt: "2026-07-15",
+  },
+  {
+    id: "blog-2",
+    slug: "cat-2026-4-month-preparation-plan",
+    title: "CAT 2026 4-Month Preparation Plan: A 16-Week System That Adapts to Your Diagnostic Score",
+    category: "mba-cat",
+    thumbnail: "/assets/images/blog/cat-2026-4-month-preparation-plan/featured.png",
+    shortDescription: "Build a CAT 2026 4-month preparation plan around a diagnostic test — 16 weeks of foundation repair, timed practice, mock analysis, and a final taper.",
+    content: `<p>In CAT 2025, around <a href="https://www.ndtv.com/education/cat-2025-result-declared-12-candidates-score-100-percent-2-58-lakh-appeared-9932936/amp/1" target="_blank">2.95 lakh candidates</a> registered, while nearly 2.58 lakh appeared for the exam, an attendance rate of about 87%. With so many candidates competing for limited seats, a four-month preparation plan needs to be focused and practical.</p>
+      <p>CAT 2026 will be conducted on November 29, 2026, in three sessions. While the exam notification has now been released, your preparation should continue to focus on skills that remain useful across sections, including accuracy, question selection, time management, and problem-solving. Any format-specific details should be checked against the latest official CAT instructions.</p>
+      <p>A CAT 2026 4-month preparation plan should start with a diagnostic test. This helps you identify your strengths, weak areas, and the topics that need the most attention. Four months can be enough if your starting level is clear and you can study consistently, but no plan can guarantee a specific percentile.</p>
+      <p>This guide covers diagnostics, section-wise preparation, topic priorities, weekly planning, mock analysis, and when to change your strategy.</p>
+
+<img src="/assets/images/blog/cat-2026-4-month-preparation-plan/image-1.png" data-filename="9lnlR59b083fc4f5948439763cde6100d628e178112516472759b083fc4f5948439763cde6100d628e.png" alt="The 16-week CAT 2026 preparation control plan at a glance.">
+      <h2 id="Four-Months-Enough">Can Four Months Be Enough for CAT 2026?</h2>
+      <p>With the CAT 2026 registration window now open, candidates should also keep track of the key dates while planning the next 16 weeks. Registration is open from August 3, 2026, at 10:00 a.m. to September 15, 2026, at 5:00 p.m. Admit cards will be available from November 4, and the exam will be held on November 29, 2026. CAT 2026 results are expected by the first week of January 2027.</p>
+      <p>Four months can be productive when your starting point allows focused improvement and you can protect consistent study time each week. Candidates who already understand most fundamentals can use this period to improve question selection, accuracy, speed, and mock performance. A CAT 2026 4-month preparation plan works best when it prioritises conversion of existing knowledge rather than attempting to learn every possible concept from scratch.</p>
+      <p>Starting from a weaker foundation changes the calculation. If VARC, DILR, and QA all show fundamental gaps in the diagnostic, you will need to spend more time on concept building before increasing full-length mock frequency. Candidates in this situation may benefit from starting earlier if additional preparation time is available.</p>
+      <p>With CAT 2026 scheduled for November 29, 2026, a four-month preparation plan gives you a defined preparation window. CAT scores are normalised and scaled across sections and test forms, so raw-score comparisons should not be treated as direct percentile predictions. Your CAT 2026 4-month preparation plan should therefore track improvement in accuracy, attempts, timing, and decision-making rather than relying on informal percentile estimates.</p>
+
+      <h2 id="Important-Dates">CAT 2026 Important Dates</h2>
+
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Registration</td><td>August 3 to September 15, 2026</td></tr>
+          <tr><td>Admit card</td><td>November 4 to November 29, 2026</td></tr>
+          <tr><td>CAT 2026 exam</td><td>November 29, 2026</td></tr>
+          <tr><td>Expected result</td><td>First week of January 2027</td></tr>
+        </tbody>
+      </table>
+
+      <p>If your diagnostic shows that all three sections need basic concept repair, four months will be more demanding. With the CAT 2026 exam scheduled for November 29, you should use the available weeks carefully and prioritise high-impact topics instead of trying to cover everything.</p>
+      <p>The same applies if your study time changes because of college, work, or other commitments. Before starting your CAT 2026 4-month preparation plan, calculate the focused hours you can realistically complete each week, not the hours you hope to study. If you are using <a href="/category/cat">CAT online coaching</a>, include classes, practice, and mock analysis in your weekly study hours.</p>
+      <p>Before starting your CAT 2026 4-month preparation plan, calculate the focused hours you can realistically complete each week, not the hours you hope to study.</p>
+
+      <h2 id="Control-Plan">Run the 16-Week CAT 2026 Control Plan</h2>
+      <p>A four-month preparation schedule becomes useful when every week has a measurable output. Instead of treating the calendar as a checklist, use exit gates to decide whether your current strategy is working. The second half of your CAT 2026 4-month preparation plan should therefore focus on converting practice into decisions.</p>
+      <p>The first four weeks should establish your baseline and repair the most important gaps. Do not rush into frequent full-length mocks if your diagnostic shows that basic concepts or question selection still need work. Your CAT 2026 4-month preparation plan should first make sure that your practice is producing measurable improvement.</p>
+
+      <h3 id="Weeks-1-4">Weeks One to Four: Establish Evidence</h3>
+
+      <table>
+        <thead>
+          <tr><th>Week</th><th>Main Output</th><th>Test Or Retest</th><th>Exit Gate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Timed three-section diagnostic</td><td>Baseline test</td><td>Error log created</td></tr>
+          <tr><td>2</td><td>Track assignment and time budget</td><td>Untimed retests</td><td>Leakage identified</td></tr>
+          <tr><td>3</td><td>Foundation repair begins</td><td>Topic check</td><td>Weak methods documented</td></tr>
+          <tr><td>4</td><td>First review cycle</td><td>Short sectional</td><td>Track remains justified</td></tr>
+        </tbody>
+      </table>
+
+      <p>During the first month, focus on understanding why you are losing marks. A low score alone does not tell you whether the problem is concepts, timing, accuracy, or question selection. Detailed review, along with regular CAT mock tests, should therefore be a key part of your CAT 2026 4-month preparation plan.</p>
+      <p>Once the first review cycle is complete, move toward timed practice. The aim is to check whether you can apply repaired concepts under pressure. If the same error continues in a <a href="/blog/evaluating-cat-mock-test-difficulty-2026">CAT mock test</a>, return to targeted practice instead of simply taking more tests.</p>
+
+      <h3 id="Weeks-5-12">Weeks Five to Twelve: Convert Knowledge Into Decisions</h3>
+
+      <table>
+        <thead>
+          <tr><th>Week</th><th>Main Output</th><th>Test Or Retest</th><th>Exit Gate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>5</td><td>Timed micro-practice</td><td>Sectional fragments</td><td>Timing issue classified</td></tr>
+          <tr><td>6</td><td>Set and passage selection review</td><td>Sectional</td><td>Review is complete</td></tr>
+          <tr><td>7</td><td>Mixed-topic practice</td><td>Timed retest</td><td>Accuracy holds</td></tr>
+          <tr><td>8</td><td>First integrated check</td><td>Full test if ready</td><td>Analysis debt is low</td></tr>
+          <tr><td>9</td><td>Correct recurring error class</td><td>Fresh practice</td><td>Error recurs less often</td></tr>
+          <tr><td>10</td><td>Increase timed work selectively</td><td>Sectional</td><td>Strategy is repeatable</td></tr>
+          <tr><td>11</td><td>Full-test rehearsal</td><td>Full mock if reviewed</td><td>No unanalysed mock remains</td></tr>
+          <tr><td>12</td><td>Rebalance study hours</td><td>Retest weak section</td><td>Allocation changes are evidence-led</td></tr>
+        </tbody>
+      </table>
+
+      <p>Weeks five to twelve should gradually connect knowledge with exam decisions. Solve mixed questions, practise under time limits, and review whether your selection strategy is improving. This is also the right stage to build a <a href="/blog/cat-sectional-test-strategyl-2026">CAT sectional test strategy</a>, so you can identify which areas need more practice without relying only on full-length mocks.</p>
+      <p>Do not increase mock frequency simply because you have reached the middle of the schedule. Every full mock needs detailed analysis, and taking another test before reviewing the previous one creates analysis debt. If you are working or studying full-time, fewer well-reviewed tests may be more useful than a crowded test calendar.</p>
+
+      <h3 id="Weeks-13-16">Weeks Thirteen to Sixteen: Refine and Taper</h3>
+
+      <table>
+        <thead>
+          <tr><th>Week</th><th>Main Output</th><th>Test Or Retest</th><th>Exit Gate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>13</td><td>Exam strategy rehearsal</td><td>Full mock</td><td>Section choices improve</td></tr>
+          <tr><td>14</td><td>Revision from error log</td><td>Targeted retest</td><td>No new large gaps</td></tr>
+          <tr><td>15</td><td>Selective simulation</td><td>Full mock if recovered</td><td>Sleep and review protected</td></tr>
+          <tr><td>16</td><td>Light revision and logistics</td><td>Short confidence check</td><td>No cramming spiral</td></tr>
+        </tbody>
+      </table>
+
+      <p>The final four weeks should be about refinement rather than trying to rebuild your entire preparation. Use your error log to identify recurring issues and conduct targeted retests to check whether they have actually improved. A good CAT 2026 4-month preparation plan protects sleep, revision, and confidence instead of filling every remaining day with new material.</p>
+
+      <h2 id="From-Zero">What If You Are Starting CAT Preparation From Zero?</h2>
+      <p>Starting from zero with four months remaining is possible, but it requires a different expectation from someone who already has strong fundamentals. Your first priority should be building enough conceptual coverage to solve representative questions rather than immediately attempting several full mocks. A CAT 2026 4-month preparation plan for beginners needs more foundation work during the early weeks.</p>
+      <p>Focus on the concepts that support multiple question types. In QA, this means building dependable arithmetic and algebra foundations before moving into harder applications. In VARC and DILR, build reading comprehension, logical interpretation, set representation, and selection skills through consistent practice.</p>
+      <p>Avoid comparing your early scores with candidates who have been preparing for months. Instead, compare your own diagnostic results with later retests. If your accuracy, attempts, and time management are improving, the preparation system is working even before your final mock scores reach your target range.</p>
+
+      <h2 id="Rodha">Build Your CAT 2026 Plan With Rodha</h2>
+      <p>At <a href="/" target="_blank">Rodha</a>, the focus is on helping candidates turn preparation into a system they can track and adjust. The approach starts with VARC, DILR, and QA diagnostics rather than assuming that one weak section requires the same intervention for everyone. A CAT 2026 4-month preparation plan becomes more useful when each mock produces specific practice tasks instead of another score to record.</p>
+      <p>Structured support can be particularly useful when you are balancing college, work, or a late start. The aim should not be to add more lectures simply because time is limited. Instead, use concepts, practice, guidance, and mock analysis together so that each stage of preparation has a clear purpose.</p>
+      <p>Before choosing a course or support system, identify your current gaps and the type of help you actually need. Rodha can provide a structured path for candidates who want concepts, practice, and guidance in one place.</p>
+      <p>Explore all our <a href="/category/cat">CAT courses</a> here!</p>
+
+      <h2 id="FAQs">FAQs on CAT 2026 4-Month Preparation Plan</h2>
+
+      <h3>How Many Hours a Day Should I Study for CAT 2026 in Four Months?</h3>
+      <p>Focus on the number of productive hours you can consistently complete rather than setting an unrealistic daily target. Protect time for practice, mock analysis, and revision because completing study hours without reviewing mistakes will not necessarily improve performance.</p>
+
+      <h3>Can I Start CAT Preparation From Zero With Four Months Left?</h3>
+      <p>Yes, but your early weeks should focus heavily on foundation repair rather than frequent full-length mocks. If all three sections show fundamental gaps, starting earlier is preferable because four months may not provide enough time for deep coverage and extensive testing.</p>
+
+      <h3>What Should I Do If I Miss a Week of My CAT Study Plan?</h3>
+      <p>Do not move every missed task into the following week. Recalculate your available hours, preserve the next important diagnostic or review gate, and remove lower-priority work before reducing analysis time.</p>
+
+      <h3>How Often Should I Take CAT Mocks in a Four-Month Plan?</h3>
+      <p>Take another full mock only after the previous one has been properly analysed and converted into practice. Mock frequency should depend on recovery from identified weaknesses rather than an arbitrary weekly target.</p>
+
+      <h3>What Changes If CAT 2026's Official Format Differs?</h3>
+      <p>Now that the CAT 2026 notification has been released, use the confirmed exam date and registration schedule to plan your preparation. Keep your diagnostic, error log, revision system, and weekly decision gates in place, while checking the official CAT website for any subsequent updates to exam instructions or the test interface.</p>
+
+    </div>`,
+    publishedDate: "2026-08-01",
+    readTime: "9 min read",
+    metaTitle: "CAT 2026 4-Month Plan That Adapts to Your Score",
+    metaDescription: "Build a CAT 2026 4-month preparation plan around a diagnostic test — 16 weeks of foundation repair, timed practice, mock analysis, and a final taper.",
+    
+    tags: ["mba-cat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Build a CAT 2026 4-month preparation plan around a diagnostic test — 16 weeks of foundation repair, timed practice, mock analysis, and a final taper.",
+    image: "/assets/images/blog/cat-2026-4-month-preparation-plan/featured.png",
+    publishedAt: "2026-08-01",
+  },
+  {
+    id: "blog-3",
+    slug: "how-to-use-rodha-cat-accelerator",
+    title: "How to Use Rodha CAT Accelerator When Your CAT 2026 Mock Scores Stall",
+    category: "mba-cat",
+    thumbnail: "/assets/images/blog/how-to-use-rodha-cat-accelerator/featured.png",
+    shortDescription: "Use Rodha CAT Accelerator when your CAT 2026 mock scores stall — diagnose lost marks, target weak areas with concept capsules, timed tests, and live sessions.",
+    content: `<p>If your CAT 2026 mock scores have stopped improving, taking more mocks without understanding the problem may not help. A better approach is to identify where you are losing marks, fix one issue at a time, and use targeted practice to test whether your strategy is working.</p>
+      <p>The new Rodha CAT Accelerator is designed for exactly this practice-first approach, with concept capsules, extensive question banks, timer-based tests, weekly live sessions, and mentorship.</p>
+
+<img src="/assets/images/blog/how-to-use-rodha-cat-accelerator/image-1.png" data-filename="2e5e4764-60f9-41e4-9092-f9f230bce3cc-1780695792980-2e5e4764-60f9-41e4-9092-f9f230bce3cc.png" alt="Turning stalled CAT mock scores into targeted practice with Rodha CAT Accelerator.">
+      <h2 id="Ways-To-Use">Ways to Use Rodha CAT Accelerator When Your CAT 2026 Mock Scores Stall</h2>
+      <p>When your percentile plateaus, the solution is not always another full-length mock. Use your Rodha CAT Accelerator practice to identify the reason behind your score, strengthen the relevant skill, and measure whether the change actually improves your performance.</p>
+
+      <h3>1. Identify Why Your Mock Scores Are Stuck</h3>
+      <p>Start by analysing your last three comparable CAT <a href="https://mocks.rodha.co.in/" target="_blank">mocks</a> instead of reacting to your latest percentile. Look at your attempts, accuracy, time spent, and section-wise performance to identify whether the problem is conceptual knowledge, question selection, calculation errors, or time management.</p>
+      <p>A flat score with increasing attempts may indicate that you are taking too many low-probability questions, while a low attempt rate could point to speed or confidence issues. This diagnosis gives you a specific problem to work on instead of encouraging you to simply take another mock.</p>
+      <p>Create a simple lost-marks tracker after every mock. For each incorrect or unattempted question, record the section, question type, time spent, and reason for the outcome. You can classify mistakes as concept errors, execution errors, poor question selection, excessive time, or guesses that happened to be correct. Once the same pattern appears repeatedly, use your Rodha CAT Accelerator practice resources to address that particular weakness.</p>
+
+      <h3>2. Strengthen Concepts Before Increasing Practice Volume</h3>
+      <p>Sometimes a mock score plateaus because you are practising questions without fully understanding the underlying concepts. If you repeatedly make the same mistakes in percentages, arithmetic, algebra, arrangements, or another topic, taking more full-length tests will not necessarily solve the problem. Go back to the relevant concept, understand the method, and then solve questions of increasing difficulty. This creates a stronger foundation before you return to timed practice.</p>
+      <p>The new Rodha CAT Accelerator includes 100 hours of concept capsules covering Quant, LRDI, and VARC. These capsules let you revisit important concepts without going through an entire long-form course again. The Quants and VARC concept capsules are available, while the LRDI Concept Capsule is scheduled for access from August 20, 2026. If you are starting VARC from scratch, you can also refer to the <a href="https://www.youtube.com/watch?v=tbLxOF-6_zE" target="_blank">beginner VARC plan</a> to build your fundamentals before moving into intensive practice.</p>
+
+      <h3>3. Use Topic-Wise Practice to Fix Repeated Errors</h3>
+      <p>Once you identify a weak area, move from general preparation to targeted practice. Solving random questions can make your preparation feel productive without necessarily addressing the specific problem behind your stagnant score. Instead, select questions based on the topic or question type where you are consistently losing marks. Revisit the same type until you can identify the correct approach more quickly and confidently.</p>
+      <p>Rodha CAT Accelerator offers 1,500+ Quant questions, 180+ LRDI sets, 300+ Reading Comprehensions, and 300+ Verbal Ability questions. This gives you enough variety to practise the same skill across different question formats rather than memorising a single solution pattern. For example, if your DILR issue is set selection, practise multiple sets and focus on deciding which set to attempt first. The objective is not simply to increase the number of questions solved but to improve the quality of your decisions.</p>
+
+      <h3>4. Use Timer-Based Tests to Improve Speed and Accuracy</h3>
+      <p>Knowing how to solve a question is different from solving it efficiently under CAT conditions. You may understand the concepts but still lose marks because you spend too long on difficult questions or hesitate when choosing what to attempt. Timer-based practice can help you build the habit of making decisions under pressure, which is also an important part of effective <a href="/category/cat">CAT online coaching</a>. It also helps you identify whether your accuracy drops significantly when you increase your solving speed.</p>
+      <p>Use the timer-based tests in Rodha CAT Accelerator for QA, LRDI, and VARC to practise this balance. Start with a manageable time limit and gradually work toward conditions that resemble the actual CAT environment. After each test, check whether your faster attempts led to more correct answers or simply more negative marks. This makes speed a measurable skill rather than something you try to improve by simply studying for longer.</p>
+
+      <h3>5. Use Weekly Live Sessions to Correct Your Preparation Strategy</h3>
+      <p>A mock analysis can tell you where something went wrong, but it may not always tell you how to fix it. This is where external guidance can become useful, especially when you have been repeating the same preparation pattern for several weeks. Discussing your approach with experienced educators can help you recognise inefficient habits that are difficult to notice on your own. Regular guidance can also prevent you from constantly changing strategies after every disappointing mock.</p>
+      <p>The <a href="https://www.rodha.co.in/courses/Rodha-CATX-6a720d6442d894118f9117d0" target="_blank">Rodha CAT Accelerator</a> includes weekly LIVE sessions with Ravi Sir and KD Sir to keep your preparation on track. Use these sessions to understand approaches, clarify difficult concepts, and evaluate how you should be practising between mocks. The program also includes Rodha Panchayat for 1:1 mentorship and the Rodha Buddy App for instant doubt solving. Together, these features give you multiple ways to get support when independent practice is not enough.</p>
+
+      <h3>6. Build Exam Temperament With Consistent Practice</h3>
+      <p>A mock score plateau is sometimes less about knowledge and more about consistency. If you perform well during untimed practice but struggle whenever the clock starts, you need more exposure to timed decision-making. Similarly, if your scores fluctuate widely between tests, focus on creating a repeatable process rather than chasing your highest percentile. The goal should be to make your performance more predictable as CAT 2026 approaches.</p>
+      <p>This is where the practice-first structure of Rodha CAT Accelerator can help. Instead of relying only on full-length mocks, combine concept revision, topic-wise questions, timed tests, and regular analysis throughout your preparation.</p>
+
+      <h2 id="Strategy-Working">How to Know If Your Strategy Is Working</h2>
+      <p>Do not judge your improvement based on a single mock percentile. Mock difficulty, the test-taking pool, and your own test-day conditions can all influence the result. Compare at least three comparable mocks and focus on measurable indicators such as accuracy, attempts, section-wise scores, and repeated error categories. A better strategy should ideally reduce the specific type of loss you identified during your diagnosis.</p>
+      <p>For example, if you identified poor DILR set selection as your main problem, track how many sets you evaluate correctly before committing to one. If calculation errors are costing you Quant marks, monitor whether those errors decline across your next few tests. Rodha CAT Accelerator gives you the practice environment, but your own analysis should determine what you practise and why. This keeps your preparation focused instead of turning every mock into another isolated score.</p>
+
+      <h2 id="Practice-With">Practice With Rodha CAT Accelerator for CAT 2026</h2>
+      <p>Rodha CAT Accelerator is <a href="/" target="_blank">Rodha's</a> new practice-first program for CAT 2026 aspirants who want structured preparation after or alongside their core learning. The program combines 100 hours of concept capsules with 180+ LRDI sets, 1,500+ Quant questions, 300+ Reading Comprehensions, and 300+ Verbal Ability questions. It also includes timer-based tests for all three sections, weekly LIVE sessions with Ravi Sir and KD Sir, the Rodha Buddy App, and Rodha Panchayat for 1:1 mentorship.</p>
+      <p>Our program is available in Hinglish and English and is designed around repeated, timed practice rather than passive learning. If your mock scores have stalled, start by identifying your biggest recurring loss and then use the relevant Rodha CAT Accelerator resource to address it.</p>
+      <p>Keep tracking your performance across comparable mocks instead of reacting to one percentile. The batch is currently valid until November 29, 2026, giving CAT 2026 aspirants a structured practice window leading into the exam.</p>
+      <p>Explore all about the <a href="https://www.rodha.co.in/courses/Rodha-CATX-6a720d6442d894118f9117d0" target="_blank">Rodha CAT Accelerator batch</a> here!</p>
+
+      <h2 id="FAQs">FAQs on Rodha CAT Accelerator</h2>
+
+      <h3>When Should I Use Rodha CAT Accelerator?</h3>
+      <p>Use Rodha CAT Accelerator when you need more structured practice, timed testing, or targeted revision for CAT 2026. It is particularly useful when you already have basic conceptual familiarity but need to improve speed, accuracy, question selection, and consistency. You can combine its practice resources with your existing CAT preparation plan. The key is to use the resources according to the specific weaknesses identified through mock analysis.</p>
+
+      <h3>What Does Rodha CAT Accelerator Include?</h3>
+      <p>Rodha CAT Accelerator includes 100 hours of concept capsules covering Quant, LRDI, and VARC, along with extensive practice material. The program offers 1,500+ Quant questions, 180+ LRDI sets, 300+ Reading Comprehensions, and 300+ Verbal Ability questions. It also includes timer-based tests, weekly LIVE sessions with Ravi Sir and KD Sir, the Rodha Buddy App, and Rodha Panchayat for 1:1 mentorship. The LRDI Concept Capsule is scheduled to become accessible from August 20, 2026.</p>
+
+      <h3>Can Rodha CAT Accelerator Help If My Mock Scores Are Not Improving?</h3>
+      <p>Yes, Rodha CAT Accelerator can help you turn mock analysis into targeted practice. Instead of taking repeated full-length tests without addressing the underlying problem, you can use concept capsules, topic-wise questions, and timer-based tests to work on specific weaknesses. Weekly live sessions and mentorship can provide additional guidance when you are unsure how to change your approach. However, your improvement will still depend on consistent practice and proper analysis.</p>
+
+    </div>`,
+    publishedDate: "2026-08-01",
+    readTime: "8 min read",
+    metaTitle: "Rodha CAT Accelerator: Fix Stalled CAT 2026 Mocks",
+    metaDescription: "Use Rodha CAT Accelerator when your CAT 2026 mock scores stall — diagnose lost marks, target weak areas with concept capsules, timed tests, and live sessions.",
+    
+    tags: ["mba-cat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Use Rodha CAT Accelerator when your CAT 2026 mock scores stall — diagnose lost marks, target weak areas with concept capsules, timed tests, and live sessions.",
+    image: "/assets/images/blog/how-to-use-rodha-cat-accelerator/featured.png",
+    publishedAt: "2026-08-01",
+  },
+  {
+    id: "blog-4",
+    slug: "cat-sectional-test-strategy-2026",
+    title: "CAT Sectional Test Strategy: The 3-Phase Progression Model for 2026",
+    category: "mba-cat",
+    thumbnail: "/assets/images/blog/cat-sectional-test-strategy-2026/featured.png",
+    shortDescription: "Master your CAT sectional test strategy with a 3-phase progression model for 2026. Learn when to attempt, analyze, and level up your sectional mock performance.",
+    content: `<p>Every CAT aspirant knows that sectional tests are an important part of preparation. However, simply attempting more tests does not always lead to better scores. Many students solve dozens of sectionals without seeing any meaningful improvement because they use the same approach throughout their preparation.</p>
+      <p>The CAT exam demands different skills at different stages, and your practice should evolve accordingly. This is where a structured CAT sectional test strategy becomes essential. Instead of focusing only on the number of tests you attempt, you should focus on why you are taking each test and what you hope to improve.</p>
+      <p>A phased approach helps you build accuracy first, improve speed next, and finally develop the confidence needed to perform under actual exam pressure.</p>
+
+<img src="/assets/images/blog/cat-sectional-test-strategy-2026/image-1.png" data-filename="05a6fe1b-b04c-489c-98f9-39d20b703ada-1784000874441-05a6fe1b-b04c-489c-98f9-39d20b703ada.png" alt="Close-up of a student writing notes next to a laptop">
+      <h2 id="Why-Different-Phases">Why Your CAT Sectional Test Strategy Should Follow Different Phases</h2>
+      <p>Many students begin taking sectional tests as soon as they complete a few topics, while others wait until the entire syllabus is finished before attempting any timed practice or full-length CAT <a href="https://mocks.rodha.co.in/" target="_blank">mocks</a>. Neither approach is ideal because sectional tests serve different purposes at different stages of preparation.</p>
+      <p>A good CAT sectional test strategy recognizes that every aspirant goes through a learning curve. In the beginning, your focus should be understanding concepts and improving accuracy. As your preparation progresses, you should gradually introduce time pressure and eventually simulate actual exam conditions.</p>
+      <p>Without this progression, students often misinterpret their scores. A low score may not mean you lack knowledge. It could simply mean you introduced timed practice too early. Likewise, taking dozens of untimed sectionals close to the exam may not prepare you for the pressure of the actual CAT.</p>
+
+      <h2 id="The-3-Phase-Strategy">The 3-Phase CAT Sectional Test Strategy for 2026</h2>
+      <p>A successful CAT sectional test strategy isn't about attempting every sectional test you can find. It is about progressing through three distinct phases that match your preparation level. Each phase focuses on a different objective, building accuracy, improving speed, and developing exam-day consistency, so you strengthen the right skills at the right time.</p>
+
+      <h3>Phase 1: Build Accuracy Before Chasing Speed</h3>
+      <p>The first phase of your CAT sectional test strategy should focus entirely on accuracy. At this stage, speed is not the priority. Your objective is to understand different question types, strengthen concepts, and develop the right problem-solving approach.</p>
+      <p>Solve sectional tests without worrying about the timer. Spend as much time as needed to understand every question and every solution. If you get a question wrong, don't just check the correct answer. Identify why your approach failed and how you can avoid making the same mistake again.</p>
+      <p>During this phase, maintain an error log. Categorize every mistake into conceptual errors, calculation mistakes, misinterpretation, or careless errors. This simple exercise helps you recognize recurring patterns and target your weak areas more effectively.</p>
+      <p>A strong CAT sectional test strategy also involves tracking accuracy by topic, whether you're preparing independently or through <a href="/category/cat">CAT online coaching</a>. For example, in VARC, identify whether you struggle more with Reading Comprehension or Para Jumbles. In DILR, find out whether Logical Reasoning or Data Interpretation sets take more time. Similarly, in Quant, monitor topics like Arithmetic, Algebra, Geometry, and Modern Math separately.</p>
+
+      <h3>Phase 2: Balance Speed and Accuracy</h3>
+      <p>Once your concepts become stronger, your CAT sectional test strategy should shift towards balancing speed with accuracy. This is the stage where you begin introducing the official 40-minute time limit for each section.</p>
+      <p>Many aspirants make the mistake of focusing only on increasing attempts. However, solving more questions is useful only if your accuracy remains high. A student attempting 18 questions with strong accuracy often scores better than someone attempting 24 questions with frequent mistakes.</p>
+      <p>During timed sectionals, record three important metrics after every test:</p>
+      <ul class="cm-list">
+        <li>Total attempts</li>
+        <li>Accuracy percentage</li>
+        <li>Time spent on different question types</li>
+      </ul>
+      <p>These numbers reveal much more than your overall score. For example, if you consistently spend too much time on Reading Comprehension passages or difficult DILR sets, you know exactly what needs improvement.</p>
+      <p>A successful CAT strategy also teaches you to leave questions. Every section contains a few difficult problems designed to consume valuable time. Learning when to skip a question is just as important as learning how to solve it.</p>
+      <p>If your accuracy drops sharply after introducing the timer, avoid taking more timed sectionals immediately. Instead, revisit your weak topics through untimed practice before returning to timed tests. This prevents bad habits from becoming permanent.</p>
+      <p>At this stage, reviewing sectional tests becomes as important as taking them. Analyse every incorrect answer, every skipped question, and every unnecessary guess. The review process often teaches more than the test itself.</p>
+
+      <h3>Phase 3: Simulate the Real CAT Exam</h3>
+      <p>The final stage of your CAT sectional test strategy is all about preparing for the pressure of the actual exam. By now, your concepts should be clear, and you should be comfortable solving questions within the 40-minute limit. The focus now shifts from learning concepts to improving consistency. At this stage, sectional tests should work alongside full-length <a href="/blog/evaluating-cat-mock-test-difficulty-2026">CAT mock tests</a> to help you build endurance, refine your test-taking strategy, and perform consistently across all three sections.</p>
+      <p>Take sectional tests exactly as you would on exam day. Avoid pausing the timer, checking solutions midway, or retaking the same test immediately. Treat every attempt as if it were the actual CAT. This helps you develop the mental discipline needed to perform under pressure.</p>
+      <p>Your CAT sectional test strategy should also include back-to-back practice sessions during this phase. For example, attempt a VARC sectional followed by a DILR sectional with only a short break in between. This helps you experience the mental fatigue that usually builds during the real exam.</p>
+      <p>Instead of celebrating one excellent score, look for consistency across multiple tests. A single high percentile could simply be the result of an easier paper. Scoring well across five or six sectionals is a much better indicator of exam readiness. Many <a href="/category/cat">CAT courses</a> also emphasize tracking consistent performance over time rather than focusing on a single exceptional score.</p>
+
+      <h2 id="Ready-For-Next-Phase">How to Know When You're Ready for the Next Phase</h2>
+      <p>Many students move to the next stage too quickly, while others spend too much time in the same phase. A structured CAT sectional test strategy includes clear milestones that tell you when it is time to progress.</p>
+      <p>You are ready to move from Phase 1 to Phase 2 if your accuracy remains above 80% across multiple untimed sectionals. You should also be able to explain your approach for most questions without relying heavily on the solutions.</p>
+      <p>Similarly, you can move from Phase 2 to Phase 3 when your timed accuracy remains close to your untimed performance. If introducing the timer no longer causes a major drop in scores, it means your concepts and solving process are becoming stable.</p>
+
+      <h2 id="How-Rodha-Helps">How Rodha Helps You Build an Effective CAT Sectional Test Strategy</h2>
+      <p>Having access to sectional tests is only one part of preparation. Knowing when to take them, how to analyse them, and how to improve after each attempt makes the real difference.</p>
+      <p><a href="/" target="_blank">Rodha</a> follows a structured learning approach that helps students build an effective CAT sectional test strategy instead of simply increasing the number of tests they attempt. The focus is on strengthening concepts first, improving sectional performance gradually, and developing exam temperament through guided practice.</p>
+      <p>Students receive topic-wise practice, sectional tests, mock analysis sessions, and detailed explanations that help identify weak areas. Instead of looking only at scores, the emphasis is placed on improving accuracy, question selection, time management, and overall decision-making.</p>
+      <p>The faculty also guide students on when to move from concept building to timed practice and finally to full exam simulations. This phased approach prevents burnout and helps aspirants improve steadily throughout their preparation.</p>
+      <p>Explore all our <a href="/category/cat">CAT courses</a> here!</p>
+
+      <h2 id="FAQs">Frequently Asked Questions</h2>
+
+      <h3>1. What is the best CAT sectional test strategy for beginners?</h3>
+      <p>Beginners should start with untimed sectional practice to strengthen concepts and improve accuracy before introducing the 40-minute time limit.</p>
+
+      <h3>2. How many sectional tests should I attempt every week?</h3>
+      <p>The number depends on your preparation stage. Early on, focus on learning through fewer sectionals with detailed analysis. As the exam approaches, increase the frequency of sectional tests while maintaining proper review.</p>
+
+      <h3>3. When should I start taking timed sectional tests?</h3>
+      <p>You should begin timed sectional tests after developing a strong conceptual foundation and achieving consistent accuracy in untimed practice.</p>
+
+      <h3>4. How important is sectional test analysis?</h3>
+      <p>Analysis is one of the most important parts of any CAT sectional test strategy. Reviewing mistakes, identifying weak areas, and tracking progress helps improve future performance more than simply taking additional tests.</p>
+
+      <h3>5. Can sectional tests alone improve my CAT percentile?</h3>
+      <p>Sectional tests are highly effective when combined with concept revision, mock tests, and detailed analysis. A balanced CAT sectional test strategy focuses on learning from every test rather than only increasing the number of attempts.</p>
+
+    </div>`,
+    publishedDate: "2026-07-15",
+    readTime: "7 min read",
+    metaTitle: "CAT Sectional Test Strategy: 3-Phase Progression Model for 2026",
+    metaDescription: "Master your CAT sectional test strategy with a 3-phase progression model for 2026. Learn when to attempt, analyze, and level up your sectional mock performance.",
+    
+    tags: ["mba-cat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Master your CAT sectional test strategy with a 3-phase progression model for 2026. Learn when to attempt, analyze, and level up your sectional mock performance.",
+    image: "/assets/images/blog/cat-sectional-test-strategy-2026/featured.png",
+    publishedAt: "2026-07-15",
+  },
+  {
+    id: "blog-5",
+    slug: "ipmat-online-coaching-balance-pre-boards-2026",
+    title: "IPMAT Online Coaching: How to Balance Class 12 Pre-Boards and IPMAT Preparation in 2026",
+    category: "ipmat",
+    thumbnail: "/assets/images/blog/ipmat-online-coaching-balance-pre-boards-2026/featured.png",
+    shortDescription: "Learn how to balance Class 12 pre-boards and IPMAT 2026 with practical study strategies, mock tests, and IPMAT online coaching designed for consistent progress.",
+    content: `<p>If you're in Class 12, you're probably juggling two equally important goals right now: scoring well in your board exams and preparing for IPMAT. As pre-boards get closer, many students put their IPMAT preparation on hold, believing they'll restart once school exams are over. Unfortunately, that delay often leaves very little time to build aptitude, improve speed, and take enough mock tests before the actual exam.</p>
+      <p>The level of competition makes this risky. IIM Rohtak's official <a href="https://iimrohtak.ac.in/assets/images/IPMAT%202025%20Summary.pdf" target="_blank">IPMAT 2025 data</a> shows that more than 12,800 students took the exam after over 14,000 were shortlisted, demonstrating how competitive admissions have become. Waiting until your board exams are over can leave you with far less preparation time than many other aspirants.</p>
+      <p>The good news is that you don't have to choose between your board exams and IPMAT. With the right strategy, you can prepare for both without burning yourself out. Instead of studying longer hours, focus on studying smarter. A structured approach through IPMAT online coaching can help you prioritise high-impact topics, stay consistent, and steadily improve your performance while keeping your board preparation on track in 2026.</p>
+
+<img src="/assets/images/blog/ipmat-online-coaching-balance-pre-boards-2026/image-1.png" data-filename="369281b1-aff7-4e7d-8d48-05419801b9d4-1783542690069-369281b1-aff7-4e7d-8d48-05419801b9d4 (1).png" alt="Student reviewing a study schedule on a laptop">
+      <h2 id="Why-Students-Struggle">Why Most Class 12 Students Struggle to Balance Pre-Boards and IPMAT Preparation</h2>
+      <p>Every year, thousands of students enter the final months before boards with a similar plan. They decide to focus entirely on school exams first and postpone IPMAT preparation until later. At first, the approach feels practical because board exams demand immediate attention. However, aptitude-based exams like IPMAT cannot be mastered in just a few weeks.</p>
+      <p>Unlike school subjects, IPMAT tests mathematical aptitude, logical reasoning, verbal ability, and decision-making under strict time limits. These skills improve only through regular practice. Waiting until boards are over often leaves students with limited time to build accuracy and speed.</p>
+      <p>Another common mistake is trying to cover every topic simultaneously. Students spend hours watching lectures, solving random questions, and collecting study material without identifying which topics contribute the most to their score. This scattered preparation creates stress while producing very little improvement.</p>
+
+      <h2 id="Biggest-Mistakes">The Biggest Mistakes Students Make While Preparing for IPMAT During Pre-Boards</h2>
+      <p>Most students don't struggle because they're incapable. They struggle because their preparation lacks direction. Some of the most common mistakes include:</p>
+      <ul class="cm-list">
+        <li>Studying without a <a href="https://ipmat.rodha.co.in/blog/ipmat-2026-preparation-fluff" target="_blank">streamlined IPMAT strategy</a>.</li>
+        <li>Ignoring regular IPMAT mock test practice until the final month.</li>
+        <li>Spending equal time on every topic instead of focusing on high-weightage areas.</li>
+        <li>Switching between multiple books and study resources without completing any.</li>
+        <li>Neglecting verbal ability while focusing only on Quant.</li>
+        <li>Not reviewing mistakes after every mock test.</li>
+        <li>Trying to study for several hours without taking productive breaks.</li>
+      </ul>
+      <p>Avoiding these mistakes immediately makes your preparation more efficient. The next step is following a practical framework that allows you to balance both board exams and IPMAT preparation without feeling overwhelmed.</p>
+
+      <h2 id="A-5-Step-Framework">A 5-Step Framework to Balance Class 12 Pre-Boards and IPMAT Preparation</h2>
+      <p>Managing both exams becomes much easier when your preparation follows a clear structure instead of depending on motivation.</p>
+
+      <h3>Step 1: Identify Your Strengths and Weaknesses With a Diagnostic Mock</h3>
+      <p>Before opening another textbook, understand where you currently stand.</p>
+      <p>Take one full-length IPMAT mock test under exam conditions. Don't worry about your score. Instead, focus on identifying patterns. Which sections consume the most time? Which concepts repeatedly lead to mistakes? Which topics can be improved quickly?</p>
+      <p>Many students are surprised to discover that a majority of their errors come from only a handful of concepts. Once you know those areas, you can prioritize them instead of attempting the entire syllabus.</p>
+      <p>A diagnostic assessment also helps your <a href="https://ipmat.rodha.co.in/" target="_blank">IPMAT online coaching</a> mentor personalize your preparation plan according to your strengths and weaknesses.</p>
+
+      <h3>Step 2: Divide Your Daily Schedule Into Focused Study Blocks</h3>
+      <p>Trying to study for three continuous hours after school rarely works. Mental fatigue reduces concentration and retention. Instead, divide your available time into smaller sessions. For example, you could spend:</p>
+      <ul class="cm-list">
+        <li>35 minutes on IPMAT Quant preparation</li>
+        <li>30 minutes on verbal ability</li>
+        <li>20 minutes reviewing formulas or vocabulary</li>
+        <li>15 minutes analysing mistakes from the previous day</li>
+      </ul>
+      <p>This structure keeps your daily IPMAT preparation manageable while leaving sufficient time for board subjects. Students following IPMAT online coaching programs often find this method easier to sustain because the daily workload is already organised into smaller learning modules.</p>
+
+      <h3>Step 3: Prioritize High-Weightage Concepts Instead of Completing the Entire Syllabus</h3>
+      <p>One of the biggest myths surrounding competitive exams is that you must master every topic. In reality, certain concepts consistently contribute more questions than others.</p>
+      <p>Arithmetic, Algebra, Reading Comprehension, Grammar, Vocabulary, and Logical Reasoning frequently account for a large portion of the paper. Strengthening these areas first creates a much stronger score than spending weeks mastering low-frequency topics.</p>
+      <p>This doesn't mean ignoring weaker chapters forever. It simply means allocating your limited preparation time wisely. A quality IPMAT online coaching program follows this principle by helping students focus on concepts that deliver the highest return on their effort.</p>
+
+      <h3>Step 4: Practice Regularly With Mock Tests and Performance Analysis</h3>
+      <p>Taking mock tests without analysing them is like practising cricket without watching where the ball goes. Every mock test should answer important questions:</p>
+      <ul class="cm-list">
+        <li>Which mistakes were conceptual?</li>
+        <li>Which mistakes happened because of poor time management?</li>
+        <li>Which questions should have been skipped?</li>
+        <li>Which topics require additional revision?</li>
+      </ul>
+      <p>Students often spend three hours taking a test but only ten minutes reviewing it. The opposite approach is far more effective. Along with an IPMAT test series, maintain an error log that records every recurring mistake. Instead of constantly adding new titles to your <a href="https://ipmat.rodha.co.in/blog/books-ipmat-preparation-booklist" target="_blank">IPMAT booklist</a>, focus on revising the same trusted resources and applying what you've learned through mock tests.</p>
+      <p>Reviewing this notebook every week prevents you from repeating the same errors during the actual examination. This habit alone can significantly improve scores over the course of several weeks.</p>
+
+      <h3>Step 5: Build a Revision System That Fits Around Your Board Schedule</h3>
+      <p>Revision becomes difficult when notes are scattered across multiple notebooks and PDFs. Instead, prepare concise revision sheets containing formulas, vocabulary, shortcuts, and frequently repeated mistakes.</p>
+      <p>Use IPMAT previous year papers to identify recurring concepts and revise only what matters most.</p>
+      <p>Many students preparing through IPMAT online coaching also schedule one light revision session every Sunday instead of introducing new topics. This improves retention while reducing stress during the pre-board season. A structured revision routine helps you stay connected with the exam without compromising your school preparation.</p>
+
+      <h2 id="How-Rodha-Helps">How Rodha Helps Students Prepare Without Compromising Board Exams</h2>
+      <p>Preparing for two major examinations simultaneously becomes much easier when you have a structured roadmap.</p>
+      <p><a href="https://ipmat.rodha.co.in/" target="_blank">Rodha's</a> IPMAT online coaching has been designed specifically for students facing this challenge. Instead of overwhelming learners with endless lectures, the program breaks preparation into bite-sized modules that fit comfortably around school schedules. Whether you're studying before school, after coaching classes, or late in the evening, the lessons are flexible enough to suit your routine.</p>
+      <p>Students receive access to concept videos, regular practice questions, structured revision plans, and a comprehensive IPMAT test series that tracks progress over time. Performance analytics help identify weak areas so students spend more time improving concepts that matter most.</p>
+      <p>The platform also includes high-quality IPMAT study material, previous year question discussions, and sectional practice sessions covering Quantitative Ability and Verbal Ability. Combined with regular mock tests and detailed analysis, this creates a preparation system that is both efficient and sustainable.</p>
+      <p>Explore all our <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT courses</a> here!</p>
+
+      <h2 id="FAQs">Frequently Asked Questions</h2>
+
+      <h3>Can I Start Preparing for IPMAT During My Pre-Board Exams?</h3>
+      <p>Yes. In fact, many successful candidates begin serious preparation during this period. The key is to avoid trying to complete the entire syllabus. Focus on high-weightage topics, maintain a fixed daily schedule, and use IPMAT online coaching to stay consistent. Even 60 to 90 minutes of focused study each day can produce excellent results when maintained over several months.</p>
+
+      <h3>How Many Hours Should I Study for IPMAT While Preparing for Boards?</h3>
+      <p>There isn't a single ideal number because every student's school schedule is different. Most mentors recommend spending between one and one-and-a-half hours daily on IPMAT preparation during pre-board season. Instead of increasing study hours, focus on improving the quality of each session. Solving questions, reviewing mistakes, and revising important concepts usually provides better results than watching lengthy lectures.</p>
+
+      <h3>Is an IPMAT Crash Course Enough for Class 12 Students?</h3>
+      <p>An IPMAT crash course can be highly effective if your basics are already reasonably strong. It helps students revise important concepts, improve speed, and practise exam-level questions within a limited timeframe. However, students who are starting from scratch may need a longer preparation cycle alongside regular practice and revision.</p>
+
+      <h3>How Important Are Mock Tests During IPMAT Preparation?</h3>
+      <p>Mock tests are one of the most valuable parts of preparation because they improve speed, accuracy, and time management. More importantly, they reveal weaknesses that ordinary practice questions often fail to identify. Students should attempt regular mock tests and spend enough time analysing every mistake. This process helps avoid repeating the same errors in future exams.</p>
+
+      <h3>What Should I Prioritize If I Have Very Little Time?</h3>
+      <p>If your schedule is extremely busy, begin with Arithmetic, Algebra, Reading Comprehension, Grammar, and Logical Reasoning. These areas frequently contribute a significant portion of the paper. Pair this with regular revision, one mock test every week, and a structured IPMAT online coaching program to maximise your preparation despite limited time.</p>
+
+    </div>`,
+    publishedDate: "2026-07-15",
+    readTime: "8 min read",
+    metaTitle: "IPMAT Online Coaching: Balance Class 12 Pre-Boards & IPMAT 2026",
+    metaDescription: "Learn how to balance Class 12 pre-boards and IPMAT 2026 with practical study strategies, mock tests, and IPMAT online coaching designed for consistent progress.",
+    
+    tags: ["ipmat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Learn how to balance Class 12 pre-boards and IPMAT 2026 with practical study strategies, mock tests, and IPMAT online coaching designed for consistent progress.",
+    image: "/assets/images/blog/ipmat-online-coaching-balance-pre-boards-2026/featured.png",
+    publishedAt: "2026-07-15",
+  },
+  {
+    id: "blog-6",
+    slug: "ipmat-preparation-with-previous-year-papers",
+    title: "IPMAT Preparation with Previous Year Papers: Build the Right Foundation First",
+    category: "ipmat",
+    thumbnail: "/assets/images/blog/ipmat-preparation-with-previous-year-papers/featured.png",
+    shortDescription: "Learn how to use IPMAT previous year papers the smart way — audit your prep, close Quant and Verbal gaps, and practise the real exam pattern early.",
+    content: `<p>Preparing for IPMAT is very different from preparing for CAT, even though both exams test quantitative aptitude and verbal ability. Many students assume that joining a CAT coaching program automatically prepares them for IPMAT, but that approach often leaves important gaps. IPMAT preparation with previous year papers helps bridge those gaps by showing exactly how the actual exam is structured and where students need additional practice.</p>
+      <p>The biggest advantage of IPMAT preparation with previous year papers is that it exposes the real question pattern instead of relying on assumptions. Previous papers reveal how concepts are tested, how much time each section demands, and which topics require faster execution. Instead of studying everything equally, students can focus on areas that repeatedly appear in the exam.</p>
+
+<img src="/assets/images/blog/ipmat-preparation-with-previous-year-papers/image-1.png" data-filename="52684068-f55a-4ece-a22e-166a6bb7276d-1784123145832-52684068-f55a-4ece-a22e-166a6bb7276d.png" alt="A student organizing flashcards and a printed mock test paper on a wooden table.">
+      <h2 id="Why-PYQs">Why Previous Year Papers Should Be Part of Every Study Plan</h2>
+      <p>Most students begin their preparation by covering the syllabus chapter by chapter. While building concepts is important, it does not automatically prepare you for the actual examination. Following a <a href="/blog/working-student-ipmat-timeline-5-month-study-plan">working-student IPMAT timeline</a> alongside IPMAT preparation with previous year papers helps you balance concept building, practice, and revision more effectively.</p>
+      <p>Every previous paper provides valuable information beyond the final score. It highlights which questions consume the most time, where calculation mistakes occur, and which concepts need revision. This makes IPMAT preparation with previous year papers one of the most effective tools for improving both accuracy and speed.</p>
+      <p>Instead of waiting until the last few months, students should begin solving previous papers once they complete their basic Quant and Verbal foundations. Regular exposure to actual questions builds familiarity with the exam and reduces surprises on test day.</p>
+
+      <h2 id="Overlap">Understanding the CAT and IPMAT Overlap</h2>
+      <p>Many concepts taught during CAT preparation are equally useful for IPMAT. Arithmetic, algebra, number systems, geometry, reading comprehension, vocabulary, and grammar form a strong foundation for both exams. This overlap helps students build conceptual clarity without learning everything from scratch.</p>
+      <p>However, IPMAT preparation with previous year papers quickly reveals that the two exams are not identical. IPMAT follows its own sectional timing, question distribution, and answer formats, especially in Quantitative Ability. Students who rely only on CAT material often realise these differences much later in their preparation.</p>
+      <p>Rather than treating CAT and IPMAT as separate journeys, students should use CAT concepts as their foundation and previous year IPMAT papers as their benchmark. This combination creates a much more balanced preparation strategy.</p>
+
+      <h2 id="Transfer">Which CAT Topics Transfer Well?</h2>
+      <p>Several CAT topics can be directly applied during IPMAT preparation. Subjects like arithmetic, percentages, ratios, averages, time and work, algebra, and basic geometry continue to appear regularly in aptitude-based entrance exams. Along with regular concept practice, taking a <a href="/blog/evaluating-cat-mock-test-difficulty-2026">CAT mock test</a> helps strengthen these fundamentals before applying them through IPMAT preparation with previous year papers.</p>
+      <p>Similarly, verbal topics including reading comprehension, sentence correction, vocabulary, and grammar provide a solid base for IPMAT. Strong reading habits developed during CAT preparation also improve comprehension speed. However, IPMAT preparation with previous year papers helps students understand how these topics appear differently under the IPMAT format.</p>
+      <p>Instead of repeatedly revising familiar concepts, students should solve previous year questions to identify whether the challenge lies in the concept itself or in applying it under time pressure.</p>
+
+      <h2 id="Audit">Audit Your Preparation Before Moving Ahead</h2>
+      <p>One common mistake students make is assuming that completing coaching classes means completing preparation. In reality, finishing lectures only marks the beginning of effective revision.</p>
+      <p>IPMAT preparation with previous year papers helps students verify whether their preparation actually matches the exam requirements. A simple way to audit your preparation is by dividing topics into three groups:</p>
+      <ul class="cm-list">
+        <li>Concepts already mastered</li>
+        <li>Concepts needing additional practice</li>
+        <li>Topics that require fresh learning</li>
+      </ul>
+      <p>This exercise immediately shows where your study time should go. Instead of spending equal effort on every chapter, students can prioritise areas that affect their overall score the most.</p>
+
+      <h2 id="Start-Early">Start Using Previous Papers Early</h2>
+      <p>Many aspirants save previous year papers for the final stage of preparation. This often limits their usefulness because there is little time left to improve weak areas. IPMAT preparation with previous year papers is far more effective when introduced early and used consistently throughout the preparation journey, alongside structured <a href="/blog/ipmat-online-coaching-balance-pre-boards-2026">IPMAT online coaching.</a></p>
+      <p>Every paper should become a learning exercise instead of a simple mock test. After completing a paper, analyse every incorrect answer, identify the reason behind the mistake, and revisit the relevant concept. Over time, this process creates a personalised improvement plan that is far more valuable than solving random practice questions.</p>
+      <p>With the right balance between concept building and regular paper analysis, students develop the confidence needed to perform consistently across all sections of the IPMAT examination.</p>
+
+      <h2 id="Smarter">How To Use Previous Year Papers for Smarter IPMAT Preparation</h2>
+      <p>Solving previous year papers is useful only when students analyse them properly. Many aspirants complete multiple papers but fail to identify the patterns behind their mistakes. Effective IPMAT preparation with previous year papers requires a structured review process where every attempt becomes a source of improvement.</p>
+      <p>After completing a paper, do not focus only on your final score. Review which questions you solved correctly, which ones took excessive time, and which mistakes happened because of weak concepts or poor decision-making. This analysis helps you understand whether your preparation needs more practice, revision, or a change in strategy.</p>
+
+      <h3>Build a Weekly Previous Paper Practice Routine</h3>
+      <p>Consistency matters more than completing a large number of papers at once. A student who analyses one paper every week can improve faster than someone who solves five papers without reviewing mistakes. IPMAT preparation with previous year papers works best when combined with structured <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT courses</a> and a regular study routine.</p>
+      <ul class="cm-list">
+        <li>Learn concepts through structured classes</li>
+        <li>Practise topic-wise questions</li>
+        <li>Attempt an IPMAT previous year section under timed conditions</li>
+        <li>Analyse mistakes and update your error log</li>
+        <li>Revise weak areas before the next attempt</li>
+      </ul>
+      <p>This cycle ensures that every practice session has a clear purpose. Instead of collecting scores, students build a record of what needs improvement.</p>
+
+      <h3>Identify Gaps in Quantitative Ability</h3>
+      <p>Quantitative Ability is one of the areas where students often discover major differences between CAT preparation and IPMAT requirements. While CAT concepts provide a strong foundation, IPMAT questions may require faster calculations, different approaches, and additional practice with specific topics.</p>
+      <p>IPMAT preparation with previous year papers helps identify these gaps early. Students can track whether they are struggling because of missing concepts, slow calculations, unfamiliar question types, or poor time management.</p>
+      <p>Topics such as arithmetic, algebra, geometry, matrices, trigonometry, and basic calculus should be reviewed based on actual question patterns. Instead of assuming every advanced topic needs equal attention, use previous papers to decide where your preparation effort will create the biggest improvement.</p>
+
+      <h3>Give Special Attention to Quantitative Ability Short Answer</h3>
+      <p>The Quantitative Ability Short Answer section requires a different approach because students cannot depend on answer options. This changes the solving strategy completely. Students need stronger calculation accuracy and confidence while entering final answers.</p>
+      <p>Regular IPMAT preparation with previous year papers helps students become comfortable with this format. By practising short-answer questions repeatedly, learners understand when to invest time in detailed calculations and when to move forward. This approach is equally valuable for students following an <a href="https://www.youtube.com/watch?v=CD3xApom9nA" target="_blank">IPMAT 2027 dropper strategy</a>, as it helps them identify and improve recurring weak areas over a longer preparation period.</p>
+      <p>Maintain a separate error log for this section. Categorise mistakes into calculation errors, concept gaps, time issues, and avoidable mistakes. This simple habit can significantly improve performance before the final examination.</p>
+
+      <h3>Improve Verbal Ability Through Exam-Based Practice</h3>
+      <p>Verbal Ability is another area where consistent practice creates long-term improvement. Reading comprehension, vocabulary, grammar, and sentence-based questions require regular exposure rather than last-minute preparation.</p>
+      <p>While CAT-level verbal practice can improve reading ability, IPMAT preparation with previous year papers helps students understand the specific difficulty level and question style of the exam. This prevents students from over-preparing for unrelated question formats.</p>
+      <p>Analyse why an option is correct instead of simply checking the answer. Understanding the reasoning behind choices improves accuracy and helps students handle unfamiliar passages during the actual exam.</p>
+
+      <h2 id="Rodha">How Rodha Helps Students Prepare for IPMAT</h2>
+      <p>At <a href="https://ipmat.rodha.co.in/" target="_blank">Rodha</a>, we help students create a preparation strategy that combines strong fundamentals with exam-specific practice. Our approach to IPMAT preparation with previous year papers focuses on helping students understand concepts, apply them through targeted questions, and analyse their performance regularly.</p>
+      <p>We believe that preparation should not depend on solving endless questions without direction. Students need clarity about which topics matter, where they are losing marks, and what action will improve their score. By combining structured learning, practice sessions, and previous paper analysis, we help students build a preparation process based on evidence.</p>
+      <p>Whether you are starting your IPMAT journey or refining your final preparation strategy, Rodha provides the guidance and resources needed to approach the exam with greater confidence.</p>
+      <p>Explore all our <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT courses</a> here!</p>
+
+      <h2 id="FAQs">FAQs on IPMAT Preparation with Previous Year Papers</h2>
+
+      <h3>When Should I Start Solving IPMAT Previous Year Papers?</h3>
+      <p>Students should begin solving previous year papers after completing basic concepts in Quant and Verbal. Starting early helps identify preparation gaps and gives enough time to improve weak areas.</p>
+
+      <h3>Are CAT Questions Enough for IPMAT Preparation?</h3>
+      <p>No. CAT questions help build strong aptitude fundamentals, but IPMAT has its own pattern, timing, and question style. Previous year IPMAT papers are essential for understanding the actual exam requirements.</p>
+
+      <h3>How Many IPMAT Previous Year Papers Should I Solve?</h3>
+      <p>Quality matters more than quantity. Solve papers regularly, analyse mistakes carefully, and revise weak topics before attempting the next paper. Consistent analysis is more valuable than simply increasing the number of attempts.</p>
+
+      <h3>Can Previous Year Papers Predict the Exact IPMAT Questions?</h3>
+      <p>No. Previous papers cannot predict exact questions, but they reveal important patterns, topic preferences, and difficulty levels. They help students prepare strategically instead of studying without direction.</p>
+
+      <h3>How Does Rodha Help With IPMAT Preparation?</h3>
+      <p>Rodha helps students combine concept learning, practice, and exam analysis. Through structured classes and previous paper-based preparation, students can identify gaps and build a focused preparation strategy.</p>
+
+    </div>`,
+    publishedDate: "2026-08-01",
+    readTime: "8 min read",
+    metaTitle: "IPMAT Previous Year Papers: Build the Right Base",
+    metaDescription: "Learn how to use IPMAT previous year papers the smart way — audit your prep, close Quant and Verbal gaps, and practise the real exam pattern early.",
+    
+    tags: ["ipmat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Learn how to use IPMAT previous year papers the smart way — audit your prep, close Quant and Verbal gaps, and practise the real exam pattern early.",
+    image: "/assets/images/blog/ipmat-preparation-with-previous-year-papers/featured.png",
+    publishedAt: "2026-08-01",
+  },
+  {
+    id: "blog-7",
+    slug: "working-student-ipmat-timeline-5-month-study-plan",
+    title: "The Working-Student IPMAT Timeline: 5-Month Compressed Prep Protocol with Weekday Micro-Learning",
+    category: "ipmat",
+    thumbnail: "/assets/images/blog/working-student-ipmat-timeline-5-month-study-plan/featured.png",
+    shortDescription: "Follow a practical 5-month IPMAT timeline with weekday micro-learning, weekend mock tests, and expert IPMAT online coaching strategies for working students.",
+    content: `<p>Preparing for IPMAT while managing a full-time job or college internship can feel overwhelming, but it is completely achievable with the right approach. The real challenge is not the syllabus but finding enough focused study time on busy weekdays. A structured IPMAT timeline helps you use limited study hours effectively instead of depending on long, inconsistent study sessions.</p>
+      <p>The competition also makes early planning essential. According to IIM Rohtak's official IPMAT 2025 data, more than 14,000 candidates were shortlisted and over <a href="https://iimrohtak.ac.in/assets/images/IPMAT%202025%20Summary.pdf" target="_blank">12,800 appeared for the examination</a>, reflecting the growing competition for admission. At the same time, candidates must solve 90 questions in just 120 minutes, making both preparation and time management equally important.</p>
+      <p>This is where a well-designed IPMAT timeline makes a difference. Instead of trying to study everything at once, it divides preparation into five clear phases: Quant Foundation, Verbal Foundation, Integrated Practice, Mock Intensity, and Exam Simulation. Each phase has a specific goal and fits naturally into short weekday study sessions and longer weekend practice blocks.</p>
+      <p>By following a structured IPMAT timeline, working aspirants can build concepts gradually, improve speed through regular practice, and reach the exam with confidence instead of rushing through the syllabus during the final few weeks.</p>
+
+<img src="/assets/images/blog/working-student-ipmat-timeline-5-month-study-plan/image-1.png" data-filename="8545e18e-08a5-48d8-9c9d-2ef9c7c95bc1-1784293792730-8545e18e-08a5-48d8-9c9d-2ef9c7c95bc1.png" alt="A tired student looking overwhelmed by a large stack of books.">
+      <h2 id="Micro-Learning-System">How the Weekday Micro-Learning System Works</h2>
+      <p>The foundation of this IPMAT timeline is micro-learning. Instead of depending on long study sessions that rarely happen consistently, students study in smaller, focused blocks that fit naturally into a working day. These sessions may seem short individually, but together they provide more than enough preparation time across five months.</p>
+      <p>The first study block is a 20-minute morning revision session. This slot is ideal for revising formulas, vocabulary, grammar rules, or error logs from the previous day. Since the brain is fresh in the morning, recall activities become much more effective than learning completely new concepts. Students enrolled in <a href="https://ipmat.rodha.co.in/" target="_blank">IPMAT online coaching</a> can also use this time to quickly revise class notes or recap recorded lessons.</p>
+      <p>The second study block is a 30-minute commute session. Whether travelling by metro, bus, or cab, students can use this time to watch concept videos, listen to recorded lectures, or read editorials for verbal ability. This converts otherwise unproductive travel time into meaningful preparation without adding extra study hours.</p>
+      <p>The final weekday block is a focused 45-minute evening practice session. This is the most important part of the timeline because it is dedicated entirely to solving questions under timed conditions. New concepts should always be reinforced through practice rather than passive learning.</p>
+
+      <h2 id="Month-1">Month 1: Build a Strong Quantitative Foundation</h2>
+      <p>The first month of the IPMAT timeline focuses entirely on strengthening quantitative aptitude fundamentals. Topics such as arithmetic, algebra, percentages, ratios, averages, and number systems should receive maximum attention because they appear repeatedly across different sections of the exam. Weak fundamentals become increasingly difficult to fix later, making this phase extremely important.</p>
+      <p>During morning sessions, revise formulas and previously solved questions instead of learning new concepts. The commute slot should be used for watching short concept videos on one quant topic at a time. Evening sessions should focus on solving 15 to 20 questions under a timer, followed by reviewing mistakes immediately after completing the set.</p>
+      <p>Weekend study blocks should go beyond simple practice. One session should include a complete topic-wise test, while the second should be dedicated to analysing mistakes and revisiting weak chapters. Students often improve much faster when they spend more time understanding incorrect answers than repeatedly solving familiar questions. Following a <a href="https://ipmat.rodha.co.in/blog/ipmat-2026-preparation-fluff" target="_blank">streamlined IPMAT strategy</a> during these review sessions helps identify recurring mistakes and strengthens conceptual clarity.</p>
+      <p>The goal of Month 1 is accuracy rather than speed. By the end of this phase in the IPMAT timeline, students should feel comfortable solving fundamental quantitative problems without relying on shortcuts or guesswork. Strong basics make every later phase significantly easier.</p>
+
+      <h2 id="Month-2">Month 2: Develop Verbal Ability Systematically</h2>
+      <p>Once quantitative fundamentals become stable, the IPMAT timeline shifts its attention towards verbal ability. Reading comprehension, vocabulary, grammar, para-jumbles, and critical reasoning require continuous exposure rather than occasional practice. Consistency matters far more than solving hundreds of questions at once.</p>
+      <p>Morning revision should now include vocabulary flashcards, grammar rules, and para-jumble strategies. During the commute, students should read one quality editorial or long-form article every day and mentally summarise the author's central argument. This simple exercise gradually improves comprehension speed and retention.</p>
+      <p>Evening sessions should focus on solving timed reading comprehension passages and verbal reasoning questions. Instead of rushing through multiple passages, students should analyse why each answer is correct or incorrect. This reflective practice strengthens logical reasoning far more effectively than chasing higher question counts.</p>
+
+      <h2 id="Month-3">Month 3: Start Integrated Practice</h2>
+      <p>By the third month, your IPMAT timeline should move beyond studying Quant and Verbal separately. The actual examination requires constant switching between numerical reasoning and language skills, so your preparation should gradually mirror that experience. This transition helps your brain adapt to changing question types without losing focus or speed during the exam. At this stage, it is also helpful to finalise your <a href="https://ipmat.rodha.co.in/blog/books-ipmat-preparation-booklist" target="_blank">IPMAT booklist</a> and avoid switching between multiple resources.</p>
+      <p>The morning 20-minute slot should alternate between Quant revision and Verbal revision on different days. During your commute, replace concept videos with solution discussions and strategy videos that explain how toppers approach mixed question sets. This shift allows you to understand decision-making rather than simply memorising formulas or grammar rules.</p>
+      <p>Your evening practice session should now consist of mixed question sets containing both Quant and Verbal questions under a timer. Resist the temptation to separate subjects again, because the objective of this stage is improving adaptability. As your IPMAT timeline progresses, learning to switch quickly between subjects becomes just as important as solving individual questions correctly.</p>
+
+      <h2 id="Month-4">Month 4: Shift Your Focus Towards Mock Tests</h2>
+      <p>The fourth month marks one of the biggest transitions in your IPMAT timeline. By now, most of the syllabus should already be complete, meaning your priority changes from learning new concepts to applying existing knowledge under exam conditions. Many aspirants continue studying theory at this stage, but that often leaves them underprepared for the pressure of the actual examination.</p>
+      <p>Morning sessions should now revolve around reviewing mistakes from previous mocks instead of revising entire chapters. Rather than reading complete notes again, spend those twenty minutes understanding why you made specific errors and how you can avoid repeating them. Small improvements in decision-making often contribute more to percentile growth than revisiting familiar concepts.</p>
+      <p>During your commute, focus only on revision capsules, formula sheets, vocabulary lists, or quick concept refreshers. This is not the time to begin entirely new topics unless they are extremely important. A disciplined IPMAT timeline prioritises strengthening existing knowledge instead of constantly expanding the syllabus. You can also use this time to revise topics from the <a href="https://www.youtube.com/watch?v=JuZyvwOZdh0" target="_blank">VARC syllabus</a>, such as reading comprehension, para jumbles, and vocabulary.</p>
+
+      <h2 id="Month-5">Month 5: Simulate the Real Examination</h2>
+      <p>The final month of your IPMAT timeline is designed to make exam day feel familiar rather than stressful. At this stage, your preparation should closely resemble the actual examination in terms of timing, environment, and mental pressure. The objective is no longer increasing knowledge but improving execution.</p>
+      <p>Morning sessions should remain extremely light. Revise formulas, vocabulary, and previously maintained error logs, but avoid introducing difficult concepts that may reduce confidence before the examination. Consistent revision is far more valuable than last-minute cramming during this phase.</p>
+      <p>Commute sessions should also become lighter and less demanding. Instead of lengthy lectures, use flashcards, short revision notes, or quick strategy videos that reinforce concepts you already understand. The final phase of the IPMAT timeline should reduce cognitive overload rather than increase it.</p>
+
+      <h2 id="How-Rodha-Helps">Stay Consistent with a Structured IPMAT Timeline at Rodha</h2>
+      <p>Following an IPMAT timeline becomes much easier when you don't have to plan every week's preparation yourself. <a href="https://ipmat.rodha.co.in/" target="_blank">Rodha's</a> IPMAT programs are built around a structured study roadmap that combines concept learning, practice questions, sectional tests, mock exams, and detailed performance analysis. Instead of guessing what to study next, students follow a clear progression that keeps preparation organised from day one.</p>
+      <p>For working students, flexibility is equally important. Rodha provides recorded lectures, structured study material, regular doubt-solving sessions, and mock tests that can fit around college classes, internships, or full-time work. This allows students to maintain their IPMAT timeline even during busy weeks without falling behind on the syllabus.</p>
+      <p>Beyond content delivery, Rodha focuses heavily on analysis and improvement. Every mock test and sectional is followed by detailed review sessions that help students identify recurring mistakes, strengthen weak areas, and improve their test-taking strategy. By following this structured approach, students can stick to their IPMAT timeline with greater consistency and enter the examination feeling well prepared rather than rushed.</p>
+      <p>Explore all our <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT courses</a> here!</p>
+
+      <h2 id="FAQs">Frequently Asked Questions</h2>
+
+      <h3>Is five months enough for a working professional to prepare for IPMAT?</h3>
+      <p>Yes, provided you follow a disciplined IPMAT timeline. Around 90 to 100 focused minutes on weekdays, combined with productive weekend sessions, are generally sufficient to complete the syllabus, practise mocks, and revise consistently before the examination.</p>
+
+      <h3>What if I miss a week because of work commitments?</h3>
+      <p>Do not restart your preparation from the beginning. Continue your IPMAT timeline by adjusting the following week's schedule and combining related topics where possible. Maintaining consistency is far more important than following the original calendar perfectly.</p>
+
+      <h3>Should working students attempt full-length mocks every week?</h3>
+      <p>Not during the initial stages. Full-length mocks become important during the fourth and fifth months of your IPMAT timeline, once the syllabus is largely complete and your focus shifts towards exam temperament and time management.</p>
+
+      <h3>Can I prepare without coaching while following this plan?</h3>
+      <p>Yes, provided you have access to quality study material, mock tests, and reliable doubt-solving resources. However, many working students prefer structured coaching because it reduces planning time and keeps their IPMAT timeline organised throughout the preparation period.</p>
+
+    </div>`,
+    publishedDate: "2026-07-15",
+    readTime: "8 min read",
+    metaTitle: "Working-Student IPMAT Timeline: 5-Month Study Plan for 2026",
+    metaDescription: "Follow a practical 5-month IPMAT timeline with weekday micro-learning, weekend mock tests, and expert IPMAT online coaching strategies for working students.",
+    
+    tags: ["ipmat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Follow a practical 5-month IPMAT timeline with weekday micro-learning, weekend mock tests, and expert IPMAT online coaching strategies for working students.",
+    image: "/assets/images/blog/working-student-ipmat-timeline-5-month-study-plan/featured.png",
+    publishedAt: "2026-07-15",
+  },
+  {
+    id: "blog-8",
+    slug: "ipmat-interview-prep-2026-written-to-wat-to-pi-framework",
+    title: "IPMAT Interview Prep 2026: The Written-to-WAT-to-PI Continuity Framework",
+    category: "ipmat",
+    thumbnail: "/assets/images/blog/ipmat-interview-prep-2026-written-to-wat-to-pi-framework/featured.png",
+    shortDescription: "Master IPMAT Interview Prep 2026 with a structured Written-to-WAT-to-PI continuity framework that helps you prepare for every stage of the admission process.",
+    content: `<p>Every year, thousands of students dedicate months to preparing for the IPMAT written exam. They solve Quant questions, improve their reading comprehension, revise formulas, and take mock tests regularly through self-study or <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT online courses</a>. Once the exam is over, however, many believe their job is done and decide to think about the interview only after the shortlist is announced. While this approach may seem practical, it often leaves very little time to prepare for one of the most important stages of the admission process.</p>
+      <p>The Personal Interview is not simply a conversation with the panel. It is designed to assess how clearly you communicate, how well you organise your thoughts, and whether you can defend your opinions with confidence. These are skills that cannot be developed overnight. The earlier you start working on them, the more natural your responses become during the actual interview. That's why IPMAT interview prep should never be treated as a separate phase that begins after the written exam.</p>
+
+<img src="/assets/images/blog/ipmat-interview-prep-2026-written-to-wat-to-pi-framework/image-1.png" data-filename="5990ca47-1a73-45f8-8164-3cc04192e837-1784123166024-5990ca47-1a73-45f8-8164-3cc04192e837.png" alt="The continuity framework connecting written prep, WAT, and PI.">
+      <h2 id="Why-Start-Early">Why You Should Start IPMAT Interview Prep Early</h2>
+      <p>Many students believe that scoring well in the written exam is enough to secure admission into their dream IPM programme. While clearing the written cutoff is undoubtedly important, it is only one part of the selection process. Once you receive an interview call, your ability to communicate your ideas, explain concepts, and stay composed under pressure becomes equally important. Students who begin IPMAT interview prep only after the results often find themselves rushing through mock interviews and current affairs in just a few weeks.</p>
+      <p>For IIM Indore, the Aptitude Test carries 65% weightage, while the Personal Interview contributes the remaining 35% to the final merit list. This means that more than one-third of your admission decision depends on your interview performance. Looking at these numbers, it becomes clear that IPMAT interview prep deserves consistent attention throughout your preparation journey instead of being pushed to the very end.</p>
+      <p>This is also why many students choose <a href="https://ipmat.rodha.co.in/" target="_blank">IPMAT online coaching</a> that integrates interview preparation into the overall study plan instead of treating it as a separate stage. The biggest advantage of starting early is that it removes unnecessary pressure later. Rather than trying to learn everything after the shortlist, you gradually build the skills needed for the interview alongside your written preparation. By the time interview calls are announced, you are refining your answers instead of starting from scratch.</p>
+
+      <h2 id="Continuity-Framework">The Continuity Framework for IPMAT Interview Prep</h2>
+      <p>The easiest way to approach IPMAT interview prep is to think of every study session as an opportunity to prepare for both the written exam and the interview. Instead of simply asking whether you solved a question correctly, ask yourself whether you could explain the concept to someone else. Similarly, after reading an editorial, try summarising the author's viewpoint in your own words and think of one argument that supports it and another that challenges it.</p>
+      <p>This simple shift transforms your daily preparation. Your RC practice becomes opinion building, your Quant revision improves conceptual clarity, and your current affairs reading develops communication skills. Over a few months, these small habits create a strong foundation for interviews without adding extra study hours to your schedule.</p>
+
+      <h2 id="Written-to-Interview-Overlap">Written Topic to Interview Theme: Where the Real Overlap Begins</h2>
+      <p>Once you start looking closely, you'll notice that your written preparation and interview preparation overlap far more than you think. Every week, you're reading editorials, solving RC passages, revising Quant concepts, and analysing mock tests. These activities don't just improve your written score; they also provide the content you'll use during your IPMAT interview prep.</p>
+      <p>The biggest difference is how you approach them. During the written exam, you're expected to identify the correct answer within a limited time. During the interview, you're expected to explain your reasoning, defend your opinion, and communicate your ideas clearly. The knowledge remains the same, but the way you present it changes. Following a reliable <a href="https://ipmat.rodha.co.in/blog/books-ipmat-preparation-booklist" target="_blank">IPMAT 2026 booklist</a> helps build a strong conceptual foundation, while developing communication skills alongside your studies makes IPMAT interview prep much easier later.</p>
+      <p>The table below shows how common written exam topics naturally translate into WAT themes and Personal Interview discussions.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Written Preparation</th>
+            <th>Possible WAT Theme</th>
+            <th>Likely PI Questions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Reading Comprehension on current affairs</td>
+            <td>Technology, economy, education, environment</td>
+            <td>Opinion-based questions and current affairs discussions</td>
+          </tr>
+          <tr>
+            <td>Quant concepts</td>
+            <td>Business applications, financial decisions</td>
+            <td>Explain concepts in simple language</td>
+          </tr>
+          <tr>
+            <td>Data Interpretation</td>
+            <td>Data-based essays</td>
+            <td>Analytical reasoning questions</td>
+          </tr>
+          <tr>
+            <td>Vocabulary &amp; Grammar</td>
+            <td>Structured writing</td>
+            <td>Communication and articulation</td>
+          </tr>
+          <tr>
+            <td>Logical Reasoning</td>
+            <td>Case studies</td>
+            <td>Situational and decision-making questions</td>
+          </tr>
+          <tr>
+            <td>Editorial reading</td>
+            <td>Social and economic issues</td>
+            <td>Opinion-based follow-up questions</td>
+          </tr>
+          <tr>
+            <td>Mock tests</td>
+            <td>Time management and learning</td>
+            <td>Questions on strengths, weaknesses, and preparation strategy</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Instead of viewing these as separate subjects, think of them as connected pieces of the same puzzle. Every time you complete an RC passage, you've also prepared for a possible discussion on that topic. Every Quant chapter you revise gives you another concept that you should be able to explain in simple words during your IPMAT interview prep.</p>
+
+      <h2 id="Interview-Notebook">Build an Interview Notebook Alongside Your Written Preparation</h2>
+      <p>One of the simplest ways to improve your IPMAT interview prep is by maintaining a dedicated interview notebook. It doesn't have to be complicated. The goal is to collect ideas, concepts, and experiences that you can revisit before your interview instead of trying to remember everything at the last minute.</p>
+      <p>After every study session, spend five minutes adding a few notes. This small habit may not seem important initially, but over several months, it creates a personalised resource that becomes incredibly valuable once interview calls are announced. Many students enrolled in <a href="https://ipmat.rodha.co.in/blog/best-coaching-ipmat-2026-commerce" target="_blank">IPMAT online coaching for commerce students</a> use this approach to organise concepts, current affairs, and personal insights in one place. Instead of searching for random interview questions online, you'll already have answers built from your own preparation. Your notebook can include the following:</p>
+      <ul class="cm-list">
+        <li>One interesting current affairs topic you read that day.</li>
+        <li>One Quant concept explained in simple language.</li>
+        <li>A summary of an RC passage in three or four lines.</li>
+        <li>One opinion on a recent issue with supporting reasons.</li>
+        <li>One personal experience, achievement, or challenge you can discuss confidently.</li>
+      </ul>
+
+      <h2 id="Dual-Prep-Schedule">A Simple Dual-Prep Schedule That Actually Works</h2>
+      <p>Many students worry that starting IPMAT interview prep early will increase their workload. In reality, you don't need to dedicate separate hours every day. A few small changes to your existing study routine are enough to prepare for both stages simultaneously. Here's a practical schedule you can follow.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Preparation Phase</th>
+            <th>Written Focus</th>
+            <th>Interview Focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12–8 weeks before exam</td>
+            <td>Build Quant fundamentals and improve VARC</td>
+            <td>Start an interview notebook and record one concept every week</td>
+          </tr>
+          <tr>
+            <td>8–4 weeks before exam</td>
+            <td>Sectional tests and mock exams</td>
+            <td>Practise speaking on two RC topics every week</td>
+          </tr>
+          <tr>
+            <td>4–1 weeks before exam</td>
+            <td>Revision and mock analysis</td>
+            <td>Revise your notebook and improve communication</td>
+          </tr>
+          <tr>
+            <td>After the written exam</td>
+            <td>Light revision</td>
+            <td>Begin mock interviews and WAT practice</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>This approach ensures that IPMAT interview prep grows naturally alongside your written preparation. By the time results are announced, you'll already have months of material to revise instead of beginning from scratch.</p>
+      <p>Another advantage of this method is that it improves your written performance as well. Explaining concepts aloud helps strengthen conceptual clarity, while discussing current affairs regularly improves reading comprehension and critical thinking. In other words, your interview preparation also contributes to a better written score.</p>
+
+      <h2 id="How-Rodha-Helps">How Rodha Helps with IPMAT Interview Prep</h2>
+      <p>Cracking the IPMAT isn't just about performing well in the written exam. You also need the confidence to communicate your ideas, explain concepts clearly, and handle interview questions without feeling overwhelmed. That's why <a href="https://ipmat.rodha.co.in/" target="_blank">Rodha</a> focuses on building these skills throughout your preparation instead of treating them as a last-minute requirement.</p>
+      <p>Along with comprehensive classroom learning, regular mock tests, and concept-based teaching, Rodha encourages students to develop the analytical and communication skills that are equally valuable during IPMAT interview prep. From improving your understanding of current affairs to strengthening your fundamentals in Quant and VARC, every part of the preparation is designed to help you perform confidently across every stage of the admission process.</p>
+      <p>Explore all our <a href="https://ipmat.rodha.co.in/s/pages/categories" target="_blank">IPMAT courses</a> here!</p>
+
+      <h2 id="FAQs">Frequently Asked Questions</h2>
+
+      <h3>1. When should I start IPMAT interview prep?</h3>
+      <p>The best time to start IPMAT interview prep is alongside your written preparation. Building communication skills, following current affairs, and explaining concepts regularly gives you enough time to prepare confidently before interview calls are announced.</p>
+
+      <h3>2. What types of questions are asked during the IPMAT interview?</h3>
+      <p>The interview usually includes questions about your academic background, current affairs, personal interests, career goals, and basic concepts from Class 11 and 12 subjects. Interviewers also assess your communication skills, confidence, and ability to think logically under pressure.</p>
+
+      <h3>3. Can I prepare for the written exam and interview together?</h3>
+      <p>Yes. In fact, it's one of the smartest ways to prepare. Reading comprehension passages, Quant concepts, mock tests, and current affairs can all contribute to IPMAT interview prep if you regularly summarise what you learn and practise expressing your thoughts clearly.</p>
+
+    </div>`,
+    publishedDate: "2026-07-15",
+    readTime: "7 min read",
+    metaTitle: "IPMAT Interview Prep 2026: Written-to-WAT-to-PI Framework",
+    metaDescription: "Master IPMAT Interview Prep 2026 with a structured Written-to-WAT-to-PI continuity framework that helps you prepare for every stage of the admission process.",
+    
+    tags: ["ipmat","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "Master IPMAT Interview Prep 2026 with a structured Written-to-WAT-to-PI continuity framework that helps you prepare for every stage of the admission process.",
+    image: "/assets/images/blog/ipmat-interview-prep-2026-written-to-wat-to-pi-framework/featured.png",
+    publishedAt: "2026-07-15",
+  },
+  {
+    id: "blog-9",
+    slug: "rodha-s-ssc-cgl-2026-preparation-priorities",
+    title: "Rodha's SSC CGL 2026 Preparation Priorities: What to Study First",
+    category: "ssc",
+    thumbnail: "/assets/images/blog/rodha-s-ssc-cgl-2026-preparation-priorities/featured.png",
+    shortDescription: "A smart SSC CGL 2026 preparation priority guide — what to study first, how to handle the 15-minute sectional timer, and how to balance Tier I & Tier II.",
+    content: `<p>Preparing for SSC CGL 2026 is no longer just about covering the syllabus before the exam. With the revised pattern introducing a separate 15-minute timer for each Tier I section, every subject now demands equal attention and a dedicated preparation strategy. This makes your preparation more structured than ever, where smart prioritisation matters as much as hard work.</p>
+      <p>Many aspirants begin preparation by following generic "high-weightage" topic lists or copying someone else's study plan. While these resources can provide direction, they rarely reflect your strengths, weaknesses, or the actual effort required to improve your score. A better approach is to combine the official syllabus with regular mock-test analysis and build a study order based on your own performance.</p>
+      <p>The most effective preparation focuses on concepts that remain useful throughout both Tier I and Tier II. Strong foundations in Quant, Reasoning, English, and General Awareness reduce the need for repeated learning later. This allows you to spend more time improving accuracy, speed, and confidence closer to the examination.</p>
+
+<img src="/assets/images/blog/rodha-s-ssc-cgl-2026-preparation-priorities/image-1.png" data-filename="1cd95569-ef0e-413c-a83c-06fd6421e66c-1782420406529-1cd95569-ef0e-413c-a83c-06fd6421e66c.png" alt="Subject-wise priority order for SSC CGL 2026 Tier I preparation.">
+      <h2 id="Which-Topics">Which Topics Should Lead Your SSC CGL 2026 Preparation?</h2>
+      <p>One of the biggest mistakes candidates make during SSC CGL 2026 preparation is treating every chapter as equally important. Although each Tier I section carries the same marks, every topic requires a different amount of learning time and practice. Choosing the right sequence helps you improve faster without feeling overwhelmed by the syllabus. Regular practice through an <a href="https://www.youtube.com/watch?v=--pPIFXNmtA" target="_blank">SSC CGL Maths PYQs series</a> can also help you identify high-weightage topics and prioritise your preparation more effectively.</p>
+      <p>The official SSC syllabus already provides a clear roadmap for preparation. Subjects like Quantitative Aptitude, Reasoning, English, and General Awareness continue to play an important role across different stages of the examination. Building these concepts early makes both revision and Tier II preparation much easier later.</p>
+      <p>Rather than relying on unofficial "most expected questions" lists, focus on topics that consistently appear in the syllabus and strengthen your overall performance. Regular mock tests will reveal which areas need immediate attention. Your preparation should be guided by evidence from your own performance instead of assumptions.</p>
+
+      <h3>Build Strong Foundations First</h3>
+      <p>Arithmetic and Algebra should usually be the first focus areas during preparation. These chapters form the base for many Quant questions and also support more advanced topics like Geometry and Mensuration. Once your fundamentals become stronger, solving difficult questions becomes much more manageable.</p>
+      <p>Reasoning is another subject where consistent practice produces steady improvement. Topics such as coding-decoding, analogy, series, blood relations, puzzles, and seating arrangement become easier through repetition rather than memorisation. Practising a few questions every day helps improve both speed and accuracy.</p>
+      <p>English should never be treated as a subject to prepare only in the final months. Daily work on grammar, vocabulary, reading comprehension, and error detection creates gradual improvement that is difficult to achieve through last-minute revision. Consistency is one of the biggest advantages in SSC CGL 2026 preparation, yet delaying English practice remains one of the most common <a href="https://www.youtube.com/watch?v=pWjZDGYYCu0" target="_blank">mistakes of SSC CGL aspirants</a>.</p>
+      <p>General Awareness requires a slightly different strategy because of its broad syllabus. Instead of trying to memorise everything at once, divide the subject into smaller revision blocks and revisit them regularly. Frequent revision improves retention far more than reading the same notes repeatedly.</p>
+
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>Why Start Early?</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Quantitative Aptitude</td><td>Builds Tier I and Tier II concepts</td><td>High</td></tr>
+          <tr><td>Reasoning</td><td>Improves through continuous practice</td><td>High</td></tr>
+          <tr><td>English</td><td>Daily learning gives steady improvement</td><td>High</td></tr>
+          <tr><td>General Awareness</td><td>Requires continuous revision</td><td>Medium to High</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Prioritise Topics Based on Your Performance</h3>
+      <p>Every aspirant has different strengths, which is why SSC CGL 2026 preparation should never follow a fixed formula. A candidate struggling in Quant needs a different study plan from someone who consistently loses marks in English or General Awareness. Understanding your own performance helps you allocate study time more effectively.</p>
+      <p>After every mock test, record the number of attempts, correct answers, mistakes, and questions left unattempted. Also note whether the mistakes happened because of weak concepts, calculation errors, or poor time management. This simple review process makes your SSC CGL 2026 preparation much more focused.</p>
+      <p>Many successful candidates adjust their study priorities every few weeks instead of following the same schedule throughout the year. As your strengths improve, your study plan should evolve as well. This flexible approach ensures that every study session contributes directly to your final score.</p>
+
+      <h2 id="Sectional-Timer">How Should You Prepare for the 15-Minute Sectional Timer?</h2>
+      <p>The sectional timer has changed the way candidates should approach SSC CGL 2026 preparation. Since every subject now has a fixed 15-minute duration, finishing one section early does not provide extra time for another. Every subject has effectively become an independent scoring opportunity.</p>
+      <p>Preparing only through full-length mocks is no longer enough. You should regularly practise individual 15-minute tests for Quant, Reasoning, English, and General Awareness to become comfortable with the actual exam format. These short practice sessions gradually improve both speed and decision-making under pressure. Many students also complement self-study with the <a href="/blog/best-ssc-coaching-2026">best SSC coaching</a> to build section-wise speed, accuracy, and exam discipline under timed conditions.</p>
+      <p>Equally important is learning how to manage time within each section. Spending too long on one difficult question often reduces the number of attempts later in the paper. Developing discipline during practice is essential for successful SSC CGL 2026 preparation.</p>
+
+      <h3>Test Different Attempt Strategies</h3>
+      <p>There is no universal strategy that works for every aspirant preparing for SSC CGL 2026. Some candidates perform better by solving questions in order, while others maximise their score by attempting easy questions first. The best approach is the one that consistently gives you the highest net score.</p>
+      <p>Experiment with multiple methods during mock tests before deciding your final exam strategy. Compare your attempts, accuracy, time utilisation, and overall marks across several practice sessions. Small improvements in decision-making often lead to significant score gains.</p>
+      <p>Avoid changing your strategy after every mock test. Instead, evaluate performance across multiple tests before making adjustments. Consistency helps you build confidence and reduces uncertainty on the actual exam day.</p>
+
+      <h3>Analyse Every Mock Test</h3>
+      <p>Mock tests are valuable only when followed by detailed analysis. Simply attempting more papers without understanding your mistakes rarely improves performance. Every mock should provide clear insights into what needs attention next.</p>
+      <p>Maintain an error log throughout your <a href="/blog/12-month-ssc-cgl-preparation-strategy-for-beginners">SSC CGL 2026 preparation</a>. Record conceptual mistakes, calculation errors, incorrect guesses, and questions skipped because of time pressure. Reviewing this record regularly helps you eliminate recurring mistakes much faster.</p>
+      <p>By the time the examination approaches, your preparation should be guided by evidence rather than intuition. Strong fundamentals, consistent revision, and careful mock-test analysis create a much stronger preparation strategy than simply completing the syllabus. In Part 2, we'll discuss Tier I and Tier II integration, attempt strategy, Computer Knowledge, DEST, and how Rodha helps students prepare for SSC CGL 2026.</p>
+
+      <h2 id="Tier-Balance">How Should You Balance Tier I and Tier II During SSC CGL 2026 Preparation?</h2>
+      <p>Many aspirants prepare for Tier I first and postpone Tier II until after the preliminary stage. While this seems practical, it often creates unnecessary pressure because several core subjects overlap across both stages. A smarter SSC CGL 2026 preparation strategy is to build concepts once and strengthen them gradually throughout your journey.</p>
+      <p>Subjects like Quantitative Aptitude, Reasoning, English, and General Awareness appear across both tiers in different forms. Developing strong fundamentals early makes later preparation much easier and reduces the need for relearning concepts. This approach also allows you to focus on improving speed and accuracy instead of revisiting basic topics.</p>
+      <p>Computer Knowledge and DEST should also be introduced early in your SSC CGL 2026 preparation. Since both are qualifying components, many candidates ignore them until the final weeks. However, failing either stage can affect your overall selection despite performing well in the scored sections.</p>
+
+      <h2 id="Rodha">Prepare Smarter for SSC CGL 2026 with Rodha</h2>
+      <p>At <a href="https://ssc.rodha.co.in/" target="_blank">Rodha SSC</a>, we believe successful SSC CGL 2026 preparation goes beyond simply completing the syllabus. Our structured courses combine concept building, regular practice, sectional tests, full-length mock exams, and detailed performance analysis to help students improve consistently. Every session focuses on strengthening fundamentals while developing the speed and accuracy needed for the latest exam pattern.</p>
+      <p>Students also receive guidance on study planning, revision strategy, and mistake analysis instead of relying only on lectures. Our experienced faculty help aspirants understand where they are losing marks and how to improve through focused practice. This evidence-based approach makes SSC CGL 2026 preparation more organised and effective.</p>
+      <p>Whether you are starting your preparation or looking to improve your mock-test performance, Rodha provides the resources, mentorship, and practice environment needed to move closer to your target score. With structured learning, continuous feedback, and high-quality practice material, you can prepare confidently for SSC CGL 2026.</p>
+      <p>Explore all our <a href="https://ssc.rodha.co.in/s/store" target="_blank">SSC courses</a> here!</p>
+
+      <h2 id="FAQs">FAQs on SSC CGL 2026 Preparation</h2>
+
+      <h3>Should I prepare Tier I and Tier II together?</h3>
+      <p>Yes. Since several subjects overlap across both stages, building strong concepts early makes SSC CGL 2026 preparation more efficient and reduces your workload later.</p>
+
+      <h3>How many mock tests should I attempt every week?</h3>
+      <p>Quality matters more than quantity. Attempt two or three well-analysed mocks each week during SSC CGL 2026 preparation and spend enough time reviewing your mistakes after every test.</p>
+
+      <h3>When should I start preparing Computer Knowledge and DEST?</h3>
+      <p>Start from the beginning of your SSC CGL 2026 preparation. Regular weekly practice helps you build confidence and prevents these qualifying sections from becoming last-minute challenges.</p>
+
+    </div>`,
+    publishedDate: "2026-08-01",
+    readTime: "8 min read",
+    metaTitle: "SSC CGL 2026 Preparation: What to Study First",
+    metaDescription: "A smart SSC CGL 2026 preparation priority guide — what to study first, how to handle the 15-minute sectional timer, and how to balance Tier I & Tier II.",
+    
+    tags: ["ssc","rodha"],
+    featured: false,
+    author: "Team Rodha",
+    excerpt: "A smart SSC CGL 2026 preparation priority guide — what to study first, how to handle the 15-minute sectional timer, and how to balance Tier I & Tier II.",
+    image: "/assets/images/blog/rodha-s-ssc-cgl-2026-preparation-priorities/featured.png",
+    publishedAt: "2026-08-01",
+  }
+];
 
 export function getBlogBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);

@@ -8,6 +8,7 @@ import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { EXTERNAL_URLS } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/seo";
 import {
   blogPosts,
   getFilteredPosts,
@@ -19,11 +20,13 @@ import { BlogHeroSection } from "@/components/sections/blog/BlogHeroSection";
 import { BlogToolbar } from "./BlogToolbar";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Blog — Rodha",
   description:
-    "Insights, tips, and strategies for MBA, Integrated Programs, Law, Banking & Government, and Skill House from Rodha's expert faculty.",
-};
+    "CAT, IPMAT, and SSC preparation guides from Rodha — exam notifications, study plans, mock strategies, and coaching tips.",
+  path: "/blog",
+});
+
 
 interface BlogPageProps {
   searchParams: Promise<{ category?: string; q?: string; page?: string }>;

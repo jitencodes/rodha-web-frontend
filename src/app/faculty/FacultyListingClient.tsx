@@ -23,7 +23,7 @@ import type { Faculty } from "@/lib/types";
 const DEFAULT_FILTERS: FacultyFiltersState = {
   query: "",
   subject: "",
-  experience: "",
+  category: "",
   sort: "experience-desc",
 };
 
@@ -41,7 +41,7 @@ export function FacultyListingClient({ faculty: allFaculty }: FacultyListingClie
     const searched = searchFaculty(allFaculty, filters.query);
     const narrowed = filterFaculty(searched, {
       subject: filters.subject,
-      experience: filters.experience,
+      category: filters.category,
     });
     return sortFaculty(narrowed, filters.sort);
   }, [allFaculty, filters]);

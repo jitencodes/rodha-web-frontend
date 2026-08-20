@@ -24,26 +24,28 @@ export function ContactHeroSection({ className }: ContactHeroSectionProps) {
 
         <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            <div className="lg:col-span-6">
-              <Breadcrumb
-                className="pt-0 pb-4 md:pb-5"
-                items={[
-                  { label: "Home", href: "/" },
-                  { label: "Contact Us" },
-                ]}
-              />
-              <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
-                {CONTACT_HERO.eyebrow}
-              </p>
-              <h1 className="text-[32px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
-                {CONTACT_HERO.titleBefore}{" "} <br />
-                <span className="text-orange-500">{CONTACT_HERO.titleHighlight}</span>
-              </h1>
-              <p className="mt-4 max-w-md text-body-lg text-text-secondary leading-relaxed">
-                {CONTACT_HERO.description}
-              </p>
+            <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-col gap-4">
+              <div className="">
+                <Breadcrumb
+                  className="pt-0 pb-4 md:pb-5"
+                  items={[
+                    { label: "Home", href: "/" },
+                    { label: "Contact Us" },
+                  ]}
+                />
+                <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
+                  {CONTACT_HERO.eyebrow}
+                </p>
+                <h1 className="text-[32px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
+                  {CONTACT_HERO.titleBefore}{" "} <br />
+                  <span className="text-orange-500">{CONTACT_HERO.titleHighlight}</span>
+                </h1>
+                <p className="mt-4 max-w-md text-body-lg text-text-secondary leading-relaxed">
+                  {CONTACT_HERO.description}
+                </p>
+              </div>
 
-              <div className="mt-8 flex w-fit flex-row items-start gap-4 rounded-[6px] border border-orange-500/25 bg-bg-secondary/80 p-4">
+              <div className="mt-8 h-fit flex w-fit flex-row items-start gap-4 rounded-[6px] border border-orange-500/25 bg-bg-secondary/80 p-4">
                 <div className="flex items-start sm:items-center gap-4 min-w-0 flex-1">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[6px] bg-orange-500/15 text-orange-400">
                     <Icon src="/assets/icons/phone.svg" size={20} />

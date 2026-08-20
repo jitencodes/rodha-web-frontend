@@ -21,7 +21,7 @@ export function AboutImpactSection({ className }: AboutImpactSectionProps) {
         aria-hidden
       />
       <Container className="relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
           {ABOUT_IMPACT_STATS.map((stat) => (
             <div key={stat.id} className="flex flex-col items-center text-center">
               {stat.icon.endsWith(".png") ? (

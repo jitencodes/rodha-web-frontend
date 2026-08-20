@@ -14,6 +14,30 @@ Format:
 
 ---
 
+### 2026-08-20 — Hero videos + faculty Graphy-id course matching
+- **Decision:** Pass distinct YouTube ids into existing `HeroVideoEmbed` (homepage default + optional `hero.videoId` per category landing). Enrich all 18 faculty from `Rodha Faculty (1).docx` (including the former portrait-only six). Faculty detail courses use authored `courseGraphyIds` resolved against existing `category-landings.json` cards only — never invent course records. Skip doc links with no matching card (CAT R1 comprehensive, COMPLETE OMETS 2026). Empty `courseGraphyIds` hides the courses section (Tarun).
+- **Rationale:** Product supplied new hero videos and an updated faculty sheet with Graphy course links; UI must stay intact while course lists stay accurate to live catalog cards.
+- **Alternatives considered:** Keep name-string matching on course `faculty` fields; fabricate missing R1/OMETS cards; invent YouTube ids for title-only snippets.
+- **Consequences:** CLAT/SSC/Skill House `facultyIds` realigned to doc roles; Skill House faculty carousel shows Divya only; Tarun detail has no courses block.
+
+### 2026-08-20 — Content & SEO migration from rodha.co.in
+- **Decision:** Replace dummy blog/FAQ/legal content with live Rodha sources without UI redesign. Featured faculty uses ordered `FEATURED_FACULTY_SLUGS` (13 names). Blogs: 9 full articles + local images; categories trimmed to All/MBA/IPMAT/SSC. Legal: migrate Privacy/Terms/Refund verbatim into `LegalSection` blocks; Disclaimer synthesized from Terms §11 + Rodha product facts and flagged for legal review (no dedicated old-site disclaimer page). FAQ listing aggregates Home + category FAQs with vertical filters. SEO uses shared `buildPageMetadata`, default OG `public/assets/og/og-rodha.png`, and `webSiteJsonLd`. Canonical host remains `SITE_URL` (`https://rodha.in`).
+- **Rationale:** Preserve rankings/content accuracy while keeping existing layouts; avoid inventing missing legal/blog material.
+- **Alternatives considered:** Keeping dummy blogs as fallback; inventing Disclaimer copy without Terms sourcing; changing SITE_URL to rodha.co.in in this pass.
+- **Consequences:** Skill House FAQ count is 5 after deduping identical “Are sessions live or recorded?” with CLAT. Some in-article links still point at non-migrated `ipmat.rodha.co.in` posts. Privacy Policy retains Graphy-template GDPR/CCPA/PDPB wording pending counsel review. Sitemap/robots still pending.
+
+### 2026-08-20 — SMTP lead emails for all website forms
+- **Decision:** Add `POST /api/leads` (Node runtime + Nodemailer) as the single backend for Contact, Hero/Modal counselling, LeadCapture, and Newsletter forms. Notify `support@rodha.co.in` with a light-theme Rodha HTML template. Logo uses a fixed absolute URL rooted at `NEXT_PUBLIC_BASE_URL` / `https://rodha.co.in` (never the request Host). Prefer server-only `EMAIL_SMTP_*` secrets; accept `NEXT_PUBLIC_EMAIL_*` as a temporary fallback.
+- **Rationale:** Phase 1 needs working lead capture without a CRM; Gmail SMTP matches provided credentials; absolute logo URLs keep email images working from localhost and preview deploys.
+- **Alternatives considered:** Third-party form SaaS; Graphy webhooks; deriving asset base from `request.url`.
+- **Consequences:** Forms show success/error states; SMTP misconfiguration returns 502; Gmail may block SVG logos in some clients — prefer hosting a PNG/WebP at the same absolute path if deliverability issues appear.
+
+### 2026-08-20 — Faculty real-data cleanup + dynamic reviews/courses/filters
+- **Decision:** Remove all dummy faculty from `src/data/faculty.ts`. Enrich 12 verified profiles from `Rodha Faculty.docx` (achievements, philosophy, YouTube snippets). Keep 6 portrait-only faculty without inventing detail content. Faculty reviews are selected at build/request time from category-landing testimonials (name → subject → category relevance, max 3). Faculty courses come from landing course `faculty` strings. Course filter chips are derived from present `courseType` values and hidden when only one type exists. Featured Faculty reuses category `InfiniteMarquee`. Team Faculty Experts / Advisors are commented out of render; `LovedTeamSection` reuses existing CTA images in a full-width `Carousel`.
+- **Rationale:** Product requires original data only; fabricated publications/reviews/videos/courses misrepresent faculty. Reuse existing carousel/modal patterns for consistency and accessibility (`prefers-reduced-motion` on marquee + carousel).
+- **Alternatives considered:** Keep dummy faculty in listing only; hardcode review IDs per faculty; separate faculty course card grid.
+- **Consequences:** `withFacultyDetailDefaults()` no longer fabricates achievements/publications/videos/courses; Publications UI unused; AdvisorsSection kept for later; Results Attributed remains static until real data arrives.
+
 ### 2026-08-20 — Category course filter chips + sheet-driven catalog
 - **Decision:** Keep the category course slider and `CourseCardV2` layout unchanged. Add a client `CategoryCoursesSlider` with four light filter chips (All default, Comprehensive, Individual, Crash Course) driven by a new `courseType` field. Replace all five verticals' course records from the supplied sheet, download named thumbnails locally, and keep enrolment on the external Graphy/ThinkExam URLs.
 - **Rationale:** Categories now have mixed course types in one carousel; filtering must not require a new card or slider. Local thumbnails avoid remote `next/image` host config. Mapping: Comprehensive / All-In-One / Program → comprehensive; Individual / Self-Paced / Single Module / Practice Engine → individual; Crash Course → crash; Free and mock packages → All only.

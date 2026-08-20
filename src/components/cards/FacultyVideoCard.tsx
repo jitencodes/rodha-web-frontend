@@ -10,7 +10,8 @@ interface FacultyVideoCardProps {
 }
 
 export function FacultyVideoCard({ video, className }: FacultyVideoCardProps) {
-  const isExternal = Boolean(video.href?.startsWith("http"));
+  const youtubeId = video.youtubeId;
+  const isExternal = Boolean(video.href?.startsWith("http")) && !youtubeId;
 
   const inner = (
     <>
@@ -21,11 +22,14 @@ export function FacultyVideoCard({ video, className }: FacultyVideoCardProps) {
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, 200px"
+          unoptimized={video.thumbnail.includes("img.youtube.com")}
         />
         <div className="absolute inset-0 bg-black/25" />
-        <span className="absolute top-2 right-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
-          {video.duration}
-        </span>
+        {video.duration && (
+          <span className="absolute top-2 right-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
+            {video.duration}
+          </span>
+        )}
         <span
           className={cn(
             "absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-orange-500",
@@ -42,7 +46,15 @@ export function FacultyVideoCard({ video, className }: FacultyVideoCardProps) {
     </>
   );
 
-  const classes = cn("group block min-w-0", className);
+  const classes = cn("group block min-w-0 text-left w-full", className);
+
+  if (youtubeId) {
+    return (
+      <button type="button" data-youtube-id={youtubeId} className={classes}>
+        {inner}
+      </button>
+    );
+  }
 
   if (video.href) {
     if (isExternal) {

@@ -9,12 +9,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Ahmedabad",
     "year": 2025,
     "image": "/assets/images/category/cat/students/siddhant-misra.webp",
-    "category": "mba",
-    "batch": [
-      "R1",
-      "QA",
-      "LRDI"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-27",
@@ -24,8 +20,8 @@ export const topResults: TopperResult[] = [
     "college": "MDI Gurgaon",
     "year": 2025,
     "image": "/assets/images/category/cat/students/rishabh-jain.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-2",
@@ -35,10 +31,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Ahmedabad",
     "year": 2025,
     "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
-    "category": "mba",
-    "batch": [
-      "R3"
-    ]
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-8",
@@ -48,8 +42,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Calcutta",
     "year": 2025,
     "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R2"]
   },
   {
     "id": "cat-result-3",
@@ -59,8 +53,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Ahmedabad",
     "year": 2025,
     "image": "/assets/images/category/cat/students/varul-sharma.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-5",
@@ -70,8 +64,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Bangalore",
     "year": 2025,
     "image": "/assets/images/category/cat/students/aditi-pandey.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-21",
@@ -81,8 +75,8 @@ export const topResults: TopperResult[] = [
     "college": "SPJIMR",
     "year": 2025,
     "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R8"]
   },
   {
     "id": "cat-result-29",
@@ -92,8 +86,8 @@ export const topResults: TopperResult[] = [
     "college": "MDI Gurgaon",
     "year": 2025,
     "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-11",
@@ -103,8 +97,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Lucknow",
     "year": 2025,
     "image": "/assets/images/category/cat/students/manan-jain.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R5"]
   },
   {
     "id": "cat-result-24",
@@ -114,10 +108,8 @@ export const topResults: TopperResult[] = [
     "college": "XLRI",
     "year": 2025,
     "image": "/assets/images/category/cat/students/manav-pathak.webp",
-    "category": "mba",
-    "batch": [
-      "R3"
-    ]
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-4",
@@ -127,8 +119,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Ahmedabad",
     "year": 2025,
     "image": "/assets/images/category/cat/students/shriya-yadav.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-20",
@@ -138,8 +130,8 @@ export const topResults: TopperResult[] = [
     "college": "FMS Delhi",
     "year": 2025,
     "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R6"]
   },
   {
     "id": "cat-result-17",
@@ -149,8 +141,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Indore",
     "year": 2025,
     "image": "/assets/images/category/cat/students/zarish-khan.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-25",
@@ -160,8 +152,8 @@ export const topResults: TopperResult[] = [
     "college": "XLRI",
     "year": 2025,
     "image": "/assets/images/category/cat/students/vansh-batra.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R7"]
   },
   {
     "id": "cat-result-14",
@@ -171,8 +163,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Kozhikode",
     "year": 2025,
     "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-22",
@@ -182,8 +174,8 @@ export const topResults: TopperResult[] = [
     "college": "SPJIMR",
     "year": 2025,
     "image": "/assets/images/category/cat/students/amrit-singh.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R5"]
   },
   {
     "id": "cat-result-35",
@@ -193,11 +185,8 @@ export const topResults: TopperResult[] = [
     "college": "SCMHRD",
     "year": 2025,
     "image": "/assets/images/category/cat/students/nitin-sharma.webp",
-    "category": "mba",
-    "batch": [
-      "R1",
-      "Comprehensive Batch"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-9",
@@ -207,11 +196,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Calcutta",
     "year": 2025,
     "image": "/assets/images/category/cat/students/varun-kumar.webp",
-    "category": "mba",
-    "batch": [
-      "R1",
-      "Comprehensive Batch"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-13",
@@ -221,11 +207,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Lucknow",
     "year": 2025,
     "image": "/assets/images/category/cat/students/om-kesharwani.webp",
-    "category": "mba",
-    "batch": [
-      "R3",
-      "Comprehensive Batch"
-    ]
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-10",
@@ -235,10 +218,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Calcutta",
     "year": 2025,
     "image": "/assets/images/category/cat/students/akshat-yadav.webp",
-    "category": "mba",
-    "batch": [
-      "R3"
-    ]
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-23",
@@ -248,8 +229,8 @@ export const topResults: TopperResult[] = [
     "college": "SPJIMR",
     "year": 2025,
     "image": "/assets/images/category/cat/students/vedant-khanna.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-38",
@@ -259,8 +240,8 @@ export const topResults: TopperResult[] = [
     "college": "NMIMS Mumbai",
     "year": 2025,
     "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R5"]
   },
   {
     "id": "cat-result-26",
@@ -270,12 +251,8 @@ export const topResults: TopperResult[] = [
     "college": "XLRI",
     "year": 2025,
     "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
-    "category": "mba",
-    "batch": [
-      "R7",
-      "QA",
-      "LRDI"
-    ]
+    "category": "cat",
+    "batch": ["R7"]
   },
   {
     "id": "cat-result-39",
@@ -285,8 +262,8 @@ export const topResults: TopperResult[] = [
     "college": "NMIMS Mumbai",
     "year": 2025,
     "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-6",
@@ -296,11 +273,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Bangalore",
     "year": 2025,
     "image": "/assets/images/category/cat/students/om-yadav.webp",
-    "category": "mba",
-    "batch": [
-      "R1",
-      "Comprehensive Batch"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-33",
@@ -310,8 +284,8 @@ export const topResults: TopperResult[] = [
     "college": "SIBM Pune",
     "year": 2025,
     "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-37",
@@ -321,8 +295,8 @@ export const topResults: TopperResult[] = [
     "college": "SCMHRD",
     "year": 2025,
     "image": "/assets/images/category/cat/students/raghav-pant.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R8"]
   },
   {
     "id": "cat-result-7",
@@ -332,10 +306,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Bangalore",
     "year": 2025,
     "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
-    "category": "mba",
-    "batch": [
-      "R1"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-15",
@@ -345,8 +317,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Kozhikode",
     "year": 2025,
     "image": "/assets/images/category/cat/students/aanand-yadav.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-18",
@@ -356,8 +328,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Indore",
     "year": 2025,
     "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R3"]
   },
   {
     "id": "cat-result-40",
@@ -367,8 +339,8 @@ export const topResults: TopperResult[] = [
     "college": "NMIMS Mumbai",
     "year": 2025,
     "image": "/assets/images/category/cat/students/laksh-mohan.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["CAT Booster"]
   },
   {
     "id": "cat-result-30",
@@ -378,10 +350,8 @@ export const topResults: TopperResult[] = [
     "college": "IIFT",
     "year": 2025,
     "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
-    "category": "mba",
-    "batch": [
-      "R1"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-16",
@@ -391,10 +361,8 @@ export const topResults: TopperResult[] = [
     "college": "IIM Kozhikode",
     "year": 2025,
     "image": "/assets/images/category/cat/students/emama-islam.webp",
-    "category": "mba",
-    "batch": [
-      "R1"
-    ]
+    "category": "cat",
+    "batch": ["R1"]
   },
   {
     "id": "cat-result-34",
@@ -404,8 +372,8 @@ export const topResults: TopperResult[] = [
     "college": "SIBM Pune",
     "year": 2025,
     "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
-    "category": "mba",
-    "batch": []
+    "category": "cat",
+    "batch": ["R5"]
   },
   {
     "id": "cat-result-32",
@@ -415,12 +383,11 @@ export const topResults: TopperResult[] = [
     "college": "IIT Bombay",
     "year": 2025,
     "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
-    "category": "mba",
-    "batch": [
-      "R3"
-    ]
+    "category": "cat",
+    "batch": ["R3"]
   }
 ]
+
 interface ResultBanner {
   id: string;
 

@@ -1,59 +1,18 @@
 import Image from "next/image";
+
 import { Container } from "@/components/layout/Container";
-import { Carousel } from "@/components/ui/Carousel";
+
 import { Icon } from "@/components/ui/Icon";
-import { ABOUT_TESTIMONIAL_IDS } from "@/data/about";
-import { getCategoryLandingBySlug } from "@/data/category-landings";
-import type { Testimonial } from "@/lib/types";
+
 import { cn } from "@/lib/utils";
 
-interface AboutTestimonialSectionProps {
+interface AboutFounderSectionProps {
   className?: string;
 }
 
-function FeaturedTestimonial({ testimonial }: { testimonial: Testimonial }) {
-  const meta = [testimonial.exam, testimonial.year, testimonial.college]
-    .filter(Boolean)
-    .join(" · ");
-
-  return (
-    <article className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-      <div className="lg:col-span-5">
-        <div className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden rounded-[8px] bg-bg-tertiary">
-          <Image
-            src={testimonial.image || "/assets/images/about us/award-to-boy.png"}
-            alt={testimonial.name}
-            fill
-            className="object-cover object-center"
-            sizes="(max-width: 1024px) 100vw, 40vw"
-          />
-        </div>
-      </div>
-      <div className="lg:col-span-7">
-        <Icon src="/assets/icons/quote.svg" size={36} className="text-orange-400" />
-        <p className="mt-4 text-body-lg md:text-h4 font-medium leading-relaxed text-text-primary">
-          &ldquo;{testimonial.quote}&rdquo;
-        </p>
-        <p className="mt-5 text-body font-semibold text-orange-400">
-          — {testimonial.name}
-          {testimonial.score ? `, ${testimonial.score}` : ""}
-        </p>
-        {meta && (
-          <p className="mt-1 text-body-sm text-text-muted">{meta}</p>
-        )}
-      </div>
-    </article>
-  );
-}
-
-export function AboutTestimonialSection({ className }: AboutTestimonialSectionProps) {
-  const catLanding = getCategoryLandingBySlug("cat");
-  const testimonialIds = new Set<string>(ABOUT_TESTIMONIAL_IDS);
-  const testimonials =
-    catLanding?.testimonials.filter((item) => testimonialIds.has(item.id)) ?? [];
-
-  if (testimonials.length === 0) return null;
-
+export function AboutFounderSection({
+  className,
+}: AboutFounderSectionProps) {
   return (
     <section
       className={cn(
@@ -61,21 +20,85 @@ export function AboutTestimonialSection({ className }: AboutTestimonialSectionPr
         className
       )}
     >
-      <div
-        className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-orange-500/10 blur-3xl"
-        aria-hidden
-      />
-      <Container className="relative z-10">
-        <Carousel showArrows>
-          {testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="min-w-full w-full shrink-0 snap-start px-0 md:px-8"
-            >
-              <FeaturedTestimonial testimonial={testimonial} />
+      <Container>
+        <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold">
+          The Founder
+        </p>
+
+        <h2 className="mt-3 text-h2 md:text-h1 font-montserrat font-semibold text-white leading-tight">
+          Meet the Founder
+        </h2>
+
+        <div
+          className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-orange-500/10 blur-3xl"
+          aria-hidden
+        />
+
+        <article className="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Founder Image */}
+          <div className="lg:col-span-5">
+            <div className="relative h-auto rounded-[8px]">
+              <Image
+                src="/assets/images/faculty/rodha faculty profile/Ravi Sir.png"
+                alt="Ravi Prakash - Founder & CEO of Rodha"
+                width={500}
+                height={500}
+                className="object-cover object-center w-full h-auto"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
             </div>
-          ))}
-        </Carousel>
+          </div>
+
+          {/* Founder Details */}
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-3">
+              <div className="h-px w-10 bg-orange-400" />
+
+              <p className="text-body-sm uppercase tracking-wider font-semibold text-orange-500">
+                Founder & CEO
+              </p>
+            </div>
+
+            <h3 className="mt-4 text-h3 md:text-h2 font-montserrat font-semibold text-text-primary">
+              Ravi Prakash
+            </h3>
+
+            <p className="mt-1 text-body font-medium text-orange-500">
+              Founder & CEO, Rodha
+            </p>
+
+            <p className="mt-5 text-body-lg leading-relaxed text-text-primary">
+              Ravi Prakash started Rodha on 25 January 2018 with a camera and
+              a laptop, teaching Quant and LRDI to whoever would watch. In the
+              first two years he recorded, edited and uploaded 530+ videos
+              entirely on his own.
+            </p>
+
+            <p className="mt-4 text-body-lg leading-relaxed text-text-primary">
+              Today he leads a company of teachers, content creators and
+              mentors across six verticals, and still teaches. Students name
+              him more often than any other faculty member when they describe
+              what changed their preparation — usually for the same two
+              reasons: he refuses to sugarcoat where you stand, and he
+              doesn't stop pushing once you know.
+            </p>
+
+            {/* Pull Quote */}
+            <div className="mt-7 flex gap-4">
+              <div className="shrink-0">
+                <Icon
+                  src="/assets/icons/quote.svg"
+                  size={32}
+                  className="text-orange-400"
+                />
+              </div>
+
+              <blockquote className="text-body-lg md:text-h4 font-medium leading-relaxed text-text-primary">
+                “Reach beyond the four walls of a coaching centre.”
+              </blockquote>
+            </div>
+          </div>
+        </article>
       </Container>
     </section>
   );

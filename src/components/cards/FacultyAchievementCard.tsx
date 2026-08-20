@@ -22,7 +22,7 @@ export function FacultyAchievementCard({
   return (
     <div
       className={cn(
-        "card-premium-hover hover-shine relative overflow-hidden flex flex-col p-5 md:p-6 h-full",
+        "card-premium-hover hover-shine relative overflow-hidden flex flex-col p-5 md:p-6 h-full md:min-h-[170px]",
         LIGHT_CARD,
         className
       )}
@@ -39,7 +39,7 @@ export function FacultyAchievementCard({
       </ul>
 
       <div
-        className="pointer-events-none absolute bottom-0 right-0 w-[42%] max-w-[180px] aspect-square ambient-drift"
+        className="pointer-events-none absolute -bottom-2 right-6 w-[42%] max-w-[180px] aspect-square ambient-drift"
         aria-hidden
       >
         <Image

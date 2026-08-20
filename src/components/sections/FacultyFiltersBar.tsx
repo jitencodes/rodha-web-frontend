@@ -3,7 +3,7 @@
 import { SearchInput } from "@/components/ui/SearchInput";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import {
-  FACULTY_EXPERIENCE_BUCKETS,
+  FACULTY_CATEGORY_OPTIONS,
   FACULTY_SORT_OPTIONS,
   FACULTY_SUBJECTS,
   type FacultySortKey,
@@ -12,7 +12,7 @@ import {
 export interface FacultyFiltersState {
   query: string;
   subject: string;
-  experience: string;
+  category: string;
   sort: FacultySortKey;
 }
 
@@ -46,20 +46,20 @@ export function FacultyFiltersBar({
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
         <DropdownSelect
+          options={[...FACULTY_CATEGORY_OPTIONS]}
+          value={filters.category}
+          onChange={(category) => update({ category })}
+          placeholder="All Categories"
+          aria-label="Filter by category"
+          variant="light"
+          className="w-full sm:w-auto sm:min-w-[160px]"
+        />
+        <DropdownSelect
           options={[...FACULTY_SUBJECTS]}
           value={filters.subject}
           onChange={(subject) => update({ subject })}
           placeholder="All Subjects"
           aria-label="Filter by subject"
-          variant="light"
-          className="w-full sm:w-auto sm:min-w-[160px]"
-        />
-        <DropdownSelect
-          options={[...FACULTY_EXPERIENCE_BUCKETS]}
-          value={filters.experience}
-          onChange={(experience) => update({ experience })}
-          placeholder="All Experience"
-          aria-label="Filter by experience"
           variant="light"
           className="w-full sm:w-auto sm:min-w-[160px]"
         />

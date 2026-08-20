@@ -6,7 +6,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingCounsellingCta } from "@/components/layout/FloatingCounsellingCta";
 import { CounsellingModalProvider } from "@/components/layout/CounsellingModalProvider";
-import { organizationJsonLd } from "@/lib/structured-data";
+import { organizationJsonLd, webSiteJsonLd } from "@/lib/structured-data";
+import { SITE_URL } from "@/lib/constants";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,10 +21,14 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const defaultTitle = "Rodha — Expert Mentorship. Proven Strategies. Real Results.";
+const defaultDescription =
+  "India's trusted platform for MBA (CAT + GDPI), Integrated Programs, Law, Banking & Government Exams, and Skill House. Expert mentorship, proven strategies, and real results.";
+
 export const metadata: Metadata = {
-  title: "Rodha — Expert Mentorship. Proven Strategies. Real Results.",
-  description:
-    "India's trusted platform for MBA (CAT + GDPI), Integrated Programs, Law, Banking & Government Exams, and Skill House. Expert mentorship, proven strategies, and real results.",
+  metadataBase: new URL(SITE_URL),
+  title: defaultTitle,
+  description: defaultDescription,
   keywords: [
     "MBA preparation",
     "CAT preparation",
@@ -34,17 +40,28 @@ export const metadata: Metadata = {
     "Skill House",
     "competitive exam coaching",
   ],
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/favicon.png", type: "image/png" }],
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Rodha — Expert Mentorship. Proven Strategies. Real Results.",
+    title: defaultTitle,
     description:
       "India's trusted platform for MBA, Integrated Programs, Law, Banking & Government, and Skill House.",
     type: "website",
+    url: SITE_URL,
+    siteName: "Rodha",
+    images: [{ url: DEFAULT_OG_IMAGE }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rodha — Expert Mentorship. Proven Strategies. Real Results.",
+    title: defaultTitle,
     description:
       "India's trusted platform for MBA, Integrated Programs, Law, Banking & Government, and Skill House.",
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
@@ -59,6 +76,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd()) }}
         />
         <PromotionalBanner />
         <Header />

@@ -5,6 +5,7 @@ import {
   getAllCategoryLandings,
   getCategoryLandingBySlug,
 } from "@/data/category-landings";
+import { buildPageMetadata } from "@/lib/seo";
 
 interface CategoryPageProps {
   params: Promise<{ category_slug: string }>;
@@ -26,10 +27,11 @@ export async function generateMetadata({
     return { title: "Category — Rodha" };
   }
 
-  return {
+  return buildPageMetadata({
     title: category.metadata.title,
     description: category.metadata.description,
-  };
+    path: `/category/${category.slug}`,
+  });
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {

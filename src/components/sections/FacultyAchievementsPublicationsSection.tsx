@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { FacultyAchievementCard } from "@/components/cards/FacultyAchievementCard";
-import { FacultyPublicationCard } from "@/components/cards/FacultyPublicationCard";
 import type { Faculty } from "@/lib/types";
+import { getCoursesForFaculty } from "@/data/faculty";
 
 interface FacultyAchievementsPublicationsSectionProps {
   faculty: Faculty;
@@ -14,29 +14,18 @@ export function FacultyAchievementsPublicationsSection({
   className,
 }: FacultyAchievementsPublicationsSectionProps) {
   const achievements = faculty.achievements;
-  const publications = faculty.publications;
   const hasAchievements = Boolean(achievements?.length);
-  const hasPublications = Boolean(publications?.length);
-
-  if (!hasAchievements && !hasPublications) return null;
-
+  const courses = getCoursesForFaculty(faculty);
+  if (!hasAchievements) return null;
+  const hasCourses = courses.length > 0;
   return (
     <section
-      className={cn("home-section-spacing bg-section-white home-on-light", className)}
+      className={cn("home-section-spacing bg-section-white home-on-light", !hasCourses && "!pt-0", className)}
     >
       <div className="container-rodha">
         <RevealGroup>
-          <div className="grid grid-cols-1 lg:grid-cols-[48%_52%] gap-4 md:gap-5 items-stretch">
-            {hasAchievements && (
-              <div className="reveal-child reveal-delay-1 h-full">
-                <FacultyAchievementCard items={achievements!} />
-              </div>
-            )}
-            {hasPublications && (
-              <div className="reveal-child reveal-delay-2 h-full">
-                <FacultyPublicationCard items={publications!} />
-              </div>
-            )}
+          <div className="reveal-child reveal-delay-1">
+            <FacultyAchievementCard items={achievements!} />
           </div>
         </RevealGroup>
       </div>

@@ -28,6 +28,20 @@ export function organizationJsonLd(): JsonLd {
   };
 }
 
+export function webSiteJsonLd(): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  };
+}
+
 export function breadcrumbJsonLd(
   items: Array<{ label: string; href?: string }>
 ): JsonLd {
@@ -98,6 +112,8 @@ export function blogPostingJsonLd(post: {
   url: string;
   image?: string;
   publishedDate: string;
+  updatedDate?: string;
+  author?: string;
 }): JsonLd {
   return {
     "@context": "https://schema.org",
@@ -107,6 +123,11 @@ export function blogPostingJsonLd(post: {
     url: `${SITE_URL}${post.url}`,
     image: post.image ? `${SITE_URL}${post.image}` : undefined,
     datePublished: post.publishedDate,
+    dateModified: post.updatedDate ?? post.publishedDate,
+    author: {
+      "@type": "Person",
+      name: post.author ?? "Team Rodha",
+    },
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,

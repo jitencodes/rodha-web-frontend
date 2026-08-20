@@ -1,10 +1,10 @@
 export const ABOUT_HERO = {
   eyebrow: "ABOUT RODHA",
-  titleBefore: "Empowering aspirants.",
-  titleHighlight: "Enabling success.",
+  titleBefore: "We started with one teacher, one camera,",
+  titleHighlight: "and one laptop",
   description:
-    "Rodha is built for aspirants who want more than recorded lectures. Expert mentors, proven methods, and personal accountability come together so every student can convert effort into selections.",
-  image: "/assets/images/meet the team/team hero.png",
+    "Now we're the bridge between where students are and where they want to be.",
+  image: "/assets/images/meet the team/rodha-team.png",
   quote:
     "At Rodha, we don't just prepare students for exams, we prepare them for life.",
   quoteAttribution: "Rodha Team",
@@ -56,78 +56,121 @@ export const ABOUT_MISSION_VISION = [
 
 export const ABOUT_JOURNEY = [
   {
-    id: "2016",
-    year: "2016",
+    id: "2018",
+    year: "Jan 2018",
     title: "The Beginning",
-    description: "Rodha started as a classroom built on concept-first teaching and personal accountability.",
+    description:
+      "Rodha CAT launches as a YouTube channel, laying the foundation for concept-first CAT preparation.",
     icon: "/assets/icons/calendar.svg",
   },
   {
-    id: "2018",
-    year: "2018",
-    title: "Growing Stronger",
-    description: "Batches expanded, faculty deepened, and thousands of aspirants joined the community.",
+    id: "2020-21",
+    year: "2020–21",
+    title: "Building Momentum",
+    description:
+      "Thousands of students join Rodha through free content, building a strong learning community.",
     icon: "/assets/icons/users.svg",
   },
   {
-    id: "2020",
-    year: "2020",
-    title: "Going Digital",
-    description: "Live online classrooms and recordings took mentorship nationwide without losing the human core.",
+    id: "2023",
+    year: "Oct 2023",
+    title: "Rodha Takes Shape",
+    description:
+      "A team comes together and Rodha becomes a full-fledged ed-tech company, launching its first CAT 2023 batch.",
     icon: "/assets/icons/ai-powered.svg",
   },
   {
-    id: "2022",
-    year: "2022",
-    title: "Milestones Achieved",
-    description: "Selections, top ranks, and a multi-exam platform spanning CAT to government exams.",
+    id: "2024",
+    year: "2024",
+    title: "Expanding Horizons",
+    description:
+      "Batches scale rapidly, the app crosses 13,000 downloads, and Rodha expands into XAT, MH-CET, and SNAP.",
     icon: "/assets/icons/star.svg",
   },
   {
-    id: "2024",
-    year: "2024+",
-    title: "The Future Ahead",
-    description: "AI-assisted guidance with Rodha Buddy and a sharper, wider prep ecosystem for every vertical.",
+    id: "2025",
+    year: "May 2025",
+    title: "New Paths Open",
+    description:
+      "Rodha IPMAT launches, expanding into IPMAT and BBA entrance preparation.",
     icon: "/assets/icons/guidance.svg",
+  },
+  {
+    id: "2025-08",
+    year: "Aug 2025",
+    title: "Rodha SSC",
+    description:
+      "Rodha SSC launches with preparation for CGL, CHSL, and other government examinations.",
+    icon: "/assets/icons/star.svg",
+  },
+  {
+    id: "2025-09",
+    year: "Sep 2025",
+    title: "Rodha CLAT",
+    description:
+      "Rodha CLAT launches, bringing structured preparation for CLAT and MH-CET Law.",
+    icon: "/assets/icons/guidance.svg",
+  },
+  {
+    id: "2026-01",
+    year: "Jan 2026",
+    title: "Rodha English",
+    description:
+      "Rodha English launches to bring CAT preparation to students through an English-medium learning experience.",
+    icon: "/assets/icons/ai-powered.svg",
+  },
+  {
+    id: "2026",
+    year: "2026",
+    title: "Rodha Skill House",
+    description:
+      "Rodha Skill House launches with a focus on pre-MBA preparation, career readiness, and upskilling.",
+    icon: "/assets/icons/users.svg",
   },
 ] as const;
 
 export const ABOUT_DIFFERENTIATORS = [
   {
-    id: "expert-led",
-    title: "Expert-Led Mentorship",
-    description: "Learn from faculty who teach live, review mocks, and stay reachable — not a video library with no owner.",
+    id: "free-first",
+    title: "Free Before Anything Else",
+    description:
+      "Rodha taught for free for five years before selling anything. With 2,400+ videos and 7.2 million watch hours, students could experience the teaching before they paid. Every vertical still has a free course.",
+    icon: "/assets/icons/book.svg",
+  },
+  {
+    id: "founder-led",
+    title: "Founder-Led Faculty",
+    description:
+      "Our mentors are the founders' bench, not a rotating panel. The same faculty who built each vertical still teach it — Sanchit Sir leads IPMAT, Divya Sir leads CLAT, Neeraj Sir leads SSC, and Ravi Sir continues to teach CAT.",
     icon: "/assets/icons/top-faculty.svg",
   },
   {
-    id: "proven-methods",
-    title: "Proven Methods",
-    description: "Frameworks for Quant, VARC, DILR, and interviews that have been stress-tested across thousands of mocks.",
+    id: "depth-over-breadth",
+    title: "Depth Over Breadth",
+    description:
+      "We entered a second exam only in 2025, seven years after the first. Every new vertical launches when the teaching is ready, not simply when the market looks attractive.",
     icon: "/assets/icons/practice.svg",
+  },
+  {
+    id: "proven-results",
+    title: "Results That Compound",
+    description:
+      "Our results are a curve, not a claim — 30+ conversions in CAT 2023, 100+ in CAT 2024, and 200+ in CAT 2025 and counting.",
+    icon: "/assets/icons/result-oriented.svg",
   },
   {
     id: "personalized",
     title: "Personalized Learning",
-    description: "Study plans and mentor check-ins that adjust to your timeline, weak areas, and target colleges.",
+    description:
+      "Study plans and mentor check-ins that adjust to your timeline, weak areas, and target colleges.",
     icon: "/assets/icons/mentorship.svg",
-  },
-  {
-    id: "end-to-end",
-    title: "End-to-End Support",
-    description: "From foundation classes to GDPI, counselling, and doubt-solving — one team through the full journey.",
-    icon: "/assets/icons/community.svg",
   },
   {
     id: "resources",
     title: "Smart Learning Resources",
-    description: "Structured notes, sectionals, full-length mocks, and recordings designed for revision under time pressure.",
-    icon: "/assets/icons/book.svg",
-  },
-  {
-    id: "result-driven",
-    title: "Result-Driven Approach",
-    description: "Every class, test, and mentor review is aimed at percentile movement and actual selections.",
-    icon: "/assets/icons/result-oriented.svg",
+    description:
+      "Structured notes, sectionals, full-length mocks, and recordings designed for revision under time pressure.",
+    icon: "/assets/icons/community.svg",
   },
 ] as const;
 
@@ -135,38 +178,26 @@ export const ABOUT_IMPACT_STATS = [
   {
     id: "selections",
     value: "10,000+",
-    label: "Selections",
+    label: "Selections till now",
     icon: "/assets/images/icons/selection.png",
   },
   {
-    id: "ranks",
-    value: "250+",
-    label: "Top 100 Ranks",
-    icon: "/assets/images/icons/rank.png",
-  },
-  {
     id: "faculty",
-    value: "50+",
-    label: "Expert Faculty",
-    icon: "/assets/images/icons/gdpi-icon-3d.png",
-  },
-  {
-    id: "courses",
-    value: "150+",
-    label: "Courses",
-    icon: "/assets/images/icons/ts-mocks.png",
+    value: "85M+",
+    label: "Views",
+    icon: "/assets/images/icons/ts-sectional.png",
   },
   {
     id: "students",
-    value: "25,000+",
-    label: "Happy Students",
+    value: "1,00,000+",
+    label: "Paid enrolments",
     icon: "/assets/images/icons/selection.png",
   },
   {
     id: "satisfaction",
-    value: "98.7%",
-    label: "Success Satisfaction",
-    icon: "/assets/images/icons/ts-sectional.png",
+    value: "5,00,000+",
+    label: "YouTube subscribers",
+    icon: "/assets/images/icons/gdpi-icon-3d.png",
   },
 ] as const;
 

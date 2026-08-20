@@ -1,7 +1,7 @@
 {
   "categories": [
     {
-      "id": "mba",
+      "id": "cat",
       "name": "MBA",
       "menuLabel": "MBA (CAT + GDPI)",
       "fullName": "MBA — CAT & GDPI",
@@ -31,7 +31,8 @@
         "primaryCta": {
           "label": "Explore Courses",
           "href": "#courses"
-        }
+        },
+        "videoId": "Jan2EV-mQJI"
       },
       "sectionCopy": {
         "coursesBadge": "CAT Programs",
@@ -1284,7 +1285,8 @@
         "faculty-profile-abhishek-gupta",
         "faculty-profile-tarun"
       ],
-      "results": [
+      "results": 
+      [
         {
           "id": "cat-result-1",
           "name": "Siddhant Misra",
@@ -1294,11 +1296,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/siddhant-misra.webp",
           "category": "mba",
-          "batch": [
-            "R1",
-            "QA",
-            "LRDI"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-27",
@@ -1309,7 +1307,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/rishabh-jain.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-2",
@@ -1320,9 +1318,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/rohit-kumar-jha.webp",
           "category": "mba",
-          "batch": [
-            "R3"
-          ]
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-8",
@@ -1333,7 +1329,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/bhupesh-bansal.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R2"]
         },
         {
           "id": "cat-result-3",
@@ -1344,7 +1340,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/varul-sharma.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-5",
@@ -1355,7 +1351,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aditi-pandey.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-21",
@@ -1366,7 +1362,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/prithvi-shetty.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R8"]
         },
         {
           "id": "cat-result-29",
@@ -1377,7 +1373,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/adyatan-mishra.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-11",
@@ -1388,7 +1384,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/manan-jain.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R5"]
         },
         {
           "id": "cat-result-24",
@@ -1399,9 +1395,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/manav-pathak.webp",
           "category": "mba",
-          "batch": [
-            "R3"
-          ]
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-4",
@@ -1412,7 +1406,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/shriya-yadav.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-20",
@@ -1423,7 +1417,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/dhananjay-tanwar.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R6"]
         },
         {
           "id": "cat-result-17",
@@ -1434,7 +1428,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/zarish-khan.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-25",
@@ -1445,7 +1439,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/vansh-batra.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R7"]
         },
         {
           "id": "cat-result-14",
@@ -1456,7 +1450,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ujjwal-singhal.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-22",
@@ -1467,7 +1461,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amrit-singh.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R5"]
         },
         {
           "id": "cat-result-35",
@@ -1478,10 +1472,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/nitin-sharma.webp",
           "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-9",
@@ -1492,10 +1483,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/varun-kumar.webp",
           "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-13",
@@ -1506,10 +1494,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/om-kesharwani.webp",
           "category": "mba",
-          "batch": [
-            "R3",
-            "Comprehensive Batch"
-          ]
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-10",
@@ -1520,9 +1505,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/akshat-yadav.webp",
           "category": "mba",
-          "batch": [
-            "R3"
-          ]
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-23",
@@ -1533,7 +1516,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/vedant-khanna.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-38",
@@ -1544,7 +1527,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amit-chaurasia.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R5"]
         },
         {
           "id": "cat-result-26",
@@ -1555,11 +1538,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/angela-bhardwaj.webp",
           "category": "mba",
-          "batch": [
-            "R7",
-            "QA",
-            "LRDI"
-          ]
+          "batch": ["R7"]
         },
         {
           "id": "cat-result-39",
@@ -1570,7 +1549,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ayush-kumar-singh.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-6",
@@ -1581,10 +1560,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/om-yadav.webp",
           "category": "mba",
-          "batch": [
-            "R1",
-            "Comprehensive Batch"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-33",
@@ -1595,7 +1571,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sai-krishna-ajith.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-37",
@@ -1606,7 +1582,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/raghav-pant.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R8"]
         },
         {
           "id": "cat-result-7",
@@ -1617,9 +1593,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sakshi-mishra.webp",
           "category": "mba",
-          "batch": [
-            "R1"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-15",
@@ -1630,7 +1604,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aanand-yadav.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-18",
@@ -1641,7 +1615,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/amit-kumar-sahu.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R3"]
         },
         {
           "id": "cat-result-40",
@@ -1652,7 +1626,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/laksh-mohan.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["CAT Booster"]
         },
         {
           "id": "cat-result-30",
@@ -1663,9 +1637,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/ankita-bhattacharya.webp",
           "category": "mba",
-          "batch": [
-            "R1"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-16",
@@ -1676,9 +1648,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/emama-islam.webp",
           "category": "mba",
-          "batch": [
-            "R1"
-          ]
+          "batch": ["R1"]
         },
         {
           "id": "cat-result-34",
@@ -1689,7 +1659,7 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/sujit-kumar-patjoshi.webp",
           "category": "mba",
-          "batch": []
+          "batch": ["R5"]
         },
         {
           "id": "cat-result-32",
@@ -1700,11 +1670,10 @@
           "year": 2025,
           "image": "/assets/images/category/cat/students/aditya-giri-goswami.webp",
           "category": "mba",
-          "batch": [
-            "R3"
-          ]
+          "batch": ["R3"]
         }
-      ],
+      ]
+    ,
       "testimonials": [
         {
           "id": "cat-testimonial-1",
@@ -2116,7 +2085,8 @@
         "secondaryCta": {
           "label": "Book a Free Counselling",
           "href": "/contact"
-        }
+        },
+        "videoId": "zk8KZbZKagw"
       },
       "sectionCopy": {
         "coursesBadge": "IPMAT Programs",
@@ -2232,56 +2202,59 @@
       },
       "testSeries": [
         {
-          "id": "ipmat-mocks",
-          "title": "IPMAT Mocks",
-          "description": "Full-length mocks designed for IIM Indore and Rohtak patterns.",
-          "features": [
-            "15+ Full Length Mocks",
-            "Pattern Matching",
-            "Detailed Analytics"
-          ],
-          "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-mocks.png",
-          "value": ""
-        },
-        {
-          "id": "aptitude-tests",
-          "title": "Aptitude Tests",
-          "description": "Strengthen Quant and Logical Reasoning with sectional intensity.",
-          "features": [
-            "50+ Aptitude Sets",
-            "Timed Practice",
-            "Concept Maps"
-          ],
-          "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-sectional.png",
-          "value": ""
-        },
-        {
-          "id": "verbal-tests",
-          "title": "Verbal Ability Tests",
-          "description": "Build RC accuracy, grammar, and verbal reasoning for IPMAT.",
-          "features": [
-            "40+ Verbal Sets",
-            "RC Speed Drills",
-            "Error Logs"
-          ],
-          "href": "https://thinkexam.com",
-          "icon": "/assets/images/icons/ts-topic.png",
-          "value": ""
-        },
-        {
-          "id": "mini-mocks",
-          "title": "Mini Mocks",
-          "description": "Short simulations for daily stamina and quick revision cycles.",
-          "features": [
-            "30+ Mini Mocks",
-            "Speed Drills",
-            "Smart Revision"
-          ],
-          "href": "https://thinkexam.com",
+          "id": "package-a",
+          "value": "225+",
+          "title": "Rodha CAT Mocks And OMETs Package Test",
+          "description": "30 CAT mocks, 50 OMET mocks, 105 sectionals and 40+ topic-wise practice modules with video solutions, mock analysis and percentile tracking.",
+          "price": "₹10,000",
+          "offerPrice": "₹6,999",
+          "href": "https://exam.rodha.co.in/packages/RodhaCATMocksandOMETSPackage/MTYwNQ==",
           "icon": "/assets/images/icons/ts-mini-mocks.png",
-          "value": ""
+          "image": "/assets/images/category/cat/mocks/sectional topic tests-4.png"
+        },
+        {
+          "id": "package-b",
+          "value": "175+",
+          "title": "Rodha CAT Mocks & Sectional Tests",
+          "description": "30 full-length CAT mocks, 105 sectional tests and 40+ topic-wise practice modules with video solutions, mock analysis and percentile tracking.",
+          "price": "₹8,000",
+          "offerPrice": "₹5,999",
+          "href": "https://exam.rodha.co.in/packages/RodhaCATMocksandSectionalTests/MTYwNA==",
+          "icon": "/assets/images/icons/ts-sectional.png",
+          "image": "/assets/images/category/cat/mocks/cat sectionals-2.png"
+        },
+        {
+          "id": "package-c",
+          "value": "30",
+          "title": "Rodha CAT Mocks",
+          "description": "30 full-length CAT mocks with video solutions, strategy-based mock analysis sessions and percentile tracking.",
+          "price": "₹5,000",
+          "offerPrice": "₹3,499",
+          "href": "https://exam.rodha.co.in/packages/RodhaCATMocks/MTYwMw==",
+          "icon": "/assets/images/icons/ts-mocks.png",
+          "image": "/assets/images/category/cat/mocks/cat & omets-1.jpg"
+        },
+        {
+          "id": "package-d",
+          "value": "145+",
+          "title": "Rodha Sectional Tests",
+          "description": "105 sectional tests and 40+ topic-wise practice modules with video solutions, analysis sessions and percentile tracking.",
+          "price": "₹5,000",
+          "offerPrice": "₹3,499",
+          "href": "https://exam.rodha.co.in/packages/RodhaSectionalTests/MTYwMg==",
+          "icon": "/assets/images/icons/ts-topic.png",
+          "image": "/assets/images/category/cat/mocks/cat mocks-3.png"
+        },
+        {
+          "id": "package-e",
+          "value": "11",
+          "title": "Rodha Free Mocks",
+          "description": "Free trial with 1 CAT mock, 3 sectional tests and 7 topic tests, all with complete video solutions.",
+          "price": "FREE",
+          "offerPrice": "FREE",
+          "href": "https://exam.rodha.co.in/startTest/NA/MTI4Nzk2MzU=",
+          "icon": "/assets/images/icons/ts-mini-mocks.png",
+          "image": "/assets/images/category/cat/mocks/Free Mocks-5.png"
         }
       ],
       "courses": [
@@ -3675,7 +3648,8 @@
         "secondaryCta": {
           "label": "Explore CLAT Courses",
           "href": "#courses"
-        }
+        },
+        "videoId": "hV0NKupf8b0"
       },
       "sectionCopy": {
         "coursesBadge": "Law Programs",
@@ -3907,11 +3881,10 @@
       ],
       "facultyIds": [
         "faculty-profile-divya",
-        "faculty-profile-Ananya",
+        "faculty-profile-ananya",
         "faculty-profile-abhishek-dubey",
         "faculty-profile-kirti",
-        "faculty-profile-rupal",
-        "faculty-profile-kd"
+        "faculty-profile-rupal"
       ],
       "results": [
         {
@@ -4736,7 +4709,10 @@
       "hero": {
         "eyebrow": "Welcome to RODHA SSC Exam Preparation",
         "title": "Crack SSC. Build Your Government Career.",
-        "accent": ["with RODHA", "With confidence"],
+        "accent": [
+          "with RODHA",
+          "With confidence"
+        ],
         "subtitle": "Complete SSC preparation under one roof — Maths, Reasoning, English & General Awareness — backed by expert faculty, structured practice and personalised support.",
         "primaryCta": {
           "label": "Explore Courses",
@@ -4746,7 +4722,8 @@
           "label": "Watch Free Demo Classes",
           "href": "#free-classes"
         },
-        "supportingLine": "Learn. Practice. Analyse. Improve. Get Selected."
+        "supportingLine": "Learn. Practice. Analyse. Improve. Get Selected.",
+        "videoId": "2-ObTWwm9yI"
       },
       "sectionCopy": {
         "coursesBadge": "SSC Programs",
@@ -5327,9 +5304,9 @@
       "facultyIds": [
         "faculty-profile-neeraj",
         "faculty-profile-shrikant",
-        "faculty-profile-abhishek-gupta",
         "faculty-profile-himanshu",
-        "faculty-profile-rupal"
+        "faculty-profile-rupal",
+        "faculty-profile-abhishek-dubey"
       ],
       "results": [
         {
@@ -6163,7 +6140,8 @@
         "secondaryCta": {
           "label": "Book a Free Counselling",
           "href": "/contact"
-        }
+        },
+        "videoId": "la29srjk2Jk"
       },
       "sectionCopy": {
         "coursesBadge": "Skill House Programs",
@@ -6390,13 +6368,7 @@
         }
       ],
       "facultyIds": [
-        "faculty-profile-ravi",
-        "faculty-profile-divya",
-        "faculty-profile-divya",
-        "faculty-profile-abhishek-dubey",
-        "faculty-profile-kirti",
-        "faculty-profile-rupal",
-        "faculty-profile-kd"
+        "faculty-profile-divya"
       ],
       "results": [
         {

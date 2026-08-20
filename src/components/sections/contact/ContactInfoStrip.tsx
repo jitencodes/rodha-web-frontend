@@ -35,15 +35,6 @@ const CHANNEL_CARDS = [
     icon: "/assets/icons/email.svg",
     external: false,
   },
-  {
-    id: "buddy",
-    title: "Rodha Buddy",
-    value: CONTACT_CHANNELS.buddyLabel,
-    href: CONTACT_CHANNELS.buddyHref,
-    note: CONTACT_CHANNELS.buddyNote,
-    icon: "/assets/icons/ai-buddy.svg",
-    external: true,
-  },
 ] as const;
 
 export function ContactInfoStrip({ className }: ContactInfoStripProps) {
@@ -51,13 +42,13 @@ export function ContactInfoStrip({ className }: ContactInfoStripProps) {
     <section
     id="contact-form"
     className={cn(
-      "relative bg-white h-5",
+      "relative bg-white lg:h-5 pt-10 lg:pt-0",
       className
     )}
     >
       <Container>
-        <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] -translate-y-1/2 bg-white p-5 md:p-6 shadow-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] lg:-translate-y-1/2 bg-white p-5 md:p-6 shadow-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
             {CHANNEL_CARDS.map((card) => (
               <a
                 key={card.id}

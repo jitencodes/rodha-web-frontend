@@ -36,7 +36,7 @@ export function HomeHeroSection() {
 
           <div className="lg:col-span-6 flex flex-col items-center min-h-0">
             <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-              <HeroVideoEmbed />
+              <HeroVideoEmbed videoId="pDmAKpHcu18" />
               {/* <HeroFloatingStats /> */}
             </div>
           </div>
