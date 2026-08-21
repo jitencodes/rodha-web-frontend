@@ -955,7 +955,7 @@ export const faculty: Faculty[] = [
     experience: "8+ Years Exp.",
     bio: "8+ years teaching; mentored students into NLS, NALSAR and other top law schools. Author of 14 CLAT books published by Unacademy.",
     about:
-      "Ananya Singhal is Faculty for Quantitative Techniques and Logical Reasoning at Rodha. With 8+ years of teaching experience, she has mentored students into NLS, NALSAR and other top law schools and authored 14 CLAT books published by Unacademy.",
+      "Ananya Singhal is Faculty for Quantitative Techniques and Logical Reasoning at Rodha. With 8+ years of teaching experience, he has mentored students into NLS, NALSAR and other top law schools and authored 14 CLAT books published by Unacademy.",
     philosophy:
       "Strong basics. Logic over shortcuts. Focuses on the fundamentals that are essential for CLAT, making students fall in love with numbers and logical thinking. Believes maths is not magic but logic — once you understand the idea behind it, the trick becomes simple.",
     expertiseTags: [
@@ -985,7 +985,7 @@ export const faculty: Faculty[] = [
     courseGraphyIds: ["69e36d2232524ce3800e8cbc"],
     categories: ["clat"],
     featured: true,
-    honorificSuffix: "Ma'am",
+    honorificSuffix: "Sir",
   },
   {
     id: "faculty-profile-abhishek-dubey",
@@ -1167,7 +1167,6 @@ export function getFacultyBySlug(slug: string): Faculty | undefined {
 }
 
 const FEMALE_FIRST_NAMES = new Set([
-  "Kirti",
   "Kriti",
   "Nikita",
   "Rupal",
