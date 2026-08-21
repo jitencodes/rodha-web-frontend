@@ -1172,7 +1172,6 @@ const FEMALE_FIRST_NAMES = new Set([
   "Nikita",
   "Rupal",
   "Sharwari",
-  "Ananya",
 ]);
 
 const DEFAULT_RESULT_STATS: Record<CategoryId, FacultyResultStat[]> = {
