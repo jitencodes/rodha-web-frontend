@@ -27,6 +27,35 @@ export interface Category {
 
 export type CourseFilterType = "comprehensive" | "individual" | "crash" | "other";
 
+export interface CourseModule {
+  id: string;
+  title: string;
+  topics?: string;
+  duration?: string;
+  lectures?: string;
+  /** Optional expanded body for curriculum accordion */
+  description?: string;
+}
+
+export interface CourseSchedule {
+  nextBatch?: string;
+  days?: string;
+  timing?: string;
+  duration?: string;
+  mode?: string;
+}
+
+export interface CoursePricingPlan {
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  features: string[];
+  ctaLabel?: string;
+  href?: string;
+  popular?: boolean;
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -66,6 +95,19 @@ export interface Course {
   showFaculty?: boolean;
 
   totalHours?: string;
+
+  /** Course detail page — optional; filled via withCourseDetailDefaults() */
+  facultyIds?: string[];
+  level?: string;
+  exam?: string;
+  benefits?: string[];
+  modules?: CourseModule[];
+  included?: string[];
+  schedule?: CourseSchedule;
+  pricingPlans?: CoursePricingPlan[];
+  relatedCourseIds?: string[];
+  tags?: string[];
+  faqs?: FaqItem[];
 }
 
 export interface FacultyHeroStat {

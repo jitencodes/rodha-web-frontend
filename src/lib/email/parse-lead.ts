@@ -44,6 +44,7 @@ export function parseLeadPayload(body: unknown): {
   const email = asTrimmedString(raw.email);
   const phone = asTrimmedString(raw.phone);
   const exam = asTrimmedString(raw.exam);
+  const examYear = asTrimmedString(raw.examYear);
   const message = asTrimmedString(raw.message);
   const sourcePath = asTrimmedString(raw.sourcePath);
 
@@ -71,6 +72,7 @@ export function parseLeadPayload(body: unknown): {
       email,
       phone,
       exam: examLabel(exam),
+      examYear,
       message,
       sourcePath,
     },

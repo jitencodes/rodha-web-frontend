@@ -12,6 +12,7 @@ export interface LeadPayload {
   email?: string;
   phone?: string;
   exam?: string;
+  examYear?: string;
   message?: string;
   /** Optional client page path for ops context (not used for assets) */
   sourcePath?: string;
@@ -99,6 +100,7 @@ export function buildLeadNotificationEmail(payload: LeadPayload): {
                 ${row("Email", payload.email)}
                 ${row("Phone", payload.phone ? (payload.phone.startsWith("+") ? payload.phone : `+91 ${payload.phone}`) : undefined)}
                 ${row("Category / Exam", payload.exam)}
+                ${row("Exam Year", payload.examYear)}
                 ${row("Message", payload.message)}
                 ${row("Submitted", `${submittedAt} (IST)`)}
                 ${row("Source path", payload.sourcePath)}
@@ -130,6 +132,7 @@ export function buildLeadNotificationEmail(payload: LeadPayload): {
     payload.email ? `Email: ${payload.email}` : null,
     payload.phone ? `Phone: ${payload.phone}` : null,
     payload.exam ? `Category / Exam: ${payload.exam}` : null,
+    payload.examYear ? `Exam Year: ${payload.examYear}` : null,
     payload.message ? `Message: ${payload.message}` : null,
     `Submitted: ${submittedAt} (IST)`,
     payload.sourcePath ? `Source path: ${payload.sourcePath}` : null,

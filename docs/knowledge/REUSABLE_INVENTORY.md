@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-20 (header/footer nav destinations)
+**Last updated:** 2026-08-21 (course detail `/courses/[slug]`)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -112,6 +112,17 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | BlogHeroSection | `blog/BlogHeroSection.tsx` (light hero with breadcrumb, eyebrow, heading, hero-blog image) |
 | BlogCategories | `blog/BlogCategories.tsx` (category badge links to `/blog?category=…`; optional `activeCategory`) |
 | ShareBlog | `blog/ShareBlog.tsx` (client; Copy Link, WhatsApp, Facebook, X, LinkedIn share buttons; `url`+`title` props) |
+| CourseDetailPageView | `course/CourseDetailPage.tsx` (assembler for `/courses/[slug]`) |
+| CourseHeroSection | `course/CourseHeroSection.tsx` |
+| CourseDetailsCurriculumSection | `course/CourseDetailsCurriculumSection.tsx` |
+| CourseCurriculumAccordion | `course/CourseCurriculumAccordion.tsx` |
+| CourseFacultySection | `course/CourseFacultySection.tsx` |
+| CourseIncludedScheduleSection | `course/CourseIncludedScheduleSection.tsx` |
+| CoursePricingSection | `course/CoursePricingSection.tsx` |
+| CourseTestimonialsSection | `course/CourseTestimonialsSection.tsx` |
+| CourseRelatedSection | `course/CourseRelatedSection.tsx` (category-style course carousel + 3s autoplay) |
+| CourseFaqSection | `course/CourseFaqSection.tsx` |
+| CourseEnquireStickyBar | `course/CourseEnquireStickyBar.tsx` (mobile Enquire Now → enquiry modal) |
 
 ## Cards — `src/components/cards/`
 
@@ -120,10 +131,12 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AdvisorCard | `AdvisorCard.tsx` |
 | BlogCard | `BlogCard.tsx` (`variant?: "overlay" \| "article"`; overlay = dark legacy homepage card; article = light listing/detail card with category link, calendar/clock meta) |
 | CourseCard | `CourseCard.tsx` |
-| CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; View Details → course slug) |
+| CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; optional `href` override for internal `/courses/[slug]`) |
+| CoursePurchaseCard | `CoursePurchaseCard.tsx` (sticky enrol card: thumbnail, benefits, price, Buy Now, Rodha Buddy) |
+| PricingPlanCard | `PricingPlanCard.tsx` (light pricing tier card; optional Most Popular) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
 | FacultyCard | `FacultyCard.tsx` |
-| FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white: TopperCardV2 layout, image + light gradient detail border; no ratings) |
+| FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white; optional `variant="detail"` with bio + View Profile) |
 | FacultyExpertCard | `FacultyExpertCard.tsx` |
 | FacultyListingCard | `FacultyListingCard.tsx` |
 | FacultyStatCard | `FacultyStatCard.tsx` (dark hero stat; `FacultyIcon` / react-icons) |
@@ -151,7 +164,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Component | File |
 |-----------|------|
 | ContactForm | `ContactForm.tsx` (light/dark `variant`; +91 phone chrome matching counselling; prefix icons; stub submit) |
-| LeadCaptureForm | `LeadCaptureForm.tsx` |
+| LeadCaptureForm | `LeadCaptureForm.tsx` (optional light variant, defaultExam, exam year, custom CTA — course Enquire Now) |
 | NewsletterSignup | `NewsletterSignup.tsx` |
 
 ## Hooks — `src/hooks/`
@@ -185,6 +198,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
 | category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
+| course-details | `course-details.ts` (course detail resolver: slug lookup, defaults, faculty, related, FAQs) |
 | courses | `courses.ts` (homepage / legacy) |
 | faculty | `faculty.ts` (real profiles only; `selectFacultyReviews`, `getCoursesForFaculty`, `withFacultyDetailDefaults`) |
 | faq | `faq.ts` |

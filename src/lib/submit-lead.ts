@@ -6,6 +6,7 @@ export interface SubmitLeadInput {
   email?: string;
   phone?: string;
   exam?: string;
+  examYear?: string;
   message?: string;
 }
 

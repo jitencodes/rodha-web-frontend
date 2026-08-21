@@ -136,3 +136,33 @@ export function blogPostingJsonLd(post: {
     },
   };
 }
+
+export function courseJsonLd(course: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  price: number;
+  currency?: string;
+}): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.description,
+    url: `${SITE_URL}${course.url}`,
+    image: course.image ? `${SITE_URL}${course.image}` : undefined,
+    provider: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    offers: {
+      "@type": "Offer",
+      price: course.price,
+      priceCurrency: course.currency ?? "INR",
+      url: `${SITE_URL}${course.url}`,
+      availability: "https://schema.org/InStock",
+    },
+  };
+}

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-20 (header/footer nav destinations)
+**Last updated:** 2026-08-21 (course detail `/courses/[slug]`)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -100,6 +100,15 @@ Update this file after every meaningful implementation task.
   - Removed header login/account control and mobile Login / Sign Up
   - Removed footer Success Stories; Free Resources now follows the same category-aware URL as the header
   - Header Test Series points at `https://mocks.rodha.co.in/`; Free Resources uses CAT on home/other pages, IPMAT/CLAT/SSC-specific Graphy courses on those landings, and the CAT free course on CAT + Skill House
+- **Course detail `/courses/[slug]` (2026-08-21):**
+  - Data-driven template from `category-landings.json` via `course-details.ts` defaults (modules, included, schedule, single pricing plan, faculty parse, related, FAQs, testimonials)
+  - Dark hero + sticky purchase card (Buy Now → Graphy, Talk to Rodha Buddy); details/curriculum; faculty detail cards; included + schedule; pricing; light `TestimonialCardV2` carousel; related `CourseCardV2`; `AccordionV2` FAQs; Enquire Now `LeadCaptureForm` (+ exam year) with mobile sticky bar
+  - Permanent redirect `/category/:category_slug/courses/:slug` → `/courses/:slug`; nested placeholder page removed
+  - Homepage and category landings unchanged
+- **Course detail UI polish (2026-08-21):**
+  - Compact sticky purchase card (image/title/price/Buy Now; viewport-fit; sticky through testimonials until Related)
+  - Enquire Now opens shared counselling modal in enquiry mode (Exam/Name/Mobile/Email/Exam Year); removed sidebar enquiry card
+  - Related courses match category slider + 3s autoplay; faculty horizontal carousel; testimonials InfiniteMarquee; info cards 4-col desktop
 
 ---
 
@@ -110,6 +119,7 @@ Update this file after every meaningful implementation task.
 | Homepage vs approved PNG | Partial | Premium polish shipped; app store URLs now live on the app promo cards |
 | Header category-state nav | Partial | Exam switcher syncs under `/category/[slug]`; full category-state nav links still TBD |
 | Category hero photography | Partial | Non-MBA landings still share CAT hero photo until dedicated assets arrive |
+| Course detail content depth | Partial | Template complete with derived defaults; optional per-course modules/pricingPlans/facultyIds can be authored in JSON later |
 
 ---
 
@@ -125,7 +135,7 @@ Update this file after every meaningful implementation task.
 ### Screens
 - [x] About `/about`
 - [x] Blog listing `/blog` + detail `/blog/[slug]`
-- [ ] Course detail (content depth; mixed-theme shells done)
+- [x] Course detail `/courses/[slug]`
 - [x] Contact `/contact`
 - [x] Faculty listing `/faculty`
 - [x] Faculty detail `/faculty/[slug]`
@@ -156,3 +166,4 @@ Update this file after every meaningful implementation task.
 - Some toppers reuse portrait files
 - Non-MBA landings share CAT hero photo until dedicated assets arrive
 - Faculty detail body cards still use dark `card-base` islands on light section shells (intentional mixed theme)
+- Course detail curriculum/pricing are defaults until per-course JSON overrides are authored

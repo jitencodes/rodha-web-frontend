@@ -37,7 +37,7 @@
 |------|------|
 | Home | `/` |
 | Category | `/category/[category_slug]` (e.g. `/category/cat`) |
-| Course detail | `/category/[category_slug]/courses/[slug]` |
+| Course detail | `/courses/[slug]` (legacy `/category/[category_slug]/courses/[slug]` permanently redirects) |
 | Faculty | `/faculty`, `/faculty/[slug]` |
 | Blog | `/blog`, `/blog/[slug]` |
 

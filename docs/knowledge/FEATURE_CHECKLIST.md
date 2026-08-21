@@ -70,19 +70,21 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ---
 
-## Course Detail `/category/[category_slug]/courses/[slug]`
+## Course Detail `/courses/[slug]`
 
 | Feature | Status |
 |---------|--------|
-| Placeholder shell | Complete (mixed-theme; validates category + course from JSON) |
-| Course hero | Not Started |
-| Curriculum accordion | Not Started |
-| Faculty for course | Not Started |
-| What's included | Not Started |
-| Pricing display | Not Started |
-| Sticky Enrol → Graphy | Not Started |
-| Floating enquiry | Not Started |
-| FAQ / related | Not Started |
+| Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
+| Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
+| Sticky purchase card | Complete (Graphy Buy Now + Rodha Buddy) |
+| Curriculum accordion | Complete (`CourseCurriculumAccordion`) |
+| Faculty for course | Complete (`FacultyCardV2` detail variant) |
+| What's included + schedule | Complete |
+| Pricing display | Complete (data-driven plans; default single plan from price) |
+| Testimonials | Complete (reuses `TestimonialCardV2` light + Carousel) |
+| Related courses | Complete (reuses `CourseCardV2` → `/courses/[slug]`) |
+| FAQ | Complete (reuses `AccordionV2` + category FAQ fallback) |
+| Floating enquiry | Complete (`LeadCaptureForm` light Enquire Now + mobile sticky) |
 
 ---
 
@@ -121,7 +123,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 |------|--------|
 | Per-page metadata (basic) | Complete | `buildPageMetadata` + category JSON titles; canonicals on key routes |
 | Open Graph / Twitter | Complete | Default `og-rodha.png`; blog/faculty use page images |
-| JSON-LD schemas | Partial | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting; Course schema still TBD |
+| JSON-LD schemas | Partial | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting, Course; sitemap still TBD |
 | sitemap.xml | Not Started |
 | robots.txt | Not Started |
 | Image alt / heading hierarchy | Partial |

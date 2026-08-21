@@ -21,15 +21,15 @@ rodha-web-frontend/
 │   │   ├── globals.css     # Design tokens + utility classes
 │   │   ├── about/, team/, faculty/, blog/, contact/, faq/
 │   │   ├── privacy-policy/, terms-and-conditions/, refund-policy/, disclaimer/
+│   │   ├── courses/[slug]/   # Course detail (canonical)
 │   │   └── category/[category_slug]/
-│   │       └── courses/[slug]/
 │   ├── components/
 │   │   ├── ui/             # Primitives (Button, Input, Modal, …)
 │   │   ├── layout/         # Header, Footer, Container, MobileNav, Banner
-│   │   ├── sections/       # Page sections (Hero, CTABand, TrustBar, …)
+│   │   ├── sections/       # Page sections (Hero, CTABand, TrustBar, course/*, …)
 │   │   ├── cards/          # Domain cards (Course, Faculty, Blog, …)
 │   │   └── forms/          # Contact, LeadCapture, Newsletter
-│   ├── data/               # Static mock data modules
+│   ├── data/               # Static mock data modules (+ course-details resolver)
 │   ├── hooks/              # Shared React hooks
 │   └── lib/                # constants, types, utils (cn)
 ├── AGENTS.md

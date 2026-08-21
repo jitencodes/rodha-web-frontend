@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/category/:category_slug/courses/:slug",
+        destination: "/courses/:slug",
+        permanent: true,
+      },
+      {
         source: "/mba",
         destination: "/category/cat",
         permanent: true,

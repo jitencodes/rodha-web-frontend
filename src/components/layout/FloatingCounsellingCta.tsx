@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useCounsellingModal } from "@/hooks/useCounsellingModal";
+import { getCourseBySlug } from "@/data/course-details";
 import { cn } from "@/lib/utils";
 
 const COUNSELLING_CTA_SELECTOR =
-  "#site-hero [data-counselling-cta], #site-footer-cta [data-counselling-cta]";
+  "#site-hero [data-counselling-cta], #site-footer-cta [data-counselling-cta], #course-enquiry [data-counselling-cta]";
 
 const OBSERVER_OPTIONS: IntersectionObserverInit = {
   threshold: 0.1,
@@ -18,7 +19,8 @@ function isCounsellingCtaInView(el: Element) {
   if (rect.width === 0 || rect.height === 0) return false;
 
   const viewportBottom = window.innerHeight * 0.92;
-  const visibleHeight = Math.min(rect.bottom, viewportBottom) - Math.max(rect.top, 0);
+  const visibleHeight =
+    Math.min(rect.bottom, viewportBottom) - Math.max(rect.top, 0);
   return visibleHeight > 0 && visibleHeight >= rect.height * 0.1;
 }
 
@@ -34,6 +36,14 @@ export function FloatingCounsellingCta() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const visibleRef = useRef(new Set<Element>());
   const observedRef = useRef(new Set<Element>());
+
+  const isCoursePage = Boolean(pathname?.startsWith("/courses/"));
+  const courseSlug = isCoursePage
+    ? pathname.split("/").filter(Boolean)[1]
+    : undefined;
+  const courseExam = courseSlug
+    ? getCourseBySlug(courseSlug)?.course.category
+    : undefined;
 
   useEffect(() => {
     visibleRef.current.clear();
@@ -78,48 +88,48 @@ export function FloatingCounsellingCta() {
       if (visibleRef.current.size > 0) {
         setHideFloating(true);
       } else {
-        syncVisibility();
+        setHideFloating(hasVisibleCounsellingCtaInDom());
       }
     }, OBSERVER_OPTIONS);
 
     observerRef.current = observer;
+    observeTargets();
 
-    const bootTimers = [0, 100, 300].map((delay) => window.setTimeout(observeTargets, delay));
-
-    window.addEventListener("scroll", syncVisibility, { passive: true });
-    window.addEventListener("resize", syncVisibility);
+    const mutationObserver = new MutationObserver(() => observeTargets());
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      bootTimers.forEach((id) => window.clearTimeout(id));
       observer.disconnect();
+      mutationObserver.disconnect();
       observerRef.current = null;
-      observedRef.current.clear();
-      visibleRef.current.clear();
-      window.removeEventListener("scroll", syncVisibility);
-      window.removeEventListener("resize", syncVisibility);
     };
   }, [pathname]);
 
-  // const isVisible = !hideFloating && !isOpen;
-  const isVisible = true;
+  const isVisible = !hideFloating && !isOpen;
 
   return (
     <div
       className={cn(
-        "fixed top-1/2 right-0 translate-x-20 hover:-trnaslate-x-19 z-30 rotate-90",
-        "transition-[opacity,transform] duration-600",
+        "fixed top-1/2 right-0 z-40 -translate-y-1/2",
+        "transition-[opacity,transform] duration-300",
         isVisible
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-3 pointer-events-none"
+          ? "pointer-events-auto opacity-100"
+          : "pointer-events-none opacity-0"
       )}
     >
       <button
         type="button"
-        onClick={() => openCounsellingModal()}
-        aria-label="Book free counselling"
-        className="floating-cta-btn floating-cta-pulse btn-primary btn-primary-premium premium-border-glow glow-accent-orange inline-flex min-h-11 items-center justify-center rounded-[6px] px-4 py-3 text-body-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-0"
+        onClick={() =>
+          openCounsellingModal(
+            isCoursePage
+              ? { mode: "enquiry", defaultExam: courseExam }
+              : undefined
+          )
+        }
+        aria-label={isCoursePage ? "Enquire now" : "Book free counselling"}
+        className="floating-cta-btn floating-cta-pulse btn-primary btn-primary-premium premium-border-glow glow-accent-orange inline-flex min-h-11 origin-bottom-right -rotate-90 items-center justify-center whitespace-nowrap rounded-[6px] px-4 py-3 text-body-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-0"
       >
-        Book Free Counselling
+        {isCoursePage ? "Enquire Now" : "Book Free Counselling"}
       </button>
     </div>
   );

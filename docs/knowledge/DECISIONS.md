@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-08-21 — Canonical course detail at `/courses/[slug]`
+- **Decision:** Course detail lives at `/courses/[slug]` with a shared data-driven template. Catalog source of truth remains `category-landings.json`; `src/data/course-details.ts` resolves lookup, defaults, faculty, related courses, FAQs, and testimonials. Nested `/category/[category_slug]/courses/[slug]` permanently redirects to `/courses/[slug]`. Category landing `CourseCardV2` still prefers Graphy `externalLink`; related cards on course detail pass an internal `href` override.
+- **Rationale:** Product requested a flat `/courses/[slug]` URL while keeping one template for all verticals and avoiding duplication of the large catalog JSON.
+- **Alternatives considered:** Keep nested category URLs only; invent three pricing SKUs for every course; duplicate courses into `courses.ts`.
+- **Consequences:** Detail pages render complete sections via defaults when curriculum/pricing overrides are absent. Optional per-course JSON fields (`modules`, `pricingPlans`, `facultyIds`, etc.) can deepen content later without route changes.
+
 ### 2026-08-20 — Category-aware Free Resources and mocks.rodha.co.in Test Series
 - **Decision:** Header Test Series is a single external link to `https://mocks.rodha.co.in/`. Free Resources (header Resources dropdown + footer) uses `getFreeResourceUrl()` from the active `/category/[slug]`: CAT and Skill House share the CAT Graphy free course; IPMAT, CLAT, and SSC use their own Graphy free courses; homepage and all other pages use the CAT free course. Login/account was removed from header and mobile nav. Footer Success Stories was removed.
 - **Rationale:** Product supplied live Graphy free-course URLs per vertical and a single mocks portal; leftover login and Success Stories links had no useful destination.

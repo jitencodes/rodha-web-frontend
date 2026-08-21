@@ -8,18 +8,20 @@ import type { Course } from "@/lib/types";
 interface CourseCardV2Props {
   course: Course;
   className?: string;
+  /** Override card link (e.g. internal `/courses/[slug]` on course detail). */
+  href?: string;
 }
 
 /** Light-theme course card for MBA category page (homepage-aligned). */
-export function CourseCardV2({ course, className }: CourseCardV2Props) {
+export function CourseCardV2({ course, className, href }: CourseCardV2Props) {
   const hasDiscount = course.originalPrice && course.originalPrice > course.price;
   const discountPercent = hasDiscount
     ? Math.round(((course.originalPrice! - course.price) / course.originalPrice!) * 100)
     : 0;
 
   const detailsHref = `${getCategoryPath(course.category)}/courses/${course.slug}`;
-  const courseHref = course.externalLink || detailsHref;
-  const isExternal = Boolean(course.externalLink);
+  const courseHref = href || course.externalLink || detailsHref;
+  const isExternal = Boolean(!href && course.externalLink);
   const posterSrc =
     course.thumbnail ||
     course.facultyImage ||
