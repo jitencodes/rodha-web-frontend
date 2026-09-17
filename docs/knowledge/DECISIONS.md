@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-09-17 — Category marquee thresholds + static course fallback
+- **Decision:** `InfiniteMarquee` only clones/animates when the first set is wider than its container. Category results get a second row at 15+ cards. Testimonials use the 3-column vertical layout only at 6+ items (2 per column). Category courses and test series fall back to `category-landings.json` when the CMS arrays are empty.
+- **Rationale:** Short CMS lists were duplicating and scrolling inside leftover width. Course/test APIs are not populated yet, and the static catalog cards are already designed for those sections.
+- **Alternatives considered:** Always hide short marquees; invent CMS course payloads.
+- **Consequences:** Faculty/stories marquees inherit the overflow check. Category course/test sections show dummy catalog data until the API returns items.
+
 ### 2026-09-16 — Remaining CMS pages + contact POST
 - **Decision:** Continue the SSR-first module pattern for category detail, faculty listing/detail, about, team, legal HTML, and contact POST. Category faculty cards come from the same category-page response as testimonials, success stories, and FAQs. Category and faculty course lists map `courseType` so existing `CategoryCoursesSlider` chips keep working client-side. Contact/counselling/lead-capture POST through `/api/leads` so `API_KEY` stays server-side; newsletter remains SMTP-only.
 - **Rationale:** Product required remaining Postman endpoints without redesigning finalized UI, without inventing fields, and without TanStack Query.

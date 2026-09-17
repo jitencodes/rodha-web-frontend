@@ -286,6 +286,8 @@ export function mapCategoryPage(
 
   const banner = mapWebsiteBanner(api.banner);
   const primaryCta = banner?.ctas[0];
+  const mappedCourses = mapCourses(api.courses, categoryId);
+  const mappedTestSeries = mapTestSeries(api);
 
   return {
     ...base,
@@ -344,7 +346,9 @@ export function mapCategoryPage(
           question: faq.question.trim(),
           answer: faq.answer.trim(),
         })) ?? [],
-    courses: mapCourses(api.courses, categoryId),
-    testSeries: mapTestSeries(api),
+    courses: mappedCourses.length > 0 ? mappedCourses : base.courses,
+    // CMS courses/test-series are not live yet; fall back to the static catalog.
+    testSeries:
+      mappedTestSeries.length > 0 ? mappedTestSeries : base.testSeries,
   };
 }

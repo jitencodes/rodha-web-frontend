@@ -58,6 +58,27 @@ export function parseLeadPayload(body: unknown): {
     if (!name) return { ok: false, error: "Name is required." };
     if (!phone) return { ok: false, error: "Phone is required." };
     if (!email) return { ok: false, error: "Email is required." };
+    if (raw.formType === "contact" && !message) {
+      return { ok: false, error: "Message is required." };
+    }
+    if (raw.formType === "contact" && !exam) {
+      return { ok: false, error: "Exam selection is required." };
+    }
+    if (raw.formType === "lead-capture" && !exam) {
+      return { ok: false, error: "Exam selection is required." };
+    }
+  }
+
+  if (name && !/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name)) {
+    return { ok: false, error: "Name can only contain letters and spaces." };
+  }
+
+  if (name && name.length > 50) {
+    return { ok: false, error: "Name is too long." };
+  }
+
+  if (phone && !/^[0-9]{10}$/.test(phone)) {
+    return { ok: false, error: "Enter a 10-digit mobile number." };
   }
 
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

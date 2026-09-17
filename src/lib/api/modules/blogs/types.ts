@@ -16,11 +16,13 @@ export interface BlogApi {
   metaDescription?: string | null;
   metaKeywords?: string[] | null;
   isActive?: boolean;
+  isFeatured?: boolean;
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
   updatedBy?: string;
   websiteCategory?: CategorySummaryApi | null;
+  relatedBlogs?: BlogApi[] | null;
 }
 
 export interface BlogListApi {
@@ -35,6 +37,7 @@ export interface BlogListApi {
 
 export interface BlogDetailApi {
   blog: BlogApi;
+  relatedBlogs?: BlogApi[] | null;
 }
 
 export interface GetBlogsParams {
@@ -63,6 +66,11 @@ export interface BlogViewModel {
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string[];
+  featured: boolean;
+}
+
+export interface BlogDetailViewModel extends BlogViewModel {
+  relatedPosts: BlogViewModel[];
 }
 
 export interface BlogListViewModel {

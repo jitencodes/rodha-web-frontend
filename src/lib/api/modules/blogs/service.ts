@@ -8,9 +8,9 @@ import {
 
 import type {
   BlogDetailApi,
+  BlogDetailViewModel,
   BlogListApi,
   BlogListViewModel,
-  BlogViewModel,
   GetBlogsParams,
 } from "./types";
 
@@ -38,7 +38,7 @@ export async function getBlogs(
 
 export async function getBlogBySlug(
   slug: string
-): Promise<BlogViewModel | null> {
+): Promise<BlogDetailViewModel | null> {
   const normalizedSlug = slug.trim();
 
   if (!normalizedSlug) {

@@ -27,6 +27,14 @@ interface CategoryLandingPageProps {
   category: CategoryLandingConfig;
 }
 
+/** Second results row only when both marquees can fill enough cards to scroll. */
+const RESULTS_SECOND_ROW_THRESHOLD = 15;
+/** 3 desktop columns × 2 cards each — below this, use a single horizontal row. */
+const TESTIMONIAL_VERTICAL_MIN_PER_COLUMN = 2;
+const TESTIMONIAL_LG_COLUMNS = 3;
+const TESTIMONIAL_MULTI_COLUMN_THRESHOLD =
+  TESTIMONIAL_LG_COLUMNS * TESTIMONIAL_VERTICAL_MIN_PER_COLUMN;
+
 function sectionSurface(theme: string | undefined) {
   switch (theme) {
     case "beige":
@@ -49,9 +57,14 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
   const showFaculty = facultyMembers.length > 0;
   const showTestimonials = testimonials.length > 0;
   const showFaqs = category.faqs.length > 0;
-  const resultsMidpoint = Math.ceil(results.length / 2);
+  const showSecondResultsRow = results.length >= RESULTS_SECOND_ROW_THRESHOLD;
+  const resultsMidpoint = showSecondResultsRow
+    ? Math.ceil(results.length / 2)
+    : results.length;
   const resultsRow1 = results.slice(0, resultsMidpoint);
   const resultsRow2 = results.slice(resultsMidpoint);
+  const useTestimonialColumns =
+    testimonials.length >= TESTIMONIAL_MULTI_COLUMN_THRESHOLD;
 
   return (
     <>
@@ -259,26 +272,57 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           />
 
           <RevealGroup>
-            <div className="testimonial-marquee relative mt-4 overflow-hidden lg:h-[580px]">
-              <div className="hidden h-full grid-cols-1 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 0)}
-                  direction="down"
-                  fadeFrom="#0A0A0A"
-                />
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 1)}
-                  direction="up"
-                  fadeFrom="#0A0A0A"
-                />
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 2)}
-                  direction="down"
-                  className="hidden lg:block"
-                  fadeFrom="#0A0A0A"
-                />
-              </div>
-              <div className="block md:hidden">
+            <div
+              className={cn(
+                "testimonial-marquee relative mt-4 overflow-hidden",
+                useTestimonialColumns && "lg:h-[580px]"
+              )}
+            >
+              {useTestimonialColumns ? (
+                <>
+                  <div className="hidden h-full gap-6 lg:grid lg:grid-cols-3">
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 0)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 1)}
+                      direction="up"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 2)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                  </div>
+                  <div className="hidden h-[580px] gap-6 md:grid md:grid-cols-2 lg:hidden">
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 2 === 0)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 2 === 1)}
+                      direction="up"
+                      fadeFrom="#0A0A0A"
+                    />
+                  </div>
+                  <div className="md:hidden">
+                    <InfiniteMarquee speed={35}>
+                      {testimonials.map((testimonial, index) => (
+                        <div
+                          key={testimonial.id}
+                          className={`snap-start shrink-0 reveal-child reveal-delay-${(index % 4) + 1}`}
+                        >
+                          <TestimonialCardV2 testimonial={testimonial} />
+                        </div>
+                      ))}
+                    </InfiniteMarquee>
+                  </div>
+                </>
+              ) : (
                 <InfiniteMarquee speed={35}>
                   {testimonials.map((testimonial, index) => (
                     <div
@@ -289,7 +333,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
                     </div>
                   ))}
                 </InfiniteMarquee>
-              </div>
+              )}
             </div>
           </RevealGroup>
         </Container>

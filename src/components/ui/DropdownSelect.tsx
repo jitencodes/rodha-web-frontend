@@ -14,6 +14,7 @@ interface DropdownSelectProps {
   onChange: (value: string) => void;
   placeholder?: string;
   label?: string;
+  error?: string;
   "aria-label"?: string;
   className?: string;
   triggerClassName?: string;
@@ -28,6 +29,7 @@ export function DropdownSelect({
   onChange,
   placeholder = "Select",
   label,
+  error,
   "aria-label": ariaLabel,
   className,
   triggerClassName,
@@ -76,13 +78,15 @@ export function DropdownSelect({
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label={resolvedAriaLabel}
+        aria-invalid={Boolean(error)}
         onClick={() => setOpen(!open)}
         className={cn(
           "flex items-center justify-between gap-2 h-9 w-full min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap",
           isLight
             ? "bg-white text-neutral-900 border-neutral-200 hover:border-orange-500/60"
             : "bg-bg-tertiary text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
-          triggerClassName
+          triggerClassName,
+          error && "border-accent-red hover:border-accent-red"
         )}
       >
         <span className="flex min-w-0 items-center gap-2.5">
@@ -150,6 +154,9 @@ export function DropdownSelect({
             );
           })}
         </div>
+      )}
+      {error && (
+        <p className="mt-1 text-caption text-accent-red">{error}</p>
       )}
     </div>
   );

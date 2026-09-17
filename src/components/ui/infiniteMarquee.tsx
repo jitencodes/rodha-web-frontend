@@ -50,6 +50,11 @@ export function InfiniteMarquee({
 
   const [paused, setPaused] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  const childCount = React.Children.count(children);
+  const loop = isOverflowing && childCount > 0;
+  const sets = loop ? [0, 1, 2] : [0];
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -59,23 +64,38 @@ export function InfiniteMarquee({
     return () => mediaQuery.removeEventListener("change", update);
   }, []);
 
+  const resetOffset = useCallback(() => {
+    offsetRef.current = 0;
+    if (trackRef.current) {
+      trackRef.current.style.transform = "translate3d(0px,0,0)";
+    }
+  }, []);
+
   const updateWidth = useCallback(() => {
+    const container = containerRef.current;
     const track = trackRef.current;
-    if (!track) return;
+    if (!container || !track) return;
 
-    const firstSet = track.children[0] as HTMLElement;
-
+    const firstSet = track.children[0] as HTMLElement | undefined;
     if (!firstSet) return;
 
     widthRef.current = firstSet.offsetWidth;
-  }, []);
+    const overflowing = firstSet.offsetWidth > container.clientWidth + 1;
+    setIsOverflowing((prev) => (prev === overflowing ? prev : overflowing));
+
+    if (!overflowing) {
+      resetOffset();
+    }
+  }, [resetOffset]);
 
   useEffect(() => {
     updateWidth();
 
     const observer = new ResizeObserver(updateWidth);
-
-    if (trackRef.current) observer.observe(trackRef.current);
+    if (containerRef.current) observer.observe(containerRef.current);
+    if (trackRef.current?.children[0]) {
+      observer.observe(trackRef.current.children[0]);
+    }
 
     window.addEventListener("resize", updateWidth);
 
@@ -83,9 +103,14 @@ export function InfiniteMarquee({
       observer.disconnect();
       window.removeEventListener("resize", updateWidth);
     };
-  }, [updateWidth]);
+  }, [updateWidth, childCount, loop]);
 
   useEffect(() => {
+    if (!loop) {
+      resetOffset();
+      return;
+    }
+
     const animate = (time: number) => {
       if (!lastTimeRef.current) {
         lastTimeRef.current = time;
@@ -119,29 +144,34 @@ export function InfiniteMarquee({
       frameRef.current = requestAnimationFrame(animate);
     };
 
+    lastTimeRef.current = 0;
     frameRef.current = requestAnimationFrame(animate);
 
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [speed, paused, direction, prefersReducedMotion]);
+  }, [speed, paused, direction, prefersReducedMotion, loop, resetOffset]);
 
   return (
     <div
       ref={containerRef}
       className={cn("overflow-hidden", className)}
-      onMouseEnter={() => pauseOnHover && setPaused(true)}
+      onMouseEnter={() => pauseOnHover && loop && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}
     >
       <div
         ref={trackRef}
-        className={cn("flex w-max will-change-transform", itemClassName)}
+        className={cn(
+          "flex w-max",
+          loop && "will-change-transform",
+          itemClassName
+        )}
       >
-        {[0, 1, 2].map((setIndex) => (
+        {sets.map((setIndex) => (
           <div
             key={setIndex}
             className="flex shrink-0"
-            style={{ gap, paddingRight: gap }}
+            style={{ gap, paddingRight: loop ? gap : 0 }}
             aria-hidden={setIndex > 0 || undefined}
           >
             {React.Children.map(children, (child, index) => (

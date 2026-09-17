@@ -36,6 +36,7 @@ function TestimonialColumn({
           <TestimonialCardV2
             key={testimonial.id}
             testimonial={testimonial}
+            className="w-full min-w-0 max-w-none"
           />
         ))}
       </VerticalMarquee>

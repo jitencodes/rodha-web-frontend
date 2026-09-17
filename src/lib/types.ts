@@ -221,7 +221,11 @@ export interface BlogPost {
   metaDescription: string;
   metaKeywords?: string[];
   tags?: string[];
+  /** Mapped from API `isFeatured` */
   featured?: boolean;
+  categoryLabel?: string;
+  categorySlug?: string;
+  relatedPosts?: BlogPost[];
   /** @deprecated kept for legacy homepage compat */
   excerpt?: string;
   /** @deprecated kept for legacy homepage compat */

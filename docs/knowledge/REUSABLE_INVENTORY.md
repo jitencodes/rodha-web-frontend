@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-09-16 (remaining CMS page APIs)
+**Last updated:** 2026-09-17 (listing polish, form validation)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -20,7 +20,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
-| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`) |
+| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`) |
 | Input | `Input.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | CounsellingCtaButton | `CounsellingCtaButton.tsx` |
 | Modal | `Modal.tsx` |
@@ -32,7 +32,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` (optional `variant?: "dark" \| "light"`; light matches blog filter pills) |
 | Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
-| InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop; respects `prefers-reduced-motion`) |
+| InfiniteMarquee | `infiniteMarquee.tsx` (loops only when items overflow; otherwise left-aligned, no clones) |
 
 ## Layout — `src/components/layout/`
 
@@ -196,6 +196,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | api home | `api/modules/home/*` | Get Home service + homepage view-model mapper |
 | course-filters | `course-filters.ts` | `getVisibleCourseFilters` / `filterCoursesByType` — data-driven chips |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
+| api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |
+| form-validation | `form-validation.ts` | Shared name/phone/email/exam/message validators for lead + contact forms |
 | submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |

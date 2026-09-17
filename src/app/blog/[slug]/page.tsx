@@ -106,7 +106,7 @@ export default async function BlogPostPage({
     post.category ||
     "Blog";
 
-  const relatedPosts = [];
+  const relatedPosts = post.relatedPosts ?? [];
 
   const shareUrl =
     `${SITE_URL}/blog/${post.slug}`;

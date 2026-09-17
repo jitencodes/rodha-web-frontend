@@ -71,11 +71,13 @@ export default async function BlogPage({
   const isDefaultView =
     category === "all" && !query;
 
-  /*
-   * The API currently does not expose a featured flag.
-   * Do not incorrectly treat the first API result as featured.
-   */
-  const featured = undefined;
+  const featured = isDefaultView
+    ? pageItems.find((post) => post.featured)
+    : undefined;
+
+  const gridItems = featured
+    ? pageItems.filter((post) => post.id !== featured.id)
+    : pageItems;
 
   const queryForPagination: Record<string, string> = {};
 
@@ -132,6 +134,7 @@ export default async function BlogPage({
       )}
 
       {/* Latest posts grid */}
+      {(gridItems.length > 0 || !featured || totalPages > 1) && (
       <section
         className={cn(
           "home-section-spacing bg-section-white home-on-light",
@@ -139,6 +142,7 @@ export default async function BlogPage({
         )}
       >
         <Container>
+          {(gridItems.length > 0 || !featured) && (
           <div className="flex items-center justify-between mb-6">
             <div className="text-h3 font-semibold text-neutral-900">
               {isDefaultView ? (
@@ -160,10 +164,11 @@ export default async function BlogPage({
               </Link>
             )}
           </div>
+          )}
 
-          {pageItems.length > 0 ? (
+          {gridItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {pageItems.map((post) => (
+              {gridItems.map((post) => (
                 <BlogCard
                   key={post.id}
                   post={post}
@@ -171,7 +176,7 @@ export default async function BlogPage({
                 />
               ))}
             </div>
-          ) : (
+          ) : !featured ? (
             <div className="rounded-xl border border-section-beige bg-white px-6 py-12 text-center shadow-sm">
               <p className="text-h4 font-semibold text-neutral-900">
                 No posts found
@@ -192,7 +197,7 @@ export default async function BlogPage({
                 Clear filters
               </Link>
             </div>
-          )}
+          ) : null}
 
           {totalPages > 1 && (
             <Pagination
@@ -206,6 +211,7 @@ export default async function BlogPage({
           )}
         </Container>
       </section>
+      )}
 
       {/* CTA */}
       <RevealGroup>

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-09-16 (remaining CMS page APIs + contact POST)
+**Last updated:** 2026-09-17 (listing polish, form validation, category fallbacks)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Listing/form polish (2026-09-17):** `InfiniteMarquee` stays left-aligned without clones when items fit. Category results use a second marquee only at 15+ cards; testimonials stay a single horizontal row below 6 items. Blog listing shows `isFeatured` on the unfiltered view and detail pages render `relatedBlogs`. Faculty search/filter keeps the viewport on `#faculty-list`. Lead/contact/counselling forms validate required fields, 10-digit phones, and alphabetic names. Category courses/test series fall back to static catalog cards while CMS lists are empty.
 - **CMS page APIs (2026-09-16):** Category detail, faculty listing/detail, about, team, legal HTML pages, and contact POST wired SSR-first. Category faculty cards come from the same category-page payload as testimonials, success stories, and FAQs. Category and faculty course lists map `courseType` into the existing static slider chips. Empty sections hidden. Contact / counselling / lead-capture POST via `/api/leads` → CMS `api/website/contact` (API key server-side); newsletter stays SMTP.
 - Design system in `src/app/globals.css` (tokens, utilities, buttons, cards, inputs)
 - Layout shell: `PromotionalBanner`, `Header`, `Footer`, `MobileNav`, `Container`

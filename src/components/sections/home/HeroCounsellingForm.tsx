@@ -7,12 +7,28 @@ import { Button } from "@/components/ui/Button";
 import { CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/submit-lead";
+import {
+  isBlockedPhoneKey,
+  NAME_MAX_LENGTH,
+  PHONE_LENGTH,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+  validateExam,
+  validateName,
+  validatePhone,
+} from "@/lib/form-validation";
 
 interface HeroCounsellingFormProps {
   className?: string;
   defaultExam?: string;
   variant?: "inline" | "modal";
   showHeader?: boolean;
+}
+
+interface CounsellingFieldErrors {
+  name?: string;
+  phone?: string;
+  exam?: string;
 }
 
 export function HeroCounsellingForm({
@@ -27,6 +43,7 @@ export function HeroCounsellingForm({
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<CounsellingFieldErrors>({});
   const [phoneFocused, setPhoneFocused] = useState(false);
 
   const isInline = variant === "inline";
@@ -38,13 +55,25 @@ export function HeroCounsellingForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setStatus("idle");
     setErrorMessage("");
 
+    const nextErrors: CounsellingFieldErrors = {
+      name: validateName(name),
+      phone: validatePhone(phone),
+      exam: validateExam(exam),
+    };
+    setFieldErrors(nextErrors);
+
+    if (Object.values(nextErrors).some(Boolean)) {
+      return;
+    }
+
+    setLoading(true);
+
     const result = await submitLead({
       formType: "counselling",
-      name,
+      name: name.trim(),
       phone,
       exam,
     });
@@ -61,6 +90,7 @@ export function HeroCounsellingForm({
     setName("");
     setPhone("");
     setExam(defaultExam);
+    setFieldErrors({});
   };
 
   const form = (
@@ -74,50 +104,70 @@ export function HeroCounsellingForm({
         </>
       )}
 
-      <form onSubmit={handleSubmit} className={cn(shouldShowHeader ? "mt-4" : "", "space-y-3")}>
+      <form noValidate onSubmit={handleSubmit} className={cn(shouldShowHeader ? "mt-4" : "", "space-y-3")}>
         <Input
           placeholder="Full Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+          onChange={(e) => {
+            setName(sanitizeNameInput(e.target.value));
+            setFieldErrors((prev) => ({ ...prev, name: undefined }));
+          }}
+          maxLength={NAME_MAX_LENGTH}
+          autoComplete="name"
+          aria-required
+          error={fieldErrors.name}
         />
-        <div
-          className={cn(
-            "input-base flex items-center gap-2.5 px-3 transition-colors",
-            phoneFocused && "border-orange-500 shadow-[0_0_0_2px_rgba(249,115,22,0.15)]"
+        <div className="w-full">
+          <div
+            className={cn(
+              "input-base flex items-center gap-2.5 px-3 transition-colors",
+              phoneFocused && "border-orange-500 shadow-[0_0_0_2px_rgba(249,115,22,0.15)]",
+              fieldErrors.phone && "border-accent-red"
+            )}
+          >
+            <span className="text-body-sm text-text-muted shrink-0 select-none">+91</span>
+            <span className="text-border-default shrink-0" aria-hidden>
+              |
+            </span>
+            <input
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              placeholder="Phone Number"
+              value={phone}
+              maxLength={PHONE_LENGTH}
+              onChange={(e) => {
+                setPhone(sanitizePhoneInput(e.target.value));
+                setFieldErrors((prev) => ({ ...prev, phone: undefined }));
+              }}
+              onKeyDown={(e) => {
+                if (isBlockedPhoneKey(e.key)) e.preventDefault();
+              }}
+              onFocus={() => setPhoneFocused(true)}
+              onBlur={() => setPhoneFocused(false)}
+              className="flex-1 min-w-0 bg-transparent text-body text-text-primary placeholder:text-text-dimmed outline-none border-0 p-0"
+              aria-required
+              aria-invalid={Boolean(fieldErrors.phone)}
+            />
+          </div>
+          {fieldErrors.phone && (
+            <p className="mt-1 text-caption text-accent-red">{fieldErrors.phone}</p>
           )}
-        >
-          <span className="text-body-sm text-text-muted shrink-0 select-none">+91</span>
-          <span className="text-border-default shrink-0" aria-hidden>
-            |
-          </span>
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            onFocus={() => setPhoneFocused(true)}
-            onBlur={() => setPhoneFocused(false)}
-            className="flex-1 min-w-0 bg-transparent text-body text-text-primary placeholder:text-text-dimmed outline-none border-0 p-0"
-            required
-          />
         </div>
         <DropdownSelect
           aria-label="Select exam of interest"
           placeholder="Select Exam of Interest"
           value={exam}
-          onChange={setExam}
+          onChange={(value) => {
+            setExam(value);
+            setFieldErrors((prev) => ({ ...prev, exam: undefined }));
+          }}
           options={CATEGORIES.map((c) => ({ value: c.id, label: c.menuLabel }))}
+          error={fieldErrors.exam}
           className="w-full relative z-[100]"
           triggerClassName="h-[42px] w-full min-w-0 text-body-sm border-border-default bg-bg-surface hover:border-orange-500/60"
         />
-        <Button
-          type="submit"
-          loading={loading}
-          fullWidth
-          size="lg"
-          disabled={!exam}
-        >
+        <Button type="submit" loading={loading} fullWidth size="lg">
           Book Free Counselling Now
         </Button>
         {status === "success" && (

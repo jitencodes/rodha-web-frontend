@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useLayoutEffect, useTransition } from "react";
 import { Container } from "@/components/layout/Container";
 import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import { Pagination } from "@/components/ui/Pagination";
@@ -58,23 +58,31 @@ export function FacultyListingClient({
 
   function navigate(next: FacultyFiltersState, page = 1) {
     startTransition(() => {
-      router.push(buildFacultyHref(next, page));
+      router.push(buildFacultyHref(next, page), { scroll: false });
     });
   }
 
-  const paginationQuery: Record<string, string> = {};
-  if (filters.query.trim()) paginationQuery.q = filters.query.trim();
-  if (filters.category) paginationQuery.category = filters.category;
-  if (filters.subject) paginationQuery.subject = filters.subject;
-  if (filters.sort && filters.sort !== "experience-desc") {
-    paginationQuery.sort = filters.sort;
-  }
+  const hasActiveFilters =
+    Boolean(filters.query.trim()) ||
+    Boolean(filters.category) ||
+    Boolean(filters.subject) ||
+    currentPage > 1;
+
+  useLayoutEffect(() => {
+    if (!hasActiveFilters) return;
+    document
+      .getElementById("faculty-list")
+        ?.scrollIntoView({ behavior: "auto", block: "start" });
+  }, [hasActiveFilters]);
 
   return (
     <>
       <FeaturedFacultySection members={featured} />
 
-      <section className="home-section-spacing bg-section-white home-on-light">
+      <section
+        id="faculty-list"
+        className="home-section-spacing bg-section-white home-on-light scroll-mt-24"
+      >
         <Container>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-2">
             <SectionHeaderV2
@@ -146,8 +154,7 @@ export function FacultyListingClient({
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              basePath="/faculty"
-              query={paginationQuery}
+              onPageChange={(page) => navigate(filters, page)}
               variant="light"
               className="mt-8 md:mt-10"
             />

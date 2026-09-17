@@ -59,11 +59,11 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island |
 | Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template; empty API sections hidden |
 | Category hero | Complete — `CategoryHeroSectionV2` from CMS banner (Typewriter + video/image) |
-| Courses overview | Complete — `CourseCardV2` slider; `courseType` from API for static chips; bar hidden when only one type |
+| Courses overview | Complete — `CourseCardV2` slider; static catalog fallback while CMS `courses` is empty; `courseType` chips; bar hidden when only one type |
 | Star faculty | Complete — `FacultyCardV2` from category-page `faculty[]` (same response as testimonials/FAQs) |
-| Test series promo | Complete (`TestSeriesCardV2`; CAT uses four supplied package posters) |
-| Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT 35 + IPMAT 16 supplied portraits; section hidden on CLAT / SSC / Skill House) |
-| Testimonials | Complete (dark island; initials for missing photos; blurred-bg contain treatment for real photos; CAT has 27 curated testimonials) |
+| Test series promo | Complete — `TestSeriesCardV2`; static catalog fallback while CMS `testSeries` is empty |
+| Results & toppers | Complete — light stats + second marquee only at 15+ cards; short lists stay on one left-aligned row |
+| Testimonials | Complete — 3-column vertical layout at 6+ items (2 per column); otherwise a single horizontal row |
 | Stories / app promo / FAQ | Complete |
 | SEO intro copy | Partial (per-page metadata from JSON; longer SEO blocks TBD) |
 | Taxonomy / switcher | Complete — public paths `/category/{slug}`; `/cat|mba|gdpi|…` permanent redirect |
@@ -95,10 +95,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 |------|--------|-------|
 | About `/about` | Complete | CMS banner, journeys, impact stacks, galleries; empty sections hidden |
 | Team `/team` | Complete | CMS banner, featured faculty, Loved Team galleries |
-| Faculty listing `/faculty` | Complete | SSR list + URL filters (`categoryIds`/`subjectIds`); CMS banner + featured |
+| Faculty listing `/faculty` | Complete | SSR list + URL filters stay on `#faculty-list`; CMS banner + featured |
 | Faculty detail `/faculty/[slug]` | Complete | CMS profile; courses with `courseType` chips; empty sections hidden |
-| Blog listing `/blog` | Complete | 9 migrated articles; filters All/MBA/IPMAT/SSC; real OG thumbnails |
-| Blog detail `/blog/[slug]` | Complete | Full HTML bodies + tables; BlogPosting JSON-LD with author |
+| Blog listing `/blog` | Complete | Unfiltered listing shows `isFeatured` post; filters All/MBA/IPMAT/SSC |
+| Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
 | Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
 | FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
 | Privacy `/privacy-policy` | Complete | CMS HTML legal page + TOC from headings |
@@ -112,8 +112,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Form | UI | Validation | Backend |
 |------|----|------------|---------|
-| ContactForm | Complete | Complete | Complete — CMS contact via `/api/leads` + SMTP |
-| LeadCaptureForm | Complete | Complete | Complete — same Route Handler |
+| ContactForm | Complete | Complete — required fields, 10-digit phone, alphabetic name | Complete — CMS contact via `/api/leads` + SMTP |
+| LeadCaptureForm | Complete | Complete — same client rules as contact | Complete — same Route Handler |
 | NewsletterSignup | Complete | Complete | Complete — SMTP `/api/leads` |
 
 ---
