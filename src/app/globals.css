@@ -1073,6 +1073,7 @@ background-size: cover;
     background-color: rgba(249, 115, 22, 0.08);
     border-color: #F97316;
   }
+  
 
   /* Blog prose — trusted static HTML content */
   .blog-prose {
@@ -1086,6 +1087,7 @@ background-size: cover;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
     line-height: 1.3;
+    scroll-margin-top: 7rem;
   }
   .blog-prose h3 {
     font-size: 1.25rem;
@@ -1094,6 +1096,12 @@ background-size: cover;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     line-height: 1.35;
+    scroll-margin-top: 7rem;
+  }
+  .legal-prose .legal-heading {
+    font-weight: 600;
+    color: #171717;
+    scroll-margin-top: 7rem;
   }
   .blog-prose p {
     margin-bottom: 1rem;
@@ -1413,5 +1421,48 @@ background-size: cover;
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ─── Announcement bar 3D flip ─── */
+@keyframes announcement-flip-out {
+  from {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes announcement-flip-in {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.announcement-flip-face {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.announcement-flip-out {
+  animation: announcement-flip-out 350ms var(--ease-premium) forwards;
+}
+
+.announcement-flip-in {
+  animation: announcement-flip-in 350ms var(--ease-premium) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-flip-out,
+  .announcement-flip-in {
+    animation: none;
   }
 }

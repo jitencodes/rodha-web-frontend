@@ -1,6 +1,30 @@
-# API Standards (Phase 1)
+# API Standards
 
-Phase 1 is a **static marketing site**. There is no first-party course/test/payment API.
+Phase 1 marketing site now loads **selected CMS content** from the public website API. Auth, payments, and course/test players remain out of scope.
+
+Authoritative agent workflow: [`.cursor/skills/api-integration/SKILL.md`](../../.cursor/skills/api-integration/SKILL.md).
+
+---
+
+## Website CMS API (SSR-first)
+
+| Concern | Rule |
+|---------|------|
+| Client | `src/lib/api/client.ts` — `apiGet` / `apiGetOrNull` / `apiPost` |
+| Modules | `src/lib/api/modules/<name>/{types,service,mapper}.ts` |
+| Rendering | Fetch in Server Components; pass view-models as props |
+| Empty data | Hide the section / chrome — do not render blank UI |
+| Types | Copy Postman response shapes; do not invent fields |
+| Env | `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_SOURCE`, `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS`, optional `API_KEY` |
+| Collection | `docs/api-collection/Rodha website Api's.postman_collection (4).json` |
+
+**Integrated now:** announcements, active categories, Get Home, category page (faculty + testimonials + stories + FAQs + courses/`courseType`), faculty listing/detail, subjects, about, team, legal HTML pages, contact POST (via `/api/leads`).
+
+**Not yet:** FAQ listing API, blogs.
+
+Do **not** use TanStack Query for these marketing surfaces unless a feature needs client refetch.
+
+Shared mappers: `mapWebsiteBanner`, `mapCourses` (`courseType` for static section filters), `mapFacultyCards` (category faculty is in the same category-page payload as testimonials / successStories / FAQs).
 
 ---
 
@@ -23,10 +47,10 @@ Do not build SSO, payment gateways, or Graphy/ThinkExam API clients in Phase 1.
 
 | Form | Fields (summary) | Backend status |
 |------|------------------|----------------|
-| Contact / Inquiry | Name, Phone, Email, Category, Message | **Complete** — `POST /api/leads` → SMTP → `support@rodha.co.in` |
-| Lead capture (promo) | Name, Mobile, Email, Exam | **Complete** — same API (`formType: lead-capture`) |
-| Counselling (hero / modal) | Name, Phone, Exam | **Complete** — same API (`formType: counselling`) |
-| Newsletter | Email | **Complete** — same API (`formType: newsletter`) |
+| Contact / Inquiry | Name, Phone, Email, Category, Message | **Complete** — `POST /api/leads` → CMS `api/website/contact` + SMTP notify |
+| Lead capture (promo) | Name, Mobile, Email, Exam | **Complete** — same Route Handler (`formType: lead-capture`) |
+| Counselling (hero / modal) | Name, Phone, Exam | **Complete** — CMS contact with collected fields only (`websiteCategoryId` from exam) |
+| Newsletter | Email | **Complete** — SMTP only (`formType: newsletter`) |
 
 **Rules:**
 - Validate on the client per [PHASE1_PRD.md](../PHASE1_PRD.md) §4; server re-validates in `parseLeadPayload`
@@ -36,12 +60,12 @@ Do not build SSO, payment gateways, or Graphy/ThinkExam API clients in Phase 1.
 
 ---
 
-## Data Layer (Phase 1)
+## Data Layer
 
-- Static TypeScript modules in `src/data/`
-- Types in `src/lib/types.ts`
-- No ORM, no authenticated fetch to Rodha backend
-- Blog may later use CMS — until then, static content is correct
+- Dynamic surfaces: API modules under `src/lib/api/modules/`
+- Remaining static TypeScript modules in `src/data/` (category landings, faculty, blog, legal, etc.)
+- Types in `src/lib/types.ts` plus API DTOs/view-models colocated with modules
+- No ORM; public website GETs are unauthenticated (optional `API_KEY` only if backend requires it)
 
 ---
 
@@ -53,6 +77,7 @@ Required for Phase 1 (PRD §8):
 - Open Graph / Twitter tags
 - Canonical URLs
 - JSON-LD where applicable: Organization, Course, FAQ, BreadcrumbList, Person, BlogPosting
+- Homepage FAQ JSON-LD uses Get Home FAQs when present
 - `sitemap.xml` and `robots.txt` (pending implementation)
 - Semantic HTML, heading hierarchy, image alt text
 

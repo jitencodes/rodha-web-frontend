@@ -1,13 +1,12 @@
-import { LegalPageLayout } from "@/components/sections/LegalPageLayout";
-import { PRIVACY_POLICY } from "@/data/legal";
-import { buildPageMetadata } from "@/lib/seo";
+import {
+  LegalCmsPage,
+  legalPageMetadata,
+} from "@/components/sections/LegalCmsPage";
 
-export const metadata = buildPageMetadata({
-  title: `${PRIVACY_POLICY.title} — Rodha`,
-  description: PRIVACY_POLICY.description,
-  path: "/privacy-policy",
-});
+export async function generateMetadata() {
+  return legalPageMetadata("PRIVACY_POLICY");
+}
 
-export default function PrivacyPolicyPage() {
-  return <LegalPageLayout content={PRIVACY_POLICY} />;
+export default async function PrivacyPolicyPage() {
+  return <LegalCmsPage pageType="PRIVACY_POLICY" />;
 }

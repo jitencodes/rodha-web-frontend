@@ -3,12 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { Category } from "@/lib/types";
+import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 
 interface ExamCardV2Props {
-  category: Category;
+  category: WebsiteCategoryViewModel;
   className?: string;
-  onCounsellingSelect?: (category: Category) => void;
+  onCounsellingSelect?: (category: WebsiteCategoryViewModel) => void;
 }
 
 export function ExamCardV2({
@@ -44,18 +44,10 @@ export function ExamCardV2({
 
   const content = (
     <div className="flex flex-col h-full justify-between">
-
-      {/* Content */}
       <div className="relative z-10">
-        {/* Category / Logo Image */}
-        {category.icon && (
-          <h3
-          className="text-[26px] md:text-[28px] font-bold leading-none tracking-tight text-[#f06b23]"
-          // style={{ color: accent }}
-        >
+        <h3 className="text-[26px] md:text-[28px] font-bold leading-none tracking-tight text-[#f06b23]">
           {category.name}
         </h3>
-        )}
         <h4 className="mt-4 mb-2 text-[14px] text-white font-medius leading-[1.2] tracking-tight 2xl:text-[15px] 2xl:leading-[20px]">
           {category.subHeading}
         </h4>
@@ -69,7 +61,6 @@ export function ExamCardV2({
         </p>
       </div>
 
-      {/* Bottom Illustration */}
       {category.image && (
         <div className="h-[113px] w-full duration-300 group-hover:scale-[1.04] relative mt-6">
           <Image

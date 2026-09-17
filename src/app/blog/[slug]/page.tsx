@@ -2,99 +2,142 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Icon } from "@/components/ui/Icon";
 import { BlogCard } from "@/components/cards/BlogCard";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
-import { RevealGroup } from "@/components/ui/RevealGroup";
 import { BlogCategories } from "@/components/sections/blog/BlogCategories";
 import { ShareBlog } from "@/components/sections/blog/ShareBlog";
-import { breadcrumbJsonLd, blogPostingJsonLd } from "@/lib/structured-data";
+
+import {
+  breadcrumbJsonLd,
+  blogPostingJsonLd,
+} from "@/lib/structured-data";
+
 import { SITE_URL, EXTERNAL_URLS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
-import {
-  blogPosts,
-  getBlogBySlug,
-  getBlogCategory,
-  getRelatedPosts,
-} from "@/data/blog";
 
-// ---------------------------------------------------------------------------
-
+import { getBlogBySlug } from "@/lib/api/modules/blogs/service";
 
 interface BlogPostPageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+
+  const post = await getBlogBySlug(slug);
 
   if (!post) {
-    return { title: "Blog — Rodha" };
+    return {
+      title: "Blog — Rodha",
+    };
   }
+
+  const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
 
   return {
     title: post.metaTitle,
     description: post.metaDescription,
-    keywords: post.metaKeywords,
+
+    keywords:
+      post.metaKeywords.length > 0
+        ? post.metaKeywords
+        : undefined,
+
     alternates: {
-      canonical: `${SITE_URL}/blog/${post.slug}`,
+      canonical: canonicalUrl,
     },
+
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
-      url: `${SITE_URL}/blog/${post.slug}`,
+      url: canonicalUrl,
       type: "article",
+
+      publishedTime: post.publishedAt || undefined,
+
+      authors: post.author
+        ? [post.author]
+        : undefined,
+
       images: post.thumbnail
-        ? [{ url: `${SITE_URL}${post.thumbnail}` }]
+        ? [
+            {
+              url: post.thumbnail,
+              alt: post.title,
+            },
+          ]
         : undefined,
     },
+
     twitter: {
       card: "summary_large_image",
       title: post.metaTitle,
       description: post.metaDescription,
-      images: post.thumbnail ? [`${SITE_URL}${post.thumbnail}`] : undefined,
+
+      images: post.thumbnail
+        ? [post.thumbnail]
+        : undefined,
     },
   };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({
+  params,
+}: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+
+  const post = await getBlogBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const categoryMeta = getBlogCategory(post.category);
-  const categoryLabel = categoryMeta?.label ?? post.category;
-  const relatedPosts = getRelatedPosts(slug, 4);
-  const shareUrl = `${SITE_URL}/blog/${post.slug}`;
+  const categoryLabel =
+    post.categoryLabel ||
+    post.category ||
+    "Blog";
+
+  const relatedPosts = [];
+
+  const shareUrl =
+    `${SITE_URL}/blog/${post.slug}`;
 
   const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "Blogs", href: "/blog" },
-    { label: post.title },
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Blogs",
+      href: "/blog",
+    },
+    {
+      label: post.title,
+    },
   ];
 
   return (
     <>
-      {/* Structured data */}
+      {/* Breadcrumb structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd(breadcrumbItems)),
+          __html: JSON.stringify(
+            breadcrumbJsonLd(breadcrumbItems)
+          ),
         }}
       />
+
+      {/* Blog structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -110,7 +153,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           ),
         }}
       />
-
 
       {/* Body + sidebar */}
       <section className="home-section-spacing bg-section-white home-on-light">
@@ -128,7 +170,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                   <div className="max-w-3xl">
                     <Link
-                      href={`/blog?category=${post.category}`}
+                      href={
+                        post.categorySlug
+                          ? `/blog?category=${encodeURIComponent(
+                              post.categorySlug
+                            )}`
+                          : "/blog"
+                      }
                       className="inline-flex items-center rounded-full bg-orange-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-orange-600 hover:bg-orange-500/20 transition-colors w-fit"
                     >
                       {categoryLabel}
@@ -149,18 +197,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           size={15}
                           className="text-orange-500"
                         />
-                        {formatDate(post.publishedDate, {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+
+                        {formatDate(
+                          post.publishedDate,
+                          {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
                       </span>
+
                       <span className="inline-flex items-center gap-1.5">
                         <Icon
                           src="/assets/icons/clock.svg"
                           size={15}
                           className="text-orange-500"
                         />
+
                         {post.readTime}
                       </span>
                     </div>
@@ -179,9 +233,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 </Container>
               </section>
+
+              {/* Article content */}
               <div
                 className="blog-prose text-body"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{
+                  __html: post.content,
+                }}
               />
             </div>
 
@@ -189,10 +247,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <aside className="lg:col-span-4">
               <div className="lg:sticky lg:top-24 space-y-8">
                 <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
-                  <BlogCategories activeCategory={post.category} />
+                  <BlogCategories
+                    activeCategory={
+                      post.categorySlug ||
+                      post.category
+                    }
+                  />
                 </div>
+
                 <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
-                  <ShareBlog url={shareUrl} title={post.title} />
+                  <ShareBlog
+                    url={shareUrl}
+                    title={post.title}
+                  />
                 </div>
               </div>
             </aside>
@@ -210,9 +277,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               viewAllLabel="View All Blogs"
               align="left"
             />
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {relatedPosts.map((rp) => (
-                <BlogCard key={rp.id} post={rp} variant="article" />
+              {relatedPosts.map((relatedPost) => (
+                <BlogCard
+                  key={relatedPost.id}
+                  post={relatedPost}
+                  variant="article"
+                />
               ))}
             </div>
           </Container>
@@ -220,18 +292,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       )}
 
       {/* CTA */}
-        <CTABandV2Decorative
-          title="Ready to Take the Next Step?"
-          subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
-          backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award-to-boy.png"
-          primaryAction={{ label: "Explore Courses", href: "/category/cat" }}
-          secondaryAction={{
-            label: "Ask Rodha Buddy",
-            href: EXTERNAL_URLS.rodhaBuddy,
-          }}
-          className="reveal-child reveal-delay-1"
-        />
+      <CTABandV2Decorative
+        title="Ready to Take the Next Step?"
+        subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
+        backgroundImage="/assets/images/background/cta background image.JPG"
+        decorativeImage="/assets/images/about us/award-to-boy.png"
+        primaryAction={{
+          label: "Explore Courses",
+          href: "/category/cat",
+        }}
+        secondaryAction={{
+          label: "Ask Rodha Buddy",
+          href: EXTERNAL_URLS.rodhaBuddy,
+        }}
+        className="reveal-child reveal-delay-1"
+      />
     </>
   );
 }

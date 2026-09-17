@@ -1,0 +1,16 @@
+---
+description: SSR-first website API integration — always follow the api-integration skill
+alwaysApply: true
+---
+
+# API Integration
+
+Before adding or changing website API calls, services, mappers, or dynamic content wiring:
+
+1. Read and follow `.cursor/skills/api-integration/SKILL.md`
+2. Use `src/lib/api/` modules (`apiGet` / `apiGetOrNull` + module service/mapper)
+3. Fetch in Server Components; pass props to client islands
+4. Hide empty/unavailable sections — no blank UI, no invented API fields
+5. Update the skill when introducing a new shared pattern
+
+Do not add TanStack Query for marketing pages unless client refetch is required; prefer SSR fetch.

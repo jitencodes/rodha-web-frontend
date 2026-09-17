@@ -14,6 +14,18 @@ Format:
 
 ---
 
+### 2026-09-16 — Remaining CMS pages + contact POST
+- **Decision:** Continue the SSR-first module pattern for category detail, faculty listing/detail, about, team, legal HTML, and contact POST. Category faculty cards come from the same category-page response as testimonials, success stories, and FAQs. Category and faculty course lists map `courseType` so existing `CategoryCoursesSlider` chips keep working client-side. Contact/counselling/lead-capture POST through `/api/leads` so `API_KEY` stays server-side; newsletter remains SMTP-only.
+- **Rationale:** Product required remaining Postman endpoints without redesigning finalized UI, without inventing fields, and without TanStack Query.
+- **Alternatives considered:** Client refetch for faculty filters; a separate faculty-by-category endpoint; replacing SMTP entirely.
+- **Consequences:** Empty CMS arrays hide sections. Faculty result stats are omitted until the API provides them. Legal TOC is derived from HTML headings (numbered paragraphs as fallback).
+
+### 2026-09-15 — SSR-first website API layer (no TanStack Query)
+- **Decision:** Integrate public website CMS APIs via `src/lib/api/` (`apiGet` + module `types`/`service`/`mapper`). Fetch in Server Components (root layout + homepage); pass view-models as props to client islands. Hide empty sections. Do not install TanStack Query for marketing pages.
+- **Rationale:** Product requires dynamic content while keeping SEO-friendly SSR. `useQuery` would push hero/FAQ text behind hydration.
+- **Alternatives considered:** Client-only TanStack Query; server prefetch + HydrationBoundary; prop-only fetch with Query only on interactive chrome.
+- **Consequences:** Announcements, header categories, and Get Home (banner, categories, FAQs, student results) are API-driven. Static `CATEGORIES` remains for footer/forms. Agents follow `.cursor/skills/api-integration/SKILL.md`.
+
 ### 2026-08-21 — Canonical course detail at `/courses/[slug]`
 - **Decision:** Course detail lives at `/courses/[slug]` with a shared data-driven template. Catalog source of truth remains `category-landings.json`; `src/data/course-details.ts` resolves lookup, defaults, faculty, related courses, FAQs, and testimonials. Nested `/category/[category_slug]/courses/[slug]` permanently redirects to `/courses/[slug]`. Category landing `CourseCardV2` still prefers Graphy `externalLink`; related cards on course detail pass an internal `href` override.
 - **Rationale:** Product requested a flat `/courses/[slug]` URL while keeping one template for all verticals and avoiding duplication of the large catalog JSON.

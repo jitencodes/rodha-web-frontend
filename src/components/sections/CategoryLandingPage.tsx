@@ -18,9 +18,6 @@ import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
 import { StoriesModal } from "@/components/layout/VideoModal";
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
-import {
-  getCategoryFaculty,
-} from "@/data/category-landings";
 import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import type { CategoryLandingConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -42,12 +39,16 @@ function sectionSurface(theme: string | undefined) {
 }
 
 export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
-  const facultyMembers = getCategoryFaculty(category);
+  const facultyMembers = category.facultyMembers ?? [];
   const courses = category.courses;
   const results = category.results;
   const testimonials = category.testimonials;
-  const showResults =
-    (category.id === "cat" || category.id === "ipmat") && results.length > 0;
+  const showResults = results.length > 0;
+  const showCourses = courses.length > 0;
+  const showTestSeries = category.testSeries.length > 0;
+  const showFaculty = facultyMembers.length > 0;
+  const showTestimonials = testimonials.length > 0;
+  const showFaqs = category.faqs.length > 0;
   const resultsMidpoint = Math.ceil(results.length / 2);
   const resultsRow1 = results.slice(0, resultsMidpoint);
   const resultsRow2 = results.slice(resultsMidpoint);
@@ -60,12 +61,14 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           __html: JSON.stringify(categoryBreadcrumbJsonLd(category.slug)),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqPageJsonLd(category.faqs)),
-        }}
-      />
+      {showFaqs ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqPageJsonLd(category.faqs)),
+          }}
+        />
+      ) : null}
 
       <CategoryHeroSectionV2
         categoryName={category.name}
@@ -88,6 +91,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         quickStats={category.quickStats}
         primaryCta={category.hero.primaryCta}
         videoId={category.hero.videoId}
+        imageUrl={category.hero.imageUrl}
       />
 
       {showResults && <section
@@ -138,6 +142,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
+      {showCourses && (
       <section
         id="courses"
         data-home-zone="courses"
@@ -157,8 +162,9 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           <CategoryCoursesSlider courses={courses} />
         </Container>
       </section>
+      )}
 
-      {(category.id == "cat" || category.id == "ipmat") && <section
+      {showTestSeries && <section
         id="test-series"
         data-home-zone="test-series"
         className={cn(
@@ -202,7 +208,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
-      {category.id !== "skillhouse" && <section
+      {showFaculty && <section
         id="faculty"
         className={cn(
           "home-section-spacing relative",
@@ -242,6 +248,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
+      {showTestimonials && (
       <section id="testimonials" className="home-section-spacing relative">
         <Container>
           <SectionHeader
@@ -287,6 +294,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           </RevealGroup>
         </Container>
       </section>
+      )}
 
       <CTABandV2Decorative
         title={category.cta.title}
@@ -336,6 +344,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
 
       <HomeAppPromotionSection />
 
+      {showFaqs && (
       <section
         id="faqs"
         className={cn(
@@ -369,6 +378,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           </div>
         </Container>
       </section>
+      )}
 
       <StoriesModal />
     </>

@@ -199,6 +199,8 @@ export interface Faculty {
    * doc. Resolved against existing category-landing course cards only.
    */
   courseGraphyIds?: string[];
+  /** API-mapped courses for faculty detail; hide the section when empty */
+  courses?: Course[];
   cta?: {
     title: string;
     description: string;
@@ -384,6 +386,8 @@ export interface CategoryLandingHero {
   primaryCta: CategoryCta;
   /** YouTube video id for the category hero embed */
   videoId?: string;
+  /** Image banner when no YouTube video is present */
+  imageUrl?: string;
 }
 
 export interface CategoryLandingSectionCopy {
@@ -426,6 +430,8 @@ export interface CategoryLandingConfig extends Category {
   faqs: FaqItem[];
   courses: Course[];
   facultyIds: string[];
+  /** Mapped faculty from the category page API (same payload as testimonials/FAQs) */
+  facultyMembers?: Faculty[];
   results: TopperResult[];
   testimonials: Testimonial[];
   stories: StudentStory[];

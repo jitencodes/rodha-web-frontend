@@ -3,9 +3,7 @@
 import { SearchInput } from "@/components/ui/SearchInput";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import {
-  FACULTY_CATEGORY_OPTIONS,
   FACULTY_SORT_OPTIONS,
-  FACULTY_SUBJECTS,
   type FacultySortKey,
 } from "@/data/faculty";
 
@@ -16,16 +14,25 @@ export interface FacultyFiltersState {
   sort: FacultySortKey;
 }
 
+interface FilterOption {
+  value: string;
+  label: string;
+}
+
 interface FacultyFiltersBarProps {
   filters: FacultyFiltersState;
   onFiltersChange: (filters: FacultyFiltersState) => void;
   onReset: () => void;
+  categoryOptions: FilterOption[];
+  subjectOptions: FilterOption[];
 }
 
 export function FacultyFiltersBar({
   filters,
   onFiltersChange,
   onReset,
+  categoryOptions,
+  subjectOptions,
 }: FacultyFiltersBarProps) {
   function update(partial: Partial<FacultyFiltersState>) {
     onFiltersChange({ ...filters, ...partial });
@@ -46,16 +53,16 @@ export function FacultyFiltersBar({
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
         <DropdownSelect
-          options={[...FACULTY_CATEGORY_OPTIONS]}
+          options={[{ value: "", label: "All Categories" }, ...categoryOptions]}
           value={filters.category}
-          onChange={(category) => update({ category })}
+          onChange={(category) => update({ category, subject: "" })}
           placeholder="All Categories"
           aria-label="Filter by category"
           variant="light"
           className="w-full sm:w-auto sm:min-w-[160px]"
         />
         <DropdownSelect
-          options={[...FACULTY_SUBJECTS]}
+          options={[{ value: "", label: "All Subjects" }, ...subjectOptions]}
           value={filters.subject}
           onChange={(subject) => update({ subject })}
           placeholder="All Subjects"

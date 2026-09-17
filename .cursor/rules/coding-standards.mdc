@@ -11,7 +11,7 @@ alwaysApply: false
 - Merge classes with `cn()` from `@/lib/utils`
 - PascalCase component files; `use*` hooks; kebab-case routes
 - No `any`; reuse `CategoryId` and existing interfaces
-- Phase 1: no fake API layer — external redirects + static data only
+- Website CMS APIs: use `src/lib/api/` (SSR fetch + mappers). See `.cursor/skills/api-integration/SKILL.md`
 - Forms: validate per PRD; do not invent unverified backends
 
 See `docs/knowledge/CODING_STANDARDS.md` and `NAMING_CONVENTIONS.md`.

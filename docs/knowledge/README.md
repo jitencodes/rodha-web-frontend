@@ -12,7 +12,7 @@
 | New UI / screen | [UI_STANDARDS.md](UI_STANDARDS.md) → [DESIGN_TOKENS.md](DESIGN_TOKENS.md) → [`../style.md`](../style.md) → [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
 | New component | [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) → [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
 | Architecture / structure | [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) → [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) |
-| Forms / redirects / SEO | [API_STANDARDS.md](API_STANDARDS.md) |
+| Forms / redirects / SEO / CMS APIs | [API_STANDARDS.md](API_STANDARDS.md) + [`.cursor/skills/api-integration/SKILL.md`](../../.cursor/skills/api-integration/SKILL.md) |
 | Naming / TypeScript | [CODING_STANDARDS.md](CODING_STANDARDS.md) → [NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md) |
 | After meaningful work | Update [PROGRESS.md](PROGRESS.md), [FEATURE_CHECKLIST.md](FEATURE_CHECKLIST.md), [DECISIONS.md](DECISIONS.md), [REUSABLE_INVENTORY.md](REUSABLE_INVENTORY.md) |
 

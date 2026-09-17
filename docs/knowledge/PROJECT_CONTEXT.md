@@ -68,8 +68,8 @@ Authoritative boundary source: [SCOPE.md](SCOPE.md). Detailed Phase 1 specs: [PH
 
 ## Current Implementation Snapshot
 
-- **Complete:** Design system, layout shell, home page (all sections), reusable component library scaffold, static data modules
-- **Partial:** Category landing pages (hero only)
-- **Placeholder:** About, Team, Faculty, Blog, Contact, FAQ, Legal, Course detail, form backends
+- **Complete:** Design system, layout shell, home page (all sections), reusable component library scaffold, static data modules, SSR CMS API layer for announcements / categories / Get Home
+- **Partial:** Category landing pages (still JSON-driven); remaining Postman endpoints not wired
+- **Placeholder:** About, Team, Faculty, Blog, Contact, FAQ listing, Legal still use static modules until their APIs are integrated
 
 Live status: [PROGRESS.md](PROGRESS.md) · [FEATURE_CHECKLIST.md](FEATURE_CHECKLIST.md)

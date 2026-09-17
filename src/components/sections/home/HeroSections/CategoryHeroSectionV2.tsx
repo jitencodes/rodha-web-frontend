@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { CategoryQuickStat } from "@/lib/types";
@@ -21,6 +22,7 @@ interface CategoryHeroSectionV2Props {
   quickStats: CategoryQuickStat[];
   primaryCta: CategoryHeroCta;
   videoId?: string;
+  imageUrl?: string;
   className?: string;
 }
 
@@ -67,10 +69,14 @@ export function CategoryHeroSectionV2({
   quickStats,
   primaryCta,
   videoId,
+  imageUrl,
   className,
 }: CategoryHeroSectionV2Props) {
   const selectionStat = quickStats[0];
   const aspirantStat = quickStats[1];
+  const hasStats = quickStats.length > 0;
+  const hasVideo = Boolean(videoId);
+  const hasImage = Boolean(imageUrl) && !hasVideo;
 
   return (
     <HomeHeroShell className={cn(className)}>
@@ -103,10 +109,25 @@ export function CategoryHeroSectionV2({
 
           <div className="lg:col-span-6 flex flex-col items-center min-h-0">
             <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-              <HeroVideoEmbed videoId={videoId} />
+              {hasVideo && videoId ? (
+                <HeroVideoEmbed videoId={videoId} />
+              ) : null}
+              {hasImage && imageUrl ? (
+                <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
+                  <Image
+                    src={imageUrl}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    fetchPriority="high"
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
+        {hasStats ? (
         <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
           <div className="flex gap-4.5">
             <svg
@@ -190,6 +211,7 @@ export function CategoryHeroSectionV2({
             </div>
           </div>
         </div>
+        ) : null}
         <div className="h-8 sm:h-0" />
       </Container>
     </HomeHeroShell>

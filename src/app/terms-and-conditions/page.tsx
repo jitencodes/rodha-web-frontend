@@ -1,13 +1,12 @@
-import { LegalPageLayout } from "@/components/sections/LegalPageLayout";
-import { TERMS_AND_CONDITIONS } from "@/data/legal";
-import { buildPageMetadata } from "@/lib/seo";
+import {
+  LegalCmsPage,
+  legalPageMetadata,
+} from "@/components/sections/LegalCmsPage";
 
-export const metadata = buildPageMetadata({
-  title: `${TERMS_AND_CONDITIONS.title} — Rodha`,
-  description: TERMS_AND_CONDITIONS.description,
-  path: "/terms-and-conditions",
-});
+export async function generateMetadata() {
+  return legalPageMetadata("TERMS_OF_USE");
+}
 
-export default function TermsPage() {
-  return <LegalPageLayout content={TERMS_AND_CONDITIONS} />;
+export default async function TermsPage() {
+  return <LegalCmsPage pageType="TERMS_OF_USE" />;
 }

@@ -9,11 +9,18 @@ import { Carousel } from "@/components/ui/Carousel";
 import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { Button } from "@/components/ui/Button";
-
-import { resultBanners } from "@/data/results";
 import { SectionHeaderV2 } from "../SectionHeaderV2";
+import type { HomeResultBannerViewModel } from "@/lib/api/modules/home/types";
 
-export function HomeResultsSection() {
+interface HomeResultsSectionProps {
+  resultBanners?: HomeResultBannerViewModel[];
+}
+
+export function HomeResultsSection({
+  resultBanners = [],
+}: HomeResultsSectionProps) {
+  if (resultBanners.length === 0) return null;
+
   return (
     <section
       id="results"
@@ -21,9 +28,8 @@ export function HomeResultsSection() {
       className="home-section-spacing relative overflow-hidden bg-white"
     >
       <Container>
-      <SectionHeaderV2
+        <SectionHeaderV2
           title={"Results that speak for themselves."}
-          // subtitle="Comprehensive preparation for every competitive exam"
           className="mx-auto lg:!mb-10"
           align="center"
           badge="Real students. Real success."
@@ -34,15 +40,10 @@ export function HomeResultsSection() {
             itemsPerView={1}
             className="mt-12"
             itemClassName="w-full shrink-0 snap-center"
-            // autoPlay
             autoPlayInterval={3000}
-
           >
             {resultBanners.map((banner) => (
-              <div
-                key={banner.id}
-                className="w-full reveal-child"
-              >
+              <div key={banner.id} className="w-full reveal-child">
                 <div
                   className={`
                     relative
@@ -57,19 +58,13 @@ export function HomeResultsSection() {
                     bg-[#FFF3E8]
                   `}
                 >
-                  {/* decorative glow */}
-
                   <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute -top-32 right-0 h-[500px] w-[500px] rounded-full bg-orange-500/10 blur-[120px]" />
                     <div className="absolute bottom-0 left-0 h-[300px] w-[300px] rounded-full bg-orange-600/5 blur-[100px]" />
                   </div>
 
                   <div className="relative z-10 grid gap-10 lg:flex items-center h-full">
-
-                    {/* LEFT */}
-
                     <div className="max-w-[330px]">
-
                       <span
                         className={`
                           inline-flex
@@ -83,7 +78,7 @@ export function HomeResultsSection() {
                           uppercase
                           tracking-[0.18em]
                           text-white/90
-                          btn-outlined-premium premium-border-glow glow-accent-${"orange"}
+                          btn-outlined-premium premium-border-glow glow-accent-orange
                         `}
                       >
                         {banner.badge}
@@ -93,32 +88,35 @@ export function HomeResultsSection() {
                         <span className="text-3xl md:text-5xl">
                           {banner.title}
                         </span>
-                          
-                        <span className="text-3xl md:text-5xl">
-                          {banner.highlight}
-                        </span>
+                        {banner.highlight ? (
+                          <span className="text-3xl md:text-5xl">
+                            {banner.highlight}
+                          </span>
+                        ) : null}
                       </h3>
 
-                      <p className="mt-1 sm:mt-4 text-xl font-semibold text-black">
-                        {banner.subtitle}
-                      </p>
+                      {banner.subtitle ? (
+                        <p className="mt-1 sm:mt-4 text-xl font-semibold text-black">
+                          {banner.subtitle}
+                        </p>
+                      ) : null}
 
-                      <p className="mt-4 text-base leading-7 text-[#727272]">
-                        {banner.description}
-                      </p>
+                      {banner.description ? (
+                        <p className="mt-4 text-base leading-7 text-[#727272]">
+                          {banner.description}
+                        </p>
+                      ) : null}
 
-                      <Button
-                        className="mt-8"
-                      >
-                        <Link href={banner.href} className="flex items-center shrink-0">
+                      <Button className="mt-8">
+                        <Link
+                          href={banner.href}
+                          className="flex items-center shrink-0"
+                        >
                           {banner.cta}
-
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
                     </div>
-
-                    {/* RIGHT */}
 
                     <div
                       className="min-w-0 flex-1 overflow-hidden"

@@ -1,14 +1,32 @@
 import { Container } from "@/components/layout/Container";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { Icon } from "@/components/ui/Icon";
-import { ABOUT_JOURNEY } from "@/data/about";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import type { AboutJourneyViewModel } from "@/lib/api/modules/about/types";
 
 interface AboutJourneyTimelineProps {
   className?: string;
+  steps?: AboutJourneyViewModel[];
 }
 
-export function AboutJourneyTimeline({ className }: AboutJourneyTimelineProps) {
+function JourneyIcon({ src, size }: { src: string; size: number }) {
+  if (!src) return null;
+  if (src.startsWith("http") || /\.(png|jpe?g|webp|svg)$/i.test(src)) {
+    return (
+      <span className="relative block" style={{ width: size, height: size }}>
+        <Image src={src} alt="" fill className="object-contain" sizes={`${size}px`} />
+      </span>
+    );
+  }
+  return <Icon src={src} size={size} />;
+}
+
+export function AboutJourneyTimeline({
+  className,
+  steps = [],
+}: AboutJourneyTimelineProps) {
+  if (steps.length === 0) return null;
   return (
     <section
       className={cn(
@@ -25,10 +43,10 @@ export function AboutJourneyTimeline({ className }: AboutJourneyTimelineProps) {
         />
 
         <ol className="md:hidden relative space-y-6 before:content-[''] before:absolute before:left-[17px] before:top-[18px] before:bottom-[18px] before:w-[2px] before:bg-orange-500/25 before:rounded-full">
-          {ABOUT_JOURNEY.map((milestone) => (
+          {steps.map((milestone) => (
             <li key={milestone.id} className="relative flex gap-4 pl-0">
               <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-orange-500/30 bg-section-beige text-orange-500">
-                <Icon src={milestone.icon} size={16} />
+                <JourneyIcon src={milestone.icon} size={16} />
               </span>
               <div className="min-w-0 pt-0.5">
                 <p className="text-body-sm font-bold text-orange-500">{milestone.year}</p>
@@ -50,10 +68,10 @@ export function AboutJourneyTimeline({ className }: AboutJourneyTimelineProps) {
               aria-hidden
             />
             <ol className="grid grid-cols-5 gap-4">
-              {ABOUT_JOURNEY.map((milestone) => (
+              {steps.map((milestone) => (
                 <li key={milestone.id} className="relative flex flex-col items-center text-center">
                   <span className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-orange-500/35 bg-white text-orange-500 shadow-sm">
-                    <Icon src={milestone.icon} size={18} />
+                    <JourneyIcon src={milestone.icon} size={18} />
                   </span>
                   <p className="mt-4 text-body font-bold text-orange-500">{milestone.year}</p>
                   <h3 className="mt-1 text-body font-semibold text-neutral-900">

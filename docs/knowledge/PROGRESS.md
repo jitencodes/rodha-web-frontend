@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-08-21 (course detail `/courses/[slug]`)
+**Last updated:** 2026-09-16 (remaining CMS page APIs + contact POST)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,8 +9,10 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **CMS page APIs (2026-09-16):** Category detail, faculty listing/detail, about, team, legal HTML pages, and contact POST wired SSR-first. Category faculty cards come from the same category-page payload as testimonials, success stories, and FAQs. Category and faculty course lists map `courseType` into the existing static slider chips. Empty sections hidden. Contact / counselling / lead-capture POST via `/api/leads` → CMS `api/website/contact` (API key server-side); newsletter stays SMTP.
 - Design system in `src/app/globals.css` (tokens, utilities, buttons, cards, inputs)
 - Layout shell: `PromotionalBanner`, `Header`, `Footer`, `MobileNav`, `Container`
+- **Website CMS API layer (2026-09-15):** `src/lib/api/` client + announcements / categories / home modules; SSR fetch in root layout + `/`; announcement 3D flip; header/mobile categories from API; homepage hero/categories/FAQs/results from Get Home; empty sections hidden; agent skill `.cursor/skills/api-integration/`
 - **Header nav trim (2026-07-17):** `HEADER_NAV` limited to About Us, Faculty, Blogs, Contact Us (desktop + mobile)
 - Homepage (`src/app/page.tsx`) — all major sections wired
 - Project knowledge base + Cursor rules
@@ -130,7 +132,7 @@ Update this file after every meaningful implementation task.
 - [ ] Dedicated IPMAT / Law / Banking / Skill House hero images
 - [ ] Dedicated leadership / advisor headshots (interim: homepage `profiles/`)
 - [x] App promotion store URLs (Rodha App + Rodha Buddy Play/App Store links live)
-- [ ] Dynamic faculty result stats (Results Attributed section still static)
+- [ ] Dynamic faculty result stats (section hidden until the faculty API provides result stats)
 
 ### Screens
 - [x] About `/about`
@@ -146,7 +148,10 @@ Update this file after every meaningful implementation task.
 - [ ] Promo popup
 
 ### Integrations
-- [ ] Final external URLs, forms, sitemap
+- [x] Homepage + layout CMS APIs (announcements, categories, Get Home) — SSR-first
+- [x] Category page + faculty + about + team + legal + contact POST (SSR-first; category faculty in the same payload as testimonials/stories/FAQs; `courseType` on category/faculty courses)
+- [ ] FAQ listing API, blogs
+- [ ] Final external URLs, sitemap
 
 ---
 
