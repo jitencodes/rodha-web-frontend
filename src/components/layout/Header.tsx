@@ -65,12 +65,18 @@ export function Header({ className, categories = [] }: HeaderProps) {
   );
 
   const [examOpen, setExamOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
   const examRef = useRef<HTMLDivElement>(null);
+  const resourcesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (examRef.current && !examRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (examRef.current && !examRef.current.contains(target)) {
         setExamOpen(false);
+      }
+      if (resourcesRef.current && !resourcesRef.current.contains(target)) {
+        setResourcesOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -126,9 +132,15 @@ export function Header({ className, categories = [] }: HeaderProps) {
               return (
                 <div
                   key={item.label}
-                  className="relative group"
+                  ref={resourcesRef}
+                  className="relative"
+                  onMouseEnter={() => setResourcesOpen(true)}
+                  onMouseLeave={() => setResourcesOpen(false)}
                 >
                   <button
+                    type="button"
+                    aria-expanded={resourcesOpen}
+                    aria-haspopup="menu"
                     className={cn(
                       "relative flex items-center gap-1 px-2 xl:px-2.5 py-1.5 text-body-sm transition-colors whitespace-nowrap after:absolute after:left-2 after:right-2 after:bottom-0 after:h-0.5 after:origin-left after:rounded-full after:bg-orange-500 after:transition-transform after:duration-300",
                       isActive
@@ -139,7 +151,10 @@ export function Header({ className, categories = [] }: HeaderProps) {
                     {item.label}
 
                     <svg
-                      className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180"
+                      className={cn(
+                        "h-3.5 w-3.5 transition-transform duration-300",
+                        resourcesOpen && "rotate-180"
+                      )}
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -152,42 +167,41 @@ export function Header({ className, categories = [] }: HeaderProps) {
                   </button>
 
                   <div
-                    className="
-                      invisible
-                      absolute
-                      right-0
-                      top-full
-                      z-50
-                      mt-2
-                      w-72
-                      rounded-xl
-                      border
-                      border-white/10
-                      bg-[#121212]/95
-                      backdrop-blur-xl
-                      opacity-0
-                      shadow-2xl
-                      transition-all
-                      duration-200
-                      group-hover:visible
-                      group-hover:opacity-100
-                    "
+                    className={cn(
+                      "absolute right-0 top-full z-50 transition-all duration-200",
+                      resourcesOpen
+                        ? "visible opacity-100"
+                        : "invisible opacity-0"
+                    )}
                   >
-                    <div className="py-2">
-                      {children.map((child) => (
-                        <HeaderNavLink
-                          key={child.label}
-                          href={child.href}
-                          className={cn(
-                            "block px-4 py-2.5 text-body-sm transition-colors",
-                            !isExternalHref(child.href) && pathname === child.href
-                              ? "text-orange-400 bg-orange-500/5"
-                              : "text-text-secondary hover:bg-orange-500/10 hover:text-text-primary"
-                          )}
-                        >
-                          {child.label}
-                        </HeaderNavLink>
-                      ))}
+                    <div
+                      className="
+                        mt-2
+                        w-72
+                        rounded-xl
+                        border
+                        border-white/10
+                        bg-[#121212]/95
+                        backdrop-blur-xl
+                        shadow-2xl
+                      "
+                    >
+                      <div className="py-2">
+                        {children.map((child) => (
+                          <HeaderNavLink
+                            key={child.label}
+                            href={child.href}
+                            className={cn(
+                              "block px-4 py-2.5 text-body-sm transition-colors",
+                              !isExternalHref(child.href) && pathname === child.href
+                                ? "text-orange-400 bg-orange-500/5"
+                                : "text-text-secondary hover:bg-orange-500/10 hover:text-text-primary"
+                            )}
+                          >
+                            {child.label}
+                          </HeaderNavLink>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

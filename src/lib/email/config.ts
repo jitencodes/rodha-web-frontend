@@ -23,7 +23,7 @@ export const EMAIL_SITE_ORIGIN =
  * Absolute logo URL for HTML email clients.
  * Hard-rooted to the Rodha website so localhost / preview hosts cannot break the image.
  */
-export const EMAIL_LOGO_URL = `${EMAIL_SITE_ORIGIN.replace(/\/$/, "")}/assets/images/rodha-logo-orange.svg`;
+export const EMAIL_LOGO_URL = env("NEXT_PUBLIC_EMAIL_LOGO_URL") || "https://github.com/jitencodes/rodha-web-frontend/blob/main/public/assets/images/rodha-logo.webp?raw=true"
 
 export const EMAIL_TO =
   env("EMAIL_TO") || "support@rodha.co.in";

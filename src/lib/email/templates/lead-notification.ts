@@ -79,12 +79,7 @@ export function buildLeadNotificationEmail(payload: LeadPayload): {
           <tr>
             <td style="padding:28px 32px 20px;background:#FFFFFF;border-bottom:3px solid #F97316;">
               <a href="${EMAIL_SITE_ORIGIN}" style="text-decoration:none;">
-                <img
-                  src="${EMAIL_LOGO_URL}"
-                  alt="Rodha"
-                  width="140"
-                  style="display:block;width:140px;height:auto;border:0;outline:none;"
-                />
+                <img src="${EMAIL_LOGO_URL}" alt="Rodha" width="140" style="display:block;width:140px;height:auto;border:0;outline:none;" />
               </a>
               <p style="margin:16px 0 0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#F97316;font-weight:700;">
                 New website lead
