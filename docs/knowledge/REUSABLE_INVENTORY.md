@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-09-18 (category landing chrome fallback)
+**Last updated:** 2026-09-18 (category faculty/stories marquee center when short)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -32,7 +32,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` (optional `variant?: "dark" \| "light"`; light matches blog filter pills) |
 | Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
-| InfiniteMarquee | `infiniteMarquee.tsx` (loops only when items overflow; otherwise left-aligned, no clones) |
+| InfiniteMarquee | `infiniteMarquee.tsx` (loops only when items overflow; otherwise `align` start/center, default start, no clones) |
 
 ## Layout — `src/components/layout/`
 

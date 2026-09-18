@@ -28,6 +28,13 @@ interface InfiniteMarqueeProps {
   gap?: number;
 
   pauseOnHover?: boolean;
+
+  /**
+   * Alignment when items do not overflow the container.
+   * Looping marquees ignore this and stay edge-to-edge.
+   * Default: start (left)
+   */
+  align?: "start" | "center";
 }
 
 export function InfiniteMarquee({
@@ -38,6 +45,7 @@ export function InfiniteMarquee({
   direction = "left",
   pauseOnHover = true,
   gap = 20,
+  align = "start",
 }: InfiniteMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -152,10 +160,16 @@ export function InfiniteMarquee({
     };
   }, [speed, paused, direction, prefersReducedMotion, loop, resetOffset]);
 
+  const centerStatic = !loop && align === "center";
+
   return (
     <div
       ref={containerRef}
-      className={cn("overflow-hidden", className)}
+      className={cn(
+        "overflow-hidden",
+        centerStatic && "flex justify-center",
+        className
+      )}
       onMouseEnter={() => pauseOnHover && loop && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}
     >

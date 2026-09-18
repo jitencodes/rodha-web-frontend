@@ -241,7 +241,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           />
         </Container>
         <RevealGroup>
-          <InfiniteMarquee speed={35} direction="left" gap={20}>
+          <InfiniteMarquee speed={35} direction="left" gap={20} align="center">
             {facultyMembers.map((member, index) => (
               <div
                 key={member.id}
@@ -375,7 +375,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             />
           </Container>
           <RevealGroup>
-            <InfiniteMarquee speed={35}>
+            <InfiniteMarquee speed={35} align="center">
               {category.stories.map((story) => (
                 <YoutubeStoryCard
                   key={story.id}
