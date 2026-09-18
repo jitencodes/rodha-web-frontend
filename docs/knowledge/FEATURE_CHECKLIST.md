@@ -55,7 +55,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Section | Status |
 |---------|--------|
-| Dynamic JSON-driven landings | Complete — `GET api/website/categories/:slug` + JSON copy/themes; faculty/testimonials/stories/FAQs/courses from the same payload |
+| Dynamic JSON-driven landings | Complete — `GET api/website/categories/:slug` + JSON copy/themes; unknown CMS slugs use name-based chrome fallback (`category-landing-defaults.ts`); faculty/testimonials/stories/FAQs/courses from the same payload |
 | MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island |
 | Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template; empty API sections hidden |
 | Category hero | Complete — `CategoryHeroSectionV2` from CMS banner (Typewriter + video/image) |

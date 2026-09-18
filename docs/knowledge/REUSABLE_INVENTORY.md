@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-09-17 (listing polish, form validation)
+**Last updated:** 2026-09-18 (category landing chrome fallback)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -214,6 +214,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
 | category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
+| category-landing-defaults | `category-landing-defaults.ts` (`buildCategoryLandingFallback`, `withCategoryLandingDefaults` — name-based chrome for CMS categories without JSON) |
 | course-details | `course-details.ts` (course detail resolver: slug lookup, defaults, faculty, related, FAQs) |
 | courses | `courses.ts` (homepage / legacy) |
 | faculty | `faculty.ts` (real profiles only; `selectFacultyReviews`, `getCoursesForFaculty`, `withFacultyDetailDefaults`) |

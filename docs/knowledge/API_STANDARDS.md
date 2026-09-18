@@ -13,7 +13,7 @@ Authoritative agent workflow: [`.cursor/skills/api-integration/SKILL.md`](../../
 | Client | `src/lib/api/client.ts` — `apiGet` / `apiGetOrNull` / `apiPost` |
 | Modules | `src/lib/api/modules/<name>/{types,service,mapper}.ts` |
 | Rendering | Fetch in Server Components; pass view-models as props |
-| Empty data | Hide the section / chrome — do not render blank UI |
+| Empty data | Hide list/card sections — do not render blank UI. Category page chrome (titles, CTA, colors) uses a name-based fallback when JSON is missing |
 | Types | Copy Postman response shapes; do not invent fields |
 | Env | `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_SOURCE`, `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS`, optional `API_KEY` |
 | Collection | `docs/api-collection/Rodha website Api's.postman_collection (4).json` |

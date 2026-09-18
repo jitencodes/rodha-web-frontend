@@ -5,7 +5,7 @@
       <stop offset="100%" stop-color="#111111"/>
     </radialGradient>
   </defs>
-  <rect width="200" height="200" fill="url(#avatar-bg)" rx="100"/>
-  <circle cx="100" cy="78" r="30" fill="none" stroke="white" stroke-width="1.5" opacity="0.2"/>
+  <rect width="200" height="200" fill="#bd4200" rx="100"/>
+  <circle cx="100" cy="78" r="30" fill="#db7500" stroke="white" stroke-width="1.5" opacity="0.2"/>
   <path d="M55 170 c0-30 20-50 45-50 s45 20 45 50" fill="none" stroke="white" stroke-width="1.5" opacity="0.2"/>
 </svg>

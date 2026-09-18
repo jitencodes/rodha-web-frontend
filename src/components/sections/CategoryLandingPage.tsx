@@ -18,6 +18,7 @@ import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
 import { StoriesModal } from "@/components/layout/VideoModal";
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
+import { getCategoryHeroAccentWords } from "@/data/category-landing-defaults";
 import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import type { CategoryLandingConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -65,6 +66,8 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
   const resultsRow2 = results.slice(resultsMidpoint);
   const useTestimonialColumns =
     testimonials.length >= TESTIMONIAL_MULTI_COLUMN_THRESHOLD;
+  const accentWords = getCategoryHeroAccentWords(category.hero.accent);
+  const showResultStats = category.resultStats.length > 0;
 
   return (
     <>
@@ -88,16 +91,14 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         eyebrow={category.hero.eyebrow}
         headline={
           <>
-            {category.hero.title}{" "}
-            <span className="text-orange-500 glow-text-orange"> <br />
-              <Typewritter
-                words={
-                  Array.isArray(category.hero.accent)
-                    ? category.hero.accent
-                    : [category.hero.accent]
-                }
-              />
-            </span>
+            {category.hero.title}
+            {accentWords.length > 0 ? (
+              <span className="text-orange-500 glow-text-orange">
+                {" "}
+                <br />
+                <Typewritter words={accentWords} />
+              </span>
+            ) : null}
           </>
         }
         subtitle={category.hero.subtitle}
@@ -123,11 +124,13 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           />
           <RevealGroup>
             <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:gap-5">
-              <ResultsStatsPanel
-                stats={category.resultStats}
-                variant="light"
-                className="reveal-child reveal-delay-1"
-              />
+              {showResultStats ? (
+                <ResultsStatsPanel
+                  stats={category.resultStats}
+                  variant="light"
+                  className="reveal-child reveal-delay-1"
+                />
+              ) : null}
               <div className="min-w-0 flex-1 overflow-hidden">
                 <InfiniteMarquee speed={32} direction="right" gap={20}>
                   {resultsRow1.map((topper, index) => (

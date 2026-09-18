@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-09-18 — Name-based chrome fallback for new CMS categories
+- **Decision:** When `GET api/website/categories/:slug` returns a category with no `category-landings.json` entry, generate section titles, hero copy, CTA, colors, and mixed-theme surfaces from the API category name via `buildCategoryLandingFallback` / `withCategoryLandingDefaults`. Do not invent courses, faculty, results, testimonials, FAQs, or stories.
+- **Rationale:** Admins can create categories in CMS without a matching JSON landing. Empty section chrome looked broken; list data should stay empty-and-hidden until the API provides it.
+- **Alternatives considered:** Require a JSON entry per new category; copy CAT JSON wholesale onto unknown slugs; fabricate dummy catalog cards.
+- **Consequences:** Known verticals keep authored JSON copy. New slugs render the same CAT V2 layout with generic `{name}` titles. `withCategoryLandingDefaults` also fills any leftover empty chrome on JSON landings. Unknown slugs use the API slug as `CategoryId` instead of defaulting to `cat`.
+
 ### 2026-09-17 — Category marquee thresholds + static course fallback
 - **Decision:** `InfiniteMarquee` only clones/animates when the first set is wider than its container. Category results get a second row at 15+ cards. Testimonials use the 3-column vertical layout only at 6+ items (2 per column). Category courses and test series fall back to `category-landings.json` when the CMS arrays are empty.
 - **Rationale:** Short CMS lists were duplicating and scrolling inside leftover width. Course/test APIs are not populated yet, and the static catalog cards are already designed for those sections.

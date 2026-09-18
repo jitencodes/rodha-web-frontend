@@ -90,7 +90,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 |--------|----------|-----------|
 | announcements | `GET api/website/announcements` | Root layout → `PromotionalBanner` |
 | categories | `GET api/website/categories` | Root layout → `Header` / `MobileNav` |
-| categories | `GET api/website/categories/:slug` | `/category/[slug]` — banner, courses (`courseType`), faculty cards, testimonials, successStories, FAQs, results |
+| categories | `GET api/website/categories/:slug` | `/category/[slug]` — banner, courses (`courseType`), faculty cards, testimonials, successStories, FAQs, results; unknown slugs use name-based chrome from `category-landing-defaults.ts` (lists still hide when empty) |
 | home | `GET api/website/home` | `/` page → hero, categories, FAQs, results |
 | faculty | `GET api/website/faculty` | `/faculty` — banner, featured, paginated list (`page`, `limit`, `search`, `categoryIds`, `subjectIds`, `sortBy`) |
 | faculty | `GET api/website/faculty/:slug` | `/faculty/[slug]` — profile, testimonials, videos, courses (`courseType`) |
