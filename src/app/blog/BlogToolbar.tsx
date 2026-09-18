@@ -1,31 +1,47 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { useAtomValue } from "jotai";
+
 import { SearchInput } from "@/components/ui/SearchInput";
-import { BLOG_CATEGORIES } from "@/data/blog";
+import { cn } from "@/lib/utils";
+import { categoriesAtom } from "@/lib/store/categories";
 
 interface BlogToolbarProps {
   activeCategory: string;
   initialQuery: string;
 }
 
-export function BlogToolbar({ activeCategory, initialQuery }: BlogToolbarProps) {
+export function BlogToolbar({
+  activeCategory,
+  initialQuery,
+}: BlogToolbarProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [query, setQuery] = useState(initialQuery);
 
+  const categories = useAtomValue(categoriesAtom);
+
   function handleSearch(value: string) {
     setQuery(value);
+
     startTransition(() => {
       const params = new URLSearchParams();
+
       if (activeCategory && activeCategory !== "all") {
         params.set("category", activeCategory);
       }
-      if (value) params.set("q", value);
+
+      const trimmedValue = value.trim();
+
+      if (trimmedValue) {
+        params.set("q", trimmedValue);
+      }
+
       const qs = params.toString();
+
       router.push(qs ? `/blog?${qs}` : "/blog");
     });
   }
@@ -37,10 +53,28 @@ export function BlogToolbar({ activeCategory, initialQuery }: BlogToolbarProps) 
         role="tablist"
         aria-label="Blog categories"
       >
-        {BLOG_CATEGORIES.map((cat) => {
-          const isActive = activeCategory === cat.id;
-          const href =
-            cat.id === "all" ? "/blog" : `/blog?category=${cat.id}`;
+        {/* All category */}
+        <Link
+          href="/blog"
+          role="tab"
+          aria-selected={activeCategory === "all"}
+          className={cn(
+            "shrink-0 rounded-full px-4 py-2 text-body-sm font-medium transition-colors whitespace-nowrap border",
+            activeCategory === "all"
+              ? "bg-orange-500 text-white border-orange-500"
+              : "bg-white text-neutral-600 border-section-beige hover:text-neutral-900 hover:border-orange-300"
+          )}
+        >
+          All
+        </Link>
+
+        {/* API categories */}
+        {categories.map((cat) => {
+          const categorySlug = cat.slug;
+          const isActive = activeCategory === categorySlug;
+
+          const href = `/blog?category=${encodeURIComponent(categorySlug)}`;
+
           return (
             <Link
               key={cat.id}
@@ -54,7 +88,7 @@ export function BlogToolbar({ activeCategory, initialQuery }: BlogToolbarProps) 
                   : "bg-white text-neutral-600 border-section-beige hover:text-neutral-900 hover:border-orange-300"
               )}
             >
-              {cat.label}
+              {cat.name}
             </Link>
           );
         })}
@@ -64,7 +98,6 @@ export function BlogToolbar({ activeCategory, initialQuery }: BlogToolbarProps) 
         <SearchInput
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
-          onClear={() => handleSearch("")}
           placeholder="Search blogs..."
           aria-label="Search blog articles"
           variant="light"

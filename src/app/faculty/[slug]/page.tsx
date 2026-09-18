@@ -7,7 +7,7 @@ import { FacultyAchievementsPublicationsSection } from "@/components/sections/Fa
 import { FacultyReviewsVideosSection } from "@/components/sections/FacultyReviewsVideosSection";
 import { FacultyResultsSection } from "@/components/sections/FacultyResultsSection";
 import { StoriesModal } from "@/components/layout/VideoModal";
-import { faculty, getFacultyBySlug } from "@/data/faculty";
+import { getFacultyBySlug } from "@/lib/api/modules/faculty/service";
 import { EXTERNAL_URLS, getCategoryPath } from "@/lib/constants";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/structured-data";
 import { buildPageMetadata } from "@/lib/seo";
@@ -18,15 +18,11 @@ interface FacultyDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return faculty.map((member) => ({ slug: member.slug }));
-}
-
 export async function generateMetadata({
   params,
 }: FacultyDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const member = getFacultyBySlug(slug);
+  const member = await getFacultyBySlug(slug);
 
   if (!member) {
     return { title: "Faculty — Rodha" };
@@ -40,9 +36,11 @@ export async function generateMetadata({
   });
 }
 
-export default async function FacultyDetailPage({ params }: FacultyDetailPageProps) {
+export default async function FacultyDetailPage({
+  params,
+}: FacultyDetailPageProps) {
   const { slug } = await params;
-  const member = getFacultyBySlug(slug);
+  const member = await getFacultyBySlug(slug);
 
   if (!member) {
     notFound();

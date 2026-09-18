@@ -4,15 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const VIDEO_ID = "pDmAKpHcu18";
-
 interface HeroVideoEmbedProps {
   className?: string;
-  videoId?: string;
+  videoId: string;
   thumbnailUrl?: string;
 }
 
-export function HeroVideoEmbed({ className, videoId=VIDEO_ID, thumbnailUrl }: HeroVideoEmbedProps) {
+export function HeroVideoEmbed({ className, videoId, thumbnailUrl }: HeroVideoEmbedProps) {
   const [hasStarted, setHasStarted] = useState(false);
   const EMBED_URL = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=1&playsinline=1`;
   const THUMBNAIL = thumbnailUrl || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;

@@ -12,6 +12,7 @@ export interface LeadPayload {
   email?: string;
   phone?: string;
   exam?: string;
+  examId?: string;
   examYear?: string;
   message?: string;
   /** Optional client page path for ops context (not used for assets) */

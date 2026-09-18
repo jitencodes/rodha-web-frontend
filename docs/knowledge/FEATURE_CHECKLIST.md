@@ -10,10 +10,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Promotional banner + countdown | Complete | Orange-tinted gradient bar, refined countdown pills, v2 alignment |
-| Header — global nav state | Partial | Exam switcher; Test Series → mocks.rodha.co.in; Free Resources is category-aware |
-| Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]`; Free Resources uses that vertical's Graphy course |
-| Mobile nav | Partial | Exists; login removed; Free Resources / Test Series match desktop |
+| Promotional banner + countdown | Complete | API-driven announcements; 3D flip every 8s (env); countdown only when `endAt` present |
+| Header — global nav state | Partial | Exam switcher from Active Categories API; Test Series → mocks.rodha.co.in; Free Resources category-aware |
+| Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]` via API slugs; Free Resources uses that vertical's Graphy course |
+| Mobile nav | Partial | Same Active Categories API as desktop; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
 | Counselling modal (lead form) | Complete | Global provider + `HeroCounsellingForm` in `Modal`; site-wide CTABand counselling actions; homepage category cards pre-fill exam |
 | Footer | Partial | v2 5-column layout; Success Stories removed; Free Resources category-aware |
@@ -27,11 +27,12 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Section | Status |
 |---------|--------|
-| Hero (neural canvas + counselling form + YouTube + floating stats) | Complete (hero-only transparent canvas in `HomeHeroShell`) |
-| Choose Your Exam | Complete (`home-section-spacing-lg`; page gradient only — no canvas overlay) |
-| Impact timeline | Complete (3-line heading: students / decade of / momentum.) |
-| Results / toppers | Complete (CAT + IPMAT slides only; max 10 cards each; 2-line heading: speak / for themselves.) |
-| App promotion | Complete (Rodha Buddy + Rodha App copy; live Play Store / App Store URLs) |
+| Hero (neural canvas + counselling form + YouTube + floating stats) | Complete — Get Home `banner` (title, titleHighlights, description, stacks, video); empty stacks/highlights hidden |
+| Choose Your Exam | Complete — Get Home `categories`; section hidden when empty |
+| Impact timeline | Complete (3-line heading: students / decade of / momentum.) — currently commented out in assembler |
+| Results / toppers | Complete — Get Home `studentResultGroups`; section hidden when empty |
+| App promotion | Complete (Rodha Buddy + Rodha App copy; live Play Store / App Store URLs) — currently commented out |
+| FAQ | Complete — Get Home `faqs` + FAQ JSON-LD; section hidden when empty |
 | CTA Band | Complete (2-line block heading; buttons clear of bg artwork) |
 | Continuous page canvas background | Complete (7-phase warm-orange gradient; body-height anchors incl. footer) |
 
@@ -54,15 +55,15 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Section | Status |
 |---------|--------|
-| Dynamic JSON-driven landings | Complete — `category-landings.json` + `CategoryLandingPage` for all five verticals |
-| MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island; supplied 2025 student, faculty, hero, and mock-package content |
-| Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template (content differs via JSON) |
-| Category hero | Complete (`CategoryHeroSectionV2` on all five) |
-| Courses overview | Complete (`CourseCardV2` slider; data-driven courseType chips; filter bar hidden when only one type; CAT 38 / IPMAT 19 / CLAT 2 / SSC 14 / Skill House 2 live offerings) |
-| Star faculty | Complete (`FacultyCardV2`) |
-| Test series promo | Complete (`TestSeriesCardV2`; CAT uses four supplied package posters) |
-| Results & toppers | Complete (light stats + dual `TopperCardV2` marquees; CAT 35 + IPMAT 16 supplied portraits; section hidden on CLAT / SSC / Skill House) |
-| Testimonials | Complete (dark island; initials for missing photos; blurred-bg contain treatment for real photos; CAT has 27 curated testimonials) |
+| Dynamic JSON-driven landings | Complete — `GET api/website/categories/:slug` + JSON copy/themes; unknown CMS slugs use name-based chrome fallback (`category-landing-defaults.ts`); faculty/testimonials/stories/FAQs/courses from the same payload |
+| MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island |
+| Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template; empty API sections hidden |
+| Category hero | Complete — `CategoryHeroSectionV2` from CMS banner (Typewriter + video/image) |
+| Courses overview | Complete — `CourseCardV2` slider; static catalog fallback while CMS `courses` is empty; `courseType` chips; bar hidden when only one type |
+| Star faculty | Complete — `FacultyCardV2` from category-page `faculty[]` (same response as testimonials/FAQs) |
+| Test series promo | Complete — `TestSeriesCardV2`; static catalog fallback while CMS `testSeries` is empty |
+| Results & toppers | Complete — light stats + second marquee only at 15+ cards; short lists stay on one left-aligned row |
+| Testimonials | Complete — 3-column vertical layout at 6+ items (2 per column); otherwise a single horizontal row |
 | Stories / app promo / FAQ | Complete |
 | SEO intro copy | Partial (per-page metadata from JSON; longer SEO blocks TBD) |
 | Taxonomy / switcher | Complete — public paths `/category/{slug}`; `/cat|mba|gdpi|…` permanent redirect |
@@ -92,18 +93,18 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Page | Status | Notes |
 |------|--------|-------|
-| About `/about` | Complete | Theme-aligned: quote repositioned, larger icons, timeline bounded, 3D stats, shorter testimonial |
-| Team `/team` | Complete | Leadership + Loved Team carousel; Faculty Experts / Advisors commented out of render |
-| Faculty listing `/faculty` | Complete | Real faculty only; InfiniteMarquee featured; Category + Subject filters; 3 hero stats |
-| Faculty detail `/faculty/[slug]` | Complete | All 18 enriched from Faculty doc; courses via `courseGraphyIds` → existing cards only; StoriesModal videos; no publications |
-| Blog listing `/blog` | Complete | 9 migrated articles; filters All/MBA/IPMAT/SSC; real OG thumbnails |
-| Blog detail `/blog/[slug]` | Complete | Full HTML bodies + tables; BlogPosting JSON-LD with author |
-| Contact `/contact` | Complete | Theme-aligned: dark compact form, left breadcrumb, overlapping info strip, unified office card |
+| About `/about` | Complete | CMS banner, journeys, impact stacks, galleries; empty sections hidden |
+| Team `/team` | Complete | CMS banner, featured faculty, Loved Team galleries |
+| Faculty listing `/faculty` | Complete | SSR list + URL filters stay on `#faculty-list`; CMS banner + featured |
+| Faculty detail `/faculty/[slug]` | Complete | CMS profile; courses with `courseType` chips; empty sections hidden |
+| Blog listing `/blog` | Complete | Unfiltered listing shows `isFeatured` post; filters All/MBA/IPMAT/SSC |
+| Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
+| Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
 | FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
-| Privacy `/privacy-policy` | Complete | Migrated from rodha.co.in/privacypolicy (**legal review**) |
-| Terms `/terms-and-conditions` | Complete | Migrated from rodha.co.in/termsofuse |
-| Refund `/refund-policy` | Complete | Migrated from rodha.co.in/refundpolicy (effective 01 Apr 2026) |
-| Disclaimer `/disclaimer` | Complete | From Terms §11 + Rodha product facts (**legal review**) |
+| Privacy `/privacy-policy` | Complete | CMS HTML legal page + TOC from headings |
+| Terms `/terms-and-conditions` | Complete | CMS HTML legal page |
+| Refund `/refund-policy` | Complete | CMS HTML legal page |
+| Disclaimer `/disclaimer` | Complete | CMS HTML legal page |
 
 ---
 
@@ -111,8 +112,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 | Form | UI | Validation | Backend |
 |------|----|------------|---------|
-| ContactForm | Complete | Complete | Complete — SMTP `/api/leads` |
-| LeadCaptureForm | Complete | Complete | Complete — SMTP `/api/leads` |
+| ContactForm | Complete | Complete — required fields, 10-digit phone, alphabetic name | Complete — CMS contact via `/api/leads` + SMTP |
+| LeadCaptureForm | Complete | Complete — same client rules as contact | Complete — same Route Handler |
 | NewsletterSignup | Complete | Complete | Complete — SMTP `/api/leads` |
 
 ---

@@ -34,7 +34,7 @@ export function TestimonialCardV2({
         "group flex h-full min-h-[220px] flex-col p-5 md:p-6",
         isLight
           ? "w-[300px] min-w-[300px] max-w-[300px] shrink-0 rounded-[6px] border border-section-beige bg-white shadow-sm shadow-orange-500/5 hover-shine"
-          : "card-base card-premium-hover shine-sweep-hover w-[300px] sm:w-full",
+          : "card-base card-premium-hover shine-sweep-hover w-[300px] min-w-[300px] max-w-[300px] shrink-0",
         className
       )}
     >

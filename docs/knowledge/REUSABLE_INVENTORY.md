@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-08-21 (course detail `/courses/[slug]`)
+**Last updated:** 2026-09-18 (category landing chrome fallback)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -20,7 +20,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
-| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`) |
+| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`) |
 | Input | `Input.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | CounsellingCtaButton | `CounsellingCtaButton.tsx` |
 | Modal | `Modal.tsx` |
@@ -32,7 +32,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Skeleton | `Skeleton.tsx` |
 | Tag | `Tag.tsx` (optional `variant?: "dark" \| "light"`; light matches blog filter pills) |
 | Textarea | `Textarea.tsx` (optional `variant?: "dark" \| "light"` and `prefixIcon`; default dark) |
-| InfiniteMarquee | `infiniteMarquee.tsx` (continuous one-direction loop; respects `prefers-reduced-motion`) |
+| InfiniteMarquee | `infiniteMarquee.tsx` (loops only when items overflow; otherwise left-aligned, no clones) |
 
 ## Layout — `src/components/layout/`
 
@@ -44,14 +44,14 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | FloatingCounsellingCta | `FloatingCounsellingCta.tsx` |
 | Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources by vertical) |
 | MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
-| PromotionalBanner | `PromotionalBanner.tsx` |
+| PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
 
 ## Sections — `src/components/sections/`
 
 | Component | File |
 |-----------|------|
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
-| CategoryLandingPage | `CategoryLandingPage.tsx` (JSON-driven CAT V2 stack for `/category/[slug]`) |
+| CategoryLandingPage | `CategoryLandingPage.tsx` (CMS category page + JSON copy/themes; faculty from same payload as testimonials/FAQs) |
 | CategoryCoursesSlider | `CategoryCoursesSlider.tsx` (client island: data-driven courseType chips — hide bar when ≤1 type; existing course carousel) |
 | LovedTeamSection | `LovedTeamSection.tsx` (full-width image-only carousel; autoplay 3s; team CTA assets) |
 | CounsellingCtaAction | `CounsellingCtaAction.tsx` |
@@ -89,7 +89,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ImpactStatsRow | `home/ImpactStatsRow.tsx` |
 | HomeResultsSection | `home/HomeResultsSection.tsx` |
 | HomeAppPromotionSection | `home/HomeAppPromotionSection.tsx` (Rodha Buddy + Rodha App cards; live Play Store / App Store URLs; optional eyebrow/title/description/className/mockupSrc) |
-| LegalPageLayout | `LegalPageLayout.tsx` |
+| LegalPageLayout | `LegalPageLayout.tsx` (CMS HTML + heading TOC) |
+| LegalCmsPage | `LegalCmsPage.tsx` (shared legal route fetch + metadata) |
+| LegalCmsPage | `LegalCmsPage.tsx` (shared legal route fetch + metadata) |
 | ResultsStatsPanel | `ResultsStatsPanel.tsx` (optional `variant?: "dark" \| "light"`; default dark for other categories) |
 | SectionHeader | `SectionHeader.tsx` |
 | SectionHeaderV2 | `SectionHeaderV2.tsx` (locked homepage / MBA light headers) |
@@ -180,8 +182,22 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File | Role |
 |--------|------|------|
 | constants | `constants.ts` | Site config, categories, trust metrics, value props |
+| api client | `api/client.ts`, `api/env.ts`, `api/types.ts`, `api/query.ts` | Shared `apiGet` / `apiGetOrNull` / `apiPost`, env, envelope |
+| api announcements | `api/modules/announcements/*` | Active announcements service + mapper |
+| api banners | `api/modules/banners/*` | Shared `mapWebsiteBanner` (video over image) |
+| api categories | `api/modules/categories/*` | Active categories + category page mapper (faculty/testimonials/stories/FAQs/courses) |
+| api courses | `api/modules/courses/*` | Shared `mapCourses` + `mapCourseType` for static slider chips |
+| api faculty | `api/modules/faculty/*` | Listing + by-slug; reuses course/faculty card mappers |
+| api subjects | `api/modules/subjects/*` | Faculty listing subject filter |
+| api about | `api/modules/about/*` | About banner, journeys, stacks, galleries |
+| api team | `api/modules/team/*` | Team banner, featured faculty, galleries |
+| api legal | `api/modules/legal/*` | Legal HTML + TOC from headings |
+| api contact | `api/modules/contact/*` | CMS contact POST (proxied by `/api/leads`) |
+| api home | `api/modules/home/*` | Get Home service + homepage view-model mapper |
 | course-filters | `course-filters.ts` | `getVisibleCourseFilters` / `filterCoursesByType` — data-driven chips |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
+| api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |
+| form-validation | `form-validation.ts` | Shared name/phone/email/exam/message validators for lead + contact forms |
 | submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |
@@ -198,6 +214,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
 | category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
+| category-landing-defaults | `category-landing-defaults.ts` (`buildCategoryLandingFallback`, `withCategoryLandingDefaults` — name-based chrome for CMS categories without JSON) |
 | course-details | `course-details.ts` (course detail resolver: slug lookup, defaults, faculty, related, FAQs) |
 | courses | `courses.ts` (homepage / legacy) |
 | faculty | `faculty.ts` (real profiles only; `selectFacultyReviews`, `getCoursesForFaculty`, `withFacultyDetailDefaults`) |

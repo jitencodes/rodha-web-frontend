@@ -1,14 +1,19 @@
 import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Icon } from "@/components/ui/Icon";
-import { ABOUT_IMPACT_STATS } from "@/data/about";
 import { cn } from "@/lib/utils";
+import type { AboutStatViewModel } from "@/lib/api/modules/about/types";
 
 interface AboutImpactSectionProps {
   className?: string;
+  stats?: AboutStatViewModel[];
 }
 
-export function AboutImpactSection({ className }: AboutImpactSectionProps) {
+export function AboutImpactSection({
+  className,
+  stats = [],
+}: AboutImpactSectionProps) {
+  if (stats.length === 0) return null;
   return (
     <section
       className={cn(
@@ -22,9 +27,9 @@ export function AboutImpactSection({ className }: AboutImpactSectionProps) {
       />
       <Container className="relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
-          {ABOUT_IMPACT_STATS.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.id} className="flex flex-col items-center text-center">
-              {stat.icon.endsWith(".png") ? (
+              {stat.icon.startsWith("http") || stat.icon.endsWith(".png") || stat.icon.endsWith(".jpg") || stat.icon.endsWith(".jpeg") || stat.icon.endsWith(".webp") ? (
                 <span className="relative h-12 w-12">
                   <Image src={stat.icon} alt="" fill className="object-contain" sizes="48px" />
                 </span>

@@ -1,13 +1,12 @@
-import { LegalPageLayout } from "@/components/sections/LegalPageLayout";
-import { REFUND_POLICY } from "@/data/legal";
-import { buildPageMetadata } from "@/lib/seo";
+import {
+  LegalCmsPage,
+  legalPageMetadata,
+} from "@/components/sections/LegalCmsPage";
 
-export const metadata = buildPageMetadata({
-  title: `${REFUND_POLICY.title} — Rodha`,
-  description: REFUND_POLICY.description,
-  path: "/refund-policy",
-});
+export async function generateMetadata() {
+  return legalPageMetadata("REFUND_POLICY");
+}
 
-export default function RefundPolicyPage() {
-  return <LegalPageLayout content={REFUND_POLICY} />;
+export default async function RefundPolicyPage() {
+  return <LegalCmsPage pageType="REFUND_POLICY" />;
 }

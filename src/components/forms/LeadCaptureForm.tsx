@@ -8,6 +8,18 @@ import { CATEGORIES } from "@/lib/constants";
 import type { CategoryId, LeadFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/submit-lead";
+import {
+  isBlockedPhoneKey,
+  NAME_MAX_LENGTH,
+  PHONE_LENGTH,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+  validateEmail,
+  validateExam,
+  validateExamYear,
+  validateName,
+  validatePhone,
+} from "@/lib/form-validation";
 
 interface LeadCaptureFormProps {
   title?: string;
@@ -19,6 +31,14 @@ interface LeadCaptureFormProps {
   showExamYear?: boolean;
   /** Hide the default heading (e.g. when Modal already shows a title) */
   hideTitle?: boolean;
+}
+
+interface LeadFieldErrors {
+  exam?: string;
+  name?: string;
+  phone?: string;
+  email?: string;
+  examYear?: string;
 }
 
 function examYearOptions() {
@@ -49,6 +69,7 @@ export function LeadCaptureForm({
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<LeadFieldErrors>({});
   const [phoneFocused, setPhoneFocused] = useState(false);
   const isLight = variant === "light";
   const yearOptions = useMemo(() => examYearOptions(), []);
@@ -59,15 +80,29 @@ export function LeadCaptureForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setStatus("idle");
     setErrorMessage("");
 
+    const nextErrors: LeadFieldErrors = {
+      exam: validateExam(formData.exam),
+      name: validateName(formData.name),
+      phone: validatePhone(formData.phone),
+      email: validateEmail(formData.email),
+      examYear: validateExamYear(examYear, showExamYear),
+    };
+    setFieldErrors(nextErrors);
+
+    if (Object.values(nextErrors).some(Boolean)) {
+      return;
+    }
+
+    setLoading(true);
+
     const result = await submitLead({
       formType: "lead-capture",
-      name: formData.name,
+      name: formData.name.trim(),
       phone: formData.phone,
-      email: formData.email,
+      email: formData.email.trim(),
       exam: formData.exam || undefined,
       examYear: showExamYear ? examYear || undefined : undefined,
     });
@@ -83,6 +118,7 @@ export function LeadCaptureForm({
     setStatus("success");
     setFormData({ name: "", phone: "", email: "", exam: defaultExam });
     setExamYear("");
+    setFieldErrors({});
   };
 
   const titleClass = isLight ? "text-neutral-900" : "text-text-primary";
@@ -108,6 +144,7 @@ export function LeadCaptureForm({
       )}
 
       <form
+        noValidate
         onSubmit={handleSubmit}
         className={cn(
           "space-y-3",
@@ -118,17 +155,19 @@ export function LeadCaptureForm({
           aria-label="Select exam"
           placeholder="Select Exam"
           value={formData.exam}
-          onChange={(exam) =>
+          onChange={(exam) => {
             setFormData((prev) => ({
               ...prev,
               exam: exam as LeadFormData["exam"],
-            }))
-          }
+            }));
+            setFieldErrors((prev) => ({ ...prev, exam: undefined }));
+          }}
           options={CATEGORIES.map((c) => ({
             value: c.id,
             label: c.menuLabel,
           }))}
           variant={isLight ? "light" : "dark"}
+          error={fieldErrors.exam}
           className="w-full relative z-40"
           triggerClassName={cn(
             "h-[42px] w-full min-w-0 text-body-sm",
@@ -140,73 +179,104 @@ export function LeadCaptureForm({
           variant={isLight ? "light" : "dark"}
           placeholder="Your Name"
           value={formData.name}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, name: e.target.value }))
-          }
-          required
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              name: sanitizeNameInput(e.target.value),
+            }));
+            setFieldErrors((prev) => ({ ...prev, name: undefined }));
+          }}
+          maxLength={NAME_MAX_LENGTH}
+          autoComplete="name"
+          aria-required
+          error={fieldErrors.name}
         />
-        <div
-          className={cn(
-            "input-base flex items-center gap-2.5 px-3 transition-colors",
-            isLight &&
-              "border-section-beige bg-white text-neutral-800 placeholder:text-neutral-400",
-            phoneFocused &&
-              "border-orange-500 shadow-[0_0_0_2px_rgba(249,115,22,0.15)]"
+        <div className="w-full">
+          <div
+            className={cn(
+              "input-base flex items-center gap-2.5 px-3 transition-colors",
+              isLight &&
+                "border-section-beige bg-white text-neutral-800 placeholder:text-neutral-400",
+              phoneFocused &&
+                "border-orange-500 shadow-[0_0_0_2px_rgba(249,115,22,0.15)]",
+              fieldErrors.phone && "border-accent-red"
+            )}
+          >
+            <span
+              className={cn(
+                "text-body-sm shrink-0 select-none",
+                isLight ? "text-neutral-500" : "text-text-muted"
+              )}
+            >
+              +91
+            </span>
+            <span
+              className={cn(
+                "shrink-0",
+                isLight ? "text-neutral-300" : "text-border-default"
+              )}
+              aria-hidden
+            >
+              |
+            </span>
+            <input
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              placeholder="Mobile Number"
+              value={formData.phone}
+              maxLength={PHONE_LENGTH}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  phone: sanitizePhoneInput(e.target.value),
+                }));
+                setFieldErrors((prev) => ({ ...prev, phone: undefined }));
+              }}
+              onKeyDown={(e) => {
+                if (isBlockedPhoneKey(e.key)) e.preventDefault();
+              }}
+              onFocus={() => setPhoneFocused(true)}
+              onBlur={() => setPhoneFocused(false)}
+              className={cn(
+                "flex-1 min-w-0 bg-transparent text-body outline-none border-0 p-0",
+                isLight
+                  ? "text-neutral-900 placeholder:text-neutral-400"
+                  : "text-text-primary placeholder:text-text-dimmed"
+              )}
+              aria-required
+              aria-invalid={Boolean(fieldErrors.phone)}
+            />
+          </div>
+          {fieldErrors.phone && (
+            <p className="mt-1 text-caption text-accent-red">{fieldErrors.phone}</p>
           )}
-        >
-          <span
-            className={cn(
-              "text-body-sm shrink-0 select-none",
-              isLight ? "text-neutral-500" : "text-text-muted"
-            )}
-          >
-            +91
-          </span>
-          <span
-            className={cn(
-              "shrink-0",
-              isLight ? "text-neutral-300" : "text-border-default"
-            )}
-            aria-hidden
-          >
-            |
-          </span>
-          <input
-            type="tel"
-            placeholder="Mobile Number"
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, phone: e.target.value }))
-            }
-            onFocus={() => setPhoneFocused(true)}
-            onBlur={() => setPhoneFocused(false)}
-            className={cn(
-              "flex-1 min-w-0 bg-transparent text-body outline-none border-0 p-0",
-              isLight
-                ? "text-neutral-900 placeholder:text-neutral-400"
-                : "text-text-primary placeholder:text-text-dimmed"
-            )}
-            required
-          />
         </div>
         <Input
           variant={isLight ? "light" : "dark"}
           type="email"
           placeholder="Email Address"
           value={formData.email}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, email: e.target.value }))
-          }
-          required
+          onChange={(e) => {
+            setFormData((prev) => ({ ...prev, email: e.target.value }));
+            setFieldErrors((prev) => ({ ...prev, email: undefined }));
+          }}
+          autoComplete="email"
+          aria-required
+          error={fieldErrors.email}
         />
         {showExamYear && (
           <DropdownSelect
             aria-label="Select exam year"
             placeholder="Exam Year"
             value={examYear}
-            onChange={setExamYear}
+            onChange={(value) => {
+              setExamYear(value);
+              setFieldErrors((prev) => ({ ...prev, examYear: undefined }));
+            }}
             options={yearOptions}
             variant={isLight ? "light" : "dark"}
+            error={fieldErrors.examYear}
             className="w-full relative z-30"
             triggerClassName={cn(
               "h-[42px] w-full min-w-0 text-body-sm",
@@ -215,13 +285,7 @@ export function LeadCaptureForm({
             )}
           />
         )}
-        <Button
-          type="submit"
-          loading={loading}
-          fullWidth
-          size="lg"
-          disabled={!formData.exam || (showExamYear && !examYear)}
-        >
+        <Button type="submit" loading={loading} fullWidth size="lg">
           {ctaLabel}
         </Button>
         {status === "success" && (

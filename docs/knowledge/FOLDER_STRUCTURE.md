@@ -31,7 +31,8 @@ rodha-web-frontend/
 │   │   └── forms/          # Contact, LeadCapture, Newsletter
 │   ├── data/               # Static mock data modules (+ course-details resolver)
 │   ├── hooks/              # Shared React hooks
-│   └── lib/                # constants, types, utils (cn)
+│   └── lib/                # constants, types, utils (cn), api/
+│       └── api/            # Website CMS client + module services/mappers
 ├── AGENTS.md
 ├── CLAUDE.md               # @AGENTS.md
 └── README.md
@@ -51,6 +52,8 @@ rodha-web-frontend/
 | Form | `src/components/forms/` |
 | Hook | `src/hooks/` |
 | Shared type | `src/lib/types.ts` (or colocated if truly local) |
+| Website API module | `src/lib/api/modules/<name>/{types,service,mapper}.ts` |
+| API client / env | `src/lib/api/client.ts`, `src/lib/api/env.ts` |
 | Constant / nav / site config | `src/lib/constants.ts` or `src/data/` |
 | Static content lists | `src/data/<domain>.ts` |
 | SVG icon / brand asset | `public/assets/icons/` or `images/` |

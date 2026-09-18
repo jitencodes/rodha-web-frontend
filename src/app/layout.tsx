@@ -9,6 +9,10 @@ import { CounsellingModalProvider } from "@/components/layout/CounsellingModalPr
 import { organizationJsonLd, webSiteJsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/constants";
 import { DEFAULT_OG_IMAGE } from "@/lib/seo";
+import { getAnnouncementIntervalMs } from "@/lib/api/env";
+import { getActiveAnnouncements } from "@/lib/api/modules/announcements/service";
+import { getActiveCategories } from "@/lib/api/modules/categories/service";
+import { WebsiteStoreProvider } from "@/components/providers/WebsiteStoreProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,29 +69,51 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [announcements, categories] = await Promise.all([
+    getActiveAnnouncements(),
+    getActiveCategories(),
+  ]);
+
   return (
-    <html lang="en" className={`${inter.variable} ${montserrat.variable} dark`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${montserrat.variable} dark`}
+    >
       <body className="min-h-screen bg-bg-primary text-text-primary font-sans antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd()),
+          }}
         />
+
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd()) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(webSiteJsonLd()),
+          }}
         />
-        <PromotionalBanner />
-        <Header />
-        <CounsellingModalProvider>
-          <main>{children}</main>
-          <FloatingCounsellingCta />
-        </CounsellingModalProvider>
-        <Footer />
+
+
+        <WebsiteStoreProvider categories={categories}>
+          <PromotionalBanner
+            announcements={announcements}
+            intervalMs={getAnnouncementIntervalMs()}
+          />
+          <Header categories={categories} />
+
+          <CounsellingModalProvider>
+            <main>{children}</main>
+            <FloatingCounsellingCta />
+          </CounsellingModalProvider>
+
+          <Footer />
+        </WebsiteStoreProvider>
       </body>
     </html>
   );

@@ -6,16 +6,23 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn, isExternalHref } from "@/lib/utils";
 import {
-  CATEGORIES,
   EXTERNAL_URLS,
   HEADER_NAV,
-  getCategoryIdFromPathname,
   getFreeResourceUrl,
 } from "@/lib/constants";
+import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
+import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { MobileNav } from "./MobileNav";
 
 interface HeaderProps {
   className?: string;
+  categories?: WebsiteCategoryViewModel[];
+}
+
+function getCategorySlugFromPathname(pathname: string): string | null {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments[0] === "category" && segments[1]) return segments[1];
+  return segments[0] ?? null;
 }
 
 function HeaderNavLink({
@@ -47,11 +54,15 @@ function HeaderNavLink({
   );
 }
 
-export function Header({ className }: HeaderProps) {
+export function Header({ className, categories = [] }: HeaderProps) {
   const pathname = usePathname();
-  const activeCategoryId = getCategoryIdFromPathname(pathname);
-  const activeCategory = CATEGORIES.find((cat) => cat.id === activeCategoryId);
-  const freeResourceHref = getFreeResourceUrl(activeCategoryId);
+  const activeSlug = getCategorySlugFromPathname(pathname);
+  const activeCategory =
+    categories.find((cat) => cat.slug === activeSlug) ?? null;
+  const freeResourceHref = getFreeResourceUrl(
+    activeCategory?.counsellingExamId ??
+      (activeSlug ? slugToCategoryId(activeSlug) : null)
+  );
 
   const [examOpen, setExamOpen] = useState(false);
   const examRef = useRef<HTMLDivElement>(null);
@@ -67,6 +78,7 @@ export function Header({ className }: HeaderProps) {
   }, []);
 
   const examTriggerLabel = activeCategory?.name ?? "Choose your exam";
+  const showExamSwitcher = categories.length > 0;
 
   return (
     <header
@@ -200,73 +212,84 @@ export function Header({ className }: HeaderProps) {
         </nav>
 
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-          <div onMouseLeave={() => setExamOpen(false)} ref={examRef} className="relative hidden lg:flex justify-end w-46">
-            <button
-              onMouseEnter={() => setExamOpen(!examOpen)}
-              aria-expanded={examOpen}
-              aria-haspopup="listbox"
-              className={cn(
-                "flex items-center justify-between gap-1.5 h-9.5 px-4 rounded-sm whitespace-nowrap text-[#F06B23] shadow-lg",
-                "bg-transparent",
-                "border border-[#F06B23] hover:bg-orange-600/10 hover:border-[#f06b23ca]",
-                "focus:outline-none focus:ring-2 focus:ring-[#f06b23ef]",
-                examTriggerLabel === "Choose your exam" ? "w-46" : "w-35"
-              )}
+          {showExamSwitcher ? (
+            <div
+              onMouseLeave={() => setExamOpen(false)}
+              ref={examRef}
+              className="relative hidden lg:flex justify-end w-46"
             >
-              {examTriggerLabel}
-              <svg
+              <button
+                onMouseEnter={() => setExamOpen(!examOpen)}
+                aria-expanded={examOpen}
+                aria-haspopup="listbox"
                 className={cn(
-                  "h-3.5 w-3.5 text-white/50 transition-transform shrink-0",
-                  examOpen && "rotate-180"
+                  "flex items-center justify-between gap-1.5 h-9.5 px-4 rounded-sm whitespace-nowrap text-[#F06B23] shadow-lg",
+                  "bg-transparent",
+                  "border border-[#F06B23] hover:bg-orange-600/10 hover:border-[#f06b23ca]",
+                  "focus:outline-none focus:ring-2 focus:ring-[#f06b23ef]",
+                  examTriggerLabel === "Choose your exam" ? "w-46" : "w-35"
                 )}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {examOpen && (
-              <div role="listbox" className="absolute top-full right-0">
-                <div
+                {examTriggerLabel}
+                <svg
                   className={cn(
-                    "mt-3 w-72 z-50 overflow-hidden rounded-xl",
-                    "border border-orange-500/20",
-                    "bg-[#121212]/95 backdrop-blur-sm",
-                    // "shadow-[0_20px_60px_rgba(0,0,0,0.45)]",
-                    "animate-[dropdown-in_180ms_var(--ease-premium)]"
+                    "h-3.5 w-3.5 text-white/50 transition-transform shrink-0",
+                    examOpen && "rotate-180"
                   )}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
                 >
-                  {CATEGORIES.map((cat) => {
-                    const isActive = cat.id === activeCategoryId;
-                    return (
-                      <Link
-                        key={cat.id}
-                        href={`/category/${cat.slug}`}
-                        role="option"
-                        aria-selected={isActive}
-                        onClick={() => setExamOpen(false)}
-                        className={cn(
-                          "block px-3 py-3 transition-all duration-200",
-                          "border-b border-white/5 last:border-b-0",
-                          "hover:bg-orange-500/10 hover:text-orange-300",
-                          "focus:bg-orange-500/10",
-                          isActive &&
-                            "bg-orange-500/15 text-orange-300 border-l-2 border-orange-500"
-                        )}
-                      >
-                        <span className="block text-white">{cat.menuLabel}</span>
-                        <span className="mt-1 block text-caption text-white/60">
-                          {cat.description}
-                        </span>
-                      </Link>
-                    );
-                  })}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {examOpen && (
+                <div role="listbox" className="absolute top-full right-0">
+                  <div
+                    className={cn(
+                      "mt-3 w-72 z-50 overflow-hidden rounded-xl",
+                      "border border-orange-500/20",
+                      "bg-[#121212]/95 backdrop-blur-sm",
+                      "animate-[dropdown-in_180ms_var(--ease-premium)]"
+                    )}
+                  >
+                    {categories.map((cat) => {
+                      const isActive = cat.slug === activeSlug;
+                      return (
+                        <Link
+                          key={cat.id}
+                          href={`/category/${cat.slug}`}
+                          role="option"
+                          aria-selected={isActive}
+                          onClick={() => setExamOpen(false)}
+                          className={cn(
+                            "block px-3 py-3 transition-all duration-200",
+                            "border-b border-white/5 last:border-b-0",
+                            "hover:bg-orange-500/10 hover:text-orange-300",
+                            "focus:bg-orange-500/10",
+                            isActive &&
+                              "bg-orange-500/15 text-orange-300 border-l-2 border-orange-500"
+                          )}
+                        >
+                          <span className="block text-white">
+                            {cat.menuLabel}
+                          </span>
+                          <span className="mt-1 block text-caption text-white/60">
+                            {cat.description}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ) : null}
           <a
             href={EXTERNAL_URLS.rodhaBuddy}
             target="_blank"
@@ -278,7 +301,10 @@ export function Header({ className }: HeaderProps) {
           </a>
         </div>
 
-        <MobileNav activeCategoryId={activeCategoryId} />
+        <MobileNav
+          activeCategorySlug={activeSlug}
+          categories={categories}
+        />
       </div>
     </header>
   );

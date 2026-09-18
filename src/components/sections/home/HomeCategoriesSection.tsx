@@ -1,23 +1,37 @@
 "use client";
 
 import { Container } from "@/components/layout/Container";
-import { ExamCard } from "@/components/cards/ExamCard";
 import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { CATEGORIES } from "@/lib/constants";
 import { useCounsellingModal } from "@/hooks/useCounsellingModal";
 import { SectionHeaderV2 } from "../SectionHeaderV2";
 import { ExamCardV2 } from "@/components/cards/ExamCardV2";
+import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 
-export function HomeCategoriesSection() {
+interface HomeCategoriesSectionProps {
+  categories?: WebsiteCategoryViewModel[];
+}
+
+export function HomeCategoriesSection({
+  categories = [],
+}: HomeCategoriesSectionProps) {
   const { openCounsellingModal } = useCounsellingModal();
 
+  if (categories.length === 0) return null;
+
   return (
-    <section data-home-zone="categories" className="home-section-spacing home-section-spacing-lg relative bg-[#FFF3E8]">
+    <section
+      data-home-zone="categories"
+      className="home-section-spacing home-section-spacing-lg relative bg-[#FFF3E8]"
+    >
       <Container>
         <SectionHeaderV2
-          title={<p>Choose Your Goal, <br />Start Your Journey</p>}
-          // subtitle="Comprehensive preparation for every competitive exam"
+          title={
+            <p>
+              Choose Your Goal, <br />
+              Start Your Journey
+            </p>
+          }
           className="max-w-[472px] mx-auto lg:!mb-10"
           align="center"
           badge="EXPLORE YOUR OPPORTUNITIES"
@@ -26,7 +40,7 @@ export function HomeCategoriesSection() {
         <RevealGroup>
           <div className="xl:hidden">
             <Carousel itemClassName="gap-4">
-              {CATEGORIES.map((cat, index) => (
+              {categories.map((cat, index) => (
                 <div
                   key={cat.id}
                   className={`snap-start shrink-0 w-[200px] sm:w-[270px] reveal-child reveal-delay-${(index % 4) + 1}`}
@@ -34,9 +48,15 @@ export function HomeCategoriesSection() {
                   <ExamCardV2
                     category={cat}
                     className="h-full"
-                    onCounsellingSelect={(category) =>
-                      openCounsellingModal({ defaultExam: category.id })
-                    }
+                    onCounsellingSelect={(category) => {
+                      if (category.counsellingExamId) {
+                        openCounsellingModal({
+                          defaultExam: category.counsellingExamId,
+                        });
+                      } else {
+                        openCounsellingModal();
+                      }
+                    }}
                   />
                 </div>
               ))}
@@ -44,14 +64,20 @@ export function HomeCategoriesSection() {
           </div>
 
           <div className="hidden xl:grid grid-cols-5 gap-4">
-            {CATEGORIES.map((cat, index) => (
+            {categories.map((cat, index) => (
               <ExamCardV2
                 key={cat.id}
                 category={cat}
                 className={`reveal-child reveal-delay-${(index % 4) + 1}`}
-                onCounsellingSelect={(category) =>
-                  openCounsellingModal({ defaultExam: category.id })
-                }
+                onCounsellingSelect={(category) => {
+                  if (category.counsellingExamId) {
+                    openCounsellingModal({
+                      defaultExam: category.counsellingExamId,
+                    });
+                  } else {
+                    openCounsellingModal();
+                  }
+                }}
               />
             ))}
           </div>

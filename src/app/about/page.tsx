@@ -8,6 +8,7 @@ import { AboutFinalCtaSection } from "@/components/sections/about/AboutFinalCtaS
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { LovedTeamSection } from "@/components/sections/LovedTeamSection";
 import { buildPageMetadata } from "@/lib/seo";
+import { getAbout } from "@/lib/api/modules/about/service";
 
 export const metadata = buildPageMetadata({
   title: "About Us — Rodha",
@@ -21,20 +22,28 @@ const aboutBreadcrumb = [
   { label: "About Us", href: "/about" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const about = await getAbout();
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(aboutBreadcrumb)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd(aboutBreadcrumb)),
+        }}
       />
-      <AboutHeroSection />
+      <AboutHeroSection banner={about?.banner ?? null} />
       <AboutMissionVisionSection />
-      <AboutJourneyTimeline />
+      <AboutJourneyTimeline steps={about?.journeys ?? []} />
       <AboutDifferentiatorsSection />
-      <AboutImpactSection />
-      {/* <AboutMentorsSection /> */}
-      <LovedTeamSection />
+      <AboutImpactSection stats={about?.stats ?? []} />
+      <LovedTeamSection
+        images={(about?.galleries ?? []).map((item) => ({
+          src: item.src,
+          alt: item.alt,
+        }))}
+      />
       <AboutFounderSection />
       <AboutFinalCtaSection />
     </>

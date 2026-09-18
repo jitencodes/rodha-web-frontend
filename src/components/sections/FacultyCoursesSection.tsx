@@ -2,8 +2,7 @@ import { cn } from "@/lib/utils";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CategoryCoursesSlider } from "@/components/sections/CategoryCoursesSlider";
-import { getFacultyHonorific, getCoursesForFaculty } from "@/data/faculty";
-import { getCategoryPath } from "@/lib/constants";
+import { getFacultyHonorific } from "@/data/faculty";
 import type { Faculty } from "@/lib/types";
 
 interface FacultyCoursesSectionProps {
@@ -15,11 +14,10 @@ export function FacultyCoursesSection({
   faculty,
   className,
 }: FacultyCoursesSectionProps) {
-  const courses = getCoursesForFaculty(faculty);
+  const courses = faculty.courses ?? [];
   if (!courses.length) return null;
 
   const honorific = getFacultyHonorific(faculty);
-  const viewAllHref = getCategoryPath(faculty.categories[0] ?? "cat");
 
   return (
     <section

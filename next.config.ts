@@ -1,14 +1,28 @@
 import type { NextConfig } from "next";
 
 const categorySlugs = ["cat", "ipmat", "clat", "ssc", "skillhouse"] as const;
+const buildTime = new Date().toISOString();
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_TIME: buildTime,
+  },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "img.youtube.com",
         pathname: "/vi/**",
+      },
+      {
+        protocol: "https",
+        hostname: "rodha-dev-bucket.s3.ap-south-1.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.s3.*.amazonaws.com",
+        pathname: "/**",
       },
     ],
   },

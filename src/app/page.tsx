@@ -1,7 +1,7 @@
 import { HomePage } from "@/components/pages/HomePage";
-import { FAQ_DATA_HOME } from "@/data/faq";
 import { faqPageJsonLd } from "@/lib/structured-data";
 import { buildPageMetadata } from "@/lib/seo";
+import { getHome } from "@/lib/api/modules/home/service";
 
 export const metadata = buildPageMetadata({
   title: "Rodha — Expert Mentorship. Proven Strategies. Real Results.",
@@ -10,16 +10,21 @@ export const metadata = buildPageMetadata({
   path: "/",
 });
 
-export default function Page() {
+export default async function Page() {
+  const home = await getHome();
+  const faqs = home?.faqs ?? [];
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqPageJsonLd(FAQ_DATA_HOME)),
-        }}
-      />
-      <HomePage />
+      {faqs.length > 0 ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqPageJsonLd(faqs)),
+          }}
+        />
+      ) : null}
+      <HomePage home={home} />
     </>
   );
 }

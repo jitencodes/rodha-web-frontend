@@ -1,38 +1,20 @@
 import Image from "next/image";
 import { Container } from "@/components/layout/Container";
-import { Carousel } from "@/components/ui/Carousel";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { cn } from "@/lib/utils";
 import { InfiniteCarousel } from "../ui/InfiniteCaraousel";
 
-const LOVED_TEAM_IMAGES = [
-  {
-    src: "/assets/images/meet the team/team/team-1.jpg",
-    alt: "Rodha team culture",
-  },
-  {
-    src: "/assets/images/meet the team/team/team-2.jpg",
-    alt: "Rodha team culture",
-  },
-  {
-    src: "/assets/images/meet the team/team/team-3.png",
-    alt: "Rodha team culture",
-  },
-  {
-    src: "/assets/images/meet the team/team/team-4.png",
-    alt: "Rodha team culture",
-  },
-  {
-    src: "/assets/images/meet the team/team/team-5.jpg",
-    alt: "Rodha team culture",
-  },
-] as const;
-
 interface LovedTeamSectionProps {
   className?: string;
+  images?: Array<{ src: string; alt: string }>;
 }
 
-export function LovedTeamSection({ className }: LovedTeamSectionProps) {
+export function LovedTeamSection({
+  className,
+  images,
+}: LovedTeamSectionProps) {
+  const items = images ?? [];
+  if (items.length === 0) return null;
   return (
     <section
       className={cn(
@@ -56,7 +38,7 @@ export function LovedTeamSection({ className }: LovedTeamSectionProps) {
           infinite
           className="w-full"
         >
-          {LOVED_TEAM_IMAGES.map((image) => (
+          {items.map((image) => (
             <div
               key={image.src}
               className="relative h-full w-auto shrink-0 overflow-hidden rounded-xl bg-section-beige"

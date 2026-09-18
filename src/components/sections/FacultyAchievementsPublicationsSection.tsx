@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { FacultyAchievementCard } from "@/components/cards/FacultyAchievementCard";
 import type { Faculty } from "@/lib/types";
-import { getCoursesForFaculty } from "@/data/faculty";
 
 interface FacultyAchievementsPublicationsSectionProps {
   faculty: Faculty;
@@ -15,7 +14,7 @@ export function FacultyAchievementsPublicationsSection({
 }: FacultyAchievementsPublicationsSectionProps) {
   const achievements = faculty.achievements;
   const hasAchievements = Boolean(achievements?.length);
-  const courses = getCoursesForFaculty(faculty);
+  const courses = faculty.courses ?? [];
   if (!hasAchievements) return null;
   const hasCourses = courses.length > 0;
   return (

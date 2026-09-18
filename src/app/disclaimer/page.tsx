@@ -1,13 +1,12 @@
-import { LegalPageLayout } from "@/components/sections/LegalPageLayout";
-import { DISCLAIMER } from "@/data/legal";
-import { buildPageMetadata } from "@/lib/seo";
+import {
+  LegalCmsPage,
+  legalPageMetadata,
+} from "@/components/sections/LegalCmsPage";
 
-export const metadata = buildPageMetadata({
-  title: `${DISCLAIMER.title} — Rodha`,
-  description: DISCLAIMER.description,
-  path: "/disclaimer",
-});
+export async function generateMetadata() {
+  return legalPageMetadata("DISCLAIMER");
+}
 
-export default function DisclaimerPage() {
-  return <LegalPageLayout content={DISCLAIMER} />;
+export default async function DisclaimerPage() {
+  return <LegalCmsPage pageType="DISCLAIMER" />;
 }

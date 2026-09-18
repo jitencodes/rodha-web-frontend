@@ -4,16 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { cn, isExternalHref } from "@/lib/utils";
 import {
-  CATEGORIES,
   EXTERNAL_URLS,
   HEADER_NAV,
   getFreeResourceUrl,
 } from "@/lib/constants";
-import type { CategoryId } from "@/lib/types";
+import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
+import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { usePathname } from "next/navigation";
 
 interface MobileNavProps {
-  activeCategoryId?: CategoryId | null;
+  activeCategorySlug?: string | null;
+  categories?: WebsiteCategoryViewModel[];
 }
 
 function MobileNavLink({
@@ -48,13 +49,20 @@ function MobileNavLink({
   );
 }
 
-export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
+export function MobileNav({
+  activeCategorySlug = null,
+  categories = [],
+}: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const activeCategory = CATEGORIES.find((cat) => cat.id === activeCategoryId);
-  const freeResourceHref = getFreeResourceUrl(activeCategoryId);
-  
+  const activeCategory =
+    categories.find((cat) => cat.slug === activeCategorySlug) ?? null;
+  const freeResourceHref = getFreeResourceUrl(
+    activeCategory?.counsellingExamId ??
+      (activeCategorySlug ? slugToCategoryId(activeCategorySlug) : null)
+  );
+
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  
+
   const pathname = usePathname();
   return (
     <div className="lg:hidden">
@@ -81,30 +89,37 @@ export function MobileNav({ activeCategoryId = null }: MobileNavProps) {
         )}
       >
         <nav className="flex flex-col p-6 space-y-1 bg-black">
-          <p className="text-caption text-text-dimmed uppercase tracking-wider mb-2">
-            {activeCategory ? `Exam: ${activeCategory.name}` : "Choose your exam"}
-          </p>
-          {CATEGORIES.map((cat) => {
-            const isActive = cat.id === activeCategoryId;
-            return (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  "block py-2.5 text-body font-medium transition-colors",
-                  isActive ? "text-orange-400" : "text-text-primary hover:text-orange-400"
-                )}
-              >
-                <span className="block">{cat.menuLabel}</span>
-                <span className="block text-caption text-text-dimmed mt-0.5 font-normal">
-                  {cat.description}
-                </span>
-              </Link>
-            );
-          })}
-
-          <div className="border-t border-border-default my-4" />
+          {categories.length > 0 ? (
+            <>
+              <p className="text-caption text-text-dimmed uppercase tracking-wider mb-2">
+                {activeCategory
+                  ? `Exam: ${activeCategory.name}`
+                  : "Choose your exam"}
+              </p>
+              {categories.map((cat) => {
+                const isActive = cat.slug === activeCategorySlug;
+                return (
+                  <Link
+                    key={cat.id}
+                    href={`/category/${cat.slug}`}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "block py-2.5 text-body font-medium transition-colors",
+                      isActive
+                        ? "text-orange-400"
+                        : "text-text-primary hover:text-orange-400"
+                    )}
+                  >
+                    <span className="block">{cat.menuLabel}</span>
+                    <span className="block text-caption text-text-dimmed mt-0.5 font-normal">
+                      {cat.description}
+                    </span>
+                  </Link>
+                );
+              })}
+              <div className="border-t border-border-default my-4" />
+            </>
+          ) : null}
 
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;

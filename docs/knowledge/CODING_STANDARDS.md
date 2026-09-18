@@ -42,7 +42,7 @@
 
 - Static Phase 1 content: `src/data/*.ts`
 - Site-wide config: `src/lib/constants.ts`
-- Do not invent a fake API layer for Phase 1; external redirects only ([API_STANDARDS.md](API_STANDARDS.md))
+- Website CMS APIs use `src/lib/api/` (SSR-first). Follow `.cursor/skills/api-integration/SKILL.md` and [API_STANDARDS.md](API_STANDARDS.md)
 
 ## Forms
 

@@ -60,3 +60,8 @@ export function getCategoryPathById(categoryId: string): string {
   const category = getCategoryLandingById(categoryId as CategoryId);
   return getCategoryPathBySlug(category?.slug ?? categoryId);
 }
+
+export {
+  buildCategoryLandingFallback,
+  withCategoryLandingDefaults,
+} from "./category-landing-defaults";

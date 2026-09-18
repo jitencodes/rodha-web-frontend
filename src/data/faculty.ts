@@ -1239,7 +1239,13 @@ function defaultHeroStats(member: Faculty): FacultyHeroStat[] {
 
 function defaultResultStats(member: Faculty): FacultyResultStat[] {
   const cat = member.categories[0] ?? "cat";
-  return DEFAULT_RESULT_STATS[cat] ?? DEFAULT_RESULT_STATS.cat;
+  return getDefaultFacultyResultStats(cat);
+}
+
+export function getDefaultFacultyResultStats(
+  category: CategoryId
+): FacultyResultStat[] {
+  return DEFAULT_RESULT_STATS[category] ?? DEFAULT_RESULT_STATS.cat;
 }
 
 /** Match tokens used when a testimonial names a faculty member */

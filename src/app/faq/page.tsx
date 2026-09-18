@@ -6,6 +6,7 @@ import { faqPageJsonLd } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/data/faq";
 import { FAQClient } from "./FAQClient";
 import { buildPageMetadata } from "@/lib/seo";
+import { getFaqs } from "@/lib/api/modules/faqs/service";
 
 export const metadata = buildPageMetadata({
   title: "FAQ — Rodha",
@@ -14,7 +15,32 @@ export const metadata = buildPageMetadata({
   path: "/faq",
 });
 
-export default function FAQPage() {
+interface FAQPageProps {
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    category?: string;
+  }>;
+}
+export default async function FAQPage({
+  searchParams,
+}: FAQPageProps) {
+  const params = await searchParams;
+
+  const page = Math.max(
+    1,
+    Number.parseInt(params.page ?? "1", 10) || 1
+  );
+
+  const search = params.search?.trim() ?? "";
+  const category = params.category?.trim() || "all";
+
+  const faqs = await getFaqs({
+    page,
+    limit: 10,
+    search,
+    category,
+  });
   return (
     <>
       <script
@@ -32,7 +58,12 @@ export default function FAQPage() {
           />
 
           <div className="mt-8 md:mt-10">
-            <FAQClient />
+          <FAQClient
+            data={faqs}
+            search={search}
+            category={category}
+            page={page}
+          />
           </div>
         </Container>
       </section>

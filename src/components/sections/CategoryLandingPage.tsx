@@ -18,9 +18,7 @@ import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
 import { StoriesModal } from "@/components/layout/VideoModal";
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
-import {
-  getCategoryFaculty,
-} from "@/data/category-landings";
+import { getCategoryHeroAccentWords } from "@/data/category-landing-defaults";
 import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import type { CategoryLandingConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -29,6 +27,14 @@ import { Carousel } from "../ui/Carousel";
 interface CategoryLandingPageProps {
   category: CategoryLandingConfig;
 }
+
+/** Second results row only when both marquees can fill enough cards to scroll. */
+const RESULTS_SECOND_ROW_THRESHOLD = 15;
+/** 3 desktop columns × 2 cards each — below this, use a single horizontal row. */
+const TESTIMONIAL_VERTICAL_MIN_PER_COLUMN = 2;
+const TESTIMONIAL_LG_COLUMNS = 3;
+const TESTIMONIAL_MULTI_COLUMN_THRESHOLD =
+  TESTIMONIAL_LG_COLUMNS * TESTIMONIAL_VERTICAL_MIN_PER_COLUMN;
 
 function sectionSurface(theme: string | undefined) {
   switch (theme) {
@@ -42,15 +48,26 @@ function sectionSurface(theme: string | undefined) {
 }
 
 export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
-  const facultyMembers = getCategoryFaculty(category);
+  const facultyMembers = category.facultyMembers ?? [];
   const courses = category.courses;
   const results = category.results;
   const testimonials = category.testimonials;
-  const showResults =
-    (category.id === "cat" || category.id === "ipmat") && results.length > 0;
-  const resultsMidpoint = Math.ceil(results.length / 2);
+  const showResults = results.length > 0;
+  const showCourses = courses.length > 0;
+  const showTestSeries = category.testSeries.length > 0;
+  const showFaculty = facultyMembers.length > 0;
+  const showTestimonials = testimonials.length > 0;
+  const showFaqs = category.faqs.length > 0;
+  const showSecondResultsRow = results.length >= RESULTS_SECOND_ROW_THRESHOLD;
+  const resultsMidpoint = showSecondResultsRow
+    ? Math.ceil(results.length / 2)
+    : results.length;
   const resultsRow1 = results.slice(0, resultsMidpoint);
   const resultsRow2 = results.slice(resultsMidpoint);
+  const useTestimonialColumns =
+    testimonials.length >= TESTIMONIAL_MULTI_COLUMN_THRESHOLD;
+  const accentWords = getCategoryHeroAccentWords(category.hero.accent);
+  const showResultStats = category.resultStats.length > 0;
 
   return (
     <>
@@ -60,34 +77,35 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           __html: JSON.stringify(categoryBreadcrumbJsonLd(category.slug)),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqPageJsonLd(category.faqs)),
-        }}
-      />
+      {showFaqs ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqPageJsonLd(category.faqs)),
+          }}
+        />
+      ) : null}
 
       <CategoryHeroSectionV2
         categoryName={category.name}
         eyebrow={category.hero.eyebrow}
         headline={
           <>
-            {category.hero.title}{" "}
-            <span className="text-orange-500 glow-text-orange"> <br />
-              <Typewritter
-                words={
-                  Array.isArray(category.hero.accent)
-                    ? category.hero.accent
-                    : [category.hero.accent]
-                }
-              />
-            </span>
+            {category.hero.title}
+            {accentWords.length > 0 ? (
+              <span className="text-orange-500 glow-text-orange">
+                {" "}
+                <br />
+                <Typewritter words={accentWords} />
+              </span>
+            ) : null}
           </>
         }
         subtitle={category.hero.subtitle}
         quickStats={category.quickStats}
         primaryCta={category.hero.primaryCta}
         videoId={category.hero.videoId}
+        imageUrl={category.hero.imageUrl}
       />
 
       {showResults && <section
@@ -106,11 +124,13 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           />
           <RevealGroup>
             <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:gap-5">
-              <ResultsStatsPanel
-                stats={category.resultStats}
-                variant="light"
-                className="reveal-child reveal-delay-1"
-              />
+              {showResultStats ? (
+                <ResultsStatsPanel
+                  stats={category.resultStats}
+                  variant="light"
+                  className="reveal-child reveal-delay-1"
+                />
+              ) : null}
               <div className="min-w-0 flex-1 overflow-hidden">
                 <InfiniteMarquee speed={32} direction="right" gap={20}>
                   {resultsRow1.map((topper, index) => (
@@ -138,6 +158,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
+      {showCourses && (
       <section
         id="courses"
         data-home-zone="courses"
@@ -157,8 +178,9 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           <CategoryCoursesSlider courses={courses} />
         </Container>
       </section>
+      )}
 
-      {(category.id == "cat" || category.id == "ipmat") && <section
+      {showTestSeries && <section
         id="test-series"
         data-home-zone="test-series"
         className={cn(
@@ -202,7 +224,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
-      {category.id !== "skillhouse" && <section
+      {showFaculty && <section
         id="faculty"
         className={cn(
           "home-section-spacing relative",
@@ -242,6 +264,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         </Container>
       </section>}
 
+      {showTestimonials && (
       <section id="testimonials" className="home-section-spacing relative">
         <Container>
           <SectionHeader
@@ -252,26 +275,57 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           />
 
           <RevealGroup>
-            <div className="testimonial-marquee relative mt-4 overflow-hidden lg:h-[580px]">
-              <div className="hidden h-full grid-cols-1 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 0)}
-                  direction="down"
-                  fadeFrom="#0A0A0A"
-                />
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 1)}
-                  direction="up"
-                  fadeFrom="#0A0A0A"
-                />
-                <TestimonialColumn
-                  testimonials={testimonials.filter((_, i) => i % 3 === 2)}
-                  direction="down"
-                  className="hidden lg:block"
-                  fadeFrom="#0A0A0A"
-                />
-              </div>
-              <div className="block md:hidden">
+            <div
+              className={cn(
+                "testimonial-marquee relative mt-4 overflow-hidden",
+                useTestimonialColumns && "lg:h-[580px]"
+              )}
+            >
+              {useTestimonialColumns ? (
+                <>
+                  <div className="hidden h-full gap-6 lg:grid lg:grid-cols-3">
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 0)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 1)}
+                      direction="up"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 3 === 2)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                  </div>
+                  <div className="hidden h-[580px] gap-6 md:grid md:grid-cols-2 lg:hidden">
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 2 === 0)}
+                      direction="down"
+                      fadeFrom="#0A0A0A"
+                    />
+                    <TestimonialColumn
+                      testimonials={testimonials.filter((_, i) => i % 2 === 1)}
+                      direction="up"
+                      fadeFrom="#0A0A0A"
+                    />
+                  </div>
+                  <div className="md:hidden">
+                    <InfiniteMarquee speed={35}>
+                      {testimonials.map((testimonial, index) => (
+                        <div
+                          key={testimonial.id}
+                          className={`snap-start shrink-0 reveal-child reveal-delay-${(index % 4) + 1}`}
+                        >
+                          <TestimonialCardV2 testimonial={testimonial} />
+                        </div>
+                      ))}
+                    </InfiniteMarquee>
+                  </div>
+                </>
+              ) : (
                 <InfiniteMarquee speed={35}>
                   {testimonials.map((testimonial, index) => (
                     <div
@@ -282,11 +336,12 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
                     </div>
                   ))}
                 </InfiniteMarquee>
-              </div>
+              )}
             </div>
           </RevealGroup>
         </Container>
       </section>
+      )}
 
       <CTABandV2Decorative
         title={category.cta.title}
@@ -336,6 +391,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
 
       <HomeAppPromotionSection />
 
+      {showFaqs && (
       <section
         id="faqs"
         className={cn(
@@ -369,6 +425,7 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
           </div>
         </Container>
       </section>
+      )}
 
       <StoriesModal />
     </>

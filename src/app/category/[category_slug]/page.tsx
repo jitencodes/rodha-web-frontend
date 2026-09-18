@@ -1,30 +1,27 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { CategoryLandingPage } from "@/components/sections/CategoryLandingPage";
-import {
-  getAllCategoryLandings,
-  getCategoryLandingBySlug,
-} from "@/data/category-landings";
+import { getCategoryPage } from "@/lib/api/modules/categories/service";
 import { buildPageMetadata } from "@/lib/seo";
 
 interface CategoryPageProps {
-  params: Promise<{ category_slug: string }>;
-}
-
-export function generateStaticParams() {
-  return getAllCategoryLandings().map((category) => ({
-    category_slug: category.slug,
-  }));
+  params: Promise<{
+    category_slug: string;
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { category_slug } = await params;
-  const category = getCategoryLandingBySlug(category_slug);
+
+  const category = await getCategoryPage(category_slug);
 
   if (!category) {
-    return { title: "Category — Rodha" };
+    return {
+      title: "Category — Rodha",
+    };
   }
 
   return buildPageMetadata({
@@ -34,9 +31,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({
+  params,
+}: CategoryPageProps) {
   const { category_slug } = await params;
-  const category = getCategoryLandingBySlug(category_slug);
+
+  const category = await getCategoryPage(category_slug);
 
   if (!category) {
     notFound();
