@@ -88,6 +88,25 @@ export function AboutHeroSection({
               </p>
             ) : null}
 
+            {showVideo && videoId ? (
+              <HeroVideoEmbed videoId={videoId} />
+            ) : (
+              <>
+                <div className="mt-5 lg:hidden relative w-full overflow-hidden rounded-[8px]">
+                  <Image
+                    src={imageUrl}
+                    alt="Rodha mentors collaborating with students"
+                    width={300}
+                    height={300}
+                    className="object-cover object-center w-full h-auto"
+                    sizes="100vw"
+                    fetchPriority="high"
+                  />
+                </div>
+
+              </>
+            )}
+
             <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
               {ABOUT_HERO_HIGHLIGHTS.map((item) => (
                 <div key={item.id} className="min-w-0">
@@ -106,32 +125,15 @@ export function AboutHeroSection({
           </div>
 
           <div className="lg:col-span-6 relative">
-            {showVideo && videoId ? (
-              <HeroVideoEmbed videoId={videoId} />
-            ) : (
-              <>
-                <div className="lg:hidden relative h-[240px] sm:h-[320px] overflow-hidden rounded-[8px]">
-                  <Image
-                    src={imageUrl}
-                    alt="Rodha mentors collaborating with students"
-                    fill
-                    className="object-cover object-center"
-                    sizes="100vw"
-                    fetchPriority="high"
-                  />
-                </div>
-
-                <div className="mt-4 lg:hidden w-full card-base rounded-[6px] border-orange-500/25 bg-bg-secondary/90 p-4 md:p-5 backdrop-blur-sm">
-                  <Icon src="/assets/icons/quote.svg" size={22} className="text-orange-400" />
-                  <p className="mt-3 text-body-sm leading-relaxed text-text-secondary">
-                    &ldquo;{ABOUT_HERO.quote}&rdquo;
-                  </p>
-                  <p className="mt-3 text-body-sm font-semibold text-orange-400">
-                    — {ABOUT_HERO.quoteAttribution}
-                  </p>
-                </div>
-              </>
-            )}
+            <div className="mt-4 lg:hidden w-full card-base rounded-[6px] border-orange-500/25 bg-bg-secondary/90 p-4 md:p-5 backdrop-blur-sm">
+              <Icon src="/assets/icons/quote.svg" size={22} className="text-orange-400" />
+              <p className="mt-3 text-body-sm leading-relaxed text-text-secondary">
+                &ldquo;{ABOUT_HERO.quote}&rdquo;
+              </p>
+              <p className="mt-3 text-body-sm font-semibold text-orange-400">
+                — {ABOUT_HERO.quoteAttribution}
+              </p>
+            </div>
           </div>
         </div>
       </Container>

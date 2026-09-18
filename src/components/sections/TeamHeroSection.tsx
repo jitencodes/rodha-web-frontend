@@ -95,7 +95,7 @@ export function TeamHeroSection({
                           src={stat.icon}
                           alt=""
                           fill
-                          className="object-contain"
+                          className="object-contain text-orange-500"
                           sizes="32px"
                         />
                       </div>

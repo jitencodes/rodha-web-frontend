@@ -97,21 +97,12 @@ export function FacultyHeroSection({
                 {stats.map((stat) => (
                   <div key={stat.id} className="flex items-center gap-2.5">
                     {stat.icon ? (
-                      <div className="text-orange-500 shrink-0">
-                        {stat.icon.startsWith("http") || stat.icon.startsWith("/") ? (
-                          <span className="relative block h-8 w-8">
-                            <Image
-                              src={stat.icon}
-                              alt=""
-                              fill
-                              className="object-contain"
-                              sizes="32px"
-                            />
-                          </span>
-                        ) : (
-                          <Icon src={stat.icon} size={32} />
-                        )}
-                      </div>
+                      <Icon
+                        src={stat.icon}
+                        size={32}
+                        className="text-orange-500"
+                        alt={stat.label}
+                      />
                     ) : null}
                     <div>
                       <div className="text-body-sm font-bold text-text-primary leading-none">
