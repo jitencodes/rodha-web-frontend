@@ -238,7 +238,7 @@ export function FAQClient({
 
           {/* API categories */}
           {categories.map((categoryItem) => {
-            const categoryName = categoryItem.name;
+            const categoryName = categoryItem.slug;
             const isActive =
               activeCategory === categoryName;
 
