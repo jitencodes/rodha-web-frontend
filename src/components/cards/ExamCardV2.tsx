@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 
 interface ExamCardV2Props {
@@ -51,14 +52,14 @@ export function ExamCardV2({
         <h4 className="mt-4 mb-2 text-[14px] text-white font-medius leading-[1.2] tracking-tight 2xl:text-[15px] 2xl:leading-[20px]">
           {category.subHeading}
         </h4>
-        <p
-          className="text-[14px] font-medium leading-[1.2] tracking-tight 2xl:text-[15px] 2xl:leading-[20px]"
-          style={{
-            color: "#B6B6B6",
-          }}
-        >
-          {category.description}
-        </p>
+        {category.description ? (
+          <ClampTooltip
+            text={category.description}
+            lines={5}
+            className="text-[14px] font-medium leading-[1.2] tracking-tight 2xl:text-[15px] 2xl:leading-[20px] text-[#B6B6B6]"
+            tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
+          />
+        ) : null}
       </div>
 
       {category.image && (

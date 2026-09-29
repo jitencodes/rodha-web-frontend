@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import { PromotionalBanner } from "@/components/layout/PromotionalBanner";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { FloatingCounsellingCta } from "@/components/layout/FloatingCounsellingCta";
-import { CounsellingModalProvider } from "@/components/layout/CounsellingModalProvider";
 import { organizationJsonLd, webSiteJsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/constants";
 import { DEFAULT_OG_IMAGE } from "@/lib/seo";
-import { getAnnouncementIntervalMs } from "@/lib/api/env";
-import { getActiveAnnouncements } from "@/lib/api/modules/announcements/service";
-import { getActiveCategories } from "@/lib/api/modules/categories/service";
-import { WebsiteStoreProvider } from "@/components/providers/WebsiteStoreProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -69,16 +60,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [announcements, categories] = await Promise.all([
-    getActiveAnnouncements(),
-    getActiveCategories(),
-  ]);
-
   return (
     <html
       lang="en"
@@ -99,21 +85,7 @@ export default async function RootLayout({
           }}
         />
 
-
-        <WebsiteStoreProvider categories={categories}>
-          <PromotionalBanner
-            announcements={announcements}
-            intervalMs={getAnnouncementIntervalMs()}
-          />
-          <Header categories={categories} />
-
-          <CounsellingModalProvider>
-            <main>{children}</main>
-            <FloatingCounsellingCta />
-          </CounsellingModalProvider>
-
-          <Footer />
-        </WebsiteStoreProvider>
+        {children}
       </body>
     </html>
   );

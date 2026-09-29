@@ -50,6 +50,19 @@ export interface FacultyListPaginationApi {
   totalPages: number;
 }
 
+export interface FacultyPackagesApi {
+  items?: CourseApi[] | null;
+  pagination?: FacultyListPaginationApi | null;
+}
+
+/** GET api/website/faculty/:slug — live payload nests the profile. */
+export interface FacultyDetailApi {
+  faculty?: FacultyApi | null;
+  packages?: FacultyPackagesApi | null;
+  /** Legacy Postman shape: courses sat on the faculty record / envelope. */
+  courses?: CourseApi[] | null;
+}
+
 export interface FacultyPageApi {
   banner?: WebsiteBannerApi | null;
   featuredFaculty?: FacultyApi[] | null;

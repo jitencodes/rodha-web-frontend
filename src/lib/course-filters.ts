@@ -1,4 +1,4 @@
-import type { Course, CourseFilterType } from "@/lib/types";
+import type { Course, CourseFilterType, TestSeriesItem } from "@/lib/types";
 
 export const COURSE_FILTERS = [
   { id: "all", label: "All" },
@@ -9,6 +9,14 @@ export const COURSE_FILTERS = [
 ] as const;
 
 export type CourseFilterId = (typeof COURSE_FILTERS)[number]["id"];
+
+export const PRICE_FILTERS = [
+  { id: "all", label: "All Prices" },
+  { id: "paid", label: "Paid" },
+  { id: "free", label: "Free" },
+] as const;
+
+export type PriceFilterId = (typeof PRICE_FILTERS)[number]["id"];
 
 export function filterCoursesByType(
   courses: Course[],
@@ -44,4 +52,36 @@ export function getVisibleCourseFilters(courses: Course[]): Array<{
       available.includes(f.id as CourseFilterType)
     ).map((f) => ({ id: f.id as CourseFilterId, label: f.label })),
   ];
+}
+
+export function getCourseTypeDropdownOptions(courses: Course[]): Array<{
+  value: CourseFilterId;
+  label: string;
+}> {
+  const available = getAvailableCourseTypes(courses);
+  return [
+    { value: "all", label: "All Types" },
+    ...COURSE_FILTERS.filter(
+      (f): f is (typeof COURSE_FILTERS)[number] & { id: CourseFilterType } =>
+        f.id !== "all" && available.includes(f.id as CourseFilterType)
+    ).map((f) => ({ value: f.id as CourseFilterId, label: f.label })),
+  ];
+}
+
+/** True when a display price is FREE or zero (e.g. "FREE", "₹0"). */
+export function isFreePriceDisplay(value: string | undefined): boolean {
+  const normalized = (value ?? "").trim().replace(/[\s,]/g, "");
+  if (!normalized) return false;
+  return /free|^₹?0$/i.test(normalized);
+}
+
+export function isCourseFree(course: Pick<Course, "price">): boolean {
+  return course.price === 0;
+}
+
+export function isTestSeriesFree(
+  item: Pick<TestSeriesItem, "price" | "offerPrice">
+): boolean {
+  const primary = item.offerPrice.trim() || item.price.trim();
+  return isFreePriceDisplay(primary);
 }

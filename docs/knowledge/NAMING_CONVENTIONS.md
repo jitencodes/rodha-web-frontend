@@ -37,9 +37,19 @@
 |------|------|
 | Home | `/` |
 | Category | `/category/[category_slug]` (e.g. `/category/cat`) |
+| Course listing | `/courses` |
 | Course detail | `/courses/[slug]` (legacy `/category/[category_slug]/courses/[slug]` permanently redirects) |
+| Test series listing | `/test-series` |
 | Faculty | `/faculty`, `/faculty/[slug]` |
-| Blog | `/blog`, `/blog/[slug]` |
+| Login | `/login` |
+| Signup | `/signup` |
+| Account dashboard | `/account/dashboard` |
+| Account courses | `/account/courses` |
+| Account test series | `/account/test-series` |
+| Account cart | `/account/cart` |
+| Account orders | `/account/orders` |
+| Account profile | `/account/profile` |
+| Account settings | `/account/settings` |
 
 Slugs: kebab-case.
 

@@ -1,0 +1,114 @@
+/* Account-scoped theme — never toggles html.dark */
+
+.account-shell {
+  --account-accent: #f97316;
+  --account-accent-soft: #fff3e8;
+  --account-radius: 12px;
+  --account-sidebar-width: 260px;
+  --account-header-height: 64px;
+}
+
+.account-shell[data-account-theme="light"] {
+  --account-bg: #fdfbf7;
+  --account-surface: #ffffff;
+  --account-sidebar-bg: #ffffff;
+  --account-header-bg: #ffffff;
+  --account-text: #171717;
+  --account-text-secondary: #404040;
+  --account-text-muted: #737373;
+  --account-border: #ebe7e0;
+  --account-border-strong: #e5e5e5;
+  --account-nav-hover: #f7f4ef;
+  --account-nav-active-bg: #fff3e8;
+  --account-nav-active-text: #f97316;
+  --account-input-bg: #ffffff;
+  --account-input-border: #e5e5e5;
+  --account-help-bg: #fffbf5;
+  --account-badge-bg: #f97316;
+  --account-badge-text: #ffffff;
+  --account-overlay: rgba(0, 0, 0, 0.4);
+  --account-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --account-progress-track: #f0ebe3;
+  --account-welcome-from: #fff7ed;
+  --account-welcome-to: #ffedd5;
+  --account-status-active-bg: #dcfce7;
+  --account-status-active-text: #15803d;
+  --account-status-completed-bg: #e0f2fe;
+  --account-status-completed-text: #0369a1;
+  --account-status-expired-bg: #f5f5f5;
+  --account-status-expired-text: #737373;
+  --account-status-refunded-bg: #fee2e2;
+  --account-status-refunded-text: #b91c1c;
+  --account-status-pending-bg: #ffedd5;
+  --account-status-pending-text: #c2410c;
+  --account-progress-inprogress: #fdba74;
+  --account-progress-notstarted: #d4d4d4;
+  color-scheme: light;
+}
+
+.account-shell[data-account-theme="dark"] {
+  --account-bg: #0a0a0a;
+  --account-surface: #141414;
+  --account-sidebar-bg: #0a0a0a;
+  --account-header-bg: #0a0a0a;
+  --account-text: #ffffff;
+  --account-text-secondary: #d4d4d4;
+  --account-text-muted: #a3a3a3;
+  --account-border: #1f1f1f;
+  --account-border-strong: #262626;
+  --account-nav-hover: #1a1a1a;
+  --account-nav-active-bg: rgba(249, 115, 22, 0.15);
+  --account-nav-active-text: #f97316;
+  --account-input-bg: #141414;
+  --account-input-border: #262626;
+  --account-help-bg: #141414;
+  --account-badge-bg: #f97316;
+  --account-badge-text: #ffffff;
+  --account-overlay: rgba(0, 0, 0, 0.6);
+  --account-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --account-progress-track: #262626;
+  --account-welcome-from: #2a1508;
+  --account-welcome-to: #1a0f08;
+  --account-status-active-bg: rgba(34, 197, 94, 0.15);
+  --account-status-active-text: #4ade80;
+  --account-status-completed-bg: rgba(14, 165, 233, 0.15);
+  --account-status-completed-text: #38bdf8;
+  --account-status-expired-bg: rgba(163, 163, 163, 0.12);
+  --account-status-expired-text: #a3a3a3;
+  --account-status-refunded-bg: rgba(239, 68, 68, 0.15);
+  --account-status-refunded-text: #f87171;
+  --account-status-pending-bg: rgba(249, 115, 22, 0.15);
+  --account-status-pending-text: #fb923c;
+  --account-progress-inprogress: #fdba74;
+  --account-progress-notstarted: #404040;
+  color-scheme: dark;
+}
+
+.account-shell {
+  background: var(--account-bg);
+  color: var(--account-text);
+}
+
+/* View Transition circular reveal helpers */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  ::view-transition-new(root) {
+    z-index: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}

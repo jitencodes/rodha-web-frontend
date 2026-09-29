@@ -23,7 +23,12 @@ export function mapHomeBanner(
     title: mapped.title,
     titleHighlights: mapped.titleHighlights,
     description: mapped.description,
-    stacks: mapped.stacks.map(({ id, value, label }) => ({ id, value, label })),
+    stacks: mapped.stacks.map(({ id, value, label, icon }) => ({
+      id,
+      value,
+      label,
+      icon,
+    })),
     videoId: mapped.videoId,
     imageUrl: mapped.imageUrl,
   };
@@ -136,7 +141,7 @@ export function mapStudentResultGroups(
         title,
         highlight: null,
         subtitle: group.result.subTitle?.trim() || null,
-        description: null,
+        description: group.result.description?.trim() || null,
         cta: group.category.name
           ? `View ${group.category.name} Results`
           : "View Results",

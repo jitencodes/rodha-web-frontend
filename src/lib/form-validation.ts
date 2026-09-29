@@ -4,6 +4,7 @@ export const PHONE_LENGTH = 10;
 export const EMAIL_MAX_LENGTH = 100;
 export const MESSAGE_MIN_LENGTH = 5;
 export const MESSAGE_MAX_LENGTH = 1000;
+export const PASSWORD_MIN_LENGTH = 8;
 
 const NAME_PATTERN = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 const PHONE_PATTERN = /^[0-9]{10}$/;
@@ -70,5 +71,22 @@ export function validateMessage(value: string): string | undefined {
   if (message.length > MESSAGE_MAX_LENGTH) {
     return `Message must be under ${MESSAGE_MAX_LENGTH} characters.`;
   }
+  return undefined;
+}
+
+export function validatePassword(value: string): string | undefined {
+  if (!value) return "Password is required.";
+  if (value.length < PASSWORD_MIN_LENGTH) {
+    return `Password must be at least ${PASSWORD_MIN_LENGTH} characters.`;
+  }
+  return undefined;
+}
+
+export function validatePasswordConfirm(
+  password: string,
+  confirm: string
+): string | undefined {
+  if (!confirm) return "Confirm your password.";
+  if (confirm !== password) return "Passwords do not match.";
   return undefined;
 }

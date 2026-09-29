@@ -5,7 +5,7 @@ import {
   mapFacultyPage,
 } from "@/lib/api/modules/faculty/mapper";
 import type {
-  FacultyApi,
+  FacultyDetailApi,
   FacultyListViewModel,
   FacultyPageApi,
   GetFacultyParams,
@@ -36,7 +36,7 @@ export async function getFacultyBySlug(
   const normalizedSlug = slug.trim();
   if (!normalizedSlug) return null;
 
-  const data = await apiGetOrNull<FacultyApi>(
+  const data = await apiGetOrNull<FacultyDetailApi>(
     `${PATH}/${encodeURIComponent(normalizedSlug)}`
   );
 

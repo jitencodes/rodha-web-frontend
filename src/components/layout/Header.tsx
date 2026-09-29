@@ -13,6 +13,7 @@ import {
 import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { MobileNav } from "./MobileNav";
+import { CircleUserRound, User } from "lucide-react";
 
 interface HeaderProps {
   className?: string;
@@ -313,8 +314,89 @@ export function Header({ className, categories = [] }: HeaderProps) {
           >
             Rodha Buddy
           </a>
-        </div>
+          {/* <div className="relative group shrink-0">
+            <button
+              className="
+                flex items-center gap-2
+                h-9
+                px-3
+                rounded-lg
+                border border-white/15
+                bg-white/5
+                backdrop-blur-sm
+                transition-all duration-200
+                hover:border-orange-400/50
+                hover:bg-orange-500/10
+              "
+              aria-label="Account"
+            >
+              <User className="h-5 w-5 text-white group-hover:text-orange-300 transition-colors" />
 
+              <svg
+                className="h-3.5 w-3.5 text-white transition-transform duration-300 group-hover:rotate-180"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 011.08 1.04l-4.25 4.51a.75.75 0 01-1.08 0l-4.25-4.51a.75.75 0 01.02-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <div
+              className="
+                invisible
+                absolute
+                right-0
+                top-full
+                z-50
+                mt-2
+                w-72
+                rounded-xl
+                border
+                border-white/10
+                bg-[#121212]/95
+                backdrop-blur-xl
+                opacity-0
+                shadow-2xl
+                transition-all
+                duration-200
+                group-hover:visible
+                group-hover:opacity-100
+              "
+            >
+              <div className="p-2">
+
+                <Link
+                  href={"/login"}
+                  className="
+                    flex items-start gap-3
+                    rounded-lg
+                    px-3
+                    py-2.5
+                    transition-colors
+                    hover:bg-orange-500/10
+                  "
+                >
+                  <User className="mt-0.5 h-5 w-5 text-orange-400 shrink-0" />
+
+                  <div>
+                    <div className="font-medium text-white">
+                      Log In / Sign Up
+                    </div>
+
+                    <div className="text-caption text-white/60 mt-0.5">
+                      Access existing account or create new
+                    </div>
+                  </div>
+                </Link>
+
+              </div>
+            </div>
+          </div> */}
+        </div>
         <MobileNav
           activeCategorySlug={activeSlug}
           categories={categories}

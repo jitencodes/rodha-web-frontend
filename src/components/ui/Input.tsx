@@ -47,8 +47,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             className={cn(
               "input-base",
-              isLight &&
-                "bg-white text-neutral-900 border-neutral-200 placeholder:text-neutral-400",
+              isLight && [
+                "!bg-white",
+                "!text-neutral-900",
+                "!border-neutral-200",
+                "placeholder:!text-neutral-400",
+              ],
               prefixIcon && "!pl-9",
               suffixIcon && "pr-10",
               error && "border-accent-red focus:border-accent-red focus:ring-accent-red/20",

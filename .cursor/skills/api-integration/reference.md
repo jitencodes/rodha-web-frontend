@@ -72,7 +72,7 @@ JSON landings remain only for section copy/themes, not for faculty/courses/testi
 
 Listing filters are URL search params mapped to `categoryIds` / `subjectIds` (API numeric ids), `search`, `sortBy` (`rating-desc` → `experience_desc`). Featured marquee hides when `featuredFaculty` is empty.
 
-Detail courses use the same `mapCourses` + `courseType` chips as category. Hide courses / reviews / videos / achievements / results when empty. Do not invent result stats.
+Live detail payload is `{ faculty, packages }` (not a flat faculty record). Unwrap `data.faculty` for the profile; map courses from `packages.items` (fallback: faculty `courses`). Use the same `mapCourses` + `courseType` chips as category. Hide courses / reviews / videos / achievements / results when empty. Do not invent result stats.
 
 ## Banners (shared)
 

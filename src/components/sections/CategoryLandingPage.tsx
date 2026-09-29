@@ -14,8 +14,8 @@ import { AccordionV2 } from "@/components/ui/AccordionV2";
 import { CategoryHeroSectionV2 } from "@/components/sections/home/HeroSections/CategoryHeroSectionV2";
 import Typewritter from "@/components/Typewriter";
 import TestimonialColumn from "@/components/sections/home/Testimonials/TestimonialColumn";
-import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
 import { StoriesModal } from "@/components/layout/VideoModal";
+import { SuccessStoriesSection } from "@/components/sections/SuccessStoriesSection";
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
 import { getCategoryHeroAccentWords } from "@/data/category-landing-defaults";
@@ -352,42 +352,11 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         secondaryAction={category.cta.secondaryAction}
       />
 
-      {category.stories.length > 0 && (
-        <section
-          data-home-zone="stories"
-          className={cn(
-            "home-section-spacing relative",
-            sectionSurface(category.sectionThemes.stories)
-          )}
-        >
-          <Container>
-            <SectionHeaderV2
-              badge="Rodha Success Stories"
-              title={
-                <>
-                  Watch how they{" "}
-                  <span className="text-orange-500">Did it.</span>
-                </>
-              }
-              subtitle={category.sectionCopy.storiesSubtitle}
-              align="center"
-              className="mx-auto lg:!mb-10"
-            />
-          </Container>
-          <RevealGroup>
-            <InfiniteMarquee speed={35} align="center">
-              {category.stories.map((story) => (
-                <YoutubeStoryCard
-                  key={story.id}
-                  youtubeId={story.youtubeId}
-                  student={story.student}
-                  subtitle={story.subtitle}
-                />
-              ))}
-            </InfiniteMarquee>
-          </RevealGroup>
-        </section>
-      )}
+      <SuccessStoriesSection
+        stories={category.stories}
+        subtitle={category.sectionCopy.storiesSubtitle}
+        className={sectionSurface(category.sectionThemes.stories)}
+      />
 
       <HomeAppPromotionSection />
 

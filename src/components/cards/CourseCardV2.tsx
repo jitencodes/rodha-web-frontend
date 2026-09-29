@@ -10,10 +10,17 @@ interface CourseCardV2Props {
   className?: string;
   /** Override card link (e.g. internal `/courses/[slug]` on course detail). */
   href?: string;
+  /** CTA link label; defaults to `course.detailsLabel` or "View Details". */
+  ctaLabel?: string;
 }
 
 /** Light-theme course card for MBA category page (homepage-aligned). */
-export function CourseCardV2({ course, className, href }: CourseCardV2Props) {
+export function CourseCardV2({
+  course,
+  className,
+  href,
+  ctaLabel,
+}: CourseCardV2Props) {
   const hasDiscount = course.originalPrice && course.originalPrice > course.price;
   const discountPercent = hasDiscount
     ? Math.round(((course.originalPrice! - course.price) / course.originalPrice!) * 100)
@@ -96,7 +103,7 @@ export function CourseCardV2({ course, className, href }: CourseCardV2Props) {
             rel={isExternal ? "noopener noreferrer" : undefined}
             className="inline-flex items-center gap-2 hover:gap-3 transition-all duration-300 text-body-sm font-semibold text-orange-500 hover:text-orange-500/80"
           >
-            {course.detailsLabel || "View Details"}
+            {ctaLabel || course.detailsLabel || "View Details"}
             <svg
               className="h-3.5 w-3.5"
               viewBox="0 0 20 20"

@@ -1079,6 +1079,10 @@ background-size: cover;
   .blog-prose {
     color: #404040;
     line-height: 1.75;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+    min-width: 0;
   }
   .blog-prose h2 {
     font-size: 1.5rem;

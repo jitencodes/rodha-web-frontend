@@ -13,7 +13,8 @@ Default reference for all website API work. Read Postman first; type real payloa
 
 ## Source of truth
 
-- Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json`
+- Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS)
+- Student auth: `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (`api/auth/user/signup`, `api/auth/user/login` on `NEXT_PUBLIC_API_BASE_URL`)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
 - Base URL: `NEXT_PUBLIC_API_BASE_URL` with trailing slash (Postman `{{baseUrl}}`)
@@ -51,7 +52,7 @@ No barrel `index.ts`. Import from explicit paths.
 4. Do **not** install TanStack Query unless a feature needs client refetch; then update this skill
 5. Soft-fail with `apiGetOrNull` on chrome/page loads — hide UI on null/empty; do not crash SSR
 6. Cache: `fetch(..., { next: { revalidate } })` via `apiGet` (`API_REVALIDATE_SECONDS`, default 60)
-7. Mutations (contact POST) go through a Route Handler so `API_KEY` never reaches the browser
+7. Mutations (contact POST, student auth) go through a Route Handler so `API_KEY` and `accessToken` never live in client JS
 
 ## Rules
 
@@ -79,6 +80,7 @@ No barrel `index.ts`. Import from explicit paths.
 | `NEXT_PUBLIC_API_BASE_URL` | API host with trailing `/` |
 | `NEXT_PUBLIC_API_SOURCE` | `x-source` header |
 | `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS` | Banner flip interval (default 8000) |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google Identity Services OAuth Web client id (auth screen) |
 | `API_KEY` | Optional server-only key |
 | `API_REVALIDATE_SECONDS` | ISR window (default 60) |
 
@@ -93,12 +95,15 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | categories | `GET api/website/categories/:slug` | `/category/[slug]` — banner, courses (`courseType`), faculty cards, testimonials, successStories, FAQs, results; unknown slugs use name-based chrome from `category-landing-defaults.ts` (lists still hide when empty) |
 | home | `GET api/website/home` | `/` page → hero, categories, FAQs, results |
 | faculty | `GET api/website/faculty` | `/faculty` — banner, featured, paginated list (`page`, `limit`, `search`, `categoryIds`, `subjectIds`, `sortBy`) |
-| faculty | `GET api/website/faculty/:slug` | `/faculty/[slug]` — profile, testimonials, videos, courses (`courseType`) |
+| faculty | `GET api/website/faculty/:slug` | `/faculty/[slug]` — `data.faculty` profile, `data.packages.items` courses (`courseType`); legacy flat faculty/`courses` still mapped |
 | subjects | `GET api/website/subjects` | Faculty listing subject filter |
 | about | `GET api/website/about` | `/about` — banner, journeys, stacks, galleries |
 | team | `GET api/website/team` | `/team` — banner, featuredFaculty, galleries |
 | legal | `GET api/website/legal-pages?pageType=` | Privacy / Terms / Refund / Disclaimer HTML + TOC from headings |
 | contact | `POST api/website/contact` | Route Handler `/api/leads` for contact, counselling, lead-capture |
+| auth | `POST api/auth/user/signup` | `/api/auth/signup` |
+| auth | `POST api/auth/user/login` | `/api/auth/login` (`is_web: true`) |
+| auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) — not in Postman |
 
 Out of scope until requested: FAQ listing page API, blogs.
 

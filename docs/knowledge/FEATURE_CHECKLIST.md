@@ -71,6 +71,55 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ---
 
+## Auth `/login` `/signup`
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Split-panel screen | Complete | Full-bleed left slides + `rodha-logo.webp`; desktop viewport lock, form-only scroll |
+| Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field |
+| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login` |
+| Google | Complete (client) | GIS ID token → `/api/auth/google` → `api/auth/user/google` (not in Postman) |
+| Session | Complete | httpOnly `rodha_access_token`; redirect `/account/dashboard` |
+| Account static data | Complete | `src/lib/account/types.ts` + `src/data/account/*` |
+| Logout | Complete | `POST /api/auth/logout` clears cookie; header profile menu |
+
+## Student Account `/account/*`
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Shell (sidebar + header + main) | Complete | `AccountShell` under `/account`; public chrome only in `(website)` layout |
+| Scoped light/dark theme | Complete | `data-account-theme` + circular transition; no `html.dark` |
+| Sidebar nav + mobile drawer | Complete | Products accordion, cart badge, Need Help; Escape/overlay close |
+| Header chrome | Complete | Mobile search overlay, Ctrl+K, theme, notifications dot, Live Dashboard, profile/Logout |
+| Settings stub | Complete | `/account/settings` placeholder card |
+| Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue cards + Buy `CourseCardV2` `ctaLabel`; theme-aware pagination |
+| Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
+| Dashboard | Complete | Welcome, continue watching, recommended, progress ring, orders preview, quick links |
+| Orders | Complete | `/account/orders` table + mobile cards; static data; View action |
+| Profile | Complete | `/account/profile` avatar, edit name + change password (client-only) |
+| Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
+| Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
+
+## Course Listing `/courses`
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Canonical listing route | Complete | `/courses` beside existing `/courses/[slug]` detail |
+| Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/banner/banner.png` |
+| URL filters | Complete | Category chips, search `q`, course type, paid/free; omit defaults |
+| Cards + pagination | Complete | `CourseCardV2` (category card); 10 per page; URL `Pagination` light |
+| Stories + CTA | Complete | Merged category stories (hidden if empty) then `CTABandV2Decorative` |
+
+## Test Series Listing `/test-series`
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Canonical listing route | Complete | `/test-series` |
+| Dark hero | Complete | Same listing hero + banner as courses; test-series copy |
+| URL filters | Complete | Category chips, search, paid/free. Course type hidden (no `courseType` on test series) |
+| Cards + pagination | Complete | `TestSeriesCardV2` (category card); 10 per page |
+| Stories + CTA | Complete | Same stories section as courses; CTA primary Explore Courses |
+
 ## Course Detail `/courses/[slug]`
 
 | Feature | Status |
@@ -96,7 +145,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | About `/about` | Complete | CMS banner, journeys, impact stacks, galleries; empty sections hidden |
 | Team `/team` | Complete | CMS banner, featured faculty, Loved Team galleries |
 | Faculty listing `/faculty` | Complete | SSR list + URL filters stay on `#faculty-list`; CMS banner + featured |
-| Faculty detail `/faculty/[slug]` | Complete | CMS profile; courses with `courseType` chips; empty sections hidden |
+| Faculty detail `/faculty/[slug]` | Complete | Nested CMS `{ faculty, packages }`; courses with `courseType` chips; empty sections hidden |
 | Blog listing `/blog` | Complete | Unfiltered listing shows `isFeatured` post; filters All/MBA/IPMAT/SSC |
 | Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
 | Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
@@ -134,4 +183,4 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ## Explicitly Out of Scope (Phase 2)
 
-Do not mark these as remaining Phase 1 work: SSO, payments, student dashboard, admin, dedicated course/test listing pages, resources hub, search results page, login page.
+Do not mark these as remaining Phase 1 work: payments, full student dashboard, admin, resources hub, search results page, mock tests page. Login `/login` and signup `/signup` were requested and are implemented (password APIs from Graphy collection under `api/auth/user/*`; Google backend path `api/auth/user/google` is not in Postman). Course listing `/courses` and test series listing `/test-series` are implemented. Header Test Series still points at mocks.rodha.co.in.

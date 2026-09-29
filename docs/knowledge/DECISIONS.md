@@ -14,6 +14,66 @@ Format:
 
 ---
 
+### 2026-09-29 — Website route group layout vs root layout
+- **Decision:** Root `src/app/layout.tsx` only provides `html`/`body`, fonts, globals, default metadata, and JSON-LD. Public marketing chrome (`WebsiteStoreProvider` + `SiteFrame`) lives in `src/app/(website)/layout.tsx`. All public pages (including `/login` `/signup`) sit under the invisible `(website)` route group. `/account/*` and `/api/*` remain siblings outside that group.
+- **Rationale:** Account must never inherit announcement bar / Header / Footer; public URLs stay unchanged because route groups do not affect the path.
+- **Alternatives considered:** Pathname branching in root `SiteFrame` for `/account` (previous approach); separate `(auth)` group.
+- **Consequences:** Account layout is fully independent. `SiteFrame` only handles public vs auth chrome within `(website)`. Imports of colocated app files use `@/app/(website)/…` (e.g. `CatalogToolbar`).
+
+### 2026-09-29 — Account components folder + scoped theme (confirmed)
+- **Decision:** All student-dashboard UI lives under `src/components/account/` (mirrors `src/components/auth/`). Theme is account-scoped only via `data-account-theme="light|dark"` on `.account-shell` + `account-theme.css` variables — never toggles root `html.dark`. Preference in `localStorage`; circular View Transition on toggle.
+- **Rationale:** Keeps marketing site appearance and root layout unchanged while matching account light/dark reference UIs.
+- **Alternatives considered:** Shared marketing cards for continue-watching; root `html` class toggle; account chrome in root layout.
+- **Consequences:** Continue Watching / recommended / cart rows are dedicated account cards. Buy Courses may pass optional `CourseCardV2` `ctaLabel`. New account pages import from `@/components/account/*` and `@/data/account/*`.
+
+### 2026-09-29 — Account dashboard composition
+- **Decision:** `/account/dashboard` is a Server Component assembling static account data with shared account cards (`AccountContinueWatchingCard`, `AccountRecommendedCard` with `showCta={false}`) plus dashboard-only widgets (welcome, learning progress ring, orders preview, quick links). No TanStack Query.
+- **Rationale:** Matches reference two-column layout; reuses continue/recommended cards from courses/cart work; keeps dashboard SSR and theme-token driven.
+- **Alternatives considered:** Page-specific duplicate cards; client fetch for widgets.
+- **Consequences:** Dashboard View All deep-links to courses tabs. Cart recommended row keeps CTA via default `showCta`.
+
+### 2026-09-29 — Account courses tabs + continue card
+- **Decision:** `/account/courses` uses URL `?tab=continue|buy` (aliases `continue-watching` / `buy-courses`); default continue. Continue Watching uses dedicated `AccountContinueWatchingCard` (progress/play). Buy Courses reuses marketing `CourseCardV2` with optional `ctaLabel` only. Test Series reuses `TestSeriesCardV2`. Shared `paginateItems` at 6/page with URL `Pagination`.
+- **Rationale:** Continue cards need progress UI the marketing card lacks; Buy/Test Series already match catalog cards.
+- **Alternatives considered:** Extending CourseCardV2 with progress/play; client-only tab state without URL.
+- **Consequences:** Sidebar deep-links open the correct tab. Marketing CourseCardV2 CTA text stays "View Details" unless `ctaLabel` is passed.
+
+### 2026-09-29 — Account cart totals computed client-side
+- **Decision:** Cart Order Summary (subtotal, MRP line discounts, GST 18%, total, coupon savings) is derived from static cart items + coupon state via `computeCartTotals` — not hardcoded summary figures. Continue to Pay is UI-only (no payment gateway).
+- **Rationale:** Matches the account module plan and keeps demo math consistent when items or coupons change.
+- **Alternatives considered:** Hardcoding reference PNG totals; server-only totals without client remove/coupon.
+- **Consequences:** Removing items or toggling RODHA10 updates GST/total immediately. Sidebar cart badge still reads static `ACCOUNT_CART_ITEMS.length` until a shared cart context exists.
+
+### 2026-09-29 — Account dashboard shell + scoped theme
+- **Decision:** Student `/account/*` uses nested `AccountShell` (fixed sidebar + header + scrollable main) under `src/components/account/`, outside the public `(website)` layout. Theme is account-scoped via `data-account-theme` on the shell + CSS variables (never toggles `html.dark`); preference persists in `localStorage`. Theme toggle uses View Transitions circular clip-path (CSS circle fallback). Logout is `POST /api/auth/logout` clearing `rodha_access_token`.
+- **Rationale:** Isolates the logged-in dashboard from marketing layout/theme while matching reference light/dark UIs.
+- **Alternatives considered:** Reusing root `html.dark`; putting account chrome in root layout; pathname skip inside SiteFrame (superseded by `(website)` route group).
+- **Consequences:** Account pages own their chrome and never mount SiteFrame. Page content (dashboard/cart/etc.) can ship independently behind the shell. Settings is a stub.
+
+### 2026-09-28 — Auth endpoints share CMS `api/` base
+- **Decision:** Student auth uses `NEXT_PUBLIC_API_BASE_URL` (same host as website CMS) with paths `api/auth/user/signup`, `api/auth/user/login`, and `api/auth/user/google`.
+- **Rationale:** Website modules already concatenate `{{baseUrl}}api/...`. Graphy Postman used `{{baseUrl}}/auth/user/...` without `api/`; the live backend expects the CMS-style prefix.
+- **Alternatives considered:** Keep Graphy paths as-is; add a separate auth base URL env var.
+- **Consequences:** `apiPost` still builds `${baseUrl}${path}`. A missing `api/` segment 404s.
+
+### 2026-09-28 — Faculty detail unwraps nested CMS payload
+- **Decision:** Map `GET api/website/faculty/:slug` from `data.faculty` (profile) and `data.packages.items` (courses). Keep a fallback for the older Postman shape where `data` was the faculty record itself.
+- **Rationale:** The live CMS nests the profile. The mapper required `fullName`/`slug` on the envelope, so every detail URL called `notFound()` even when the API succeeded.
+- **Alternatives considered:** Treat the wrapper as an error; wait for the backend to flatten the payload again.
+- **Consequences:** Detail pages render from the nested profile. Course cards show when `packages.items` maps through `mapCourses`; empty packages hide the section.
+
+### 2026-09-28 — Student login/signup with httpOnly cookie
+- **Decision:** `/login` and `/signup` share `AuthScreen`. Password calls `api/auth/user/signup` and `api/auth/user/login` (`is_web: true`) through `/api/auth/*` Route Handlers using shared `apiPost` + `NEXT_PUBLIC_API_BASE_URL`. `accessToken` is stored in httpOnly `rodha_access_token`. Google uses GIS on the client and posts `{ idToken, is_web: true }` to `api/auth/user/google` (not in the Graphy collection). Signup includes a +91 mobile field because the API requires `phoneNumber`. Success redirects to a stub `/account/dashboard`. Marketing chrome is skipped on auth routes via `SiteFrame`.
+- **Rationale:** Product requested the signup mockup and website login APIs while keeping API keys and tokens off the client. There is no Google request in Postman, so the sibling path is documented rather than inventing extra fields.
+- **Alternatives considered:** Graphy `ssoUrl` redirect; localStorage tokens; skipping Google until a Postman folder exists; omitting phone to match the mockup exactly.
+- **Consequences:** Google 404s until the backend implements `api/auth/user/google`. Set `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (Web application OAuth client; JS origins `http://localhost:3000` and production origin). No Apple button. Header still has no Login link. Dashboard is a placeholder behind middleware.
+
+### 2026-09-28 — Catalog listings from category pages (no listing API)
+- **Decision:** `/courses` and `/test-series` list from `getActiveCategories()` + parallel `getCategoryPage(slug)`, then filter/paginate in the Server Component (10 per page). Reuse `CourseCardV2` / `TestSeriesCardV2`. No dedicated CMS listing endpoints. Header/Footer destinations stay unchanged.
+- **Rationale:** Product requested blog-style catalog pages. Postman has no `GET api/website/courses` or test-series list; category payloads already supply the same cards (CMS with static fallback).
+- **Alternatives considered:** Wait for listing APIs; client-side fetch of every category; point Header Test Series at `/test-series`.
+- **Consequences:** Empty CMS categories yield an empty listing (no invented rows). Course type filter is courses-only. Stories merge unique YouTube ids across verticals and hide when empty.
+
 ### 2026-09-18 — Name-based chrome fallback for new CMS categories
 - **Decision:** When `GET api/website/categories/:slug` returns a category with no `category-landings.json` entry, generate section titles, hero copy, CTA, colors, and mixed-theme surfaces from the API category name via `buildCategoryLandingFallback` / `withCategoryLandingDefaults`. Do not invent courses, faculty, results, testimonials, FAQs, or stories.
 - **Rationale:** Admins can create categories in CMS without a matching JSON landing. Empty section chrome looked broken; list data should stay empty-and-hidden until the API provides it.

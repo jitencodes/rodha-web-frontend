@@ -62,6 +62,7 @@ export interface ResultMetaApi {
   title?: string | null;
   overline?: string | null;
   subTitle?: string | null;
+  description?: string | null;
 }
 
 export interface StudentResultGroupApi {
@@ -81,6 +82,8 @@ export interface HeroStackViewModel {
   id: string;
   value: string;
   label: string;
+  /** From CMS stack `iconUrl` when present */
+  icon?: string;
 }
 
 export interface HomeBannerViewModel {

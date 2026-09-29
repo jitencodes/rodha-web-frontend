@@ -2,8 +2,10 @@ import { extractYoutubeId } from "@/lib/api/modules/banners/mapper";
 import { mapWebsiteBanner } from "@/lib/api/modules/banners/mapper";
 import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import { mapCourses } from "@/lib/api/modules/courses/mapper";
+import type { CourseApi } from "@/lib/api/modules/courses/types";
 import type {
   FacultyApi,
+  FacultyDetailApi,
   FacultyListViewModel,
   FacultyPageApi,
   FacultyTestimonialApi,
@@ -117,15 +119,37 @@ export function mapFacultyCards(
     .filter((item): item is Faculty => item !== null);
 }
 
-export function mapFacultyDetail(api: FacultyApi | null): Faculty | null {
+function unwrapFacultyDetail(
+  data: FacultyApi | FacultyDetailApi | null | undefined
+): FacultyApi | null {
+  if (!data) return null;
+  if ("faculty" in data && data.faculty) return data.faculty;
+  if ("fullName" in data || "slug" in data) return data as FacultyApi;
+  return null;
+}
+
+function facultyCourseItems(
+  data: FacultyApi | FacultyDetailApi,
+  api: FacultyApi
+): CourseApi[] | null | undefined {
+  if ("packages" in data && data.packages?.items) return data.packages.items;
+  if (api.courses?.length) return api.courses;
+  if ("courses" in data) return data.courses;
+  return null;
+}
+
+export function mapFacultyDetail(
+  data: FacultyApi | FacultyDetailApi | null
+): Faculty | null {
+  const api = unwrapFacultyDetail(data);
   const card = api ? mapFacultyCard(api) : null;
-  if (!card || !api) return null;
+  if (!card || !api || !data) return null;
 
   const specialization = card.specialization;
   const reviews = mapReviews(api.testimonials);
   const videos = mapVideos(api.videoLinks);
   const fallbackCategory = card.categories[0] ?? "cat";
-  const courses = mapCourses(api.courses, fallbackCategory);
+  const courses = mapCourses(facultyCourseItems(data, api), fallbackCategory);
 
   const heroStats =
     api.experienceYears !== null && api.experienceYears !== undefined

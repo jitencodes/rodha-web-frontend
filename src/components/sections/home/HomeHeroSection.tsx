@@ -22,6 +22,17 @@ function HeroStacksStrip({ stacks }: { stacks: HeroStackViewModel[] }) {
     <div className="bg-[#F06B23]/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
       {stacks.map((stack) => (
         <div key={stack.id} className="flex gap-4.5 items-center">
+          {stack.icon ? (
+            <div className="relative h-8 w-8 shrink-0 sm:h-10 sm:w-10">
+              <Image
+                src={stack.icon}
+                alt=""
+                fill
+                className="object-contain"
+                sizes="40px"
+              />
+            </div>
+          ) : null}
           <div>
             <p className="text-lg md:text-2xl font-semibold font-montserrat">
               {stack.value}

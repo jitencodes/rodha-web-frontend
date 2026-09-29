@@ -1,6 +1,6 @@
 # API Standards
 
-Phase 1 marketing site now loads **selected CMS content** from the public website API. Auth, payments, and course/test players remain out of scope.
+Phase 1 marketing site now loads **selected CMS content** from the public website API. Student login/signup uses the same `NEXT_PUBLIC_API_BASE_URL` with `api/auth/user/*` paths. Payments and course/test players remain out of scope.
 
 Authoritative agent workflow: [`.cursor/skills/api-integration/SKILL.md`](../../.cursor/skills/api-integration/SKILL.md).
 
@@ -15,10 +15,10 @@ Authoritative agent workflow: [`.cursor/skills/api-integration/SKILL.md`](../../
 | Rendering | Fetch in Server Components; pass view-models as props |
 | Empty data | Hide list/card sections — do not render blank UI. Category page chrome (titles, CTA, colors) uses a name-based fallback when JSON is missing |
 | Types | Copy Postman response shapes; do not invent fields |
-| Env | `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_SOURCE`, `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS`, optional `API_KEY` |
-| Collection | `docs/api-collection/Rodha website Api's.postman_collection (4).json` |
+| Env | `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_SOURCE`, `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS`, optional `API_KEY`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID` |
+| Collection | `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS) + `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (student auth) |
 
-**Integrated now:** announcements, active categories, Get Home, category page (faculty + testimonials + stories + FAQs + courses/`courseType`), faculty listing/detail, subjects, about, team, legal HTML pages, contact POST (via `/api/leads`).
+**Integrated now:** announcements, active categories, Get Home, category page (faculty + testimonials + stories + FAQs + courses/`courseType`), faculty listing/detail, subjects, about, team, legal HTML pages, contact POST (via `/api/leads`), student signup/login (via `/api/auth/*`).
 
 **Not yet:** FAQ listing API, blogs.
 
@@ -32,7 +32,7 @@ Shared mappers: `mapWebsiteBanner`, `mapCourses` (`courseType` for static sectio
 
 | User action | Platform | Behavior |
 |-------------|----------|----------|
-| Login / Sign Up | Graphy | `external` link / `window` navigate to portal URL |
+| Login / Sign Up | This site `/login` `/signup` | Password + Google; session cookie; dashboard stub |
 | Enrol Now | Graphy | Course-specific enrollment URL from course data |
 | Test Series / Mocks | ThinkExam | Portal URL |
 | Rodha Buddy | Rodha Buddy | Chatbot URL |

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-09-18 (category faculty/stories marquee center when short)
+**Last updated:** 2026-09-29 (home/blog UI fixes)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,19 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Home/blog UI + mapping fixes (2026-09-29):** Hero stacks pass through CMS `iconUrl` and render icons. Category + results descriptions use `ClampTooltip` (`line-clamp-5` / `line-clamp-2`). Results mapper reads `result.description`; category CTA is a real `Link` (no nested button) with carousel pointer stop. Blog detail prose gets Privacy-style overflow wrapping (`break-words` / `overflow-wrap: anywhere`).
+- **Website `(website)` layout split (2026-09-29):** Root layout is fonts/globals/metadata/JSON-LD only. Public SiteFrame + `WebsiteStoreProvider` moved to `src/app/(website)/layout.tsx`. All public pages (home, marketing, auth) live under `(website)` with unchanged URLs. `/account/*` no longer passes through SiteFrame. `CatalogToolbar` imports updated to `@/app/(website)/courses/CatalogToolbar`.
+- **Account module integration + responsive polish (2026-09-29):** Conflict check across `src/app/account/`, `src/components/account/`, `src/data/account/`, `src/lib/account/` — `tsc --noEmit` clean. Mobile header search expands as an overlay (was `sr-only`/unusable). `AccountPagination` picks light/dark from account theme. Orders table scrolls inside the card (no page overflow); dashboard/cart grids stack. Knowledge docs updated for the full module.
+- **Account My Cart page (2026-09-29):** Full `/account/cart` — item cards (image, type badge, meta, prices, View Details, remove), sticky Order Summary with computed subtotal / MRP discount / GST 18% / total + RODHA10 coupon apply/remove, Continue to Pay (UI only), savings banner, You May Also Like rail from `ACCOUNT_RECOMMENDED_PRODUCTS`. Helpers in `src/lib/account/cart-totals.ts`.
+- **Account orders / profile / settings (2026-09-29):** `/account/orders` desktop table + mobile cards (Order ID, product, date, amount, payment status, order status, View). `/account/profile` avatar, Edit Profile, update-name + change-password with client validation/success (no APIs). `/account/settings` polished stub. Extended `AccountOrder` with `paymentStatus`; added `AccountOrdersList` + `AccountProfilePanel`.
+- **Account Dashboard page (2026-09-29):** Full `/account/dashboard` matching light/dark refs — welcome banner (orange first name + MBA 3D illustration), Continue Watching + Recommended grids (`AccountContinueWatchingCard` / `AccountRecommendedCard` `showCta={false}`), right rail Learning Progress ring, My Orders preview, Quick Links. View All → courses tabs. Account theme CSS vars extended for welcome/status/progress. Responsive two-column → stack.
+- **Account Courses + Test Series (2026-09-29):** `/account/courses` tabs Continue Watching | Buy Courses (`?tab=continue|buy`, aliases `continue-watching` / `buy-courses`); default continue. Continue cards via `AccountContinueWatchingCard` + URL `AccountPagination` (6/page). Buy uses `CourseCardV2` with optional `ctaLabel="Buy Now"`. `/account/test-series` grids `TestSeriesCardV2` + pagination from static account data. Sidebar deep-links highlight correct tab.
+- **Account dashboard static data (2026-09-29):** Typed models in `src/lib/account/types.ts` plus `src/data/account/*` (`user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`). Rodha-style CAT/MBA sample data for Jitendra Saini; ~8–12 items per list for pagination.
+- **Account dashboard shell + scoped theme (2026-09-29):** `/account/*` nested layout with `AccountShell` / `AccountSidebar` / `AccountHeader` / `AccountThemeProvider`. Outside public `(website)` layout (no SiteFrame). Light/dark via `data-account-theme` + account CSS (no `html.dark` toggle); circular View Transition from click (viewport center for keyboard); `localStorage` persistence. Sidebar nav + cart badge, Need Help card, mobile drawer. Header search + Ctrl+K, theme toggle, notifications dot, Live Dashboard, profile dropdown Logout via `POST /api/auth/logout` + `clearAuthCookie`.
+- **Auth UI + API path polish (2026-09-28):** Login/signup left column is a full-bleed two-slide panel (`login-banner.png` per slide) with the original `rodha-logo.webp`. Desktop auth is viewport-locked (`h-dvh overflow-hidden`); only the form column scrolls. Light inputs use `!bg-white` so they beat `.input-base` on `html.dark`. Student auth now posts to `NEXT_PUBLIC_API_BASE_URL` + `api/auth/user/{signup,login,google}`.
+- **Faculty detail 404 (2026-09-28):** `GET api/website/faculty/:slug` now returns `{ faculty, packages }` instead of a flat profile. `mapFacultyDetail` unwraps `data.faculty` and maps courses from `packages.items` (legacy flat `courses` still accepted). Every slug was 404ing because the mapper treated the wrapper as a missing profile.
+- **Login `/login` + Signup `/signup` (2026-09-28):** Split-panel auth matching the signup mockup. Password signup/login via `api/auth/user/signup` and `api/auth/user/login` (`is_web: true`) on `NEXT_PUBLIC_API_BASE_URL`. Google Identity Services ID token → `api/auth/user/google` (not in Postman). httpOnly `rodha_access_token` cookie; redirect to stub `/account/dashboard`. Marketing chrome hidden on auth routes via `SiteFrame`. No Apple login; Header destinations unchanged.
+- **Courses `/courses` + Test Series `/test-series` listings (2026-09-28):** Blog-style dark hero (`ListingHeroSection` + `banner.png`), overlapping URL toolbar (CMS category chips, search, course-type + paid/free icon dropdowns), `CourseCardV2` / `TestSeriesCardV2` grids at 10 per page, then shared `SuccessStoriesSection` and `CTABandV2Decorative`. Catalog is SSR-aggregated from active category pages (CMS + existing static fallback). Header/Footer destinations unchanged.
 - **Category faculty/stories marquee alignment (2026-09-18):** `InfiniteMarquee` accepts optional `align="center"` for non-overflowing lists. Category faculty and success stories use it so a short row sits under the centered headers; results, testimonials, team, and other marquees keep the default start alignment.
 - **New-category landing fallback (2026-09-18):** Categories that exist in the CMS but not in `category-landings.json` now get a name-based chrome template (`src/data/category-landing-defaults.ts`). Section titles, subtitles, hero copy, CTA, colors, and mixed-theme surfaces fill automatically from the API category name. List sections still hide when empty; result-stat panels and hero media columns no longer render blank.
 - **Listing/form polish (2026-09-17):** `InfiniteMarquee` stays left-aligned without clones when items fit. Category results use a second marquee only at 15+ cards; testimonials stay a single horizontal row below 6 items. Blog listing shows `isFeatured` on the unfiltered view and detail pages render `relatedBlogs`. Faculty search/filter keeps the viewport on `#faculty-list`. Lead/contact/counselling forms validate required fields, 10-digit phones, and alphabetic names. Category courses/test series fall back to static catalog cards while CMS lists are empty.
@@ -140,6 +153,8 @@ Update this file after every meaningful implementation task.
 ### Screens
 - [x] About `/about`
 - [x] Blog listing `/blog` + detail `/blog/[slug]`
+- [x] Course listing `/courses`
+- [x] Test series listing `/test-series`
 - [x] Course detail `/courses/[slug]`
 - [x] Contact `/contact`
 - [x] Faculty listing `/faculty`
@@ -148,6 +163,8 @@ Update this file after every meaningful implementation task.
 - [x] FAQ listing (`/faq`)
 - [x] Legal pages (Privacy / Terms / Refund / Disclaimer)
 - [x] Dynamic category landings `/category/[category_slug]`
+- [x] Login `/login` + Signup `/signup`
+- [x] Student account pages (`/account/*`) — dashboard, courses, test-series, cart, orders, profile, settings
 - [ ] Promo popup
 
 ### Integrations
@@ -175,3 +192,5 @@ Update this file after every meaningful implementation task.
 - Non-MBA landings share CAT hero photo until dedicated assets arrive
 - Faculty detail body cards still use dark `card-base` islands on light section shells (intentional mixed theme)
 - Course detail curriculum/pricing are defaults until per-course JSON overrides are authored
+- Account module: Continue to Pay / notifications / Settings preferences / cart badge live sync / profile APIs still out of scope (static demo only)
+- Account search is presentational (Ctrl+K focuses input; no results)

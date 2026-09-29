@@ -6,9 +6,9 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { Carousel } from "@/components/ui/Carousel";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { Button } from "@/components/ui/Button";
 import { SectionHeaderV2 } from "../SectionHeaderV2";
 import type { HomeResultBannerViewModel } from "@/lib/api/modules/home/types";
 
@@ -64,7 +64,10 @@ export function HomeResultsSection({
                   </div>
 
                   <div className="relative z-10 grid gap-10 lg:flex items-center h-full">
-                    <div className="max-w-[330px]">
+                    <div
+                      className="max-w-[330px]"
+                      onPointerDown={(event) => event.stopPropagation()}
+                    >
                       <span
                         className={`
                           inline-flex
@@ -102,20 +105,22 @@ export function HomeResultsSection({
                       ) : null}
 
                       {banner.description ? (
-                        <p className="mt-4 text-base leading-7 text-[#727272]">
-                          {banner.description}
-                        </p>
+                        <div className="mt-4">
+                          <ClampTooltip
+                            text={banner.description}
+                            lines={2}
+                            className="text-base leading-7 text-[#727272]"
+                          />
+                        </div>
                       ) : null}
 
-                      <Button className="mt-8">
-                        <Link
-                          href={banner.href}
-                          className="flex items-center shrink-0"
-                        >
-                          {banner.cta}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
+                      <Link
+                        href={banner.href}
+                        className="btn-primary-premium premium-border-glow glow-accent-orange mt-8 inline-flex h-10 items-center justify-center gap-2 rounded-md bg-orange-500 px-5 text-body font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-orange-600 hover:shadow-orange active:translate-y-0 active:bg-orange-700"
+                      >
+                        {banner.cta}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
                     </div>
 
                     <div
