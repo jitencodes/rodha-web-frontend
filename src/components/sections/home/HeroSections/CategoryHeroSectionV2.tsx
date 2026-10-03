@@ -18,9 +18,9 @@ interface CategoryHeroSectionV2Props {
   categoryName: string;
   eyebrow?: string;
   headline: ReactNode;
-  subtitle: string;
+  subtitle?: string;
   quickStats: CategoryQuickStat[];
-  primaryCta: CategoryHeroCta;
+  primaryCta?: CategoryHeroCta | null;
   videoId?: string;
   imageUrl?: string;
   className?: string;
@@ -62,7 +62,6 @@ function HeroCtaLink({
 const HERO_CONTENT_MAX = "max-w-[26rem] sm:max-w-[34rem] h-full";
 
 export function CategoryHeroSectionV2({
-  categoryName,
   eyebrow,
   headline,
   subtitle,
@@ -79,6 +78,10 @@ export function CategoryHeroSectionV2({
   const hasImage = Boolean(imageUrl) && !hasVideo;
   const hasMedia = hasVideo || hasImage;
   const hasSubtitle = Boolean(subtitle?.trim());
+  const hasEyebrow = Boolean(eyebrow?.trim());
+  const hasPrimaryCta = Boolean(
+    primaryCta?.label?.trim() && primaryCta?.href?.trim()
+  );
 
   return (
     <HomeHeroShell className={cn(className)}>
@@ -93,9 +96,11 @@ export function CategoryHeroSectionV2({
             )}
           >
             <div className={HERO_CONTENT_MAX}>
-              <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
-                {eyebrow ?? `${categoryName} Entrance`}
-              </p>
+              {hasEyebrow ? (
+                <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
+                  {eyebrow}
+                </p>
+              ) : null}
 
               <h1 className="text-[32px] sm:text-[38px] md:text-[40px] font-bold leading-[1.4] tracking-tight">
                 {headline}
@@ -109,7 +114,9 @@ export function CategoryHeroSectionV2({
                 <div className="mb-8" />
               )}
               <div className="mt-3 flex flex-col sm:flex-row items-start gap-3">
-                <HeroCtaLink cta={primaryCta} variant="primary" />
+                {hasPrimaryCta && primaryCta ? (
+                  <HeroCtaLink cta={primaryCta} variant="primary" />
+                ) : null}
                 <CounsellingCtaAction
                   action={{ label: "Book Free Counselling", href: "/contact" }}
                   className="btn-secondary btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline text-body px-7 py-3.5"

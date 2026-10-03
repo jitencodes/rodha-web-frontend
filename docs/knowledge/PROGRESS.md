@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-09-29 (home/blog UI fixes)
+**Last updated:** 2026-09-29 (banner empty-state hiding)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Banner empty-state / hide heroes (2026-09-29):** Home, category, about, team, and faculty heroes no longer fall back to static placeholder copy/images/stats for empty CMS banner fields. If the banner is missing/inactive, the hero section is hidden. Category mapper sets `hero: null` and empty `quickStats` when no banner; `withCategoryLandingDefaults` preserves that null.
 - **Home/blog UI + mapping fixes (2026-09-29):** Hero stacks pass through CMS `iconUrl` and render icons. Category + results descriptions use `ClampTooltip` (`line-clamp-5` / `line-clamp-2`). Results mapper reads `result.description`; category CTA is a real `Link` (no nested button) with carousel pointer stop. Blog detail prose gets Privacy-style overflow wrapping (`break-words` / `overflow-wrap: anywhere`).
 - **Website `(website)` layout split (2026-09-29):** Root layout is fonts/globals/metadata/JSON-LD only. Public SiteFrame + `WebsiteStoreProvider` moved to `src/app/(website)/layout.tsx`. All public pages (home, marketing, auth) live under `(website)` with unchanged URLs. `/account/*` no longer passes through SiteFrame. `CatalogToolbar` imports updated to `@/app/(website)/courses/CatalogToolbar`.
 - **Account module integration + responsive polish (2026-09-29):** Conflict check across `src/app/account/`, `src/components/account/`, `src/data/account/`, `src/lib/account/` — `tsc --noEmit` clean. Mobile header search expands as an overlay (was `sr-only`/unusable). `AccountPagination` picks light/dark from account theme. Orders table scrolls inside the card (no page overflow); dashboard/cart grids stack. Knowledge docs updated for the full module.

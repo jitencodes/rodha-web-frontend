@@ -205,7 +205,7 @@ export function withCategoryLandingDefaults(
   });
 
   const accent = getCategoryHeroAccentWords(landing.hero?.accent);
-  const fallbackAccent = getCategoryHeroAccentWords(fallback.hero.accent);
+  const fallbackHero = fallback.hero!;
 
   return {
     ...landing,
@@ -226,15 +226,26 @@ export function withCategoryLandingDefaults(
         fallback.metadata.description
       ),
     },
-    hero: {
-      eyebrow: filled(landing.hero?.eyebrow, fallback.hero.eyebrow),
-      title: filled(landing.hero?.title, fallback.hero.title),
-      accent: accent.length > 0 ? accent : fallbackAccent,
-      subtitle: filled(landing.hero?.subtitle, fallback.hero.subtitle),
-      primaryCta: filledCta(landing.hero?.primaryCta, fallback.hero.primaryCta),
-      videoId: landing.hero?.videoId,
-      imageUrl: landing.hero?.imageUrl,
-    },
+    // Preserve explicit null (no CMS banner). Do not refill empty banner
+    // fields with static placeholders.
+    hero:
+      landing.hero === null
+        ? null
+        : {
+            eyebrow: landing.hero?.eyebrow ?? "",
+            title: filled(landing.hero?.title, fallbackHero.title),
+            accent,
+            subtitle: landing.hero?.subtitle ?? "",
+            primaryCta:
+              landing.hero?.primaryCta?.label?.trim() &&
+              landing.hero?.primaryCta?.href?.trim()
+                ? landing.hero.primaryCta
+                : landing.hero?.primaryCta === undefined
+                  ? fallbackHero.primaryCta
+                  : null,
+            videoId: landing.hero?.videoId,
+            imageUrl: landing.hero?.imageUrl,
+          },
     sectionCopy: mergeSectionCopy(landing.sectionCopy, fallback.sectionCopy),
     cta: {
       title: filled(landing.cta?.title, fallback.cta.title),

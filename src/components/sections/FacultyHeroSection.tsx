@@ -2,7 +2,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
-import { FACULTY_HERO, FACULTY_HERO_STATS } from "@/data/faculty";
 import { Icon } from "@/components/ui/Icon";
 import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
 import type { WebsiteBannerViewModel } from "@/lib/api/modules/banners/types";
@@ -16,23 +15,17 @@ export function FacultyHeroSection({
   className,
   banner = null,
 }: FacultyHeroSectionProps) {
-  const title = banner?.title || FACULTY_HERO.titleBefore;
-  const highlight =
-    banner?.titleHighlights[0] || FACULTY_HERO.titleHighlight;
-  const description = banner?.description ?? FACULTY_HERO.description;
-  const overline = banner?.overline || "Our Faculty";
-  const stats =
-    banner?.listItems.length
-      ? banner.listItems
-      : FACULTY_HERO_STATS.map((stat) => ({
-          id: stat.id,
-          value: stat.value,
-          label: stat.label,
-          icon: stat.icon,
-        }));
-  const videoId = banner?.videoId;
-  const imageUrl = banner?.imageUrl || FACULTY_HERO.image;
+  if (!banner) return null;
+
+  const title = banner.title;
+  const highlight = banner.titleHighlights[0] || null;
+  const description = banner.description;
+  const overline = banner.overline;
+  const stats = banner.listItems;
+  const videoId = banner.videoId;
+  const imageUrl = banner.imageUrl;
   const showVideo = Boolean(videoId);
+  const showImage = Boolean(imageUrl) && !showVideo;
 
   return (
     <section
@@ -41,7 +34,7 @@ export function FacultyHeroSection({
         className
       )}
     >
-      {!showVideo ? (
+      {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]">
           <Image
             src={imageUrl}
@@ -71,10 +64,18 @@ export function FacultyHeroSection({
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-          <div className={showVideo ? "lg:col-span-6" : "lg:col-span-6 xl:col-span-5"}>
-            <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
-              {overline}
-            </p>
+          <div
+            className={
+              showVideo || showImage
+                ? "lg:col-span-6"
+                : "lg:col-span-6 xl:col-span-5"
+            }
+          >
+            {overline ? (
+              <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
+                {overline}
+              </p>
+            ) : null}
 
             <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
@@ -122,18 +123,18 @@ export function FacultyHeroSection({
             <div className="lg:col-span-6">
               <HeroVideoEmbed videoId={videoId} />
             </div>
-          ) : (
+          ) : showImage && imageUrl ? (
             <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden bg-bg-primary">
               <Image
                 src={imageUrl}
-                alt={FACULTY_HERO.imageAlt}
+                alt=""
                 fill
                 className="object-contain object-[center_bottom]"
                 sizes="100vw"
                 fetchPriority="high"
               />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

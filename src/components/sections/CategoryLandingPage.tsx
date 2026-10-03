@@ -66,7 +66,10 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
   const resultsRow2 = results.slice(resultsMidpoint);
   const useTestimonialColumns =
     testimonials.length >= TESTIMONIAL_MULTI_COLUMN_THRESHOLD;
-  const accentWords = getCategoryHeroAccentWords(category.hero.accent);
+  const showHero = Boolean(category.hero);
+  const accentWords = showHero
+    ? getCategoryHeroAccentWords(category.hero?.accent)
+    : [];
   const showResultStats = category.resultStats.length > 0;
 
   return (
@@ -86,27 +89,29 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
         />
       ) : null}
 
-      <CategoryHeroSectionV2
-        categoryName={category.name}
-        eyebrow={category.hero.eyebrow}
-        headline={
-          <>
-            {category.hero.title}
-            {accentWords.length > 0 ? (
-              <span className="text-orange-500 glow-text-orange">
-                {" "}
-                <br />
-                <Typewritter words={accentWords} />
-              </span>
-            ) : null}
-          </>
-        }
-        subtitle={category.hero.subtitle}
-        quickStats={category.quickStats}
-        primaryCta={category.hero.primaryCta}
-        videoId={category.hero.videoId}
-        imageUrl={category.hero.imageUrl}
-      />
+      {category.hero ? (
+        <CategoryHeroSectionV2
+          categoryName={category.name}
+          eyebrow={category.hero.eyebrow || undefined}
+          headline={
+            <>
+              {category.hero.title}
+              {accentWords.length > 0 ? (
+                <span className="text-orange-500 glow-text-orange">
+                  {" "}
+                  <br />
+                  <Typewritter words={accentWords} />
+                </span>
+              ) : null}
+            </>
+          }
+          subtitle={category.hero.subtitle}
+          quickStats={category.quickStats}
+          primaryCta={category.hero.primaryCta ?? null}
+          videoId={category.hero.videoId}
+          imageUrl={category.hero.imageUrl}
+        />
+      ) : null}
 
       {showResults && <section
         id="results"

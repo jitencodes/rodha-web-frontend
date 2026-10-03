@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Icon } from "@/components/ui/Icon";
-import { ABOUT_HERO, ABOUT_HERO_HIGHLIGHTS } from "@/data/about";
 import { cn } from "@/lib/utils";
 import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
 import type { WebsiteBannerViewModel } from "@/lib/api/modules/banners/types";
@@ -16,13 +15,18 @@ export function AboutHeroSection({
   className,
   banner = null,
 }: AboutHeroSectionProps) {
-  const title = banner?.title || ABOUT_HERO.titleBefore;
-  const highlight = banner?.titleHighlights[0] || ABOUT_HERO.titleHighlight;
-  const description = banner?.description ?? ABOUT_HERO.description;
-  const eyebrow = banner?.overline || ABOUT_HERO.eyebrow;
-  const videoId = banner?.videoId;
-  const imageUrl = banner?.imageUrl || ABOUT_HERO.image;
+  if (!banner) return null;
+
+  const title = banner.title;
+  const highlight = banner.titleHighlights[0] || null;
+  const description = banner.description;
+  const eyebrow = banner.overline;
+  const videoId = banner.videoId;
+  const imageUrl = banner.imageUrl;
+  const stats = banner.listItems;
   const showVideo = Boolean(videoId);
+  const showImage = Boolean(imageUrl) && !showVideo;
+
   return (
     <section
       className={cn(
@@ -35,11 +39,11 @@ export function AboutHeroSection({
         aria-hidden
       />
 
-      {!showVideo ? (
+      {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[46%] xl:w-[50%]">
           <Image
             src={imageUrl}
-            alt="Rodha mentors collaborating with students"
+            alt=""
             fill
             className="object-cover object-center"
             sizes="50vw"
@@ -52,15 +56,6 @@ export function AboutHeroSection({
                 "linear-gradient(to right, var(--bg-primary) 0%, rgba(10,10,10,0.72) 12%, rgba(10,10,10,0.2) 38%, transparent 58%)",
             }}
           />
-          <div className="pointer-events-auto absolute right-4 bottom-4 xl:right-6 xl:bottom-6 max-w-[300px] rounded-[6px] border border-orange-500/25 bg-bg-secondary/90 p-4 md:p-5 backdrop-blur-sm z-10">
-            <Icon src="/assets/icons/quote.svg" size={22} className="text-orange-400" />
-            <p className="mt-3 text-body-sm leading-relaxed text-text-secondary">
-              &ldquo;{ABOUT_HERO.quote}&rdquo;
-            </p>
-            <p className="mt-3 text-body-sm font-semibold text-orange-400">
-              — {ABOUT_HERO.quoteAttribution}
-            </p>
-          </div>
         </div>
       ) : null}
 
@@ -74,13 +69,21 @@ export function AboutHeroSection({
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-          <div className={showVideo ? "lg:col-span-6" : "lg:col-span-6 xl:col-span-6"}>
-            <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
-              {eyebrow}
-            </p>
+          <div
+            className={
+              showVideo || showImage ? "lg:col-span-6" : "lg:col-span-6 xl:col-span-6"
+            }
+          >
+            {eyebrow ? (
+              <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
+                {eyebrow}
+              </p>
+            ) : null}
             <h1 className="text-[32px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
               {title}{" "}
-              {highlight ? <span className="text-orange-500">{highlight}</span> : null}
+              {highlight ? (
+                <span className="text-orange-500">{highlight}</span>
+              ) : null}
             </h1>
             {description ? (
               <p className="mt-4 max-w-xl text-body-lg text-text-secondary leading-relaxed">
@@ -89,51 +92,42 @@ export function AboutHeroSection({
             ) : null}
 
             {showVideo && videoId ? (
-              <HeroVideoEmbed videoId={videoId} />
-            ) : (
-              <>
-                <div className="mt-5 lg:hidden relative w-full overflow-hidden rounded-[8px]">
-                  <Image
-                    src={imageUrl}
-                    alt="Rodha mentors collaborating with students"
-                    width={300}
-                    height={300}
-                    className="object-cover object-center w-full h-auto"
-                    sizes="100vw"
-                    fetchPriority="high"
-                  />
-                </div>
+              <div className="mt-5">
+                <HeroVideoEmbed videoId={videoId} />
+              </div>
+            ) : showImage && imageUrl ? (
+              <div className="mt-5 lg:hidden relative w-full overflow-hidden rounded-[8px]">
+                <Image
+                  src={imageUrl}
+                  alt=""
+                  width={300}
+                  height={300}
+                  className="object-cover object-center w-full h-auto"
+                  sizes="100vw"
+                  fetchPriority="high"
+                />
+              </div>
+            ) : null}
 
-              </>
-            )}
-
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-              {ABOUT_HERO_HIGHLIGHTS.map((item) => (
-                <div key={item.id} className="min-w-0">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-[6px] border border-orange-500/30 bg-orange-500/10 text-orange-400">
-                    <Icon src={item.icon} size={18} />
-                  </span>
-                  <h3 className="mt-2.5 text-body-sm font-semibold text-text-primary leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1 text-caption text-text-muted leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 relative">
-            <div className="mt-4 lg:hidden w-full card-base rounded-[6px] border-orange-500/25 bg-bg-secondary/90 p-4 md:p-5 backdrop-blur-sm">
-              <Icon src="/assets/icons/quote.svg" size={22} className="text-orange-400" />
-              <p className="mt-3 text-body-sm leading-relaxed text-text-secondary">
-                &ldquo;{ABOUT_HERO.quote}&rdquo;
-              </p>
-              <p className="mt-3 text-body-sm font-semibold text-orange-400">
-                — {ABOUT_HERO.quoteAttribution}
-              </p>
-            </div>
+            {stats.length > 0 ? (
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+                {stats.map((item) => (
+                  <div key={item.id} className="min-w-0">
+                    {item.icon ? (
+                      <span className="flex h-9 w-9 items-center justify-center rounded-[6px] border border-orange-500/30 bg-orange-500/10 text-orange-400">
+                        <Icon src={item.icon} size={18} />
+                      </span>
+                    ) : null}
+                    <h3 className="mt-2.5 text-body-sm font-semibold text-text-primary leading-snug">
+                      {item.value}
+                    </h3>
+                    <p className="mt-1 text-caption text-text-muted leading-relaxed">
+                      {item.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </Container>

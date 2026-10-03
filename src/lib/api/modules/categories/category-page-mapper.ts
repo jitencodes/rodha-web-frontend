@@ -254,19 +254,17 @@ export function mapCategoryPage(
     },
     hero: banner
       ? {
-          eyebrow: banner.overline || base.hero.eyebrow,
-          title: banner.title || base.hero.title,
-          accent: banner.titleHighlights.length
-            ? banner.titleHighlights
-            : base.hero.accent,
-          subtitle: banner.description || base.hero.subtitle,
+          eyebrow: banner.overline || "",
+          title: banner.title,
+          accent: banner.titleHighlights,
+          subtitle: banner.description || "",
           primaryCta: primaryCta
             ? { label: primaryCta.label, href: primaryCta.href }
-            : base.hero.primaryCta,
+            : null,
           videoId: banner.videoId || undefined,
           imageUrl: banner.imageUrl || undefined,
         }
-      : base.hero,
+      : null,
     quickStats: banner?.stacks.length
       ? banner.stacks.map((stack) => ({
           id: stack.id,
@@ -275,7 +273,7 @@ export function mapCategoryPage(
           icon: stack.icon || "",
           prefix: stack.prefix,
         }))
-      : base.quickStats,
+      : [],
     results,
     resultStats,
     facultyMembers,

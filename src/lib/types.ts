@@ -387,7 +387,8 @@ export interface CategoryLandingHero {
   title: string;
   accent: string | string[];
   subtitle: string;
-  primaryCta: CategoryCta;
+  /** Omitted or empty when CMS banner has no CTA */
+  primaryCta?: CategoryCta | null;
   /** YouTube video id for the category hero embed */
   videoId?: string;
   /** Image banner when no YouTube video is present */
@@ -424,7 +425,8 @@ export interface StudentStory {
 
 export interface CategoryLandingConfig extends Category {
   metadata: CategoryLandingMetadata;
-  hero: CategoryLandingHero;
+  /** Null when CMS banner is missing — hero section should be hidden */
+  hero: CategoryLandingHero | null;
   sectionCopy: CategoryLandingSectionCopy;
   cta: CategoryLandingCta;
   sectionThemes: Record<string, CategorySectionTheme>;

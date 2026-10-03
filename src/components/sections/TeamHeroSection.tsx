@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { TEAM_HERO, TEAM_HERO_STATS } from "@/data/team";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
@@ -15,21 +14,16 @@ export function TeamHeroSection({
   className,
   banner = null,
 }: TeamHeroSectionProps) {
-  const title = banner?.title || TEAM_HERO.titleBefore;
-  const highlight = banner?.titleHighlights[0] || TEAM_HERO.titleHighlight;
-  const description = banner?.description ?? TEAM_HERO.description;
-  const stats =
-    banner?.listItems.length
-      ? banner.listItems
-      : TEAM_HERO_STATS.map((stat) => ({
-          id: stat.id,
-          value: stat.value,
-          label: stat.label,
-          icon: stat.icon,
-        }));
-  const videoId = banner?.videoId;
-  const imageUrl = banner?.imageUrl || TEAM_HERO.image;
+  if (!banner) return null;
+
+  const title = banner.title;
+  const highlight = banner.titleHighlights[0] || null;
+  const description = banner.description;
+  const stats = banner.listItems;
+  const videoId = banner.videoId;
+  const imageUrl = banner.imageUrl;
   const showVideo = Boolean(videoId);
+  const showImage = Boolean(imageUrl) && !showVideo;
 
   return (
     <section
@@ -38,7 +32,7 @@ export function TeamHeroSection({
         className
       )}
     >
-      {!showVideo ? (
+      {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]">
           <Image
             src={imageUrl}
@@ -68,7 +62,13 @@ export function TeamHeroSection({
           className="py-0 pb-4 md:pb-5"
         />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-          <div className={showVideo ? "lg:col-span-6" : "lg:col-span-6 xl:col-span-5"}>
+          <div
+            className={
+              showVideo || showImage
+                ? "lg:col-span-6"
+                : "lg:col-span-6 xl:col-span-5"
+            }
+          >
             <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
               {highlight ? (
@@ -118,18 +118,18 @@ export function TeamHeroSection({
             <div className="lg:col-span-6">
               <HeroVideoEmbed videoId={videoId} />
             </div>
-          ) : (
+          ) : showImage && imageUrl ? (
             <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden">
               <Image
                 src={imageUrl}
-                alt={TEAM_HERO.imageAlt}
+                alt=""
                 fill
                 className="object-cover object-center"
                 sizes="100vw"
                 fetchPriority="high"
               />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>
