@@ -53,9 +53,20 @@ export function mapHomeFaqs(
     .filter((item): item is HomeFaqViewModel => item !== null);
 }
 
-function parsePercentile(raw: string | null | undefined): number | undefined {
-  if (!raw?.trim()) return undefined;
-  const n = Number.parseFloat(raw.replace(/%/g, "").trim());
+function parsePercentile(
+  raw: string | number | null | undefined
+): number | undefined {
+  if (raw == null) return undefined;
+
+  if (typeof raw === "number") {
+    return Number.isFinite(raw) ? raw : undefined;
+  }
+
+  const value = raw.trim();
+  if (!value) return undefined;
+
+  const n = Number.parseFloat(value.replace(/%/g, "").trim());
+
   return Number.isFinite(n) ? n : undefined;
 }
 
