@@ -19,6 +19,7 @@ workflow:
 stages:
   - validate
   - build
+  - package
   - deploy
 
 default:
@@ -28,6 +29,9 @@ default:
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   NEXT_TELEMETRY_DISABLED: "1"
+  # Docker / registry
+  DOCKER_TLS_CERTDIR: "/certs"
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE"
 
 cache:
   key:
@@ -47,6 +51,19 @@ cache:
     - npm ci --prefer-offline
     - node scripts/ci-write-env.mjs
 
+.docker_setup: &docker_setup
+  image: docker:27-cli
+  services:
+    - docker:27-dind
+  before_script:
+    - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    # Write env with node (Alpine package) so NEXT_PUBLIC_* bake correctly
+    - |
+      apk add --no-cache nodejs
+      node scripts/ci-write-env.mjs
+      test -n "$NEXT_PUBLIC_API_BASE_URL" || (echo "Missing NEXT_PUBLIC_API_BASE_URL for this environment" && exit 1)
+
 # ---------------------------------------------------------------------------
 # Validate (both branches + MRs)
 # ---------------------------------------------------------------------------
@@ -63,7 +80,7 @@ validate:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 # ---------------------------------------------------------------------------
-# Build — development (main)
+# Build — npm artifacts (kept for non-Docker / PM2 deploys)
 # ---------------------------------------------------------------------------
 
 build:development:
@@ -88,10 +105,6 @@ build:development:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
-# ---------------------------------------------------------------------------
-# Build — production (production branch)
-# ---------------------------------------------------------------------------
-
 build:production:
   stage: build
   <<: *node_setup
@@ -115,20 +128,82 @@ build:production:
     - if: $CI_COMMIT_BRANCH == "production"
 
 # ---------------------------------------------------------------------------
-# Deploy — optional SSH/rsync + pm2 (manual until DEPLOY_* vars are set)
-# Uses environment-scoped DEPLOY_HOST / DEPLOY_USER / DEPLOY_PATH / SSH_PRIVATE_KEY
+# Package — Docker image → GitLab Container Registry
+# Tags: :<env>-<sha> and :<env>-latest (isolated per environment)
 # ---------------------------------------------------------------------------
 
-.deploy_template: &deploy_template
-  stage: deploy
+docker:development:
+  stage: package
+  <<: *docker_setup
+  environment:
+    name: development
+  # Run after validate; do not wait on npm artifact build (image builds inside Docker)
+  needs:
+    - job: validate
+  script:
+    - |
+      DEV_TAG="${IMAGE_NAME}:development-${CI_COMMIT_SHORT_SHA}"
+      DEV_LATEST="${IMAGE_NAME}:development-latest"
+      echo "Building Docker image $DEV_TAG"
+      docker build \
+        --pull \
+        -t "$DEV_TAG" \
+        -t "$DEV_LATEST" \
+        .
+      docker push "$DEV_TAG"
+      docker push "$DEV_LATEST"
+      echo "IMAGE_TAG=$DEV_TAG" > docker.env
+  artifacts:
+    reports:
+      dotenv: docker.env
+    paths:
+      - .env
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+docker:production:
+  stage: package
+  <<: *docker_setup
+  environment:
+    name: production
+  needs:
+    - job: validate
+  script:
+    - |
+      PROD_TAG="${IMAGE_NAME}:production-${CI_COMMIT_SHORT_SHA}"
+      PROD_LATEST="${IMAGE_NAME}:production-latest"
+      echo "Building Docker image $PROD_TAG"
+      docker build \
+        --pull \
+        -t "$PROD_TAG" \
+        -t "$PROD_LATEST" \
+        .
+      docker push "$PROD_TAG"
+      docker push "$PROD_LATEST"
+      echo "IMAGE_TAG=$PROD_TAG" > docker.env
+  artifacts:
+    reports:
+      dotenv: docker.env
+    paths:
+      - .env
+    expire_in: 14 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+
+# ---------------------------------------------------------------------------
+# Deploy — PM2/rsync (manual) OR Docker pull on host (manual)
+# ---------------------------------------------------------------------------
+
+.deploy_ssh_setup: &deploy_ssh_setup
   image: alpine:3.20
   before_script:
     - apk add --no-cache openssh-client rsync bash
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - |
-      if [ -z "${SSH_PRIVATE_KEY}" ] || [ -z "${DEPLOY_HOST}" ] || [ -z "${DEPLOY_USER}" ] || [ -z "${DEPLOY_PATH}" ]; then
-        echo "Deploy skipped: set environment-scoped SSH_PRIVATE_KEY, DEPLOY_HOST, DEPLOY_USER, DEPLOY_PATH"
+      if [ -z "${SSH_PRIVATE_KEY}" ] || [ -z "${DEPLOY_HOST}" ] || [ -z "${DEPLOY_USER}" ]; then
+        echo "Set environment-scoped SSH_PRIVATE_KEY, DEPLOY_HOST, DEPLOY_USER"
         exit 1
       fi
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
@@ -140,12 +215,21 @@ build:production:
         ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
       fi
       chmod 644 ~/.ssh/known_hosts
+
+deploy:development:
+  <<: *deploy_ssh_setup
+  stage: deploy
+  environment:
+    name: development
+    url: $NEXT_PUBLIC_BASE_URL
+  needs:
+    - build:development
   script:
     - |
+      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
       rsync -az --delete \
         .next public package.json package-lock.json next.config.ts .env \
         "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
-    - |
       ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
         set -e
         cd \"${DEPLOY_PATH}\"
@@ -154,29 +238,102 @@ build:production:
           pm2 restart \"${DEPLOY_PM2_NAME:-rodha-web}\" || pm2 start npm --name \"${DEPLOY_PM2_NAME:-rodha-web}\" -- start
           pm2 save || true
         else
-          echo \"pm2 not found — artifacts synced; start the app manually with npm start\"
+          echo \"pm2 not found — artifacts synced; start manually with npm start\"
         fi
       '"
-
-deploy:development:
-  <<: *deploy_template
-  environment:
-    name: development
-    url: $NEXT_PUBLIC_BASE_URL
-  needs:
-    - build:development
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
       allow_failure: false
 
 deploy:production:
-  <<: *deploy_template
+  <<: *deploy_ssh_setup
+  stage: deploy
   environment:
     name: production
     url: $NEXT_PUBLIC_BASE_URL
   needs:
     - build:production
+  script:
+    - |
+      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
+      rsync -az --delete \
+        .next public package.json package-lock.json next.config.ts .env \
+        "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
+      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
+        set -e
+        cd \"${DEPLOY_PATH}\"
+        npm ci --omit=dev
+        if command -v pm2 >/dev/null 2>&1; then
+          pm2 restart \"${DEPLOY_PM2_NAME:-rodha-web}\" || pm2 start npm --name \"${DEPLOY_PM2_NAME:-rodha-web}\" -- start
+          pm2 save || true
+        else
+          echo \"pm2 not found — artifacts synced; start manually with npm start\"
+        fi
+      '"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+      when: manual
+      allow_failure: false
+
+deploy:docker:development:
+  <<: *deploy_ssh_setup
+  stage: deploy
+  environment:
+    name: development
+    url: $NEXT_PUBLIC_BASE_URL
+  needs:
+    - job: docker:development
+      artifacts: true
+  script:
+    - |
+      test -n "${IMAGE_TAG}" || (echo "Missing IMAGE_TAG from docker job" && exit 1)
+      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
+      scp docker-compose.deploy.yml "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/docker-compose.deploy.yml"
+      # Runtime .env for server-only secrets (SMTP etc.) — not the baked NEXT_PUBLIC build file
+      if [ -f .env ]; then
+        scp .env "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env"
+      fi
+      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
+        set -e
+        cd \"${DEPLOY_PATH}\"
+        echo \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"
+        export IMAGE=\"${IMAGE_TAG}\"
+        export PORT=\"${DEPLOY_PORT:-3000}\"
+        docker compose -f docker-compose.deploy.yml pull
+        docker compose -f docker-compose.deploy.yml up -d --remove-orphans
+      '"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+      allow_failure: false
+
+deploy:docker:production:
+  <<: *deploy_ssh_setup
+  stage: deploy
+  environment:
+    name: production
+    url: $NEXT_PUBLIC_BASE_URL
+  needs:
+    - job: docker:production
+      artifacts: true
+  script:
+    - |
+      test -n "${IMAGE_TAG}" || (echo "Missing IMAGE_TAG from docker job" && exit 1)
+      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
+      scp docker-compose.deploy.yml "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/docker-compose.deploy.yml"
+      if [ -f .env ]; then
+        scp .env "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env"
+      fi
+      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
+        set -e
+        cd \"${DEPLOY_PATH}\"
+        echo \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"
+        export IMAGE=\"${IMAGE_TAG}\"
+        export PORT=\"${DEPLOY_PORT:-3000}\"
+        docker compose -f docker-compose.deploy.yml pull
+        docker compose -f docker-compose.deploy.yml up -d --remove-orphans
+      '"
   rules:
     - if: $CI_COMMIT_BRANCH == "production"
       when: manual

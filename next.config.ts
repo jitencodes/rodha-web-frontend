@@ -6,6 +6,8 @@ const defaultHomePath =
   process.env.NEXT_PUBLIC_DEFAULT_HOME_PATH?.trim() || "/category/cat";
 
 const nextConfig: NextConfig = {
+  /** Required for the multi-stage Docker image (`.next/standalone`). */
+  output: "standalone",
   env: {
     NEXT_PUBLIC_BUILD_TIME: buildTime,
   },

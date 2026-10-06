@@ -1,0 +1,37 @@
+# dependencies & build output
+node_modules
+.next
+out
+build
+coverage
+
+# git / IDE / docs (keep Dockerfile context lean)
+.git
+.github
+.cursor
+.vscode
+docs
+referrence
+*.md
+AGENTS.md
+CLAUDE.md
+
+# local-only env variants (CI job writes `.env` into the context intentionally)
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# misc
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
+scripts/*.html
+scripts/*.json
+scripts/sample-*
+Rodha*.docx
+*.png
+!public/**
