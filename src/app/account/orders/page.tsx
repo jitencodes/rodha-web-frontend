@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { AccountOrdersList } from "@/components/account/AccountOrdersList";
 import { getStudentOrders } from "@/lib/api/modules/student/orders/service";
-import { getAccessToken } from "@/lib/auth/server-session";
+import {
+  isUnauthorizedError,
+  redirectSessionExpired,
+  withStudentAuth,
+} from "@/lib/auth/require-student";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -12,18 +15,17 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function AccountOrdersPage() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect("/login?next=/account/orders");
-  }
-
-  let orders: Awaited<ReturnType<typeof getStudentOrders>>["items"] = [];
-  try {
-    const result = await getStudentOrders(accessToken, 1, 50);
-    orders = result.items;
-  } catch {
-    orders = [];
-  }
+  const orders = await withStudentAuth(async (accessToken) => {
+    try {
+      const result = await getStudentOrders(accessToken, 1, 50);
+      return result.items;
+    } catch (error) {
+      if (isUnauthorizedError(error)) {
+        redirectSessionExpired("/account/orders");
+      }
+      return [];
+    }
+  }, "/account/orders");
 
   return (
     <div className="mx-auto w-full max-w-6xl">

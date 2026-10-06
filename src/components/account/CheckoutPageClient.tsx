@@ -4,7 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 import { formatCartMoney } from "@/lib/account/cart-totals";
+import { userHasState } from "@/lib/api/modules/auth/mapper";
+import { fetchAuthed } from "@/lib/auth/session-expired";
+import { userAtom } from "@/lib/store/user";
 
 type CheckoutItem = {
   cartItemId: string;
@@ -56,6 +61,7 @@ export function CheckoutPageClient({
   promocodeOptions,
 }: CheckoutPageClientProps) {
   const router = useRouter();
+  const authUser = useAtomValue(userAtom);
   const [couponInput, setCouponInput] = useState(item?.promocodeCode || "");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -63,6 +69,8 @@ export function CheckoutPageClient({
   const [discount, setDiscount] = useState(discountAmount);
   const [payable, setPayable] = useState(payableAmount);
   const [appliedCode, setAppliedCode] = useState(item?.promocodeCode || null);
+  const [stateDialogOpen, setStateDialogOpen] = useState(false);
+  const [resumePayAfterState, setResumePayAfterState] = useState(false);
 
   async function applyCoupon() {
     if (!item || !couponInput.trim()) return;
@@ -76,7 +84,7 @@ export function CheckoutPageClient({
     setPending(true);
     setError(null);
     try {
-      const res = await fetch("/api/checkout/promocode", {
+      const res = await fetchAuthed("/api/checkout/promocode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -116,7 +124,7 @@ export function CheckoutPageClient({
     setPending(true);
     setError(null);
     try {
-      const res = await fetch("/api/checkout/promocode", {
+      const res = await fetchAuthed("/api/checkout/promocode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -151,12 +159,18 @@ export function CheckoutPageClient({
     }
   }
 
-  async function handlePay() {
+  async function handlePay(options?: { skipStateCheck?: boolean }) {
     if (!item) return;
+    if (!options?.skipStateCheck && !userHasState(authUser)) {
+      setResumePayAfterState(true);
+      setStateDialogOpen(true);
+      setError("Please select your state before continuing to pay.");
+      return;
+    }
     setPending(true);
     setError(null);
     try {
-      const res = await fetch("/api/checkout/pay", { method: "POST" });
+      const res = await fetchAuthed("/api/checkout/pay", { method: "POST" });
       const data = (await res.json()) as {
         ok: boolean;
         error?: string;
@@ -166,6 +180,7 @@ export function CheckoutPageClient({
         amountPaise?: number;
         currency?: string;
         orderNumber?: string;
+        payableAmount?: number;
         prefill?: { name?: string; email?: string; contact?: string };
       };
       if (!res.ok || !data.ok) {
@@ -173,7 +188,7 @@ export function CheckoutPageClient({
       }
 
       if (data.mode === "free") {
-        router.push("/account/courses?tab=continue&checkout=success");
+        router.push("/account/checkout/success");
         router.refresh();
         return;
       }
@@ -196,7 +211,7 @@ export function CheckoutPageClient({
           razorpay_payment_id: string;
           razorpay_signature: string;
         }) => {
-          const verifyRes = await fetch("/api/checkout/verify", {
+          const verifyRes = await fetchAuthed("/api/checkout/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(response),
@@ -210,7 +225,7 @@ export function CheckoutPageClient({
             setPending(false);
             return;
           }
-          router.push("/account/courses?tab=continue&checkout=success");
+          router.push("/account/checkout/success");
           router.refresh();
         },
         modal: {
@@ -246,7 +261,30 @@ export function CheckoutPageClient({
     );
   }
 
+  const stateDialog = (
+    <UpdateStateDialog
+      open={stateDialogOpen}
+      required={resumePayAfterState}
+      initialStateId={authUser?.stateId}
+      title="Select your state to continue"
+      description="State is required before you can complete checkout."
+      onClose={() => {
+        setStateDialogOpen(false);
+        setResumePayAfterState(false);
+      }}
+      onUpdated={() => {
+        setStateDialogOpen(false);
+        setError(null);
+        if (resumePayAfterState) {
+          setResumePayAfterState(false);
+          void handlePay({ skipStateCheck: true });
+        }
+      }}
+    />
+  );
+
   return (
+    <>
     <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-4">
         <header>
@@ -285,75 +323,83 @@ export function CheckoutPageClient({
         </article>
       </div>
 
-      <aside className="h-fit rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] lg:sticky lg:top-4">
-        <h3 className="text-[15px] font-semibold text-[var(--account-text)]">
-          Order Summary
-        </h3>
-        <dl className="mt-4 space-y-2 text-[13px]">
-          <div className="flex justify-between gap-3">
-            <dt className="text-[var(--account-text-muted)]">Subtotal</dt>
-            <dd>{formatCartMoney(subtotal)}</dd>
-          </div>
-          <div className="flex justify-between gap-3">
-            <dt className="text-[var(--account-text-muted)]">Discount</dt>
-            <dd>-{formatCartMoney(discount)}</dd>
-          </div>
-          <div className="flex justify-between gap-3 border-t border-[var(--account-border)] pt-2 text-[15px] font-semibold">
-            <dt>Total</dt>
-            <dd>{formatCartMoney(payable)}</dd>
-          </div>
-        </dl>
+      <aside className="flex h-fit flex-col gap-4 lg:sticky lg:top-4">
+        <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)]">
+          <h3 className="text-[15px] font-semibold text-[var(--account-text)]">
+            Order Summary
+          </h3>
+          <dl className="mt-4 space-y-2 text-[13px]">
+            <div className="flex justify-between gap-3">
+              <dt className="text-[var(--account-text-muted)]">Subtotal</dt>
+              <dd>{formatCartMoney(subtotal)}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-[var(--account-text-muted)]">Discount</dt>
+              <dd>-{formatCartMoney(discount)}</dd>
+            </div>
+            <div className="flex justify-between gap-3 border-t border-[var(--account-border)] pt-2 text-[15px] font-semibold">
+              <dt>Total</dt>
+              <dd>{formatCartMoney(payable)}</dd>
+            </div>
+          </dl>
 
-        <div className="mt-4 space-y-2">
-          {appliedCode ? (
-            <div className="flex items-center justify-between rounded-md bg-[var(--account-nav-active-bg)] px-3 py-2 text-[13px]">
-              <span className="font-medium text-[var(--account-accent)]">
-                {appliedCode}
-              </span>
-              <button
-                type="button"
-                onClick={removeCoupon}
-                disabled={pending}
-                className="font-semibold text-[var(--account-text-muted)] hover:text-[var(--account-text)]"
-              >
-                Remove
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <input
-                value={couponInput}
-                onChange={(e) => setCouponInput(e.target.value)}
-                placeholder="Coupon code"
-                className="min-w-0 flex-1 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 py-2 text-[13px]"
-              />
-              <button
-                type="button"
-                onClick={applyCoupon}
-                disabled={pending}
-                className="rounded-[var(--account-radius)] bg-[var(--account-accent)] px-3 py-2 text-[13px] font-semibold text-white disabled:opacity-60"
-              >
-                Apply
-              </button>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => void handlePay()}
+            disabled={pending}
+            className="mt-5 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {pending ? "Processing…" : "Continue to Pay"}
+          </button>
         </div>
 
-        {error ? (
-          <p className="mt-3 text-[12px] text-red-500" role="alert">
-            {error}
+        <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-4 shadow-[var(--account-shadow)]">
+          <p className="text-[14px] font-semibold text-[var(--account-text)]">
+            Have a coupon?
           </p>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={handlePay}
-          disabled={pending}
-          className="mt-5 inline-flex h-11 w-full items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:opacity-60"
-        >
-          {pending ? "Processing…" : "Continue to Pay"}
-        </button>
+          <div className="mt-3 space-y-2">
+            {appliedCode ? (
+              <div className="flex items-center justify-between rounded-md bg-[var(--account-nav-active-bg)] px-3 py-2.5 text-[13px]">
+                <span className="font-medium text-[var(--account-accent)]">
+                  {appliedCode}
+                </span>
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                  disabled={pending}
+                  className="cursor-pointer font-semibold text-[var(--account-text-muted)] hover:text-[var(--account-text)] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  Remove Coupon
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
+                  placeholder="Enter coupon code"
+                  className="min-w-0 flex-1 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 py-2 text-[13px]"
+                />
+                <button
+                  type="button"
+                  onClick={applyCoupon}
+                  disabled={pending}
+                  className="cursor-pointer rounded-[var(--account-radius)] bg-[var(--account-accent)] px-3 py-2 text-[13px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+          </div>
+          {error ? (
+            <p className="mt-3 text-[12px] text-red-500" role="alert">
+              {error}
+            </p>
+          ) : null}
+        </div>
       </aside>
     </div>
+    {stateDialog}
+    </>
   );
 }

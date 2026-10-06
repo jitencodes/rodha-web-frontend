@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-05 (Graphy packages + student commerce)
+**Last updated:** 2026-10-06 (State selection across auth / profile / checkout)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **State selection (2026-10-06):** `states` module + BFF dropdown; signup requires `stateId`; `GET api/auth/me` + `PATCH api/auth/me/state` wired; Jotai `userAtom` in account shell; blocking Update State dialog when `state` is null; Profile Update State + Checkout pay blocked until state set.
+- **UI / integration fixes (2026-10-06):** Account header session user + Buddy / Take Test / Live Classroom; shared `COURSE_IMAGE_FALLBACK`; 401/403 → session-expired BFF + login toast (`sonner`); profile avatar crop/upload + email/phone-only details + password/logout confirm; `/` → `NEXT_PUBLIC_DEFAULT_HOME_PATH`; Footer Category from CMS `categoriesAtom`; category filter tab drag-scroll; checkout coupon outside summary + success Lottie/Meta Pixel; Download Invoice; Settings hidden; category hero WhatsApp/Brochure icon CTAs.
 - **Graphy packages + student commerce (2026-10-05):** Public `/courses` + category courses use `GET /website/packages` with Category=`graphyCategory` and Course Type=`subCategory1` masters. Package detail at `/courses/[slug]` (Plan hidden). Buy Now → login → clear cart → add package → `/account/checkout` + Razorpay verify. Auth persists Graphy SSO; Header Login/Dashboard; account Open Graphy new tab. Dashboard/Continue Watching/course detail/orders/profile wired to student APIs. Test Series + My Cart nav hidden. Gaps in `docs/graphy-api-requirements.txt`.
 - **Banner empty-state / hide heroes (2026-09-29):** Home, category, about, team, and faculty heroes no longer fall back to static placeholder copy/images/stats for empty CMS banner fields. If the banner is missing/inactive, the hero section is hidden. Category mapper sets `hero: null` and empty `quickStats` when no banner; `withCategoryLandingDefaults` preserves that null.
 - **Home/blog UI + mapping fixes (2026-09-29):** Hero stacks pass through CMS `iconUrl` and render icons. Category + results descriptions use `ClampTooltip` (`line-clamp-5` / `line-clamp-2`). Results mapper reads `result.description`; category CTA is a real `Link` (no nested button) with carousel pointer stop. Blog detail prose gets Privacy-style overflow wrapping (`break-words` / `overflow-wrap: anywhere`).

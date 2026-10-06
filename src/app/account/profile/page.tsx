@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { buildPageMetadata } from "@/lib/seo";
 import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
 import { AccountProfilePanel } from "@/components/account/AccountProfilePanel";
+import { getCurrentUser } from "@/lib/api/modules/auth/service";
 import { getStudentProfile } from "@/lib/api/modules/student/profile/service";
-import { getAccessToken } from "@/lib/auth/server-session";
+import {
+  isUnauthorizedError,
+  redirectSessionExpired,
+  withStudentAuth,
+} from "@/lib/auth/require-student";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "My Profile — Rodha",
@@ -13,31 +17,57 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function AccountProfilePage() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect("/login?next=/account/profile");
-  }
+  const profile = await withStudentAuth(async (accessToken) => {
+    let next = {
+      fullName: "",
+      email: "",
+      phone: "",
+      avatarUrl: "",
+      stateId: null as number | null,
+      stateName: "",
+      stateCode: "",
+    };
 
-  let profile = {
-    fullName: "",
-    email: "",
-    phone: "",
-    avatarUrl: "",
-  };
-
-  try {
-    const data = await getStudentProfile(accessToken);
-    if (data) {
-      profile = {
-        fullName: data.fullName,
-        email: data.email,
-        phone: data.mobile,
-        avatarUrl: data.profilePicturePath || "",
-      };
+    try {
+      const me = await getCurrentUser(accessToken);
+      if (me) {
+        next = {
+          fullName: me.fullName,
+          email: me.email,
+          phone: me.mobile,
+          avatarUrl: me.profilePicturePath || "",
+          stateId: me.stateId,
+          stateName: me.state?.name || "",
+          stateCode: me.state?.code || "",
+        };
+      }
+    } catch (error) {
+      if (isUnauthorizedError(error)) {
+        redirectSessionExpired("/account/profile");
+      }
     }
-  } catch {
-    // keep empty profile shell
-  }
+
+    if (!next.email) {
+      try {
+        const data = await getStudentProfile(accessToken);
+        if (data) {
+          next = {
+            ...next,
+            fullName: data.fullName || next.fullName,
+            email: data.email,
+            phone: data.mobile || next.phone,
+            avatarUrl: data.profilePicturePath || next.avatarUrl,
+          };
+        }
+      } catch (error) {
+        if (isUnauthorizedError(error)) {
+          redirectSessionExpired("/account/profile");
+        }
+      }
+    }
+
+    return next;
+  }, "/account/profile");
 
   return (
     <div className="mx-auto w-full min-w-0 max-w-3xl">
@@ -49,7 +79,6 @@ export default async function AccountProfilePage() {
           {ACCOUNT_PROFILE_PAGE_COPY.subtitle}
         </p>
       </header>
-
       <AccountProfilePanel initialProfile={profile} />
     </div>
   );

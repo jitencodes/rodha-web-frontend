@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { AccountContinueWatchingCard } from "@/components/account/AccountContinueWatchingCard";
 import { AccountPagination } from "@/components/account/AccountPagination";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
 import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
 import { getPackages } from "@/lib/api/modules/packages/service";
 import { getStudentCourses } from "@/lib/api/modules/student/courses/service";
-import { getAccessToken } from "@/lib/auth/server-session";
+import {
+  isUnauthorizedError,
+  redirectSessionExpired,
+  withStudentAuth,
+} from "@/lib/auth/require-student";
 import {
   parseCoursesTab,
   parsePageParam,
@@ -45,59 +48,71 @@ const PAGE_SIZE = 8;
 export default async function AccountCoursesPage({
   searchParams,
 }: AccountCoursesPageProps) {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect("/login?next=/account/courses");
-  }
-
   const params = await searchParams;
   const tab = parseCoursesTab(params.tab);
   const page = parsePageParam(params.page);
   const packageId = params.packageId?.trim();
 
-  let continueItems: Awaited<ReturnType<typeof getStudentCourses>>["items"] =
-    [];
-  let continueTotalPages = 1;
-  let continuePage = page;
-  let buyItems: ReturnType<typeof packageCardToCourse>[] = [];
-  let buyMeta = { page: 1, totalPages: 1 };
+  const { continueItems, continueTotalPages, continuePage, buyItems, buyMeta } =
+    await withStudentAuth(async (accessToken) => {
+      let continueItems: Awaited<
+        ReturnType<typeof getStudentCourses>
+      >["items"] = [];
+      let continueTotalPages = 1;
+      let continuePage = page;
+      let buyItems: ReturnType<typeof packageCardToCourse>[] = [];
+      let buyMeta = { page: 1, totalPages: 1 };
 
-  if (tab === "continue") {
-    try {
-      const result = await getStudentCourses(accessToken, {
-        page,
-        limit: PAGE_SIZE,
-        sortBy: "continue_watching",
-        packageId: packageId || undefined,
-      });
-      continueItems = result.items;
-      continueTotalPages = result.totalPages;
-      continuePage = result.page;
-    } catch {
-      continueItems = [];
-    }
-  } else {
-    try {
-      const result = await getPackages({ page, limit: PAGE_SIZE });
-      buyItems = result.items.map((pkg) => {
-        const course = packageCardToCourse(pkg);
-        return {
-          ...course,
-          detailsLabel: pkg.isSelfEnrolled ? "View Course" : "Buy Now",
-          // stash for CTA via href below
-          enrollmentUrl: pkg.isSelfEnrolled
-            ? packageViewCourseHref(pkg.packageId)
-            : pkg.packageId != null
-              ? packageBuyNowHref(pkg.packageId, pkg.slug)
-              : `/courses/${pkg.slug}`,
-          externalLink: undefined,
-        };
-      });
-      buyMeta = { page: result.page, totalPages: result.totalPages };
-    } catch {
-      buyItems = [];
-    }
-  }
+      if (tab === "continue") {
+        try {
+          const result = await getStudentCourses(accessToken, {
+            page,
+            limit: PAGE_SIZE,
+            sortBy: "continue_watching",
+            packageId: packageId || undefined,
+          });
+          continueItems = result.items;
+          continueTotalPages = result.totalPages;
+          continuePage = result.page;
+        } catch (error) {
+          if (isUnauthorizedError(error)) {
+            redirectSessionExpired("/account/courses");
+          }
+          continueItems = [];
+        }
+      } else {
+        try {
+          const result = await getPackages({ page, limit: PAGE_SIZE });
+          buyItems = result.items.map((pkg) => {
+            const course = packageCardToCourse(pkg);
+            return {
+              ...course,
+              detailsLabel: pkg.isSelfEnrolled ? "View Course" : "Buy Now",
+              enrollmentUrl: pkg.isSelfEnrolled
+                ? packageViewCourseHref(pkg.packageId)
+                : pkg.packageId != null
+                  ? packageBuyNowHref(pkg.packageId, pkg.slug)
+                  : `/courses/${pkg.slug}`,
+              externalLink: undefined,
+            };
+          });
+          buyMeta = { page: result.page, totalPages: result.totalPages };
+        } catch (error) {
+          if (isUnauthorizedError(error)) {
+            redirectSessionExpired("/account/courses");
+          }
+          buyItems = [];
+        }
+      }
+
+      return {
+        continueItems,
+        continueTotalPages,
+        continuePage,
+        buyItems,
+        buyMeta,
+      };
+    }, "/account/courses");
 
   const currentPage = tab === "continue" ? continuePage : buyMeta.page;
   const totalPages =

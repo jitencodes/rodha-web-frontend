@@ -174,6 +174,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ContactForm | `ContactForm.tsx` (light/dark `variant`; +91 phone chrome matching counselling; prefix icons; stub submit) |
 | LeadCaptureForm | `LeadCaptureForm.tsx` (optional light variant, defaultExam, exam year, custom CTA — course Enquire Now) |
 | NewsletterSignup | `NewsletterSignup.tsx` |
+| StateSelectField | `StateSelectField.tsx` (loads `/api/states/dropdown`; wraps `DropdownSelect`) |
 
 ## Auth — `src/components/auth/`
 
@@ -187,10 +188,13 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Component | File |
 |-----------|------|
-| AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme provider) |
+| AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme + `AccountUserProvider` / `userAtom`) |
 | AccountSidebar | `AccountSidebar.tsx` (nav accordion, cart badge, Need Help) |
 | AccountHeader | `AccountHeader.tsx` (mobile search overlay, Ctrl+K, theme toggle, notifications, Live Dashboard, profile/Logout) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
+| AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
+| UpdateStateDialog | `UpdateStateDialog.tsx` (shared state picker → `PATCH /api/account/state`) |
+| RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (progress + Continue CTA; account theme tokens) |
 | AccountRecommendedCard | `AccountRecommendedCard.tsx` (price/discount; optional `showCta` for dashboard vs cart) |

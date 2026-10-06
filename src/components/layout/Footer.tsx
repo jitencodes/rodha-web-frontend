@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
-  CATEGORIES,
   CONTACT_INFO,
   SOCIAL_LINKS,
   SITE_NAME,
@@ -13,7 +13,9 @@ import {
   CAT_FREE_COURSE_URL,
   getCategoryIdFromPathname,
   getFreeResourceUrl,
+  getSupportEmail,
 } from "@/lib/constants";
+import { categoriesAtom } from "@/lib/store/categories";
 import { Icon } from "@/components/ui/Icon";
 import { cn, isExternalHref } from "@/lib/utils";
 
@@ -88,12 +90,16 @@ function parseFooterHref(href: string): { path: string; hash: string } {
   };
 }
 
-function getActiveFooterLabel(pathname: string, currentHash: string): string | null {
+function getActiveFooterLabel(
+  pathname: string,
+  currentHash: string,
+  categoryLinks: { label: string; href: string }[]
+): string | null {
   const currentPath = normalizePath(pathname);
   const hash = currentHash || "";
 
   const allLinks = [
-    ...CATEGORIES.map((c) => ({ label: c.menuLabel, href: `/category/${c.slug}` })),
+    ...categoryLinks,
     ...QUICK_LINKS,
     ...RESOURCES_LINKS,
     ...LEGAL_LINKS,
@@ -170,6 +176,7 @@ function FooterColumn({
 
 export function Footer() {
   const pathname = usePathname();
+  const categories = useAtomValue(categoriesAtom);
   const [hash, setHash] = useState("");
   const currentYear = new Date().getFullYear();
 
@@ -180,11 +187,11 @@ export function Footer() {
     return () => window.removeEventListener("hashchange", syncHash);
   }, [pathname]);
 
-  const activeLabel = getActiveFooterLabel(pathname, hash);
-  const examLinks = CATEGORIES.map((c) => ({
+  const examLinks = categories.map((c) => ({
     label: c.menuLabel,
     href: `/category/${c.slug}`,
   }));
+  const activeLabel = getActiveFooterLabel(pathname, hash, examLinks);
   const resourceLinks = RESOURCES_LINKS.map((item) =>
     item.label === "Free Resources"
       ? {
@@ -247,12 +254,14 @@ export function Footer() {
             </div>
           </div>
 
-          <FooterColumn
-            title="Courses"
-            links={examLinks}
-            activeLabel={activeLabel}
-            theme={footerTheme}
-          />
+          {examLinks.length > 0 ? (
+            <FooterColumn
+              title="Category"
+              links={examLinks}
+              activeLabel={activeLabel}
+              theme={footerTheme}
+            />
+          ) : null}
           <FooterColumn
             title="Quick Links"
             links={QUICK_LINKS}
@@ -296,10 +305,10 @@ export function Footer() {
                   className="text-orange-400 mt-0.5 shrink-0"
                 />
                 <a
-                  href={`mailto:${CONTACT_INFO.email}`}
+                  href={`mailto:${getSupportEmail()}`}
                   className="transition-colors hover:text-orange-600"
                 >
-                  {CONTACT_INFO.email}
+                  {getSupportEmail()}
                 </a>
               </li>
               <li

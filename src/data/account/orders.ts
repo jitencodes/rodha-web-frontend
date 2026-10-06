@@ -163,6 +163,7 @@ export const ACCOUNT_ORDERS_PAGE_COPY = {
   subtitle: "Track your purchases and access status.",
   empty: "You have no orders yet.",
   viewLabel: "View",
+  downloadInvoiceLabel: "Download Invoice",
 } as const;
 
 export function getAccountOrderById(id: string): AccountOrder | undefined {

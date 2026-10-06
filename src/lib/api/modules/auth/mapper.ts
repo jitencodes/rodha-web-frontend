@@ -6,6 +6,7 @@ import type {
   AuthUserApi,
   AuthUserViewModel,
 } from "@/lib/api/modules/auth/types";
+import { mapAuthState } from "@/lib/api/modules/states/mapper";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -19,6 +20,12 @@ export function mapAuthUser(
   const email = asString(user.email);
   if (!id || !email) return null;
 
+  const state = mapAuthState(user.state ?? null);
+  const stateId =
+    typeof user.stateId === "number" && Number.isFinite(user.stateId)
+      ? user.stateId
+      : state?.id ?? null;
+
   return {
     id,
     email,
@@ -30,6 +37,8 @@ export function mapAuthUser(
       typeof user.profilePicturePath === "string"
         ? user.profilePicturePath
         : null,
+    stateId,
+    state,
   };
 }
 
@@ -63,4 +72,9 @@ export function mapAuthSession(
       : [],
     graphy: mapAuthGraphy(data.graphy),
   };
+}
+
+/** True when the user has a persisted state selection. */
+export function userHasState(user: AuthUserViewModel | null | undefined): boolean {
+  return Boolean(user?.stateId && user.state);
 }

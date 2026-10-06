@@ -1,8 +1,13 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CategoryQuickStat } from "@/lib/types";
+import {
+  getBrochureUrl,
+  getCatCommunityUrl,
+} from "@/lib/constants";
 import { CounsellingCtaAction } from "../../CounsellingCtaAction";
 import { HeroVideoEmbed } from "../HeroVideoEmbed";
 import { HomeHeroShell } from "../HomeHeroShell";
@@ -82,6 +87,8 @@ export function CategoryHeroSectionV2({
   const hasPrimaryCta = Boolean(
     primaryCta?.label?.trim() && primaryCta?.href?.trim()
   );
+  const communityUrl = getCatCommunityUrl();
+  const brochureUrl = getBrochureUrl();
 
   return (
     <HomeHeroShell className={cn(className)}>
@@ -113,7 +120,7 @@ export function CategoryHeroSectionV2({
               ) : (
                 <div className="mb-8" />
               )}
-              <div className="mt-3 flex flex-col sm:flex-row items-start gap-3">
+              <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
                 {hasPrimaryCta && primaryCta ? (
                   <HeroCtaLink cta={primaryCta} variant="primary" />
                 ) : null}
@@ -121,6 +128,36 @@ export function CategoryHeroSectionV2({
                   action={{ label: "Book Free Counselling", href: "/contact" }}
                   className="btn-secondary btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline text-body px-7 py-3.5"
                 />
+                {communityUrl ? (
+                  <a
+                    href={communityUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="WhatsApp community"
+                    aria-label="WhatsApp community"
+                    className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-orange-500 bg-transparent text-orange-500 transition-colors hover:bg-orange-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
+                  >
+                    <Image
+                      src="/assets/icons/whatsapp.svg"
+                      alt=""
+                      width={22}
+                      height={22}
+                      className="size-[22px]"
+                    />
+                  </a>
+                ) : null}
+                {brochureUrl ? (
+                  <a
+                    href={brochureUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Download brochure"
+                    aria-label="Download brochure"
+                    className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-orange-500 bg-transparent text-orange-500 transition-colors hover:bg-orange-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
+                  >
+                    <FileText className="size-5" strokeWidth={1.75} aria-hidden />
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>

@@ -333,6 +333,7 @@ export function Header({
           </a>
           <div className="relative group shrink-0">
             <button
+              type="button"
               className="
                 flex items-center gap-2
                 h-9
@@ -344,8 +345,11 @@ export function Header({
                 transition-all duration-200
                 hover:border-orange-400/50
                 hover:bg-orange-500/10
+                group-hover:border-orange-400/50
+                group-hover:bg-orange-500/10
               "
               aria-label="Account"
+              aria-haspopup="menu"
             >
               <User className="h-5 w-5 text-white group-hover:text-orange-300 transition-colors" />
 
@@ -353,6 +357,7 @@ export function Header({
                 className="h-3.5 w-3.5 text-white transition-transform duration-300 group-hover:rotate-180"
                 viewBox="0 0 20 20"
                 fill="currentColor"
+                aria-hidden
               >
                 <path
                   fillRule="evenodd"
@@ -362,32 +367,44 @@ export function Header({
               </svg>
             </button>
 
+            {/* pt-2 bridges the gap so hover isn't lost between trigger and menu */}
             <div
               className="
+                pointer-events-none
                 invisible
                 absolute
                 right-0
                 top-full
                 z-50
-                mt-2
                 w-72
-                rounded-xl
-                border
-                border-white/10
-                bg-[#121212]/95
-                backdrop-blur-xl
+                pt-2
                 opacity-0
-                shadow-2xl
                 transition-all
                 duration-200
+                group-hover:pointer-events-auto
                 group-hover:visible
                 group-hover:opacity-100
+                group-focus-within:pointer-events-auto
+                group-focus-within:visible
+                group-focus-within:opacity-100
               "
             >
-              <div className="p-2">
+              <div
+                role="menu"
+                className="
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-[#121212]/95
+                  p-2
+                  shadow-2xl
+                  backdrop-blur-xl
+                "
+              >
                 {isLoggedIn ? (
                   <Link
                     href="/account/dashboard"
+                    role="menuitem"
                     className="
                       flex items-start gap-3
                       rounded-lg
@@ -410,6 +427,7 @@ export function Header({
                 ) : (
                   <Link
                     href="/login"
+                    role="menuitem"
                     className="
                       flex items-start gap-3
                       rounded-lg

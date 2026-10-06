@@ -4,6 +4,7 @@ import type {
   StudentCourseDetailDataApi,
   StudentEnrollmentListItemApi,
 } from "@/lib/api/modules/student/courses/types";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -45,8 +46,7 @@ export function mapContinueWatchingItem(
     title,
     tag: asString(course.language) || "Course",
     thumbnail:
-      asString(course.bannerImageUrl) ||
-      "/assets/images/placeholders/course-thumb.svg",
+      asString(course.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     durationLabel: formatDuration(asNumber(item.totalTime)),
     progressCurrent: Math.min(100, Math.max(0, percent)),
     progressTotal: 100,

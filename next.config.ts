@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const categorySlugs = ["cat", "ipmat", "clat", "ssc", "skillhouse"] as const;
 const buildTime = new Date().toISOString();
+const defaultHomePath =
+  process.env.NEXT_PUBLIC_DEFAULT_HOME_PATH?.trim() || "/category/cat";
 
 const nextConfig: NextConfig = {
   env: {
@@ -32,7 +34,19 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
+    const homeRedirects =
+      defaultHomePath === "/"
+        ? []
+        : [
+            {
+              source: "/",
+              destination: defaultHomePath,
+              permanent: false,
+            },
+          ];
+
     return [
+      ...homeRedirects,
       {
         source: "/category/:category_slug/courses/:slug",
         destination: "/courses/:slug",

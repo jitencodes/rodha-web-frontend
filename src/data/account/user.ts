@@ -3,6 +3,7 @@ import type {
   AccountSupportCard,
   AccountUser,
 } from "@/lib/account/types";
+import { getSupportMailto } from "@/lib/constants";
 
 export const ACCOUNT_USER: AccountUser = {
   id: "user-jitendra-saini",
@@ -19,7 +20,7 @@ export const ACCOUNT_SUPPORT_CARD: AccountSupportCard = {
   title: "Need Help?",
   description: "Get in touch with our support team for any assistance.",
   ctaLabel: "Contact Support",
-  href: "mailto:support@rodha.co.in",
+  href: getSupportMailto(),
 };
 
 export const ACCOUNT_SEARCH_PLACEHOLDER =
@@ -67,10 +68,5 @@ export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
     id: "my-profile",
     label: "My Profile",
     href: "/account/profile",
-  },
-  {
-    id: "settings",
-    label: "Settings",
-    href: "/account/settings",
   },
 ];

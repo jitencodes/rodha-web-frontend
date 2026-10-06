@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { AuthBannerSlider } from "@/components/auth/AuthBannerSlider";
 import { GoogleContinueButton } from "@/components/auth/GoogleContinueButton";
+import { StateSelectField } from "@/components/forms/StateSelectField";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Input } from "@/components/ui/Input";
+import { SESSION_EXPIRED_QUERY } from "@/lib/auth/session-expired";
 import {
   isBlockedPhoneKey,
   NAME_MAX_LENGTH,
@@ -38,6 +41,7 @@ interface FieldErrors {
   fullName?: string;
   email?: string;
   phone?: string;
+  state?: string;
   password?: string;
   confirmPassword?: string;
 }
@@ -53,9 +57,18 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const nextPath = safeNextPath(searchParams.get("next"));
   const isSignup = mode === "signup";
 
+  useEffect(() => {
+    if (searchParams.get("reason") === SESSION_EXPIRED_QUERY) {
+      toast.error("Session expired", {
+        description: "Please log in again to continue.",
+      });
+    }
+  }, [searchParams]);
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [stateId, setStateId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -66,7 +79,10 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function submitAuth(path: string, body: Record<string, string>) {
+  async function submitAuth(
+    path: string,
+    body: Record<string, string | number>
+  ) {
     const response = await fetch(path, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -103,6 +119,10 @@ export function AuthScreen({ mode }: AuthScreenProps) {
         password,
         confirmPassword
       );
+      const parsedStateId = Number(stateId);
+      if (!stateId || !Number.isFinite(parsedStateId) || parsedStateId <= 0) {
+        nextErrors.state = "Please select your state.";
+      }
     }
     setFieldErrors(nextErrors);
     if (Object.values(nextErrors).some(Boolean)) return;
@@ -115,6 +135,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
           email: email.trim(),
           password,
           phoneNumber: phone,
+          stateId: Number(stateId),
         });
         setSuccessMessage("Account created. Redirecting…");
       } else {
@@ -271,6 +292,20 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                   </p>
                 ) : null}
               </div>
+            ) : null}
+
+            {isSignup ? (
+              <StateSelectField
+                value={stateId}
+                onChange={(next) => {
+                  setStateId(next);
+                  setFieldErrors((prev) => ({ ...prev, state: undefined }));
+                }}
+                error={fieldErrors.state}
+                disabled={loading}
+                required
+                variant="light"
+              />
             ) : null}
 
             <Input

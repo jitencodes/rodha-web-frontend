@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Eye } from "lucide-react";
+import { Download } from "lucide-react";
 import type {
   AccountOrder,
   AccountOrderStatus,
@@ -72,19 +72,41 @@ function ProductCell({ order }: { order: AccountOrder }) {
   );
 }
 
-function ViewAction() {
+const invoiceBtnClass =
+  "inline-flex h-8 min-w-[9.5rem] items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-3 text-caption font-medium";
+
+function DownloadInvoiceAction({ href }: { href?: string }) {
+  if (!href) {
+    return (
+      <span
+        className={cn(
+          invoiceBtnClass,
+          "cursor-not-allowed border-[var(--account-border)] bg-[var(--account-nav-hover)] text-[var(--account-text-muted)] opacity-60"
+        )}
+        aria-disabled="true"
+      >
+        <Download className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+        {ACCOUNT_ORDERS_PAGE_COPY.downloadInvoiceLabel}
+      </span>
+    );
+  }
+
   return (
-    <button
-      type="button"
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      download
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--account-border-strong)] bg-[var(--account-surface)] px-3 py-1.5 text-caption font-medium text-[var(--account-text-secondary)]",
+        invoiceBtnClass,
+        "cursor-pointer border-[var(--account-border-strong)] bg-[var(--account-surface)] text-[var(--account-text-secondary)]",
         "transition-colors hover:border-[var(--account-accent)] hover:text-[var(--account-accent)]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
       )}
     >
-      <Eye className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
-      {ACCOUNT_ORDERS_PAGE_COPY.viewLabel}
-    </button>
+      <Download className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+      {ACCOUNT_ORDERS_PAGE_COPY.downloadInvoiceLabel}
+    </a>
   );
 }
 
@@ -161,7 +183,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                     />
                   </td>
                   <td className="px-4 py-3.5 text-right">
-                    <ViewAction />
+                    <DownloadInvoiceAction href={order.href} />
                   </td>
                 </tr>
               ))}
@@ -179,7 +201,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
           >
             <div className="flex items-start justify-between gap-3">
               <ProductCell order={order} />
-              <ViewAction />
+              <DownloadInvoiceAction href={order.href} />
             </div>
 
             <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3">

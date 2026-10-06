@@ -26,7 +26,9 @@ export const EMAIL_SITE_ORIGIN =
 export const EMAIL_LOGO_URL = env("NEXT_PUBLIC_EMAIL_LOGO_URL") || "https://github.com/jitencodes/rodha-web-frontend/blob/main/public/assets/images/rodha-logo.webp?raw=true"
 
 export const EMAIL_TO =
-  env("EMAIL_TO") || "support@rodha.co.in";
+  env("EMAIL_TO") ||
+  env("NEXT_PUBLIC_SUPPORT_EMAIL") ||
+  "contactus@rodha.co.in";
 
 export const EMAIL_FROM =
   env("EMAIL_FROM") ||

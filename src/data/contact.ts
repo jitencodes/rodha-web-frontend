@@ -1,5 +1,5 @@
 import { FAQ_DATA } from "@/data/faq";
-import { EXTERNAL_URLS } from "@/lib/constants";
+import { EXTERNAL_URLS, getSupportEmail, getSupportMailto } from "@/lib/constants";
 import type { FaqItem } from "@/lib/types";
 
 export const CONTACT_HERO = {
@@ -17,8 +17,8 @@ export const CONTACT_CHANNELS = {
   whatsapp: "+91-9304491484",
   whatsappHref: "https://wa.me/917982212251",
   whatsappNote: "Chat with us",
-  email: "contactus@rodha.co.in",
-  emailHref: "mailto:contactus@rodha.co.in",
+  email: getSupportEmail(),
+  emailHref: getSupportMailto(),
   emailNote: "We reply within 24 hrs",
   buddyLabel: "24/7 AI Study Assistant",
   buddyNote: "Ask doubts, get guidance",

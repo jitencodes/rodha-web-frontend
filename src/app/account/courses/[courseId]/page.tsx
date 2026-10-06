@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getStudentCourseDetail } from "@/lib/api/modules/student/courses/service";
 import {
-  getAccessToken,
   getSessionGraphy,
   withSsoToken,
 } from "@/lib/auth/server-session";
 import { getGraphySso } from "@/lib/api/modules/student/profile/service";
+import {
+  isUnauthorizedError,
+  redirectSessionExpired,
+  withStudentAuth,
+} from "@/lib/auth/require-student";
 import { buildPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -39,38 +43,43 @@ export default async function AccountCourseDetailPage({
   params,
   searchParams,
 }: AccountCourseDetailPageProps) {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect("/login?next=/account/courses");
-  }
-
   const { courseId } = await params;
   const { type } = await searchParams;
   const contentType = type?.trim() || undefined;
 
-  let detail = null;
-  try {
-    detail = await getStudentCourseDetail(accessToken, courseId, {
-      type: contentType,
-      page: 1,
-      limit: 50,
-    });
-  } catch {
-    detail = null;
-  }
+  const { detail, ssoToken } = await withStudentAuth(async (accessToken) => {
+    let detail = null;
+    try {
+      detail = await getStudentCourseDetail(accessToken, courseId, {
+        type: contentType,
+        page: 1,
+        limit: 50,
+      });
+    } catch (error) {
+      if (isUnauthorizedError(error)) {
+        redirectSessionExpired(`/account/courses/${courseId}`);
+      }
+      detail = null;
+    }
+
+    let ssoToken = (await getSessionGraphy())?.ssoToken || "";
+    if (!ssoToken) {
+      try {
+        const fresh = await getGraphySso(accessToken);
+        ssoToken = fresh?.ssoToken || "";
+      } catch (error) {
+        if (isUnauthorizedError(error)) {
+          redirectSessionExpired(`/account/courses/${courseId}`);
+        }
+        ssoToken = "";
+      }
+    }
+
+    return { detail, ssoToken };
+  }, `/account/courses/${courseId}`);
 
   if (!detail) {
     notFound();
-  }
-
-  let ssoToken = (await getSessionGraphy())?.ssoToken || "";
-  if (!ssoToken) {
-    try {
-      const fresh = await getGraphySso(accessToken);
-      ssoToken = fresh?.ssoToken || "";
-    } catch {
-      ssoToken = "";
-    }
   }
 
   const openCourseHref = detail.courseTakeUrl

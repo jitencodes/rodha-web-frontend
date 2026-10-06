@@ -101,9 +101,12 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | team | `GET api/website/team` | `/team` — banner, featuredFaculty, galleries |
 | legal | `GET api/website/legal-pages?pageType=` | Privacy / Terms / Refund / Disclaimer HTML + TOC from headings |
 | contact | `POST api/website/contact` | Route Handler `/api/leads` for contact, counselling, lead-capture |
-| auth | `POST api/auth/user/signup` | `/api/auth/signup` |
+| auth | `POST api/auth/user/signup` | `/api/auth/signup` (requires `stateId`) |
 | auth | `POST api/auth/user/login` | `/api/auth/login` (`is_web: true`) |
 | auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) |
+| auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state` |
+| auth | `PATCH api/auth/me/state` | `/api/account/state` — update state + refresh user cookie/atom |
+| states | `GET api/website/states/dropdown` | `/api/states/dropdown` — registration + Update State dialog |
 | packages | `GET api/website/packages` | `/courses`, account buy tab; filters `graphyCategory`, `subCategory1`, `search` |
 | packages | `GET api/website/packages/:slug` | `/courses/[slug]` public package detail |
 | packages | `GET api/website/packages/categories` | Category filter masters (graphyCategory values) |

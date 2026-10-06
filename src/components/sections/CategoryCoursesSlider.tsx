@@ -1,7 +1,13 @@
 "use client";
 
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
 import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
@@ -37,12 +43,39 @@ export function CategoryCoursesSlider({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+  const dragRef = useRef<{
+    active: boolean;
+    startX: number;
+    scrollLeft: number;
+  }>({ active: false, startX: 0, scrollLeft: 0 });
 
   const showFilterBar = courseTypeOptions.length > 0;
   const filters = [
     { value: "all", label: "All" },
     ...courseTypeOptions,
   ];
+  const fewTabs = filters.length <= 2;
+
+  const measureOverflow = useCallback(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+    setOverflowing(el.scrollWidth > el.clientWidth + 2);
+  }, []);
+
+  useEffect(() => {
+    measureOverflow();
+    const el = tabsRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => measureOverflow());
+    ro.observe(el);
+    window.addEventListener("resize", measureOverflow);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measureOverflow);
+    };
+  }, [measureOverflow, filters.length, courseTypeOptions]);
 
   function setType(value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -57,15 +90,50 @@ export function CategoryCoursesSlider({
     });
   }
 
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    if (!el || !overflowing) return;
+    dragRef.current = {
+      active: true,
+      startX: e.clientX,
+      scrollLeft: el.scrollLeft,
+    };
+    el.setPointerCapture(e.pointerId);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    if (!el || !dragRef.current.active) return;
+    const dx = e.clientX - dragRef.current.startX;
+    el.scrollLeft = dragRef.current.scrollLeft - dx;
+  }
+
+  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    dragRef.current.active = false;
+    el?.releasePointerCapture(e.pointerId);
+  }
+
   if (courses.length === 0 && !showFilterBar) return null;
+
+  const centerTabs = fewTabs || !overflowing;
 
   return (
     <div>
       {showFilterBar && (
         <div
-          className="mb-6 flex max-w-full justify-center gap-2 overflow-x-auto scrollbar-hide pb-1 md:mb-8"
+          ref={tabsRef}
+          className={cn(
+            "mb-6 flex max-w-full gap-2 overflow-x-auto scrollbar-hide pb-1 md:mb-8",
+            centerTabs ? "justify-center" : "justify-start",
+            overflowing && "cursor-grab active:cursor-grabbing"
+          )}
           role="tablist"
           aria-label="Filter courses by type"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
         >
           {filters.map((filter) => {
             const isActive = activeType === filter.value;

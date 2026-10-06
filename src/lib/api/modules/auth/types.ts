@@ -1,4 +1,6 @@
-/** Raw student user from signup / login `data.user`. */
+import type { AuthStateApi } from "@/lib/api/modules/states/types";
+
+/** Raw student user from signup / login / me `data.user` or `data`. */
 export interface AuthUserApi {
   id: string;
   email: string;
@@ -7,6 +9,8 @@ export interface AuthUserApi {
   mobile: string;
   isActive: boolean;
   profilePicturePath: string | null;
+  stateId?: number | null;
+  state?: AuthStateApi | null;
 }
 
 /** Optional Graphy SSO payload — mapped but unused in the auth UI. */
@@ -28,6 +32,7 @@ export interface AuthSignupRequest {
   email: string;
   password: string;
   phoneNumber: string;
+  stateId: number;
 }
 
 export interface AuthLoginRequest {
@@ -41,6 +46,12 @@ export interface AuthGoogleRequest {
   is_web: true;
 }
 
+export interface AuthStateViewModel {
+  id: number;
+  name: string;
+  code: string;
+}
+
 export interface AuthUserViewModel {
   id: string;
   email: string;
@@ -49,6 +60,8 @@ export interface AuthUserViewModel {
   mobile: string;
   isActive: boolean;
   profilePicturePath: string | null;
+  stateId: number | null;
+  state: AuthStateViewModel | null;
 }
 
 export interface AuthGraphyViewModel {

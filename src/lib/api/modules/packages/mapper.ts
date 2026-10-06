@@ -5,6 +5,7 @@ import type {
   PackageListItemApi,
   PackageMasterItemApi,
 } from "@/lib/api/modules/packages/types";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import type { Course, CourseModule, FaqItem } from "@/lib/types";
 
 function asString(value: unknown): string {
@@ -82,7 +83,7 @@ export function mapPackageListItem(
     price,
     originalPrice:
       original !== undefined && original > price ? original : undefined,
-    thumbnail: asString(item.bannerImageUrl) || undefined,
+    thumbnail: asString(item.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     tags: asStringList(item.tags),
     courseCount: asNumber(item.courseCount),
     isSelfEnrolled: item.isSelfEnrolled === true,

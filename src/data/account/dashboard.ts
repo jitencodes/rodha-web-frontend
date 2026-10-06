@@ -5,6 +5,7 @@ import type {
   LearningProgress,
 } from "@/lib/account/types";
 import { ACCOUNT_USER } from "@/data/account/user";
+import { getSupportMailto } from "@/lib/constants";
 
 export const ACCOUNT_WELCOME: DashboardWelcome = {
   greetingPrefix: "Welcome back,",
@@ -50,7 +51,7 @@ export const ACCOUNT_QUICK_LINKS: DashboardQuickLink[] = [
   {
     id: "get-help",
     label: "Get Help",
-    href: "mailto:support@rodha.co.in",
+    href: getSupportMailto(),
     icon: "help",
   },
 ];

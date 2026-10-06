@@ -1,6 +1,7 @@
 import { apiGet } from "@/lib/api/client";
 import { mapContinueWatchingItems } from "@/lib/api/modules/student/courses/mapper";
 import type { ContinueWatchingItem, LearningProgress, RecommendedProduct } from "@/lib/account/types";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 
 interface DashboardApi {
   courseStats?: {
@@ -65,7 +66,7 @@ export async function getStudentDashboard(
       tag: typeof item.language === "string" ? item.language : "Package",
       thumbnail:
         (typeof item.bannerImageUrl === "string" && item.bannerImageUrl) ||
-        "/assets/images/placeholders/course-thumb.svg",
+        COURSE_IMAGE_FALLBACK,
       price,
       originalPrice: original > price ? original : price,
       discountPercent,

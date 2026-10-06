@@ -131,6 +131,9 @@ export interface AccountProfile {
   email: string;
   phone: string;
   avatarUrl: string;
+  stateId?: number | null;
+  stateName?: string;
+  stateCode?: string;
   /** @deprecated Prefer fullName — kept for transitional mocks */
   firstName?: string;
   lastName?: string;

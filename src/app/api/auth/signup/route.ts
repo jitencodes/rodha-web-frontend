@@ -27,6 +27,13 @@ export async function POST(request: Request) {
   const password = typeof payload.password === "string" ? payload.password : "";
   const phoneNumber =
     typeof payload.phoneNumber === "string" ? payload.phoneNumber : "";
+  const stateIdRaw = payload.stateId;
+  const stateId =
+    typeof stateIdRaw === "number"
+      ? stateIdRaw
+      : typeof stateIdRaw === "string"
+        ? Number(stateIdRaw)
+        : NaN;
 
   const fieldError =
     validateName(fullName) ||
@@ -36,6 +43,9 @@ export async function POST(request: Request) {
   if (fieldError) {
     return jsonError(fieldError, 400);
   }
+  if (!Number.isFinite(stateId) || stateId <= 0) {
+    return jsonError("Please select your state.", 400);
+  }
 
   try {
     const session = await signupStudent({
@@ -43,6 +53,7 @@ export async function POST(request: Request) {
       email,
       password,
       phoneNumber,
+      stateId,
     });
     return sessionResponse(session);
   } catch (error) {

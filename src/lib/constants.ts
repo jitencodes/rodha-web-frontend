@@ -19,6 +19,52 @@ export const EXTERNAL_URLS = {
   testSeries: "https://mocks.rodha.co.in/",
 } as const;
 
+/** Fallback when course/package/test-series thumbnail is missing. */
+export const COURSE_IMAGE_FALLBACK =
+  "/assets/images/Rodha Learning Journey Banner.png";
+
+export function getThinkExamUrl(): string {
+  return (
+    process.env.NEXT_PUBLIC_THINK_EXAM_URL?.trim() ||
+    EXTERNAL_URLS.testSeries
+  );
+}
+
+export function getGraphyDashboardUrl(): string {
+  return (
+    process.env.NEXT_PUBLIC_GRAPHY_DASHBOARD_URL?.trim() ||
+    "https://rodha.graphy.com/t/u/activeCourses"
+  );
+}
+
+export function getCatCommunityUrl(): string {
+  return process.env.NEXT_PUBLIC_CAT_COMMUNITY_URL?.trim() || "";
+}
+
+export function getBrochureUrl(): string {
+  return process.env.NEXT_PUBLIC_BROCHURE_URL?.trim() || "";
+}
+
+export function getDefaultHomePath(): string {
+  const path = process.env.NEXT_PUBLIC_DEFAULT_HOME_PATH?.trim();
+  return path || "/category/cat";
+}
+
+export function getMetaPixelId(): string {
+  return process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
+}
+
+/** Public support / contact inbox (Footer, account help, mailto links). */
+export function getSupportEmail(): string {
+  return (
+    process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in"
+  );
+}
+
+export function getSupportMailto(): string {
+  return `mailto:${getSupportEmail()}`;
+}
+
 export const CAT_FREE_COURSE_URL =
   "https://www.rodha.co.in/courses/Free-Course-for-CAT-2026--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-68df9c431bf5c8479d8dd7c3";
 
@@ -142,7 +188,7 @@ export const CATEGORIES: Category[] = [
 
 export const CONTACT_INFO: ContactInfo = {
   phone: "+91 98765 43210",
-  email: "hello@rodha.in",
+  email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in",
   address: "Mumbai, Maharashtra, India",
 };
 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { buildPageMetadata } from "@/lib/seo";
 import {
   ACCOUNT_DASHBOARD_WIDGETS,
@@ -15,7 +14,11 @@ import { QuickLinksCard } from "@/components/account/QuickLinksCard";
 import { getStudentDashboard } from "@/lib/api/modules/student/dashboard/service";
 import { getStudentOrders } from "@/lib/api/modules/student/orders/service";
 import { getStudentProfile } from "@/lib/api/modules/student/profile/service";
-import { getAccessToken } from "@/lib/auth/server-session";
+import {
+  isUnauthorizedError,
+  redirectSessionExpired,
+  withStudentAuth,
+} from "@/lib/auth/require-student";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Dashboard — Rodha",
@@ -24,39 +27,48 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function AccountDashboardPage() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect("/login?next=/account/dashboard");
-  }
+  const { firstName, continueWatching, recommended, learningProgress, previewOrders } =
+    await withStudentAuth(async (accessToken) => {
+      let firstName = "there";
+      let continueWatching: Awaited<
+        ReturnType<typeof getStudentDashboard>
+      >["continueWatching"] = [];
+      let recommended: Awaited<
+        ReturnType<typeof getStudentDashboard>
+      >["recommended"] = [];
+      let learningProgress = ACCOUNT_DASHBOARD_WIDGETS.learningProgress;
+      let previewOrders: Awaited<ReturnType<typeof getStudentOrders>>["items"] =
+        [];
 
-  let firstName = "there";
-  let continueWatching: Awaited<
-    ReturnType<typeof getStudentDashboard>
-  >["continueWatching"] = [];
-  let recommended: Awaited<
-    ReturnType<typeof getStudentDashboard>
-  >["recommended"] = [];
-  let learningProgress = ACCOUNT_DASHBOARD_WIDGETS.learningProgress;
-  let previewOrders: Awaited<ReturnType<typeof getStudentOrders>>["items"] =
-    [];
+      try {
+        const [dashboard, profile, orders] = await Promise.all([
+          getStudentDashboard(accessToken),
+          getStudentProfile(accessToken),
+          getStudentOrders(accessToken, 1, 3),
+        ]);
+        continueWatching = dashboard.continueWatching.slice(0, 4);
+        recommended = dashboard.recommended.slice(0, 4);
+        learningProgress = dashboard.learningProgress;
+        previewOrders = orders.items.slice(0, 3);
+        if (profile?.fullName) {
+          firstName = profile.fullName.split(/\s+/)[0] || profile.fullName;
+        }
+      } catch (error) {
+        if (isUnauthorizedError(error)) {
+          redirectSessionExpired("/account/dashboard");
+        }
+        continueWatching = [];
+        recommended = [];
+      }
 
-  try {
-    const [dashboard, profile, orders] = await Promise.all([
-      getStudentDashboard(accessToken),
-      getStudentProfile(accessToken),
-      getStudentOrders(accessToken, 1, 3),
-    ]);
-    continueWatching = dashboard.continueWatching.slice(0, 4);
-    recommended = dashboard.recommended.slice(0, 4);
-    learningProgress = dashboard.learningProgress;
-    previewOrders = orders.items.slice(0, 3);
-    if (profile?.fullName) {
-      firstName = profile.fullName.split(/\s+/)[0] || profile.fullName;
-    }
-  } catch {
-    continueWatching = [];
-    recommended = [];
-  }
+      return {
+        firstName,
+        continueWatching,
+        recommended,
+        learningProgress,
+        previewOrders,
+      };
+    }, "/account/dashboard");
 
   return (
     <div className="mx-auto max-w-360">
@@ -95,7 +107,8 @@ export default async function AccountDashboardPage() {
                   <AccountRecommendedCard
                     key={product.id}
                     product={product}
-                    showCta={false}
+                    showCta
+                    ctaLabel="Buy Now"
                   />
                 ))}
               </div>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+import { AppToaster } from "@/components/providers/AppToaster";
+import { MetaPixel } from "@/components/providers/MetaPixel";
 import { organizationJsonLd, webSiteJsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/constants";
 import { DEFAULT_OG_IMAGE } from "@/lib/seo";
@@ -86,6 +88,8 @@ export default function RootLayout({
         />
 
         {children}
+        <AppToaster />
+        <MetaPixel />
       </body>
     </html>
   );

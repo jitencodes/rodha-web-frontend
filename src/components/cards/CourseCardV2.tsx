@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
-import { getCategoryPath } from "@/lib/constants";
+import { COURSE_IMAGE_FALLBACK, getCategoryPath } from "@/lib/constants";
 import type { Course } from "@/lib/types";
 
 interface CourseCardV2Props {
@@ -32,7 +32,7 @@ export function CourseCardV2({
   const posterSrc =
     course.thumbnail ||
     course.facultyImage ||
-    "/assets/images/placeholders/course-thumb.svg";
+    COURSE_IMAGE_FALLBACK;
 
   return (
     <article
@@ -80,28 +80,27 @@ export function CourseCardV2({
           )}
           {course.language ? <span>{course.language}</span> : null}
         </div>
-        <div className="mt-5 flex flex-wrap items-end gap-x-3 gap-y-1">
-          <span className="text-[1.4rem] font-bold leading-none text-neutral-900">
-            {course.price === 0 ? "FREE" : formatPrice(course.price)}
-          </span>
-          {hasDiscount && (
-            <>
-              <span className="text-body-sm text-neutral-400 line-through">
-                {formatPrice(course.originalPrice!)}
-              </span>
-              <span className="text-caption font-bold text-orange-500">
-                {discountPercent}% OFF
-              </span>
-            </>
-          )}
-        </div>
-
-        <div className="mt-auto pt-2">
+        <div className="mt-auto flex items-end justify-between gap-3 pt-5">
+          <div className="min-w-0">
+            <span className="block text-[1.4rem] font-bold leading-none text-neutral-900">
+              {course.price === 0 ? "FREE" : formatPrice(course.price)}
+            </span>
+            {hasDiscount ? (
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                <span className="text-body-sm text-neutral-400 line-through">
+                  {formatPrice(course.originalPrice!)}
+                </span>
+                <span className="text-caption font-bold text-orange-500">
+                  {discountPercent}% OFF
+                </span>
+              </div>
+            ) : null}
+          </div>
           <Link
             href={courseHref}
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noopener noreferrer" : undefined}
-            className="inline-flex items-center gap-2 hover:gap-3 transition-all duration-300 text-body-sm font-semibold text-orange-500 hover:text-orange-500/80"
+            className="inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
           >
             {ctaLabel || course.detailsLabel || "View Details"}
             <svg

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
 import { PackagePurchaseActions } from "@/components/cards/PackagePurchaseActions";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Course } from "@/lib/types";
 
@@ -25,7 +26,7 @@ export function CoursePurchaseCard({
   const posterSrc =
     course.thumbnail ||
     course.image ||
-    "/assets/images/placeholders/course-thumb.svg";
+    COURSE_IMAGE_FALLBACK;
   const enrollHref = course.externalLink || course.enrollmentUrl || "#";
   const usePackageCheckout = packageId != null || isSelfEnrolled;
 

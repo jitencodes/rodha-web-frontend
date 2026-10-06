@@ -10,7 +10,6 @@ import {
   Headphones,
   LayoutDashboard,
   Package,
-  Settings,
   ShoppingBag,
   UserRound,
 } from "lucide-react";
@@ -44,7 +43,6 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
   const dashboardActive = pathname.startsWith("/account/dashboard");
   const ordersActive = pathname.startsWith("/account/orders");
   const profileActive = pathname.startsWith("/account/profile");
-  const settingsActive = pathname.startsWith("/account/settings");
   const continueActive =
     pathname.startsWith("/account/courses") &&
     (tab === null ||
@@ -165,18 +163,6 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
           onClick={onClose}
         >
           My Profile
-        </SidebarLink>
-
-        <SidebarLink
-          href="/account/settings"
-          active={settingsActive}
-          icon={<Settings className="size-[18px]" strokeWidth={1.75} />}
-          trailing={
-            <ChevronRight className="size-4 opacity-60" strokeWidth={1.75} />
-          }
-          onClick={onClose}
-        >
-          Settings
         </SidebarLink>
       </nav>
 

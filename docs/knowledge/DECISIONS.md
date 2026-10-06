@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-06 — State selection via `/auth/me` + shared dialog
+- **Decision:** Collect `stateId` at signup; persist/read via `GET api/auth/me` (`stateId` + nested `state`); update via `PATCH api/auth/me/state` (BFF `/api/account/state`). Account shell hydrates Jotai `userAtom`. Missing `state` opens shared blocking `UpdateStateDialog` (account gate + checkout). States list from `GET api/website/states/dropdown` via `/api/states/dropdown`.
+- **Rationale:** Single source of truth on the auth user, one dialog for all required updates, matches existing module/BFF patterns.
+- **Alternatives considered:** Student profile-only state field; TanStack Query for dropdown; page-local dialogs.
+- **Consequences:** Signup requires state; Google/login users without state are prompted before account use; checkout cannot pay until state is set.
+
 ### 2026-09-29 — Website route group layout vs root layout
 - **Decision:** Root `src/app/layout.tsx` only provides `html`/`body`, fonts, globals, default metadata, and JSON-LD. Public marketing chrome (`WebsiteStoreProvider` + `SiteFrame`) lives in `src/app/(website)/layout.tsx`. All public pages (including `/login` `/signup`) sit under the invisible `(website)` route group. `/account/*` and `/api/*` remain siblings outside that group.
 - **Rationale:** Account must never inherit announcement bar / Header / Footer; public URLs stay unchanged because route groups do not affect the path.
