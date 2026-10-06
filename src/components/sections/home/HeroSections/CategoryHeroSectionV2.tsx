@@ -12,6 +12,7 @@ import { CounsellingCtaAction } from "../../CounsellingCtaAction";
 import { HeroVideoEmbed } from "../HeroVideoEmbed";
 import { HomeHeroShell } from "../HomeHeroShell";
 import { Container } from "@/components/layout/Container";
+import { IoLogoWhatsapp } from "react-icons/io";
 
 interface CategoryHeroCta {
   label: string;
@@ -137,13 +138,7 @@ export function CategoryHeroSectionV2({
                     aria-label="WhatsApp community"
                     className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-orange-500 bg-transparent text-orange-500 transition-colors hover:bg-orange-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
                   >
-                    <Image
-                      src="/assets/icons/whatsapp.svg"
-                      alt=""
-                      width={22}
-                      height={22}
-                      className="size-[22px]"
-                    />
+                    <IoLogoWhatsapp className="size-5" strokeWidth={1.75} aria-hidden />
                   </a>
                 ) : null}
                 {brochureUrl ? (
