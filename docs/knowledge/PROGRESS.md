@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-09-29 (banner empty-state hiding)
+**Last updated:** 2026-10-05 (Graphy packages + student commerce)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Graphy packages + student commerce (2026-10-05):** Public `/courses` + category courses use `GET /website/packages` with Category=`graphyCategory` and Course Type=`subCategory1` masters. Package detail at `/courses/[slug]` (Plan hidden). Buy Now → login → clear cart → add package → `/account/checkout` + Razorpay verify. Auth persists Graphy SSO; Header Login/Dashboard; account Open Graphy new tab. Dashboard/Continue Watching/course detail/orders/profile wired to student APIs. Test Series + My Cart nav hidden. Gaps in `docs/graphy-api-requirements.txt`.
 - **Banner empty-state / hide heroes (2026-09-29):** Home, category, about, team, and faculty heroes no longer fall back to static placeholder copy/images/stats for empty CMS banner fields. If the banner is missing/inactive, the hero section is hidden. Category mapper sets `hero: null` and empty `quickStats` when no banner; `withCategoryLandingDefaults` preserves that null.
 - **Home/blog UI + mapping fixes (2026-09-29):** Hero stacks pass through CMS `iconUrl` and render icons. Category + results descriptions use `ClampTooltip` (`line-clamp-5` / `line-clamp-2`). Results mapper reads `result.description`; category CTA is a real `Link` (no nested button) with carousel pointer stop. Blog detail prose gets Privacy-style overflow wrapping (`break-words` / `overflow-wrap: anywhere`).
 - **Website `(website)` layout split (2026-09-29):** Root layout is fonts/globals/metadata/JSON-LD only. Public SiteFrame + `WebsiteStoreProvider` moved to `src/app/(website)/layout.tsx`. All public pages (home, marketing, auth) live under `(website)` with unchanged URLs. `/account/*` no longer passes through SiteFrame. `CatalogToolbar` imports updated to `@/app/(website)/courses/CatalogToolbar`.

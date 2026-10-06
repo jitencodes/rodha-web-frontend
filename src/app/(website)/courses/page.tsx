@@ -10,15 +10,19 @@ import { ListingHeroSection } from "@/components/sections/listing/ListingHeroSec
 import { SuccessStoriesSection } from "@/components/sections/SuccessStoriesSection";
 import { Pagination } from "@/components/ui/Pagination";
 import { RevealGroup } from "@/components/ui/RevealGroup";
+import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
 import {
-  catalogQueryRecord,
-  filterCatalogCourses,
-  getCatalogListings,
-  paginateCatalog,
-  parseCatalogSearchParams,
-} from "@/lib/catalog";
+  getPackageCategories,
+  getPackages,
+  getPackageSubcategories,
+} from "@/lib/api/modules/packages/service";
+import { getCatalogListings } from "@/lib/catalog";
 import { EXTERNAL_URLS } from "@/lib/constants";
-import { getCourseTypeDropdownOptions } from "@/lib/course-filters";
+import {
+  packageBuyNowHref,
+  packageDetailHref,
+  packageViewCourseHref,
+} from "@/lib/packages/buy-now";
 import { buildPageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
@@ -31,6 +35,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 const LISTING_BANNER = "/assets/images/courses/banner/banner.png";
+const PAGE_SIZE = 12;
 
 interface CoursesPageProps {
   searchParams: Promise<{
@@ -44,17 +49,47 @@ interface CoursesPageProps {
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
-  const filters = parseCatalogSearchParams(params);
-  const catalog = await getCatalogListings();
-  const courseTypeOptions = getCourseTypeDropdownOptions(catalog.courses);
-  const filtered = filterCatalogCourses(catalog.courses, filters);
-  const paged = paginateCatalog(filtered, filters.page);
-  const queryForPagination = catalogQueryRecord(filters);
+  const graphyCategory =
+    params.category?.trim() && params.category !== "all"
+      ? params.category.trim()
+      : undefined;
+  const subCategory1 =
+    params.type?.trim() && params.type !== "all"
+      ? params.type.trim()
+      : undefined;
+  const query = params.q?.trim() || undefined;
+  const price = params.price?.trim() || "all";
+  const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
+
+  const [categoryOptions, courseTypeOptions, packagesResult, catalog] =
+    await Promise.all([
+      getPackageCategories(),
+      getPackageSubcategories(),
+      getPackages({
+        page,
+        limit: PAGE_SIZE,
+        search: query,
+        graphyCategory,
+        subCategory1,
+      }),
+      getCatalogListings(),
+    ]);
+
+  let items = packagesResult.items;
+  if (price === "free") {
+    items = items.filter((item) => item.price === 0);
+  } else if (price === "paid") {
+    items = items.filter((item) => item.price > 0);
+  }
+
   const isDefaultView =
-    filters.category === "all" &&
-    !filters.query &&
-    filters.type === "all" &&
-    filters.price === "all";
+    !graphyCategory && !subCategory1 && !query && price === "all";
+
+  const queryForPagination: Record<string, string> = {};
+  if (graphyCategory) queryForPagination.category = graphyCategory;
+  if (query) queryForPagination.q = query;
+  if (subCategory1) queryForPagination.type = subCategory1;
+  if (price !== "all") queryForPagination.price = price;
 
   return (
     <>
@@ -87,12 +122,13 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         <Container>
           <CatalogToolbar
             basePath="/courses"
-            activeCategory={filters.category}
-            initialQuery={filters.query}
-            activeType={filters.type}
-            activePrice={filters.price}
-            showCourseType={courseTypeOptions.length > 1}
+            activeCategory={graphyCategory || "all"}
+            categoryOptions={categoryOptions}
+            initialQuery={query || ""}
+            activeType={subCategory1 || "all"}
             courseTypeOptions={courseTypeOptions}
+            activePrice={price}
+            showCourseType={courseTypeOptions.length > 0}
             searchPlaceholder="Search courses..."
             searchAriaLabel="Search courses"
             categoryAriaLabel="Course categories"
@@ -111,7 +147,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             <div className="text-h3 font-semibold text-neutral-900">
               {isDefaultView
                 ? "All Courses"
-                : `${paged.total} Result${paged.total === 1 ? "" : "s"}`}
+                : `${packagesResult.total} Result${packagesResult.total === 1 ? "" : "s"}`}
             </div>
 
             {!isDefaultView && (
@@ -124,15 +160,31 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             )}
           </div>
 
-          {paged.items.length > 0 ? (
+          {items.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {paged.items.map((course) => (
-                <CourseCardV2
-                  key={course.id}
-                  course={course}
-                  className="h-full bg-white"
-                />
-              ))}
+              {items.map((pkg) => {
+                const course = packageCardToCourse(pkg);
+                const href = pkg.isSelfEnrolled
+                  ? packageViewCourseHref(pkg.packageId)
+                  : packageDetailHref(pkg.slug);
+                const ctaLabel = pkg.isSelfEnrolled
+                  ? "View Course"
+                  : "Buy Now";
+                const buyHref =
+                  pkg.packageId != null
+                    ? packageBuyNowHref(pkg.packageId, pkg.slug)
+                    : packageDetailHref(pkg.slug);
+
+                return (
+                  <CourseCardV2
+                    key={pkg.id}
+                    course={course}
+                    className="h-full bg-white"
+                    href={pkg.isSelfEnrolled ? href : buyHref}
+                    ctaLabel={ctaLabel}
+                  />
+                );
+              })}
             </div>
           ) : (
             <div className="rounded-xl border border-section-beige bg-white px-6 py-12 text-center shadow-sm">
@@ -140,13 +192,9 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 No courses found
               </p>
               <p className="mt-2 text-body text-neutral-500">
-                {filters.query
+                {query
                   ? "We couldn't find any courses matching your search. Try a different keyword or browse another category."
-                  : filters.category !== "all" ||
-                      filters.type !== "all" ||
-                      filters.price !== "all"
-                    ? "There are no courses matching these filters at the moment. Please try another category, type, or price."
-                    : "There are no courses available at the moment. Please check back soon."}
+                  : "There are no courses matching these filters at the moment. Please try another category or type."}
               </p>
               <Link
                 href="/courses"
@@ -157,10 +205,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             </div>
           )}
 
-          {paged.totalPages > 1 && (
+          {packagesResult.totalPages > 1 && (
             <Pagination
-              currentPage={paged.page}
-              totalPages={paged.totalPages}
+              currentPage={packagesResult.page}
+              totalPages={packagesResult.totalPages}
               basePath="/courses"
               query={queryForPagination}
               variant="light"
@@ -180,12 +228,12 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <RevealGroup>
         <CTABandV2Decorative
           title="Ready to Begin Your Journey?"
-          subtitle="Explore our test series or connect with Rodha Buddy for personalised guidance."
+          subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
           backgroundImage="/assets/images/background/cta background image.JPG"
           decorativeImage="/assets/images/about us/award-to-boy.png"
           primaryAction={{
-            label: "Explore Test Series",
-            href: "/test-series",
+            label: "Browse Courses",
+            href: "/courses",
           }}
           secondaryAction={{
             label: "Ask Rodha Buddy",

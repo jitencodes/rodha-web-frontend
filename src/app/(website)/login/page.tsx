@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AuthScreen } from "@/components/auth/AuthScreen";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -9,5 +10,9 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function LoginPage() {
-  return <AuthScreen mode="login" />;
+  return (
+    <Suspense fallback={null}>
+      <AuthScreen mode="login" />
+    </Suspense>
+  );
 }

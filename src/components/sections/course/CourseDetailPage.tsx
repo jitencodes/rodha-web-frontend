@@ -19,32 +19,51 @@ import {
   getRelatedCourses,
   withCourseDetailDefaults,
 } from "@/data/course-details";
+import type { PackageCardViewModel } from "@/lib/api/modules/packages/types";
+import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
 import {
   breadcrumbJsonLd,
   courseJsonLd,
   faqPageJsonLd,
 } from "@/lib/structured-data";
-import type { CategoryLandingConfig, Course } from "@/lib/types";
+import type { CategoryLandingConfig, Course, FaqItem } from "@/lib/types";
 
 interface CourseDetailPageProps {
   course: Course;
   landing: CategoryLandingConfig;
+  packageId?: number | null;
+  isSelfEnrolled?: boolean;
+  isLoggedIn?: boolean;
+  faqsOverride?: FaqItem[];
+  similarPackages?: PackageCardViewModel[];
+  /** When true, hide the Plan / pricing-plans section. */
+  hidePlanSection?: boolean;
 }
 
 export function CourseDetailPageView({
   course: rawCourse,
   landing,
+  packageId = null,
+  isSelfEnrolled = false,
+  isLoggedIn = false,
+  faqsOverride,
+  similarPackages,
+  hidePlanSection = false,
 }: CourseDetailPageProps) {
   const course = withCourseDetailDefaults(rawCourse);
   const faculty = getFacultyForCourse(course);
-  const relatedCourses = getRelatedCourses(course, 8);
+  const relatedCourses =
+    similarPackages && similarPackages.length > 0
+      ? similarPackages.map((pkg) => packageCardToCourse(pkg, course.category))
+      : getRelatedCourses(course, 8);
   const testimonials = getCourseTestimonials(course, landing);
-  const faqs = getCourseFaqs(course, landing);
+  const faqs = faqsOverride?.length
+    ? faqsOverride
+    : getCourseFaqs(course, landing);
   const categoryHref = getCourseCategoryHref(course.category);
   const categoryLabel = landing.menuLabel || landing.name;
   const coursePath = getCoursePath(course.slug);
   const enrollmentHref = getCourseEnrollmentHref(course);
-
   const plans = (course.pricingPlans ?? []).map((plan) => ({
     ...plan,
     href: plan.href || enrollmentHref,
@@ -96,6 +115,9 @@ export function CourseDetailPageView({
                 <CoursePurchaseCard
                   course={course}
                   categoryLabel={landing.name}
+                  packageId={packageId}
+                  isSelfEnrolled={isSelfEnrolled}
+                  isLoggedIn={isLoggedIn}
                 />
               </div>
             </div>
@@ -126,6 +148,9 @@ export function CourseDetailPageView({
               <CoursePurchaseCard
                 course={course}
                 categoryLabel={landing.name}
+                packageId={packageId}
+                isSelfEnrolled={isSelfEnrolled}
+                isLoggedIn={isLoggedIn}
               />
             </div>
           </Container>
@@ -143,7 +168,9 @@ export function CourseDetailPageView({
 
         <CourseFacultySection faculty={faculty} />
         <CourseIncludedScheduleSection course={course} />
-        <CoursePricingSection plans={plans} />
+        {!hidePlanSection && plans.length > 0 ? (
+          <CoursePricingSection plans={plans} />
+        ) : null}
         <CourseTestimonialsSection testimonials={testimonials} />
       </div>
 

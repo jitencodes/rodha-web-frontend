@@ -12,14 +12,10 @@ import {
   Package,
   Settings,
   ShoppingBag,
-  ShoppingCart,
   UserRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ACCOUNT_CART_ITEMS } from "@/data/account/cart";
 import { ACCOUNT_SUPPORT_CARD } from "@/data/account/user";
-
-const CART_ITEM_COUNT = ACCOUNT_CART_ITEMS.length;
 
 type AccountSidebarProps = {
   open: boolean;
@@ -46,7 +42,6 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
   }, [pathname]);
 
   const dashboardActive = pathname.startsWith("/account/dashboard");
-  const cartActive = pathname.startsWith("/account/cart");
   const ordersActive = pathname.startsWith("/account/orders");
   const profileActive = pathname.startsWith("/account/profile");
   const settingsActive = pathname.startsWith("/account/settings");
@@ -135,26 +130,21 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
               >
                 Buy Courses
               </SidebarSubLink>
-              <SidebarSubLink
-                href="/account/test-series"
-                active={testSeriesActive}
-                onClick={onClose}
-              >
-                Test Series
-              </SidebarSubLink>
+              {/* Test Series hidden from My Products (Graphy integration). */}
+              {false && (
+                <SidebarSubLink
+                  href="/account/test-series"
+                  active={testSeriesActive}
+                  onClick={onClose}
+                >
+                  Test Series
+                </SidebarSubLink>
+              )}
             </div>
           ) : null}
         </div>
 
-        <SidebarLink
-          href="/account/cart"
-          active={cartActive}
-          icon={<ShoppingCart className="size-[18px]" strokeWidth={1.75} />}
-          badge={CART_ITEM_COUNT > 0 ? CART_ITEM_COUNT : undefined}
-          onClick={onClose}
-        >
-          My Cart
-        </SidebarLink>
+        {/* My Cart replaced by single-package Checkout (not shown in nav). */}
 
         <SidebarLink
           href="/account/orders"

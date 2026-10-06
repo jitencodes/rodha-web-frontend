@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { AccountContinueWatchingCard } from "@/components/account/AccountContinueWatchingCard";
 import { AccountPagination } from "@/components/account/AccountPagination";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
-import { ACCOUNT_CONTINUE_WATCHING } from "@/data/account/continue-watching";
-import { ACCOUNT_BUY_COURSES } from "@/data/account/courses";
+import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
+import { getPackages } from "@/lib/api/modules/packages/service";
+import { getStudentCourses } from "@/lib/api/modules/student/courses/service";
+import { getAccessToken } from "@/lib/auth/server-session";
 import {
-  paginateItems,
   parseCoursesTab,
   parsePageParam,
   type CoursesTab,
 } from "@/lib/account/pagination";
+import {
+  packageBuyNowHref,
+  packageViewCourseHref,
+} from "@/lib/packages/buy-now";
 import { buildPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +30,8 @@ interface AccountCoursesPageProps {
   searchParams: Promise<{
     tab?: string;
     page?: string;
+    packageId?: string;
+    type?: string;
   }>;
 }
 
@@ -32,17 +40,68 @@ const TABS: { id: CoursesTab; label: string }[] = [
   { id: "buy", label: "Buy Courses" },
 ];
 
+const PAGE_SIZE = 8;
+
 export default async function AccountCoursesPage({
   searchParams,
 }: AccountCoursesPageProps) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    redirect("/login?next=/account/courses");
+  }
+
   const params = await searchParams;
   const tab = parseCoursesTab(params.tab);
   const page = parsePageParam(params.page);
+  const packageId = params.packageId?.trim();
 
-  const continuePaged = paginateItems(ACCOUNT_CONTINUE_WATCHING, page);
-  const buyPaged = paginateItems(ACCOUNT_BUY_COURSES, page);
-  const { page: currentPage, totalPages } =
-    tab === "continue" ? continuePaged : buyPaged;
+  let continueItems: Awaited<ReturnType<typeof getStudentCourses>>["items"] =
+    [];
+  let continueTotalPages = 1;
+  let continuePage = page;
+  let buyItems: ReturnType<typeof packageCardToCourse>[] = [];
+  let buyMeta = { page: 1, totalPages: 1 };
+
+  if (tab === "continue") {
+    try {
+      const result = await getStudentCourses(accessToken, {
+        page,
+        limit: PAGE_SIZE,
+        sortBy: "continue_watching",
+        packageId: packageId || undefined,
+      });
+      continueItems = result.items;
+      continueTotalPages = result.totalPages;
+      continuePage = result.page;
+    } catch {
+      continueItems = [];
+    }
+  } else {
+    try {
+      const result = await getPackages({ page, limit: PAGE_SIZE });
+      buyItems = result.items.map((pkg) => {
+        const course = packageCardToCourse(pkg);
+        return {
+          ...course,
+          detailsLabel: pkg.isSelfEnrolled ? "View Course" : "Buy Now",
+          // stash for CTA via href below
+          enrollmentUrl: pkg.isSelfEnrolled
+            ? packageViewCourseHref(pkg.packageId)
+            : pkg.packageId != null
+              ? packageBuyNowHref(pkg.packageId, pkg.slug)
+              : `/courses/${pkg.slug}`,
+          externalLink: undefined,
+        };
+      });
+      buyMeta = { page: result.page, totalPages: result.totalPages };
+    } catch {
+      buyItems = [];
+    }
+  }
+
+  const currentPage = tab === "continue" ? continuePage : buyMeta.page;
+  const totalPages =
+    tab === "continue" ? continueTotalPages : buyMeta.totalPages;
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -82,22 +141,23 @@ export default async function AccountCoursesPage({
       </div>
 
       {tab === "continue" ? (
-        continuePaged.items.length > 0 ? (
+        continueItems.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {continuePaged.items.map((item) => (
+            {continueItems.map((item) => (
               <AccountContinueWatchingCard key={item.id} item={item} />
             ))}
           </div>
         ) : (
           <EmptyState message="No courses in progress yet." />
         )
-      ) : buyPaged.items.length > 0 ? (
+      ) : buyItems.length > 0 ? (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {buyPaged.items.map((course) => (
+          {buyItems.map((course) => (
             <CourseCardV2
               key={course.id}
               course={course}
-              ctaLabel="Buy Now"
+              href={course.enrollmentUrl || `/courses/${course.slug}`}
+              ctaLabel={course.detailsLabel || "Buy Now"}
             />
           ))}
         </div>
@@ -110,7 +170,10 @@ export default async function AccountCoursesPage({
           currentPage={currentPage}
           totalPages={totalPages}
           basePath="/account/courses"
-          query={{ tab }}
+          query={{
+            tab,
+            ...(packageId ? { packageId } : {}),
+          }}
           className="pt-8"
         />
       ) : null}

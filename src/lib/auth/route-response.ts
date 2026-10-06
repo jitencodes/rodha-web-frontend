@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { applyAuthCookie } from "@/lib/auth/session-cookie";
+import { applySessionCookies } from "@/lib/auth/session-cookie";
 import { ApiError } from "@/lib/api/types";
 import type { AuthSessionViewModel } from "@/lib/api/modules/auth/types";
 
@@ -11,8 +11,18 @@ export function sessionResponse(session: AuthSessionViewModel) {
   const response = NextResponse.json({
     ok: true,
     user: session.user,
+    graphy: session.graphy
+      ? {
+          ssoUrl: session.graphy.ssoUrl,
+          graphyLearnerId: session.graphy.graphyLearnerId,
+        }
+      : null,
   });
-  applyAuthCookie(response, session.accessToken);
+  applySessionCookies(response, {
+    accessToken: session.accessToken,
+    user: session.user,
+    graphy: session.graphy,
+  });
   return response;
 }
 

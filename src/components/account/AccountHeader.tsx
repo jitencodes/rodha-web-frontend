@@ -185,13 +185,27 @@ export function AccountHeader({ onMenuClick }: AccountHeaderProps) {
           ) : null}
         </button>
 
-        <Link
-          href="/account/dashboard"
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              const res = await fetch("/api/graphy/sso");
+              const data = (await res.json()) as {
+                ok: boolean;
+                graphy?: { ssoUrl?: string };
+              };
+              if (res.ok && data.ok && data.graphy?.ssoUrl) {
+                window.open(data.graphy.ssoUrl, "_blank", "noopener,noreferrer");
+              }
+            } catch {
+              // ignore
+            }
+          }}
           className="hidden items-center gap-2 rounded-[var(--account-radius)] border border-[var(--account-accent)] px-3 py-2 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)] sm:inline-flex"
         >
           <ChartNoAxesCombined className="size-4" strokeWidth={1.75} />
-          Live Dashboard
-        </Link>
+          Open Graphy
+        </button>
 
         <div ref={profileRef} className="relative">
           <button

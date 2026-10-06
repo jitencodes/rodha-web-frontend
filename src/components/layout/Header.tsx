@@ -13,11 +13,20 @@ import {
 import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { MobileNav } from "./MobileNav";
-import { CircleUserRound, User } from "lucide-react";
+import { LayoutDashboard, User } from "lucide-react";
+import { AUTH_LOGGED_IN_COOKIE_NAME } from "@/lib/auth/session-cookie";
 
 interface HeaderProps {
   className?: string;
   categories?: WebsiteCategoryViewModel[];
+  isLoggedIn?: boolean;
+}
+
+function readLoggedInCookie(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.cookie
+    .split(";")
+    .some((part) => part.trim().startsWith(`${AUTH_LOGGED_IN_COOKIE_NAME}=1`));
 }
 
 function getCategorySlugFromPathname(pathname: string): string | null {
@@ -55,7 +64,11 @@ function HeaderNavLink({
   );
 }
 
-export function Header({ className, categories = [] }: HeaderProps) {
+export function Header({
+  className,
+  categories = [],
+  isLoggedIn: isLoggedInProp = false,
+}: HeaderProps) {
   const pathname = usePathname();
   const activeSlug = getCategorySlugFromPathname(pathname);
   const activeCategory =
@@ -67,8 +80,13 @@ export function Header({ className, categories = [] }: HeaderProps) {
 
   const [examOpen, setExamOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
   const examRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsLoggedIn(isLoggedInProp || readLoggedInCookie());
+  }, [isLoggedInProp, pathname]);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -310,11 +328,10 @@ export function Header({ className, categories = [] }: HeaderProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center h-9.5 px-4 text-body-sm font-semibold text-white border border-[#4B5563]/80 rounded-[4px] transition-colors whitespace-nowrap hover:border-orange-400/50
-                hover:bg-orange-500/10"
-          >
+                hover:bg-orange-500/10"          >
             Rodha Buddy
           </a>
-          {/* <div className="relative group shrink-0">
+          <div className="relative group shrink-0">
             <button
               className="
                 flex items-center gap-2
@@ -368,34 +385,52 @@ export function Header({ className, categories = [] }: HeaderProps) {
               "
             >
               <div className="p-2">
-
-                <Link
-                  href={"/login"}
-                  className="
-                    flex items-start gap-3
-                    rounded-lg
-                    px-3
-                    py-2.5
-                    transition-colors
-                    hover:bg-orange-500/10
-                  "
-                >
-                  <User className="mt-0.5 h-5 w-5 text-orange-400 shrink-0" />
-
-                  <div>
-                    <div className="font-medium text-white">
-                      Log In / Sign Up
+                {isLoggedIn ? (
+                  <Link
+                    href="/account/dashboard"
+                    className="
+                      flex items-start gap-3
+                      rounded-lg
+                      px-3
+                      py-2.5
+                      transition-colors
+                      hover:bg-orange-500/10
+                    "
+                  >
+                    <LayoutDashboard className="mt-0.5 h-5 w-5 text-orange-400 shrink-0" />
+                    <div>
+                      <div className="font-medium text-white">
+                        Go to Dashboard
+                      </div>
+                      <div className="text-caption text-white/60 mt-0.5">
+                        Continue learning in your account
+                      </div>
                     </div>
-
-                    <div className="text-caption text-white/60 mt-0.5">
-                      Access existing account or create new
+                  </Link>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="
+                      flex items-start gap-3
+                      rounded-lg
+                      px-3
+                      py-2.5
+                      transition-colors
+                      hover:bg-orange-500/10
+                    "
+                  >
+                    <User className="mt-0.5 h-5 w-5 text-orange-400 shrink-0" />
+                    <div>
+                      <div className="font-medium text-white">Login</div>
+                      <div className="text-caption text-white/60 mt-0.5">
+                        Access existing account or create new
+                      </div>
                     </div>
-                  </div>
-                </Link>
-
+                  </Link>
+                )}
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
         <MobileNav
           activeCategorySlug={activeSlug}

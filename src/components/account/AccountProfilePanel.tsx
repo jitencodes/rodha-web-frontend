@@ -2,13 +2,11 @@
 
 import { useId, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { CheckCircle2, Eye, EyeOff, Pencil } from "lucide-react";
+import { CheckCircle2, Eye, EyeOff } from "lucide-react";
 import type { AccountProfile } from "@/lib/account/types";
 import { getInitials } from "@/lib/initials";
 import { cn } from "@/lib/utils";
 import {
-  sanitizeNameInput,
-  validateName,
   validatePassword,
   validatePasswordConfirm,
 } from "@/lib/form-validation";
@@ -16,11 +14,6 @@ import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
 
 type AccountProfilePanelProps = {
   initialProfile: AccountProfile;
-};
-
-type NameErrors = {
-  firstName?: string;
-  lastName?: string;
 };
 
 type PasswordErrors = {
@@ -69,48 +62,27 @@ export function AccountProfilePanel({
   initialProfile,
 }: AccountProfilePanelProps) {
   const formIds = useId();
-  const [profile, setProfile] = useState(initialProfile);
-  const [editing, setEditing] = useState(false);
-
-  const [firstName, setFirstName] = useState(initialProfile.firstName);
-  const [lastName, setLastName] = useState(initialProfile.lastName);
-  const [nameErrors, setNameErrors] = useState<NameErrors>({});
-  const [nameSuccess, setNameSuccess] = useState(false);
+  const [profile] = useState(initialProfile);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState<PasswordErrors>({});
   const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordPending, setPasswordPending] = useState(false);
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+  const fullName =
+    profile.fullName ||
+    `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
 
-  function handleNameSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setNameSuccess(false);
-
-    const nextErrors: NameErrors = {
-      firstName: validateName(firstName),
-      lastName: validateName(lastName),
-    };
-    setNameErrors(nextErrors);
-    if (Object.values(nextErrors).some(Boolean)) return;
-
-    setProfile((prev) => ({
-      ...prev,
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-    }));
-    setNameSuccess(true);
-    setEditing(false);
-  }
-
-  function handlePasswordSubmit(e: React.FormEvent) {
+  async function handlePasswordSubmit(e: React.FormEvent) {
     e.preventDefault();
     setPasswordSuccess(false);
+    setPasswordError("");
 
     const nextErrors: PasswordErrors = {
       currentPassword: validatePassword(currentPassword),
@@ -120,170 +92,99 @@ export function AccountProfilePanel({
     setPasswordErrors(nextErrors);
     if (Object.values(nextErrors).some(Boolean)) return;
 
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordSuccess(true);
-  }
-
-  function cancelEdit() {
-    setFirstName(profile.firstName);
-    setLastName(profile.lastName);
-    setNameErrors({});
-    setEditing(false);
+    setPasswordPending(true);
+    try {
+      const res = await fetch("/api/account/password", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = (await res.json()) as { ok: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Unable to update password");
+      }
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordSuccess(true);
+    } catch (err) {
+      setPasswordError(
+        err instanceof Error ? err.message : "Unable to update password"
+      );
+    } finally {
+      setPasswordPending(false);
+    }
   }
 
   return (
     <div className="flex w-full flex-col gap-5">
-      {/* Summary card */}
       <section className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex min-w-0 items-center gap-4">
-            <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-[var(--account-accent-soft)] sm:size-20">
-              {profile.avatarUrl ? (
-                <Image
-                  src={profile.avatarUrl}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              ) : (
-                <span className="flex size-full items-center justify-center font-montserrat text-xl font-bold text-[var(--account-accent)]">
-                  {getInitials(fullName)}
-                </span>
-              )}
-            </div>
-            <div className="min-w-0">
-              <h2 className="truncate font-montserrat text-xl font-bold text-[var(--account-text)] sm:text-2xl">
-                {fullName}
-              </h2>
-              <p className="mt-1 truncate text-body-sm text-[var(--account-text-muted)]">
-                {profile.email}
-              </p>
-              <p className="mt-0.5 truncate text-body-sm text-[var(--account-text-muted)]">
-                {profile.phone}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setEditing(true);
-              setNameSuccess(false);
-            }}
-            className={cn(
-              "inline-flex shrink-0 items-center justify-center gap-2 rounded-[var(--account-radius)] px-4 py-2.5 text-body-sm font-semibold",
-              "bg-[var(--account-accent)] text-white transition-opacity hover:opacity-90",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-[var(--account-accent-soft)] sm:size-20">
+            {profile.avatarUrl ? (
+              <Image
+                src={profile.avatarUrl}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="80px"
+              />
+            ) : (
+              <span className="flex size-full items-center justify-center font-montserrat text-xl font-bold text-[var(--account-accent)]">
+                {getInitials(fullName)}
+              </span>
             )}
-          >
-            <Pencil className="size-4" strokeWidth={1.75} aria-hidden />
-            {ACCOUNT_PROFILE_PAGE_COPY.editLabel}
-          </button>
+          </div>
+          <div className="min-w-0">
+            <h2 className="truncate font-montserrat text-xl font-bold text-[var(--account-text)] sm:text-2xl">
+              {fullName}
+            </h2>
+            <p className="mt-1 truncate text-body-sm text-[var(--account-text-muted)]">
+              {profile.email}
+            </p>
+            <p className="mt-0.5 truncate text-body-sm text-[var(--account-text-muted)]">
+              {profile.phone}
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Update name */}
       <section className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
         <h2 className="font-montserrat text-lg font-bold text-[var(--account-text)]">
-          {ACCOUNT_PROFILE_PAGE_COPY.updateNameTitle}
+          Profile details
         </h2>
-        <p className="mt-1 text-body-sm text-[var(--account-text-muted)]">
-          Changes are saved locally in this session only.
-        </p>
-
-        {nameSuccess ? (
-          <p
-            className="mt-4 flex items-start gap-2 rounded-lg bg-emerald-500/10 px-3 py-2.5 text-body-sm text-emerald-600"
-            role="status"
-          >
-            <CheckCircle2 className="mt-0.5 size-4 shrink-0" aria-hidden />
-            {ACCOUNT_PROFILE_PAGE_COPY.successName}
-          </p>
-        ) : null}
-
-        <form
-          onSubmit={handleNameSubmit}
-          className="mt-5 flex flex-col gap-4"
-          noValidate
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <AccountField
-              id={`${formIds}-first-name`}
-              label="First name"
-              error={nameErrors.firstName}
-            >
-              <input
-                id={`${formIds}-first-name`}
-                className={inputClassName}
-                value={firstName}
-                disabled={!editing}
-                autoComplete="given-name"
-                onChange={(e) => {
-                  setFirstName(sanitizeNameInput(e.target.value));
-                  setNameErrors((prev) => ({ ...prev, firstName: undefined }));
-                  setNameSuccess(false);
-                }}
-              />
-            </AccountField>
-            <AccountField
-              id={`${formIds}-last-name`}
-              label="Last name"
-              error={nameErrors.lastName}
-            >
-              <input
-                id={`${formIds}-last-name`}
-                className={inputClassName}
-                value={lastName}
-                disabled={!editing}
-                autoComplete="family-name"
-                onChange={(e) => {
-                  setLastName(sanitizeNameInput(e.target.value));
-                  setNameErrors((prev) => ({ ...prev, lastName: undefined }));
-                  setNameSuccess(false);
-                }}
-              />
-            </AccountField>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt className="text-body-sm text-[var(--account-text-muted)]">
+              Full name
+            </dt>
+            <dd className="mt-1 text-body font-medium text-[var(--account-text)]">
+              {fullName || "—"}
+            </dd>
           </div>
-
-          {editing ? (
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="submit"
-                className={cn(
-                  "inline-flex items-center justify-center rounded-[var(--account-radius)] px-4 py-2.5 text-body-sm font-semibold",
-                  "bg-[var(--account-accent)] text-white transition-opacity hover:opacity-90",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
-                )}
-              >
-                Save name
-              </button>
-              <button
-                type="button"
-                onClick={cancelEdit}
-                className={cn(
-                  "inline-flex items-center justify-center rounded-[var(--account-radius)] border border-[var(--account-border-strong)] px-4 py-2.5 text-body-sm font-semibold text-[var(--account-text-secondary)]",
-                  "transition-colors hover:bg-[var(--account-nav-hover)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
-                )}
-              >
-                Cancel
-              </button>
-            </div>
-          ) : null}
-        </form>
+          <div>
+            <dt className="text-body-sm text-[var(--account-text-muted)]">
+              Email
+            </dt>
+            <dd className="mt-1 text-body font-medium text-[var(--account-text)]">
+              {profile.email || "—"}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-body-sm text-[var(--account-text-muted)]">
+              Phone
+            </dt>
+            <dd className="mt-1 text-body font-medium text-[var(--account-text)]">
+              {profile.phone || "—"}
+            </dd>
+          </div>
+        </dl>
       </section>
 
-      {/* Change password */}
       <section className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
         <h2 className="font-montserrat text-lg font-bold text-[var(--account-text)]">
           {ACCOUNT_PROFILE_PAGE_COPY.changePasswordTitle}
         </h2>
-        <p className="mt-1 text-body-sm text-[var(--account-text-muted)]">
-          Demo validation only — passwords are not sent to a server.
-        </p>
 
         {passwordSuccess ? (
           <p
@@ -291,7 +192,12 @@ export function AccountProfilePanel({
             role="status"
           >
             <CheckCircle2 className="mt-0.5 size-4 shrink-0" aria-hidden />
-            {ACCOUNT_PROFILE_PAGE_COPY.successPassword}
+            Password updated successfully.
+          </p>
+        ) : null}
+        {passwordError ? (
+          <p className="mt-4 text-body-sm text-red-500" role="alert">
+            {passwordError}
           </p>
         ) : null}
 
@@ -300,119 +206,123 @@ export function AccountProfilePanel({
           className="mt-5 flex flex-col gap-4"
           noValidate
         >
-          <PasswordField
-            id={`${formIds}-current-password`}
+          <AccountField
+            id={`${formIds}-current`}
             label="Current password"
-            value={currentPassword}
-            show={showCurrent}
-            onToggleShow={() => setShowCurrent((v) => !v)}
             error={passwordErrors.currentPassword}
-            autoComplete="current-password"
-            onChange={(value) => {
-              setCurrentPassword(value);
-              setPasswordErrors((prev) => ({
-                ...prev,
-                currentPassword: undefined,
-              }));
-              setPasswordSuccess(false);
-            }}
-          />
-          <PasswordField
-            id={`${formIds}-new-password`}
-            label="New password"
-            value={newPassword}
-            show={showNew}
-            onToggleShow={() => setShowNew((v) => !v)}
-            error={passwordErrors.newPassword}
-            autoComplete="new-password"
-            onChange={(value) => {
-              setNewPassword(value);
-              setPasswordErrors((prev) => ({
-                ...prev,
-                newPassword: undefined,
-              }));
-              setPasswordSuccess(false);
-            }}
-          />
-          <PasswordField
-            id={`${formIds}-confirm-password`}
-            label="Confirm new password"
-            value={confirmPassword}
-            show={showConfirm}
-            onToggleShow={() => setShowConfirm((v) => !v)}
-            error={passwordErrors.confirmPassword}
-            autoComplete="new-password"
-            onChange={(value) => {
-              setConfirmPassword(value);
-              setPasswordErrors((prev) => ({
-                ...prev,
-                confirmPassword: undefined,
-              }));
-              setPasswordSuccess(false);
-            }}
-          />
+          >
+            <div className="relative">
+              <input
+                id={`${formIds}-current`}
+                type={showCurrent ? "text" : "password"}
+                className={cn(inputClassName, "pr-11")}
+                value={currentPassword}
+                autoComplete="current-password"
+                onChange={(e) => {
+                  setCurrentPassword(e.target.value);
+                  setPasswordErrors((prev) => ({
+                    ...prev,
+                    currentPassword: undefined,
+                  }));
+                }}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-3 text-[var(--account-text-muted)]"
+                onClick={() => setShowCurrent((v) => !v)}
+                aria-label={showCurrent ? "Hide password" : "Show password"}
+              >
+                {showCurrent ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </AccountField>
 
-          <div>
-            <button
-              type="submit"
-              className={cn(
-                "inline-flex items-center justify-center rounded-[var(--account-radius)] px-4 py-2.5 text-body-sm font-semibold",
-                "bg-[var(--account-accent)] text-white transition-opacity hover:opacity-90",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
-              )}
-            >
-              Update password
-            </button>
-          </div>
+          <AccountField
+            id={`${formIds}-new`}
+            label="New password"
+            error={passwordErrors.newPassword}
+          >
+            <div className="relative">
+              <input
+                id={`${formIds}-new`}
+                type={showNew ? "text" : "password"}
+                className={cn(inputClassName, "pr-11")}
+                value={newPassword}
+                autoComplete="new-password"
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                  setPasswordErrors((prev) => ({
+                    ...prev,
+                    newPassword: undefined,
+                  }));
+                }}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-3 text-[var(--account-text-muted)]"
+                onClick={() => setShowNew((v) => !v)}
+                aria-label={showNew ? "Hide password" : "Show password"}
+              >
+                {showNew ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </AccountField>
+
+          <AccountField
+            id={`${formIds}-confirm`}
+            label="Confirm new password"
+            error={passwordErrors.confirmPassword}
+          >
+            <div className="relative">
+              <input
+                id={`${formIds}-confirm`}
+                type={showConfirm ? "text" : "password"}
+                className={cn(inputClassName, "pr-11")}
+                value={confirmPassword}
+                autoComplete="new-password"
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setPasswordErrors((prev) => ({
+                    ...prev,
+                    confirmPassword: undefined,
+                  }));
+                }}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-3 text-[var(--account-text-muted)]"
+                onClick={() => setShowConfirm((v) => !v)}
+                aria-label={showConfirm ? "Hide password" : "Show password"}
+              >
+                {showConfirm ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </AccountField>
+
+          <button
+            type="submit"
+            disabled={passwordPending}
+            className={cn(
+              "inline-flex w-fit items-center justify-center rounded-[var(--account-radius)] px-4 py-2.5 text-body-sm font-semibold",
+              "bg-[var(--account-accent)] text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            )}
+          >
+            {passwordPending ? "Updating…" : "Update password"}
+          </button>
         </form>
       </section>
     </div>
-  );
-}
-
-function PasswordField({
-  id,
-  label,
-  value,
-  show,
-  onToggleShow,
-  onChange,
-  error,
-  autoComplete,
-}: {
-  id: string;
-  label: string;
-  value: string;
-  show: boolean;
-  onToggleShow: () => void;
-  onChange: (value: string) => void;
-  error?: string;
-  autoComplete: string;
-}) {
-  return (
-    <AccountField id={id} label={label} error={error}>
-      <div className="relative">
-        <input
-          id={id}
-          type={show ? "text" : "password"}
-          className={cn(inputClassName, "pr-11")}
-          value={value}
-          autoComplete={autoComplete}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        <button
-          type="button"
-          onClick={onToggleShow}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--account-text-muted)] transition-colors hover:text-[var(--account-text)]"
-          aria-label={show ? `Hide ${label}` : `Show ${label}`}
-        >
-          {show ? (
-            <EyeOff className="size-4" strokeWidth={1.75} />
-          ) : (
-            <Eye className="size-4" strokeWidth={1.75} />
-          )}
-        </button>
-      </div>
-    </AccountField>
   );
 }

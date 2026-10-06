@@ -1,4 +1,6 @@
 import type {
+  AuthGraphyApi,
+  AuthGraphyViewModel,
   AuthSessionApi,
   AuthSessionViewModel,
   AuthUserApi,
@@ -31,6 +33,20 @@ export function mapAuthUser(
   };
 }
 
+export function mapAuthGraphy(
+  graphy: AuthGraphyApi | null | undefined
+): AuthGraphyViewModel | null {
+  if (!graphy) return null;
+  const ssoToken = asString(graphy.ssoToken);
+  const ssoUrl = asString(graphy.ssoUrl);
+  if (!ssoToken && !ssoUrl) return null;
+  return {
+    ssoToken,
+    ssoUrl,
+    graphyLearnerId: asString(graphy.graphyLearnerId),
+  };
+}
+
 export function mapAuthSession(
   data: AuthSessionApi | null | undefined
 ): AuthSessionViewModel | null {
@@ -45,5 +61,6 @@ export function mapAuthSession(
     roles: Array.isArray(data.roles)
       ? data.roles.filter((role): role is string => typeof role === "string")
       : [],
+    graphy: mapAuthGraphy(data.graphy),
   };
 }

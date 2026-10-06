@@ -13,6 +13,7 @@ interface SiteFrameProps {
   announcements: AnnouncementViewModel[];
   intervalMs: number;
   categories: WebsiteCategoryViewModel[];
+  isLoggedIn?: boolean;
   children: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export function SiteFrame({
   announcements,
   intervalMs,
   categories,
+  isLoggedIn = false,
   children,
 }: SiteFrameProps) {
   const pathname = usePathname();
@@ -40,7 +42,7 @@ export function SiteFrame({
         announcements={announcements}
         intervalMs={intervalMs}
       />
-      <Header categories={categories} />
+      <Header categories={categories} isLoggedIn={isLoggedIn} />
       <CounsellingModalProvider>
         <main>{children}</main>
         <FloatingCounsellingCta />

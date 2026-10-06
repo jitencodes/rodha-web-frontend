@@ -1,0 +1,67 @@
+Rodha Graphy API requirements — gaps only
+Generated from UI vs Postman (Share Copy) + updated api.json
+
+================================================================================
+SCREEN: Public category package listing
+API: Packages list
+METHOD: GET
+ENDPOINT: /website/packages
+
+MISSING/INSUFFICIENT FIELD: websiteCategorySlug (or categoryId) filter
+CURRENT RESPONSE: Filters via graphyCategory + subCategory1 (Graphy strings)
+REQUIRED USAGE: Map CMS /category/[slug] to packages without best-effort name matching
+EXPECTED TYPE: string
+NULLABLE: yes (optional filter)
+EXAMPLE: ?websiteCategorySlug=cat
+
+================================================================================
+SCREEN: My Profile — edit name / mobile
+API: Student profile
+METHOD: PATCH (missing)
+ENDPOINT: /website/student/profile
+
+MISSING/INSUFFICIENT FIELD: update endpoint for fullName / mobile
+CURRENT RESPONSE: GET returns id, email, mobile, fullName, profilePicturePath, stats
+REQUIRED USAGE: Allow student to update display name / mobile after First/Last removal
+EXPECTED TYPE: { fullName?: string, mobile?: string }
+NULLABLE: fields optional
+EXAMPLE: { "fullName": "Test Graphy Student" }
+
+================================================================================
+SCREEN: Public package detail — View Course when enrolled
+API: Package detail
+METHOD: GET
+ENDPOINT: /website/packages/:packageSlug
+
+MISSING/INSUFFICIENT FIELD: enrolledCourseIds[] or primaryCourseId when isSelfEnrolled=true
+CURRENT RESPONSE: isSelfEnrolled boolean; no courseTakeUrl on package
+REQUIRED USAGE: Deep-link View Course to the correct assigned course detail
+EXPECTED TYPE: number[] or number
+NULLABLE: yes when not enrolled
+EXAMPLE: "enrolledCourseIds": [12, 21]
+
+================================================================================
+SCREEN: Checkout order summary
+API: Student cart / checkout
+METHOD: GET / POST
+ENDPOINT: /website/student/cart , /website/student/checkout
+
+MISSING/INSUFFICIENT FIELD: gstAmount (if UI must show GST line)
+CURRENT RESPONSE: totals.subtotalAmount, discountAmount, payableAmount only
+REQUIRED USAGE: Existing cart UI previously showed GST 18%; now uses API payableAmount
+EXPECTED TYPE: number
+NULLABLE: yes
+EXAMPLE: "gstAmount": 0
+
+================================================================================
+SCREEN: Google authentication (documented for Postman completeness)
+API: Google login/signup
+METHOD: POST
+ENDPOINT: /auth/user/google
+
+MISSING/INSUFFICIENT FIELD: Official Postman example (backend already used by FE)
+CURRENT RESPONSE: Same session shape as email login (accessToken, user, graphy) — assumed
+REQUIRED USAGE: Document request { idToken, is_web: true } and full response example
+EXPECTED TYPE: AuthSession
+NULLABLE: graphy optional
+EXAMPLE: { "idToken": "<gis-credential>", "is_web": true }

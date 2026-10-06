@@ -125,13 +125,15 @@ export interface CartCoupon {
   isApplied: boolean;
 }
 
-/** Profile form initial values (client-only edits). */
+/** Profile form initial values. */
 export interface AccountProfile {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
   avatarUrl: string;
+  /** @deprecated Prefer fullName — kept for transitional mocks */
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface DashboardWelcome {

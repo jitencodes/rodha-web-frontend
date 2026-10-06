@@ -3,23 +3,29 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { useAtomValue } from "jotai";
 
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
-import { Icon } from "@/components/ui/Icon";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { PRICE_FILTERS, type CourseFilterId } from "@/lib/course-filters";
-import { categoriesAtom } from "@/lib/store/categories";
+import { PRICE_FILTERS } from "@/lib/course-filters";
 import { cn } from "@/lib/utils";
+
+export interface CatalogFilterOption {
+  value: string;
+  label: string;
+}
 
 interface CatalogToolbarProps {
   basePath: string;
+  /** Active graphyCategory value (`all` when unset). */
   activeCategory: string;
+  categoryOptions?: CatalogFilterOption[];
   initialQuery: string;
+  /** Active subCategory1 value (`all` when unset). */
   activeType: string;
+  courseTypeOptions?: CatalogFilterOption[];
   activePrice: string;
   showCourseType?: boolean;
-  courseTypeOptions?: Array<{ value: CourseFilterId | string; label: string }>;
+  showPrice?: boolean;
   searchPlaceholder: string;
   searchAriaLabel: string;
   categoryAriaLabel: string;
@@ -28,11 +34,13 @@ interface CatalogToolbarProps {
 export function CatalogToolbar({
   basePath,
   activeCategory,
+  categoryOptions = [],
   initialQuery,
   activeType,
-  activePrice,
-  showCourseType = false,
   courseTypeOptions = [],
+  activePrice,
+  showCourseType = true,
+  showPrice = true,
   searchPlaceholder,
   searchAriaLabel,
   categoryAriaLabel,
@@ -40,7 +48,6 @@ export function CatalogToolbar({
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [query, setQuery] = useState(initialQuery);
-  const categories = useAtomValue(categoriesAtom);
 
   function hrefFor(next: {
     category?: string;
@@ -93,6 +100,11 @@ export function CatalogToolbar({
     label: filter.label,
   }));
 
+  const typeDropdownOptions = [
+    { value: "all", label: "All Types" },
+    ...courseTypeOptions,
+  ];
+
   return (
     <div className="flex flex-col gap-4 border border-[#fee8dd] rounded-md p-6 bg-white shadow-sm -translate-y-1/2 shadow-[#fee8dd]">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -115,12 +127,12 @@ export function CatalogToolbar({
             All
           </Link>
 
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat.slug;
+          {categoryOptions.map((cat) => {
+            const isActive = activeCategory === cat.value;
             return (
               <Link
-                key={cat.id}
-                href={hrefFor({ category: cat.slug, q: "" })}
+                key={cat.value}
+                href={hrefFor({ category: cat.value, q: "" })}
                 role="tab"
                 aria-selected={isActive}
                 className={cn(
@@ -130,7 +142,7 @@ export function CatalogToolbar({
                     : "bg-white text-neutral-600 border-section-beige hover:text-neutral-900 hover:border-orange-300"
                 )}
               >
-                {cat.name}
+                {cat.label}
               </Link>
             );
           })}
@@ -148,35 +160,30 @@ export function CatalogToolbar({
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
-        {showCourseType && courseTypeOptions.length > 1 ? (
-          <DropdownSelect
-            options={courseTypeOptions}
-            value={activeType}
-            onChange={(type) => navigate({ type })}
-            placeholder="All Types"
-            aria-label="Filter by course type"
-            variant="light"
-            className="w-full sm:w-auto sm:min-w-[180px]"
-            prefixIcon={
-              <Icon src="/assets/icons/book.svg" size={16} alt="" />
-            }
-          />
-        ) : null}
-
-        <DropdownSelect
-          options={priceOptions}
-          value={activePrice}
-          onChange={(price) => navigate({ price })}
-          placeholder="All Prices"
-          aria-label="Filter by price"
-          variant="light"
-          className="w-full sm:w-auto sm:min-w-[160px]"
-          prefixIcon={
-            <Icon src="/assets/icons/practice.svg" size={16} alt="" />
-          }
-        />
-      </div>
+      {(showCourseType || showPrice) && (
+        <div className="flex flex-wrap items-center gap-3">
+          {showCourseType && typeDropdownOptions.length > 1 ? (
+            <DropdownSelect
+              value={activeType}
+              onChange={(value) => navigate({ type: value })}
+              options={typeDropdownOptions}
+              aria-label="Course type"
+              className="min-w-[10rem]"
+              variant="light"
+            />
+          ) : null}
+          {showPrice ? (
+            <DropdownSelect
+              value={activePrice}
+              onChange={(value) => navigate({ price: value })}
+              options={priceOptions}
+              aria-label="Price"
+              className="min-w-[9rem]"
+              variant="light"
+            />
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }

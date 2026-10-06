@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
+import { PackagePurchaseActions } from "@/components/cards/PackagePurchaseActions";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Course } from "@/lib/types";
 
@@ -7,6 +8,9 @@ interface CoursePurchaseCardProps {
   course: Course;
   categoryLabel: string;
   className?: string;
+  packageId?: number | null;
+  isSelfEnrolled?: boolean;
+  isLoggedIn?: boolean;
 }
 
 /** Compact sticky purchase card — image, essentials, price, Buy Now. */
@@ -14,12 +18,16 @@ export function CoursePurchaseCard({
   course,
   categoryLabel,
   className,
+  packageId = null,
+  isSelfEnrolled = false,
+  isLoggedIn = false,
 }: CoursePurchaseCardProps) {
   const posterSrc =
     course.thumbnail ||
     course.image ||
     "/assets/images/placeholders/course-thumb.svg";
   const enrollHref = course.externalLink || course.enrollmentUrl || "#";
+  const usePackageCheckout = packageId != null || isSelfEnrolled;
 
   return (
     <aside
@@ -88,14 +96,26 @@ export function CoursePurchaseCard({
             )}
         </div>
 
-        <a
-          href={enrollHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-primary-premium premium-border-glow glow-accent-orange mt-4 inline-flex h-11 w-full shrink-0 items-center justify-center rounded-md bg-orange-500 px-6 text-body font-semibold text-white hover:bg-orange-600"
-        >
-          {course.price === 0 ? "Start Free" : "Buy Now"}
-        </a>
+        {usePackageCheckout ? (
+          <div className="mt-4">
+            <PackagePurchaseActions
+              packageId={packageId}
+              slug={course.slug}
+              isSelfEnrolled={isSelfEnrolled}
+              isLoggedIn={isLoggedIn}
+              className="btn-primary-premium premium-border-glow glow-accent-orange h-11 rounded-md bg-orange-500 px-6 text-body font-semibold text-white hover:bg-orange-600"
+            />
+          </div>
+        ) : (
+          <a
+            href={enrollHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary-premium premium-border-glow glow-accent-orange mt-4 inline-flex h-11 w-full shrink-0 items-center justify-center rounded-md bg-orange-500 px-6 text-body font-semibold text-white hover:bg-orange-600"
+          >
+            {course.price === 0 ? "Start Free" : "Buy Now"}
+          </a>
+        )}
       </div>
     </aside>
   );

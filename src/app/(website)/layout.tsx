@@ -3,15 +3,17 @@ import { WebsiteStoreProvider } from "@/components/providers/WebsiteStoreProvide
 import { getAnnouncementIntervalMs } from "@/lib/api/env";
 import { getActiveAnnouncements } from "@/lib/api/modules/announcements/service";
 import { getActiveCategories } from "@/lib/api/modules/categories/service";
+import { getAccessToken } from "@/lib/auth/server-session";
 
 export default async function WebsiteLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [announcements, categories] = await Promise.all([
+  const [announcements, categories, accessToken] = await Promise.all([
     getActiveAnnouncements(),
     getActiveCategories(),
+    getAccessToken(),
   ]);
 
   return (
@@ -20,6 +22,7 @@ export default async function WebsiteLayout({
         announcements={announcements}
         intervalMs={getAnnouncementIntervalMs()}
         categories={categories}
+        isLoggedIn={Boolean(accessToken)}
       >
         {children}
       </SiteFrame>

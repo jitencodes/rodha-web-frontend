@@ -176,10 +176,11 @@ export const HEADER_NAV = [
       },
     ],
   },
-  {
-    label: "Test Series",
-    href: EXTERNAL_URLS.testSeries,
-  },
+  // Test Series hidden from public header (Graphy integration).
+  // {
+  //   label: "Test Series",
+  //   href: EXTERNAL_URLS.testSeries,
+  // },
   {
     label: "Contact",
     href: "/contact",

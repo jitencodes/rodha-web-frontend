@@ -51,8 +51,15 @@ export interface AuthUserViewModel {
   profilePicturePath: string | null;
 }
 
+export interface AuthGraphyViewModel {
+  ssoToken: string;
+  ssoUrl: string;
+  graphyLearnerId: string;
+}
+
 export interface AuthSessionViewModel {
   accessToken: string;
   user: AuthUserViewModel;
   roles: string[];
+  graphy: AuthGraphyViewModel | null;
 }

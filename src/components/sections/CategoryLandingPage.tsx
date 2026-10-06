@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
 import { ResultsStatsPanel } from "@/components/sections/ResultsStatsPanel";
 import { SectionHeader } from "@/components/sections/SectionHeader";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
-import { CategoryCoursesSlider } from "@/components/sections/CategoryCoursesSlider";
+import {
+  CategoryCoursesSlider,
+  type CategoryCourseCard,
+} from "@/components/sections/CategoryCoursesSlider";
 import { FacultyCardV2 } from "@/components/cards/FacultyCardV2";
 import { TopperCardV2 } from "@/components/cards/TopperCardV2";
 import { TestSeriesCardV2 } from "@/components/cards/TestSeriesCardV2";
@@ -19,6 +23,7 @@ import { SuccessStoriesSection } from "@/components/sections/SuccessStoriesSecti
 import { TestimonialCardV2 } from "@/components/sections/home/Testimonials/TestimonialCardV2";
 import { HomeAppPromotionSection } from "@/components/sections/home/HomeAppPromotionSection";
 import { getCategoryHeroAccentWords } from "@/data/category-landing-defaults";
+import type { PackageFilterOption } from "@/lib/api/modules/packages/types";
 import { categoryBreadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import type { CategoryLandingConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -26,6 +31,11 @@ import { Carousel } from "../ui/Carousel";
 
 interface CategoryLandingPageProps {
   category: CategoryLandingConfig;
+  /** Packages mapped to course cards (overrides category.courses when provided). */
+  packageCourses?: CategoryCourseCard[];
+  /** subCategory1 options for course-type filter chips. */
+  courseTypeOptions?: PackageFilterOption[];
+  activeCourseType?: string;
 }
 
 /** Second results row only when both marquees can fill enough cards to scroll. */
@@ -47,13 +57,21 @@ function sectionSurface(theme: string | undefined) {
   }
 }
 
-export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
+export function CategoryLandingPage({
+  category,
+  packageCourses,
+  courseTypeOptions = [],
+  activeCourseType = "all",
+}: CategoryLandingPageProps) {
   const facultyMembers = category.facultyMembers ?? [];
-  const courses = category.courses;
+  const courses =
+    packageCourses !== undefined ? packageCourses : category.courses;
   const results = category.results;
   const testimonials = category.testimonials;
   const showResults = results.length > 0;
-  const showCourses = courses.length > 0;
+  const showCourses =
+    courses.length > 0 ||
+    (packageCourses !== undefined && courseTypeOptions.length > 0);
   const showTestSeries = category.testSeries.length > 0;
   const showFaculty = facultyMembers.length > 0;
   const showTestimonials = testimonials.length > 0;
@@ -180,12 +198,18 @@ export function CategoryLandingPage({ category }: CategoryLandingPageProps) {
             align="center"
             className="mx-auto lg:!mb-10"
           />
-          <CategoryCoursesSlider courses={courses} />
+          <Suspense fallback={null}>
+            <CategoryCoursesSlider
+              courses={courses}
+              courseTypeOptions={courseTypeOptions}
+              activeType={activeCourseType}
+            />
+          </Suspense>
         </Container>
       </section>
       )}
 
-      {showTestSeries && <section
+      {false && showTestSeries && <section
         id="test-series"
         data-home-zone="test-series"
         className={cn(

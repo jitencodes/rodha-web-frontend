@@ -1,8 +1,9 @@
 import type { AccountProfile } from "@/lib/account/types";
 import { ACCOUNT_USER } from "@/data/account/user";
 
-/** Initial profile form values — client-only edits, no API. */
+/** Fallback profile values when API is unavailable. */
 export const ACCOUNT_PROFILE: AccountProfile = {
+  fullName: ACCOUNT_USER.fullName,
   firstName: ACCOUNT_USER.firstName,
   lastName: ACCOUNT_USER.lastName,
   email: ACCOUNT_USER.email,

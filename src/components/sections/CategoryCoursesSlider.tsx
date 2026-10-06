@@ -1,37 +1,63 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
 import { Carousel } from "@/components/ui/Carousel";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { Tag } from "@/components/ui/Tag";
+import type { PackageFilterOption } from "@/lib/api/modules/packages/types";
 import {
-  filterCoursesByType,
-  getVisibleCourseFilters,
-  type CourseFilterId,
-} from "@/lib/course-filters";
+  packageBuyNowHref,
+  packageDetailHref,
+  packageViewCourseHref,
+} from "@/lib/packages/buy-now";
 import type { Course } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+export type CategoryCourseCard = Course & {
+  packageId?: number | null;
+  isSelfEnrolled?: boolean;
+};
+
 interface CategoryCoursesSliderProps {
-  courses: Course[];
+  courses: CategoryCourseCard[];
+  /** subCategory1 master options — filter key `type` → API `subCategory1` */
+  courseTypeOptions?: PackageFilterOption[];
+  /** Active subCategory1 value */
+  activeType?: string;
 }
 
-export function CategoryCoursesSlider({ courses }: CategoryCoursesSliderProps) {
-  const visibleFilters = useMemo(
-    () => getVisibleCourseFilters(courses),
-    [courses]
-  );
-  const showFilterBar = visibleFilters.length > 0;
+export function CategoryCoursesSlider({
+  courses,
+  courseTypeOptions = [],
+  activeType = "all",
+}: CategoryCoursesSliderProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
 
-  const [activeFilter, setActiveFilter] = useState<CourseFilterId>("all");
+  const showFilterBar = courseTypeOptions.length > 0;
+  const filters = [
+    { value: "all", label: "All" },
+    ...courseTypeOptions,
+  ];
 
-  const filteredCourses = useMemo(() => {
-    if (!showFilterBar) return courses;
-    return filterCoursesByType(courses, activeFilter);
-  }, [courses, activeFilter, showFilterBar]);
+  function setType(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!value || value === "all") {
+      params.delete("type");
+    } else {
+      params.set("type", value);
+    }
+    const qs = params.toString();
+    startTransition(() => {
+      router.push(qs ? `${pathname}?${qs}#courses` : `${pathname}#courses`);
+    });
+  }
 
-  if (courses.length === 0) return null;
+  if (courses.length === 0 && !showFilterBar) return null;
 
   return (
     <div>
@@ -41,14 +67,14 @@ export function CategoryCoursesSlider({ courses }: CategoryCoursesSliderProps) {
           role="tablist"
           aria-label="Filter courses by type"
         >
-          {visibleFilters.map((filter) => {
-            const isActive = activeFilter === filter.id;
+          {filters.map((filter) => {
+            const isActive = activeType === filter.value;
             return (
               <Tag
-                key={filter.id}
+                key={filter.value}
                 variant="light"
                 active={isActive}
-                onClick={() => setActiveFilter(filter.id)}
+                onClick={() => setType(filter.value)}
                 className={cn("shrink-0 px-4 py-2")}
               >
                 {filter.label}
@@ -58,21 +84,38 @@ export function CategoryCoursesSlider({ courses }: CategoryCoursesSliderProps) {
         </div>
       )}
 
-      {filteredCourses.length === 0 ? (
+      {courses.length === 0 ? (
         <p className="py-10 text-center text-body-sm text-neutral-500">
           No courses in this category yet. Try another filter.
         </p>
       ) : (
         <RevealGroup>
-          <Carousel key={activeFilter} showArrows>
-            {filteredCourses.map((course, index) => (
-              <div
-                key={course.id}
-                className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
-              >
-                <CourseCardV2 course={course} className="h-full bg-white" />
-              </div>
-            ))}
+          <Carousel key={activeType} showArrows>
+            {courses.map((course, index) => {
+              const isSelfEnrolled = course.isSelfEnrolled === true;
+              const href = isSelfEnrolled
+                ? packageViewCourseHref(course.packageId ?? null)
+                : course.packageId != null
+                  ? packageBuyNowHref(course.packageId, course.slug)
+                  : packageDetailHref(course.slug);
+              return (
+                <div
+                  key={course.id}
+                  className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
+                >
+                  <CourseCardV2
+                    course={course}
+                    className="h-full bg-white"
+                    href={href}
+                    ctaLabel={
+                      isSelfEnrolled
+                        ? "View Course"
+                        : course.detailsLabel || "Buy Now"
+                    }
+                  />
+                </div>
+              );
+            })}
           </Carousel>
         </RevealGroup>
       )}

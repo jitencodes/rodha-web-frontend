@@ -1,0 +1,673 @@
+// updated api's and changes made
+
+added two new filter 
+ 
+graphyCategory:CAT 2026
+subCategory1:Crash Course and Boosters Comprehensive
+ 
+curl --location 'http://localhost:5000/rodha/api/website/packages?page=1&limit=10&graphyCategory=CAT%202026&subCategory1=Crash%20Course%20and%20Boosters%20Comprehensive%27 \
+--header 'Authorization: Bearer '
+ 
+dropdown masters(categories and subcategories) list api
+curl --location 'http://localhost:5000/rodha/api/website/packages/categories?search=&page=1&limit=10' \
+--header 'Authorization: Bearer '
+curl --location 'http://localhost:5000/rodha/api/website/packages/subcategories?search=&page=1&limit=10' \
+--header 'Authorization: Bearer '
+
+
+// update password api
+curl --location --request PATCH 'http://localhost:5000/rodha/api/website/student/password' \
+--header 'Authorization: Bearer ' \
+--data-raw '{
+  "currentPassword": "Pr1y@Rodha",
+  "newPassword": "Pr1y@Rodha123"
+}'
+ 
+{
+    "success": true,
+    "message": "Password updated successfully",
+    "data": {
+        "message": "Password updated successfully"
+    }
+}
+
+// student dashboard api
+curl --location 'http://localhost:5000/rodha/api/website/student/dashboard' \
+--header 'Authorization: Bearer
+{
+    "success": true,
+    "message": "Dashboard fetched successfully",
+    "data": {
+        "courseStats": {
+            "completed": 0,
+            "inProgress": 4,
+            "notStarted": 6,
+            "total": 10,
+            "learningProgressPercentage": 1.1
+        },
+        "latestOrders": [
+            {
+                "id": 5,
+                "orderNumber": "ORD-MU6UM2O9-C1F4D0",
+                "status": "PAID",
+                "currency": "INR",
+                "payableAmount": 6498,
+                "paidAt": "2026-09-18T16:35:45.461+05:30",
+                "createdAt": "2026-09-18T16:31:35.626+05:30",
+                "itemCount": 2,
+                "items": [
+                    {
+                        "id": 7,
+                        "productType": "course",
+                        "packageId": null,
+                        "courseId": 1,
+                        "title": "SNAP Ethics, Morality & Value",
+                        "payableAmount": 2499,
+                        "package": null,
+                        "course": {
+                            "id": 1,
+                            "slug": "course-1-6aa0dfa97a1e5116d7237899",
+                            "bannerImageUrl": null
+                        }
+                    },
+                    {
+                        "id": 8,
+                        "productType": "package",
+                        "packageId": 4,
+                        "courseId": null,
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "payableAmount": 3999,
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoice": {
+                    "id": 3,
+                    "invoiceNumber": "INV-5-MU6URFUV3592",
+                    "pdfUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/1789729546055-b87a6a40-59af-4e80-8f04-31797e83a26a.pdf%22
+                }
+            },
+            {
+                "id": 4,
+                "orderNumber": "ORD-MU3XFD1A-DE6E9E",
+                "status": "PAID",
+                "currency": "INR",
+                "payableAmount": 3999,
+                "paidAt": "2026-09-16T15:28:36.286+05:30",
+                "createdAt": "2026-09-16T15:27:02.782+05:30",
+                "itemCount": 1,
+                "items": [
+                    {
+                        "id": 6,
+                        "productType": "package",
+                        "packageId": 4,
+                        "courseId": null,
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "payableAmount": 3999,
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoice": {
+                    "id": 2,
+                    "invoiceNumber": "INV-4-MU3XHDKB68DE",
+                    "pdfUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/1789552716855-5c22471e-f6f3-4ad7-9ff4-0d0d628fe40b.pdf%22
+                }
+            },
+            {
+                "id": 3,
+                "orderNumber": "ORD-MU3X2TTA-69DF31",
+                "status": "PENDING",
+                "currency": "INR",
+                "payableAmount": 3999,
+                "paidAt": null,
+                "createdAt": "2026-09-16T09:47:18.018+05:30",
+                "itemCount": 1,
+                "items": [
+                    {
+                        "id": 5,
+                        "productType": "package",
+                        "packageId": 4,
+                        "courseId": null,
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "payableAmount": 3999,
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoice": null
+            }
+        ],
+        "continueWatching": [
+            {
+                "enrollmentId": 23390,
+                "learningStatus": "IN_PROGRESS",
+                "progress": 0,
+                "progressPercent": 0,
+                "totalTime": 526,
+                "completed": false,
+                "validTill": "2027-01-03T00:00:00.000+05:30",
+                "lastAccessDate": "2026-10-05T00:00:00.000+05:30",
+                "startDate": "2026-10-05T00:00:00.000+05:30",
+                "assignedAt": "2026-10-05T09:42:05.419+05:30",
+                "course": {
+                    "id": 21,
+                    "slug": "course-21-6a73261f0142c62b70ce9383",
+                    "graphyProductId": "6a73261f0142c62b70ce9383",
+                    "title": "LRDI Concept Capsule For CAT 2026",
+                    "bannerImageUrl": null,
+                    "language": "HINGLISH",
+                    "duration": null,
+                    "price": 0,
+                    "discountedPrice": 0,
+                    "averageRating": null,
+                    "ratingCount": 0,
+                    "courseTakeUrl": "https://rodha.graphy.com/s/courses/6a73261f0142c62b70ce9383/take",
+                    "courseTakeSsoLandingPath": "/s/courses/6a73261f0142c62b70ce9383/take"
+                }
+            },
+            {
+                "enrollmentId": 23394,
+                "learningStatus": "IN_PROGRESS",
+                "progress": 0,
+                "progressPercent": 0,
+                "totalTime": 9,
+                "completed": false,
+                "validTill": "2027-01-03T00:00:00.000+05:30",
+                "lastAccessDate": "2026-09-29T00:00:00.000+05:30",
+                "startDate": "2026-09-29T00:00:00.000+05:30",
+                "assignedAt": "2026-10-05T09:42:05.461+05:30",
+                "course": {
+                    "id": 127,
+                    "slug": "course-127-68dd1f975b4169738bce7eb9",
+                    "graphyProductId": "68dd1f975b4169738bce7eb9",
+                    "title": "CAT 2026 General Queries, Doubts,Form filling And Strategy Sessions",
+                    "bannerImageUrl": null,
+                    "language": "HINGLISH",
+                    "duration": null,
+                    "price": 1000,
+                    "discountedPrice": 999,
+                    "averageRating": null,
+                    "ratingCount": 0,
+                    "courseTakeUrl": "https://rodha.graphy.com/s/courses/68dd1f975b4169738bce7eb9/take",
+                    "courseTakeSsoLandingPath": "/s/courses/68dd1f975b4169738bce7eb9/take"
+                }
+            },
+            {
+                "enrollmentId": 23388,
+                "learningStatus": "IN_PROGRESS",
+                "progress": 4,
+                "progressPercent": 4,
+                "totalTime": 2,
+                "completed": false,
+                "validTill": "2027-01-03T00:00:00.000+05:30",
+                "lastAccessDate": null,
+                "startDate": null,
+                "assignedAt": "2026-10-05T09:42:05.393+05:30",
+                "course": {
+                    "id": 9,
+                    "slug": "course-9-6a860af6e17073e161678c62",
+                    "graphyProductId": "6a860af6e17073e161678c62",
+                    "title": "Quants Booster For CAT 2026 | English | By Apoorv Sir and Swapanil Sir",
+                    "bannerImageUrl": null,
+                    "language": "ENGLISH",
+                    "duration": null,
+                    "price": 0,
+                    "discountedPrice": 0,
+                    "averageRating": null,
+                    "ratingCount": 0,
+                    "courseTakeUrl": "https://rodha.graphy.com/s/courses/6a860af6e17073e161678c62/take",
+                    "courseTakeSsoLandingPath": "/s/courses/6a860af6e17073e161678c62/take"
+                }
+            },
+            {
+                "enrollmentId": 23387,
+                "learningStatus": "IN_PROGRESS",
+                "progress": 7,
+                "progressPercent": 7,
+                "totalTime": 0,
+                "completed": false,
+                "validTill": "2027-01-03T00:00:00.000+05:30",
+                "lastAccessDate": null,
+                "startDate": null,
+                "assignedAt": "2026-10-05T09:42:05.380+05:30",
+                "course": {
+                    "id": 8,
+                    "slug": "course-8-6a860b53905834575b5b9b57",
+                    "graphyProductId": "6a860b53905834575b5b9b57",
+                    "title": "LRDI Booster For CAT 2026 | English | By Apoorv Sir and Abhishek Sir",
+                    "bannerImageUrl": null,
+                    "language": "ENGLISH",
+                    "duration": null,
+                    "price": 0,
+                    "discountedPrice": 0,
+                    "averageRating": null,
+                    "ratingCount": 0,
+                    "courseTakeUrl": "https://rodha.graphy.com/s/courses/6a860b53905834575b5b9b57/take",
+                    "courseTakeSsoLandingPath": "/s/courses/6a860b53905834575b5b9b57/take"
+                }
+            }
+        ],
+        "recommended": [
+            {
+                "type": "package",
+                "id": 120,
+                "slug": "complete-booster-course-for-cat-2023-quantitative-aptitude-lrdi-varc-all-in-one",
+                "title": "COMPLETE BOOSTER COURSE FOR CAT 2023 (Quantitative Aptitude + LRDI + VARC) - All In One",
+                "bannerImageUrl": null,
+                "language": "Hinglish",
+                "duration": null,
+                "price": 10000,
+                "discountedPrice": 5600,
+                "averageRating": null,
+                "ratingCount": 0
+            },
+            {
+                "type": "package",
+                "id": 117,
+                "slug": "zero-to-zenith-comprehensive-batch-for-cat-2024-basic-to-advance-courses-of-quantitative-aptitude-zero-to-zenith-batch-for-cat-2024-basic-to-advance-courses-of-quantitative-aptitude-logical-reasoning-data-interpretation-",
+                "title": "Zero To Zenith Comprehensive Batch for CAT 2024 - Basic to Advance Courses of Quantitative Aptitude, Zero To Zenith Batch for CAT 2024 - Basic to Advance Courses of Quantitative Aptitude, Logical Reasoning & Data Interpretation & Verbal Ability Reading Comprehension",
+                "bannerImageUrl": null,
+                "language": "Hinglish",
+                "duration": null,
+                "price": 30000,
+                "discountedPrice": 25000,
+                "averageRating": null,
+                "ratingCount": 0
+            },
+            {
+                "type": "package",
+                "id": 116,
+                "slug": "complete-batch-1-hinglish-i-zero-to-zenith-comprehensive-batch-for-cat-2024-basic-to-advance-courses-of-quantitative-aptitude-logical-reasoning-data-interpretation-verbal-ability-reading-comprehension-all-in-one",
+                "title": "COMPLETE Batch - 1 (Hinglish) I Zero To Zenith Comprehensive Batch for CAT 2024 - Basic to Advance Courses of Quantitative Aptitude, Logical Reasoning & Data Interpretation, Verbal Ability Reading Comprehension ? All In One",
+                "bannerImageUrl": null,
+                "language": "Hinglish",
+                "duration": null,
+                "price": 30000,
+                "discountedPrice": 25000,
+                "averageRating": null,
+                "ratingCount": 0
+            },
+            {
+                "type": "package",
+                "id": 115,
+                "slug": "recordings-zero-to-zenith-comprehensive-batch-for-cat-2024",
+                "title": "Recordings : Zero To Zenith Comprehensive Batch for CAT 2024",
+                "bannerImageUrl": null,
+                "language": "English",
+                "duration": null,
+                "price": 0,
+                "discountedPrice": 0,
+                "averageRating": null,
+                "ratingCount": 0
+            }
+        ]
+    }
+}
+
+// update profile picture api
+curl --location --request PATCH 'http://localhost:5000/rodha/api/auth/me/profile-picture' \
+--header 'Authorization: Bearer YOUR_JWT_TOKEN' \
+--form 'profilePicture=@"/C:/Users/pc/Downloads/success_story4.png"'
+
+// order status keys
+ 
+PENDING	Checkout started; payment not completed yet
+PAID	Payment captured; order fulfilled
+FREE	Free order (no payment); fulfilled
+FAILED	Payment/fulfillment failed
+CANCELLED	Order cancelled
+ 
+// student orders api updated response structure
+/website/student/orders? Page=1&limit=20
+ 
+{
+    "success": true,
+    "message": "Orders fetched successfully",
+    "data": {
+        "items": [
+            {
+                "id": 5,
+                "orderNumber": "ORD-MU6UM2O9-C1F4D0",
+                "status": "PAID",
+                "currency": "INR",
+                "subtotalAmount": 7498,
+                "discountAmount": 1000,
+                "payableAmount": 6498,
+                "razorpayOrderId": "order_TdTZ6vgDep629n",
+                "studentEmail": "priyamachhopuriya12@gmail.com",
+                "studentMobile": "9685711771",
+                "studentName": "Test Graphy Student",
+                "paidAt": "2026-09-18T16:35:45.461+05:30",
+                "createdAt": "2026-09-18T16:31:35.626+05:30",
+                "items": [
+                    {
+                        "id": 7,
+                        "packageId": null,
+                        "courseId": 1,
+                        "productType": "course",
+                        "packageTitle": "SNAP Ethics, Morality & Value",
+                        "title": "SNAP Ethics, Morality & Value",
+                        "graphyProductId": "6aa0dfa97a1e5116d7237899",
+                        "listPrice": 3000,
+                        "salePrice": 2499,
+                        "discountAmount": 0,
+                        "payableAmount": 2499,
+                        "promocodeCode": null,
+                        "graphyAssignStatus": "FAILED",
+                        "package": null,
+                        "course": {
+                            "id": 1,
+                            "slug": "course-1-6aa0dfa97a1e5116d7237899",
+                            "bannerImageUrl": null
+                        }
+                    },
+                    {
+                        "id": 8,
+                        "packageId": 4,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "graphyProductId": "6a860fc6f19597cc9b0907c3",
+                        "listPrice": 7000,
+                        "salePrice": 4999,
+                        "discountAmount": 1000,
+                        "payableAmount": 3999,
+                        "promocodeCode": "ROD26IND",
+                        "graphyAssignStatus": "UNASSIGNED",
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoices": [
+                    {
+                        "id": 3,
+                        "invoiceNumber": "INV-5-MU6URFUV3592",
+                        "pdfUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/1789729546055-b87a6a40-59af-4e80-8f04-31797e83a26a.pdf%22
+                    }
+                ],
+                "payments": [
+                    {
+                        "id": 5,
+                        "status": "CAPTURED",
+                        "razorpayPaymentId": "pay_TdTbhZ37gJ2tWF",
+                        "amount": 6498,
+                        "capturedAt": "2026-09-18T16:35:45.461+05:30"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "orderNumber": "ORD-MU3XFD1A-DE6E9E",
+                "status": "PAID",
+                "currency": "INR",
+                "subtotalAmount": 4999,
+                "discountAmount": 1000,
+                "payableAmount": 3999,
+                "razorpayOrderId": "order_TcfOh95UlAgTEG",
+                "studentEmail": "priyamachhopuriya12@gmail.com",
+                "studentMobile": "9685711771",
+                "studentName": "Test Graphy Student",
+                "paidAt": "2026-09-16T15:28:36.286+05:30",
+                "createdAt": "2026-09-16T15:27:02.782+05:30",
+                "items": [
+                    {
+                        "id": 6,
+                        "packageId": 4,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "graphyProductId": "6a860fc6f19597cc9b0907c3",
+                        "listPrice": 7000,
+                        "salePrice": 4999,
+                        "discountAmount": 1000,
+                        "payableAmount": 3999,
+                        "promocodeCode": "ROD26IND",
+                        "graphyAssignStatus": "UNASSIGNED",
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoices": [
+                    {
+                        "id": 2,
+                        "invoiceNumber": "INV-4-MU3XHDKB68DE",
+                        "pdfUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/1789552716855-5c22471e-f6f3-4ad7-9ff4-0d0d628fe40b.pdf%22
+                    }
+                ],
+                "payments": [
+                    {
+                        "id": 4,
+                        "status": "CAPTURED",
+                        "razorpayPaymentId": "pay_TcfPOcNGv29URj",
+                        "amount": 3999,
+                        "capturedAt": "2026-09-16T15:28:36.286+05:30"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "orderNumber": "ORD-MU3X2TTA-69DF31",
+                "status": "PENDING",
+                "currency": "INR",
+                "subtotalAmount": 4999,
+                "discountAmount": 1000,
+                "payableAmount": 3999,
+                "razorpayOrderId": "order_TcfEPXzKmioyjI",
+                "studentEmail": "priyamachhopuriya12@gmail.com",
+                "studentMobile": "9685711771",
+                "studentName": "Test Graphy Student",
+                "paidAt": null,
+                "createdAt": "2026-09-16T09:47:18.018+05:30",
+                "items": [
+                    {
+                        "id": 5,
+                        "packageId": 4,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "title": "VARC Booster | English | By Nikita Ma'am For CAT 2026",
+                        "graphyProductId": "6a860fc6f19597cc9b0907c3",
+                        "listPrice": 7000,
+                        "salePrice": 4999,
+                        "discountAmount": 1000,
+                        "payableAmount": 3999,
+                        "promocodeCode": "ROD26IND",
+                        "graphyAssignStatus": "PENDING",
+                        "package": {
+                            "id": 4,
+                            "slug": "varc-booster-english-by-nikita-maam-for-cat-2026",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoices": [],
+                "payments": [
+                    {
+                        "id": 3,
+                        "status": "FAILED",
+                        "razorpayPaymentId": "pay_TcfE3v2k7Rku53",
+                        "amount": 3999,
+                        "capturedAt": null
+                    },
+                    {
+                        "id": 2,
+                        "status": "CREATED",
+                        "razorpayPaymentId": null,
+                        "amount": 3999,
+                        "capturedAt": null
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "orderNumber": "ORD-MU3LYB5Q-6E5ACF",
+                "status": "PAID",
+                "currency": "INR",
+                "subtotalAmount": 5600,
+                "discountAmount": 0,
+                "payableAmount": 5600,
+                "razorpayOrderId": "order_TcZvPsh3LlTUIo",
+                "studentEmail": "priyamachhopuriya12@gmail.com",
+                "studentMobile": "9685711771",
+                "studentName": "Test Graphy Student",
+                "paidAt": "2026-09-16T10:15:55.042+05:30",
+                "createdAt": "2026-09-16T04:35:51.466+05:30",
+                "items": [
+                    {
+                        "id": 3,
+                        "packageId": 1,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "Test by Innowrap",
+                        "title": "Test by Innowrap",
+                        "graphyProductId": "6a9aa43ae84367c7709091a2",
+                        "listPrice": 0,
+                        "salePrice": 0,
+                        "discountAmount": 0,
+                        "payableAmount": 0,
+                        "promocodeCode": null,
+                        "graphyAssignStatus": "UNASSIGNED",
+                        "package": {
+                            "id": 1,
+                            "slug": "cat-2026-free-course",
+                            "bannerImageUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/packages/1789624921701-0c390e34-64d9-455c-a558-1d618e7d788e.webp%22
+                        },
+                        "course": null
+                    },
+                    {
+                        "id": 4,
+                        "packageId": 120,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "COMPLETE BOOSTER COURSE FOR CAT 2023 (Quantitative Aptitude + LRDI + VARC) - All In One",
+                        "title": "COMPLETE BOOSTER COURSE FOR CAT 2023 (Quantitative Aptitude + LRDI + VARC) - All In One",
+                        "graphyProductId": "65232bece4b0c1ae0c402a2a",
+                        "listPrice": 10000,
+                        "salePrice": 5600,
+                        "discountAmount": 0,
+                        "payableAmount": 5600,
+                        "promocodeCode": null,
+                        "graphyAssignStatus": "FAILED",
+                        "package": {
+                            "id": 120,
+                            "slug": "complete-booster-course-for-cat-2023-quantitative-aptitude-lrdi-varc-all-in-one",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoices": [
+                    {
+                        "id": 1,
+                        "invoiceNumber": "INV-2-MU3MB9E97BAF",
+                        "pdfUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/1789533955730-5ed335c0-1192-4188-8920-9b7d06ce5783.pdf%22
+                    }
+                ],
+                "payments": [
+                    {
+                        "id": 1,
+                        "status": "CAPTURED",
+                        "razorpayPaymentId": "pay_TcZy3h9CSuttLc",
+                        "amount": 5600,
+                        "capturedAt": "2026-09-16T10:15:55.042+05:30"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "orderNumber": "ORD-MU3LTEZ7-BD9852",
+                "status": "PENDING",
+                "currency": "INR",
+                "subtotalAmount": 5600,
+                "discountAmount": 0,
+                "payableAmount": 5600,
+                "razorpayOrderId": null,
+                "studentEmail": "priyamachhopuriya12@gmail.com",
+                "studentMobile": "9685711771",
+                "studentName": "Test Graphy Student",
+                "paidAt": null,
+                "createdAt": "2026-09-16T04:32:03.131+05:30",
+                "items": [
+                    {
+                        "id": 1,
+                        "packageId": 1,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "Test by Innowrap",
+                        "title": "Test by Innowrap",
+                        "graphyProductId": "6a9aa43ae84367c7709091a2",
+                        "listPrice": 0,
+                        "salePrice": 0,
+                        "discountAmount": 0,
+                        "payableAmount": 0,
+                        "promocodeCode": null,
+                        "graphyAssignStatus": "PENDING",
+                        "package": {
+                            "id": 1,
+                            "slug": "cat-2026-free-course",
+                            "bannerImageUrl": "https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/packages/1789624921701-0c390e34-64d9-455c-a558-1d618e7d788e.webp%22
+                        },
+                        "course": null
+                    },
+                    {
+                        "id": 2,
+                        "packageId": 120,
+                        "courseId": null,
+                        "productType": "package",
+                        "packageTitle": "COMPLETE BOOSTER COURSE FOR CAT 2023 (Quantitative Aptitude + LRDI + VARC) - All In One",
+                        "title": "COMPLETE BOOSTER COURSE FOR CAT 2023 (Quantitative Aptitude + LRDI + VARC) - All In One",
+                        "graphyProductId": "65232bece4b0c1ae0c402a2a",
+                        "listPrice": 10000,
+                        "salePrice": 5600,
+                        "discountAmount": 0,
+                        "payableAmount": 5600,
+                        "promocodeCode": null,
+                        "graphyAssignStatus": "PENDING",
+                        "package": {
+                            "id": 120,
+                            "slug": "complete-booster-course-for-cat-2023-quantitative-aptitude-lrdi-varc-all-in-one",
+                            "bannerImageUrl": null
+                        },
+                        "course": null
+                    }
+                ],
+                "invoices": [],
+                "payments": []
+            }
+        ],
+        "pagination": {
+            "page": 1,
+            "limit": 20,
+            "total": 5,
+            "totalPages": 1
+        }
+    }
+}
+
+// newly added keys for course/package continue watching card progress bar ui 
+ "progressPercent": 4, / 
+ "totalTime": 542, // total speed time in seconds 

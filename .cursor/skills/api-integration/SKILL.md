@@ -103,9 +103,22 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | contact | `POST api/website/contact` | Route Handler `/api/leads` for contact, counselling, lead-capture |
 | auth | `POST api/auth/user/signup` | `/api/auth/signup` |
 | auth | `POST api/auth/user/login` | `/api/auth/login` (`is_web: true`) |
-| auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) — not in Postman |
+| auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) |
+| packages | `GET api/website/packages` | `/courses`, account buy tab; filters `graphyCategory`, `subCategory1`, `search` |
+| packages | `GET api/website/packages/:slug` | `/courses/[slug]` public package detail |
+| packages | `GET api/website/packages/categories` | Category filter masters (graphyCategory values) |
+| packages | `GET api/website/packages/subcategories` | Course-type filter masters (subCategory1 values) |
+| student | `GET api/website/student/dashboard` | Account dashboard |
+| student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
+| student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
+| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout` |
+| student | `GET api/website/student/orders` | My Orders |
+| student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
+| graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |
 
-Out of scope until requested: FAQ listing page API, blogs.
+Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
+
+Gaps: `docs/graphy-api-requirements.txt`
 
 ## Checklist for a new endpoint
 

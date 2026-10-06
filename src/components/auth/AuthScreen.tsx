@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthBannerSlider } from "@/components/auth/AuthBannerSlider";
 import { GoogleContinueButton } from "@/components/auth/GoogleContinueButton";
 import { Button } from "@/components/ui/Button";
@@ -26,6 +26,14 @@ interface AuthScreenProps {
   mode: "login" | "signup";
 }
 
+function safeNextPath(raw: string | null): string {
+  if (!raw) return "/account/dashboard";
+  if (!raw.startsWith("/") || raw.startsWith("//")) {
+    return "/account/dashboard";
+  }
+  return raw;
+}
+
 interface FieldErrors {
   fullName?: string;
   email?: string;
@@ -41,6 +49,8 @@ interface AuthApiResponse {
 
 export function AuthScreen({ mode }: AuthScreenProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = safeNextPath(searchParams.get("next"));
   const isSignup = mode === "signup";
 
   const [fullName, setFullName] = useState("");
@@ -114,7 +124,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
         });
         setSuccessMessage("Logged in. Redirecting…");
       }
-      router.push("/account/dashboard");
+      router.push(nextPath);
       router.refresh();
     } catch (error) {
       setFormError(
@@ -135,7 +145,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     try {
       await submitAuth("/api/auth/google", { idToken });
       setSuccessMessage("Signed in with Google. Redirecting…");
-      router.push("/account/dashboard");
+      router.push(nextPath);
       router.refresh();
     } catch (error) {
       setFormError(
