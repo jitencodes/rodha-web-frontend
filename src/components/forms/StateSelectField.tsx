@@ -20,10 +20,12 @@ type StateSelectFieldProps = {
 type StatesApiResponse = {
   ok: boolean;
   items?: Array<{ value: string; label: string; stateId: number }>;
+  total?: number;
+  totalPages?: number;
   error?: string;
 };
 
-/** Loads states from BFF and renders a DropdownSelect. */
+/** Loads the full state list from BFF (server paginates until last page). */
 export function StateSelectField({
   value,
   onChange,
@@ -45,6 +47,7 @@ export function StateSelectField({
     let cancelled = false;
     setLoading(true);
     setLoadError("");
+    // Omit `page` so BFF aggregates every upstream page into one list
     void fetch("/api/states/dropdown?limit=50")
       .then(async (res) => {
         const data = (await res.json()) as StatesApiResponse;
