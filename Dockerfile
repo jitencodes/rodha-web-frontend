@@ -5,7 +5,7 @@
 # Local:
 #   cp .env.example .env  # fill values, then docker compose up --build
 
-ARG NODE_VERSION=20-alpine
+ARG NODE_VERSION=22-alpine
 
 # -----------------------------------------------------------------------------
 # Dependencies

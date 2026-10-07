@@ -28,11 +28,12 @@ Build jobs run `scripts/ci-write-env.mjs` to materialize a job-local `.env` from
 
 ## Pipeline jobs
 
-All jobs are tagged **`arm`** (ARM64 runner, shell executor + Docker). Node runs inside `node:20-alpine` via `docker run`.
+All jobs are tagged **`arm`** (ARM64 runner, shell executor + Docker). Node runs inside `node:22-alpine` via `docker run`.
 
 | Job | Branch | What |
 |-----|--------|------|
-| `validate` | `main`, `production`, MRs | `tsc` + lint |
+| `validate` | `main`, `production`, MRs | `tsc` (blocks build) |
+| `lint` | `main`, `production`, MRs | ESLint — `allow_failure`, does not block deploy |
 | `build` | `main` → `production` (for now), `production` → `production` | `docker build` (Dockerfile) → push to ECR `:<env>-<sha>` and `:<env>-latest` |
 | `deploy` | `main` → production (auto, for now), `production` (**manual**) | SSH to EC2 → `docker pull` → restart container `rodha-web-<env>` on host port `APP_PORT` (default `3000`) |
 
