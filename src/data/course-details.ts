@@ -9,7 +9,6 @@ import type {
   CategoryLandingConfig,
   Course,
   CourseModule,
-  CoursePricingPlan,
   CourseSchedule,
   Faculty,
   FaqItem,
@@ -82,9 +81,34 @@ function normalizeCourseCategory(
   };
 }
 
-export function withCourseDetailDefaults(course: Course): Course {
-  const enrollmentHref =
-    course.externalLink || course.enrollmentUrl || undefined;
+export interface CourseDetailDefaultsOptions {
+  /**
+   * When false, only normalize present API fields — do not invent highlights,
+   * modules, schedule, plans, etc. Used for package-detail SSR.
+   */
+  fillMissing?: boolean;
+}
+
+export function withCourseDetailDefaults(
+  course: Course,
+  options: CourseDetailDefaultsOptions = {}
+): Course {
+  const fillMissing = options.fillMissing !== false;
+
+  if (!fillMissing) {
+    return {
+      ...course,
+      highlights: course.highlights ?? [],
+      benefits: course.benefits,
+      included: course.included,
+      modules: course.modules,
+      schedule: course.schedule,
+      pricingPlans: undefined,
+      level: course.level,
+      exam: course.exam,
+      language: course.language,
+    };
+  }
 
   const highlights =
     course.highlights?.length > 0 ? course.highlights : DEFAULT_HIGHLIGHTS;
@@ -110,11 +134,6 @@ export function withCourseDetailDefaults(course: Course): Course {
 
   const schedule = course.schedule ?? defaultSchedule(course);
 
-  const pricingPlans =
-    course.pricingPlans?.length && course.pricingPlans.length > 0
-      ? course.pricingPlans
-      : defaultPricingPlans(course, benefits, enrollmentHref);
-
   const level =
     course.level ??
     (course.courseType === "crash"
@@ -137,7 +156,7 @@ export function withCourseDetailDefaults(course: Course): Course {
     included,
     modules,
     schedule,
-    pricingPlans,
+    pricingPlans: undefined,
     level,
     exam,
     language: course.language ?? "English",
@@ -194,27 +213,6 @@ function defaultSchedule(course: Course): CourseSchedule {
     duration: course.duration,
     mode: course.mode || "Live Online",
   };
-}
-
-function defaultPricingPlans(
-  course: Course,
-  benefits: string[],
-  enrollmentHref?: string
-): CoursePricingPlan[] {
-  return [
-    {
-      name: course.badge || "Standard",
-      description:
-        course.shortDescription ||
-        "Full access to this Rodha program with live classes and support.",
-      price: course.price,
-      originalPrice: course.originalPrice,
-      features: benefits.slice(0, 5),
-      ctaLabel: course.price === 0 ? "Start Free" : "Buy Now",
-      href: enrollmentHref,
-      popular: true,
-    },
-  ];
 }
 
 export function getFacultyForCourse(course: Course): Faculty[] {

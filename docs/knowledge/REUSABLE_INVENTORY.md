@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-09-29 (account module integration)
+**Last updated:** 2026-10-07 (BottomSheet + DropdownSelect portal)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -21,7 +21,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ClampTooltip | `ClampTooltip.tsx` (line-clamp + viewport-aware full-text tooltip when truncated) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
-| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`) |
+| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`; menu portaled to `document.body`) |
+| BottomSheet | `BottomSheet.tsx` (mobile slide-up panel; portaled; body scroll lock) |
 | Input | `Input.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | CounsellingCtaButton | `CounsellingCtaButton.tsx` |
 | Modal | `Modal.tsx` |
@@ -237,6 +238,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | api auth | `api/modules/auth/*` | Student signup/login/google; session mapped; cookie set in Route Handlers |
 | api home | `api/modules/home/*` | Get Home service + homepage view-model mapper |
 | course-filters | `course-filters.ts` | Course type chips/dropdowns + paid/free helpers (`isCourseFree`, `isTestSeriesFree`) |
+| course-sort | `course-sort.ts` | Packages listing sort presets (`sortBy`/`sortOrder` pairs for `/courses`) |
 | session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
 | api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |

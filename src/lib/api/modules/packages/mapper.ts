@@ -1,12 +1,22 @@
 import type {
   PackageCardViewModel,
   PackageDetailApi,
+  PackageFacultyApi,
   PackageFilterOption,
   PackageListItemApi,
   PackageMasterItemApi,
+  PackageTestimonialApi,
 } from "@/lib/api/modules/packages/types";
+import type { FacultyApi } from "@/lib/api/modules/faculty/types";
+import { mapFacultyCards } from "@/lib/api/modules/faculty/mapper";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
-import type { Course, CourseModule, FaqItem } from "@/lib/types";
+import type {
+  Course,
+  CourseModule,
+  Faculty,
+  FaqItem,
+  Testimonial,
+} from "@/lib/types";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -29,6 +39,27 @@ function asStringList(value: unknown): string[] {
   return value
     .map((item) => asString(item))
     .filter(Boolean);
+}
+
+function firstBatchStart(
+  value: string | string[] | null | undefined
+): string | undefined {
+  if (Array.isArray(value)) {
+    const first = value.map((item) => asString(item)).find(Boolean);
+    return first || undefined;
+  }
+  return asString(value) || undefined;
+}
+
+function discountFromPrices(
+  mrp: number | undefined,
+  sale: number
+): { originalPrice?: number; discountPercent?: number } {
+  if (mrp === undefined || !(mrp > sale)) return {};
+  return {
+    originalPrice: mrp,
+    discountPercent: Math.round(((mrp - sale) / mrp) * 100),
+  };
 }
 
 export function mapPackageMasterOptions(
@@ -61,11 +92,12 @@ export function mapPackageListItem(
   const slug = asString(item.slug);
   if (!title || !slug) return null;
 
-  const price = asNumber(item.discountedPrice ?? item.price);
-  const original =
+  const sale = asNumber(item.discountedPrice ?? item.price);
+  const mrp =
     item.price !== null && item.price !== undefined
       ? asNumber(item.price)
       : undefined;
+  const { originalPrice, discountPercent } = discountFromPrices(mrp, sale);
   const packageId =
     typeof item.id === "number"
       ? item.id
@@ -80,9 +112,9 @@ export function mapPackageListItem(
     title,
     subtitle: asString(item.subtitle),
     language: asString(item.language) || undefined,
-    price,
-    originalPrice:
-      original !== undefined && original > price ? original : undefined,
+    price: sale,
+    originalPrice,
+    discountPercent,
     thumbnail: asString(item.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     tags: asStringList(item.tags),
     courseCount: asNumber(item.courseCount),
@@ -91,7 +123,10 @@ export function mapPackageListItem(
       typeof item.averageRating === "number" ? item.averageRating : null,
     ratingCount: asNumber(item.ratingCount),
     href: `/courses/${slug}`,
-    courseTypeLabel: asStringList(item.graphySubCategory1)[0] || undefined,
+    courseTypeLabel:
+      asStringList(item.subCategory1)[0] ||
+      asStringList(item.graphySubCategory1)[0] ||
+      undefined,
   };
 }
 
@@ -119,6 +154,7 @@ export function packageCardToCourse(
     shortDescription: pkg.subtitle || pkg.title,
     price: pkg.price,
     originalPrice: pkg.originalPrice,
+    discountPercent: pkg.discountPercent,
     duration: pkg.courseCount > 0 ? `${pkg.courseCount} courses` : "",
     features: [],
     highlights: pkg.tags,
@@ -173,6 +209,82 @@ function mapPackageFaqs(faqs: PackageDetailApi["faqs"]): FaqItem[] {
     .filter((item): item is FaqItem => Boolean(item));
 }
 
+function toFacultyApi(item: PackageFacultyApi): FacultyApi | null {
+  const fullName =
+    asString(item.fullName) || asString(item.name);
+  const slug = asString(item.slug);
+  if (!fullName || !slug) return null;
+  const idNum =
+    typeof item.id === "number"
+      ? item.id
+      : Number.isFinite(Number(item.id))
+        ? Number(item.id)
+        : 0;
+  return {
+    id: idNum || 0,
+    slug,
+    fullName,
+    designation: asString(item.designation) || asString(item.title) || null,
+    profileImageUrl:
+      asString(item.profileImageUrl) ||
+      asString(item.imageUrl) ||
+      asString(item.photoUrl) ||
+      null,
+    about: asString(item.about) || asString(item.bio) || null,
+    experienceYears:
+      typeof item.experienceYears === "number" ? item.experienceYears : null,
+    isFeatured: item.isFeatured === true,
+    isActive: item.isActive !== false,
+  };
+}
+
+function mapPackageFaculty(
+  items: PackageFacultyApi[] | null | undefined
+): Faculty[] {
+  if (!Array.isArray(items)) return [];
+  const apis = items
+    .map(toFacultyApi)
+    .filter((item): item is FacultyApi => Boolean(item));
+  return mapFacultyCards(apis);
+}
+
+function parseYear(value: string | null | undefined): number {
+  if (!value) return new Date().getFullYear();
+  const year = Number.parseInt(value.slice(0, 4), 10);
+  return Number.isFinite(year) ? year : new Date().getFullYear();
+}
+
+function mapPackageTestimonials(
+  items: PackageTestimonialApi[] | null | undefined,
+  category: Course["category"]
+): Testimonial[] {
+  if (!Array.isArray(items)) return [];
+  const mapped: Testimonial[] = [];
+  items.forEach((item, index) => {
+    if (item.isActive === false) return;
+    const name = asString(item.fullName) || asString(item.name);
+    const quote =
+      asString(item.reviewText) ||
+      asString(item.quote) ||
+      asString(item.text);
+    if (!name || !quote) return;
+    const image =
+      asString(item.profileImageUrl) || asString(item.imageUrl) || undefined;
+    mapped.push({
+      id: asString(item.id) || `testimonial-${index}`,
+      name,
+      quote,
+      ...(image ? { image } : {}),
+      college: asString(item.collegeName),
+      exam: asString(item.batch) || asString(item.role),
+      score: "",
+      year: parseYear(item.createdAt),
+      category,
+    });
+  });
+  return mapped;
+}
+
 export interface PackageDetailViewModel {
   course: Course;
   packageId: number | null;
@@ -181,7 +293,8 @@ export interface PackageDetailViewModel {
   similar: PackageCardViewModel[];
   graphyCategories: string[];
   graphySubCategory1: string[];
-  facultyNames: string[];
+  faculty: Faculty[];
+  testimonials: Testimonial[];
 }
 
 export function mapPackageDetail(
@@ -196,37 +309,42 @@ export function mapPackageDetail(
   const highlights = asStringList(data.highlights);
   const benefits = asStringList(data.benefits);
   const modules = mapCurriculumModules(data.courses);
-  const facultyNames = Array.isArray(data.faculty)
-    ? data.faculty.map((f) => asString(f.name)).filter(Boolean)
-    : [];
-  const duration =
-    asString(data.duration) ||
-    (card.courseCount > 0 ? `${card.courseCount} courses` : "");
+  const faculty = mapPackageFaculty(data.faculty);
+  const duration = asString(data.duration);
+  const nextBatch = firstBatchStart(data.batchStarts);
+  const days = asString(data.days) || undefined;
+  const timing = asString(data.classTiming) || undefined;
+  const mode = asString(data.mode) || undefined;
+  const level = asString(data.level) || undefined;
+  const hasSchedule = Boolean(nextBatch || days || timing || duration || mode);
 
   const course: Course = {
     ...packageCardToCourse(card),
     description,
     shortDescription: card.subtitle || description,
     duration,
-    mode: asString(data.mode) || undefined,
-    level: asString(data.level) || undefined,
-    highlights: highlights.length ? highlights : card.tags,
+    mode,
+    level,
+    highlights,
     benefits: benefits.length ? benefits : undefined,
     included: benefits.length ? benefits : undefined,
     modules: modules.length ? modules : undefined,
     faqs: mapPackageFaqs(data.faqs),
-    faculty: facultyNames[0],
+    faculty: faculty[0]?.name,
     exam: asStringList(data.graphyCategories)[0] || undefined,
-    schedule:
-      data.batchStarts || data.days || data.classTiming
-        ? {
-            nextBatch: asString(data.batchStarts) || undefined,
-            days: asString(data.days) || undefined,
-            timing: asString(data.classTiming) || undefined,
-          }
-        : undefined,
+    schedule: hasSchedule
+      ? {
+          nextBatch,
+          days,
+          timing,
+          duration: duration || undefined,
+          mode,
+        }
+      : undefined,
     detailsLabel: card.isSelfEnrolled ? "View Course" : "Buy Now",
   };
+
+  const category = course.category;
 
   return {
     course,
@@ -236,6 +354,7 @@ export function mapPackageDetail(
     similar: mapPackageListItems(data.similarPackages),
     graphyCategories: asStringList(data.graphyCategories),
     graphySubCategory1: asStringList(data.graphySubCategory1),
-    facultyNames,
+    faculty,
+    testimonials: mapPackageTestimonials(data.testimonials, category),
   };
 }

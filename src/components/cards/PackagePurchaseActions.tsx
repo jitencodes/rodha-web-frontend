@@ -69,7 +69,8 @@ export function PackagePurchaseActions({
       return;
     }
     setPending(true);
-    router.push(buyHref);
+    // Full navigation so the checkout buy Route Handler runs with cookies.
+    window.location.assign(buyHref);
   }
 
   return (

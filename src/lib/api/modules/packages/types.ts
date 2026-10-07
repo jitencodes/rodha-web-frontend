@@ -14,6 +14,9 @@ export interface PackageListItemApi {
   courseCount?: number | null;
   isSelfEnrolled?: boolean | null;
   graphyCategories?: string[] | null;
+  /** Live list/detail field from packages + category embedded packages */
+  subCategory1?: string[] | string | null;
+  /** Legacy alias kept for older payloads */
   graphySubCategory1?: string[] | string | null;
 }
 
@@ -30,12 +33,20 @@ export interface PackageListDataApi {
 export interface PackageFacultyApi {
   id?: number | string;
   slug?: string;
-  name?: string;
-  title?: string;
-  designation?: string;
+  /** Postman field */
+  fullName?: string | null;
+  /** Legacy fallback */
+  name?: string | null;
+  title?: string | null;
+  designation?: string | null;
+  profileImageUrl?: string | null;
   imageUrl?: string | null;
   photoUrl?: string | null;
   bio?: string | null;
+  about?: string | null;
+  experienceYears?: number | null;
+  isFeatured?: boolean | null;
+  isActive?: boolean | null;
 }
 
 export interface PackageFaqApi {
@@ -46,12 +57,21 @@ export interface PackageFaqApi {
 
 export interface PackageTestimonialApi {
   id?: number | string;
-  name?: string;
-  quote?: string;
-  text?: string;
-  role?: string;
+  /** Postman field */
+  fullName?: string | null;
+  /** Legacy fallback */
+  name?: string | null;
+  collegeName?: string | null;
+  batch?: string | null;
+  reviewText?: string | null;
+  quote?: string | null;
+  text?: string | null;
+  role?: string | null;
+  profileImageUrl?: string | null;
   imageUrl?: string | null;
   rating?: number | null;
+  createdAt?: string | null;
+  isActive?: boolean | null;
 }
 
 export interface PackageCourseNodeApi {
@@ -69,7 +89,7 @@ export interface PackageDetailApi extends PackageListItemApi {
   level?: string | null;
   highlights?: string[] | null;
   benefits?: string[] | null;
-  batchStarts?: string | null;
+  batchStarts?: string | string[] | null;
   days?: string | null;
   classTiming?: string | null;
   graphyTitle?: string | null;
@@ -110,12 +130,26 @@ export interface PackageListQuery {
   page?: number;
   limit?: number;
   search?: string;
-  /** Maps to API `graphyCategory` */
+  /** CMS website category id */
+  categoryId?: number | string;
+  /** Maps to API `graphyCategory` (UI: Type) */
   graphyCategory?: string;
   /** Maps to API `subCategory1` */
   subCategory1?: string;
-  language?: string;
+  facultyId?: number | string;
+  subjectId?: number | string;
+  /** createdAt | price | title | rating */
   sortBy?: string;
+  /** asc | desc */
+  sortOrder?: string;
+}
+
+export interface PackageMasterQuery {
+  search?: string;
+  page?: number;
+  limit?: number;
+  categoryId?: number | string;
+  graphyCategory?: string;
 }
 
 export interface PackageCardViewModel {
@@ -127,6 +161,8 @@ export interface PackageCardViewModel {
   language?: string;
   price: number;
   originalPrice?: number;
+  /** Derived from price vs discountedPrice */
+  discountPercent?: number;
   thumbnail?: string;
   tags: string[];
   courseCount: number;

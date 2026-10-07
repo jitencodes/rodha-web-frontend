@@ -189,7 +189,7 @@ export const CATEGORIES: Category[] = [
 export const CONTACT_INFO: ContactInfo = {
   phone: "+91 98765 43210",
   email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in",
-  address: "Mumbai, Maharashtra, India",
+  address: "No. 7714, 7th Floor, Block C, Pranavas BSR Gitaaar, Panthur, Bangalore, Karnataka, 560103",
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [

@@ -67,6 +67,8 @@ export interface Course {
   shortDescription: string;
   price: number;
   originalPrice?: number;
+  /** Derived from API price vs discountedPrice when available. */
+  discountPercent?: number;
   duration: string;
   mode?: string;
   classCount?: string;
@@ -441,6 +443,8 @@ export interface CategoryLandingConfig extends Category {
   results: TopperResult[];
   testimonials: Testimonial[];
   stories: StudentStory[];
+  /** Numeric CMS category id from `api.category.id` (for packages /courses links) */
+  cmsCategoryId?: number;
 }
 
 export interface LeadershipMember {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { AuthBannerSlider } from "@/components/auth/AuthBannerSlider";
 import { GoogleContinueButton } from "@/components/auth/GoogleContinueButton";
@@ -37,6 +37,14 @@ function safeNextPath(raw: string | null): string {
   return raw;
 }
 
+/**
+ * Full page navigation after auth so Set-Cookie is applied and Route Handlers
+ * like `/api/checkout/buy` run (client router.push soft-nav cannot).
+ */
+function navigateAfterAuth(path: string) {
+  window.location.assign(path);
+}
+
 interface FieldErrors {
   fullName?: string;
   email?: string;
@@ -52,7 +60,6 @@ interface AuthApiResponse {
 }
 
 export function AuthScreen({ mode }: AuthScreenProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = safeNextPath(searchParams.get("next"));
   const isSignup = mode === "signup";
@@ -145,8 +152,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
         });
         setSuccessMessage("Logged in. Redirecting…");
       }
-      router.push(nextPath);
-      router.refresh();
+      navigateAfterAuth(nextPath);
     } catch (error) {
       setFormError(
         error instanceof Error
@@ -166,8 +172,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     try {
       await submitAuth("/api/auth/google", { idToken });
       setSuccessMessage("Signed in with Google. Redirecting…");
-      router.push(nextPath);
-      router.refresh();
+      navigateAfterAuth(nextPath);
     } catch (error) {
       setFormError(
         error instanceof Error
@@ -334,6 +339,17 @@ export function AuthScreen({ mode }: AuthScreenProps) {
               aria-required
               error={fieldErrors.password}
             />
+
+            {!isSignup ? (
+              <div className="-mt-2 flex justify-end">
+                <Link
+                  href="/forgot-password"
+                  className="text-caption font-semibold text-orange-500 hover:text-orange-600"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            ) : null}
 
             {isSignup ? (
               <Input

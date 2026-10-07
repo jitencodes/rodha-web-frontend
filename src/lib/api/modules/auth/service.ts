@@ -1,8 +1,11 @@
 import { apiGet, apiPatch, apiPost } from "@/lib/api/client";
 import { mapAuthSession, mapAuthUser } from "@/lib/api/modules/auth/mapper";
 import type {
+  AuthForgotPasswordRequest,
   AuthGoogleRequest,
   AuthLoginRequest,
+  AuthPasswordMessageApi,
+  AuthResetPasswordRequest,
   AuthSessionApi,
   AuthSessionViewModel,
   AuthSignupRequest,
@@ -14,6 +17,8 @@ import { ApiError } from "@/lib/api/types";
 const SIGNUP_PATH = "api/auth/user/signup";
 const LOGIN_PATH = "api/auth/user/login";
 const GOOGLE_PATH = "api/auth/user/google";
+const FORGOT_PASSWORD_PATH = "api/auth/user/forgot-password";
+const RESET_PASSWORD_PATH = "api/auth/user/reset-password";
 const ME_PATH = "api/auth/me";
 const ME_STATE_PATH = "api/auth/me/state";
 
@@ -66,6 +71,44 @@ export async function loginWithGoogle(input: {
     is_web: true,
   };
   return postSession(GOOGLE_PATH, body);
+}
+
+export async function forgotPassword(input: {
+  email: string;
+}): Promise<string> {
+  const body: AuthForgotPasswordRequest = {
+    email: input.email.trim(),
+    is_web: true,
+  };
+  const data = await apiPost<AuthPasswordMessageApi, AuthForgotPasswordRequest>(
+    FORGOT_PASSWORD_PATH,
+    body
+  );
+  return (
+    (typeof data?.message === "string" && data.message.trim()) ||
+    "Password reset link has been sent"
+  );
+}
+
+export async function resetPassword(input: {
+  email: string;
+  token: string;
+  newPassword: string;
+}): Promise<string> {
+  const body: AuthResetPasswordRequest = {
+    email: input.email.trim(),
+    token: input.token.trim(),
+    newPassword: input.newPassword,
+    is_web: true,
+  };
+  const data = await apiPost<AuthPasswordMessageApi, AuthResetPasswordRequest>(
+    RESET_PASSWORD_PATH,
+    body
+  );
+  return (
+    (typeof data?.message === "string" && data.message.trim()) ||
+    "Password has been reset successfully"
+  );
 }
 
 /**

@@ -14,6 +14,24 @@ Format:
 
 ---
 
+### 2026-10-07 — Catalog filter dropdown portal + mobile bottom sheet
+- **Decision:** `DropdownSelect` option lists render via `createPortal` to `document.body` with fixed coordinates (no permanent high z-index on toolbar children). Mobile catalog filters open in a reusable `BottomSheet` (also portaled); search and draggable filter tiles stay outside. Packages Type/`graphyCategory` dropdown UI is temporarily gated off (`false ? …`) while props/URL/API remain.
+- **Rationale:** Toolbar `-translate-y-1/2` creates a stacking context that buried absolute menus under sibling filters and listing cards; mobile needed a non-overflowing filter entry without redesigning desktop.
+- **Alternatives considered:** Escalate arbitrary z-index on every filter row; keep inline mobile dropdowns; remove Type filter from the page API layer.
+- **Consequences:** All `DropdownSelect` consumers get correct layering; `BottomSheet` is available for other mobile panels; re-enable Type by flipping the temporary gate.
+
+### 2026-10-07 — Category embedded packages + courses master filters
+- **Decision:** Category landing courses come only from `GET categories/:slug` embedded `packages` (`items` = All tab; `groups[].subCategory1` = other tabs). No separate packages list/probe calls on category pages. View all → `/courses?categoryId={cms id}`. Courses listing filters use master APIs: categories dropdown (`categoryId`), packages/categories as Type (`graphyCategory`), packages/subcategories as course tabs (`subCategory1`), faculty list, subjects; sort via `sortBy`/`sortOrder`. Skip tag/language (no masters). URL: `categoryId`, `type`, `subCategory1`, `facultyId`, `subjectId`, `sort`, `q`, `page`.
+- **Rationale:** Category detail already returns the course section payload; listing filters must not invent options from the packages list response.
+- **Alternatives considered:** Keep Graphy category tabs on `/courses`; probe empty subcategory tabs on category pages; derive filter options from listing rows.
+- **Consequences:** Category page is one SSR fetch for courses. Changing Category/Type clears dependent filters. `CatalogToolbar` has `variant="packages"` vs legacy for test-series.
+
+### 2026-10-07 — Package detail mapping + category course navigation
+- **Decision:** Public package detail uses Postman fields only (`fullName`/`profileImageUrl` for faculty, array-aware `batchStarts`, package testimonials). Discount % is derived from `price` vs `discountedPrice` (no `discountPercent` API field). Course detail never renders a Plans section; package-backed pages use `withCourseDetailDefaults(..., { fillMissing: false })` so missing arrays hide sections. Category course cards navigate to `/courses/[slug]` (full-card `Link`, CTA as text). Subcategory filter chips are probed per `graphyCategory` and omitted when `total === 0`.
+- **Rationale:** Matches Graphy Share Postman payloads, avoids blank/invented UI, and keeps category browse → detail before checkout.
+- **Alternatives considered:** Keep Plans from `pricingPlans`; invent static section defaults; Buy Now → checkout from category cards; show all subcategory masters.
+- **Consequences:** Checkout stays on the detail purchase CTA. Empty subcategory tabs disappear. `CourseCardV2` is a single link (no nested anchors).
+
 ### 2026-10-06 — State selection via `/auth/me` + shared dialog
 - **Decision:** Collect `stateId` at signup; persist/read via `GET api/auth/me` (`stateId` + nested `state`); update via `PATCH api/auth/me/state` (BFF `/api/account/state`). Account shell hydrates Jotai `userAtom`. Missing `state` opens shared blocking `UpdateStateDialog` (account gate + checkout). States list from `GET api/website/states/dropdown` via `/api/states/dropdown`.
 - **Rationale:** Single source of truth on the auth user, one dialog for all required updates, matches existing module/BFF patterns.

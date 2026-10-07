@@ -10,14 +10,21 @@ import { ListingHeroSection } from "@/components/sections/listing/ListingHeroSec
 import { SuccessStoriesSection } from "@/components/sections/SuccessStoriesSection";
 import { Pagination } from "@/components/ui/Pagination";
 import { RevealGroup } from "@/components/ui/RevealGroup";
+import { getCategoryDropdown } from "@/lib/api/modules/categories/service";
+import { getFacultyPage } from "@/lib/api/modules/faculty/service";
 import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
 import {
   getPackageCategories,
   getPackages,
   getPackageSubcategories,
 } from "@/lib/api/modules/packages/service";
+import { getActiveSubjects } from "@/lib/api/modules/subjects/service";
 import { getCatalogListings } from "@/lib/catalog";
 import { EXTERNAL_URLS } from "@/lib/constants";
+import {
+  DEFAULT_COURSE_SORT,
+  resolveCourseSort,
+} from "@/lib/course-sort";
 import {
   packageBuyNowHref,
   packageDetailHref,
@@ -39,57 +46,120 @@ const PAGE_SIZE = 12;
 
 interface CoursesPageProps {
   searchParams: Promise<{
-    category?: string;
+    categoryId?: string;
     q?: string;
     type?: string;
-    price?: string;
+    subCategory1?: string;
+    facultyId?: string;
+    subjectId?: string;
+    sort?: string;
     page?: string;
   }>;
 }
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
-  const graphyCategory =
-    params.category?.trim() && params.category !== "all"
-      ? params.category.trim()
+  const categoryId =
+    params.categoryId?.trim() && params.categoryId !== "all"
+      ? params.categoryId.trim()
       : undefined;
-  const subCategory1 =
+  const graphyCategory =
     params.type?.trim() && params.type !== "all"
       ? params.type.trim()
       : undefined;
+  const subCategory1 =
+    params.subCategory1?.trim() && params.subCategory1 !== "all"
+      ? params.subCategory1.trim()
+      : undefined;
+  const facultyId =
+    params.facultyId?.trim() && params.facultyId !== "all"
+      ? params.facultyId.trim()
+      : undefined;
+  const subjectId =
+    params.subjectId?.trim() && params.subjectId !== "all"
+      ? params.subjectId.trim()
+      : undefined;
   const query = params.q?.trim() || undefined;
-  const price = params.price?.trim() || "all";
+  const sortPreset = resolveCourseSort(params.sort?.trim());
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
 
-  const [categoryOptions, courseTypeOptions, packagesResult, catalog] =
-    await Promise.all([
-      getPackageCategories(),
-      getPackageSubcategories(),
-      getPackages({
-        page,
-        limit: PAGE_SIZE,
-        search: query,
-        graphyCategory,
-        subCategory1,
-      }),
-      getCatalogListings(),
-    ]);
+  const [
+    categoryOptions,
+    typeOptions,
+    subCategoryOptions,
+    facultyPage,
+    subjects,
+    packagesResult,
+    catalog,
+  ] = await Promise.all([
+    getCategoryDropdown({ limit: 50 }),
+    getPackageCategories({
+      categoryId,
+      limit: 50,
+    }),
+    getPackageSubcategories({
+      categoryId,
+      graphyCategory,
+      limit: 50,
+    }),
+    getFacultyPage({
+      page: 1,
+      limit: 50,
+      categoryIds: categoryId,
+      subjectIds: subjectId,
+    }),
+    getActiveSubjects(),
+    getPackages({
+      page,
+      limit: PAGE_SIZE,
+      search: query,
+      categoryId,
+      graphyCategory,
+      subCategory1,
+      facultyId,
+      subjectId,
+      sortBy: sortPreset.sortBy,
+      sortOrder: sortPreset.sortOrder,
+    }),
+    getCatalogListings(),
+  ]);
 
-  let items = packagesResult.items;
-  if (price === "free") {
-    items = items.filter((item) => item.price === 0);
-  } else if (price === "paid") {
-    items = items.filter((item) => item.price > 0);
-  }
+  const facultyOptions =
+    facultyPage?.items.map((member) => ({
+      value: member.id,
+      label: member.name,
+    })) ?? [];
+
+  const subjectOptions = subjects
+    .filter((subject) =>
+      categoryId ? subject.categoryIds.includes(categoryId) : true
+    )
+    .map((subject) => ({
+      value: subject.id,
+      label: subject.name,
+    }));
+
+  const items = packagesResult.items;
 
   const isDefaultView =
-    !graphyCategory && !subCategory1 && !query && price === "all";
+    !categoryId &&
+    !graphyCategory &&
+    !subCategory1 &&
+    !facultyId &&
+    !subjectId &&
+    !query &&
+    sortPreset.value === DEFAULT_COURSE_SORT;
 
   const queryForPagination: Record<string, string> = {};
-  if (graphyCategory) queryForPagination.category = graphyCategory;
+  if (categoryId) queryForPagination.categoryId = categoryId;
   if (query) queryForPagination.q = query;
-  if (subCategory1) queryForPagination.type = subCategory1;
-  if (price !== "all") queryForPagination.price = price;
+  if (graphyCategory) queryForPagination.type = graphyCategory;
+  if (subCategory1) queryForPagination.subCategory1 = subCategory1;
+  if (facultyId) queryForPagination.facultyId = facultyId;
+  if (subjectId) queryForPagination.subjectId = subjectId;
+  if (sortPreset.value !== DEFAULT_COURSE_SORT) {
+    queryForPagination.sort = sortPreset.value;
+  }
 
   return (
     <>
@@ -118,20 +188,26 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         imageAlt="Graduation cap and books"
       />
 
-      <section className="bg-section-white home-on-light">
+      <section className="relative z-20 bg-section-white home-on-light">
         <Container>
           <CatalogToolbar
+            variant="packages"
             basePath="/courses"
-            activeCategory={graphyCategory || "all"}
+            activeCategoryId={categoryId || "all"}
             categoryOptions={categoryOptions}
             initialQuery={query || ""}
-            activeType={subCategory1 || "all"}
-            courseTypeOptions={courseTypeOptions}
-            activePrice={price}
-            showCourseType={courseTypeOptions.length > 0}
+            activeType={graphyCategory || "all"}
+            typeOptions={typeOptions}
+            activeSubCategory1={subCategory1 || "all"}
+            subCategoryOptions={subCategoryOptions}
+            activeFacultyId={facultyId || "all"}
+            facultyOptions={facultyOptions}
+            activeSubjectId={subjectId || "all"}
+            subjectOptions={subjectOptions}
+            activeSort={sortPreset.value}
             searchPlaceholder="Search courses..."
             searchAriaLabel="Search courses"
-            categoryAriaLabel="Course categories"
+            tabsAriaLabel="Course subcategories"
           />
         </Container>
       </section>
@@ -164,23 +240,23 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {items.map((pkg) => {
                 const course = packageCardToCourse(pkg);
-                const href = pkg.isSelfEnrolled
-                  ? packageViewCourseHref(pkg.packageId)
-                  : packageDetailHref(pkg.slug);
+                const detailHref = packageDetailHref(pkg.slug);
                 const ctaLabel = pkg.isSelfEnrolled
                   ? "View Course"
                   : "Buy Now";
-                const buyHref =
-                  pkg.packageId != null
+                const ctaHref = pkg.isSelfEnrolled
+                  ? packageViewCourseHref(pkg.packageId)
+                  : pkg.packageId != null
                     ? packageBuyNowHref(pkg.packageId, pkg.slug)
-                    : packageDetailHref(pkg.slug);
+                    : detailHref;
 
                 return (
                   <CourseCardV2
                     key={pkg.id}
                     course={course}
                     className="h-full bg-white"
-                    href={pkg.isSelfEnrolled ? href : buyHref}
+                    href={detailHref}
+                    ctaHref={ctaHref}
                     ctaLabel={ctaLabel}
                   />
                 );

@@ -12,6 +12,7 @@ import type {
   PackageFilterOption,
   PackageListDataApi,
   PackageListQuery,
+  PackageMasterQuery,
   PackageMastersDataApi,
 } from "@/lib/api/modules/packages/types";
 
@@ -27,18 +28,25 @@ export interface PackageListResult {
   totalPages: number;
 }
 
-export async function getPackages(
-  query: PackageListQuery = {}
-): Promise<PackageListResult> {
-  const qs = buildApiQuery({
+function packagesQueryString(query: PackageListQuery): string {
+  return buildApiQuery({
     page: query.page ?? 1,
     limit: query.limit ?? 12,
     search: query.search,
+    categoryId: query.categoryId,
     graphyCategory: query.graphyCategory,
     subCategory1: query.subCategory1,
-    language: query.language,
+    facultyId: query.facultyId,
+    subjectId: query.subjectId,
     sortBy: query.sortBy,
+    sortOrder: query.sortOrder,
   });
+}
+
+export async function getPackages(
+  query: PackageListQuery = {}
+): Promise<PackageListResult> {
+  const qs = packagesQueryString(query);
 
   const data = await apiGetOrNull<PackageListDataApi>(
     `${PACKAGES_PATH}${qs}`,
@@ -75,10 +83,18 @@ export async function getPackageBySlug(
   return mapPackageDetail(data);
 }
 
+/** Graphy Type masters (UI label: Type). Scoped by categoryId when provided. */
 export async function getPackageCategories(
-  search = ""
+  query: PackageMasterQuery | string = {}
 ): Promise<PackageFilterOption[]> {
-  const qs = buildApiQuery({ search, page: 1, limit: 100 });
+  const opts: PackageMasterQuery =
+    typeof query === "string" ? { search: query } : query;
+  const qs = buildApiQuery({
+    search: opts.search?.trim() || undefined,
+    categoryId: opts.categoryId,
+    page: opts.page ?? 1,
+    limit: opts.limit ?? 50,
+  });
   const data = await apiGetOrNull<PackageMastersDataApi>(
     `${CATEGORIES_PATH}${qs}`,
     { revalidate: 300 }
@@ -86,10 +102,19 @@ export async function getPackageCategories(
   return mapPackageMasterOptions(data?.items);
 }
 
+/** subCategory1 masters for course tabs. Scoped by categoryId / graphyCategory. */
 export async function getPackageSubcategories(
-  search = ""
+  query: PackageMasterQuery | string = {}
 ): Promise<PackageFilterOption[]> {
-  const qs = buildApiQuery({ search, page: 1, limit: 100 });
+  const opts: PackageMasterQuery =
+    typeof query === "string" ? { search: query } : query;
+  const qs = buildApiQuery({
+    search: opts.search?.trim() || undefined,
+    categoryId: opts.categoryId,
+    graphyCategory: opts.graphyCategory,
+    page: opts.page ?? 1,
+    limit: opts.limit ?? 50,
+  });
   const data = await apiGetOrNull<PackageMastersDataApi>(
     `${SUBCATEGORIES_PATH}${qs}`,
     { revalidate: 300 }
@@ -124,13 +149,7 @@ export async function resolveGraphyCategory(
 export async function getPackagesOrThrow(
   query: PackageListQuery = {}
 ): Promise<PackageListResult> {
-  const qs = buildApiQuery({
-    page: query.page ?? 1,
-    limit: query.limit ?? 12,
-    search: query.search,
-    graphyCategory: query.graphyCategory,
-    subCategory1: query.subCategory1,
-  });
+  const qs = packagesQueryString(query);
   const data = await apiGet<PackageListDataApi>(`${PACKAGES_PATH}${qs}`);
   return {
     items: mapPackageListItems(data.items),

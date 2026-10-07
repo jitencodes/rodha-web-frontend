@@ -4,14 +4,12 @@ import { CourseHeroSection } from "@/components/sections/course/CourseHeroSectio
 import { CourseDetailsCurriculumSection } from "@/components/sections/course/CourseDetailsCurriculumSection";
 import { CourseFacultySection } from "@/components/sections/course/CourseFacultySection";
 import { CourseIncludedScheduleSection } from "@/components/sections/course/CourseIncludedScheduleSection";
-import { CoursePricingSection } from "@/components/sections/course/CoursePricingSection";
 import { CourseTestimonialsSection } from "@/components/sections/course/CourseTestimonialsSection";
 import { CourseRelatedSection } from "@/components/sections/course/CourseRelatedSection";
 import { CourseFaqSection } from "@/components/sections/course/CourseFaqSection";
 import { CourseEnquireStickyBar } from "@/components/sections/course/CourseEnquireStickyBar";
 import {
   getCourseCategoryHref,
-  getCourseEnrollmentHref,
   getCourseFaqs,
   getCoursePath,
   getCourseTestimonials,
@@ -26,7 +24,13 @@ import {
   courseJsonLd,
   faqPageJsonLd,
 } from "@/lib/structured-data";
-import type { CategoryLandingConfig, Course, FaqItem } from "@/lib/types";
+import type {
+  CategoryLandingConfig,
+  Course,
+  Faculty,
+  FaqItem,
+  Testimonial,
+} from "@/lib/types";
 
 interface CourseDetailPageProps {
   course: Course;
@@ -36,8 +40,10 @@ interface CourseDetailPageProps {
   isLoggedIn?: boolean;
   faqsOverride?: FaqItem[];
   similarPackages?: PackageCardViewModel[];
-  /** When true, hide the Plan / pricing-plans section. */
-  hidePlanSection?: boolean;
+  facultyOverride?: Faculty[];
+  testimonialsOverride?: Testimonial[];
+  /** When true, do not invent missing section content (package API path). */
+  apiBacked?: boolean;
 }
 
 export function CourseDetailPageView({
@@ -48,26 +54,32 @@ export function CourseDetailPageView({
   isLoggedIn = false,
   faqsOverride,
   similarPackages,
-  hidePlanSection = false,
+  facultyOverride,
+  testimonialsOverride,
+  apiBacked = false,
 }: CourseDetailPageProps) {
-  const course = withCourseDetailDefaults(rawCourse);
-  const faculty = getFacultyForCourse(course);
+  const course = withCourseDetailDefaults(rawCourse, {
+    fillMissing: !apiBacked,
+  });
+  const faculty =
+    facultyOverride !== undefined
+      ? facultyOverride
+      : getFacultyForCourse(course);
   const relatedCourses =
-    similarPackages && similarPackages.length > 0
+    similarPackages !== undefined
       ? similarPackages.map((pkg) => packageCardToCourse(pkg, course.category))
       : getRelatedCourses(course, 8);
-  const testimonials = getCourseTestimonials(course, landing);
-  const faqs = faqsOverride?.length
-    ? faqsOverride
-    : getCourseFaqs(course, landing);
+  const testimonials =
+    testimonialsOverride !== undefined
+      ? testimonialsOverride
+      : getCourseTestimonials(course, landing);
+  const faqs =
+    faqsOverride !== undefined
+      ? faqsOverride
+      : getCourseFaqs(course, landing);
   const categoryHref = getCourseCategoryHref(course.category);
   const categoryLabel = landing.menuLabel || landing.name;
   const coursePath = getCoursePath(course.slug);
-  const enrollmentHref = getCourseEnrollmentHref(course);
-  const plans = (course.pricingPlans ?? []).map((plan) => ({
-    ...plan,
-    href: plan.href || enrollmentHref,
-  }));
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -168,9 +180,6 @@ export function CourseDetailPageView({
 
         <CourseFacultySection faculty={faculty} />
         <CourseIncludedScheduleSection course={course} />
-        {!hidePlanSection && plans.length > 0 ? (
-          <CoursePricingSection plans={plans} />
-        ) : null}
         <CourseTestimonialsSection testimonials={testimonials} />
       </div>
 

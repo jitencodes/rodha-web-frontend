@@ -92,7 +92,8 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 |--------|----------|-----------|
 | announcements | `GET api/website/announcements` | Root layout → `PromotionalBanner` |
 | categories | `GET api/website/categories` | Root layout → `Header` / `MobileNav` |
-| categories | `GET api/website/categories/:slug` | `/category/[slug]` — banner, courses (`courseType`), faculty cards, testimonials, successStories, FAQs, results; unknown slugs use name-based chrome from `category-landing-defaults.ts` (lists still hide when empty) |
+| categories | `GET api/website/categories/dropdown?withPackages=true` | `/courses` Category filter (`categoryId`) |
+| categories | `GET api/website/categories/:slug` | `/category/[slug]` — banner, embedded `packages` (items + groups for course tabs), faculty, testimonials, successStories, FAQs, results; unknown slugs use name-based chrome from `category-landing-defaults.ts` (lists still hide when empty) |
 | home | `GET api/website/home` | `/` page → hero, categories, FAQs, results |
 | faculty | `GET api/website/faculty` | `/faculty` — banner, featured, paginated list (`page`, `limit`, `search`, `categoryIds`, `subjectIds`, `sortBy`) |
 | faculty | `GET api/website/faculty/:slug` | `/faculty/[slug]` — `data.faculty` profile, `data.packages.items` courses (`courseType`); legacy flat faculty/`courses` still mapped |
@@ -104,13 +105,15 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | auth | `POST api/auth/user/signup` | `/api/auth/signup` (requires `stateId`) |
 | auth | `POST api/auth/user/login` | `/api/auth/login` (`is_web: true`) |
 | auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) |
+| auth | `POST api/auth/user/forgot-password` | `/api/auth/forgot-password` (`email`, `is_web: true`) |
+| auth | `POST api/auth/user/reset-password` | `/api/auth/reset-password` (`email`, `token`, `newPassword`, `is_web: true`) |
 | auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state` |
 | auth | `PATCH api/auth/me/state` | `/api/account/state` — update state + refresh user cookie/atom |
 | states | `GET api/website/states/dropdown` | `/api/states/dropdown` — registration + Update State dialog |
-| packages | `GET api/website/packages` | `/courses`, account buy tab; filters `graphyCategory`, `subCategory1`, `search` |
-| packages | `GET api/website/packages/:slug` | `/courses/[slug]` public package detail |
-| packages | `GET api/website/packages/categories` | Category filter masters (graphyCategory values) |
-| packages | `GET api/website/packages/subcategories` | Course-type filter masters (subCategory1 values) |
+| packages | `GET api/website/packages` | `/courses`, account buy tab; filters `search`, `categoryId`, `graphyCategory` (UI Type), `subCategory1`, `facultyId`, `subjectId`, `sortBy`, `sortOrder` (skip tag/language — no masters) |
+| packages | `GET api/website/packages/:slug` | `/courses/[slug]` — map faculty (`fullName`/`profileImageUrl`), testimonials, curriculum; hide empty sections; no Plans UI; discount % from `price`/`discountedPrice` |
+| packages | `GET api/website/packages/categories` | Type filter masters (`graphyCategory`); scoped by `categoryId` when set |
+| packages | `GET api/website/packages/subcategories` | Course tab masters (`subCategory1`); scoped by `categoryId` + `graphyCategory`; category landing tabs come from embedded `packages.groups` instead |
 | student | `GET api/website/student/dashboard` | Account dashboard |
 | student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |

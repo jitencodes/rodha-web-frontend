@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
 export interface DropdownSelectOption {
@@ -23,6 +29,11 @@ interface DropdownSelectProps {
   variant?: "dark" | "light";
 }
 
+/**
+ * Custom select. Menu renders in a portal so ancestor transforms / stacking
+ * contexts (e.g. catalog toolbar `-translate-y-1/2`) cannot bury options under
+ * sibling filters or page content.
+ */
 export function DropdownSelect({
   options,
   value,
@@ -38,31 +49,134 @@ export function DropdownSelect({
 }: DropdownSelectProps) {
   const resolvedAriaLabel = ariaLabel ?? label;
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const selected = options.find((opt) => opt.value === value);
   const displayLabel = selected?.label ?? placeholder;
   const isLight = variant === "light";
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+    setMounted(true);
+  }, []);
+
+  const updateCoords = () => {
+    const el = rootRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const width = Math.max(rect.width, 140);
+    let left = rect.left;
+    if (left + width > window.innerWidth - 8) {
+      left = Math.max(8, window.innerWidth - 8 - width);
     }
+    if (left < 8) left = 8;
+    setCoords({
+      top: rect.bottom + 8,
+      left,
+      width,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setCoords(null);
+      return;
+    }
+    updateCoords();
+    const onReposition = () => updateCoords();
+    window.addEventListener("resize", onReposition);
+    window.addEventListener("scroll", onReposition, true);
+    return () => {
+      window.removeEventListener("resize", onReposition);
+      window.removeEventListener("scroll", onReposition, true);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handlePointer(e: MouseEvent) {
+      const target = e.target as Node;
+      if (rootRef.current?.contains(target)) return;
+      if (menuRef.current?.contains(target)) return;
+      setOpen(false);
+    }
+
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("mousedown", handleClick);
+
+    document.addEventListener("mousedown", handlePointer);
     document.addEventListener("keydown", handleKey);
     return () => {
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("mousedown", handlePointer);
       document.removeEventListener("keydown", handleKey);
     };
-  }, []);
+  }, [open]);
+
+  const menu =
+    mounted &&
+    open &&
+    coords &&
+    createPortal(
+      <div
+        ref={menuRef}
+        role="listbox"
+        aria-label={resolvedAriaLabel}
+        style={{
+          position: "fixed",
+          top: coords.top,
+          left: coords.left,
+          width: coords.width,
+        }}
+        className={cn(
+          "z-50 min-w-[140px] max-h-60 overflow-y-auto animate-[dropdown-in_180ms_var(--ease-premium)]",
+          isLight
+            ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
+            : "dropdown-menu"
+        )}
+      >
+        {options.map((option) => {
+          const isActive = option.value === value;
+          return (
+            <button
+              key={option.value || "__all__"}
+              type="button"
+              role="option"
+              aria-selected={isActive}
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              className={cn(
+                isLight
+                  ? cn(
+                      "block w-full text-left px-4 py-2.5 text-body-sm text-neutral-700 transition-colors cursor-pointer",
+                      "hover:bg-orange-500/10 hover:text-orange-600",
+                      isActive && "bg-orange-500/10 text-orange-600 font-medium"
+                    )
+                  : cn(
+                      "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
+                      isActive && "dropdown-option--active"
+                    )
+              )}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>,
+      document.body
+    );
 
   return (
-    <div ref={ref} className={cn("relative", className)}>
+    <div ref={rootRef} className={cn("relative", className)}>
       {label && (
         <label
           className={cn(
@@ -91,7 +205,12 @@ export function DropdownSelect({
       >
         <span className="flex min-w-0 items-center gap-2.5">
           {prefixIcon && (
-            <span className={cn("shrink-0 translate-y-[2px]", isLight ? "text-neutral-400" : "text-text-dimmed")}>
+            <span
+              className={cn(
+                "shrink-0 translate-y-[2px]",
+                isLight ? "text-neutral-400" : "text-text-dimmed"
+              )}
+            >
               {prefixIcon}
             </span>
           )}
@@ -109,52 +228,15 @@ export function DropdownSelect({
           strokeWidth={2.5}
           aria-hidden
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      {open && (
-        <div
-          role="listbox"
-          aria-label={resolvedAriaLabel}
-          className={cn(
-            "absolute top-full left-0 right-0 mt-2 min-w-full max-h-60 overflow-y-auto z-[100] animate-[dropdown-in_180ms_var(--ease-premium)]",
-            isLight
-              ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
-              : "dropdown-menu"
-          )}
-        >
-          {options.map((option) => {
-            const isActive = option.value === value;
-            return (
-              <button
-                key={option.value || "__all__"}
-                type="button"
-                role="option"
-                aria-selected={isActive}
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
-                }}
-                className={cn(
-                  isLight
-                    ? cn(
-                        "block w-full text-left px-4 py-2.5 text-body-sm text-neutral-700 transition-colors cursor-pointer",
-                        "hover:bg-orange-500/10 hover:text-orange-600",
-                        isActive && "bg-orange-500/10 text-orange-600 font-medium"
-                      )
-                    : cn(
-                        "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
-                        isActive && "dropdown-option--active"
-                      )
-                )}
-              >
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {menu}
       {error && (
         <p className="mt-1 text-caption text-accent-red">{error}</p>
       )}

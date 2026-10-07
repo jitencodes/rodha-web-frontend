@@ -46,6 +46,22 @@ export interface AuthGoogleRequest {
   is_web: true;
 }
 
+export interface AuthForgotPasswordRequest {
+  email: string;
+  is_web: true;
+}
+
+export interface AuthResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+  is_web: true;
+}
+
+export interface AuthPasswordMessageApi {
+  message?: string | null;
+}
+
 export interface AuthStateViewModel {
   id: number;
   name: string;

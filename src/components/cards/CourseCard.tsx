@@ -23,10 +23,17 @@ const CATEGORY_BG: Record<string, string> = {
 };
 
 export function CourseCard({ course, className }: CourseCardProps) {
-  const hasDiscount = course.originalPrice && course.originalPrice > course.price;
-  const discountPercent = hasDiscount
-    ? Math.round(((course.originalPrice! - course.price) / course.originalPrice!) * 100)
-    : 0;
+  const hasDiscount =
+    course.originalPrice != null && course.originalPrice > course.price;
+  const discountPercent =
+    typeof course.discountPercent === "number" && course.discountPercent > 0
+      ? Math.round(course.discountPercent)
+      : hasDiscount
+        ? Math.round(
+            ((course.originalPrice! - course.price) / course.originalPrice!) *
+              100
+          )
+        : 0;
 
   const accent =
     CATEGORIES.find((c) => c.id === course.category)?.color || "#F97316";
@@ -93,7 +100,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
             <span className="text-h4 font-bold text-white">
               {formatPrice(course.price)}
             </span>
-            {hasDiscount && (
+            {hasDiscount && discountPercent > 0 && (
               <>
                 <span className="text-body-sm text-white/50 line-through">
                   {formatPrice(course.originalPrice!)}

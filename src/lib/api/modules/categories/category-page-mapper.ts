@@ -3,6 +3,7 @@ import { extractYoutubeId } from "@/lib/api/modules/banners/mapper";
 import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type {
   CategoryPageApi,
+  CategoryPagePackagesApi,
   CategoryPageStudentResultApi,
   CategoryPageSuccessStoryApi,
   CategoryPageTestimonialApi,
@@ -10,6 +11,11 @@ import type {
 import { mapCourses } from "@/lib/api/modules/courses/mapper";
 import { mapFacultyCards } from "@/lib/api/modules/faculty/mapper";
 import type { FacultyApi } from "@/lib/api/modules/faculty/types";
+import {
+  mapPackageListItems,
+  packageCardToCourse,
+} from "@/lib/api/modules/packages/mapper";
+import type { PackageFilterOption } from "@/lib/api/modules/packages/types";
 import {
   getCategoryLandingBySlug,
 } from "@/data/category-landings";
@@ -20,11 +26,93 @@ import {
 import type {
   CategoryId,
   CategoryLandingConfig,
+  Course,
   ResultStat,
   Testimonial,
   TestSeriesItem,
   TopperResult,
 } from "@/lib/types";
+
+export type CategoryPackageCourseCard = Course & {
+  packageId?: number | null;
+  isSelfEnrolled?: boolean;
+};
+
+export interface CategoryPackagesViewModel {
+  allItems: CategoryPackageCourseCard[];
+  groups: {
+    subCategory1: string;
+    items: CategoryPackageCourseCard[];
+  }[];
+  courseTypeOptions: PackageFilterOption[];
+}
+
+function toPackageCourseCards(
+  items: ReturnType<typeof mapPackageListItems>,
+  categoryFallback: CategoryId
+): CategoryPackageCourseCard[] {
+  return items.map((pkg) => ({
+    ...packageCardToCourse(pkg, categoryFallback),
+    packageId: pkg.packageId,
+    isSelfEnrolled: pkg.isSelfEnrolled,
+    detailsLabel: pkg.isSelfEnrolled ? "View Course" : "Buy Now",
+  }));
+}
+
+/** Map embedded category `packages` → course cards + tab options from groups. */
+export function mapCategoryPagePackages(
+  packages: CategoryPagePackagesApi | null | undefined,
+  subCategories: CategoryPageApi["subCategories"],
+  categoryFallback: CategoryId
+): CategoryPackagesViewModel | null {
+  if (!packages) return null;
+
+  const allItems = toPackageCourseCards(
+    mapPackageListItems(packages.items),
+    categoryFallback
+  );
+
+  const groups: CategoryPackagesViewModel["groups"] = [];
+  const seen = new Set<string>();
+
+  if (Array.isArray(packages.groups)) {
+    for (const group of packages.groups) {
+      const key =
+        typeof group?.subCategory1 === "string" ? group.subCategory1.trim() : "";
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      groups.push({
+        subCategory1: key,
+        items: toPackageCourseCards(
+          mapPackageListItems(group.items),
+          categoryFallback
+        ),
+      });
+    }
+  }
+
+  if (groups.length === 0 && Array.isArray(subCategories)) {
+    for (const entry of subCategories) {
+      const key = typeof entry?.value === "string" ? entry.value.trim() : "";
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      groups.push({ subCategory1: key, items: [] });
+    }
+  }
+
+  if (allItems.length === 0 && groups.every((g) => g.items.length === 0)) {
+    return null;
+  }
+
+  return {
+    allItems,
+    groups,
+    courseTypeOptions: groups.map((g) => ({
+      value: g.subCategory1,
+      label: g.subCategory1,
+    })),
+  };
+}
 
 function parseYear(raw: string | number | null | undefined): number {
   if (raw === null || raw === undefined) return new Date().getFullYear();
@@ -241,9 +329,15 @@ export function mapCategoryPage(
         answer: faq.answer.trim(),
       })) ?? [];
 
+  const cmsCategoryId =
+    typeof api.category.id === "number" && Number.isFinite(api.category.id)
+      ? api.category.id
+      : undefined;
+
   const mapped: CategoryLandingConfig = {
     ...base,
     id: categoryId,
+    cmsCategoryId,
     name: name || base.name,
     slug: apiSlug,
     fullName: title || base.fullName,

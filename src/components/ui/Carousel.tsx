@@ -16,6 +16,15 @@ interface CarouselProps {
   draggable?: boolean;
 }
 
+function isInteractiveTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest(
+      "a, button, input, select, textarea, label, [role='button'], [role='link'], [data-carousel-ignore]"
+    )
+  );
+}
+
 export function Carousel({
   children,
   className,
@@ -36,6 +45,7 @@ export function Carousel({
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dragRef = useRef({
     active: false,
+    dragging: false,
     pointerId: -1,
     startX: 0,
     startScrollLeft: 0,
@@ -115,20 +125,20 @@ export function Carousel({
         !draggable ||
         !el ||
         event.pointerType === "touch" ||
-        event.button !== 0
+        event.button !== 0 ||
+        isInteractiveTarget(event.target)
       ) {
         return;
       }
 
       dragRef.current = {
         active: true,
+        dragging: false,
         pointerId: event.pointerId,
         startX: event.clientX,
         startScrollLeft: el.scrollLeft,
       };
       suppressClickRef.current = false;
-      el.setPointerCapture(event.pointerId);
-      setIsDragging(true);
     },
     [draggable]
   );
@@ -139,7 +149,14 @@ export function Carousel({
       if (!el || !dragRef.current.active) return;
 
       const delta = event.clientX - dragRef.current.startX;
-      if (Math.abs(delta) > 5) suppressClickRef.current = true;
+      if (!dragRef.current.dragging) {
+        if (Math.abs(delta) <= 6) return;
+        dragRef.current.dragging = true;
+        suppressClickRef.current = true;
+        el.setPointerCapture(dragRef.current.pointerId);
+        setIsDragging(true);
+      }
+
       el.scrollLeft = dragRef.current.startScrollLeft - delta;
       event.preventDefault();
     },
@@ -151,13 +168,18 @@ export function Carousel({
       const el = scrollRef.current;
       if (!el || !dragRef.current.active) return;
 
-      if (el.hasPointerCapture(dragRef.current.pointerId)) {
+      const wasDragging = dragRef.current.dragging;
+      if (
+        wasDragging &&
+        el.hasPointerCapture(dragRef.current.pointerId)
+      ) {
         el.releasePointerCapture(dragRef.current.pointerId);
       }
       dragRef.current.active = false;
+      dragRef.current.dragging = false;
       setIsDragging(false);
 
-      if (suppressClickRef.current) {
+      if (wasDragging || suppressClickRef.current) {
         window.setTimeout(() => {
           suppressClickRef.current = false;
         }, 0);

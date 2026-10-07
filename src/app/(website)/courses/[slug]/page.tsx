@@ -38,7 +38,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const pkg = await getPackageBySlug(slug);
   if (pkg) {
-    const course = withCourseDetailDefaults(pkg.course);
+    const course = withCourseDetailDefaults(pkg.course, { fillMissing: false });
     return buildPageMetadata({
       title: `${course.title} — Rodha`,
       description: course.shortDescription || course.description,
@@ -52,7 +52,7 @@ export async function generateMetadata({
     return { title: "Course — Rodha" };
   }
 
-  const course = withCourseDetailDefaults(match.course);
+  const course = withCourseDetailDefaults(match.course, { fillMissing: false });
   return buildPageMetadata({
     title: `${course.title} — ${match.landing.name} Course — Rodha`,
     description: course.shortDescription || course.description,
@@ -83,7 +83,9 @@ export default async function CourseDetailPage({
         isLoggedIn={Boolean(accessToken)}
         faqsOverride={pkg.faqs}
         similarPackages={pkg.similar}
-        hidePlanSection
+        facultyOverride={pkg.faculty}
+        testimonialsOverride={pkg.testimonials}
+        apiBacked
       />
     );
   }

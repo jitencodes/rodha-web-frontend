@@ -36,6 +36,8 @@ interface CategoryLandingPageProps {
   /** subCategory1 options for course-type filter chips. */
   courseTypeOptions?: PackageFilterOption[];
   activeCourseType?: string;
+  /** Courses listing link preserving CMS categoryId */
+  viewAllCoursesHref?: string;
 }
 
 /** Second results row only when both marquees can fill enough cards to scroll. */
@@ -62,6 +64,7 @@ export function CategoryLandingPage({
   packageCourses,
   courseTypeOptions = [],
   activeCourseType = "all",
+  viewAllCoursesHref,
 }: CategoryLandingPageProps) {
   const facultyMembers = category.facultyMembers ?? [];
   const courses =
@@ -203,6 +206,7 @@ export function CategoryLandingPage({
               courses={courses}
               courseTypeOptions={courseTypeOptions}
               activeType={activeCourseType}
+              viewAllHref={viewAllCoursesHref}
             />
           </Suspense>
         </Container>

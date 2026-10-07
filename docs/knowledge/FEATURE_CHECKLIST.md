@@ -59,7 +59,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | MBA `/category/cat` mixed-theme alignment | Complete — peach/white rhythm; V2 cards; decorative CTA; dark testimonials island |
 | Other verticals (`ipmat` / `clat` / `banking` / `skillhouse`) | Complete — same CAT V2 template; empty API sections hidden |
 | Category hero | Complete — `CategoryHeroSectionV2` from CMS banner (Typewriter + video/image) |
-| Courses overview | Complete — `CourseCardV2` slider; static catalog fallback while CMS `courses` is empty; `courseType` chips; bar hidden when only one type |
+| Courses overview | Complete — Embedded category `packages` → full-card `CourseCardV2` → `/courses/[slug]`; tabs from `groups.subCategory1` + All; View all → `/courses?categoryId=`; discount % from price fields |
 | Star faculty | Complete — `FacultyCardV2` from category-page `faculty[]` (same response as testimonials/FAQs) |
 | Test series promo | Complete — `TestSeriesCardV2`; static catalog fallback while CMS `testSeries` is empty |
 | Results & toppers | Complete — light stats + second marquee only at 15+ cards; short lists stay on one left-aligned row |
@@ -78,6 +78,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Split-panel screen | Complete | Full-bleed left slides + `rodha-logo.webp`; desktop viewport lock, form-only scroll |
 | Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field |
 | Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login` |
+| Forgot password | Complete | `/forgot-password` → `/api/auth/forgot-password` → `api/auth/user/forgot-password` |
+| Reset password | Complete | `/reset-password` → `/api/auth/reset-password` → `api/auth/user/reset-password` (`email`/`token` query prefill) |
 | Google | Complete (client) | GIS ID token → `/api/auth/google` → `api/auth/user/google` (not in Postman) |
 | Session | Complete | httpOnly `rodha_access_token`; redirect `/account/dashboard` |
 | Account static data | Complete | `src/lib/account/types.ts` + `src/data/account/*` |
@@ -106,8 +108,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 |---------|--------|-------|
 | Canonical listing route | Complete | `/courses` beside existing `/courses/[slug]` detail |
 | Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/banner/banner.png` |
-| URL filters | Complete | Category chips, search `q`, course type, paid/free; omit defaults |
-| Cards + pagination | Complete | `CourseCardV2` (category card); 10 per page; URL `Pagination` light |
+| URL filters | Complete | Master-driven: `categoryId`, subCategory1 tabs, faculty, subject, sort, search `q`; Type (`type`→graphyCategory) UI temporarily hidden; mobile Filter bottom sheet; desktop dropdowns portaled above cards |
+| Cards + pagination | Complete | `CourseCardV2` (category card); 12 per page; URL `Pagination` light |
 | Stories + CTA | Complete | Merged category stories (hidden if empty) then `CTABandV2Decorative` |
 
 ## Test Series Listing `/test-series`
@@ -125,16 +127,18 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status |
 |---------|--------|
 | Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
+| Package Detail By Slug API | Complete (`getPackageBySlug` + mapper; empty sections hidden) |
 | Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
-| Sticky purchase card | Complete (Graphy Buy Now + Rodha Buddy) |
-| Curriculum accordion | Complete (`CourseCurriculumAccordion`) |
-| Faculty for course | Complete (`FacultyCardV2` detail variant) |
-| What's included + schedule | Complete |
-| Pricing display | Complete (data-driven plans; default single plan from price) |
-| Testimonials | Complete (reuses `TestimonialCardV2` light + Carousel) |
-| Related courses | Complete (reuses `CourseCardV2` → `/courses/[slug]`) |
-| FAQ | Complete (reuses `AccordionV2` + category FAQ fallback) |
+| Sticky purchase card | Complete (package Buy Now checkout + Rodha Buddy) |
+| Curriculum accordion | Complete (`CourseCurriculumAccordion`; hidden when no modules) |
+| Faculty for course | Complete (package `faculty[]` via `FacultyCardV2`; hidden when empty) |
+| What's included + schedule | Complete (API benefits/schedule only; no invented defaults on package path) |
+| Pricing / Plans section | Removed (purchase via sticky card only) |
+| Testimonials | Complete (package testimonials; hidden when empty) |
+| Related courses | Complete (`similarPackages` → `CourseCardV2` → `/courses/[slug]`) |
+| FAQ | Complete (package FAQs; hidden when empty) |
 | Floating enquiry | Complete (`LeadCaptureForm` light Enquire Now + mobile sticky) |
+| Course card discount % | Complete (derived from `price` / `discountedPrice` on `CourseCard` / `CourseCardV2`) |
 
 ---
 

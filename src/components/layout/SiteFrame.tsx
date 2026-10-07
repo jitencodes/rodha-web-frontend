@@ -26,7 +26,11 @@ export function SiteFrame({
   children,
 }: SiteFrameProps) {
   const pathname = usePathname();
-  const isAuth = pathname === "/login" || pathname === "/signup";
+  const isAuth =
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password";
 
   if (isAuth) {
     return (

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-06 (GitLab main=dev / production branch CI)
+**Last updated:** 2026-10-07 (Catalog toolbar mobile filters + dropdown layering)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,10 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Catalog toolbar mobile filters + dropdown layering (2026-10-07):** `DropdownSelect` menus portal to `document.body` so toolbar transforms/stacking no longer bury options under sibling filters or course cards. Mobile `/courses` (+ legacy test-series) use a Filter icon + `BottomSheet` for dropdown filters; search and draggable subcategory/category tiles stay outside the sheet. Packages Type (`graphyCategory`) filter UI temporarily disabled (URL/API wiring kept).
+- **Category embedded packages + courses filters (2026-10-07):** Category landing courses use `packages.items` / `packages.groups` from category detail (no separate packages API). View all → `/courses?categoryId=`. Courses listing filters from masters: categories dropdown, Type (`graphyCategory`), subCategory1 tabs, faculty, subject, sort (`sortBy`/`sortOrder`); skip tag/language. Forgot-password payload already includes `is_web: true`.
+- **Course card UX + password reset (2026-10-07):** Carousel drag no longer blocks card clicks; category/listing cards go to `/courses/[slug]` while Buy Now uses checkout (CTA stopPropagation). Catalog toolbar gets higher z-index, non-shrinking search, and draggable category tabs. Added `/forgot-password` + `/reset-password` on the auth layout with BFF routes to Graphy forgot/reset APIs.
+- **Package detail + category courses (2026-10-07):** `GET api/website/packages/:slug` mapper aligned to Postman (`fullName`/`profileImageUrl` faculty, `batchStarts` array, testimonials, derived `discountPercent`). Course detail hides Plans and empty API sections (`fillMissing: false`). Category course cards are full-card links to `/courses/[slug]`; subcategory filter tabs probe for packages and hide empty types. `CourseCard` / `CourseCardV2` show API-derived discount %.
 - **GitLab production workflow (2026-10-06):** `main` = development, `production` = production. `.gitlab-ci.yml` with environment-scoped builds + Docker (`Dockerfile`, compose); registry tags `development-*` / `production-*`; docs in `docs/DEPLOYMENT_GITLAB.md`. Manual PM2 or Docker deploy.
 - **State selection (2026-10-06):** `states` module + BFF dropdown; signup requires `stateId`; `GET api/auth/me` + `PATCH api/auth/me/state` wired; Jotai `userAtom` in account shell; blocking Update State dialog when `state` is null; Profile Update State + Checkout pay blocked until state set.
 - **UI / integration fixes (2026-10-06):** Account header session user + Buddy / Take Test / Live Classroom; shared `COURSE_IMAGE_FALLBACK`; 401/403 → session-expired BFF + login toast (`sonner`); profile avatar crop/upload + email/phone-only details + password/logout confirm; `/` → `NEXT_PUBLIC_DEFAULT_HOME_PATH`; Footer Category from CMS `categoriesAtom`; category filter tab drag-scroll; checkout coupon outside summary + success Lottie/Meta Pixel; Download Invoice; Settings hidden; category hero WhatsApp/Brochure icon CTAs.

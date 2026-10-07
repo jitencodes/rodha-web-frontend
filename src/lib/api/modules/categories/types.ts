@@ -1,4 +1,5 @@
 import type { CourseApi } from "@/lib/api/modules/courses/types";
+import type { PackageListItemApi } from "@/lib/api/modules/packages/types";
 import type { CategoryId } from "@/lib/types";
 
 /** Raw category from GET /api/website/categories and home.categories */
@@ -233,6 +234,34 @@ export interface CategoryPageTestSeriesApi {
   isActive?: boolean;
 }
 
+export interface CategoryPagePackageGroupApi {
+  subCategory1?: string | null;
+  total?: number;
+  items?: PackageListItemApi[] | null;
+  pagination?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+    totalPages?: number;
+  } | null;
+}
+
+export interface CategoryPagePackagesApi {
+  items?: PackageListItemApi[] | null;
+  pagination?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+    totalPages?: number;
+  } | null;
+  groups?: CategoryPagePackageGroupApi[] | null;
+  packageTotal?: number | null;
+}
+
+export interface CategoryPageSubCategoryApi {
+  value?: string | null;
+}
+
 export interface CategoryPageApi {
   category: CategoryApi;
 
@@ -251,4 +280,35 @@ export interface CategoryPageApi {
   courses?: CourseApi[] | null;
 
   testSeries?: CategoryPageTestSeriesApi[] | null;
+
+  /** Embedded packages for the category courses section */
+  packages?: CategoryPagePackagesApi | null;
+
+  subCategories?: CategoryPageSubCategoryApi[] | null;
+}
+
+/** Dropdown item from GET api/website/categories/dropdown */
+export interface CategoryDropdownItemApi {
+  id: number;
+  name?: string | null;
+  title?: string | null;
+  slug?: string | null;
+  iconUrl?: string | null;
+  isActive?: boolean | null;
+}
+
+export interface CategoryDropdownDataApi {
+  items?: CategoryDropdownItemApi[] | null;
+  pagination?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+    totalPages?: number;
+  } | null;
+}
+
+export interface CategoryDropdownOption {
+  value: string;
+  label: string;
+  slug?: string;
 }

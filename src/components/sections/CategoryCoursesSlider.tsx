@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   useCallback,
   useEffect,
@@ -20,6 +21,7 @@ import {
 } from "@/lib/packages/buy-now";
 import type { Course } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Container } from "../layout/Container";
 
 export type CategoryCourseCard = Course & {
   packageId?: number | null;
@@ -32,12 +34,15 @@ interface CategoryCoursesSliderProps {
   courseTypeOptions?: PackageFilterOption[];
   /** Active subCategory1 value */
   activeType?: string;
+  /** Link to courses listing filtered by this CMS category */
+  viewAllHref?: string;
 }
 
 export function CategoryCoursesSlider({
   courses,
   courseTypeOptions = [],
   activeType = "all",
+  viewAllHref,
 }: CategoryCoursesSliderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -161,11 +166,12 @@ export function CategoryCoursesSlider({
           <Carousel key={activeType} showArrows>
             {courses.map((course, index) => {
               const isSelfEnrolled = course.isSelfEnrolled === true;
-              const href = isSelfEnrolled
+              const detailHref = packageDetailHref(course.slug);
+              const ctaHref = isSelfEnrolled
                 ? packageViewCourseHref(course.packageId ?? null)
                 : course.packageId != null
                   ? packageBuyNowHref(course.packageId, course.slug)
-                  : packageDetailHref(course.slug);
+                  : detailHref;
               return (
                 <div
                   key={course.id}
@@ -174,7 +180,8 @@ export function CategoryCoursesSlider({
                   <CourseCardV2
                     course={course}
                     className="h-full bg-white"
-                    href={href}
+                    href={detailHref}
+                    ctaHref={ctaHref}
                     ctaLabel={
                       isSelfEnrolled
                         ? "View Course"
@@ -187,6 +194,18 @@ export function CategoryCoursesSlider({
           </Carousel>
         </RevealGroup>
       )}
+
+      {viewAllHref && <Container>
+          <div className="mt-8 flex justify-center md:mt-10">
+            <Link
+              href={viewAllHref}
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline inline-flex"
+            >
+              View All courses
+            </Link>
+          </div>
+        </Container>}
+
     </div>
   );
 }

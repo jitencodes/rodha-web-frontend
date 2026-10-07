@@ -87,8 +87,9 @@ function AnnouncementFace({
           <p className="text-caption sm:text-body-sm text-center text-text-secondary leading-snug">
             <span
               className="announcement-html [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:hover:text-orange-400 [&_a]:underline [&_a]:underline-offset-2 sm:[&_a]:no-underline"
+              suppressHydrationWarning
               dangerouslySetInnerHTML={{
-                __html: announcement.descriptionHtml,
+                __html: announcement.descriptionHtml || "",
               }}
             />
           </p>
