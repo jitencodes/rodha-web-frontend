@@ -25,8 +25,12 @@ interface DropdownSelectProps {
   className?: string;
   triggerClassName?: string;
   prefixIcon?: React.ReactNode;
-  /** Default stays dark for counselling and existing filters. */
-  variant?: "dark" | "light";
+  /**
+   * `dark` — marketing/counselling dark UI.
+   * `light` — public light UI (hardcoded white).
+   * `account` — follows account shell light/dark tokens (portal mounts into `.account-shell`).
+   */
+  variant?: "dark" | "light" | "account";
 }
 
 /**
@@ -61,6 +65,7 @@ export function DropdownSelect({
   const selected = options.find((opt) => opt.value === value);
   const displayLabel = selected?.label ?? placeholder;
   const isLight = variant === "light";
+  const isAccount = variant === "account";
 
   useEffect(() => {
     setMounted(true);
@@ -120,10 +125,19 @@ export function DropdownSelect({
     };
   }, [open]);
 
+  const portalParent =
+    typeof document !== "undefined"
+      ? isAccount
+        ? (document.querySelector(".account-shell") as HTMLElement | null) ??
+          document.body
+        : document.body
+      : null;
+
   const menu =
     mounted &&
     open &&
     coords &&
+    portalParent &&
     createPortal(
       <div
         ref={menuRef}
@@ -136,10 +150,13 @@ export function DropdownSelect({
           width: coords.width,
         }}
         className={cn(
-          "z-50 min-w-[140px] max-h-60 overflow-y-auto animate-[dropdown-in_180ms_var(--ease-premium)]",
-          isLight
-            ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
-            : "dropdown-menu"
+          // Above ConfirmDialog / Modal overlays (z-[100]) so options stay clickable
+          "z-[110] min-w-[140px] max-h-60 overflow-y-auto animate-[dropdown-in_180ms_var(--ease-premium)]",
+          isAccount
+            ? "rounded-[6px] border border-[var(--account-border)] bg-[var(--account-surface)] py-1 shadow-[var(--account-shadow)]"
+            : isLight
+              ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
+              : "dropdown-menu"
         )}
       >
         {options.map((option) => {
@@ -155,16 +172,23 @@ export function DropdownSelect({
                 setOpen(false);
               }}
               className={cn(
-                isLight
+                isAccount
                   ? cn(
-                      "block w-full text-left px-4 py-2.5 text-body-sm text-neutral-700 transition-colors cursor-pointer",
-                      "hover:bg-orange-500/10 hover:text-orange-600",
-                      isActive && "bg-orange-500/10 text-orange-600 font-medium"
+                      "block w-full cursor-pointer px-4 py-2.5 text-left text-body-sm text-[var(--account-text-secondary)] transition-colors",
+                      "hover:bg-[var(--account-nav-active-bg)] hover:text-[var(--account-accent)]",
+                      isActive &&
+                        "bg-[var(--account-nav-active-bg)] font-medium text-[var(--account-accent)]"
                     )
-                  : cn(
-                      "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
-                      isActive && "dropdown-option--active"
-                    )
+                  : isLight
+                    ? cn(
+                        "block w-full text-left px-4 py-2.5 text-body-sm text-neutral-700 transition-colors cursor-pointer",
+                        "hover:bg-orange-500/10 hover:text-orange-600",
+                        isActive && "bg-orange-500/10 text-orange-600 font-medium"
+                      )
+                    : cn(
+                        "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
+                        isActive && "dropdown-option--active"
+                      )
               )}
             >
               {option.label}
@@ -172,7 +196,7 @@ export function DropdownSelect({
           );
         })}
       </div>,
-      document.body
+      portalParent
     );
 
   return (
@@ -181,7 +205,11 @@ export function DropdownSelect({
         <label
           className={cn(
             "block text-body-sm font-medium mb-1.5",
-            isLight ? "text-neutral-700" : "text-text-secondary"
+            isAccount
+              ? "text-[var(--account-text-secondary)]"
+              : isLight
+                ? "text-neutral-700"
+                : "text-text-secondary"
           )}
         >
           {label}
@@ -196,9 +224,11 @@ export function DropdownSelect({
         onClick={() => setOpen(!open)}
         className={cn(
           "flex items-center justify-between gap-2 h-9 w-full min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap",
-          isLight
-            ? "bg-white text-neutral-900 border-neutral-200 hover:border-orange-500/60"
-            : "bg-bg-tertiary text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
+          isAccount
+            ? "bg-[var(--account-input-bg)] text-[var(--account-text)] border-[var(--account-input-border)] hover:border-[var(--account-accent)]/60"
+            : isLight
+              ? "bg-white text-neutral-900 border-neutral-200 hover:border-orange-500/60"
+              : "bg-bg-tertiary text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
           triggerClassName,
           error && "border-accent-red hover:border-accent-red"
         )}
@@ -208,7 +238,11 @@ export function DropdownSelect({
             <span
               className={cn(
                 "shrink-0 translate-y-[2px]",
-                isLight ? "text-neutral-400" : "text-text-dimmed"
+                isAccount
+                  ? "text-[var(--account-text-muted)]"
+                  : isLight
+                    ? "text-neutral-400"
+                    : "text-text-dimmed"
               )}
             >
               {prefixIcon}
@@ -219,7 +253,11 @@ export function DropdownSelect({
         <svg
           className={cn(
             "h-3.5 w-3.5 shrink-0 transition-transform",
-            isLight ? "text-neutral-500" : "text-text-secondary",
+            isAccount
+              ? "text-[var(--account-text-muted)]"
+              : isLight
+                ? "text-neutral-500"
+                : "text-text-secondary",
             open && "rotate-180"
           )}
           fill="none"

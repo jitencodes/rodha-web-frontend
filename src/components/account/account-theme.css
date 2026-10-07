@@ -23,6 +23,8 @@
   --account-nav-active-text: #f97316;
   --account-input-bg: #ffffff;
   --account-input-border: #e5e5e5;
+  --account-shimmer-base: #ebe7e0;
+  --account-shimmer-highlight: #f7f4ef;
   --account-help-bg: #fffbf5;
   --account-badge-bg: #f97316;
   --account-badge-text: #ffffff;
@@ -61,6 +63,8 @@
   --account-nav-active-text: #f97316;
   --account-input-bg: #141414;
   --account-input-border: #262626;
+  --account-shimmer-base: #1f1f1f;
+  --account-shimmer-highlight: #2a2a2a;
   --account-help-bg: #141414;
   --account-badge-bg: #f97316;
   --account-badge-text: #ffffff;
@@ -87,6 +91,18 @@
 .account-shell {
   background: var(--account-bg);
   color: var(--account-text);
+}
+
+/* Account shimmer — overrides global marketing dark --bg-surface tokens */
+.account-shell .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--account-shimmer-base) 25%,
+    var(--account-shimmer-highlight) 50%,
+    var(--account-shimmer-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
 
 /* View Transition circular reveal helpers */

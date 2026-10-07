@@ -256,20 +256,6 @@ export function AuthPasswordScreen({ mode }: AuthPasswordScreenProps) {
 
               {!isForgot ? (
                 <>
-                  <Input
-                    variant="light"
-                    label="Reset Token"
-                    type="text"
-                    placeholder="Paste the token from your email"
-                    value={token}
-                    onChange={(e) => {
-                      setToken(e.target.value);
-                      setTokenError(undefined);
-                    }}
-                    autoComplete="one-time-code"
-                    aria-required
-                    error={tokenError}
-                  />
 
                   <Input
                     variant="light"

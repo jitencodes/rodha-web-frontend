@@ -64,7 +64,7 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
     >
       <div className="flex h-[var(--account-header-height)] shrink-0 items-center px-5">
         <Link
-          href="/account/dashboard"
+          href="/"
           onClick={onClose}
           className="inline-flex items-center"
         >

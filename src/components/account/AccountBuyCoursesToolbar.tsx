@@ -148,7 +148,7 @@ export function AccountBuyCoursesToolbar({
           ]}
           aria-label="Category"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {typeOptions.length > 0 ? (
@@ -163,7 +163,7 @@ export function AccountBuyCoursesToolbar({
           ]}
           aria-label="Type"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {subCategoryOptions.length > 0 ? (
@@ -176,7 +176,7 @@ export function AccountBuyCoursesToolbar({
           ]}
           aria-label="Sub-category"
           className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       <DropdownSelect
@@ -188,7 +188,7 @@ export function AccountBuyCoursesToolbar({
         }))}
         aria-label="Sort by"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-        variant="light"
+        variant="account"
       />
     </>
   );
@@ -221,7 +221,7 @@ export function AccountBuyCoursesToolbar({
               onClear={() => handleSearch("")}
               placeholder="Search packages..."
               aria-label="Search packages to buy"
-              variant="light"
+              variant="account"
             />
           </div>
         </div>
@@ -233,7 +233,7 @@ export function AccountBuyCoursesToolbar({
             onClear={() => handleSearch("")}
             placeholder="Search packages..."
             aria-label="Search packages to buy"
-            variant="light"
+            variant="account"
           />
         </div>
       </div>

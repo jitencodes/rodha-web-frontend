@@ -107,7 +107,7 @@ export function UpdateStateDialog({
           error={error}
           disabled={pending}
           required
-          variant="light"
+          variant="account"
           label="State"
         />
         <span id={formId} className="sr-only">

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-07 (Live content + Quick Actions + account UX)
+**Last updated:** 2026-10-07 (Quick Content filters/shimmer + UX polish)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Quick Content filters/shimmer + UX polish (2026-10-07):** `/account/content` course + package filters from filter-options; shimmer skeletons on content + course-detail listing loads; DropdownSelect menu `z-[110]` above ConfirmDialog; counselling modal auto-closes 2s after success; Continue Watching CTA label `View`.
 - **Live content + Quick Actions + account UX (2026-10-07):** Background `POST enrollments/refresh` via BFF + `useEnrollmentRefresh` (4 min). Orders product image fallback + Payment column removed. Continue Watching cards show Time Spent / Valid Till / Language (no thumbnail time / ⋮ menu). Category hero Enrol for Free → login → `/courses?categoryId=`. FAQ pagination scrolls to `#faq-list`. Google login overlay hit-target fixed. Continue/Buy Reset Filters clears search+filters. `todayContents` Live Classes on dashboard + continue tab; Quick Action tiles → `/account/content` (mandatory `type`, server pagination, no infinite scroll). Course detail: detail/progress/`productContents` independent of Quick Actions listing (`type` default `videos`, includes `assignments`). Header search → Quick Content with clear button.
 - **Vercel standalone fix + client course detail (2026-10-07):** Disable `output: "standalone"` when `VERCEL` is set (fixes ENOENT `next-server.js.nft.json`). Account course detail loads via client + BFF (`/api/account/courses/:id` + chapters) for easier API debugging; SSO still via `/api/graphy/sso`.
 - **Account Graphy course learning UX (2026-10-07):** `/account/courses/[courseId]` is a Rodha-native single-page hub — progress, content-type tabs (Videos/Live/PDFs/Quizzes; chapters as filters only), search + Postman filters (completion/live/result/chapter), paginated content cards opening Graphy via `takeUrl` + SSO. Continue Watching and Buy Courses get account-styled search/filters with mobile bottom sheets. Student courses types/mapper/service extended for chapters, filter-options, and enrollment progress.

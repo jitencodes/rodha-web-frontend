@@ -3,6 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { AccountContentListingSkeleton } from "@/components/account/AccountContentListingSkeleton";
 import { AccountContentTypeTabs } from "@/components/account/AccountContentTypeTabs";
 import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
@@ -10,6 +11,7 @@ import { AccountQuickContentToolbar } from "@/components/account/AccountQuickCon
 import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
 import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
 import { AccountCourseProgressCard } from "@/components/account/course-detail/AccountCourseProgressCard";
+import { Skeleton } from "@/components/ui/Skeleton";
 import {
   DEFAULT_CONTENT_TYPE,
   QUICK_CONTENT_PAGE_SIZE,
@@ -215,8 +217,14 @@ export function AccountCourseDetailClient() {
 
   if (detailLoading && !detail) {
     return (
-      <div className="mx-auto w-full max-w-5xl py-16 text-center text-body-sm text-[var(--account-text-muted)]">
-        Loading course…
+      <div className="mx-auto w-full max-w-5xl space-y-5" aria-busy="true">
+        <div className="space-y-3">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-8 w-3/4 max-w-xl" />
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <Skeleton className="h-28 w-full rounded-[var(--account-radius)]" />
+        <AccountContentListingSkeleton count={4} />
       </div>
     );
   }
@@ -299,16 +307,13 @@ export function AccountCourseDetailClient() {
         activeCompletionStatus={completionStatus || "all"}
         activeLiveClassStatus={liveClassStatus || "all"}
         activeResultStatus={resultStatus || "all"}
+        showCoursePackageFilters={false}
         preserveQuery={{ limit: String(QUICK_CONTENT_PAGE_SIZE) }}
       />
 
       {listLoading ? (
-        <p className="mb-3 text-[12px] text-[var(--account-text-muted)]">
-          Loading content…
-        </p>
-      ) : null}
-
-      {contentItems.length === 0 && !listLoading ? (
+        <AccountContentListingSkeleton count={4} />
+      ) : contentItems.length === 0 ? (
         <p className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-6 py-10 text-center text-body-sm text-[var(--account-text-muted)]">
           No content items for this filter.
         </p>
@@ -327,7 +332,7 @@ export function AccountCourseDetailClient() {
         </ul>
       )}
 
-      {contentPagination.totalPages > 1 ? (
+      {!listLoading && contentPagination.totalPages > 1 ? (
         <AccountPagination
           currentPage={contentPagination.page}
           totalPages={contentPagination.totalPages}

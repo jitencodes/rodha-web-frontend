@@ -1,10 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { HeroCounsellingForm } from "@/components/sections/home/HeroCounsellingForm";
 import { LeadCaptureForm } from "@/components/forms/LeadCaptureForm";
 import type { CategoryId } from "@/lib/types";
+
+const AUTO_CLOSE_MS = 2000;
 
 export interface CounsellingModalOptions {
   defaultExam?: string;
@@ -29,19 +31,41 @@ export function CounsellingModalProvider({
   const [isOpen, setIsOpen] = useState(false);
   const [defaultExam, setDefaultExam] = useState("");
   const [mode, setMode] = useState<"counselling" | "enquiry">("counselling");
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
 
   const openCounsellingModal = useCallback(
     (options?: CounsellingModalOptions) => {
+      clearCloseTimer();
       setDefaultExam(options?.defaultExam ?? "");
       setMode(options?.mode ?? "counselling");
       setIsOpen(true);
     },
-    []
+    [clearCloseTimer]
   );
 
   const closeCounsellingModal = useCallback(() => {
+    clearCloseTimer();
     setIsOpen(false);
-  }, []);
+  }, [clearCloseTimer]);
+
+  const scheduleAutoClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => {
+      setIsOpen(false);
+      closeTimerRef.current = null;
+    }, AUTO_CLOSE_MS);
+  }, [clearCloseTimer]);
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, [clearCloseTimer]);
 
   const value = useMemo(
     () => ({ isOpen, openCounsellingModal, closeCounsellingModal }),
@@ -68,6 +92,7 @@ export function CounsellingModalProvider({
             ctaLabel="Enrol Enquiry"
             defaultExam={(defaultExam as CategoryId) || ""}
             showExamYear
+            onSuccess={scheduleAutoClose}
           />
         ) : (
           <>
@@ -79,6 +104,7 @@ export function CounsellingModalProvider({
               variant="modal"
               showHeader={false}
               defaultExam={defaultExam}
+              onSuccess={scheduleAutoClose}
             />
           </>
         )}

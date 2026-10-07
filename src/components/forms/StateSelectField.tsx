@@ -11,8 +11,8 @@ type StateSelectFieldProps = {
   label?: string;
   placeholder?: string;
   disabled?: boolean;
-  /** Auth forms use light; account dialogs use light as well. */
-  variant?: "dark" | "light";
+  /** Auth forms use light; account shell uses `account` for theme tokens. */
+  variant?: "dark" | "light" | "account";
   className?: string;
   required?: boolean;
 };

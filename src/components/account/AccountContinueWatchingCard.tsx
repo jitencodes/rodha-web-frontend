@@ -110,7 +110,7 @@ export function AccountContinueWatchingCard({
             className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--account-accent)] px-3 py-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
           >
             <Play className="size-3 fill-current" strokeWidth={0} />
-            Continue
+            View
           </Link>
         </div>
       </div>

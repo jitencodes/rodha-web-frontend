@@ -23,6 +23,8 @@ interface HeroCounsellingFormProps {
   defaultExam?: string;
   variant?: "inline" | "modal";
   showHeader?: boolean;
+  /** Called after a successful submit (e.g. auto-close modal). */
+  onSuccess?: () => void;
 }
 
 interface CounsellingFieldErrors {
@@ -36,6 +38,7 @@ export function HeroCounsellingForm({
   defaultExam = "",
   variant = "inline",
   showHeader,
+  onSuccess,
 }: HeroCounsellingFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -91,6 +94,7 @@ export function HeroCounsellingForm({
     setPhone("");
     setExam(defaultExam);
     setFieldErrors({});
+    onSuccess?.();
   };
 
   const form = (

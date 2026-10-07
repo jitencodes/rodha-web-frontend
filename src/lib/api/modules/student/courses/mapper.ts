@@ -434,16 +434,27 @@ export function mapStudentCourseFilterOptions(
   packages: { value: string; label: string }[];
   categories: { value: string; label: string }[];
   subCategories: { value: string; label: string }[];
+  courses: { value: string; label: string }[];
 } {
   const mapList = (list: StudentCourseFilterOptionApi[] | undefined) =>
     (list ?? [])
       .map(mapFilterOption)
       .filter((o): o is { value: string; label: string } => Boolean(o));
 
+  const courses = (data?.courses ?? [])
+    .map((course) => {
+      const value = course.id != null ? String(course.id) : "";
+      const label = asString(course.title);
+      if (!value || !label) return null;
+      return { value, label };
+    })
+    .filter((o): o is { value: string; label: string } => Boolean(o));
+
   return {
     packages: mapList(data?.packages),
     categories: mapList(data?.categories),
     subCategories: mapList(data?.subCategories),
+    courses,
   };
 }
 

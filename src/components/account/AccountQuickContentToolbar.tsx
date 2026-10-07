@@ -14,6 +14,8 @@ import {
   RESULT_STATUS_OPTIONS,
 } from "@/lib/account/course-content-filters";
 
+type FilterOption = { value: string; label: string };
+
 type AccountQuickContentToolbarProps = {
   basePath: string;
   activeType: string;
@@ -21,7 +23,13 @@ type AccountQuickContentToolbarProps = {
   activeCompletionStatus: string;
   activeLiveClassStatus: string;
   activeResultStatus: string;
-  /** Extra query keys preserved on navigation (e.g. courseId, limit). */
+  activeCourseId?: string;
+  activePackageId?: string;
+  courseOptions?: FilterOption[];
+  packageOptions?: FilterOption[];
+  /** When false, hide course/package filters (e.g. course detail already scoped). */
+  showCoursePackageFilters?: boolean;
+  /** Extra query keys preserved on navigation (e.g. limit). */
   preserveQuery?: Record<string, string>;
 };
 
@@ -58,10 +66,15 @@ export function AccountQuickContentToolbar({
   activeCompletionStatus,
   activeLiveClassStatus,
   activeResultStatus,
+  activeCourseId = "all",
+  activePackageId = "all",
+  courseOptions = [],
+  packageOptions = [],
+  showCoursePackageFilters = true,
   preserveQuery = {},
 }: AccountQuickContentToolbarProps) {
   const router = useRouter();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [query, setQuery] = useState(initialSearch);
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
 
@@ -72,16 +85,31 @@ export function AccountQuickContentToolbar({
   const type = activeType || DEFAULT_CONTENT_TYPE;
   const showLiveStatus = type === "live-classes";
   const showResultStatus = type === "quizzes";
+  const showCourses =
+    showCoursePackageFilters && courseOptions.length > 0;
+  const showPackages =
+    showCoursePackageFilters && packageOptions.length > 0;
 
   function hrefFor(next: {
     search?: string;
     completionStatus?: string;
     liveClassStatus?: string;
     resultStatus?: string;
+    courseId?: string;
+    packageId?: string;
   } = {}): string {
     const params = new URLSearchParams();
     Object.entries(preserveQuery).forEach(([key, value]) => {
-      if (value) params.set(key, value);
+      if (
+        !value ||
+        key === "courseId" ||
+        key === "packageId" ||
+        key === "search" ||
+        key === "page"
+      ) {
+        return;
+      }
+      params.set(key, value);
     });
     params.set("type", type);
     params.set("page", "1");
@@ -99,6 +127,10 @@ export function AccountQuickContentToolbar({
       next.resultStatus !== undefined
         ? next.resultStatus
         : activeResultStatus;
+    const courseId =
+      next.courseId !== undefined ? next.courseId : activeCourseId;
+    const packageId =
+      next.packageId !== undefined ? next.packageId : activePackageId;
 
     const trimmed = search.trim();
     if (trimmed) params.set("search", trimmed);
@@ -110,6 +142,12 @@ export function AccountQuickContentToolbar({
     }
     if (showResultStatus && resultStatus && resultStatus !== "all") {
       params.set("resultStatus", resultStatus);
+    }
+    if (showCourses && courseId && courseId !== "all") {
+      params.set("courseId", courseId);
+    }
+    if (showPackages && packageId && packageId !== "all") {
+      params.set("packageId", packageId);
     }
 
     return `${basePath}?${params.toString()}`;
@@ -133,6 +171,8 @@ export function AccountQuickContentToolbar({
       completionStatus: "all",
       liveClassStatus: "all",
       resultStatus: "all",
+      courseId: "all",
+      packageId: "all",
     });
   }
 
@@ -140,11 +180,39 @@ export function AccountQuickContentToolbar({
     activeCompletionStatus && activeCompletionStatus !== "all",
     showLiveStatus && activeLiveClassStatus && activeLiveClassStatus !== "all",
     showResultStatus && activeResultStatus && activeResultStatus !== "all",
+    showCourses && activeCourseId && activeCourseId !== "all",
+    showPackages && activePackageId && activePackageId !== "all",
   ].filter(Boolean).length;
   const hasActiveFilters = activeFilterCount > 0 || Boolean(query.trim());
 
   const filterDropdowns = (
     <>
+      {showCourses ? (
+        <DropdownSelect
+          value={activeCourseId || "all"}
+          onChange={(value) => navigate({ courseId: value })}
+          options={[
+            { value: "all", label: "All Courses" },
+            ...courseOptions,
+          ]}
+          aria-label="Course"
+          className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
+          variant="account"
+        />
+      ) : null}
+      {showPackages ? (
+        <DropdownSelect
+          value={activePackageId || "all"}
+          onChange={(value) => navigate({ packageId: value })}
+          options={[
+            { value: "all", label: "All Packages" },
+            ...packageOptions,
+          ]}
+          aria-label="Package"
+          className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
+          variant="account"
+        />
+      ) : null}
       <DropdownSelect
         value={activeCompletionStatus || "all"}
         onChange={(value) => navigate({ completionStatus: value })}
@@ -154,7 +222,7 @@ export function AccountQuickContentToolbar({
         }))}
         aria-label="Completion status"
         className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-        variant="light"
+        variant="account"
       />
       {showLiveStatus ? (
         <DropdownSelect
@@ -166,7 +234,7 @@ export function AccountQuickContentToolbar({
           }))}
           aria-label="Live class status"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {showResultStatus ? (
@@ -179,14 +247,17 @@ export function AccountQuickContentToolbar({
           }))}
           aria-label="Result status"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
     </>
   );
 
   return (
-    <div className="mb-5 flex flex-col gap-3">
+    <div
+      className="mb-5 flex flex-col gap-3"
+      data-pending={isPending ? "true" : undefined}
+    >
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="relative hidden min-w-0 flex-1 flex-wrap items-center gap-3 md:flex">
           {filterDropdowns}
@@ -213,7 +284,7 @@ export function AccountQuickContentToolbar({
               onClear={() => handleSearch("")}
               placeholder="Search content..."
               aria-label="Search content"
-              variant="light"
+              variant="account"
             />
           </div>
         </div>
@@ -225,7 +296,7 @@ export function AccountQuickContentToolbar({
             onClear={() => handleSearch("")}
             placeholder="Search content..."
             aria-label="Search content"
-            variant="light"
+            variant="account"
           />
         </div>
       </div>

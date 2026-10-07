@@ -172,7 +172,7 @@ export function AccountCourseContentToolbar({
           ]}
           aria-label="Chapter"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       <DropdownSelect
@@ -184,7 +184,7 @@ export function AccountCourseContentToolbar({
         }))}
         aria-label="Completion status"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-        variant="light"
+        variant="account"
       />
       {showLiveStatus ? (
         <DropdownSelect
@@ -196,7 +196,7 @@ export function AccountCourseContentToolbar({
           }))}
           aria-label="Live class status"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {showResultStatus ? (
@@ -209,7 +209,7 @@ export function AccountCourseContentToolbar({
           }))}
           aria-label="Quiz result status"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
     </>
@@ -234,7 +234,7 @@ export function AccountCourseContentToolbar({
               onClear={() => handleSearch("")}
               placeholder="Search content..."
               aria-label="Search course content"
-              variant="light"
+              variant="account"
             />
           </div>
         </div>
@@ -246,7 +246,7 @@ export function AccountCourseContentToolbar({
             onClear={() => handleSearch("")}
             placeholder="Search content..."
             aria-label="Search course content"
-            variant="light"
+            variant="account"
           />
         </div>
       </div>

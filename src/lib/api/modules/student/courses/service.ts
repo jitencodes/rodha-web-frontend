@@ -119,6 +119,7 @@ export async function getStudentCourseFilterOptions(
   packages: { value: string; label: string }[];
   categories: { value: string; label: string }[];
   subCategories: { value: string; label: string }[];
+  courses: { value: string; label: string }[];
 }> {
   try {
     const data = await apiGet<StudentCourseFilterOptionsDataApi>(
@@ -127,7 +128,12 @@ export async function getStudentCourseFilterOptions(
     );
     return mapStudentCourseFilterOptions(data);
   } catch {
-    return { packages: [], categories: [], subCategories: [] };
+    return {
+      packages: [],
+      categories: [],
+      subCategories: [],
+      courses: [],
+    };
   }
 }
 

@@ -163,7 +163,7 @@ export function AccountContinueCoursesToolbar({
             setFromDate(e.target.value);
             navigate({ validTillFrom: e.target.value });
           }}
-          className="h-9 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-3 text-[13px] text-[var(--account-text)]"
+          className="h-9 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 text-[13px] text-[var(--account-text)] [color-scheme:inherit]"
         />
       </label>
       <label className="flex min-w-0 flex-1 flex-col gap-1 text-[12px] font-medium text-[var(--account-text-muted)] md:flex-none">
@@ -175,7 +175,7 @@ export function AccountContinueCoursesToolbar({
             setToDate(e.target.value);
             navigate({ validTillTo: e.target.value });
           }}
-          className="h-9 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-3 text-[13px] text-[var(--account-text)]"
+          className="h-9 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 text-[13px] text-[var(--account-text)] [color-scheme:inherit]"
         />
       </label>
     </div>
@@ -193,7 +193,7 @@ export function AccountContinueCoursesToolbar({
           ]}
           aria-label="Category"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {subCategoryOptions.length > 0 ? (
@@ -206,7 +206,7 @@ export function AccountContinueCoursesToolbar({
           ]}
           aria-label="Sub-category"
           className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       {packageOptions.length > 0 ? (
@@ -219,7 +219,7 @@ export function AccountContinueCoursesToolbar({
           ]}
           aria-label="Package"
           className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
+          variant="account"
         />
       ) : null}
       <DropdownSelect
@@ -231,7 +231,7 @@ export function AccountContinueCoursesToolbar({
         }))}
         aria-label="Sort by"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-        variant="light"
+        variant="account"
       />
       {dateInputs}
     </>
@@ -265,7 +265,7 @@ export function AccountContinueCoursesToolbar({
               onClear={() => handleSearch("")}
               placeholder="Search courses..."
               aria-label="Search continue watching"
-              variant="light"
+              variant="account"
             />
           </div>
         </div>
@@ -277,7 +277,7 @@ export function AccountContinueCoursesToolbar({
             onClear={() => handleSearch("")}
             placeholder="Search courses..."
             aria-label="Search continue watching"
-            variant="light"
+            variant="account"
           />
         </div>
       </div>

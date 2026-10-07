@@ -7,13 +7,15 @@ import { cn } from "@/lib/utils";
 interface SearchInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: string;
-  variant?: "dark" | "light";
+  /** `account` follows account light/dark theme tokens. */
+  variant?: "dark" | "light" | "account";
   onClear?: () => void;
 }
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   ({ className, value, variant = "dark", onClear, ...props }, ref) => {
     const isLight = variant === "light";
+    const isAccount = variant === "account";
     const showClear = Boolean(onClear && value);
 
     return (
@@ -25,7 +27,11 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             aria-label="Clear search"
             className={cn(
               "absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4",
-              isLight ? "text-neutral-400 hover:text-neutral-700" : "text-text-dimmed hover:text-text-secondary"
+              isAccount
+                ? "text-[var(--account-text-muted)] hover:text-[var(--account-text)]"
+                : isLight
+                  ? "text-neutral-400 hover:text-neutral-700"
+                  : "text-text-dimmed hover:text-text-secondary"
             )}
           >
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
@@ -36,7 +42,11 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         <svg
           className={cn(
             "absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none",
-            isLight ? "text-neutral-400" : "text-text-dimmed"
+            isAccount
+              ? "text-[var(--account-text-muted)]"
+              : isLight
+                ? "text-neutral-400"
+                : "text-text-dimmed"
           )}
           fill="none"
           viewBox="0 0 24 24"
@@ -59,7 +69,17 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             "input-base pl-11 pr-10",
             "[&::-webkit-search-cancel-button]:appearance-none",
             "[&::-webkit-search-decoration]:appearance-none",
-            "caret-neutral-900",
+            isAccount && [
+              "!bg-[var(--account-input-bg)]",
+              "!text-[var(--account-text)]",
+              "!caret-[var(--account-text)]",
+              "!border-[var(--account-input-border)]",
+              "placeholder:!text-[var(--account-text-muted)]",
+              "hover:!text-[var(--account-text)]",
+              "focus:!text-[var(--account-text)]",
+              "hover:!border-[var(--account-accent)]/50",
+              "focus:!border-[var(--account-accent)]",
+            ],
             isLight && [
               "!bg-white",
               "!text-neutral-900",
@@ -71,6 +91,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
               "hover:!border-orange-300",
               "focus:!border-orange-300",
             ],
+            !isAccount && !isLight && "caret-neutral-900",
             className
           )}
           {...props}

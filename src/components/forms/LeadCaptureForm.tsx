@@ -31,6 +31,8 @@ interface LeadCaptureFormProps {
   showExamYear?: boolean;
   /** Hide the default heading (e.g. when Modal already shows a title) */
   hideTitle?: boolean;
+  /** Called after a successful submit (e.g. auto-close modal). */
+  onSuccess?: () => void;
 }
 
 interface LeadFieldErrors {
@@ -58,6 +60,7 @@ export function LeadCaptureForm({
   ctaLabel = "Book Free Session",
   showExamYear = false,
   hideTitle = false,
+  onSuccess,
 }: LeadCaptureFormProps) {
   const [formData, setFormData] = useState<LeadFormData>({
     name: "",
@@ -119,6 +122,7 @@ export function LeadCaptureForm({
     setFormData({ name: "", phone: "", email: "", exam: defaultExam });
     setExamYear("");
     setFieldErrors({});
+    onSuccess?.();
   };
 
   const titleClass = isLight ? "text-neutral-900" : "text-text-primary";

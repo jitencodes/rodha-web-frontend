@@ -133,6 +133,7 @@ export default async function AccountCoursesPage({
       packages: [] as { value: string; label: string }[],
       categories: [] as { value: string; label: string }[],
       subCategories: [] as { value: string; label: string }[],
+      courses: [] as { value: string; label: string }[],
     };
     let buyCategoryOptions: { value: string; label: string }[] = [];
     let buyTypeOptions: { value: string; label: string }[] = [];
