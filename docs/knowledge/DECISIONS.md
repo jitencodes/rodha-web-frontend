@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-07 — Google GIS production: near-invisible overlay + build-time env
+- **Decision:** Keep the styled “Continue with Google” facade with a GIS `renderButton` overlay, but use `opacity-[0.02]` (not `opacity-0`), `onReady` + already-loaded GIS detection, debounced resize re-render, `ux_mode: "popup"`, FedCM button flag, and `error_callback` with Authorized JavaScript origins guidance. Explicitly pass `NEXT_PUBLIC_GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_API_BASE_URL` through `next.config` `env` so Vercel/GitLab bake them at build time.
+- **Rationale:** Localhost worked while Vercel failed for users even with the client id set — fully transparent overlays drop hit-testing in some browsers, Script `onLoad` can miss cached GIS, and `NEXT_PUBLIC_*` only updates after redeploy. Origins must include the Vercel host and `rodha.co.in` / `www`.
+- **Alternatives considered:** Visible native Google button only; auth-code + client secret (rejected — browser must not hold secret).
+- **Consequences:** After env or Console origin changes, redeploy. Production API base for release: `https://api.rodha.co.in/rodha/`.
+
 ### 2026-10-07 — todayContents / productContents / Quick Actions separation
 - **Decision:** Keep three independent data flows: (1) `todayContents` from dashboard + assigned-courses APIs → Live Classes sections on dashboard and Continue Watching; (2) `productContents` from course detail API → Live/Recent preview on `/account/courses/[courseId]` only; (3) `GET student/courses/quick-actions` with mandatory `type` (never `all`; default `videos`; includes `assignments`) → `/account/content` and the course-detail content listing. Changing Quick Actions filters/page must not refetch course meta/`productContents`.
 - **Rationale:** Match Oct-7 Graphy API shapes and avoid conflating sync-preview rows with paginated content search.

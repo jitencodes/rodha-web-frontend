@@ -20,6 +20,10 @@ declare global {
           initialize: (config: {
             client_id: string;
             callback: (response: { credential?: string }) => void;
+            error_callback?: (error: { type?: string; message?: string }) => void;
+            ux_mode?: "popup" | "redirect";
+            use_fedcm_for_button?: boolean;
+            itp_support?: boolean;
           }) => void;
           renderButton: (
             parent: HTMLElement,
@@ -29,12 +33,29 @@ declare global {
               size?: string;
               width?: number;
               text?: string;
+              shape?: string;
+              logo_alignment?: string;
             }
           ) => void;
         };
       };
     };
   }
+}
+
+function gisOriginHint(message: string): string {
+  const lower = message.toLowerCase();
+  if (
+    lower.includes("origin") ||
+    lower.includes("client_id") ||
+    lower.includes("unauthorized") ||
+    lower.includes("idpiframe")
+  ) {
+    return (
+      "Google blocked this site origin. In Google Cloud Console → Credentials → your OAuth Web client, add this exact origin under Authorized JavaScript origins (e.g. https://rodha-web-frontend.vercel.app and https://rodha.co.in), then redeploy."
+    );
+  }
+  return message;
 }
 
 export function GoogleContinueButton({
@@ -46,54 +67,82 @@ export function GoogleContinueButton({
   const overlayRef = useRef<HTMLDivElement>(null);
   const onCredentialRef = useRef(onCredential);
   const onErrorRef = useRef(onError);
+  const lastWidthRef = useRef(0);
   const [scriptReady, setScriptReady] = useState(false);
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim() ?? "";
 
   onCredentialRef.current = onCredential;
   onErrorRef.current = onError;
 
-  const renderButton = useCallback(() => {
-    const parent = overlayRef.current;
-    const container = containerRef.current;
-    if (!clientId || !parent || !container || !window.google?.accounts?.id) {
-      return;
+  const markScriptReady = useCallback(() => {
+    if (typeof window !== "undefined" && window.google?.accounts?.id) {
+      setScriptReady(true);
     }
+  }, []);
 
-    const width = Math.max(
-      Math.floor(container.getBoundingClientRect().width),
-      240
-    );
-    if (width < 40) return;
+  const renderButton = useCallback(
+    (force = false) => {
+      const parent = overlayRef.current;
+      const container = containerRef.current;
+      if (!clientId || !parent || !container || !window.google?.accounts?.id) {
+        return;
+      }
 
-    parent.innerHTML = "";
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: (response) => {
-        if (response.credential) {
-          onCredentialRef.current(response.credential);
-          return;
-        }
-        onErrorRef.current?.("Google sign-in did not return a credential.");
-      },
-    });
-    window.google.accounts.id.renderButton(parent, {
-      type: "standard",
-      theme: "outline",
-      size: "large",
-      width,
-      text: "continue_with",
-    });
-  }, [clientId]);
+      const width = Math.max(
+        Math.floor(container.getBoundingClientRect().width),
+        240
+      );
+      if (width < 40) return;
+      if (!force && Math.abs(width - lastWidthRef.current) < 8) return;
+      lastWidthRef.current = width;
+
+      parent.innerHTML = "";
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        ux_mode: "popup",
+        itp_support: true,
+        use_fedcm_for_button: true,
+        callback: (response) => {
+          if (response.credential) {
+            onCredentialRef.current(response.credential);
+            return;
+          }
+          onErrorRef.current?.("Google sign-in did not return a credential.");
+        },
+        error_callback: (error) => {
+          const raw =
+            (typeof error?.message === "string" && error.message.trim()) ||
+            (typeof error?.type === "string" && error.type.trim()) ||
+            "Google sign-in failed.";
+          onErrorRef.current?.(gisOriginHint(raw));
+        },
+      });
+      window.google.accounts.id.renderButton(parent, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        width,
+        text: "continue_with",
+        shape: "rectangular",
+        logo_alignment: "left",
+      });
+    },
+    [clientId]
+  );
+
+  useEffect(() => {
+    markScriptReady();
+  }, [markScriptReady]);
 
   useEffect(() => {
     if (!scriptReady || !clientId) return;
-    renderButton();
+    renderButton(true);
 
     const container = containerRef.current;
     if (!container || typeof ResizeObserver === "undefined") return;
 
     const ro = new ResizeObserver(() => {
-      renderButton();
+      renderButton(false);
     });
     ro.observe(container);
     return () => ro.disconnect();
@@ -104,7 +153,8 @@ export function GoogleContinueButton({
       <Script
         src={GIS_SRC}
         strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
+        onLoad={markScriptReady}
+        onReady={markScriptReady}
       />
       <div ref={containerRef} className="relative w-full">
         <span
@@ -120,7 +170,9 @@ export function GoogleContinueButton({
           <div
             ref={overlayRef}
             className={cn(
-              "absolute inset-0 z-10 flex items-center justify-center overflow-visible opacity-0",
+              // Near-invisible (not opacity-0): some browsers skip hit-testing on
+              // fully transparent GIS iframes, which breaks production clicks.
+              "absolute inset-0 z-10 flex items-center justify-center overflow-hidden opacity-[0.02]",
               "[&_iframe]:!h-full [&_iframe]:!max-h-none [&_iframe]:!w-full",
               "[&>div]:!h-full [&>div]:!w-full",
               disabled ? "pointer-events-none" : "pointer-events-auto"
@@ -135,7 +187,7 @@ export function GoogleContinueButton({
             aria-label="Google login is not configured"
             onClick={() =>
               onError?.(
-                "Google login is not configured. Set NEXT_PUBLIC_GOOGLE_CLIENT_ID."
+                "Google login is not configured. Set NEXT_PUBLIC_GOOGLE_CLIENT_ID and redeploy."
               )
             }
           />

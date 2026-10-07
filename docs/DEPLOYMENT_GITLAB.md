@@ -63,7 +63,8 @@ Create **two scopes** (`development` and `production`) for each app key unless n
 | `NEXT_PUBLIC_BASE_URL` | prod: yes | no | Site origin, e.g. `https://dev.rodha.co.in` / `https://rodha.co.in` |
 | `NEXT_PUBLIC_API_BASE_URL` | prod: yes | no | API base with trailing `/` |
 | `NEXT_PUBLIC_API_SOURCE` | no | no | Usually `website` |
-| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | no | no | OAuth Web client (origins must match each env URL) |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | no | no | OAuth Web client. Google Console **Authorized JavaScript origins** must include each site origin (`http://localhost:3000`, Vercel URL, `https://rodha.co.in`, `https://www.rodha.co.in`). Redeploy after changing the env var. |
+| `NEXT_PUBLIC_API_BASE_URL` (prod) | prod: yes | no | Production value: `https://api.rodha.co.in/rodha/` (trailing slash) |
 
 ### Recommended / feature flags
 

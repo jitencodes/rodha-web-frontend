@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : "standalone",
   env: {
     NEXT_PUBLIC_BUILD_TIME: buildTime,
+    // Force-inline at build time (Vercel/GitLab). Adding the var in the dashboard
+    // without a redeploy leaves an empty client bundle — rebuild after changes.
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID:
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
   },
   images: {
     remotePatterns: [
