@@ -14,6 +14,18 @@ Format:
 
 ---
 
+### 2026-10-07 — Vercel build: disable standalone on Vercel
+- **Decision:** `next.config` sets `output: process.env.VERCEL ? undefined : "standalone"`. Docker/GitLab images still get standalone; Vercel builds do not.
+- **Rationale:** Next 16.3 + Vercel’s injected adapter omits `.next/next-server.js.nft.json`, then `onBuildComplete` crashes with ENOENT when `output: "standalone"` is set (vercel/next.js#96646).
+- **Alternatives considered:** Pin Next to 16.2.x; wait for 16.4 fix.
+- **Consequences:** Local `npm run build` without `VERCEL` still produces `.next/standalone` for Docker.
+
+### 2026-10-07 — Account course detail client fetch
+- **Decision:** `/account/courses/[courseId]` renders a client island that loads detail/chapters via BFF (`/api/account/courses/:id`, `…/chapters`) and SSO via `/api/graphy/sso`. Thin RSC page only provides metadata + Suspense.
+- **Rationale:** Account page is not SEO-critical; client fetch makes Network-tab debugging of API query/response straightforward while keeping tokens server-side in the BFF.
+- **Alternatives considered:** Keep full RSC `withStudentAuth` fetch; call upstream API from the browser with exposed API key.
+- **Consequences:** Console `debug` logs request/response shapes; 401 still routes through `fetchAuthed` session expiry.
+
 ### 2026-10-07 — Account Graphy course learning hub
 - **Decision:** Authenticated learning stays on a single `/account/courses/[courseId]` page. Content types are Videos / Live Classes / PDFs / Quizzes (plus All); chapters are filters (`chapterId` / `chapter`) only. Content list uses `GET student/courses/:id` with Postman query params; resources open on Graphy via API `takeUrl` + existing SSO. Continue/Buy listing toolbars are account-styled (reuse BottomSheet/DropdownSelect pattern), not the public CatalogToolbar chrome.
 - **Rationale:** Match Graphy learning workflow without copying Graphy visuals or inventing filters; keep package vs assigned-course models separate.

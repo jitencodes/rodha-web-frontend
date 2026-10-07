@@ -95,7 +95,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Header chrome | Complete | Mobile search overlay, Ctrl+K, theme, notifications dot, Live Dashboard, profile/Logout |
 | Settings stub | Complete | `/account/settings` placeholder card |
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
-| Course detail (assigned) | Complete | `/account/courses/[courseId]` — progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
+| Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
 | Dashboard | Complete | Welcome, continue watching, recommended, progress ring, orders preview, quick links |
 | Orders | Complete | `/account/orders` table + mobile cards; static data; View action |

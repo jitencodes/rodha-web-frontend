@@ -205,6 +205,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountCourseContentTypeNav | `course-detail/AccountCourseContentTypeNav.tsx` (drag-scroll content-type tiles) |
 | AccountCourseContentToolbar | `course-detail/AccountCourseContentToolbar.tsx` |
 | AccountCourseContentCard | `course-detail/AccountCourseContentCard.tsx` |
+| AccountCourseDetailClient | `course-detail/AccountCourseDetailClient.tsx` (client fetch via account course BFF + SSO) |
 | AccountRecommendedCard | `AccountRecommendedCard.tsx` (price/discount; optional `showCta` for dashboard vs cart) |
 | WelcomeBanner | `WelcomeBanner.tsx` (dashboard greeting + orange name + illustration) |
 | AccountSectionHeader | `AccountSectionHeader.tsx` (section title + View All link) |

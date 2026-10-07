@@ -6,8 +6,13 @@ const defaultHomePath =
   process.env.NEXT_PUBLIC_DEFAULT_HOME_PATH?.trim() || "/category/cat";
 
 const nextConfig: NextConfig = {
-  /** Required for the multi-stage Docker image (`.next/standalone`). */
-  output: "standalone",
+  /**
+   * Standalone output is required for the multi-stage Docker image.
+   * Disable on Vercel: Next 16.3 + Vercel’s injected adapter skips emitting
+   * `.next/next-server.js.nft.json`, which then crashes onBuildComplete when
+   * `output: "standalone"` is set (vercel/next.js#96646).
+   */
+  output: process.env.VERCEL ? undefined : "standalone",
   env: {
     NEXT_PUBLIC_BUILD_TIME: buildTime,
   },
