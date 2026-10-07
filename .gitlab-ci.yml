@@ -100,7 +100,7 @@ build:
     - set -o pipefail
     # .env in the build context bakes NEXT_PUBLIC_* into the image
     - node_run "node scripts/ci-write-env.mjs"
-    - test -n "$NEXT_PUBLIC_API_BASE_URL" || echo "WARNING: NEXT_PUBLIC_API_BASE_URL is not set — API calls will fail until it is added in GitLab"
+    - test -n "$NEXT_PUBLIC_API_BASE_URL" || echo "WARNING - NEXT_PUBLIC_API_BASE_URL is not set, API calls will fail until it is added in GitLab"
     - docker run --rm -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION
         amazon/aws-cli:2.17.0 ecr get-login-password
         | docker login --username AWS --password-stdin "$ECR_REGISTRY"
