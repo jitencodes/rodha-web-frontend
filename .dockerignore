@@ -35,3 +35,6 @@ scripts/sample-*
 Rodha*.docx
 *.png
 !public/**
+
+# CI npm cache
+.npm
