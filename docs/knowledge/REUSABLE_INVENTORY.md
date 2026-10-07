@@ -191,14 +191,20 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme + `AccountUserProvider` / `userAtom`) |
 | AccountSidebar | `AccountSidebar.tsx` (nav accordion, cart badge, Need Help) |
-| AccountHeader | `AccountHeader.tsx` (mobile search overlay, Ctrl+K, theme toggle, notifications, Live Dashboard, profile/Logout) |
+| AccountHeader | `AccountHeader.tsx` (search → `/account/content`, clear button, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
+| AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
+| AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |
+| AccountQuickActionTiles | `AccountQuickActionTiles.tsx` (Continue Watching → Quick Content types) |
+| AccountContentTypeTabs | `AccountContentTypeTabs.tsx` (Videos/Quizzes/PDFs/Live/Assignments; no All) |
+| AccountQuickContentToolbar | `AccountQuickContentToolbar.tsx` (search outside sheet; completion/live/result filters) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
 | AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
 | UpdateStateDialog | `UpdateStateDialog.tsx` (shared state picker → `PATCH /api/account/state`) |
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
-| AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (progress + Continue CTA; account theme tokens) |
-| AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + mobile BottomSheet) |
+| AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (Time Spent / Valid Till / Language in body; progress + Continue CTA) |
+| AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + Reset Filters + mobile BottomSheet) |
+| useEnrollmentRefresh | `src/hooks/useEnrollmentRefresh.ts` (silent enrollments refresh on mount + 4 min) |
 | AccountBuyCoursesToolbar | `AccountBuyCoursesToolbar.tsx` (Buy tab package search/filters + mobile BottomSheet) |
 | AccountCourseDetailHeader | `course-detail/AccountCourseDetailHeader.tsx` |
 | AccountCourseProgressCard | `course-detail/AccountCourseProgressCard.tsx` |
@@ -254,7 +260,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | account types | `account/types.ts` | Student dashboard models (user, continue watching, cart, orders, profile, widgets) |
 | account cart totals | `account/cart-totals.ts` | `computeCartTotals` / `formatCartMoney` for cart summary |
 | account pagination | `account/pagination.ts` | `paginateItems`, `parseCoursesTab` (continue/buy + aliases), page size 6 |
-| course content filters | `account/course-content-filters.ts` | Content-type tabs, completion/live/result/sort enums + labels for assigned course UI |
+| course content filters | `account/course-content-filters.ts` | Quick Action types (incl. assignments), `parseQuickActionType`, completion/live/result/sort enums + labels |
 | submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |

@@ -128,9 +128,11 @@ export function AccountContinueCoursesToolbar({
   }
 
   function clearFilters() {
+    setQuery("");
     setFromDate("");
     setToDate("");
     navigate({
+      q: "",
       categoryId: "all",
       subCategory1: "all",
       packageId: "all",
@@ -148,6 +150,7 @@ export function AccountContinueCoursesToolbar({
     Boolean(validTillFrom),
     Boolean(validTillTo),
   ].filter(Boolean).length;
+  const hasActiveFilters = activeFilterCount > 0 || Boolean(query.trim());
 
   const dateInputs = (
     <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center md:w-auto">
@@ -239,6 +242,15 @@ export function AccountContinueCoursesToolbar({
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="relative hidden min-w-0 flex-1 flex-wrap items-end gap-3 md:flex">
           {filterDropdowns}
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={() => clearFilters()}
+              className="h-9 shrink-0 rounded-[var(--account-radius)] border border-[var(--account-border)] px-3 text-[13px] font-medium text-[var(--account-text-secondary)] transition-colors hover:border-[var(--account-accent)] hover:text-[var(--account-accent)]"
+            >
+              Reset Filters
+            </button>
+          ) : null}
         </div>
 
         <div className="flex min-w-0 items-center gap-3 md:hidden">
@@ -283,7 +295,7 @@ export function AccountContinueCoursesToolbar({
               onClick={() => clearFilters()}
               className="h-11 flex-1 rounded-[var(--account-radius)] border border-[var(--account-border)] text-body-sm font-medium text-[var(--account-text)]"
             >
-              Clear
+              Reset Filters
             </button>
             <button
               type="button"

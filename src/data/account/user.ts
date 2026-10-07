@@ -24,7 +24,7 @@ export const ACCOUNT_SUPPORT_CARD: AccountSupportCard = {
 };
 
 export const ACCOUNT_SEARCH_PLACEHOLDER =
-  "Search for courses, test series, faculty...";
+  "Search courses, packages, assignments...";
 
 export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
   {

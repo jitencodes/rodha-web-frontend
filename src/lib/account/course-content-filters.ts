@@ -1,17 +1,42 @@
 export const COURSE_CONTENT_TYPE_TABS = [
-  { id: "", label: "All", summaryKey: null },
   { id: "videos", label: "Videos", summaryKey: "video" as const },
+  { id: "quizzes", label: "Quizzes", summaryKey: "quiz" as const },
+  { id: "pdfs", label: "PDFs", summaryKey: "pdf" as const },
   {
     id: "live-classes",
     label: "Live Classes",
     summaryKey: "liveclass" as const,
   },
-  { id: "pdfs", label: "PDFs", summaryKey: "pdf" as const },
-  { id: "quizzes", label: "Quizzes", summaryKey: "quiz" as const },
+  { id: "assignments", label: "Assignments", summaryKey: null },
 ] as const;
 
 export type CourseContentTypeTabId =
   (typeof COURSE_CONTENT_TYPE_TABS)[number]["id"];
+
+export const DEFAULT_CONTENT_TYPE: CourseContentTypeTabId = "videos";
+
+export const QUICK_ACTION_TILES = [
+  { type: "videos" as const, label: "Videos" },
+  { type: "quizzes" as const, label: "Quizzes" },
+  { type: "pdfs" as const, label: "PDFs" },
+  { type: "live-classes" as const, label: "Live Classes" },
+  { type: "assignments" as const, label: "Assignments" },
+];
+
+const QUICK_ACTION_TYPE_SET = new Set<string>(
+  QUICK_ACTION_TILES.map((tile) => tile.type)
+);
+
+/** Never returns `all`. Defaults to `videos`. */
+export function parseQuickActionType(
+  value: string | null | undefined
+): CourseContentTypeTabId {
+  const trimmed = value?.trim() ?? "";
+  if (QUICK_ACTION_TYPE_SET.has(trimmed)) {
+    return trimmed as CourseContentTypeTabId;
+  }
+  return DEFAULT_CONTENT_TYPE;
+}
 
 export const COMPLETION_STATUS_OPTIONS = [
   { value: "all", label: "All" },
@@ -40,6 +65,7 @@ export const CONTINUE_SORT_OPTIONS = [
 ] as const;
 
 export const COURSE_CONTENT_PAGE_SIZE = 12;
+export const QUICK_CONTENT_PAGE_SIZE = 10;
 
 export function contentTypeLabel(type: string): string {
   switch (type.toLowerCase()) {
@@ -51,6 +77,8 @@ export function contentTypeLabel(type: string): string {
       return "PDF";
     case "liveclass":
       return "Live Class";
+    case "assignment":
+      return "Assignment";
     default:
       return type;
   }

@@ -416,11 +416,13 @@ export function AuthScreen({ mode }: AuthScreenProps) {
             <span className="h-px flex-1 bg-neutral-200" />
           </div>
 
-          <GoogleContinueButton
-            disabled={loading}
-            onCredential={handleGoogle}
-            onError={setFormError}
-          />
+          <div className="relative z-10 overflow-visible">
+            <GoogleContinueButton
+              disabled={loading}
+              onCredential={handleGoogle}
+              onError={setFormError}
+            />
+          </div>
 
           <p className="mt-5 text-center text-caption text-neutral-500">
             By continuing, you agree to our{" "}

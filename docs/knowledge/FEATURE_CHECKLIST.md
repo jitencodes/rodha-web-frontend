@@ -97,8 +97,9 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
 | Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
-| Dashboard | Complete | Welcome, continue watching, recommended, progress ring, orders preview, quick links |
-| Orders | Complete | `/account/orders` table + mobile cards; static data; View action |
+| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended, progress ring, orders preview, quick links |
+| Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |
+| Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
 | Profile | Complete | `/account/profile` avatar, edit name + change password (client-only) |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |

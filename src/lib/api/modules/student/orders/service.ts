@@ -5,6 +5,7 @@ import type {
   AccountOrderStatus,
   AccountPaymentStatus,
 } from "@/lib/account/types";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 
 interface OrderItemApi {
   title?: string;
@@ -107,7 +108,7 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
     thumbnail:
       first?.package?.bannerImageUrl ||
       first?.course?.bannerImageUrl ||
-      undefined,
+      COURSE_IMAGE_FALLBACK,
     href: order.invoices?.[0]?.pdfUrl || undefined,
   };
 }

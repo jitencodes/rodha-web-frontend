@@ -40,8 +40,33 @@ export interface StudentEnrollmentListItemApi {
   course?: StudentAssignedCourseApi | null;
 }
 
+/** Shared shape for todayContents (dashboard / assigned courses) and productContents (course detail). */
+export interface StudentLiveContentApi {
+  id?: number | string;
+  source?: string;
+  graphyItemId?: string;
+  title?: string;
+  type?: string;
+  contentType?: string;
+  startTime?: string | null;
+  endTime?: string | null;
+  graphyCreatedAt?: string | null;
+  graphyModifiedAt?: string | null;
+  liveClassStatus?: string | null;
+  takeUrl?: string | null;
+  ssoLandingPath?: string | null;
+  course?: {
+    id?: number | string;
+    slug?: string;
+    graphyProductId?: string;
+    title?: string;
+  } | null;
+  package?: unknown;
+}
+
 export interface StudentCoursesListDataApi {
   items?: StudentEnrollmentListItemApi[];
+  todayContents?: StudentLiveContentApi[] | null;
   pagination?: {
     page?: number;
     limit?: number;
@@ -118,6 +143,7 @@ export interface StudentCourseDetailDataApi {
     };
     chapters?: StudentCourseChapterApi[];
     items?: StudentCourseContentItemApi[];
+    productContents?: StudentLiveContentApi[] | null;
   };
   items?: StudentCourseContentItemApi[];
   type?: string;
@@ -174,12 +200,27 @@ export interface StudentCourseChapterOptionsDataApi {
   >;
 }
 
-/** Postman-supported content type query values */
+/** Quick Actions / content-type query values (requirement + Postman). Never use `all`. */
 export type StudentCourseContentTypeQuery =
   | "videos"
   | "quizzes"
   | "pdfs"
-  | "live-classes";
+  | "live-classes"
+  | "assignments";
+
+export interface QuickActionsQuery {
+  type: StudentCourseContentTypeQuery;
+  search?: string;
+  page?: number;
+  limit?: number;
+  courseId?: string | number;
+  courseIds?: string;
+  packageId?: string | number;
+  packageIds?: string;
+  completionStatus?: string;
+  liveClassStatus?: string;
+  resultStatus?: string;
+}
 
 /** Postman-supported completionStatus values */
 export type StudentCompletionStatusQuery =

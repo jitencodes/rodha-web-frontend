@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CategoryLandingPage } from "@/components/sections/CategoryLandingPage";
 import type { CategoryCourseCard } from "@/components/sections/CategoryCoursesSlider";
 import { getCategoryPageDetail } from "@/lib/api/modules/categories/service";
+import { getSessionUser } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
 interface CategoryPageProps {
@@ -41,6 +42,7 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { category_slug } = await params;
   const { type } = await searchParams;
+  const sessionUser = await getSessionUser();
 
   const detail = await getCategoryPageDetail(category_slug);
 
@@ -78,6 +80,7 @@ export default async function CategoryPage({
           ? `/courses?categoryId=${category.cmsCategoryId}`
           : "/courses"
       }
+      isLoggedIn={Boolean(sessionUser)}
     />
   );
 }

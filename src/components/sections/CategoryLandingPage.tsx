@@ -38,6 +38,7 @@ interface CategoryLandingPageProps {
   activeCourseType?: string;
   /** Courses listing link preserving CMS categoryId */
   viewAllCoursesHref?: string;
+  isLoggedIn?: boolean;
 }
 
 /** Second results row only when both marquees can fill enough cards to scroll. */
@@ -65,6 +66,7 @@ export function CategoryLandingPage({
   courseTypeOptions = [],
   activeCourseType = "all",
   viewAllCoursesHref,
+  isLoggedIn = false,
 }: CategoryLandingPageProps) {
   const facultyMembers = category.facultyMembers ?? [];
   const courses =
@@ -129,6 +131,8 @@ export function CategoryLandingPage({
           subtitle={category.hero.subtitle}
           quickStats={category.quickStats}
           primaryCta={category.hero.primaryCta ?? null}
+          enrollCoursesHref={viewAllCoursesHref}
+          isLoggedIn={isLoggedIn}
           videoId={category.hero.videoId}
           imageUrl={category.hero.imageUrl}
         />

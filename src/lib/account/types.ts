@@ -38,8 +38,12 @@ export interface ContinueWatchingItem {
   /** Category chip, e.g. "MBA" */
   tag: string;
   thumbnail: string;
-  /** Remaining / current lecture duration overlay, e.g. "32:15" */
-  durationLabel: string;
+  /** Time spent label for card body (from totalTime), e.g. "32:15" */
+  timeSpentLabel?: string;
+  /** Valid till display date when available */
+  validTillLabel?: string;
+  /** Course language when available */
+  language?: string;
   progressCurrent: number;
   progressTotal: number;
   /** Display string, e.g. "12 of 45 lectures" */

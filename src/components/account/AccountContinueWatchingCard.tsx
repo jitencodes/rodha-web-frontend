@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MoreVertical, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ContinueWatchingItem } from "@/lib/account/types";
 
@@ -21,6 +21,16 @@ export function AccountContinueWatchingCard({
           Math.round((item.progressCurrent / item.progressTotal) * 100)
         )
       : 0;
+
+  const metaItems = [
+    item.timeSpentLabel
+      ? { label: "Time Spent", value: item.timeSpentLabel }
+      : null,
+    item.validTillLabel
+      ? { label: "Valid Till", value: item.validTillLabel }
+      : null,
+    item.language ? { label: "Language", value: item.language } : null,
+  ].filter(Boolean) as { label: string; value: string }[];
 
   return (
     <article
@@ -47,26 +57,12 @@ export function AccountContinueWatchingCard({
         >
           <Play className="size-4 fill-current" strokeWidth={0} />
         </span>
-        {item.durationLabel ? (
-          <span className="absolute bottom-3 right-3 rounded bg-black/70 px-1.5 py-0.5 text-[11px] font-medium text-white">
-            {item.durationLabel}
-          </span>
-        ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col gap-3 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--account-accent)]">
-            {item.tag}
-          </span>
-          <button
-            type="button"
-            className="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-[var(--account-text-muted)] hover:bg-[var(--account-nav-hover)] hover:text-[var(--account-text)]"
-            aria-label="More options"
-          >
-            <MoreVertical className="size-4" strokeWidth={1.75} />
-          </button>
-        </div>
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--account-accent)]">
+          {item.tag}
+        </span>
 
         <h3 className="line-clamp-2 font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
           <Link href={item.href} className="hover:text-[var(--account-accent)]">
@@ -74,10 +70,25 @@ export function AccountContinueWatchingCard({
           </Link>
         </h3>
 
+        {metaItems.length > 0 ? (
+          <dl className="space-y-1 text-[12px] text-[var(--account-text-muted)]">
+            {metaItems.map((meta) => (
+              <div key={meta.label} className="flex gap-1.5">
+                <dt className="shrink-0 font-medium text-[var(--account-text-secondary)]">
+                  {meta.label}:
+                </dt>
+                <dd className="min-w-0 truncate">{meta.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+
         <div className="mt-auto space-y-2">
-          <p className="text-[12px] text-[var(--account-text-muted)]">
-            {item.progressLabel}
-          </p>
+          {item.progressLabel ? (
+            <p className="text-[12px] text-[var(--account-text-muted)]">
+              {item.progressLabel}
+            </p>
+          ) : null}
           <div
             className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--account-border)]"
             role="progressbar"

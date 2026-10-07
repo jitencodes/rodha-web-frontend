@@ -42,6 +42,7 @@ export function GoogleContinueButton({
   onCredential,
   onError,
 }: GoogleContinueButtonProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const onCredentialRef = useRef(onCredential);
   const onErrorRef = useRef(onError);
@@ -53,7 +54,16 @@ export function GoogleContinueButton({
 
   const renderButton = useCallback(() => {
     const parent = overlayRef.current;
-    if (!clientId || !parent || !window.google?.accounts?.id) return;
+    const container = containerRef.current;
+    if (!clientId || !parent || !container || !window.google?.accounts?.id) {
+      return;
+    }
+
+    const width = Math.max(
+      Math.floor(container.getBoundingClientRect().width),
+      240
+    );
+    if (width < 40) return;
 
     parent.innerHTML = "";
     window.google.accounts.id.initialize({
@@ -70,15 +80,24 @@ export function GoogleContinueButton({
       type: "standard",
       theme: "outline",
       size: "large",
-      width: Math.max(parent.offsetWidth, 240),
+      width,
       text: "continue_with",
     });
   }, [clientId]);
 
   useEffect(() => {
-    if (!scriptReady) return;
+    if (!scriptReady || !clientId) return;
     renderButton();
-  }, [scriptReady, renderButton]);
+
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === "undefined") return;
+
+    const ro = new ResizeObserver(() => {
+      renderButton();
+    });
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, [scriptReady, clientId, renderButton]);
 
   return (
     <>
@@ -87,10 +106,10 @@ export function GoogleContinueButton({
         strategy="afterInteractive"
         onLoad={() => setScriptReady(true)}
       />
-      <div className="relative w-full">
+      <div ref={containerRef} className="relative w-full">
         <span
           className={cn(
-            "inline-flex h-11 w-full items-center justify-center gap-2 rounded-[8px] border border-neutral-200 bg-white text-body-sm font-semibold text-neutral-800",
+            "pointer-events-none inline-flex h-11 w-full items-center justify-center gap-2 rounded-[8px] border border-neutral-200 bg-white text-body-sm font-semibold text-neutral-800",
             (disabled || !clientId) && "opacity-50"
           )}
         >
@@ -101,8 +120,10 @@ export function GoogleContinueButton({
           <div
             ref={overlayRef}
             className={cn(
-              "absolute inset-0 overflow-hidden opacity-0",
-              disabled && "pointer-events-none"
+              "absolute inset-0 z-10 flex items-center justify-center overflow-visible opacity-0",
+              "[&_iframe]:!h-full [&_iframe]:!max-h-none [&_iframe]:!w-full",
+              "[&>div]:!h-full [&>div]:!w-full",
+              disabled ? "pointer-events-none" : "pointer-events-auto"
             )}
             aria-hidden
           />
@@ -110,7 +131,7 @@ export function GoogleContinueButton({
           <button
             type="button"
             disabled
-            className="absolute inset-0 cursor-not-allowed"
+            className="absolute inset-0 z-10 cursor-not-allowed"
             aria-label="Google login is not configured"
             onClick={() =>
               onError?.(

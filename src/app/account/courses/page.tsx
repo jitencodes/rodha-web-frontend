@@ -4,8 +4,11 @@ import Link from "next/link";
 import { AccountBuyCoursesToolbar } from "@/components/account/AccountBuyCoursesToolbar";
 import { AccountContinueCoursesToolbar } from "@/components/account/AccountContinueCoursesToolbar";
 import { AccountContinueWatchingCard } from "@/components/account/AccountContinueWatchingCard";
+import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
+import { AccountQuickActionTiles } from "@/components/account/AccountQuickActionTiles";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
+import type { AccountLiveContentItem } from "@/lib/api/modules/student/courses/mapper";
 import {
   parseCoursesTab,
   parsePageParam,
@@ -107,6 +110,7 @@ export default async function AccountCoursesPage({
   const validTillTo = params.validTillTo?.trim() || undefined;
 
   const {
+    todayContents,
     continueItems,
     continueTotalPages,
     continuePage,
@@ -117,6 +121,7 @@ export default async function AccountCoursesPage({
     buyTypeOptions,
     buySubCategoryOptions,
   } = await withStudentAuth(async (accessToken) => {
+    let todayContents: AccountLiveContentItem[] = [];
     let continueItems: Awaited<
       ReturnType<typeof getStudentCourses>
     >["items"] = [];
@@ -149,6 +154,7 @@ export default async function AccountCoursesPage({
           }),
           getStudentCourseFilterOptions(accessToken),
         ]);
+        todayContents = result.todayContents;
         continueItems = result.items;
         continueTotalPages = result.totalPages;
         continuePage = result.page;
@@ -157,6 +163,7 @@ export default async function AccountCoursesPage({
         if (isUnauthorizedError(error)) {
           redirectSessionExpired("/account/courses");
         }
+        todayContents = [];
         continueItems = [];
       }
     } else {
@@ -213,6 +220,7 @@ export default async function AccountCoursesPage({
     }
 
     return {
+      todayContents,
       continueItems,
       continueTotalPages,
       continuePage,
@@ -285,18 +293,22 @@ export default async function AccountCoursesPage({
       </div>
 
       {tab === "continue" ? (
-        <AccountContinueCoursesToolbar
-          initialSearch={query || ""}
-          activeCategoryId={categoryId || "all"}
-          categoryOptions={continueFilterOptions.categories}
-          activeSubCategory1={subCategory1 || "all"}
-          subCategoryOptions={continueFilterOptions.subCategories}
-          activePackageId={packageId || "all"}
-          packageOptions={continueFilterOptions.packages}
-          activeSort={continueSort}
-          validTillFrom={validTillFrom || ""}
-          validTillTo={validTillTo || ""}
-        />
+        <>
+          <AccountLiveClassesSection items={todayContents} />
+          <AccountQuickActionTiles />
+          <AccountContinueCoursesToolbar
+            initialSearch={query || ""}
+            activeCategoryId={categoryId || "all"}
+            categoryOptions={continueFilterOptions.categories}
+            activeSubCategory1={subCategory1 || "all"}
+            subCategoryOptions={continueFilterOptions.subCategories}
+            activePackageId={packageId || "all"}
+            packageOptions={continueFilterOptions.packages}
+            activeSort={continueSort}
+            validTillFrom={validTillFrom || ""}
+            validTillTo={validTillTo || ""}
+          />
+        </>
       ) : (
         <AccountBuyCoursesToolbar
           initialSearch={query || ""}

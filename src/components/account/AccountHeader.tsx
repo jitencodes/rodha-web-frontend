@@ -14,6 +14,7 @@ import {
   Search,
   Sun,
   UserRound,
+  X,
 } from "lucide-react";
 import { useAccountTheme } from "@/components/account/AccountThemeProvider";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -23,6 +24,7 @@ import { withSsoToken } from "@/lib/auth/sso";
 import { expireSessionClient, isUnauthorizedStatus } from "@/lib/auth/session-expired";
 import { cn } from "@/lib/utils";
 import { ACCOUNT_SEARCH_PLACEHOLDER } from "@/data/account/user";
+import { DEFAULT_CONTENT_TYPE } from "@/lib/account/course-content-filters";
 
 export type AccountHeaderUser = {
   fullName: string;
@@ -43,6 +45,7 @@ export function AccountHeader({ onMenuClick, user }: AccountHeaderProps) {
   const profileRef = useRef<HTMLDivElement>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [graphyPending, setGraphyPending] = useState(false);
@@ -106,6 +109,22 @@ export function AccountHeader({ onMenuClick, user }: AccountHeaderProps) {
     }
   }
 
+  function submitSearch(raw?: string) {
+    const q = (raw ?? searchValue).trim();
+    const params = new URLSearchParams();
+    params.set("type", DEFAULT_CONTENT_TYPE);
+    params.set("page", "1");
+    params.set("limit", "10");
+    if (q) params.set("search", q);
+    setMobileSearchOpen(false);
+    router.push(`/account/content?${params.toString()}`);
+  }
+
+  function clearSearch() {
+    setSearchValue("");
+    requestAnimationFrame(() => searchRef.current?.focus());
+  }
+
   async function openLiveClassroom() {
     if (graphyPending) return;
     setGraphyPending(true);
@@ -157,27 +176,51 @@ export function AccountHeader({ onMenuClick, user }: AccountHeaderProps) {
               : "max-md:hidden"
           )}
         >
-          <label className="relative block w-full min-w-0">
-            <span className="sr-only">Search</span>
-            <Search
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[var(--account-text-muted)]"
-              strokeWidth={1.75}
-            />
-            <input
-              ref={searchRef}
-              type="search"
-              placeholder={ACCOUNT_SEARCH_PLACEHOLDER}
-              className="h-10 w-full max-w-xl rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] pr-3 pl-10 text-[14px] text-[var(--account-text)] outline-none placeholder:text-[var(--account-text-muted)] focus:border-[var(--account-accent)] md:pr-20"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 items-center gap-1 text-[11px] text-[var(--account-text-muted)] md:flex">
-              <kbd className="rounded border border-[var(--account-border-strong)] bg-[var(--account-bg)] px-1.5 py-0.5 font-sans">
-                Ctrl
-              </kbd>
-              <kbd className="rounded border border-[var(--account-border-strong)] bg-[var(--account-bg)] px-1.5 py-0.5 font-sans">
-                K
-              </kbd>
-            </span>
-          </label>
+          <form
+            className="relative block w-full min-w-0"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitSearch();
+            }}
+          >
+            <label className="relative block w-full min-w-0">
+              <span className="sr-only">Search</span>
+              <Search
+                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[var(--account-text-muted)]"
+                strokeWidth={1.75}
+              />
+              <input
+                ref={searchRef}
+                type="search"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder={ACCOUNT_SEARCH_PLACEHOLDER}
+                className={cn(
+                  "h-10 w-full max-w-xl rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] pl-10 text-[14px] text-[var(--account-text)] outline-none placeholder:text-[var(--account-text-muted)] focus:border-[var(--account-accent)]",
+                  "[&::-webkit-search-cancel-button]:appearance-none",
+                  searchValue.trim() ? "pr-10 md:pr-24" : "pr-3 md:pr-20"
+                )}
+              />
+              {searchValue.trim() ? (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute top-1/2 right-3 z-10 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-[var(--account-text-muted)] hover:bg-[var(--account-nav-hover)] hover:text-[var(--account-text)] md:right-[4.5rem]"
+                  aria-label="Clear search"
+                >
+                  <X className="size-4" strokeWidth={1.75} />
+                </button>
+              ) : null}
+              <span className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 items-center gap-1 text-[11px] text-[var(--account-text-muted)] md:flex">
+                <kbd className="rounded border border-[var(--account-border-strong)] bg-[var(--account-bg)] px-1.5 py-0.5 font-sans">
+                  Ctrl
+                </kbd>
+                <kbd className="rounded border border-[var(--account-border-strong)] bg-[var(--account-bg)] px-1.5 py-0.5 font-sans">
+                  K
+                </kbd>
+              </span>
+            </label>
+          </form>
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">

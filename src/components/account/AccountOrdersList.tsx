@@ -1,10 +1,7 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
-import type {
-  AccountOrder,
-  AccountOrderStatus,
-  AccountPaymentStatus,
-} from "@/lib/account/types";
+import type { AccountOrder, AccountOrderStatus } from "@/lib/account/types";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 import { ACCOUNT_ORDERS_PAGE_COPY } from "@/data/account/orders";
 
@@ -18,13 +15,6 @@ const ORDER_STATUS_CLASS: Record<AccountOrderStatus, string> = {
   expired: "bg-[var(--account-nav-hover)] text-[var(--account-text-muted)]",
   refunded: "bg-orange-500/15 text-orange-600",
   pending: "bg-amber-500/15 text-amber-600",
-};
-
-const PAYMENT_STATUS_CLASS: Record<AccountPaymentStatus, string> = {
-  paid: "bg-emerald-500/15 text-emerald-600",
-  pending: "bg-amber-500/15 text-amber-600",
-  failed: "bg-red-500/15 text-red-600",
-  refunded: "bg-orange-500/15 text-orange-600",
 };
 
 function StatusBadge({
@@ -47,19 +37,18 @@ function StatusBadge({
 }
 
 function ProductCell({ order }: { order: AccountOrder }) {
+  const thumbnail = order.thumbnail?.trim() || COURSE_IMAGE_FALLBACK;
   return (
     <div className="flex min-w-0 items-center gap-3">
-      {order.thumbnail ? (
-        <span className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-[var(--account-nav-hover)]">
-          <Image
-            src={order.thumbnail}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="40px"
-          />
-        </span>
-      ) : null}
+      <span className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-[var(--account-nav-hover)]">
+        <Image
+          src={thumbnail}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="40px"
+        />
+      </span>
       <div className="min-w-0">
         <p className="truncate text-body-sm font-medium text-[var(--account-text)]">
           {order.title}
@@ -142,9 +131,6 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   Amount
                 </th>
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
-                  Payment
-                </th>
-                <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
                   Status
                 </th>
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
@@ -169,12 +155,6 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   </td>
                   <td className="whitespace-nowrap px-4 py-3.5 text-body-sm font-medium text-[var(--account-text)]">
                     {formatPrice(order.amount)}
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <StatusBadge
-                      label={order.paymentStatusLabel}
-                      className={PAYMENT_STATUS_CLASS[order.paymentStatus]}
-                    />
                   </td>
                   <td className="px-4 py-3.5">
                     <StatusBadge
@@ -230,17 +210,6 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                 </dd>
               </div>
               <div className="min-w-0">
-                <dt className="text-caption text-[var(--account-text-muted)]">
-                  Payment
-                </dt>
-                <dd className="mt-1">
-                  <StatusBadge
-                    label={order.paymentStatusLabel}
-                    className={PAYMENT_STATUS_CLASS[order.paymentStatus]}
-                  />
-                </dd>
-              </div>
-              <div className="min-w-0 col-span-2">
                 <dt className="text-caption text-[var(--account-text-muted)]">
                   Order status
                 </dt>

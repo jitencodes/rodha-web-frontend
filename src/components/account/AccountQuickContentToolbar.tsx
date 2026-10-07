@@ -8,21 +8,21 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { SearchInput } from "@/components/ui/SearchInput";
 import {
-  COURSE_SORT_PRESETS,
-  DEFAULT_COURSE_SORT,
-} from "@/lib/course-sort";
+  COMPLETION_STATUS_OPTIONS,
+  DEFAULT_CONTENT_TYPE,
+  LIVE_CLASS_STATUS_OPTIONS,
+  RESULT_STATUS_OPTIONS,
+} from "@/lib/account/course-content-filters";
 
-type FilterOption = { value: string; label: string };
-
-type AccountBuyCoursesToolbarProps = {
-  initialSearch: string;
-  activeCategoryId: string;
-  categoryOptions: FilterOption[];
+type AccountQuickContentToolbarProps = {
+  basePath: string;
   activeType: string;
-  typeOptions: FilterOption[];
-  activeSubCategory1: string;
-  subCategoryOptions: FilterOption[];
-  activeSort: string;
+  initialSearch: string;
+  activeCompletionStatus: string;
+  activeLiveClassStatus: string;
+  activeResultStatus: string;
+  /** Extra query keys preserved on navigation (e.g. courseId, limit). */
+  preserveQuery?: Record<string, string>;
 };
 
 function FilterIconButton({
@@ -51,16 +51,15 @@ function FilterIconButton({
   );
 }
 
-export function AccountBuyCoursesToolbar({
-  initialSearch,
-  activeCategoryId,
-  categoryOptions,
+export function AccountQuickContentToolbar({
+  basePath,
   activeType,
-  typeOptions,
-  activeSubCategory1,
-  subCategoryOptions,
-  activeSort,
-}: AccountBuyCoursesToolbarProps) {
+  initialSearch,
+  activeCompletionStatus,
+  activeLiveClassStatus,
+  activeResultStatus,
+  preserveQuery = {},
+}: AccountQuickContentToolbarProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [query, setQuery] = useState(initialSearch);
@@ -70,34 +69,50 @@ export function AccountBuyCoursesToolbar({
     setQuery(initialSearch);
   }, [initialSearch]);
 
+  const type = activeType || DEFAULT_CONTENT_TYPE;
+  const showLiveStatus = type === "live-classes";
+  const showResultStatus = type === "quizzes";
+
   function hrefFor(next: {
-    q?: string;
-    categoryId?: string;
-    type?: string;
-    subCategory1?: string;
-    sort?: string;
+    search?: string;
+    completionStatus?: string;
+    liveClassStatus?: string;
+    resultStatus?: string;
   } = {}): string {
     const params = new URLSearchParams();
-    params.set("tab", "buy");
+    Object.entries(preserveQuery).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+    params.set("type", type);
+    params.set("page", "1");
 
-    const search = next.q !== undefined ? next.q : query;
-    const categoryId =
-      next.categoryId !== undefined ? next.categoryId : activeCategoryId;
-    const type = next.type !== undefined ? next.type : activeType;
-    const subCategory1 =
-      next.subCategory1 !== undefined ? next.subCategory1 : activeSubCategory1;
-    const sort = next.sort !== undefined ? next.sort : activeSort;
+    const search = next.search !== undefined ? next.search : query;
+    const completionStatus =
+      next.completionStatus !== undefined
+        ? next.completionStatus
+        : activeCompletionStatus;
+    const liveClassStatus =
+      next.liveClassStatus !== undefined
+        ? next.liveClassStatus
+        : activeLiveClassStatus;
+    const resultStatus =
+      next.resultStatus !== undefined
+        ? next.resultStatus
+        : activeResultStatus;
 
     const trimmed = search.trim();
-    if (trimmed) params.set("q", trimmed);
-    if (categoryId && categoryId !== "all") params.set("categoryId", categoryId);
-    if (type && type !== "all") params.set("type", type);
-    if (subCategory1 && subCategory1 !== "all") {
-      params.set("subCategory1", subCategory1);
+    if (trimmed) params.set("search", trimmed);
+    if (completionStatus && completionStatus !== "all") {
+      params.set("completionStatus", completionStatus);
     }
-    if (sort && sort !== DEFAULT_COURSE_SORT) params.set("sort", sort);
+    if (showLiveStatus && liveClassStatus && liveClassStatus !== "all") {
+      params.set("liveClassStatus", liveClassStatus);
+    }
+    if (showResultStatus && resultStatus && resultStatus !== "all") {
+      params.set("resultStatus", resultStatus);
+    }
 
-    return `/account/courses?${params.toString()}`;
+    return `${basePath}?${params.toString()}`;
   }
 
   function navigate(next?: Parameters<typeof hrefFor>[0]) {
@@ -108,88 +123,65 @@ export function AccountBuyCoursesToolbar({
 
   function handleSearch(value: string) {
     setQuery(value);
-    navigate({ q: value });
+    navigate({ search: value });
   }
 
   function clearFilters() {
     setQuery("");
     navigate({
-      q: "",
-      categoryId: "all",
-      type: "all",
-      subCategory1: "all",
-      sort: DEFAULT_COURSE_SORT,
+      search: "",
+      completionStatus: "all",
+      liveClassStatus: "all",
+      resultStatus: "all",
     });
   }
 
   const activeFilterCount = [
-    activeCategoryId && activeCategoryId !== "all",
-    activeType && activeType !== "all",
-    activeSubCategory1 && activeSubCategory1 !== "all",
-    activeSort && activeSort !== DEFAULT_COURSE_SORT,
+    activeCompletionStatus && activeCompletionStatus !== "all",
+    showLiveStatus && activeLiveClassStatus && activeLiveClassStatus !== "all",
+    showResultStatus && activeResultStatus && activeResultStatus !== "all",
   ].filter(Boolean).length;
   const hasActiveFilters = activeFilterCount > 0 || Boolean(query.trim());
 
   const filterDropdowns = (
     <>
-      {categoryOptions.length > 0 ? (
-        <DropdownSelect
-          value={activeCategoryId || "all"}
-          onChange={(value) =>
-            navigate({
-              categoryId: value,
-              type: "all",
-              subCategory1: "all",
-            })
-          }
-          options={[
-            { value: "all", label: "All Categories" },
-            ...categoryOptions,
-          ]}
-          aria-label="Category"
-          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
-        />
-      ) : null}
-      {typeOptions.length > 0 ? (
-        <DropdownSelect
-          value={activeType || "all"}
-          onChange={(value) =>
-            navigate({ type: value, subCategory1: "all" })
-          }
-          options={[
-            { value: "all", label: "All Types" },
-            ...typeOptions,
-          ]}
-          aria-label="Type"
-          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="light"
-        />
-      ) : null}
-      {subCategoryOptions.length > 0 ? (
-        <DropdownSelect
-          value={activeSubCategory1 || "all"}
-          onChange={(value) => navigate({ subCategory1: value })}
-          options={[
-            { value: "all", label: "All Sub-categories" },
-            ...subCategoryOptions,
-          ]}
-          aria-label="Sub-category"
-          className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-          variant="light"
-        />
-      ) : null}
       <DropdownSelect
-        value={activeSort || DEFAULT_COURSE_SORT}
-        onChange={(value) => navigate({ sort: value })}
-        options={COURSE_SORT_PRESETS.map((preset) => ({
-          value: preset.value,
-          label: preset.label,
+        value={activeCompletionStatus || "all"}
+        onChange={(value) => navigate({ completionStatus: value })}
+        options={COMPLETION_STATUS_OPTIONS.map((o) => ({
+          value: o.value,
+          label: o.label,
         }))}
-        aria-label="Sort by"
-        className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
+        aria-label="Completion status"
+        className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
         variant="light"
       />
+      {showLiveStatus ? (
+        <DropdownSelect
+          value={activeLiveClassStatus || "all"}
+          onChange={(value) => navigate({ liveClassStatus: value })}
+          options={LIVE_CLASS_STATUS_OPTIONS.map((o) => ({
+            value: o.value,
+            label: o.label,
+          }))}
+          aria-label="Live class status"
+          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
+          variant="light"
+        />
+      ) : null}
+      {showResultStatus ? (
+        <DropdownSelect
+          value={activeResultStatus || "all"}
+          onChange={(value) => navigate({ resultStatus: value })}
+          options={RESULT_STATUS_OPTIONS.map((o) => ({
+            value: o.value,
+            label: o.label,
+          }))}
+          aria-label="Result status"
+          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
+          variant="light"
+        />
+      ) : null}
     </>
   );
 
@@ -219,8 +211,8 @@ export function AccountBuyCoursesToolbar({
               value={query}
               onChange={(e) => handleSearch(e.target.value)}
               onClear={() => handleSearch("")}
-              placeholder="Search packages..."
-              aria-label="Search packages to buy"
+              placeholder="Search content..."
+              aria-label="Search content"
               variant="light"
             />
           </div>
@@ -231,8 +223,8 @@ export function AccountBuyCoursesToolbar({
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
             onClear={() => handleSearch("")}
-            placeholder="Search packages..."
-            aria-label="Search packages to buy"
+            placeholder="Search content..."
+            aria-label="Search content"
             variant="light"
           />
         </div>

@@ -1,0 +1,139 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  COURSE_CONTENT_TYPE_TABS,
+  DEFAULT_CONTENT_TYPE,
+} from "@/lib/account/course-content-filters";
+import { cn } from "@/lib/utils";
+
+type AccountContentTypeTabsProps = {
+  basePath: string;
+  activeType: string;
+  query: Record<string, string>;
+  className?: string;
+};
+
+function hrefFor(
+  basePath: string,
+  typeId: string,
+  query: Record<string, string>
+): string {
+  const params = new URLSearchParams();
+  Object.entries(query).forEach(([key, value]) => {
+    if (!value || key === "type" || key === "page") return;
+    params.set(key, value);
+  });
+  params.set("type", typeId || DEFAULT_CONTENT_TYPE);
+  params.set("page", "1");
+  const qs = params.toString();
+  return qs ? `${basePath}?${qs}` : basePath;
+}
+
+/** Horizontally scrollable content-type tabs (no All / type=all). */
+export function AccountContentTypeTabs({
+  basePath,
+  activeType,
+  query,
+  className,
+}: AccountContentTypeTabsProps) {
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+  const dragRef = useRef<{
+    active: boolean;
+    startX: number;
+    scrollLeft: number;
+    moved: boolean;
+  }>({ active: false, startX: 0, scrollLeft: 0, moved: false });
+
+  const currentType = activeType || DEFAULT_CONTENT_TYPE;
+
+  const measureOverflow = useCallback(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+    setOverflowing(el.scrollWidth > el.clientWidth + 2);
+  }, []);
+
+  useEffect(() => {
+    measureOverflow();
+    const el = tabsRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => measureOverflow());
+    ro.observe(el);
+    window.addEventListener("resize", measureOverflow);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measureOverflow);
+    };
+  }, [measureOverflow]);
+
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    if (!el || !overflowing) return;
+    dragRef.current = {
+      active: true,
+      startX: e.clientX,
+      scrollLeft: el.scrollLeft,
+      moved: false,
+    };
+    el.setPointerCapture(e.pointerId);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    if (!el || !dragRef.current.active) return;
+    const dx = e.clientX - dragRef.current.startX;
+    if (Math.abs(dx) > 4) dragRef.current.moved = true;
+    el.scrollLeft = dragRef.current.scrollLeft - dx;
+  }
+
+  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    const el = tabsRef.current;
+    dragRef.current.active = false;
+    el?.releasePointerCapture(e.pointerId);
+  }
+
+  return (
+    <div
+      ref={tabsRef}
+      className={cn(
+        "mb-4 flex min-w-0 max-w-full gap-2 overflow-x-auto scrollbar-hide pb-1",
+        overflowing && "cursor-grab active:cursor-grabbing",
+        className
+      )}
+      role="tablist"
+      aria-label="Content types"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClickCapture={(e) => {
+        if (!dragRef.current.moved) return;
+        e.preventDefault();
+        e.stopPropagation();
+        dragRef.current.moved = false;
+      }}
+    >
+      {COURSE_CONTENT_TYPE_TABS.map((tab) => {
+        const isActive = currentType === tab.id;
+        return (
+          <Link
+            key={tab.id}
+            href={hrefFor(basePath, tab.id, query)}
+            role="tab"
+            aria-selected={isActive}
+            className={cn(
+              "shrink-0 rounded-full border px-3.5 py-2 text-[13px] font-medium whitespace-nowrap transition-colors",
+              isActive
+                ? "border-[var(--account-accent)] bg-[var(--account-nav-active-bg)] text-[var(--account-accent)]"
+                : "border-[var(--account-border)] bg-[var(--account-surface)] text-[var(--account-text-muted)] hover:text-[var(--account-text)]"
+            )}
+          >
+            {tab.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}

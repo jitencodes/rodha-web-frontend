@@ -3,27 +3,25 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { AccountContentTypeTabs } from "@/components/account/AccountContentTypeTabs";
+import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
+import { AccountQuickContentToolbar } from "@/components/account/AccountQuickContentToolbar";
 import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
-import { AccountCourseContentToolbar } from "@/components/account/course-detail/AccountCourseContentToolbar";
-import { AccountCourseContentTypeNav } from "@/components/account/course-detail/AccountCourseContentTypeNav";
 import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
 import { AccountCourseProgressCard } from "@/components/account/course-detail/AccountCourseProgressCard";
-import { COURSE_CONTENT_PAGE_SIZE } from "@/lib/account/course-content-filters";
+import {
+  DEFAULT_CONTENT_TYPE,
+  QUICK_CONTENT_PAGE_SIZE,
+  parseQuickActionType,
+} from "@/lib/account/course-content-filters";
 import { parsePageParam } from "@/lib/account/pagination";
 import type {
-  AccountCourseChapterOption,
+  AccountCourseContentItem,
   AccountCourseDetailViewModel,
 } from "@/lib/api/modules/student/courses/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { withSsoToken } from "@/lib/auth/sso";
-
-const VALID_TYPES = new Set([
-  "videos",
-  "quizzes",
-  "pdfs",
-  "live-classes",
-]);
 
 type DetailApiResponse = {
   ok: boolean;
@@ -31,9 +29,14 @@ type DetailApiResponse = {
   error?: string;
 };
 
-type ChaptersApiResponse = {
+type QuickActionsApiResponse = {
   ok: boolean;
-  chapters?: AccountCourseChapterOption[];
+  type?: string;
+  items?: AccountCourseContentItem[];
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPages?: number;
   error?: string;
 };
 
@@ -48,11 +51,7 @@ export function AccountCourseDetailClient() {
   const searchParams = useSearchParams();
   const courseId = params.courseId;
 
-  const contentType =
-    searchParams.get("type")?.trim() &&
-    VALID_TYPES.has(searchParams.get("type")!.trim())
-      ? searchParams.get("type")!.trim()
-      : undefined;
+  const contentType = parseQuickActionType(searchParams.get("type"));
   const search =
     (searchParams.get("search") ?? searchParams.get("q"))?.trim() || undefined;
   const page = parsePageParam(searchParams.get("page") ?? undefined);
@@ -71,27 +70,23 @@ export function AccountCourseDetailClient() {
     searchParams.get("resultStatus") !== "all"
       ? searchParams.get("resultStatus")!.trim()
       : undefined;
-  const chapterId =
-    searchParams.get("chapterId")?.trim() &&
-    searchParams.get("chapterId") !== "all"
-      ? searchParams.get("chapterId")!.trim()
-      : undefined;
-  const chapter =
-    !chapterId &&
-    searchParams.get("chapter")?.trim() &&
-    searchParams.get("chapter") !== "all"
-      ? searchParams.get("chapter")!.trim()
-      : undefined;
 
   const [detail, setDetail] = useState<AccountCourseDetailViewModel | null>(
     null
   );
-  const [chapters, setChapters] = useState<AccountCourseChapterOption[]>([]);
+  const [contentItems, setContentItems] = useState<AccountCourseContentItem[]>(
+    []
+  );
+  const [contentPagination, setContentPagination] = useState({
+    page: 1,
+    totalPages: 1,
+  });
   const [ssoToken, setSsoToken] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [detailLoading, setDetailLoading] = useState(true);
+  const [listLoading, setListLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const queryKey = useMemo(
+  const listingKey = useMemo(
     () =>
       JSON.stringify({
         courseId,
@@ -101,8 +96,6 @@ export function AccountCourseDetailClient() {
         completionStatus,
         liveClassStatus,
         resultStatus,
-        chapterId,
-        chapter,
       }),
     [
       courseId,
@@ -112,68 +105,24 @@ export function AccountCourseDetailClient() {
       completionStatus,
       liveClassStatus,
       resultStatus,
-      chapterId,
-      chapter,
     ]
   );
 
-  const load = useCallback(async () => {
+  const loadDetail = useCallback(async () => {
     if (!courseId) return;
-    setLoading(true);
+    setDetailLoading(true);
     setError(null);
 
-    const detailParams = new URLSearchParams();
-    if (contentType) detailParams.set("type", contentType);
-    if (search) detailParams.set("search", search);
-    detailParams.set("page", String(page));
-    detailParams.set("limit", String(COURSE_CONTENT_PAGE_SIZE));
-    if (completionStatus) {
-      detailParams.set("completionStatus", completionStatus);
-    }
-    if (liveClassStatus) {
-      detailParams.set("liveClassStatus", liveClassStatus);
-    }
-    if (resultStatus) detailParams.set("resultStatus", resultStatus);
-    if (chapterId) detailParams.set("chapterId", chapterId);
-    if (chapter) detailParams.set("chapter", chapter);
-
-    const detailUrl = `/api/account/courses/${encodeURIComponent(courseId)}?${detailParams.toString()}`;
-    const chaptersUrl = `/api/account/courses/${encodeURIComponent(courseId)}/chapters`;
-
     try {
-      console.debug("[AccountCourseDetail] fetching", {
-        detailUrl,
-        chaptersUrl,
-        query: {
-          contentType,
-          search,
-          page,
-          completionStatus,
-          liveClassStatus,
-          resultStatus,
-          chapterId,
-          chapter,
-        },
-      });
-
-      const [detailRes, chaptersRes, ssoRes] = await Promise.all([
-        fetchAuthed(detailUrl),
-        fetchAuthed(chaptersUrl),
+      const [detailRes, ssoRes] = await Promise.all([
+        fetchAuthed(
+          `/api/account/courses/${encodeURIComponent(courseId)}`
+        ),
         fetchAuthed("/api/graphy/sso"),
       ]);
 
       const detailJson = (await detailRes.json()) as DetailApiResponse;
-      const chaptersJson = (await chaptersRes.json()) as ChaptersApiResponse;
       const ssoJson = (await ssoRes.json()) as SsoApiResponse;
-
-      console.debug("[AccountCourseDetail] responses", {
-        detailStatus: detailRes.status,
-        detail: detailJson,
-        chaptersStatus: chaptersRes.status,
-        chapters: chaptersJson,
-        ssoStatus: ssoRes.status,
-        ssoOk: ssoJson.ok,
-      });
 
       if (!detailRes.ok || !detailJson.ok || !detailJson.detail) {
         setDetail(null);
@@ -182,20 +131,51 @@ export function AccountCourseDetailClient() {
       }
 
       setDetail(detailJson.detail);
-      const chapterOptions =
-        chaptersJson.ok && chaptersJson.chapters?.length
-          ? chaptersJson.chapters
-          : detailJson.detail.chapters ?? [];
-      setChapters(chapterOptions);
       setSsoToken(ssoJson.ok ? ssoJson.graphy?.ssoToken || "" : "");
     } catch (err) {
-      console.error("[AccountCourseDetail] fetch failed", err);
       setDetail(null);
       setError(
         err instanceof Error ? err.message : "Unable to load course"
       );
     } finally {
-      setLoading(false);
+      setDetailLoading(false);
+    }
+  }, [courseId]);
+
+  const loadListing = useCallback(async () => {
+    if (!courseId) return;
+    setListLoading(true);
+
+    const qs = new URLSearchParams();
+    qs.set("type", contentType);
+    qs.set("courseId", courseId);
+    qs.set("page", String(page));
+    qs.set("limit", String(QUICK_CONTENT_PAGE_SIZE));
+    if (search) qs.set("search", search);
+    if (completionStatus) qs.set("completionStatus", completionStatus);
+    if (liveClassStatus) qs.set("liveClassStatus", liveClassStatus);
+    if (resultStatus) qs.set("resultStatus", resultStatus);
+
+    try {
+      const res = await fetchAuthed(
+        `/api/account/courses/quick-actions?${qs.toString()}`
+      );
+      const json = (await res.json()) as QuickActionsApiResponse;
+      if (!res.ok || !json.ok) {
+        setContentItems([]);
+        setContentPagination({ page: 1, totalPages: 1 });
+        return;
+      }
+      setContentItems(json.items ?? []);
+      setContentPagination({
+        page: json.page ?? page,
+        totalPages: json.totalPages ?? 1,
+      });
+    } catch {
+      setContentItems([]);
+      setContentPagination({ page: 1, totalPages: 1 });
+    } finally {
+      setListLoading(false);
     }
   }, [
     courseId,
@@ -205,20 +185,22 @@ export function AccountCourseDetailClient() {
     completionStatus,
     liveClassStatus,
     resultStatus,
-    chapterId,
-    chapter,
   ]);
 
   useEffect(() => {
-    void load();
-  }, [load, queryKey]);
+    void loadDetail();
+  }, [loadDetail]);
+
+  useEffect(() => {
+    void loadListing();
+  }, [loadListing, listingKey]);
 
   const paginationQuery = useMemo(() => {
-    const q: Record<string, string> = {};
-    if (contentType) q.type = contentType;
+    const q: Record<string, string> = {
+      type: contentType || DEFAULT_CONTENT_TYPE,
+      limit: String(QUICK_CONTENT_PAGE_SIZE),
+    };
     if (search) q.search = search;
-    if (chapterId) q.chapterId = chapterId;
-    if (chapter) q.chapter = chapter;
     if (completionStatus) q.completionStatus = completionStatus;
     if (liveClassStatus) q.liveClassStatus = liveClassStatus;
     if (resultStatus) q.resultStatus = resultStatus;
@@ -226,14 +208,12 @@ export function AccountCourseDetailClient() {
   }, [
     contentType,
     search,
-    chapterId,
-    chapter,
     completionStatus,
     liveClassStatus,
     resultStatus,
   ]);
 
-  if (loading && !detail) {
+  if (detailLoading && !detail) {
     return (
       <div className="mx-auto w-full max-w-5xl py-16 text-center text-body-sm text-[var(--account-text-muted)]">
         Loading course…
@@ -250,7 +230,7 @@ export function AccountCourseDetailClient() {
           </p>
           <button
             type="button"
-            onClick={() => void load()}
+            onClick={() => void loadDetail()}
             className="mt-4 text-[13px] font-semibold text-[var(--account-accent)]"
           >
             Retry
@@ -263,15 +243,10 @@ export function AccountCourseDetailClient() {
   const openCourseHref = detail.courseTakeUrl
     ? withSsoToken(detail.courseTakeUrl, ssoToken)
     : "";
+  const basePath = `/account/courses/${courseId}`;
 
   return (
     <div className="mx-auto w-full max-w-5xl">
-      {loading ? (
-        <p className="mb-3 text-[12px] text-[var(--account-text-muted)]">
-          Updating…
-        </p>
-      ) : null}
-
       <AccountCourseDetailHeader
         title={detail.title}
         language={detail.language}
@@ -301,31 +276,45 @@ export function AccountCourseDetailClient() {
         </section>
       ) : null}
 
-      <AccountCourseContentTypeNav
-        courseId={courseId}
-        activeType={contentType || ""}
-        contentSummary={detail.contentSummary}
+      <AccountLiveClassesSection
+        items={detail.productContents}
+        title="Live / Recent Content"
+        titleId="product-contents-heading"
+      />
+
+      <h2 className="mb-3 font-montserrat text-[15px] font-bold text-[var(--account-text)]">
+        Course Content
+      </h2>
+
+      <AccountContentTypeTabs
+        basePath={basePath}
+        activeType={contentType}
         query={paginationQuery}
       />
 
-      <AccountCourseContentToolbar
-        courseId={courseId}
-        activeType={contentType || ""}
+      <AccountQuickContentToolbar
+        basePath={basePath}
+        activeType={contentType}
         initialSearch={search || ""}
-        activeChapterId={chapterId || "all"}
         activeCompletionStatus={completionStatus || "all"}
         activeLiveClassStatus={liveClassStatus || "all"}
         activeResultStatus={resultStatus || "all"}
-        chapters={chapters}
+        preserveQuery={{ limit: String(QUICK_CONTENT_PAGE_SIZE) }}
       />
 
-      {detail.items.length === 0 ? (
+      {listLoading ? (
+        <p className="mb-3 text-[12px] text-[var(--account-text-muted)]">
+          Loading content…
+        </p>
+      ) : null}
+
+      {contentItems.length === 0 && !listLoading ? (
         <p className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-6 py-10 text-center text-body-sm text-[var(--account-text-muted)]">
           No content items for this filter.
         </p>
       ) : (
         <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-          {detail.items.map((item) => {
+          {contentItems.map((item) => {
             const href = item.takeUrl
               ? withSsoToken(item.takeUrl, ssoToken)
               : "";
@@ -338,11 +327,11 @@ export function AccountCourseDetailClient() {
         </ul>
       )}
 
-      {detail.pagination.totalPages > 1 ? (
+      {contentPagination.totalPages > 1 ? (
         <AccountPagination
-          currentPage={detail.pagination.page}
-          totalPages={detail.pagination.totalPages}
-          basePath={`/account/courses/${courseId}`}
+          currentPage={contentPagination.page}
+          totalPages={contentPagination.totalPages}
+          basePath={basePath}
           query={paginationQuery}
           className="pt-8"
         />

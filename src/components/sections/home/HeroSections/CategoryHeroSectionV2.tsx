@@ -27,24 +27,47 @@ interface CategoryHeroSectionV2Props {
   subtitle?: string;
   quickStats: CategoryQuickStat[];
   primaryCta?: CategoryHeroCta | null;
+  /** When set, Enrol/Enroll for Free CTAs redirect to courses with this category filter. */
+  enrollCoursesHref?: string;
+  isLoggedIn?: boolean;
   videoId?: string;
   imageUrl?: string;
   className?: string;
 }
 
+const ENROLL_FOR_FREE_RE = /^enroll?\s+for\s+free$/i;
+
+function isEnrollForFreeLabel(label: string): boolean {
+  return ENROLL_FOR_FREE_RE.test(label.trim());
+}
+
 function HeroCtaLink({
   cta,
   variant,
+  enrollCoursesHref,
+  isLoggedIn,
 }: {
   cta: CategoryHeroCta;
   variant: "primary" | "secondary";
+  enrollCoursesHref?: string;
+  isLoggedIn?: boolean;
 }) {
   const className =
     variant === "primary"
       ? "btn-primary btn-primary-premium premium-border-glow glow-accent-orange text-body px-7 py-3.5"
       : "btn-secondary btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline text-body px-7 py-3.5";
 
-  if (cta.external) {
+  const enrollHref =
+    enrollCoursesHref && isEnrollForFreeLabel(cta.label)
+      ? enrollCoursesHref
+      : null;
+  const href = enrollHref
+    ? isLoggedIn
+      ? enrollHref
+      : `/login?next=${encodeURIComponent(enrollHref)}`
+    : cta.href;
+
+  if (cta.external && !enrollHref) {
     return (
       <a
         href={cta.href}
@@ -58,7 +81,7 @@ function HeroCtaLink({
   }
 
   return (
-    <Link href={cta.href} className={className}>
+    <Link href={href} className={className}>
       {cta.label}
     </Link>
   );
@@ -73,6 +96,8 @@ export function CategoryHeroSectionV2({
   subtitle,
   quickStats,
   primaryCta,
+  enrollCoursesHref,
+  isLoggedIn = false,
   videoId,
   imageUrl,
   className,
@@ -123,7 +148,12 @@ export function CategoryHeroSectionV2({
               )}
               <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
                 {hasPrimaryCta && primaryCta ? (
-                  <HeroCtaLink cta={primaryCta} variant="primary" />
+                  <HeroCtaLink
+                    cta={primaryCta}
+                    variant="primary"
+                    enrollCoursesHref={enrollCoursesHref}
+                    isLoggedIn={isLoggedIn}
+                  />
                 ) : null}
                 <CounsellingCtaAction
                   action={{ label: "Book Free Counselling", href: "/contact" }}

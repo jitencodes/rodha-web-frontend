@@ -1,3 +1,4 @@
+import { formatCourseDate } from "@/lib/account/course-content-filters";
 import type { ContinueWatchingItem } from "@/lib/account/types";
 import type {
   StudentCourseChapterApi,
@@ -6,6 +7,7 @@ import type {
   StudentCourseFilterOptionApi,
   StudentCourseFilterOptionsDataApi,
   StudentEnrollmentListItemApi,
+  StudentLiveContentApi,
 } from "@/lib/api/modules/student/courses/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 
@@ -14,7 +16,24 @@ const SUPPORTED_CONTENT_TYPES = new Set([
   "quiz",
   "pdf",
   "liveclass",
+  "assignment",
 ]);
+
+/** UI model for todayContents / productContents live class cards. */
+export type AccountLiveContentItem = {
+  id: string;
+  title: string;
+  type: string;
+  contentType?: string;
+  liveClassStatus?: string;
+  startTime?: string;
+  endTime?: string;
+  timeRangeLabel?: string;
+  statusLabel?: string;
+  courseTitle?: string;
+  courseId?: string;
+  takeUrl: string;
+};
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -74,14 +93,18 @@ export function mapContinueWatchingItem(
   if (!title || !id) return null;
 
   const percent = asOptionalNumber(item.progressPercent ?? item.progress);
-  const durationLabel = formatDuration(asNumber(item.totalTime)) ?? "";
+  const timeSpentLabel = formatDuration(asNumber(item.totalTime));
+  const language = asString(course.language) || undefined;
+  const validTillLabel = formatCourseDate(asString(item.validTill) || undefined);
 
   return {
     id,
     title,
-    tag: asString(course.language) || "Course",
+    tag: language || "Course",
     thumbnail: asString(course.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
-    durationLabel,
+    timeSpentLabel,
+    validTillLabel,
+    language,
     progressCurrent:
       percent !== undefined ? Math.min(100, Math.max(0, percent)) : 0,
     progressTotal: 100,
@@ -145,6 +168,8 @@ export type AccountCourseDetailViewModel = {
     liveclass: number;
   };
   chapters: AccountCourseChapterOption[];
+  /** Live/recent preview from course.productContents (not Quick Actions). */
+  productContents: AccountLiveContentItem[];
   items: AccountCourseContentItem[];
   pagination: {
     page: number;
@@ -153,6 +178,74 @@ export type AccountCourseDetailViewModel = {
     totalPages: number;
   };
 };
+
+function formatDateTimeLabel(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function formatLiveStatusLabel(status: string | undefined): string | undefined {
+  if (!status) return undefined;
+  const normalized = status.trim().toLowerCase();
+  if (!normalized) return undefined;
+  if (normalized === "live") return "Live";
+  if (normalized === "upcoming") return "Upcoming";
+  if (normalized === "past") return "Past";
+  return status.replace(/_/g, " ");
+}
+
+export function mapLiveContentItem(
+  item: StudentLiveContentApi
+): AccountLiveContentItem | null {
+  const title = asString(item.title);
+  const id =
+    item.id != null ? String(item.id) : asString(item.graphyItemId);
+  if (!title || !id) return null;
+
+  const startTime = asString(item.startTime) || undefined;
+  const endTime = asString(item.endTime) || undefined;
+  const startLabel = formatDateTimeLabel(startTime);
+  const endLabel = formatDateTimeLabel(endTime);
+  let timeRangeLabel: string | undefined;
+  if (startLabel && endLabel) timeRangeLabel = `${startLabel} – ${endLabel}`;
+  else timeRangeLabel = startLabel || endLabel;
+
+  const courseTitle = asString(item.course?.title) || undefined;
+  const courseId =
+    item.course?.id != null ? String(item.course.id) : undefined;
+  const liveClassStatus = asString(item.liveClassStatus) || undefined;
+
+  return {
+    id,
+    title,
+    type: asString(item.type).toLowerCase() || "liveclass",
+    contentType: asString(item.contentType) || undefined,
+    liveClassStatus,
+    startTime,
+    endTime,
+    timeRangeLabel,
+    statusLabel: formatLiveStatusLabel(liveClassStatus),
+    courseTitle,
+    courseId,
+    takeUrl: asString(item.takeUrl),
+  };
+}
+
+export function mapLiveContentItems(
+  items: StudentLiveContentApi[] | null | undefined
+): AccountLiveContentItem[] {
+  if (!Array.isArray(items) || items.length === 0) return [];
+  return items
+    .map(mapLiveContentItem)
+    .filter((item): item is AccountLiveContentItem => Boolean(item));
+}
 
 function mapChapterOption(
   chapter: StudentCourseChapterApi
@@ -318,6 +411,7 @@ export function mapStudentCourseDetail(
     contentTotal: asOptionalNumber(course.contentSummary?.total),
     contentSummary: mapContentSummary(course.contentSummary?.byType),
     chapters,
+    productContents: mapLiveContentItems(course.productContents),
     items,
     pagination: {
       page: data.pagination?.page ?? 1,
@@ -326,6 +420,12 @@ export function mapStudentCourseDetail(
       totalPages: data.pagination?.totalPages ?? 1,
     },
   };
+}
+
+export function mapQuickActionItems(
+  items: StudentCourseContentItemApi[] | null | undefined
+): AccountCourseContentItem[] {
+  return mapFlatItems(items);
 }
 
 export function mapStudentCourseFilterOptions(

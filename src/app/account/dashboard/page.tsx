@@ -7,11 +7,13 @@ import {
 import { WelcomeBanner } from "@/components/account/WelcomeBanner";
 import { AccountSectionHeader } from "@/components/account/AccountSectionHeader";
 import { AccountContinueWatchingCard } from "@/components/account/AccountContinueWatchingCard";
+import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountRecommendedCard } from "@/components/account/AccountRecommendedCard";
 import { LearningProgressCard } from "@/components/account/LearningProgressCard";
 import { OrdersPreviewCard } from "@/components/account/OrdersPreviewCard";
 import { QuickLinksCard } from "@/components/account/QuickLinksCard";
 import { getStudentDashboard } from "@/lib/api/modules/student/dashboard/service";
+import type { AccountLiveContentItem } from "@/lib/api/modules/student/courses/mapper";
 import { getStudentOrders } from "@/lib/api/modules/student/orders/service";
 import { getStudentProfile } from "@/lib/api/modules/student/profile/service";
 import {
@@ -27,9 +29,16 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function AccountDashboardPage() {
-  const { firstName, continueWatching, recommended, learningProgress, previewOrders } =
-    await withStudentAuth(async (accessToken) => {
+  const {
+    firstName,
+    todayContents,
+    continueWatching,
+    recommended,
+    learningProgress,
+    previewOrders,
+  } = await withStudentAuth(async (accessToken) => {
       let firstName = "there";
+      let todayContents: AccountLiveContentItem[] = [];
       let continueWatching: Awaited<
         ReturnType<typeof getStudentDashboard>
       >["continueWatching"] = [];
@@ -46,6 +55,7 @@ export default async function AccountDashboardPage() {
           getStudentProfile(accessToken),
           getStudentOrders(accessToken, 1, 3),
         ]);
+        todayContents = dashboard.todayContents;
         continueWatching = dashboard.continueWatching.slice(0, 4);
         recommended = dashboard.recommended.slice(0, 4);
         learningProgress = dashboard.learningProgress;
@@ -57,12 +67,14 @@ export default async function AccountDashboardPage() {
         if (isUnauthorizedError(error)) {
           redirectSessionExpired("/account/dashboard");
         }
+        todayContents = [];
         continueWatching = [];
         recommended = [];
       }
 
       return {
         firstName,
+        todayContents,
         continueWatching,
         recommended,
         learningProgress,
@@ -75,6 +87,8 @@ export default async function AccountDashboardPage() {
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-6">
         <div className="min-w-0 space-y-7">
           <WelcomeBanner welcome={ACCOUNT_WELCOME} firstName={firstName} />
+
+          <AccountLiveClassesSection items={todayContents} />
 
           <section aria-labelledby="continue-watching-heading">
             <AccountSectionHeader

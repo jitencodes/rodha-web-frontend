@@ -44,6 +44,9 @@ export function FAQClient({
   // Keeps track of the last search value that we intentionally
   // pushed to the URL.
   const committedSearchRef = useRef(search);
+  const faqListRef = useRef<HTMLDivElement>(null);
+  const prevPageRef = useRef(page);
+  const isFirstRenderRef = useRef(true);
 
   const items = data?.items ?? [];
   const pagination = data?.pagination;
@@ -172,6 +175,20 @@ export function FAQClient({
     }
   }, [search]);
 
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      prevPageRef.current = page;
+      return;
+    }
+    if (prevPageRef.current === page) return;
+    prevPageRef.current = page;
+    // After new FAQ page content has rendered, scroll to the list — not document top.
+    requestAnimationFrame(() => {
+      faqListRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [page, items]);
+
   const activeCategoryLabel =
     activeCategory === "all"
       ? null
@@ -272,6 +289,7 @@ export function FAQClient({
           ` in ${activeCategoryLabel}`}
       </p>
 
+      <div ref={faqListRef} id="faq-list" className="scroll-mt-24">
       {items.length > 0 ? (
         <AccordionV2
           key={`${activeCategory}-${safePage}-${search}`}
@@ -311,6 +329,7 @@ export function FAQClient({
           </button>
         </div>
       )}
+      </div>
 
       {totalPages > 1 && (
         <Pagination

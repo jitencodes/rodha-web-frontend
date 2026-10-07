@@ -1,5 +1,10 @@
 import { apiGet } from "@/lib/api/client";
-import { mapContinueWatchingItems } from "@/lib/api/modules/student/courses/mapper";
+import {
+  mapContinueWatchingItems,
+  mapLiveContentItems,
+  type AccountLiveContentItem,
+} from "@/lib/api/modules/student/courses/mapper";
+import type { StudentLiveContentApi } from "@/lib/api/modules/student/courses/types";
 import type { ContinueWatchingItem, LearningProgress, RecommendedProduct } from "@/lib/account/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 
@@ -11,6 +16,7 @@ interface DashboardApi {
     total?: number;
     learningProgressPercentage?: number;
   };
+  todayContents?: StudentLiveContentApi[] | null;
   continueWatching?: unknown[];
   recommended?: Array<{
     type?: string;
@@ -26,6 +32,7 @@ interface DashboardApi {
 }
 
 export interface StudentDashboardViewModel {
+  todayContents: AccountLiveContentItem[];
   continueWatching: ContinueWatchingItem[];
   recommended: RecommendedProduct[];
   learningProgress: LearningProgress;
@@ -76,6 +83,7 @@ export async function getStudentDashboard(
   }
 
   return {
+    todayContents: mapLiveContentItems(data.todayContents),
     continueWatching,
     recommended,
     learningProgress: {

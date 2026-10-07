@@ -2,14 +2,19 @@ import { apiGet } from "@/lib/api/client";
 import { buildApiQuery } from "@/lib/api/query";
 import {
   mapContinueWatchingItems,
+  mapLiveContentItems,
+  mapQuickActionItems,
   mapStudentCourseChapterOptions,
   mapStudentCourseDetail,
   mapStudentCourseFilterOptions,
   type AccountCourseChapterOption,
+  type AccountCourseContentItem,
   type AccountCourseDetailViewModel,
+  type AccountLiveContentItem,
 } from "@/lib/api/modules/student/courses/mapper";
 import type {
   QuickActionsDataApi,
+  QuickActionsQuery,
   StudentCourseChapterOptionsDataApi,
   StudentCourseContentTypeQuery,
   StudentCourseDetailDataApi,
@@ -17,6 +22,7 @@ import type {
   StudentCoursesListDataApi,
   StudentCoursesSortByQuery,
 } from "@/lib/api/modules/student/courses/types";
+import { parseQuickActionType } from "@/lib/account/course-content-filters";
 import type { ContinueWatchingItem } from "@/lib/account/types";
 
 const COURSES_PATH = "api/website/student/courses";
@@ -51,6 +57,7 @@ export async function getStudentCourses(
   query: StudentCoursesQuery = {}
 ): Promise<{
   items: ContinueWatchingItem[];
+  todayContents: AccountLiveContentItem[];
   page: number;
   total: number;
   totalPages: number;
@@ -75,6 +82,7 @@ export async function getStudentCourses(
 
   return {
     items: mapContinueWatchingItems(data.items),
+    todayContents: mapLiveContentItems(data.todayContents),
     page: data.pagination?.page ?? 1,
     total: data.pagination?.total ?? 0,
     totalPages: data.pagination?.totalPages ?? 1,
@@ -142,15 +150,51 @@ export async function getStudentCourseChapterOptions(
   }
 }
 
+export type QuickActionsViewModel = {
+  type: string;
+  items: AccountCourseContentItem[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+export { parseQuickActionType };
+
 export async function getQuickActions(
   accessToken: string,
-  type: StudentCourseContentTypeQuery,
-  page = 1,
-  limit = 10
-) {
-  const qs = buildApiQuery({ type, page, limit });
-  return apiGet<QuickActionsDataApi>(`${COURSES_PATH}/quick-actions${qs}`, {
-    accessToken,
-    cache: "no-store",
+  query: QuickActionsQuery
+): Promise<QuickActionsViewModel> {
+  const type = parseQuickActionType(query.type) as StudentCourseContentTypeQuery;
+  const page = query.page ?? 1;
+  const limit = query.limit ?? 10;
+
+  const qs = buildApiQuery({
+    type,
+    search: query.search,
+    page,
+    limit,
+    courseId: query.courseId,
+    courseIds: query.courseIds,
+    packageId: query.packageId,
+    packageIds: query.packageIds,
+    completionStatus: query.completionStatus,
+    liveClassStatus: query.liveClassStatus,
+    resultStatus: query.resultStatus,
   });
+
+  const data = await apiGet<QuickActionsDataApi>(
+    `${COURSES_PATH}/quick-actions${qs}`,
+    { accessToken, cache: "no-store" }
+  );
+
+  const items = mapQuickActionItems(data.items);
+  return {
+    type: data.type || type,
+    items,
+    page: data.pagination?.page ?? page,
+    limit: data.pagination?.limit ?? limit,
+    total: data.pagination?.total ?? items.length,
+    totalPages: data.pagination?.totalPages ?? 1,
+  };
 }

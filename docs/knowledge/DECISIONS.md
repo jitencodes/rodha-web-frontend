@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-07 — todayContents / productContents / Quick Actions separation
+- **Decision:** Keep three independent data flows: (1) `todayContents` from dashboard + assigned-courses APIs → Live Classes sections on dashboard and Continue Watching; (2) `productContents` from course detail API → Live/Recent preview on `/account/courses/[courseId]` only; (3) `GET student/courses/quick-actions` with mandatory `type` (never `all`; default `videos`; includes `assignments`) → `/account/content` and the course-detail content listing. Changing Quick Actions filters/page must not refetch course meta/`productContents`.
+- **Rationale:** Match Oct-7 Graphy API shapes and avoid conflating sync-preview rows with paginated content search.
+- **Alternatives considered:** Keep course-detail `type/page` as the primary listing; invent `type=all`.
+- **Consequences:** New `/account/content` route; BFF `/api/account/courses/quick-actions` + `/api/account/enrollments/refresh`; shared `AccountLiveClassCard` / `AccountContentTypeTabs` / `AccountQuickContentToolbar`.
+
 ### 2026-10-07 — Vercel build: disable standalone on Vercel
 - **Decision:** `next.config` sets `output: process.env.VERCEL ? undefined : "standalone"`. Docker/GitLab images still get standalone; Vercel builds do not.
 - **Rationale:** Next 16.3 + Vercel’s injected adapter omits `.next/next-server.js.nft.json`, then `onBuildComplete` crashes with ENOENT when `output: "standalone"` is set (vercel/next.js#96646).
