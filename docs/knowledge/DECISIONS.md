@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-07 — Account Graphy course learning hub
+- **Decision:** Authenticated learning stays on a single `/account/courses/[courseId]` page. Content types are Videos / Live Classes / PDFs / Quizzes (plus All); chapters are filters (`chapterId` / `chapter`) only. Content list uses `GET student/courses/:id` with Postman query params; resources open on Graphy via API `takeUrl` + existing SSO. Continue/Buy listing toolbars are account-styled (reuse BottomSheet/DropdownSelect pattern), not the public CatalogToolbar chrome.
+- **Rationale:** Match Graphy learning workflow without copying Graphy visuals or inventing filters; keep package vs assigned-course models separate.
+- **Alternatives considered:** Separate Course Items route; use quick-actions as primary list; treat chapters as content-type tabs.
+- **Consequences:** Empty content types/filters/sections hide; pagination via AccountPagination; filter-options endpoints feed Continue dropdowns.
+
 ### 2026-10-07 — Catalog filter dropdown portal + mobile bottom sheet
 - **Decision:** `DropdownSelect` option lists render via `createPortal` to `document.body` with fixed coordinates (no permanent high z-index on toolbar children). Mobile catalog filters open in a reusable `BottomSheet` (also portaled); search and draggable filter tiles stay outside. Packages Type/`graphyCategory` dropdown UI is temporarily gated off (`false ? …`) while props/URL/API remain.
 - **Rationale:** Toolbar `-translate-y-1/2` creates a stacking context that buried absolute menus under sibling filters and listing cards; mobile needed a non-overflowing filter entry without redesigning desktop.

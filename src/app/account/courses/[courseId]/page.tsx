@@ -1,82 +1,150 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getStudentCourseDetail } from "@/lib/api/modules/student/courses/service";
+
+import { AccountPagination } from "@/components/account/AccountPagination";
+import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
+import { AccountCourseContentToolbar } from "@/components/account/course-detail/AccountCourseContentToolbar";
+import { AccountCourseContentTypeNav } from "@/components/account/course-detail/AccountCourseContentTypeNav";
+import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
+import { AccountCourseProgressCard } from "@/components/account/course-detail/AccountCourseProgressCard";
 import {
-  getSessionGraphy,
-  withSsoToken,
-} from "@/lib/auth/server-session";
+  COURSE_CONTENT_PAGE_SIZE,
+} from "@/lib/account/course-content-filters";
+import { parsePageParam } from "@/lib/account/pagination";
+import {
+  getStudentCourseChapterOptions,
+  getStudentCourseDetail,
+} from "@/lib/api/modules/student/courses/service";
 import { getGraphySso } from "@/lib/api/modules/student/profile/service";
 import {
   isUnauthorizedError,
   redirectSessionExpired,
   withStudentAuth,
 } from "@/lib/auth/require-student";
+import {
+  getSessionGraphy,
+  withSsoToken,
+} from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
-import { cn } from "@/lib/utils";
 
 interface AccountCourseDetailPageProps {
   params: Promise<{ courseId: string }>;
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{
+    type?: string;
+    search?: string;
+    q?: string;
+    page?: string;
+    completionStatus?: string;
+    liveClassStatus?: string;
+    resultStatus?: string;
+    chapterId?: string;
+    chapter?: string;
+  }>;
 }
+
+const VALID_TYPES = new Set([
+  "videos",
+  "quizzes",
+  "pdfs",
+  "live-classes",
+]);
 
 export async function generateMetadata({
   params,
 }: AccountCourseDetailPageProps): Promise<Metadata> {
   const { courseId } = await params;
   return buildPageMetadata({
-    title: `Course ${courseId} — Rodha`,
+    title: `Course Details — Rodha`,
     description: "Your assigned course content.",
     path: `/account/courses/${courseId}`,
   });
 }
-
-const CONTENT_TYPES = [
-  { id: "", label: "All" },
-  { id: "videos", label: "Videos" },
-  { id: "quizzes", label: "Quizzes" },
-  { id: "pdfs", label: "PDFs" },
-  { id: "live-classes", label: "Live Classes" },
-] as const;
 
 export default async function AccountCourseDetailPage({
   params,
   searchParams,
 }: AccountCourseDetailPageProps) {
   const { courseId } = await params;
-  const { type } = await searchParams;
-  const contentType = type?.trim() || undefined;
+  const sp = await searchParams;
 
-  const { detail, ssoToken } = await withStudentAuth(async (accessToken) => {
-    let detail = null;
-    try {
-      detail = await getStudentCourseDetail(accessToken, courseId, {
-        type: contentType,
-        page: 1,
-        limit: 50,
-      });
-    } catch (error) {
-      if (isUnauthorizedError(error)) {
-        redirectSessionExpired(`/account/courses/${courseId}`);
-      }
-      detail = null;
-    }
+  const contentType =
+    sp.type?.trim() && VALID_TYPES.has(sp.type.trim())
+      ? sp.type.trim()
+      : undefined;
+  const search = (sp.search ?? sp.q)?.trim() || undefined;
+  const page = parsePageParam(sp.page);
+  const completionStatus =
+    sp.completionStatus?.trim() && sp.completionStatus !== "all"
+      ? sp.completionStatus.trim()
+      : undefined;
+  const liveClassStatus =
+    sp.liveClassStatus?.trim() && sp.liveClassStatus !== "all"
+      ? sp.liveClassStatus.trim()
+      : undefined;
+  const resultStatus =
+    sp.resultStatus?.trim() && sp.resultStatus !== "all"
+      ? sp.resultStatus.trim()
+      : undefined;
+  const chapterId =
+    sp.chapterId?.trim() && sp.chapterId !== "all"
+      ? sp.chapterId.trim()
+      : undefined;
+  const chapter =
+    !chapterId && sp.chapter?.trim() && sp.chapter !== "all"
+      ? sp.chapter.trim()
+      : undefined;
 
-    let ssoToken = (await getSessionGraphy())?.ssoToken || "";
-    if (!ssoToken) {
+  const { detail, chapters, ssoToken } = await withStudentAuth(
+    async (accessToken) => {
+      let detail = null;
+      let chapters: Awaited<
+        ReturnType<typeof getStudentCourseChapterOptions>
+      > = [];
+
       try {
-        const fresh = await getGraphySso(accessToken);
-        ssoToken = fresh?.ssoToken || "";
+        const [detailResult, chapterOptions] = await Promise.all([
+          getStudentCourseDetail(accessToken, courseId, {
+            type: contentType,
+            search,
+            page,
+            limit: COURSE_CONTENT_PAGE_SIZE,
+            completionStatus,
+            liveClassStatus,
+            resultStatus,
+            chapterId,
+            chapter,
+          }),
+          getStudentCourseChapterOptions(accessToken, { courseId }),
+        ]);
+        detail = detailResult;
+        chapters =
+          chapterOptions.length > 0
+            ? chapterOptions
+            : detailResult?.chapters ?? [];
       } catch (error) {
         if (isUnauthorizedError(error)) {
           redirectSessionExpired(`/account/courses/${courseId}`);
         }
-        ssoToken = "";
+        detail = null;
       }
-    }
 
-    return { detail, ssoToken };
-  }, `/account/courses/${courseId}`);
+      let ssoToken = (await getSessionGraphy())?.ssoToken || "";
+      if (!ssoToken) {
+        try {
+          const fresh = await getGraphySso(accessToken);
+          ssoToken = fresh?.ssoToken || "";
+        } catch (error) {
+          if (isUnauthorizedError(error)) {
+            redirectSessionExpired(`/account/courses/${courseId}`);
+          }
+          ssoToken = "";
+        }
+      }
+
+      return { detail, chapters, ssoToken };
+    },
+    `/account/courses/${courseId}`
+  );
 
   if (!detail) {
     notFound();
@@ -86,111 +154,94 @@ export default async function AccountCourseDetailPage({
     ? withSsoToken(detail.courseTakeUrl, ssoToken)
     : "";
 
+  const paginationQuery: Record<string, string> = {};
+  if (contentType) paginationQuery.type = contentType;
+  if (search) paginationQuery.search = search;
+  if (chapterId) paginationQuery.chapterId = chapterId;
+  if (chapter) paginationQuery.chapter = chapter;
+  if (completionStatus) paginationQuery.completionStatus = completionStatus;
+  if (liveClassStatus) paginationQuery.liveClassStatus = liveClassStatus;
+  if (resultStatus) paginationQuery.resultStatus = resultStatus;
+
+  const navQuery = { ...paginationQuery };
+
   return (
     <div className="mx-auto w-full max-w-5xl">
-      <div className="mb-4">
-        <Link
-          href="/account/courses?tab=continue"
-          className="text-[13px] font-medium text-[var(--account-accent)]"
-        >
-          ← Back to Continue Watching
-        </Link>
-      </div>
+      <AccountCourseDetailHeader
+        title={detail.title}
+        language={detail.language}
+        categoryLabel={detail.categoryLabel}
+        openCourseHref={openCourseHref || undefined}
+      />
 
-      <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="font-montserrat text-h3 font-bold text-[var(--account-text)]">
-            {detail.title}
-          </h1>
-          <p className="mt-1 text-body-sm text-[var(--account-text-muted)]">
-            {[detail.instructor, detail.language, `${Math.round(detail.progressPercent)}% complete`]
-              .filter(Boolean)
-              .join(" · ")}
+      <AccountCourseProgressCard
+        progressPercent={detail.progressPercent}
+        contentTotal={detail.contentTotal}
+        completed={detail.completed}
+        learningStatus={detail.learningStatus}
+        totalTimeLabel={detail.totalTimeLabel}
+        validTill={detail.validTill}
+        startDate={detail.startDate}
+        lastAccessDate={detail.lastAccessDate}
+      />
+
+      {detail.syllabus ? (
+        <section className="mb-5 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-4 sm:p-5">
+          <h2 className="font-montserrat text-[15px] font-bold text-[var(--account-text)]">
+            Description
+          </h2>
+          <p className="mt-2 text-body-sm leading-relaxed text-[var(--account-text-muted)] whitespace-pre-wrap">
+            {detail.syllabus}
           </p>
-        </div>
-        {openCourseHref ? (
-          <a
-            href={openCourseHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-10 items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] px-4 text-[13px] font-semibold text-white"
-          >
-            Open in Graphy
-          </a>
-        ) : null}
-      </header>
+        </section>
+      ) : null}
 
-      <div
-        role="tablist"
-        className="mb-5 flex flex-wrap gap-2"
-        aria-label="Content type"
-      >
-        {CONTENT_TYPES.map((tab) => {
-          const active = (contentType || "") === tab.id;
-          const href = tab.id
-            ? `/account/courses/${courseId}?type=${tab.id}`
-            : `/account/courses/${courseId}`;
-          return (
-            <Link
-              key={tab.id || "all"}
-              href={href}
-              className={cn(
-                "rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors",
-                active
-                  ? "border-[var(--account-accent)] bg-[var(--account-nav-active-bg)] text-[var(--account-accent)]"
-                  : "border-[var(--account-border)] text-[var(--account-text-muted)] hover:text-[var(--account-text)]"
-              )}
-            >
-              {tab.label}
-            </Link>
-          );
-        })}
-      </div>
+      <AccountCourseContentTypeNav
+        courseId={courseId}
+        activeType={contentType || ""}
+        contentSummary={detail.contentSummary}
+        query={navQuery}
+      />
+
+      <AccountCourseContentToolbar
+        courseId={courseId}
+        activeType={contentType || ""}
+        initialSearch={search || ""}
+        activeChapterId={chapterId || "all"}
+        activeCompletionStatus={completionStatus || "all"}
+        activeLiveClassStatus={liveClassStatus || "all"}
+        activeResultStatus={resultStatus || "all"}
+        chapters={chapters}
+      />
 
       {detail.items.length === 0 ? (
         <p className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-6 py-10 text-center text-body-sm text-[var(--account-text-muted)]">
           No content items for this filter.
         </p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {detail.items.map((item) => {
             const href = item.takeUrl
               ? withSsoToken(item.takeUrl, ssoToken)
               : "";
-            const Wrapper = href ? "a" : "div";
             return (
               <li key={item.id}>
-                <Wrapper
-                  {...(href
-                    ? {
-                        href,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                      }
-                    : {})}
-                  className="flex items-center justify-between gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-4 py-3 transition-colors hover:border-[var(--account-accent)]/40"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-[14px] font-semibold text-[var(--account-text)]">
-                      {item.title}
-                    </p>
-                    <p className="mt-0.5 text-[12px] capitalize text-[var(--account-text-muted)]">
-                      {item.type}
-                      {item.durationLabel ? ` · ${item.durationLabel}` : ""}
-                      {item.completed ? " · Completed" : ""}
-                    </p>
-                  </div>
-                  {href ? (
-                    <span className="shrink-0 text-[12px] font-semibold text-[var(--account-accent)]">
-                      Open →
-                    </span>
-                  ) : null}
-                </Wrapper>
+                <AccountCourseContentCard item={item} href={href} />
               </li>
             );
           })}
         </ul>
       )}
+
+      {detail.pagination.totalPages > 1 ? (
+        <AccountPagination
+          currentPage={detail.pagination.page}
+          totalPages={detail.pagination.totalPages}
+          basePath={`/account/courses/${courseId}`}
+          query={paginationQuery}
+          className="pt-8"
+        />
+      ) : null}
     </div>
   );
 }

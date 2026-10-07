@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-10-07 (BottomSheet + DropdownSelect portal)
+**Last updated:** 2026-10-07 (Account course learning hub)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -198,6 +198,13 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (progress + Continue CTA; account theme tokens) |
+| AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + mobile BottomSheet) |
+| AccountBuyCoursesToolbar | `AccountBuyCoursesToolbar.tsx` (Buy tab package search/filters + mobile BottomSheet) |
+| AccountCourseDetailHeader | `course-detail/AccountCourseDetailHeader.tsx` |
+| AccountCourseProgressCard | `course-detail/AccountCourseProgressCard.tsx` |
+| AccountCourseContentTypeNav | `course-detail/AccountCourseContentTypeNav.tsx` (drag-scroll content-type tiles) |
+| AccountCourseContentToolbar | `course-detail/AccountCourseContentToolbar.tsx` |
+| AccountCourseContentCard | `course-detail/AccountCourseContentCard.tsx` |
 | AccountRecommendedCard | `AccountRecommendedCard.tsx` (price/discount; optional `showCta` for dashboard vs cart) |
 | WelcomeBanner | `WelcomeBanner.tsx` (dashboard greeting + orange name + illustration) |
 | AccountSectionHeader | `AccountSectionHeader.tsx` (section title + View All link) |
@@ -246,6 +253,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | account types | `account/types.ts` | Student dashboard models (user, continue watching, cart, orders, profile, widgets) |
 | account cart totals | `account/cart-totals.ts` | `computeCartTotals` / `formatCartMoney` for cart summary |
 | account pagination | `account/pagination.ts` | `paginateItems`, `parseCoursesTab` (continue/buy + aliases), page size 6 |
+| course content filters | `account/course-content-filters.ts` | Content-type tabs, completion/live/result/sort enums + labels for assigned course UI |
 | submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |

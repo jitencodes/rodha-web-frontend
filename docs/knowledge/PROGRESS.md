@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-07 (Catalog toolbar mobile filters + dropdown layering)
+**Last updated:** 2026-10-07 (Account Graphy course learning UX)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Account Graphy course learning UX (2026-10-07):** `/account/courses/[courseId]` is a Rodha-native single-page hub — progress, content-type tabs (Videos/Live/PDFs/Quizzes; chapters as filters only), search + Postman filters (completion/live/result/chapter), paginated content cards opening Graphy via `takeUrl` + SSO. Continue Watching and Buy Courses get account-styled search/filters with mobile bottom sheets. Student courses types/mapper/service extended for chapters, filter-options, and enrollment progress.
 - **Catalog toolbar mobile filters + dropdown layering (2026-10-07):** `DropdownSelect` menus portal to `document.body` so toolbar transforms/stacking no longer bury options under sibling filters or course cards. Mobile `/courses` (+ legacy test-series) use a Filter icon + `BottomSheet` for dropdown filters; search and draggable subcategory/category tiles stay outside the sheet. Packages Type (`graphyCategory`) filter UI temporarily disabled (URL/API wiring kept).
 - **Category embedded packages + courses filters (2026-10-07):** Category landing courses use `packages.items` / `packages.groups` from category detail (no separate packages API). View all → `/courses?categoryId=`. Courses listing filters from masters: categories dropdown, Type (`graphyCategory`), subCategory1 tabs, faculty, subject, sort (`sortBy`/`sortOrder`); skip tag/language. Forgot-password payload already includes `is_web: true`.
 - **Course card UX + password reset (2026-10-07):** Carousel drag no longer blocks card clicks; category/listing cards go to `/courses/[slug]` while Buy Now uses checkout (CTA stopPropagation). Catalog toolbar gets higher z-index, non-shrinking search, and draggable category tabs. Added `/forgot-password` + `/reset-password` on the auth layout with BFF routes to Graphy forgot/reset APIs.

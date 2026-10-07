@@ -2,13 +2,20 @@ import { apiGet } from "@/lib/api/client";
 import { buildApiQuery } from "@/lib/api/query";
 import {
   mapContinueWatchingItems,
+  mapStudentCourseChapterOptions,
   mapStudentCourseDetail,
+  mapStudentCourseFilterOptions,
+  type AccountCourseChapterOption,
   type AccountCourseDetailViewModel,
 } from "@/lib/api/modules/student/courses/mapper";
 import type {
   QuickActionsDataApi,
+  StudentCourseChapterOptionsDataApi,
+  StudentCourseContentTypeQuery,
   StudentCourseDetailDataApi,
+  StudentCourseFilterOptionsDataApi,
   StudentCoursesListDataApi,
+  StudentCoursesSortByQuery,
 } from "@/lib/api/modules/student/courses/types";
 import type { ContinueWatchingItem } from "@/lib/account/types";
 
@@ -18,11 +25,25 @@ export interface StudentCoursesQuery {
   page?: number;
   limit?: number;
   search?: string;
-  sortBy?: string;
+  sortBy?: StudentCoursesSortByQuery | string;
   packageId?: string | number;
   packageIds?: string;
   categoryId?: string | number;
   subCategory1?: string;
+  validTillFrom?: string;
+  validTillTo?: string;
+}
+
+export interface StudentCourseDetailQuery {
+  type?: StudentCourseContentTypeQuery | string;
+  search?: string;
+  page?: number;
+  limit?: number;
+  completionStatus?: string;
+  liveClassStatus?: string;
+  resultStatus?: string;
+  chapter?: string;
+  chapterId?: string;
 }
 
 export async function getStudentCourses(
@@ -43,6 +64,8 @@ export async function getStudentCourses(
     packageIds: query.packageIds,
     categoryId: query.categoryId,
     subCategory1: query.subCategory1,
+    validTillFrom: query.validTillFrom,
+    validTillTo: query.validTillTo,
   });
 
   const data = await apiGet<StudentCoursesListDataApi>(`${COURSES_PATH}${qs}`, {
@@ -61,17 +84,7 @@ export async function getStudentCourses(
 export async function getStudentCourseDetail(
   accessToken: string,
   courseId: string,
-  query: {
-    type?: string;
-    search?: string;
-    page?: number;
-    limit?: number;
-    completionStatus?: string;
-    liveClassStatus?: string;
-    resultStatus?: string;
-    chapter?: string;
-    chapterId?: string;
-  } = {}
+  query: StudentCourseDetailQuery = {}
 ): Promise<AccountCourseDetailViewModel | null> {
   const qs = buildApiQuery({
     type: query.type,
@@ -92,9 +105,46 @@ export async function getStudentCourseDetail(
   return mapStudentCourseDetail(data);
 }
 
+export async function getStudentCourseFilterOptions(
+  accessToken: string
+): Promise<{
+  packages: { value: string; label: string }[];
+  categories: { value: string; label: string }[];
+  subCategories: { value: string; label: string }[];
+}> {
+  try {
+    const data = await apiGet<StudentCourseFilterOptionsDataApi>(
+      `${COURSES_PATH}/filter-options`,
+      { accessToken, cache: "no-store" }
+    );
+    return mapStudentCourseFilterOptions(data);
+  } catch {
+    return { packages: [], categories: [], subCategories: [] };
+  }
+}
+
+export async function getStudentCourseChapterOptions(
+  accessToken: string,
+  query: { courseId: string; search?: string }
+): Promise<AccountCourseChapterOption[]> {
+  const qs = buildApiQuery({
+    courseId: query.courseId,
+    search: query.search,
+  });
+  try {
+    const data = await apiGet<StudentCourseChapterOptionsDataApi>(
+      `${COURSES_PATH}/filter-options/chapters${qs}`,
+      { accessToken, cache: "no-store" }
+    );
+    return mapStudentCourseChapterOptions(data.items);
+  } catch {
+    return [];
+  }
+}
+
 export async function getQuickActions(
   accessToken: string,
-  type: "videos" | "quizzes" | "pdfs" | "live-classes",
+  type: StudentCourseContentTypeQuery,
   page = 1,
   limit = 10
 ) {
