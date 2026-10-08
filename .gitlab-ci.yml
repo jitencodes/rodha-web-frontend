@@ -1,17 +1,15 @@
 # Rodha Web Frontend — GitLab CI/CD
 #
-# Branches:
-#   main        → development (environment: development)
-#   production  → production  (environment: production)
+#   main        → development  → image :development-<sha> / :development-latest
+#   production  → production   → image :production-<sha>  / :production-latest
 #
-# Public config comes from committed env files, not from colliding CI variables:
-#   main / development  → `.env`             NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/
-#   production          → `.env.production`  NEXT_PUBLIC_API_BASE_URL=https://api.rodha.co.in/rodha/
-# scripts/select-env.mjs copies the matching file to `.env` and removes
-# `.env.production` before the build so Next cannot load both.
-# GitLab variables are only for secrets (EMAIL_SMTP_PASS, API_KEY) and deploy keys.
+# Public API URLs come from committed files (scripts/select-env.mjs), not CI variables:
+#   main / development  → .env              NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/
+#   production          → .env.production   NEXT_PUBLIC_API_BASE_URL=https://api.rodha.co.in/rodha/
 #
-# See docs/DEPLOYMENT_GITLAB.md.
+# Images are built on the ARM64 runner (tag `arm`) and pushed to AWS ECR.
+# GitLab variables: AWS_* (ECR), EC2_HOST / EC2_USER / EC2_PORT / PEM_FILE (deploy),
+# and optional secrets EMAIL_SMTP_PASS / API_KEY. Do not set NEXT_PUBLIC_API_BASE_URL in CI.
 
 workflow:
   rules:
@@ -22,331 +20,157 @@ workflow:
 stages:
   - validate
   - build
-  - package
   - deploy
 
 default:
-  image: node:20-bookworm
+  tags:
+    - arm
   interruptible: true
 
 variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
-  NEXT_TELEMETRY_DISABLED: "1"
-  # Docker / registry
-  DOCKER_TLS_CERTDIR: "/certs"
-  IMAGE_NAME: "$CI_REGISTRY_IMAGE"
+  NODE_IMAGE: "node:22-alpine"
+  ECR_REGISTRY: "976416649390.dkr.ecr.ap-south-1.amazonaws.com"
+  ECR_IMAGE: "$ECR_REGISTRY/rodha-website"
+  APP_PORT: "3000"
 
-cache:
-  key:
-    files:
-      - package-lock.json
-  paths:
-    - .npm/
-
-# ---------------------------------------------------------------------------
-# Shared anchors
-# ---------------------------------------------------------------------------
-
-.node_setup: &node_setup
-  before_script:
-    - node -v
-    - npm -v
-    - npm ci --prefer-offline
-    - node scripts/select-env.mjs
-
-.docker_setup: &docker_setup
-  image: docker:27-cli
-  services:
-    - docker:27-dind
-  before_script:
-    - docker info
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    # Write env with node (Alpine package) so NEXT_PUBLIC_* bake correctly
-    - |
-      apk add --no-cache nodejs
-      node scripts/select-env.mjs
-
-# ---------------------------------------------------------------------------
-# Validate (both branches + MRs)
-# ---------------------------------------------------------------------------
+.node_run: &node_run
+  - |
+    node_run() {
+      local env_args=(-e CI=true -e GITLAB_CI=true -e HOME=/tmp -e npm_config_cache=/app/.npm -e NEXT_TELEMETRY_DISABLED=1)
+      if [ -n "${APP_ENV:-}" ]; then env_args+=(-e "APP_ENV=$APP_ENV"); fi
+      if [ -n "${CI_COMMIT_BRANCH:-}" ]; then env_args+=(-e "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"); fi
+      for k in $(compgen -e | grep -E '^(NEXT_PUBLIC_|API_|EMAIL_)'); do env_args+=(-e "$k"); done
+      docker run --rm -u "$(id -u):$(id -g)" -v "$CI_PROJECT_DIR:/app" -w /app \
+        "${env_args[@]}" "$NODE_IMAGE" sh -c "$1"
+    }
 
 validate:
   stage: validate
-  <<: *node_setup
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  before_script:
+    - *node_run
   script:
-    - npx tsc --noEmit
-    - npm run lint
+    - node_run "npm ci --prefer-offline && npx tsc --noEmit"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "production"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-# ---------------------------------------------------------------------------
-# Build — npm artifacts (kept for non-Docker / PM2 deploys)
-# ---------------------------------------------------------------------------
-
-build:development:
-  stage: build
-  <<: *node_setup
-  environment:
-    name: development
-  variables:
-    APP_ENV: development
-  script:
-    - echo "Building for DEVELOPMENT (branch=$CI_COMMIT_BRANCH)"
-    - grep -q "NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/" .env
-    - npm run build
-  artifacts:
-    name: "rodha-web-dev-$CI_COMMIT_SHORT_SHA"
-    expire_in: 7 days
+lint:
+  stage: validate
+  allow_failure: true
+  cache:
+    key:
+      files:
+        - package-lock.json
     paths:
-      - .next/
-      - public/
-      - package.json
-      - package-lock.json
-      - next.config.ts
-      - .env
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-build:production:
-  stage: build
-  <<: *node_setup
-  environment:
-    name: production
-  variables:
-    APP_ENV: production
-  script:
-    - echo "Building for PRODUCTION (branch=$CI_COMMIT_BRANCH)"
-    - grep -q "NEXT_PUBLIC_API_BASE_URL=https://api.rodha.co.in/rodha/" .env
-    - npm run build
-  artifacts:
-    name: "rodha-web-prod-$CI_COMMIT_SHORT_SHA"
-    expire_in: 14 days
-    paths:
-      - .next/
-      - public/
-      - package.json
-      - package-lock.json
-      - next.config.ts
-      - .env
-  rules:
-    - if: $CI_COMMIT_BRANCH == "production"
-
-# ---------------------------------------------------------------------------
-# Package — Docker image → GitLab Container Registry
-# Tags: :<env>-<sha> and :<env>-latest (isolated per environment)
-# ---------------------------------------------------------------------------
-
-docker:development:
-  stage: package
-  <<: *docker_setup
-  environment:
-    name: development
-  variables:
-    APP_ENV: development
-  # Run after validate; do not wait on npm artifact build (image builds inside Docker)
-  needs:
-    - job: validate
-  script:
-    - |
-      DEV_TAG="${IMAGE_NAME}:development-${CI_COMMIT_SHORT_SHA}"
-      DEV_LATEST="${IMAGE_NAME}:development-latest"
-      echo "Building Docker image $DEV_TAG"
-      docker build \
-        --pull \
-        --build-arg APP_ENV=development \
-        -t "$DEV_TAG" \
-        -t "$DEV_LATEST" \
-        .
-      docker push "$DEV_TAG"
-      docker push "$DEV_LATEST"
-      echo "IMAGE_TAG=$DEV_TAG" > docker.env
-  artifacts:
-    reports:
-      dotenv: docker.env
-    paths:
-      - .env
-    expire_in: 7 days
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-docker:production:
-  stage: package
-  <<: *docker_setup
-  environment:
-    name: production
-  variables:
-    APP_ENV: production
-  needs:
-    - job: validate
-  script:
-    - |
-      PROD_TAG="${IMAGE_NAME}:production-${CI_COMMIT_SHORT_SHA}"
-      PROD_LATEST="${IMAGE_NAME}:production-latest"
-      echo "Building Docker image $PROD_TAG"
-      docker build \
-        --pull \
-        --build-arg APP_ENV=production \
-        -t "$PROD_TAG" \
-        -t "$PROD_LATEST" \
-        .
-      docker push "$PROD_TAG"
-      docker push "$PROD_LATEST"
-      echo "IMAGE_TAG=$PROD_TAG" > docker.env
-  artifacts:
-    reports:
-      dotenv: docker.env
-    paths:
-      - .env
-    expire_in: 14 days
-  rules:
-    - if: $CI_COMMIT_BRANCH == "production"
-
-# ---------------------------------------------------------------------------
-# Deploy — PM2/rsync (manual) OR Docker pull on host (manual)
-# ---------------------------------------------------------------------------
-
-.deploy_ssh_setup: &deploy_ssh_setup
-  image: alpine:3.20
+      - .npm/
+    policy: pull
   before_script:
-    - apk add --no-cache openssh-client rsync bash
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - *node_run
+  script:
+    - node_run "npm ci --prefer-offline && npm run lint"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "production"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+.ecr_login: &ecr_login
+  - |
+    docker run --rm \
+      -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION \
+      amazon/aws-cli:2.17.0 ecr get-login-password \
+      | docker login --username AWS --password-stdin "$ECR_REGISTRY"
+
+build:
+  stage: build
+  needs:
+    - validate
+  environment:
+    name: $APP_ENV
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      variables:
+        APP_ENV: development
+    - if: $CI_COMMIT_BRANCH == "production"
+      variables:
+        APP_ENV: production
+  before_script:
+    - *node_run
+  script:
+    - set -o pipefail
+    - node_run "node scripts/select-env.mjs"
     - |
-      if [ -z "${SSH_PRIVATE_KEY}" ] || [ -z "${DEPLOY_HOST}" ] || [ -z "${DEPLOY_USER}" ]; then
-        echo "Set environment-scoped SSH_PRIVATE_KEY, DEPLOY_HOST, DEPLOY_USER"
-        exit 1
-      fi
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - |
-      if [ -n "${DEPLOY_SSH_KNOWN_HOSTS}" ]; then
-        echo "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      if [ "$APP_ENV" = "production" ]; then
+        grep -q "NEXT_PUBLIC_API_BASE_URL=https://api.rodha.co.in/rodha/" .env
       else
-        ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+        grep -q "NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/" .env
       fi
-      chmod 644 ~/.ssh/known_hosts
-
-deploy:development:
-  <<: *deploy_ssh_setup
-  stage: deploy
-  environment:
-    name: development
-    url: $NEXT_PUBLIC_BASE_URL
-  needs:
-    - build:development
-  script:
+    - *ecr_login
     - |
-      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
-      rsync -az --delete \
-        .next public package.json package-lock.json next.config.ts .env \
-        "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
-      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
-        set -e
-        cd \"${DEPLOY_PATH}\"
-        npm ci --omit=dev
-        if command -v pm2 >/dev/null 2>&1; then
-          pm2 restart \"${DEPLOY_PM2_NAME:-rodha-web}\" || pm2 start npm --name \"${DEPLOY_PM2_NAME:-rodha-web}\" -- start
-          pm2 save || true
-        else
-          echo \"pm2 not found — artifacts synced; start manually with npm start\"
-        fi
-      '"
+      docker build --pull \
+        --build-arg APP_ENV="$APP_ENV" \
+        -t "$ECR_IMAGE:$APP_ENV-$CI_COMMIT_SHORT_SHA" \
+        -t "$ECR_IMAGE:$APP_ENV-latest" \
+        .
+    - docker push "$ECR_IMAGE:$APP_ENV-$CI_COMMIT_SHORT_SHA"
+    - docker push "$ECR_IMAGE:$APP_ENV-latest"
+  after_script:
+    - rm -f .env
+    - docker logout "$ECR_REGISTRY" || true
+
+deploy:
+  stage: deploy
+  needs:
+    - build
+  environment:
+    name: $APP_ENV
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
-      allow_failure: false
-
-deploy:production:
-  <<: *deploy_ssh_setup
-  stage: deploy
-  environment:
-    name: production
-    url: $NEXT_PUBLIC_BASE_URL
-  needs:
-    - build:production
-  script:
-    - |
-      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
-      rsync -az --delete \
-        .next public package.json package-lock.json next.config.ts .env \
-        "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
-      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
-        set -e
-        cd \"${DEPLOY_PATH}\"
-        npm ci --omit=dev
-        if command -v pm2 >/dev/null 2>&1; then
-          pm2 restart \"${DEPLOY_PM2_NAME:-rodha-web}\" || pm2 start npm --name \"${DEPLOY_PM2_NAME:-rodha-web}\" -- start
-          pm2 save || true
-        else
-          echo \"pm2 not found — artifacts synced; start manually with npm start\"
-        fi
-      '"
-  rules:
+      variables:
+        APP_ENV: development
     - if: $CI_COMMIT_BRANCH == "production"
+      variables:
+        APP_ENV: production
       when: manual
-      allow_failure: false
-
-deploy:docker:development:
-  <<: *deploy_ssh_setup
-  stage: deploy
-  environment:
-    name: development
-    url: $NEXT_PUBLIC_BASE_URL
-  needs:
-    - job: docker:development
-      artifacts: true
+  before_script:
+    - *node_run
   script:
+    - set -o pipefail
+    - test -n "$EC2_HOST" && test -n "$EC2_USER" || { echo "Missing EC2_HOST / EC2_USER"; exit 1; }
+    - test -f "$PEM_FILE" || { echo "PEM_FILE must be a GitLab File variable"; exit 1; }
+    - KEY="$CI_PROJECT_DIR/.ec2.pem"
+    - (umask 077; tr -d '\r' < "$PEM_FILE" > "$KEY"; echo >> "$KEY")
+    - SSH="ssh -i $KEY -p ${EC2_PORT:-22} -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$CI_PROJECT_DIR/.ec2_known_hosts $EC2_USER@$EC2_HOST"
+    - node_run "node scripts/select-env.mjs"
     - |
-      test -n "${IMAGE_TAG}" || (echo "Missing IMAGE_TAG from docker job" && exit 1)
-      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
-      scp docker-compose.deploy.yml "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/docker-compose.deploy.yml"
-      # Runtime .env for server-only secrets (SMTP etc.) — not the baked NEXT_PUBLIC build file
-      if [ -f .env ]; then
-        scp .env "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env"
+      if [ "$APP_ENV" = "production" ]; then
+        grep -q "NEXT_PUBLIC_API_BASE_URL=https://api.rodha.co.in/rodha/" .env
+      else
+        grep -q "NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/" .env
       fi
-      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
-        set -e
-        cd \"${DEPLOY_PATH}\"
-        echo \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"
-        export IMAGE=\"${IMAGE_TAG}\"
-        export PORT=\"${DEPLOY_PORT:-3000}\"
-        docker compose -f docker-compose.deploy.yml pull
-        docker compose -f docker-compose.deploy.yml up -d --remove-orphans
-      '"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
-      allow_failure: false
-
-deploy:docker:production:
-  <<: *deploy_ssh_setup
-  stage: deploy
-  environment:
-    name: production
-    url: $NEXT_PUBLIC_BASE_URL
-  needs:
-    - job: docker:production
-      artifacts: true
-  script:
+    - $SSH "mkdir -p ~/rodha-web && cat > ~/rodha-web/$APP_ENV.env && chmod 600 ~/rodha-web/$APP_ENV.env" < .env
     - |
-      test -n "${IMAGE_TAG}" || (echo "Missing IMAGE_TAG from docker job" && exit 1)
-      test -n "${DEPLOY_PATH}" || (echo "Missing DEPLOY_PATH" && exit 1)
-      scp docker-compose.deploy.yml "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/docker-compose.deploy.yml"
-      if [ -f .env ]; then
-        scp .env "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env"
-      fi
-      ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -lc '
-        set -e
-        cd \"${DEPLOY_PATH}\"
-        echo \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"
-        export IMAGE=\"${IMAGE_TAG}\"
-        export PORT=\"${DEPLOY_PORT:-3000}\"
-        docker compose -f docker-compose.deploy.yml pull
-        docker compose -f docker-compose.deploy.yml up -d --remove-orphans
-      '"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "production"
-      when: manual
-      allow_failure: false
+      docker run --rm \
+        -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION \
+        amazon/aws-cli:2.17.0 ecr get-login-password \
+        | $SSH "docker login --username AWS --password-stdin $ECR_REGISTRY"
+    - |
+      $SSH "bash -s" <<EOF
+      set -e
+      IMAGE="$ECR_IMAGE:$APP_ENV-$CI_COMMIT_SHORT_SHA"
+      NAME="rodha-web-$APP_ENV"
+      docker pull "\$IMAGE"
+      docker rm -f "\$NAME" 2>/dev/null || true
+      docker run -d --name "\$NAME" --restart unless-stopped \\
+        -p $APP_PORT:3000 --env-file ~/rodha-web/$APP_ENV.env "\$IMAGE"
+      docker logout $ECR_REGISTRY || true
+      docker image prune -f
+      EOF
+  after_script:
+    - rm -f .env .ec2.pem .ec2_known_hosts

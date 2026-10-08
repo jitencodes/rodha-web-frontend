@@ -24,29 +24,35 @@ GitLab variables are for **secrets and deploy keys only** (`EMAIL_SMTP_PASS`, `A
 
 ## Pipeline jobs
 
-| Job | Branch | When |
+All jobs are tagged **`arm`** (ARM64 runner, shell executor + Docker). Node runs inside `node:22-alpine` via `docker run`.
+
+| Job | Branch | What |
 |-----|--------|------|
-| `validate` | `main`, `production`, MRs | auto — `tsc` + lint |
-| `build:development` | `main` | auto — npm `.next` artifacts (PM2 path) |
-| `build:production` | `production` | auto — npm `.next` artifacts (PM2 path) |
-| `docker:development` | `main` | auto — image → GitLab registry `:development-<sha>` |
-| `docker:production` | `production` | auto — image → GitLab registry `:production-<sha>` |
-| `deploy:development` | `main` | **manual** — SSH + rsync + pm2 |
-| `deploy:production` | `production` | **manual** — SSH + rsync + pm2 |
-| `deploy:docker:development` | `main` | **manual** — SSH + `docker compose` pull/up |
-| `deploy:docker:production` | `production` | **manual** — SSH + `docker compose` pull/up |
+| `validate` | `main`, `production`, MRs | `tsc` (blocks build) |
+| `lint` | `main`, `production`, MRs | ESLint — `allow_failure`, does not block deploy |
+| `build` | `main` → `development`, `production` → `production` | `docker build` (Dockerfile) → push to ECR `:<env>-<sha>` and `:<env>-latest` |
+| `deploy` | `main` → development (auto), `production` (**manual**) | SSH to EC2 → `docker pull` → restart container `rodha-web-<env>` on host port `APP_PORT` (default `3000`) |
 
-Docker and npm builds both use environment-scoped variables. Image tags never overlap (`development-*` vs `production-*`).
+### EC2 deploy variables (environment-scoped)
 
-### Docker locally
+| Variable | Notes |
+|----------|-------|
+| `EC2_HOST` | EC2 public IP / hostname |
+| `EC2_USER` | SSH user, e.g. `ubuntu` / `ec2-user` |
+| `EC2_PORT` | SSH port (default `22`) |
+| `PEM_FILE` | SSH private key — GitLab **File** variable (Type: File) |
+
+EC2 only needs Docker, with `EC2_USER` in the `docker` group. The ECR login token is created on the runner and sent over SSH, so EC2 needs no AWS CLI or credentials. Runtime env is written to `~/rodha-web/<env>.env` on the host and passed with `--env-file`.
+
+The image repository is `ECR_IMAGE` in `.gitlab-ci.yml` → `variables`. ECR login uses the GitLab variables `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (masked) and `AWS_DEFAULT_REGION`, through the `amazon/aws-cli` image.
+
+The Dockerfile is the only production build path. `docker-compose.yml` is for local development:
 
 ```bash
 cp .env.example .env   # fill values (NEXT_PUBLIC_* baked at image build)
 docker compose up --build
 # app on http://localhost:3000
 ```
-
-Enable the GitLab Container Registry for the project. Runners need the Docker executor / `docker:dind` privileged mode for `docker:development` / `docker:production` jobs.
 
 ## Variables to configure manually
 
@@ -90,22 +96,6 @@ Create **two scopes** (`development` and `production`) for each app key unless n
 | `EMAIL_FROM_NAME` | no |
 | `EMAIL_TO` | no |
 
-### Deploy (optional, environment-scoped)
-
-| Variable | Mask? | Notes |
-|----------|-------|-------|
-| `DEPLOY_HOST` | no | Server hostname/IP |
-| `DEPLOY_USER` | no | SSH user |
-| `DEPLOY_PATH` | no | Absolute app directory on server |
-| `SSH_PRIVATE_KEY` | **yes** | Deploy key (full PEM) |
-| `DEPLOY_SSH_KNOWN_HOSTS` | no | Optional pinned `known_hosts` lines |
-| `DEPLOY_PM2_NAME` | no | Default `rodha-web` (PM2 deploys only) |
-| `DEPLOY_PORT` | no | Host port for Docker deploy (default `3000`) |
-
-Registry login on the deploy host uses GitLab’s built-in `CI_REGISTRY_*` (no extra vars). Host must have Docker + Compose v2.
-
-Use **different** `DEPLOY_HOST` / `DEPLOY_PATH` (or PM2 name / port) per environment so a development deploy never overwrites production.
-
 ## Branch protection (recommended)
 
 In GitLab → **Settings → Repository → Protected branches**:
@@ -134,8 +124,7 @@ docker compose up --build
 
 1. [ ] Create GitLab environments `development` and `production` (created automatically on first job, or under Deployments → Environments).
 2. [ ] Add all required variables scoped to each environment (no unscoped duplicates).
-3. [ ] Enable Container Registry; ensure runners support `docker:dind` (privileged).
-4. [ ] Push to `main` → `validate` + `build:development` + `docker:development`.
-5. [ ] Push to `production` → `validate` + `build:production` + `docker:production`.
-6. [ ] (Optional) Configure deploy SSH vars → manually run PM2 or Docker deploy job.
-7. [ ] Confirm each site hits the correct API (`NEXT_PUBLIC_API_BASE_URL`) and OAuth client.
+3. [ ] `AWS_*` variables set; the key can push to the ECR repo.
+4. [ ] Push to `main` → `validate` + `build` (`development-*` tags).
+5. [ ] Push to `production` → `validate` + `build` (`production-*` tags).
+6. [ ] Confirm each site hits the correct API (`NEXT_PUBLIC_API_BASE_URL`) and OAuth client.

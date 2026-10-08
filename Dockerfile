@@ -5,7 +5,7 @@
 # scripts/select-env.mjs copies that file to `.env` and deletes `.env.production`
 # before `next build`, because Next always loads `.env.production` when NODE_ENV=production.
 
-ARG NODE_VERSION=20-alpine
+ARG NODE_VERSION=22-alpine
 
 # -----------------------------------------------------------------------------
 # Dependencies
