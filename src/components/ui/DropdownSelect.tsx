@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
@@ -19,59 +20,49 @@ interface DropdownSelectProps {
   options: DropdownSelectOption[];
   value: string;
   onChange: (value: string) => void;
+
   placeholder?: string;
   label?: string;
   error?: string;
   "aria-label"?: string;
+
   className?: string;
   triggerClassName?: string;
-  prefixIcon?: React.ReactNode;
+  prefixIcon?: ReactNode;
 
   /**
-   * Optional trigger width control.
-   *
-   * Existing behavior is preserved when omitted:
-   * - mobile: full width
-   * - desktop: content/max-content width
+   * Trigger width:
+   * - "auto": content/intrinsic width with minimum width
+   * - "full": fills parent width
+   * - number: explicit width in px
    */
   triggerWidth?: "auto" | "full" | number;
 
   /**
-   * Minimum trigger width.
-   *
-   * Defaults to the existing 140px.
+   * Minimum trigger width in px.
+   * Defaults to 140px.
    */
   triggerMinWidth?: number;
 
   /**
-   * Optional maximum trigger width.
+   * Maximum trigger width in px.
    */
   triggerMaxWidth?: number;
 
   /**
-   * Optional menu width control.
-   *
-   * Existing behavior:
-   * - "trigger": menu follows trigger width
-   *
-   * New:
-   * - "content": menu expands based on option content
-   * - number: explicit menu width in px
+   * Portal/menu width:
+   * - "trigger": exactly matches trigger width
+   * - "content": expands to fit option content
+   * - number: explicit width in px
    */
   menuWidth?: "trigger" | "content" | number;
 
   /**
-   * Optional maximum menu width.
-   *
-   * Useful with menuWidth="content".
+   * Maximum portal/menu width in px.
+   * Viewport width is always respected.
    */
   menuMaxWidth?: number;
 
-  /**
-   * `dark` — marketing/counselling dark UI.
-   * `light` — public light UI.
-   * `account` — account shell tokens.
-   */
   variant?: "dark" | "light" | "account";
 }
 
@@ -87,7 +78,6 @@ export function DropdownSelect({
   triggerClassName,
   prefixIcon,
 
-  // New props are optional so existing usages are unchanged.
   triggerWidth = "auto",
   triggerMinWidth = 140,
   triggerMaxWidth,
@@ -123,11 +113,10 @@ export function DropdownSelect({
   }, []);
 
   /**
-   * Calculate only the portal position/width.
+   * Calculate portal position and width only.
    *
-   * IMPORTANT:
-   * The menu is fixed-positioned and rendered through a portal,
-   * so a wider menu never changes the trigger/filter layout.
+   * The menu is position: fixed and rendered through a portal,
+   * so its width never participates in the trigger/filter layout.
    */
   const updateCoords = () => {
     const trigger = triggerRef.current;
@@ -139,64 +128,53 @@ export function DropdownSelect({
     const viewportPadding = 8;
     const viewportWidth = window.innerWidth;
 
-    const actualTriggerWidth = rect.width;
+    const triggerActualWidth = rect.width;
 
     let width: number;
 
     if (typeof menuWidth === "number") {
-      /**
-       * Explicit menu width.
-       *
-       * Never make the menu smaller than the trigger.
-       */
-      width = Math.max(menuWidth, actualTriggerWidth);
+      // Explicit menu width.
+      width = Math.max(menuWidth, triggerActualWidth);
     } else if (menuWidth === "content") {
       /**
-       * Calculate enough width for the longest option.
+       * Estimate the width required by the longest option.
        *
-       * This is only used when explicitly requested.
+       * Padding + approximate character width keeps this lightweight
+       * and avoids measuring hidden DOM elements.
        */
       const longestLabelLength = options.reduce(
-        (max, option) =>
-          Math.max(max, option.label.length),
+        (max, option) => Math.max(max, option.label.length),
         0
       );
 
       const estimatedContentWidth =
-        longestLabelLength * 7.5 + 48;
+        longestLabelLength * 8 + 48;
 
       width = Math.max(
-        actualTriggerWidth,
+        triggerActualWidth,
         estimatedContentWidth
       );
     } else {
-      /**
-       * Existing/default behavior:
-       * menu width = actual trigger width.
-       */
-      width = actualTriggerWidth;
+      // Default: menu exactly matches trigger.
+      width = triggerActualWidth;
     }
 
     if (menuMaxWidth !== undefined) {
       width = Math.min(width, menuMaxWidth);
     }
 
-    /**
-     * Never allow the portal to exceed the viewport.
-     */
+    // Never exceed viewport.
     width = Math.min(
       width,
       viewportWidth - viewportPadding * 2
     );
 
+    /**
+     * If the menu is wider than the trigger, keep it inside
+     * the viewport without affecting surrounding layout.
+     */
     let left = rect.left;
 
-    /**
-     * If the menu is wider than the trigger and would
-     * overflow the viewport, shift only the portal.
-     *
-     * This does NOT affect the trigger or neighboring fields.
-     */
     if (
       left + width >
       viewportWidth - viewportPadding
@@ -226,30 +204,30 @@ export function DropdownSelect({
 
     updateCoords();
 
-    const onReposition = () => {
+    const handleReposition = () => {
       updateCoords();
     };
 
     window.addEventListener(
       "resize",
-      onReposition
+      handleReposition
     );
 
     window.addEventListener(
       "scroll",
-      onReposition,
+      handleReposition,
       true
     );
 
     return () => {
       window.removeEventListener(
         "resize",
-        onReposition
+        handleReposition
       );
 
       window.removeEventListener(
         "scroll",
-        onReposition,
+        handleReposition,
         true
       );
     };
@@ -334,18 +312,11 @@ export function DropdownSelect({
           maxWidth: "calc(100vw - 16px)",
         }}
         className={cn(
-          /**
-           * Keep the existing menu behavior.
-           *
-           * overflow-x-hidden prevents horizontal scrolling
-           * when content-width mode is used.
-           */
-          "z-[1000] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
-
+          "z-[110] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
           isAccount
             ? "rounded-[6px] border border-[var(--account-border)] bg-[var(--account-surface)] py-1 shadow-[var(--account-shadow)]"
             : isLight
-              ? "rounded-[6px] bg-white border border-neutral-200 shadow-lg py-1"
+              ? "rounded-[6px] border border-neutral-200 bg-white py-1 shadow-lg"
               : "dropdown-menu"
         )}
       >
@@ -364,25 +335,23 @@ export function DropdownSelect({
               }}
               className={cn(
                 /**
-                 * Preserve old behavior for the default
-                 * trigger-width menu.
-                 *
-                 * Only content-width mode allows wrapping.
+                 * IMPORTANT:
+                 * Do not use whitespace-nowrap here.
+                 * Long options must wrap inside the wider menu
+                 * instead of creating horizontal scrolling.
                  */
-                menuWidth === "content"
-                  ? "block w-full min-w-0 whitespace-normal break-words"
-                  : "block w-full whitespace-nowrap",
+                "block w-full min-w-0 whitespace-normal break-words text-left",
 
                 isAccount
                   ? cn(
-                      "cursor-pointer px-4 py-2.5 text-left text-body-sm text-[var(--account-text-secondary)] transition-colors",
+                      "cursor-pointer px-4 py-2.5 text-body-sm text-[var(--account-text-secondary)] transition-colors",
                       "hover:bg-[var(--account-nav-active-bg)] hover:text-[var(--account-accent)]",
                       isActive &&
                         "bg-[var(--account-nav-active-bg)] font-medium text-[var(--account-accent)]"
                     )
                   : isLight
                     ? cn(
-                        "cursor-pointer px-4 py-2.5 text-left text-body-sm text-neutral-700 transition-colors",
+                        "cursor-pointer px-4 py-2.5 text-body-sm text-neutral-700 transition-colors",
                         "hover:bg-orange-500/10 hover:text-orange-600",
                         isActive &&
                           "bg-orange-500/10 font-medium text-orange-600"
@@ -402,10 +371,6 @@ export function DropdownSelect({
       portalParent
     );
 
-  /**
-   * Trigger styles are applied only to the trigger.
-   * Menu width is completely independent.
-   */
   const triggerStyle: CSSProperties = {
     ...(typeof triggerWidth === "number"
       ? {
@@ -430,25 +395,17 @@ export function DropdownSelect({
     <div
       ref={rootRef}
       className={cn(
-        /**
-         * Preserve old responsive behavior by default.
-         */
-        "relative w-full max-w-full shrink-0 md:w-max",
-
-        /**
-         * Only override the width behavior when the
-         * new triggerWidth prop is explicitly used.
-         */
-        triggerWidth === "full" && "w-full",
-        triggerWidth === "auto" && "w-full md:w-max",
-
+        "relative min-w-0 shrink-0",
+        triggerWidth === "full"
+          ? "w-full"
+          : "w-fit max-w-full",
         className
       )}
     >
       {label && (
         <label
           className={cn(
-            "block text-body-sm font-medium mb-1.5",
+            "mb-1.5 block text-body-sm font-medium",
             isAccount
               ? "text-[var(--account-text-secondary)]"
               : isLight
@@ -472,23 +429,16 @@ export function DropdownSelect({
         }
         style={triggerStyle}
         className={cn(
-          /**
-           * Keep the original responsive behavior.
-           */
-          "flex w-full items-center justify-between gap-2 h-9 min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap md:w-max md:max-w-[min(100vw-2rem,28rem)]",
-
-          /**
-           * Explicit trigger width overrides.
-           */
-          triggerWidth === "full" && "w-full",
-          typeof triggerWidth === "number" &&
-            "w-auto md:w-auto",
+          "flex h-9 items-center justify-between gap-2 whitespace-nowrap rounded-[6px] border px-3 text-body-sm font-medium transition-colors",
+          triggerWidth === "full"
+            ? "w-full"
+            : "w-auto max-w-full",
 
           isAccount
-            ? "bg-[var(--account-input-bg)] text-[var(--account-text)] border-[var(--account-input-border)] hover:border-[var(--account-accent)]/60"
+            ? "border-[var(--account-input-border)] bg-[var(--account-input-bg)] text-[var(--account-text)] hover:border-[var(--account-accent)]/60"
             : isLight
-              ? "bg-white text-neutral-900 border-neutral-200 hover:border-orange-500/60"
-              : "bg-bg-tertiary text-text-primary border-white/30 hover:border-orange-500/60 hover:text-orange-400",
+              ? "border-neutral-200 bg-white text-neutral-900 hover:border-orange-500/60"
+              : "border-white/30 bg-bg-tertiary text-text-primary hover:border-orange-500/60 hover:text-orange-400",
 
           triggerClassName,
           error &&
@@ -511,7 +461,7 @@ export function DropdownSelect({
             </span>
           )}
 
-          <span className="truncate">
+          <span className="min-w-0 truncate whitespace-nowrap">
             {displayLabel}
           </span>
         </span>
