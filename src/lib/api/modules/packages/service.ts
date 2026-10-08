@@ -44,13 +44,18 @@ function packagesQueryString(query: PackageListQuery): string {
 }
 
 export async function getPackages(
-  query: PackageListQuery = {}
+  query: PackageListQuery = {},
+  options?: { accessToken?: string }
 ): Promise<PackageListResult> {
   const qs = packagesQueryString(query);
 
   const data = await apiGetOrNull<PackageListDataApi>(
     `${PACKAGES_PATH}${qs}`,
-    { revalidate: 60 }
+    {
+      revalidate: options?.accessToken ? undefined : 60,
+      accessToken: options?.accessToken,
+      cache: options?.accessToken ? "no-store" : undefined,
+    }
   );
 
   const items = mapPackageListItems(data?.items);

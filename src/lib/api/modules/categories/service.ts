@@ -67,13 +67,19 @@ export async function getCategoryDropdown(
 }
 
 export async function getCategoryPageDetail(
-  slug: string
+  slug: string,
+  options?: { accessToken?: string }
 ): Promise<CategoryPageDetail | null> {
   const normalizedSlug = slug.trim();
   if (!normalizedSlug) return null;
 
   const data = await apiGetOrNull<CategoryPageApi>(
-    `${PATH}/${encodeURIComponent(normalizedSlug)}`
+    `${PATH}/${encodeURIComponent(normalizedSlug)}`,
+    {
+      revalidate: options?.accessToken ? undefined : 60,
+      accessToken: options?.accessToken,
+      cache: options?.accessToken ? "no-store" : undefined,
+    }
   );
   const category = mapCategoryPage(data, normalizedSlug);
   if (!category) return null;

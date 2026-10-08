@@ -75,7 +75,14 @@ export function DropdownSelect({
     const el = rootRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const width = Math.max(rect.width, 140);
+    const longest = options.reduce(
+      (max, option) => Math.max(max, option.label.length),
+      0
+    );
+    const width = Math.min(
+      Math.max(rect.width, longest * 7.5 + 32, 140),
+      window.innerWidth - 16
+    );
     let left = rect.left;
     if (left + width > window.innerWidth - 8) {
       left = Math.max(8, window.innerWidth - 8 - width);
@@ -172,6 +179,7 @@ export function DropdownSelect({
                 setOpen(false);
               }}
               className={cn(
+                "whitespace-nowrap",
                 isAccount
                   ? cn(
                       "block w-full cursor-pointer px-4 py-2.5 text-left text-body-sm text-[var(--account-text-secondary)] transition-colors",
@@ -200,7 +208,7 @@ export function DropdownSelect({
     );
 
   return (
-    <div ref={rootRef} className={cn("relative", className)}>
+    <div ref={rootRef} className={cn("relative w-full max-w-full shrink-0 md:w-max", className)}>
       {label && (
         <label
           className={cn(
@@ -223,7 +231,7 @@ export function DropdownSelect({
         aria-invalid={Boolean(error)}
         onClick={() => setOpen(!open)}
         className={cn(
-          "flex items-center justify-between gap-2 h-9 w-full min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap",
+          "flex w-full items-center justify-between gap-2 h-9 min-w-[140px] px-3 text-body-sm font-medium border rounded-[6px] transition-colors whitespace-nowrap md:w-max md:max-w-[min(100vw-2rem,28rem)]",
           isAccount
             ? "bg-[var(--account-input-bg)] text-[var(--account-text)] border-[var(--account-input-border)] hover:border-[var(--account-accent)]/60"
             : isLight
@@ -233,7 +241,7 @@ export function DropdownSelect({
           error && "border-accent-red hover:border-accent-red"
         )}
       >
-        <span className="flex min-w-0 items-center gap-2.5">
+        <span className="flex min-w-0 items-center gap-2.5 md:min-w-max">
           {prefixIcon && (
             <span
               className={cn(
@@ -248,7 +256,7 @@ export function DropdownSelect({
               {prefixIcon}
             </span>
           )}
-          <span className="truncate">{displayLabel}</span>
+          <span className="truncate md:overflow-visible md:whitespace-nowrap">{displayLabel}</span>
         </span>
         <svg
           className={cn(

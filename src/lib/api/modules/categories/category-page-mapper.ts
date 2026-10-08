@@ -375,10 +375,8 @@ export function mapCategoryPage(
     testimonials: mapTestimonials(api.testimonials, categoryId),
     stories: mapSuccessStories(api.successStories),
     faqs: mappedFaqs,
-    courses: mappedCourses.length > 0 ? mappedCourses : base.courses,
-    // CMS courses/test-series are not live yet; fall back to the static catalog.
-    testSeries:
-      mappedTestSeries.length > 0 ? mappedTestSeries : base.testSeries,
+    courses: mappedCourses,
+    testSeries: mappedTestSeries,
   };
 
   return withCategoryLandingDefaults(mapped);

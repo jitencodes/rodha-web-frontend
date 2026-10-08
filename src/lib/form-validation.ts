@@ -74,8 +74,62 @@ export function validateMessage(value: string): string | undefined {
   return undefined;
 }
 
-export function validatePassword(value: string): string | undefined {
+export interface PasswordRule {
+  id: string;
+  label: string;
+  met: boolean;
+}
+
+export function getPasswordRules(value: string): PasswordRule[] {
+  return [
+    {
+      id: "length",
+      label: `At least ${PASSWORD_MIN_LENGTH} characters`,
+      met: value.length >= PASSWORD_MIN_LENGTH,
+    },
+    {
+      id: "lower",
+      label: "One lowercase letter",
+      met: /[a-z]/.test(value),
+    },
+    {
+      id: "upper",
+      label: "One uppercase letter",
+      met: /[A-Z]/.test(value),
+    },
+    {
+      id: "number",
+      label: "One number",
+      met: /\d/.test(value),
+    },
+    {
+      id: "special",
+      label: "One special character",
+      met: /[^A-Za-z0-9]/.test(value),
+    },
+  ];
+}
+
+export type PasswordStrength = "weak" | "medium" | "strong";
+
+export function getPasswordStrength(value: string): PasswordStrength | null {
+  if (!value) return null;
+  const met = getPasswordRules(value).filter((rule) => rule.met).length;
+  if (met <= 2) return "weak";
+  if (met <= 4) return "medium";
+  return "strong";
+}
+
+export function validatePassword(
+  value: string,
+  options?: { strict?: boolean }
+): string | undefined {
   if (!value) return "Password is required.";
+  if (options?.strict) {
+    const unmet = getPasswordRules(value).filter((rule) => !rule.met);
+    if (unmet.length > 0) return "Password does not meet all requirements.";
+    return undefined;
+  }
   if (value.length < PASSWORD_MIN_LENGTH) {
     return `Password must be at least ${PASSWORD_MIN_LENGTH} characters.`;
   }

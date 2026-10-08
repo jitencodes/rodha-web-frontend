@@ -72,7 +72,10 @@ export interface RecommendedProduct {
   /** Whole-number percent off, e.g. 38 */
   discountPercent: number;
   href: string;
+  /** Buy Now / View Course destination when it differs from the card href. */
+  ctaHref?: string;
   productType: AccountProductType;
+  isSelfEnrolled?: boolean;
   /** CTA for cart "You May Also Like" */
   ctaLabel?: string;
 }

@@ -103,7 +103,8 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
     status,
     statusLabel: (order.status || status).replace(/_/g, " "),
     paymentStatus,
-    paymentStatusLabel: paymentStatus,
+    paymentStatusLabel:
+      paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1),
     amount: typeof order.payableAmount === "number" ? order.payableAmount : 0,
     thumbnail:
       first?.package?.bannerImageUrl ||

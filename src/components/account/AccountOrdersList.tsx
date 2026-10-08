@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
-import type { AccountOrder, AccountOrderStatus } from "@/lib/account/types";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
+import type { AccountOrder, AccountPaymentStatus } from "@/lib/account/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 import { ACCOUNT_ORDERS_PAGE_COPY } from "@/data/account/orders";
@@ -9,12 +10,11 @@ type AccountOrdersListProps = {
   orders: AccountOrder[];
 };
 
-const ORDER_STATUS_CLASS: Record<AccountOrderStatus, string> = {
-  active: "bg-emerald-500/15 text-emerald-600",
-  completed: "bg-sky-500/15 text-sky-600",
-  expired: "bg-[var(--account-nav-hover)] text-[var(--account-text-muted)]",
-  refunded: "bg-orange-500/15 text-orange-600",
+const PAYMENT_STATUS_CLASS: Record<AccountPaymentStatus, string> = {
+  paid: "bg-emerald-500/15 text-emerald-600",
   pending: "bg-amber-500/15 text-amber-600",
+  failed: "bg-red-500/15 text-red-600",
+  refunded: "bg-orange-500/15 text-orange-600",
 };
 
 function StatusBadge({
@@ -50,9 +50,12 @@ function ProductCell({ order }: { order: AccountOrder }) {
         />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-body-sm font-medium text-[var(--account-text)]">
-          {order.title}
-        </p>
+        <ClampTooltip
+          text={order.title}
+          lines={2}
+          className="text-body-sm font-medium text-[var(--account-text)]"
+          tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
+        />
         <p className="truncate text-caption text-[var(--account-text-muted)] capitalize">
           {order.productType === "test-series" ? "Test series" : "Course"}
         </p>
@@ -119,9 +122,6 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
             <thead>
               <tr className="border-b border-[var(--account-border)] bg-[var(--account-nav-hover)]/60">
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
-                  Order ID
-                </th>
-                <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
                   Product
                 </th>
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
@@ -131,7 +131,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   Amount
                 </th>
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
-                  Status
+                  Payment Status
                 </th>
                 <th className="px-4 py-3 text-caption font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
                   <span className="sr-only">Actions</span>
@@ -144,10 +144,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   key={order.id}
                   className="border-b border-[var(--account-border)] last:border-b-0"
                 >
-                  <td className="whitespace-nowrap px-4 py-3.5 font-mono text-caption text-[var(--account-text-secondary)]">
-                    {order.orderNumber}
-                  </td>
-                  <td className="max-w-[240px] px-4 py-3.5">
+                  <td className="max-w-[280px] px-4 py-3.5">
                     <ProductCell order={order} />
                   </td>
                   <td className="whitespace-nowrap px-4 py-3.5 text-body-sm text-[var(--account-text-secondary)]">
@@ -158,8 +155,8 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   </td>
                   <td className="px-4 py-3.5">
                     <StatusBadge
-                      label={order.statusLabel}
-                      className={ORDER_STATUS_CLASS[order.status]}
+                      label={order.paymentStatusLabel}
+                      className={PAYMENT_STATUS_CLASS[order.paymentStatus]}
                     />
                   </td>
                   <td className="px-4 py-3.5 text-right">
@@ -187,14 +184,6 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
             <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3">
               <div className="min-w-0">
                 <dt className="text-caption text-[var(--account-text-muted)]">
-                  Order ID
-                </dt>
-                <dd className="mt-0.5 truncate font-mono text-caption text-[var(--account-text-secondary)]">
-                  {order.orderNumber}
-                </dd>
-              </div>
-              <div className="min-w-0">
-                <dt className="text-caption text-[var(--account-text-muted)]">
                   Date
                 </dt>
                 <dd className="mt-0.5 text-body-sm text-[var(--account-text-secondary)]">
@@ -211,12 +200,12 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-caption text-[var(--account-text-muted)]">
-                  Order status
+                  Payment status
                 </dt>
                 <dd className="mt-1">
                   <StatusBadge
-                    label={order.statusLabel}
-                    className={ORDER_STATUS_CLASS[order.status]}
+                    label={order.paymentStatusLabel}
+                    className={PAYMENT_STATUS_CLASS[order.paymentStatus]}
                   />
                 </dd>
               </div>

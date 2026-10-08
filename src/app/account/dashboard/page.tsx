@@ -122,7 +122,6 @@ export default async function AccountDashboardPage() {
                     key={product.id}
                     product={product}
                     showCta
-                    ctaLabel="Buy Now"
                   />
                 ))}
               </div>

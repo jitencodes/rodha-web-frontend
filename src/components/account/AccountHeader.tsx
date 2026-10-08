@@ -19,7 +19,7 @@ import {
 import { useAccountTheme } from "@/components/account/AccountThemeProvider";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { getInitials } from "@/lib/initials";
-import { EXTERNAL_URLS, getGraphyDashboardUrl } from "@/lib/constants";
+import { getGraphyDashboardUrl } from "@/lib/constants";
 import { withSsoToken } from "@/lib/auth/sso";
 import { expireSessionClient, isUnauthorizedStatus } from "@/lib/auth/session-expired";
 import { cn } from "@/lib/utils";
@@ -275,7 +275,7 @@ export function AccountHeader({ onMenuClick, user }: AccountHeaderProps) {
           */}
 
           <a
-            href={EXTERNAL_URLS.rodhaBuddy}
+            href="/api/buddy/auto-login"
             target="_blank"
             rel="noopener noreferrer"
             className={actionBtnClass}

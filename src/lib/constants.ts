@@ -15,7 +15,9 @@ export const SITE_URL = "https://rodha.in";
 export const EXTERNAL_URLS = {
   graphy: "https://rodha.graphy.com",
   thinkExam: "https://thinkexam.com",
-  rodhaBuddy: "https://buddy.rodha.in",
+  rodhaBuddy:
+    process.env.NEXT_PUBLIC_RODHA_BUDDY_URL?.trim().replace(/\/$/, "") ||
+    "https://rodhabuddy.innowrap.co.in",
   testSeries: "https://mocks.rodha.co.in/",
 } as const;
 
@@ -28,6 +30,27 @@ export function getThinkExamUrl(): string {
     process.env.NEXT_PUBLIC_THINK_EXAM_URL?.trim() ||
     EXTERNAL_URLS.testSeries
   );
+}
+
+const RODHA_BUDDY_DEV_ORIGIN = "https://rodhabuddy.innowrap.co.in";
+
+/** Buddy site origin from env. Dev `.env` and prod `.env.production` differ. */
+export function getRodhaBuddyOrigin(): string {
+  const raw =
+    process.env.NEXT_PUBLIC_RODHA_BUDDY_URL?.trim() || RODHA_BUDDY_DEV_ORIGIN;
+  return raw.replace(/\/$/, "").replace(/\/#\/.*$/, "");
+}
+
+/**
+ * Logged-in Buddy handoff:
+ * `{origin}/#/auto-login?authToken=<URL_ENCODED_JWT>`
+ * Guests get the origin only.
+ */
+export function buildRodhaBuddyUrl(token?: string | null): string {
+  const origin = getRodhaBuddyOrigin();
+  const jwt = token?.trim();
+  if (!jwt) return origin;
+  return `${origin}/#/auto-login?authToken=${encodeURIComponent(jwt)}`;
 }
 
 export function getGraphyDashboardUrl(): string {

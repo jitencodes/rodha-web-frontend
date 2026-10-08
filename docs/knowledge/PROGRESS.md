@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-08 (production branch reset; ARM/ECR CI with separate env files)
+**Last updated:** 2026-10-08 (Rodha Buddy auto-login token)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Rodha Buddy auto-login (2026-10-08):** Header and account Buddy buttons open `/api/buddy/auto-login`, which redirects to `{NEXT_PUBLIC_RODHA_BUDDY_URL}/#/auto-login?authToken=<encoded JWT>` when the login cookie is present. Dev `.env` is `https://rodhabuddy.innowrap.co.in`; `.env.production` is `https://buddy.rodha.co.in`.
+- **Account/catalog UX (2026-10-08):** Buy Now uses `isSelfEnrolled` (View Course) on `/courses`, account buy tab, and dashboard recommendations, with the student token on package fetches. Title tooltips on course, recommended, continue-watching, live-class, and order product cells. Orders show payment status and hide Order ID. Category courses no longer fall back to static packages. Blog detail category tags use the header category list. Signup fields marked required with live password strength. Password-update dialog closes on API error. Sidebar support mailto assigns `window.location` so the client router does not swallow it. Test and certificate quick links commented out.
 - **Production branch reset + env-separated CI (2026-10-08):** Recreated `production` from current `main` after merging `gitlab/main` (ARM runner, Node 22, ECR, EC2 deploy, non-blocking lint). `main` builds `APP_ENV=development` (`https://innowrap.co.in/rodha/`); `production` builds `APP_ENV=production` (`https://api.rodha.co.in/rodha/`) via `select-env.mjs`.
 - **Env files per environment (2026-10-08):** Committed `.env` (`https://innowrap.co.in/rodha/`) and `.env.production` (`https://api.rodha.co.in/rodha/`). `select-env.mjs` plus Docker `APP_ENV` and GitLab jobs pick one file before `next build` so Next cannot load both. SMTP passwords stay in `.env.local`.
 - **Google login production harden (2026-10-07):** GIS overlay uses near-invisible opacity (not `opacity-0`), `Script` `onReady`, origin-aware `error_callback`, and `next.config` build-time passthrough for `NEXT_PUBLIC_GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_API_BASE_URL`. Documented Vercel + rodha.co.in Authorized JavaScript origins; production API URL `https://api.rodha.co.in/rodha/`.

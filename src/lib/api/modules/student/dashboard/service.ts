@@ -7,6 +7,10 @@ import {
 import type { StudentLiveContentApi } from "@/lib/api/modules/student/courses/types";
 import type { ContinueWatchingItem, LearningProgress, RecommendedProduct } from "@/lib/account/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
+import {
+  packageBuyNowHref,
+  packageViewCourseHref,
+} from "@/lib/packages/buy-now";
 
 interface DashboardApi {
   courseStats?: {
@@ -27,6 +31,7 @@ interface DashboardApi {
     language?: string | null;
     price?: number | null;
     discountedPrice?: number | null;
+    isSelfEnrolled?: boolean | null;
   }>;
   latestOrders?: unknown[];
 }
@@ -67,6 +72,7 @@ export async function getStudentDashboard(
       original > price && original > 0
         ? Math.round(((original - price) / original) * 100)
         : 0;
+    const isSelfEnrolled = item.isSelfEnrolled === true;
     recommended.push({
       id,
       title,
@@ -78,6 +84,11 @@ export async function getStudentDashboard(
       originalPrice: original > price ? original : price,
       discountPercent,
       href: slug ? `/courses/${slug}` : "/courses",
+      ctaHref: isSelfEnrolled
+        ? packageViewCourseHref(id)
+        : packageBuyNowHref(id, slug || undefined),
+      ctaLabel: isSelfEnrolled ? "View Course" : "Buy Now",
+      isSelfEnrolled,
       productType: "course",
     });
   }

@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { cn } from "@/lib/utils";
 import type { ContinueWatchingItem } from "@/lib/account/types";
+
+const TITLE_TOOLTIP =
+  "border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]";
 
 type AccountContinueWatchingCardProps = {
   item: ContinueWatchingItem;
@@ -64,9 +68,14 @@ export function AccountContinueWatchingCard({
           {item.tag}
         </span>
 
-        <h3 className="line-clamp-2 font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
+        <h3 className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
           <Link href={item.href} className="hover:text-[var(--account-accent)]">
-            {item.title}
+            <ClampTooltip
+              text={item.title}
+              lines={2}
+              className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]"
+              tooltipClassName={TITLE_TOOLTIP}
+            />
           </Link>
         </h3>
 

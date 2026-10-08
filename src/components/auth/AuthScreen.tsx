@@ -17,6 +17,8 @@ import {
   PHONE_LENGTH,
   sanitizeNameInput,
   sanitizePhoneInput,
+  getPasswordRules,
+  getPasswordStrength,
   validateEmail,
   validateName,
   validatePassword,
@@ -117,7 +119,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
     const nextErrors: FieldErrors = {
       email: validateEmail(email),
-      password: validatePassword(password),
+      password: validatePassword(password, { strict: isSignup }),
     };
     if (isSignup) {
       nextErrors.fullName = validateName(fullName);
@@ -212,7 +214,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
             {isSignup ? (
               <Input
                 variant="light"
-                label="Full Name"
+                label="Full Name *"
                 placeholder="Enter your full name"
                 value={fullName}
                 onChange={(e) => {
@@ -229,7 +231,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
             <Input
               variant="light"
-              label="Email Address"
+              label={isSignup ? "Email Address *" : "Email Address"}
               type="email"
               placeholder="you@example.com"
               value={email}
@@ -249,7 +251,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                   htmlFor="auth-phone"
                   className="mb-1.5 block text-body-sm font-medium text-neutral-700"
                 >
-                  Mobile Number
+                  Mobile Number *
                 </label>
                 <div
                   className={cn(
@@ -315,7 +317,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
             <Input
               variant="light"
-              label="Password"
+              label={isSignup ? "Password *" : "Password"}
               type={showPassword ? "text" : "password"}
               placeholder={isSignup ? "Create a password" : "Enter your password"}
               value={password}
@@ -337,8 +339,15 @@ export function AuthScreen({ mode }: AuthScreenProps) {
               }
               autoComplete={isSignup ? "new-password" : "current-password"}
               aria-required
-              error={fieldErrors.password}
+              error={isSignup ? undefined : fieldErrors.password}
             />
+
+            {isSignup ? (
+              <PasswordRequirements
+                password={password}
+                showError={Boolean(fieldErrors.password)}
+              />
+            ) : null}
 
             {!isSignup ? (
               <div className="-mt-2 flex justify-end">
@@ -354,7 +363,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
             {isSignup ? (
               <Input
                 variant="light"
-                label="Confirm Password"
+                label="Confirm Password *"
                 type={showConfirm ? "text" : "password"}
                 placeholder="Confirm your password"
                 value={confirmPassword}
@@ -488,6 +497,70 @@ function LockIcon() {
         d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
       />
     </svg>
+  );
+}
+
+function PasswordRequirements({
+  password,
+  showError,
+}: {
+  password: string;
+  showError: boolean;
+}) {
+  const rules = getPasswordRules(password);
+  const strength = getPasswordStrength(password);
+  const allMet = rules.every((rule) => rule.met);
+  if (!password && !showError) return null;
+
+  const strengthClass =
+    strength === "strong"
+      ? "bg-emerald-500"
+      : strength === "medium"
+        ? "bg-amber-500"
+        : "bg-red-500";
+  const strengthWidth =
+    strength === "strong" ? "w-full" : strength === "medium" ? "w-2/3" : "w-1/3";
+
+  return (
+    <div className="-mt-2 space-y-2" aria-live="polite">
+      {strength ? (
+        <div className="flex items-center gap-2">
+          <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-neutral-200">
+            <span className={cn("block h-full rounded-full", strengthWidth, strengthClass)} />
+          </span>
+          <span
+            className={cn(
+              "text-caption font-semibold capitalize",
+              strength === "strong"
+                ? "text-emerald-600"
+                : strength === "medium"
+                  ? "text-amber-600"
+                  : "text-red-500"
+            )}
+          >
+            {strength}
+          </span>
+        </div>
+      ) : null}
+      <ul className="space-y-1">
+        {rules.map((rule) => (
+          <li
+            key={rule.id}
+            className={cn(
+              "text-caption",
+              rule.met ? "text-emerald-600" : showError ? "text-accent-red" : "text-neutral-500"
+            )}
+          >
+            {rule.met ? "✓" : "•"} {rule.label}
+          </li>
+        ))}
+      </ul>
+      {allMet ? (
+        <p className="text-caption font-semibold text-emerald-600">
+          All requirements met
+        </p>
+      ) : null}
+    </div>
   );
 }
 

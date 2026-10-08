@@ -324,7 +324,7 @@ export function Header({
             </div>
           ) : null}
           <a
-            href={EXTERNAL_URLS.rodhaBuddy}
+            href="/api/buddy/auto-login"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center h-9.5 px-4 text-body-sm font-semibold text-white border border-[#4B5563]/80 rounded-[4px] transition-colors whitespace-nowrap hover:border-orange-400/50

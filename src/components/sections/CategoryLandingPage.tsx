@@ -69,8 +69,7 @@ export function CategoryLandingPage({
   isLoggedIn = false,
 }: CategoryLandingPageProps) {
   const facultyMembers = category.facultyMembers ?? [];
-  const courses =
-    packageCourses !== undefined ? packageCourses : category.courses;
+  const courses = packageCourses ?? [];
   const results = category.results;
   const testimonials = category.testimonials;
   const showResults = results.length > 0;

@@ -246,14 +246,9 @@ export default async function BlogPostPage({
             {/* Sidebar */}
             <aside className="lg:col-span-4">
               <div className="lg:sticky lg:top-24 space-y-8">
-                <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
-                  <BlogCategories
-                    activeCategory={
-                      post.categorySlug ||
-                      post.category
-                    }
-                  />
-                </div>
+                <BlogCategories
+                  activeCategory={post.categorySlug || post.category}
+                />
 
                 <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
                   <ShareBlog

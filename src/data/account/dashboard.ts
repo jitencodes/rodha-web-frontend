@@ -30,18 +30,18 @@ export const ACCOUNT_QUICK_LINKS: DashboardQuickLink[] = [
     href: "/account/courses?tab=buy",
     icon: "courses",
   },
-  {
-    id: "take-test",
-    label: "Take a Test",
-    href: "/account/test-series",
-    icon: "test",
-  },
-  {
-    id: "certificates",
-    label: "View My Certificates",
-    href: "/account/orders",
-    icon: "certificate",
-  },
+  // {
+  //   id: "take-test",
+  //   label: "Take a Test",
+  //   href: "/account/test-series",
+  //   icon: "test",
+  // },
+  // {
+  //   id: "certificates",
+  //   label: "View My Certificates",
+  //   href: "/account/orders",
+  //   icon: "certificate",
+  // },
   {
     id: "update-profile",
     label: "Update Profile",

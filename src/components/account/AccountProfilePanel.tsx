@@ -189,6 +189,7 @@ export function AccountProfilePanel({
       setPasswordError(
         err instanceof Error ? err.message : "Unable to update password"
       );
+      setConfirmPasswordOpen(false);
     } finally {
       setPasswordPending(false);
     }

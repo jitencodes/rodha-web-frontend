@@ -175,16 +175,19 @@ export default async function AccountCoursesPage({
           typeOptions,
           subCategoryOptions,
         ] = await Promise.all([
-          getPackages({
-            page,
-            limit: PAGE_SIZE,
-            search: query,
-            categoryId,
-            graphyCategory,
-            subCategory1,
-            sortBy: buySortPreset.sortBy,
-            sortOrder: buySortPreset.sortOrder,
-          }),
+          getPackages(
+            {
+              page,
+              limit: PAGE_SIZE,
+              search: query,
+              categoryId,
+              graphyCategory,
+              subCategory1,
+              sortBy: buySortPreset.sortBy,
+              sortOrder: buySortPreset.sortOrder,
+            },
+            { accessToken }
+          ),
           getCategoryDropdown({ limit: 50 }),
           getPackageCategories({ categoryId, limit: 50 }),
           getPackageSubcategories({
@@ -339,7 +342,8 @@ export default async function AccountCoursesPage({
             <CourseCardV2
               key={course.id}
               course={course}
-              href={course.enrollmentUrl || `/courses/${course.slug}`}
+              href={`/courses/${course.slug}`}
+              ctaHref={course.enrollmentUrl || `/courses/${course.slug}`}
               ctaLabel={course.detailsLabel || "Buy Now"}
             />
           ))}

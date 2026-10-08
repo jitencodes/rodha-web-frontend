@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CategoryLandingPage } from "@/components/sections/CategoryLandingPage";
 import type { CategoryCourseCard } from "@/components/sections/CategoryCoursesSlider";
 import { getCategoryPageDetail } from "@/lib/api/modules/categories/service";
-import { getSessionUser } from "@/lib/auth/server-session";
+import { getAccessToken, getSessionUser } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
 interface CategoryPageProps {
@@ -42,9 +42,14 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { category_slug } = await params;
   const { type } = await searchParams;
-  const sessionUser = await getSessionUser();
+  const [sessionUser, accessToken] = await Promise.all([
+    getSessionUser(),
+    getAccessToken(),
+  ]);
 
-  const detail = await getCategoryPageDetail(category_slug);
+  const detail = await getCategoryPageDetail(category_slug, {
+    accessToken: accessToken ?? undefined,
+  });
 
   if (!detail) {
     notFound();

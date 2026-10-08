@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { cn, formatPrice } from "@/lib/utils";
 import type { RecommendedProduct } from "@/lib/account/types";
+
+const TITLE_TOOLTIP =
+  "border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]";
 
 type AccountRecommendedCardProps = {
   product: RecommendedProduct;
@@ -26,7 +30,12 @@ export function AccountRecommendedCard({
   const label =
     ctaLabel ??
     product.ctaLabel ??
-    (onAddToCart ? "Add to Cart" : "Buy Now");
+    (product.isSelfEnrolled
+      ? "View Course"
+      : onAddToCart
+        ? "Add to Cart"
+        : "Buy Now");
+  const actionHref = product.ctaHref || product.href;
   const badgeLabel =
     product.productType === "test-series" ? "Test Series" : product.tag || "Course";
 
@@ -56,12 +65,17 @@ export function AccountRecommendedCard({
           {badgeLabel}
         </span>
 
-        <h3 className="line-clamp-2 font-montserrat text-[14px] leading-snug font-semibold text-[var(--account-text)]">
+        <h3 className="font-montserrat text-[14px] leading-snug font-semibold text-[var(--account-text)]">
           <Link
             href={product.href}
             className="hover:text-[var(--account-accent)]"
           >
-            {product.title}
+            <ClampTooltip
+              text={product.title}
+              lines={2}
+              className="font-montserrat text-[14px] leading-snug font-semibold text-[var(--account-text)]"
+              tooltipClassName={TITLE_TOOLTIP}
+            />
           </Link>
         </h3>
 
@@ -94,7 +108,7 @@ export function AccountRecommendedCard({
               </button>
             ) : (
               <Link
-                href={product.href}
+                href={actionHref}
                 className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 {label}

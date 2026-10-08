@@ -112,7 +112,7 @@ export function AuthBannerSlider() {
             />
             <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 lg:p-10">
               <div className="mt-auto max-w-md pb-8">
-                <h2 className="font-montserrat text-[28px] font-bold leading-[1.15] tracking-tight text-white sm:text-[34px] lg:text-[38px]">
+                <h2 className="font-montserrat text-sm 2xl:text-[28px] font-bold leading-[1.15] tracking-tight text-white sm:text-[34px] lg:text-[38px]">
                   {slide.title}
                 </h2>
                 <p className="mt-3 max-w-sm text-body text-white/80 leading-relaxed">

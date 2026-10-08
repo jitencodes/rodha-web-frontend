@@ -61,7 +61,15 @@ export function QuickLinksCard({ links, className }: QuickLinksCardProps) {
           return (
             <li key={link.id}>
               {isExternal ? (
-                <a href={link.href} className={classNameLink}>
+                <a
+                  href={link.href}
+                  className={classNameLink}
+                  onClickCapture={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    window.location.assign(link.href);
+                  }}
+                >
                   {content}
                 </a>
               ) : (

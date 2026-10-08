@@ -19,6 +19,7 @@ import {
   getPackageSubcategories,
 } from "@/lib/api/modules/packages/service";
 import { getActiveSubjects } from "@/lib/api/modules/subjects/service";
+import { getAccessToken } from "@/lib/auth/server-session";
 import { getCatalogListings } from "@/lib/catalog";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import {
@@ -83,6 +84,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const sortPreset = resolveCourseSort(params.sort?.trim());
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
 
+  const accessToken = await getAccessToken();
   const [
     categoryOptions,
     typeOptions,
@@ -109,18 +111,21 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       subjectIds: subjectId,
     }),
     getActiveSubjects(),
-    getPackages({
-      page,
-      limit: PAGE_SIZE,
-      search: query,
-      categoryId,
-      graphyCategory,
-      subCategory1,
-      facultyId,
-      subjectId,
-      sortBy: sortPreset.sortBy,
-      sortOrder: sortPreset.sortOrder,
-    }),
+    getPackages(
+      {
+        page,
+        limit: PAGE_SIZE,
+        search: query,
+        categoryId,
+        graphyCategory,
+        subCategory1,
+        facultyId,
+        subjectId,
+        sortBy: sortPreset.sortBy,
+        sortOrder: sortPreset.sortOrder,
+      },
+      { accessToken: accessToken ?? undefined }
+    ),
     getCatalogListings(),
   ]);
 

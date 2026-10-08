@@ -2,6 +2,7 @@
 
 import { CalendarClock, Play, Radio } from "lucide-react";
 import { useState } from "react";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import type { AccountLiveContentItem } from "@/lib/api/modules/student/courses/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { withSsoToken } from "@/lib/auth/sso";
@@ -69,8 +70,13 @@ export function AccountLiveClassCard({
         ) : null}
       </div>
 
-      <h3 className="mt-2 line-clamp-2 font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
-        {item.title}
+      <h3 className="mt-2 font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
+        <ClampTooltip
+          text={item.title}
+          lines={2}
+          className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]"
+          tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
+        />
       </h3>
 
       {item.courseTitle ? (

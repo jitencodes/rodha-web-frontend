@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { COURSE_IMAGE_FALLBACK, getCategoryPath } from "@/lib/constants";
 import type { Course } from "@/lib/types";
 
@@ -94,8 +95,13 @@ export function CourseCardV2({
         </div>
 
         <div className="flex flex-1 flex-col p-5 md:p-6 justify-between">
-          <h3 className="text-h4 font-montserrat font-medium leading-tight text-neutral-900 line-clamp-2">
-            {course.title}
+          <h3 className="pointer-events-auto text-h4 font-montserrat font-medium leading-tight text-neutral-900">
+            <ClampTooltip
+              text={course.title}
+              lines={2}
+              className="text-h4 font-montserrat font-medium leading-tight text-neutral-900"
+              tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
+            />
           </h3>
 
           {(course.shortDescription || course.description) && (
