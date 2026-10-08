@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-07 (Google login production harden + production branch release)
+**Last updated:** 2026-10-08 (separate committed env files for dev and production)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Env files per environment (2026-10-08):** Committed `.env` (`https://innowrap.co.in/rodha/`) and `.env.production` (`https://api.rodha.co.in/rodha/`). `select-env.mjs` plus Docker `APP_ENV` and GitLab jobs pick one file before `next build` so Next cannot load both. SMTP passwords stay in `.env.local`.
 - **Google login production harden (2026-10-07):** GIS overlay uses near-invisible opacity (not `opacity-0`), `Script` `onReady`, origin-aware `error_callback`, and `next.config` build-time passthrough for `NEXT_PUBLIC_GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_API_BASE_URL`. Documented Vercel + rodha.co.in Authorized JavaScript origins; production API URL `https://api.rodha.co.in/rodha/`.
 - **Quick Content filters/shimmer + UX polish (2026-10-07):** `/account/content` course + package filters from filter-options; shimmer skeletons on content + course-detail listing loads; DropdownSelect menu `z-[110]` above ConfirmDialog; counselling modal auto-closes 2s after success; Continue Watching CTA label `View`.
 - **Live content + Quick Actions + account UX (2026-10-07):** Background `POST enrollments/refresh` via BFF + `useEnrollmentRefresh` (4 min). Orders product image fallback + Payment column removed. Continue Watching cards show Time Spent / Valid Till / Language (no thumbnail time / ⋮ menu). Category hero Enrol for Free → login → `/courses?categoryId=`. FAQ pagination scrolls to `#faq-list`. Google login overlay hit-target fixed. Continue/Buy Reset Filters clears search+filters. `todayContents` Live Classes on dashboard + continue tab; Quick Action tiles → `/account/content` (mandatory `type`, server pagination, no infinite scroll). Course detail: detail/progress/`productContents` independent of Quick Actions listing (`type` default `videos`, includes `assignments`). Header search → Quick Content with clear button.

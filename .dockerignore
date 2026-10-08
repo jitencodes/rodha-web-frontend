@@ -16,12 +16,9 @@ referrence
 AGENTS.md
 CLAUDE.md
 
-# local-only env variants (CI job writes `.env` into the context intentionally)
+# Secrets only. Committed `.env` (development) and `.env.production` must be in the build context.
 .env.local
-.env.*.local
-.env.development
-.env.production
-.env.test
+.env*.local
 
 # misc
 npm-debug.log*

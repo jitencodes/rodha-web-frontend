@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-08 — Committed env files, one API URL per environment
+- **Decision:** Commit `.env` (development, `https://innowrap.co.in/rodha/`) and `.env.production` (production, `https://api.rodha.co.in/rodha/`). `scripts/select-env.mjs` copies the file for `APP_ENV` and removes `.env.production` before `next build`. Docker `APP_ENV` and GitLab jobs follow the same split. SMTP passwords stay in `.env.local` / CI secrets, not in git.
+- **Rationale:** Next loads `.env.production` on every production-mode build, so leaving both files in the tree makes development builds call the production API. GitLab-scoped duplicates of `NEXT_PUBLIC_API_BASE_URL` were colliding the same way.
+- **Alternatives considered:** Keep generating `.env` only from CI variables (`ci-write-env.mjs`).
+- **Consequences:** Do not set `NEXT_PUBLIC_API_BASE_URL` in Vercel or GitLab. The previously committed production `.env` that contained an SMTP password is replaced; rotate that app password because it remains in git history.
+
 ### 2026-10-07 — Google GIS production: near-invisible overlay + build-time env
 - **Decision:** Keep the styled “Continue with Google” facade with a GIS `renderButton` overlay, but use `opacity-[0.02]` (not `opacity-0`), `onReady` + already-loaded GIS detection, debounced resize re-render, `ux_mode: "popup"`, FedCM button flag, and `error_callback` with Authorized JavaScript origins guidance. Explicitly pass `NEXT_PUBLIC_GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_API_BASE_URL` through `next.config` `env` so Vercel/GitLab bake them at build time.
 - **Rationale:** Localhost worked while Vercel failed for users even with the client id set — fully transparent overlays drop hit-testing in some browsers, Script `onLoad` can miss cached GIS, and `NEXT_PUBLIC_*` only updates after redeploy. Origins must include the Vercel host and `rodha.co.in` / `www`.

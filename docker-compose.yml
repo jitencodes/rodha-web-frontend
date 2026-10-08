@@ -1,7 +1,9 @@
 # Local Docker Compose for Rodha Web Frontend
 #
-#   cp .env.example .env   # fill values
+# Development image (dev API from `.env`):
 #   docker compose up --build
+# Production image (prod API from `.env.production`):
+#   APP_ENV=production docker compose up --build
 
 services:
   web:
@@ -9,6 +11,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        APP_ENV: ${APP_ENV:-development}
     ports:
       - "${PORT:-3000}:3000"
     env_file:

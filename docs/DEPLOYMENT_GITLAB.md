@@ -9,22 +9,18 @@ Pipelines are defined in [`.gitlab-ci.yml`](../.gitlab-ci.yml).
 
 ## How env isolation works
 
-Use the **same variable names** in both environments. In GitLab:
+Public config is committed so the API URL cannot drift between GitLab variables:
 
-**Settings → CI/CD → Variables → Add variable**
+| File | Used by | `NEXT_PUBLIC_API_BASE_URL` |
+|------|---------|----------------------------|
+| `.env` | `main`, local `next dev`, Docker `APP_ENV=development`, Vercel Preview | `https://innowrap.co.in/rodha/` |
+| `.env.production` | `production` branch, Docker `APP_ENV=production`, Vercel Production | `https://api.rodha.co.in/rodha/` |
 
-| Field | Development | Production |
-|-------|-------------|------------|
-| Key | e.g. `NEXT_PUBLIC_API_BASE_URL` | same key |
-| Value | **dev** API / URLs | **prod** API / URLs |
-| Environment scope | `development` | `production` |
-| Protect variable | optional | recommended **Yes** |
-| Mask variable | for secrets | for secrets |
+`next build` always sets `NODE_ENV=production` and would load `.env.production` on top of `.env`. `scripts/select-env.mjs` (run by `npm run build`, GitLab, and the Dockerfile) copies the file for `APP_ENV` into `.env` and deletes `.env.production` in the build sandbox so only one URL is baked in.
 
-Jobs declare `environment: name: development|production`, so GitLab injects only that scope’s values.  
-**Do not** create unscoped copies of the same keys — they can override or conflict.
+Do **not** set `NEXT_PUBLIC_API_BASE_URL` in GitLab or Vercel. A dashboard value overrides the committed file and the two environments will collide again.
 
-Build jobs run `scripts/ci-write-env.mjs` to materialize a job-local `.env` from those variables (values are never printed).
+GitLab variables are for **secrets and deploy keys only** (`EMAIL_SMTP_PASS`, `API_KEY`, `SSH_PRIVATE_KEY`, …). `select-env` appends those secrets when they are missing from the committed file. Put local passwords in gitignored `.env.local`.
 
 ## Pipeline jobs
 
@@ -61,10 +57,9 @@ Create **two scopes** (`development` and `production`) for each app key unless n
 | Variable | Protected? | Mask? | Notes |
 |----------|------------|-------|-------|
 | `NEXT_PUBLIC_BASE_URL` | prod: yes | no | Site origin, e.g. `https://dev.rodha.co.in` / `https://rodha.co.in` |
-| `NEXT_PUBLIC_API_BASE_URL` | prod: yes | no | API base with trailing `/` |
+| `NEXT_PUBLIC_API_BASE_URL` | — | — | Do not set in CI. Dev file `https://innowrap.co.in/rodha/`, prod file `https://api.rodha.co.in/rodha/`. |
 | `NEXT_PUBLIC_API_SOURCE` | no | no | Usually `website` |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | no | no | OAuth Web client. Google Console **Authorized JavaScript origins** must include each site origin (`http://localhost:3000`, Vercel URL, `https://rodha.co.in`, `https://www.rodha.co.in`). Redeploy after changing the env var. |
-| `NEXT_PUBLIC_API_BASE_URL` (prod) | prod: yes | no | Production value: `https://api.rodha.co.in/rodha/` (trailing slash) |
 
 ### Recommended / feature flags
 

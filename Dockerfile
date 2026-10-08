@@ -1,9 +1,9 @@
 # Rodha Web Frontend — multi-stage Next.js standalone image
 #
-# CI: write `.env` (scripts/ci-write-env.mjs) then:
-#   docker build -t rodha-web:tag .
-# Local:
-#   cp .env.example .env  # fill values, then docker compose up --build
+# APP_ENV=development uses committed `.env` (dev API).
+# APP_ENV=production uses committed `.env.production` (prod API).
+# scripts/select-env.mjs copies that file to `.env` and deletes `.env.production`
+# before `next build`, because Next always loads `.env.production` when NODE_ENV=production.
 
 ARG NODE_VERSION=20-alpine
 
@@ -26,10 +26,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG APP_ENV=development
+ENV APP_ENV=${APP_ENV}
+ENV SELECT_ENV_ISOLATE=1
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN node scripts/select-env.mjs && npm run build
 
 # -----------------------------------------------------------------------------
 # Runner
