@@ -1,7 +1,7 @@
 # Rodha Web Frontend — GitLab CI/CD
 #
-#   main        → development  → image :development-<sha> / :development-latest (no deploy)
 #   production  → production   → image :production-<sha>  / :production-latest → auto-deploy to EC2
+#   (no pipeline runs on main or other branches)
 #
 # Public API URLs come from committed files (scripts/select-env.mjs), not CI variables:
 #   main / development  → .env              NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/
@@ -12,11 +12,10 @@
 # and optional secrets EMAIL_SMTP_PASS / API_KEY. Do not set NEXT_PUBLIC_API_BASE_URL in CI.
 
 
+# Pipelines run only for the production branch.
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "production"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 stages:
   - validate
