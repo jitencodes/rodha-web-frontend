@@ -31,7 +31,7 @@ All jobs are tagged **`arm`** (ARM64 runner, shell executor + Docker). Node runs
 | `validate` | `main`, `production`, MRs | `tsc` (blocks build) |
 | `lint` | `main`, `production`, MRs | ESLint — `allow_failure`, does not block deploy |
 | `build` | `main` → `development`, `production` → `production` | `docker build` (Dockerfile) → push to ECR `:<env>-<sha>` and `:<env>-latest` |
-| `deploy` | `main` → development (auto), `production` (**manual**) | SSH to EC2 → `docker pull` → restart container `rodha-web-<env>` on host port `APP_PORT` (default `3000`) |
+| `deploy` | `production` only (auto) — `main` never deploys | SSH to EC2 → `docker pull` → restart container `rodha-web-<env>` on host port `APP_PORT` (default `3000`) |
 
 ### EC2 deploy variables (environment-scoped)
 

@@ -1,7 +1,7 @@
 # Rodha Web Frontend — GitLab CI/CD
 #
-#   main        → development  → image :development-<sha> / :development-latest
-#   production  → production   → image :production-<sha>  / :production-latest
+#   main        → development  → image :development-<sha> / :development-latest (no deploy)
+#   production  → production   → image :production-<sha>  / :production-latest → auto-deploy to EC2
 #
 # Public API URLs come from committed files (scripts/select-env.mjs), not CI variables:
 #   main / development  → .env              NEXT_PUBLIC_API_BASE_URL=https://innowrap.co.in/rodha/
@@ -10,6 +10,7 @@
 # Images are built on the ARM64 runner (tag `arm`) and pushed to AWS ECR.
 # GitLab variables: AWS_* (ECR), EC2_HOST / EC2_USER / EC2_PORT / PEM_FILE (deploy),
 # and optional secrets EMAIL_SMTP_PASS / API_KEY. Do not set NEXT_PUBLIC_API_BASE_URL in CI.
+
 
 workflow:
   rules:
@@ -130,14 +131,11 @@ deploy:
     - build
   environment:
     name: $APP_ENV
+  # Only the production branch deploys to EC2 (automatically); main never deploys.
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      variables:
-        APP_ENV: development
     - if: $CI_COMMIT_BRANCH == "production"
       variables:
         APP_ENV: production
-      when: manual
   before_script:
     - *node_run
   script:
