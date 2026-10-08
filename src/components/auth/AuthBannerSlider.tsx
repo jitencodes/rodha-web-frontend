@@ -112,7 +112,7 @@ export function AuthBannerSlider() {
             />
             <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 lg:p-10">
               <div className="mt-auto max-w-md pb-8">
-                <h2 className="font-montserrat text-sm 2xl:text-[28px] font-bold leading-[1.15] tracking-tight text-white sm:text-[34px] lg:text-[38px]">
+                <h2 className="font-montserrat text-[24px] font-bold leading-[1.15] tracking-tight text-white sm:text-[30px] 2xl:text-[38px]">
                   {slide.title}
                 </h2>
                 <p className="mt-3 max-w-sm text-body text-white/80 leading-relaxed">
@@ -143,7 +143,7 @@ export function AuthBannerSlider() {
         alt="Rodha"
         width={120}
         height={36}
-        className="absolute left-6 top-6 z-10 h-8 w-auto sm:left-8 sm:top-8 sm:h-9 lg:left-10 lg:top-10"
+        className="absolute hidden sm:block right-6 bottom-6 z-10 h-8 w-auto sm:right-8 sm:bottom-8 sm:h-9 2xl:left-10 2xl:top-10"
       />
 
       <div
