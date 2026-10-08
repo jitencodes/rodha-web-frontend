@@ -13,8 +13,12 @@ type BottomSheetProps = {
 };
 
 /**
- * Mobile-friendly panel that slides up from the bottom. Portaled to `document.body`
- * so ancestor transforms / stacking contexts cannot trap it under page content.
+ * Mobile-friendly panel that slides up from the bottom.
+ *
+ * For account pages, the sheet is portaled into `.account-shell`
+ * so account-level CSS variables are inherited correctly.
+ *
+ * Falls back to document.body when `.account-shell` is unavailable.
  */
 export function BottomSheet({
   open,
@@ -34,50 +38,67 @@ export function BottomSheet({
     if (!open) return;
 
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+      }
     }
 
-    const prevOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onKey);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = previousBodyOverflow;
       document.removeEventListener("keydown", onKey);
     };
   }, [open, onClose]);
 
   if (!mounted || !open) return null;
 
+  const portalTarget =
+    document.querySelector<HTMLElement>(".account-shell") ??
+    document.body;
+
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center md:hidden">
+    <div className="fixed inset-0 z-[1000] flex items-end justify-center md:hidden">
+      {/* Backdrop */}
       <button
         type="button"
         aria-label="Dismiss filters"
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 z-0 bg-black/50"
         onClick={onClose}
       />
+
+      {/* Bottom sheet */}
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
         className={cn(
-          "relative z-10 flex max-h-[85dvh] w-full flex-col rounded-t-2xl border border-neutral-200 bg-white shadow-xl",
+          "relative z-10 flex max-h-[85dvh] w-full flex-col overflow-hidden rounded-t-2xl border border-neutral-200 bg-white shadow-xl",
           "animate-[slide-up_220ms_var(--ease-premium)]",
           className
         )}
       >
-        <div className="flex shrink-0 justify-center pt-3 pb-1" aria-hidden>
+        {/* Drag handle */}
+        <div
+          className="relative z-[1] flex shrink-0 justify-center bg-white pt-3 pb-1"
+          aria-hidden
+        >
           <span className="h-1 w-10 rounded-full bg-neutral-300" />
         </div>
+
+        {/* Header */}
         {title ? (
-          <div className="flex items-center justify-between gap-3 border-b border-neutral-100 px-5 pb-3 pt-1">
+          <div className="relative z-[1] flex shrink-0 items-center justify-between gap-3 border-b border-neutral-100 bg-white px-5 pb-3 pt-1">
             <h2
               id={titleId}
               className="text-h4 font-semibold text-neutral-900"
             >
               {title}
             </h2>
+
             <button
               type="button"
               onClick={onClose}
@@ -101,11 +122,13 @@ export function BottomSheet({
             </button>
           </div>
         ) : null}
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+
+        {/* Scrollable content */}
+        <div className="relative z-[1] min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white px-5 py-4">
           {children}
         </div>
       </div>
     </div>,
-    document.body
+    portalTarget
   );
 }

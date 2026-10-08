@@ -87,7 +87,14 @@ export function StateSelectField({
         placeholder={loading ? "Loading states…" : placeholder}
         error={error || loadError || undefined}
         aria-label={label}
-        className={disabled ? "pointer-events-none opacity-60" : undefined}
+        triggerWidth="full"
+        triggerMinWidth={140}
+        menuWidth="content"
+        menuMaxWidth={420}
+        className={cn(
+          disabled ? "pointer-events-none opacity-60" : undefined,
+          className
+        )}
       />
     </div>
   );

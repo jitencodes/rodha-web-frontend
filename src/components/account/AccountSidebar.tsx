@@ -183,11 +183,6 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
           <a
             href={ACCOUNT_SUPPORT_CARD.href}
             className="relative z-10 mt-3 inline-flex cursor-pointer items-center gap-1 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
-            onClickCapture={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              window.location.assign(ACCOUNT_SUPPORT_CARD.href);
-            }}
           >
             {ACCOUNT_SUPPORT_CARD.ctaLabel}
             <span aria-hidden>→</span>

@@ -185,52 +185,62 @@ export function AccountContinueCoursesToolbar({
     <>
       {categoryOptions.length > 0 ? (
         <DropdownSelect
-          value={activeCategoryId || "all"}
-          onChange={(value) => navigate({ categoryId: value })}
-          options={[
-            { value: "all", label: "All Categories" },
-            ...categoryOptions,
-          ]}
-          aria-label="Category"
-          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="account"
-        />
+        value={activeCategoryId || "all"}
+        onChange={(value) => navigate({ categoryId: value })}
+        options={[
+          { value: "all", label: "All Categories" },
+          ...categoryOptions,
+        ]}
+        aria-label="Category"
+        className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
+        triggerWidth="auto"
+        menuWidth="trigger"
+        variant="account"
+      />
       ) : null}
       {subCategoryOptions.length > 0 ? (
         <DropdownSelect
-          value={activeSubCategory1 || "all"}
-          onChange={(value) => navigate({ subCategory1: value })}
-          options={[
-            { value: "all", label: "All Sub-categories" },
-            ...subCategoryOptions,
-          ]}
-          aria-label="Sub-category"
-          className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-          variant="account"
-        />
+        value={activeSubCategory1 || "all"}
+        onChange={(value) => navigate({ subCategory1: value })}
+        options={[
+          { value: "all", label: "All Sub-categories" },
+          ...subCategoryOptions,
+        ]}
+        aria-label="Sub-category"
+        className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
+        triggerWidth="auto"
+        menuWidth="trigger"
+        variant="account"
+      />
       ) : null}
       {packageOptions.length > 0 ? (
         <DropdownSelect
-          value={activePackageId || "all"}
-          onChange={(value) => navigate({ packageId: value })}
-          options={[
-            { value: "all", label: "All Packages" },
-            ...packageOptions,
-          ]}
-          aria-label="Package"
-          className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-          variant="account"
-        />
+        value={activePackageId || "all"}
+        onChange={(value) => navigate({ packageId: value })}
+        options={[
+          { value: "all", label: "All Packages" },
+          ...packageOptions,
+        ]}
+        aria-label="Package"
+        className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
+        triggerWidth="auto"
+        triggerMinWidth={160}
+        menuWidth="content"
+        menuMaxWidth={420}
+        variant="account"
+      />
       ) : null}
       <DropdownSelect
         value={activeSort || "continue_watching"}
         onChange={(value) => navigate({ sortBy: value })}
-        options={CONTINUE_SORT_OPTIONS.map((o) => ({
-          value: o.value,
-          label: o.label,
+        options={CONTINUE_SORT_OPTIONS.map((option) => ({
+          value: option.value,
+          label: option.label,
         }))}
         aria-label="Sort by"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
+        triggerWidth="auto"
+        menuWidth="trigger"
         variant="account"
       />
       {dateInputs}

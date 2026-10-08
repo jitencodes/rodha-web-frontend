@@ -65,11 +65,6 @@ export function QuickLinksCard({ links, className }: QuickLinksCardProps) {
                 <a
                   href={link.href}
                   className={classNameLink}
-                  onClickCapture={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    window.location.assign(link.href);
-                  }}
                 >
                   {content}
                 </a>

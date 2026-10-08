@@ -312,6 +312,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                 disabled={loading}
                 required
                 variant="light"
+                className="w-full"
               />
             ) : null}
 
