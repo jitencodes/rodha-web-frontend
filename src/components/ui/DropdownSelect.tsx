@@ -120,36 +120,33 @@ export function DropdownSelect({
    */
   const updateCoords = () => {
     const trigger = triggerRef.current;
-
+  
     if (!trigger) return;
-
+  
     const rect = trigger.getBoundingClientRect();
-
+  
     const viewportPadding = 8;
     const viewportWidth = window.innerWidth;
-
+  
     const triggerActualWidth = rect.width;
-
+  
     let width: number;
-
+  
     if (typeof menuWidth === "number") {
-      // Explicit menu width.
+      // Explicit menu width, but never smaller than the trigger.
       width = Math.max(menuWidth, triggerActualWidth);
     } else if (menuWidth === "content") {
       /**
        * Estimate the width required by the longest option.
-       *
-       * Padding + approximate character width keeps this lightweight
-       * and avoids measuring hidden DOM elements.
+       * The portal must always be at least as wide as the trigger.
        */
       const longestLabelLength = options.reduce(
         (max, option) => Math.max(max, option.label.length),
         0
       );
-
-      const estimatedContentWidth =
-        longestLabelLength * 8 + 48;
-
+  
+      const estimatedContentWidth = longestLabelLength * 8 + 48;
+  
       width = Math.max(
         triggerActualWidth,
         estimatedContentWidth
@@ -158,23 +155,36 @@ export function DropdownSelect({
       // Default: menu exactly matches trigger.
       width = triggerActualWidth;
     }
-
+  
+    /**
+     * IMPORTANT:
+     * Never allow the portal to become narrower than the trigger,
+     * regardless of menuWidth/menuMaxWidth configuration.
+     */
+    width = Math.max(width, triggerActualWidth);
+  
     if (menuMaxWidth !== undefined) {
       width = Math.min(width, menuMaxWidth);
+  
+      /**
+       * If menuMaxWidth is smaller than the trigger, the trigger
+       * still wins. The menu should never be narrower than it.
+       */
+      width = Math.max(width, triggerActualWidth);
     }
-
+  
     // Never exceed viewport.
     width = Math.min(
       width,
       viewportWidth - viewportPadding * 2
     );
-
+  
     /**
      * If the menu is wider than the trigger, keep it inside
      * the viewport without affecting surrounding layout.
      */
     let left = rect.left;
-
+  
     if (
       left + width >
       viewportWidth - viewportPadding
@@ -184,11 +194,11 @@ export function DropdownSelect({
         viewportPadding -
         width;
     }
-
+  
     if (left < viewportPadding) {
       left = viewportPadding;
     }
-
+  
     setCoords({
       top: rect.bottom + 8,
       left,
@@ -312,7 +322,7 @@ export function DropdownSelect({
           maxWidth: "calc(100vw - 16px)",
         }}
         className={cn(
-          "z-[110] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
+          "z-[1000] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
           isAccount
             ? "rounded-[6px] border border-[var(--account-border)] bg-[var(--account-surface)] py-1 shadow-[var(--account-shadow)]"
             : isLight

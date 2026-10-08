@@ -84,27 +84,27 @@ export function getPasswordRules(value: string): PasswordRule[] {
   return [
     {
       id: "length",
-      label: `At least ${PASSWORD_MIN_LENGTH} characters`,
+      label: `${PASSWORD_MIN_LENGTH}+ characters`,
       met: value.length >= PASSWORD_MIN_LENGTH,
     },
     {
       id: "lower",
-      label: "One lowercase letter",
+      label: "Lowercase",
       met: /[a-z]/.test(value),
     },
     {
       id: "upper",
-      label: "One uppercase letter",
+      label: "Uppercase",
       met: /[A-Z]/.test(value),
     },
     {
       id: "number",
-      label: "One number",
+      label: "Number",
       met: /\d/.test(value),
     },
     {
       id: "special",
-      label: "One special character",
+      label: "Special character",
       met: /[^A-Za-z0-9]/.test(value),
     },
   ];

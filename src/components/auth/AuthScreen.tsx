@@ -543,13 +543,17 @@ function PasswordRequirements({
           </span>
         </div>
       ) : null}
-      <ul className="space-y-1">
+      <ul className="flex items-center flex-wrap gap-x-1 gap-y-1">
         {rules.map((rule) => (
           <li
             key={rule.id}
             className={cn(
-              "text-caption",
-              rule.met ? "text-emerald-600" : showError ? "text-accent-red" : "text-neutral-500"
+              "shrink-0 !text-body-sm text-accent-red",
+              rule.met
+                ? "text-emerald-600"
+                : showError
+                  ? "text-accent-red"
+                  : "text-neutral-500"
             )}
           >
             {rule.met ? "✓" : "•"} {rule.label}
