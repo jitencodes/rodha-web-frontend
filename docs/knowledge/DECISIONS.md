@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-10 — Dashboard Buy links stay plain anchors
+- **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
+- **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.
+- **Alternatives considered:** Mark the card `"use client"` (rejected — pulls the tile into the client bundle). Encode the handler as a server action (rejected — checkout must be a document navigation).
+- **Consequences:** Do not pass event handlers from this server card. Cart "Add to Cart" remains a button only when a client parent supplies `onAddToCart`.
+
 ### 2026-10-10 — Public origin for auth cookies and checkout redirects
 - **Decision:** Set cookie `Secure` from the request scheme (`x-forwarded-proto`, otherwise the request URL). Build checkout, login, and session-expired redirects with `x-forwarded-host` / `x-forwarded-proto`. Buy links use a same-tab document navigation instead of a client `<Link>` or `router.push`.
 - **Rationale:** Production cookies were always `Secure`, so browsers dropped them on HTTP IP deployments and Buy looked like a no-op. Route Handler redirects built from `request.url` could point at an internal host. App Router soft navigation does not follow `/api/checkout/buy` redirects.

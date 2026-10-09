@@ -18,7 +18,13 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
-            <li key={`${item.label}-${index}`} className="flex items-center gap-1.5">
+            <li
+              key={`${item.label}-${index}`}
+              className={cn(
+                "flex items-center gap-1.5",
+                isLast ? "min-w-0" : "shrink-0"
+              )}
+            >
               {index > 0 && (
                 <svg
                   className="h-3 w-3 text-text-dimmed/70"
@@ -40,7 +46,9 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
                 </Link>
               ) : (
                 <span
-                  className={cn(isLast && "text-text-muted font-medium")}
+                  className={cn(
+                    isLast && "min-w-0 break-words text-text-muted font-medium"
+                  )}
                   aria-current={isLast ? "page" : undefined}
                 >
                   {item.label}

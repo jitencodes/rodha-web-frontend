@@ -201,12 +201,17 @@ export function Footer() {
       : item
   );
   const isCategoryRoute = pathname.startsWith("/category/");
+  const isCourseDetail = /^\/courses\/[^/]+$/.test(pathname);
   const footerTheme = LIGHT_FOOTER_THEME;
 
   return (
     <footer
       data-home-zone={pathname === "/" || isCategoryRoute ? "footer" : undefined}
-      className="relative bg-section-cream border-t-[10px] border-brand-orange"
+      className={cn(
+        "relative border-t-[10px] border-brand-orange bg-section-cream",
+        isCourseDetail &&
+          "max-md:pb-[calc(4.75rem+env(safe-area-inset-bottom))]"
+      )}
     >
       <div className="container-rodha relative py-10 md:py-12">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">

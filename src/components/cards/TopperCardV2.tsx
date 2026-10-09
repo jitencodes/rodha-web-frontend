@@ -49,11 +49,11 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[6px] border border-border-default bg-[#0C0500] min-w-[204px] h-[316px] group card-premium-hover hover-shine",
+        "relative overflow-hidden rounded-[6px] border border-border-default bg-[#0C0500] min-w-[156px] h-[248px] sm:min-w-[204px] sm:h-[316px] group card-premium-hover hover-shine",
         className
       )}
     >
-      <div className="h-[166px] w-[204px] relative overflow-hidden group">
+      <div className="relative h-[124px] w-[156px] overflow-hidden group sm:h-[166px] sm:w-[204px]">
         {/* 1. Blurred Background Image Layer */}
         <div 
           className="absolute -inset-5 bg-cover bg-center filter blur-xl brightness-75 scale-110 pointer-events-none transition-transform duration-500 group-hover:scale-[1.13]"
@@ -78,11 +78,11 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
         </span>
       </div>
 
-      <div className="p-3 z-10 text-left border-image-gradient-t">
+      <div className="z-10 border-image-gradient-t p-2 text-left sm:p-3">
         <div
           className={cn(
             "mt-1.5 font-montserrat font-bold text-orange-500 leading-none",
-            metric.numeric ? "text-3xl tabular-nums" : "text-[28px]"
+            metric.numeric ? "text-2xl tabular-nums sm:text-3xl" : "text-[22px] sm:text-[28px]"
           )}
         >
           {metric.value}
@@ -90,11 +90,11 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
             <span className="text-sm text-orange-500">{metric.suffix}</span>
           ) : null}
         </div>
-        <p className="text-sm text-[#C0C0C0] mt-1 font-medium">{topper.exam}</p>
-        <h4 className="text-base leading-6 font-bold mt-2 text-text-primary truncate">
+        <p className="mt-1 text-xs font-medium text-[#C0C0C0] sm:text-sm">{topper.exam}</p>
+        <h4 className="mt-1.5 truncate text-sm font-bold leading-5 text-text-primary sm:mt-2 sm:text-base sm:leading-6">
           {topper.name}
         </h4>
-        <p title={topper.college} className="text-sm text-[#cda68e] truncate mt-0.5 max-w-[180px]">{topper.college}</p>
+        <p title={topper.college} className="mt-0.5 max-w-[132px] truncate text-xs text-[#cda68e] sm:max-w-[180px] sm:text-sm">{topper.college}</p>
       </div>
     </div>
   );

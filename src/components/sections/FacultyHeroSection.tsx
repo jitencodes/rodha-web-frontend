@@ -77,7 +77,7 @@ export function FacultyHeroSection({
               </p>
             ) : null}
 
-            <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
+            <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
               {highlight ? (
                 <span className="relative inline-block text-orange-500">

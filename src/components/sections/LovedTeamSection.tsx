@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { cn } from "@/lib/utils";
-import { InfiniteCarousel } from "../ui/InfiniteCaraousel";
+import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 
 interface LovedTeamSectionProps {
   className?: string;
@@ -29,19 +29,11 @@ export function LovedTeamSection({
           align="center"
           className="mx-auto lg:!mb-10"
         />
-        <InfiniteCarousel
-          showArrows
-          autoPlay
-          autoPlayInterval={3000}
-          variableWidth
-          fixedHeight={420}
-          infinite
-          className="w-full"
-        >
+        <InfiniteMarquee speed={36} gap={16} pauseOnHover className="w-full">
           {items.map((image) => (
             <div
               key={image.src}
-              className="relative h-full w-auto shrink-0 overflow-hidden rounded-xl bg-section-beige"
+              className="relative h-[420px] w-auto shrink-0 overflow-hidden rounded-xl bg-section-beige"
             >
               <Image
                 src={image.src}
@@ -53,7 +45,7 @@ export function LovedTeamSection({
               />
             </div>
           ))}
-        </InfiniteCarousel>
+        </InfiniteMarquee>
       </Container>
     </section>
   );

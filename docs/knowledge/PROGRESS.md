@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (localhost images, Buy navigation, course overflow)
+**Last updated:** 2026-10-10 (dashboard Buy link server error, mobile layout)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Account dashboard on the HTTP production host (2026-10-10):** Recommendation Buy controls are native anchors. A Server Component `onClick` on those links failed RSC serialization and the production IP showed Next's "This page couldn't load" page. HTTPS Vercel did not render that handler.
+- **Mobile layout, gallery loop, team SVG color (2026-10-10):** Smaller hero and section titles below 640px, wrapping hero CTAs, `h-fit` stat strips, smaller category result cards, carousel `touch-action: pan-x pan-y`, course breadcrumb wrap, course-detail footer clearance, team gallery on `InfiniteMarquee`, team stat SVGs inlined in orange.
 - **Localhost images, Buy navigation, course overflow (2026-10-10):** Image optimizer allows `*.s3.ap-south-1.amazonaws.com` and `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources render through `AppImage` instead of `next/image`. Buy uses a same-tab document navigation; checkout redirects use the public origin; cookie `Secure` follows the request scheme. Checkout failures show `checkoutError`. Course detail full-bleed backgrounds no longer use `w-screen`.
 - **Rodha Buddy auto-login (2026-10-08):** Header and account Buddy buttons open `/api/buddy/auto-login`, which redirects to `{NEXT_PUBLIC_RODHA_BUDDY_URL}/#/auto-login?authToken=<encoded JWT>` when the login cookie is present. Dev `.env` is `https://rodhabuddy.innowrap.co.in`; `.env.production` is `https://buddy.rodha.co.in`.
 - **Account/catalog UX (2026-10-08):** Buy Now uses `isSelfEnrolled` (View Course) on `/courses`, account buy tab, and dashboard recommendations, with the student token on package fetches. Title tooltips on course, recommended, continue-watching, live-class, and order product cells. Orders show payment status and hide Order ID. Category courses no longer fall back to static packages. Blog detail category tags use the header category list. Signup fields marked required with live password strength. Password-update dialog closes on API error. Sidebar support mailto assigns `window.location` so the client router does not swallow it. Test and certificate quick links commented out.

@@ -190,7 +190,6 @@ export function CourseDetailPageView({
       <CourseRelatedSection relatedCourses={relatedCourses} />
       <CourseFaqSection faqs={faqs} />
       <CourseEnquireStickyBar defaultExam={course.category} />
-      <div className="h-16 md:hidden" aria-hidden />
     </>
   );
 }

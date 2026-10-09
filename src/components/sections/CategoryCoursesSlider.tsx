@@ -97,7 +97,7 @@ export function CategoryCoursesSlider({
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     const el = tabsRef.current;
-    if (!el || !overflowing) return;
+    if (!el || !overflowing || e.pointerType === "touch") return;
     dragRef.current = {
       active: true,
       startX: e.clientX,
@@ -116,7 +116,9 @@ export function CategoryCoursesSlider({
   function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
     const el = tabsRef.current;
     dragRef.current.active = false;
-    el?.releasePointerCapture(e.pointerId);
+    if (el?.hasPointerCapture(e.pointerId)) {
+      el.releasePointerCapture(e.pointerId);
+    }
   }
 
   if (courses.length === 0 && !showFilterBar) return null;

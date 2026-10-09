@@ -10,6 +10,54 @@ interface TeamHeroSectionProps {
   banner?: WebsiteBannerViewModel | null;
 }
 
+function isSvgUrl(src: string): boolean {
+  const path = src.split(/[?#]/)[0]?.toLowerCase() ?? "";
+  return path.endsWith(".svg");
+}
+
+/** CMS stat icons use stroke="currentColor". Inline them so the orange text color applies. */
+async function TeamStatIcon({ src }: { src: string }) {
+  if (!isSvgUrl(src) || !src.startsWith("https://")) {
+    return (
+      <AppImage
+        src={src}
+        alt=""
+        fill
+        className="object-contain"
+        sizes="32px"
+      />
+    );
+  }
+
+  try {
+    const response = await fetch(src, { next: { revalidate: 3600 } });
+    const markup = await response.text();
+    if (!response.ok || !markup.trim().startsWith("<svg")) {
+      throw new Error("Not an SVG");
+    }
+    const safe = markup
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/\son\w+=(?:"[^"]*"|'[^']*')/gi, "")
+      .replace(/<svg\b/, '<svg class="h-full w-full"');
+    return (
+      <span
+        className="block h-full w-full text-orange-500 [&_svg]:h-full [&_svg]:w-full"
+        dangerouslySetInnerHTML={{ __html: safe }}
+      />
+    );
+  } catch {
+    return (
+      <AppImage
+        src={src}
+        alt=""
+        fill
+        className="object-contain"
+        sizes="32px"
+      />
+    );
+  }
+}
+
 export function TeamHeroSection({
   className,
   banner = null,
@@ -69,7 +117,7 @@ export function TeamHeroSection({
                 : "lg:col-span-6 xl:col-span-5"
             }
           >
-            <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
+            <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
               {highlight ? (
                 <span className="relative inline-block text-orange-500">
@@ -90,14 +138,8 @@ export function TeamHeroSection({
                 {stats.map((stat) => (
                   <div key={stat.id} className="flex items-center gap-2.5">
                     {stat.icon ? (
-                      <div className="relative w-8 h-8 shrink-0">
-                        <AppImage
-                          src={stat.icon}
-                          alt=""
-                          fill
-                          className="object-contain text-orange-500"
-                          sizes="32px"
-                        />
+                      <div className="relative h-8 w-8 shrink-0 text-orange-500">
+                        <TeamStatIcon src={stat.icon} />
                       </div>
                     ) : null}
                     <div>
