@@ -356,7 +356,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                   href="/forgot-password"
                   className="text-caption font-semibold text-orange-500 hover:text-orange-600"
                 >
-                  Forgot password?
+                  Forgot password
                 </Link>
               </div>
             ) : null}
