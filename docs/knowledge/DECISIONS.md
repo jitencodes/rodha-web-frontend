@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-09 — Auth cookies follow the request scheme
+- **Decision:** `Secure` on `rodha_access_token`, `rodha_user`, `rodha_graphy`, and `rodha_logged_in` is set from `x-forwarded-proto` or the request URL, not from `NODE_ENV === "production"`.
+- **Rationale:** The GitLab EC2 app is served at `http://13.207.165.22:3000`. Production builds set `NODE_ENV=production`, so login returned `Set-Cookie` with `Secure`. Browsers ignore that on non-localhost HTTP, middleware then sees no token and sends `/account/dashboard` back to `/login`. `npm run dev` keeps `NODE_ENV=development` (no `Secure`). Vercel is HTTPS, so `Secure` cookies stick. Localhost is a secure context, so a local production build would not show the bug.
+- **Alternatives considered:** Force `COOKIE_SECURE=false` in the EC2 env; turn off middleware; store the token in localStorage.
+- **Consequences:** HTTP deploys persist the session. HTTPS deploys, including Vercel and any proxy that sends `x-forwarded-proto: https`, still set `Secure`. Logout and session-expired clear cookies with the same flag.
+
 ### 2026-10-08 — Committed env files, one API URL per environment
 - **Decision:** Commit `.env` (development, `https://innowrap.co.in/rodha/`) and `.env.production` (production, `https://api.rodha.co.in/rodha/`). `scripts/select-env.mjs` copies the file for `APP_ENV` and removes `.env.production` before `next build`. Docker `APP_ENV` and GitLab jobs follow the same split. SMTP passwords stay in `.env.local` / CI secrets, not in git.
 - **Rationale:** Next loads `.env.production` on every production-mode build, so leaving both files in the tree makes development builds call the production API. GitLab-scoped duplicates of `NEXT_PUBLIC_API_BASE_URL` were colliding the same way.

@@ -77,7 +77,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 |---------|--------|-------|
 | Split-panel screen | Complete | Full-bleed left slides + `rodha-logo.webp`; desktop viewport lock, form-only scroll |
 | Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field |
-| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login` |
+| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login`. Session cookies are `Secure` only on HTTPS so plain-HTTP production hosts keep the session. |
 | Forgot password | Complete | `/forgot-password` → `/api/auth/forgot-password` → `api/auth/user/forgot-password` |
 | Reset password | Complete | `/reset-password` → `/api/auth/reset-password` → `api/auth/user/reset-password` (`email`/`token` query prefill) |
 | Google | Complete (client) | GIS ID token → `/api/auth/google` → `api/auth/user/google` (not in Postman) |

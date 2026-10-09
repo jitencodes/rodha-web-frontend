@@ -59,11 +59,15 @@ export async function PATCH(request: Request) {
       jar.get(AUTH_GRAPHY_COOKIE_NAME)?.value
     );
     const response = NextResponse.json({ ok: true, user });
-    applySessionCookies(response, {
-      accessToken: token,
-      user,
-      graphy,
-    });
+    applySessionCookies(
+      response,
+      {
+        accessToken: token,
+        user,
+        graphy,
+      },
+      request
+    );
     return response;
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {

@@ -31,24 +31,44 @@ function tokenMaxAgeSeconds(accessToken: string): number {
   return seconds > 60 ? seconds : DEFAULT_MAX_AGE;
 }
 
-function cookieBase(maxAge: number, httpOnly: boolean) {
+/**
+ * Secure follows the browser scheme. Production `NODE_ENV` on plain HTTP
+ * (for example EC2 port 3000) makes browsers drop Set-Cookie, so the dashboard
+ * navigation looks logged out. HTTPS, including `x-forwarded-proto: https`, stays Secure.
+ */
+export function authCookieSecure(request: Request): boolean {
+  const forwarded = request.headers.get("x-forwarded-proto");
+  if (forwarded) {
+    const proto = forwarded.split(",")[0]?.trim().toLowerCase();
+    if (proto === "https") return true;
+    if (proto === "http") return false;
+  }
+  try {
+    return new URL(request.url).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function cookieBase(maxAge: number, httpOnly: boolean, secure: boolean) {
   return {
     httpOnly,
-    secure: process.env.NODE_ENV === "production",
+    secure,
     sameSite: "lax" as const,
     path: "/",
     maxAge,
   };
 }
 
-export function applyAuthCookie(
+function applyAuthCookie(
   response: NextResponse,
-  accessToken: string
+  accessToken: string,
+  secure: boolean
 ): void {
   response.cookies.set(
     AUTH_COOKIE_NAME,
     accessToken,
-    cookieBase(tokenMaxAgeSeconds(accessToken), true)
+    cookieBase(tokenMaxAgeSeconds(accessToken), true, secure)
   );
 }
 
@@ -58,43 +78,49 @@ export function applySessionCookies(
     accessToken: string;
     user: AuthUserViewModel;
     graphy?: AuthGraphyViewModel | null;
-  }
+  },
+  request: Request
 ): void {
+  const secure = authCookieSecure(request);
   const maxAge = tokenMaxAgeSeconds(input.accessToken);
-  applyAuthCookie(response, input.accessToken);
+  applyAuthCookie(response, input.accessToken, secure);
 
   response.cookies.set(
     AUTH_USER_COOKIE_NAME,
     encodeURIComponent(JSON.stringify(input.user)),
-    cookieBase(maxAge, true)
+    cookieBase(maxAge, true, secure)
   );
 
   if (input.graphy?.ssoToken || input.graphy?.ssoUrl) {
     response.cookies.set(
       AUTH_GRAPHY_COOKIE_NAME,
       encodeURIComponent(JSON.stringify(input.graphy)),
-      cookieBase(maxAge, true)
+      cookieBase(maxAge, true, secure)
     );
   } else {
-    response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cookieBase(0, true));
+    response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cookieBase(0, true, secure));
   }
 
   response.cookies.set(
     AUTH_LOGGED_IN_COOKIE_NAME,
     "1",
-    cookieBase(maxAge, false)
+    cookieBase(maxAge, false, secure)
   );
 }
 
-export function clearAuthCookie(response: NextResponse): void {
-  const cleared = cookieBase(0, true);
+export function clearAuthCookie(
+  response: NextResponse,
+  request: Request
+): void {
+  const secure = authCookieSecure(request);
+  const cleared = cookieBase(0, true, secure);
   response.cookies.set(AUTH_COOKIE_NAME, "", cleared);
   response.cookies.set(AUTH_USER_COOKIE_NAME, "", cleared);
   response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cleared);
   response.cookies.set(
     AUTH_LOGGED_IN_COOKIE_NAME,
     "",
-    cookieBase(0, false)
+    cookieBase(0, false, secure)
   );
 }
 

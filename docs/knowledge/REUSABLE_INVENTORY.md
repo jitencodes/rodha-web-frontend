@@ -253,7 +253,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | api home | `api/modules/home/*` | Get Home service + homepage view-model mapper |
 | course-filters | `course-filters.ts` | Course type chips/dropdowns + paid/free helpers (`isCourseFree`, `isTestSeriesFree`) |
 | course-sort | `course-sort.ts` | Packages listing sort presets (`sortBy`/`sortOrder` pairs for `/courses`) |
-| session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers |
+| session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers; `Secure` follows request scheme |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
 | api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |
 | form-validation | `form-validation.ts` | Name/phone/email/exam/message + password/confirm validators |

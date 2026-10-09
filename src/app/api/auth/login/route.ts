@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
   try {
     const session = await loginStudent({ email, password });
-    return sessionResponse(session);
+    return sessionResponse(session, request);
   } catch (error) {
     return authCatch(error, "Unable to log in right now.");
   }

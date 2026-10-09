@@ -13,6 +13,6 @@ export async function GET(request: Request) {
     url.searchParams.set("next", next);
   }
   const response = NextResponse.redirect(url);
-  clearAuthCookie(response);
+  clearAuthCookie(response, request);
   return response;
 }
