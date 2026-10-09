@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Icon } from "@/components/ui/Icon";
@@ -41,7 +41,7 @@ export function AboutHeroSection({
 
       {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[46%] xl:w-[50%]">
-          <Image
+          <AppImage
             src={imageUrl}
             alt=""
             fill
@@ -97,7 +97,7 @@ export function AboutHeroSection({
               </div>
             ) : showImage && imageUrl ? (
               <div className="mt-5 lg:hidden relative w-full overflow-hidden rounded-[8px]">
-                <Image
+                <AppImage
                   src={imageUrl}
                   alt=""
                   width={300}

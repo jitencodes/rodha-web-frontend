@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import type { Testimonial } from "@/lib/types";
@@ -28,7 +28,7 @@ export function TestimonialCard({ testimonial, className }: TestimonialCardProps
 
       <div className="mt-5 flex items-center gap-3 pt-4 border-t border-border-default">
         <div className="relative w-11 h-11 rounded-full overflow-hidden border border-border-default shrink-0 bg-bg-tertiary">
-          <Image
+          <AppImage
             src={testimonial.image || "/assets/images/placeholders/topper-photo.svg"}
             alt={testimonial.name}
             fill

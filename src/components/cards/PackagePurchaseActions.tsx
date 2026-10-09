@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   packageBuyNowHref,
+  packageLoginBuyHref,
   packageViewCourseHref,
 } from "@/lib/packages/buy-now";
 
@@ -27,7 +27,6 @@ export function PackagePurchaseActions({
   className,
   fullWidth = true,
 }: PackagePurchaseActionsProps) {
-  const router = useRouter();
   const [pending, setPending] = useState(false);
 
   if (isSelfEnrolled) {
@@ -61,11 +60,12 @@ export function PackagePurchaseActions({
   }
 
   const buyHref = packageBuyNowHref(packageId, slug);
+  const loginHref = packageLoginBuyHref(packageId, slug);
 
-  async function handleBuy() {
+  function handleBuy() {
     if (pending) return;
     if (!isLoggedIn) {
-      router.push(`/login?next=${encodeURIComponent(buyHref)}`);
+      window.location.assign(loginHref);
       return;
     }
     setPending(true);

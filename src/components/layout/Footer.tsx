@@ -306,7 +306,7 @@ export function Footer() {
                 />
                 <a
                   href={`mailto:${getSupportEmail()}`}
-                  className="transition-colors hover:text-orange-600"
+                  className="min-w-0 break-all transition-colors hover:text-orange-600"
                 >
                   {getSupportEmail()}
                 </a>

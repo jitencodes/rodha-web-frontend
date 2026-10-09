@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 
 import { Container } from "@/components/layout/Container";
 
@@ -38,7 +38,7 @@ export function AboutFounderSection({
           {/* Founder Image */}
           <div className="lg:col-span-5">
             <div className="relative h-auto rounded-[8px]">
-              <Image
+              <AppImage
                 src="/assets/images/faculty/rodha faculty profile/Ravi Sir.png"
                 alt="Ravi Prakash - Founder & CEO of Rodha"
                 width={500}

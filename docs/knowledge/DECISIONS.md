@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-10 — Localhost image hosts and course-detail overflow
+- **Decision:** Allow `*.s3.ap-south-1.amazonaws.com` in the image optimizer and set `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources use `AppImage`. Course detail full-bleed backgrounds use `inset-x-0` instead of `w-screen`.
+- **Rationale:** CMS media is on `rodha-prod-bucket`, and this network resolves that host to `64:ff9b::/96`, which Next blocks. `w-screen` backgrounds were wider than the layout by the scrollbar.
+- **Alternatives considered:** `dangerouslyAllowSVG` for remote files; `overflow-x-hidden` on the page.
+- **Consequences:** Hostnames stay limited to YouTube and the ap-south-1 S3 buckets.
+
 ### 2026-10-10 — Redirects use the browser Host
 - **Decision:** Middleware and `GET /api/checkout/buy` build redirect URLs from `x-forwarded-host` or the `Host` header. Buy Now is a normal same-tab navigation to that relative API path. Blog share/copy uses `window.location.origin`.
 - **Rationale:** Docker `HOSTNAME=0.0.0.0` makes `request.url` point at the bind address, so an IP deployment redirected to `http://0.0.0.0:3000`. `SITE_URL` (`https://rodha.in`) made shared blog links ignore localhost, IP, and staging hosts.

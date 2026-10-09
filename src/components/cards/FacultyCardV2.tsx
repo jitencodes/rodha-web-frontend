@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { parseExperienceYears } from "@/data/faculty";
 import type { Faculty } from "@/lib/types";
@@ -32,7 +32,7 @@ export function FacultyCardV2({
         )}
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FFF8F1]">
-          <Image
+          <AppImage
             src={
               faculty.image || "/assets/images/placeholders/faculty-avatar.svg"
             }
@@ -85,7 +85,7 @@ export function FacultyCardV2({
       )}
     >
       <div className="relative h-[180px] sm:h-[190px] overflow-hidden bg-[#FFF8F1]">
-        <Image
+        <AppImage
           src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
           alt={faculty.name}
           fill

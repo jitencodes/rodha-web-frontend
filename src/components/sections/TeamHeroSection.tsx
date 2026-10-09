@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -34,7 +34,7 @@ export function TeamHeroSection({
     >
       {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]">
-          <Image
+          <AppImage
             src={imageUrl}
             alt=""
             fill
@@ -91,7 +91,7 @@ export function TeamHeroSection({
                   <div key={stat.id} className="flex items-center gap-2.5">
                     {stat.icon ? (
                       <div className="relative w-8 h-8 shrink-0">
-                        <Image
+                        <AppImage
                           src={stat.icon}
                           alt=""
                           fill
@@ -120,7 +120,7 @@ export function TeamHeroSection({
             </div>
           ) : showImage && imageUrl ? (
             <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden">
-              <Image
+              <AppImage
                 src={imageUrl}
                 alt=""
                 fill

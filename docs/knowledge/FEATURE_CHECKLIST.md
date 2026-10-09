@@ -131,7 +131,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
 | Package Detail By Slug API | Complete (`getPackageBySlug` + mapper; empty sections hidden) |
 | Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
-| Sticky purchase card | Complete (package Buy Now checkout + Rodha Buddy) |
+| Sticky purchase card | Complete (same-tab Buy Now → login or checkout; checkout errors surfaced) |
 | Curriculum accordion | Complete (`CourseCurriculumAccordion`; hidden when no modules) |
 | Faculty for course | Complete (package `faculty[]` via `FacultyCardV2`; hidden when empty) |
 | What's included + schedule | Complete (API benefits/schedule only; no invented defaults on package path) |
