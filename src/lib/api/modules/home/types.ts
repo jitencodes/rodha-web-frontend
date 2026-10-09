@@ -92,6 +92,7 @@ export interface HomeBannerViewModel {
   description: string | null;
   stacks: HeroStackViewModel[];
   videoId: string | null;
+  videoUrl: string | null;
   imageUrl: string | null;
 }
 

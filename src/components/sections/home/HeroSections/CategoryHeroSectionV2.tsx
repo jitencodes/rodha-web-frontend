@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,7 +8,7 @@ import {
   getCatCommunityUrl,
 } from "@/lib/constants";
 import { CounsellingCtaAction } from "../../CounsellingCtaAction";
-import { HeroVideoEmbed } from "../HeroVideoEmbed";
+import { HeroBannerMedia } from "../HeroBannerMedia";
 import { HomeHeroShell } from "../HomeHeroShell";
 import { Container } from "@/components/layout/Container";
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -31,6 +30,7 @@ interface CategoryHeroSectionV2Props {
   enrollCoursesHref?: string;
   isLoggedIn?: boolean;
   videoId?: string;
+  videoUrl?: string;
   imageUrl?: string;
   className?: string;
 }
@@ -99,15 +99,14 @@ export function CategoryHeroSectionV2({
   enrollCoursesHref,
   isLoggedIn = false,
   videoId,
+  videoUrl,
   imageUrl,
   className,
 }: CategoryHeroSectionV2Props) {
   const selectionStat = quickStats[0];
   const aspirantStat = quickStats[1];
   const hasStats = quickStats.length > 0;
-  const hasVideo = Boolean(videoId);
-  const hasImage = Boolean(imageUrl) && !hasVideo;
-  const hasMedia = hasVideo || hasImage;
+  const hasMedia = Boolean(videoId || videoUrl || imageUrl);
   const hasSubtitle = Boolean(subtitle?.trim());
   const hasEyebrow = Boolean(eyebrow?.trim());
   const hasPrimaryCta = Boolean(
@@ -190,21 +189,11 @@ export function CategoryHeroSectionV2({
           {hasMedia ? (
             <div className="lg:col-span-6 flex flex-col items-center min-h-0">
               <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-                {hasVideo && videoId ? (
-                  <HeroVideoEmbed videoId={videoId} />
-                ) : null}
-                {hasImage && imageUrl ? (
-                  <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
-                    <Image
-                      src={imageUrl}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      fetchPriority="high"
-                    />
-                  </div>
-                ) : null}
+                <HeroBannerMedia
+                  videoId={videoId}
+                  videoUrl={videoUrl}
+                  imageUrl={imageUrl}
+                />
               </div>
             </div>
           ) : null}

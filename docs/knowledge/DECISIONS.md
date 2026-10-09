@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-10 — Redirects use the browser Host
+- **Decision:** Middleware and `GET /api/checkout/buy` build redirect URLs from `x-forwarded-host` or the `Host` header. Buy Now is a normal same-tab navigation to that relative API path. Blog share/copy uses `window.location.origin`.
+- **Rationale:** Docker `HOSTNAME=0.0.0.0` makes `request.url` point at the bind address, so an IP deployment redirected to `http://0.0.0.0:3000`. `SITE_URL` (`https://rodha.in`) made shared blog links ignore localhost, IP, and staging hosts.
+- **Alternatives considered:** Hardcode the EC2 IP; keep Next `<Link>` client navigation into the checkout route.
+- **Consequences:** Domain and localhost redirects stay on the host the browser used. HTTPS stays HTTPS only when `x-forwarded-proto` is sent with `x-forwarded-host`.
+
 ### 2026-10-09 — Auth cookies follow the request scheme
 - **Decision:** `Secure` on `rodha_access_token`, `rodha_user`, `rodha_graphy`, and `rodha_logged_in` is set from `x-forwarded-proto` or the request URL, not from `NODE_ENV === "production"`.
 - **Rationale:** The GitLab EC2 app is served at `http://13.207.165.22:3000`. Production builds set `NODE_ENV=production`, so login returned `Set-Cookie` with `Secure`. Browsers ignore that on non-localhost HTTP, middleware then sees no token and sends `/account/dashboard` back to `/login`. `npm run dev` keeps `NODE_ENV=development` (no `Secure`). Vercel is HTTPS, so `Secure` cookies stick. Localhost is a secure context, so a local production build would not show the bug.

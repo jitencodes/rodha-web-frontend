@@ -1,6 +1,6 @@
 import { Container } from "@/components/layout/Container";
+import { HeroBannerMedia } from "@/components/sections/home/HeroBannerMedia";
 import { HomeHeroShell } from "@/components/sections/home/HomeHeroShell";
-import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
 import Typewritter from "@/components/Typewriter";
 import Image from "next/image";
 import type {
@@ -50,7 +50,7 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
 
   const hasHighlights = banner.titleHighlights.length > 0;
   const hasDescription = Boolean(banner.description);
-  const hasVideo = Boolean(banner.videoId);
+  const hasMedia = Boolean(banner.videoId || banner.videoUrl || banner.imageUrl);
   const hasStacks = banner.stacks.length > 0;
 
   return (
@@ -86,19 +86,12 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
 
           <div className="lg:col-span-6 flex flex-col items-center min-h-0">
             <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-              {hasVideo && banner.videoId ? (
-                <HeroVideoEmbed videoId={banner.videoId} />
-              ) : banner.imageUrl ? (
-                <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
-                  <Image
-                    src={banner.imageUrl}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    fetchPriority="high"
-                  />
-                </div>
+              {hasMedia ? (
+                <HeroBannerMedia
+                  videoId={banner.videoId}
+                  videoUrl={banner.videoUrl}
+                  imageUrl={banner.imageUrl}
+                />
               ) : null}
             </div>
           </div>

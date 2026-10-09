@@ -133,6 +133,7 @@ export function CategoryLandingPage({
           enrollCoursesHref={viewAllCoursesHref}
           isLoggedIn={isLoggedIn}
           videoId={category.hero.videoId}
+          videoUrl={category.hero.videoUrl}
           imageUrl={category.hero.imageUrl}
         />
       ) : null}

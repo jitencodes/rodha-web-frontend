@@ -1469,3 +1469,34 @@ background-size: cover;
     animation: none;
   }
 }
+
+@keyframes announcement-ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.announcement-ticker {
+  animation: announcement-ticker 22s linear infinite;
+}
+
+.announcement-ticker .announcement-html,
+.announcement-ticker .announcement-html * {
+  display: inline;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-ticker {
+    animation: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .announcement-ticker-clone {
+    display: none;
+  }
+}

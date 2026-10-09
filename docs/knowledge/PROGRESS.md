@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-09 (HTTP production login cookie)
+**Last updated:** 2026-10-10 (share, buy redirect, playlist, announcement ticker)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Share, buy navigation, faculty playlist, mobile announcement (2026-10-10):** Blog share/copy uses the current origin. Checkout and account redirects use the request Host instead of `0.0.0.0`. Buy Now stays in the same tab. Faculty “View All” videos shows only for a valid `youtubePlaylistUrl` and opens a new tab. Mobile announcement is a one-way ticker with a stationary countdown and no dismiss button.
+- **Hero video priority (2026-10-09):** Home and category heroes play a YouTube link or a direct banner video before the image when both are present.
 - **HTTP production login session (2026-10-09):** Auth `Set-Cookie` `Secure` now follows the request scheme (`x-forwarded-proto` or URL), so login on `http://13.207.165.22:3000` keeps the session. HTTPS (Vercel) still sets `Secure`. `npm run dev` was unaffected because `NODE_ENV` is not production.
 - **Rodha Buddy auto-login (2026-10-08):** Header and account Buddy buttons open `/api/buddy/auto-login`, which redirects to `{NEXT_PUBLIC_RODHA_BUDDY_URL}/#/auto-login?authToken=<encoded JWT>` when the login cookie is present. Dev `.env` is `https://rodhabuddy.innowrap.co.in`; `.env.production` is `https://buddy.rodha.co.in`.
 - **Account/catalog UX (2026-10-08):** Buy Now uses `isSelfEnrolled` (View Course) on `/courses`, account buy tab, and dashboard recommendations, with the student token on package fetches. Title tooltips on course, recommended, continue-watching, live-class, and order product cells. Orders show payment status and hide Order ID. Category courses no longer fall back to static packages. Blog detail category tags use the header category list. Signup fields marked required with live password strength. Password-update dialog closes on API error. Sidebar support mailto assigns `window.location` so the client router does not swallow it. Test and certificate quick links commented out.

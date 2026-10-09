@@ -31,6 +31,7 @@ export interface FacultyApi {
   teachingPhilosophy?: string | null;
   achievements?: string[] | null;
   videoLinks?: string[] | null;
+  youtubePlaylistUrl?: string | null;
   isFeatured?: boolean;
   isActive?: boolean;
   categories?: CategorySummaryApi[] | null;

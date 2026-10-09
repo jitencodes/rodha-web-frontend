@@ -108,9 +108,6 @@ export default async function BlogPostPage({
 
   const relatedPosts = post.relatedPosts ?? [];
 
-  const shareUrl =
-    `${SITE_URL}/blog/${post.slug}`;
-
   const breadcrumbItems = [
     {
       label: "Home",
@@ -252,7 +249,7 @@ export default async function BlogPostPage({
 
                 <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
                   <ShareBlog
-                    url={shareUrl}
+                    url={`/blog/${post.slug}`}
                     title={post.title}
                   />
                 </div>

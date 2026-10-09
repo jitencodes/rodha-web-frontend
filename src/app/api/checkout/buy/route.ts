@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { AUTH_COOKIE_NAME } from "@/lib/auth/session-cookie";
+import { publicRequestUrl } from "@/lib/http/public-url";
 import {
   addPackageToCart,
   clearStudentCart,
@@ -9,15 +10,18 @@ import { ApiError } from "@/lib/api/types";
 
 export const runtime = "nodejs";
 
+function redirectTo(request: Request, path: string) {
+  return NextResponse.redirect(publicRequestUrl(request, path));
+}
+
 function redirectToLogin(request: Request, packageId: string, slug: string) {
-  const url = new URL("/login", request.url);
   const buyParams = new URLSearchParams({ packageId });
   if (slug) buyParams.set("slug", slug);
-  url.searchParams.set(
-    "next",
-    `/api/checkout/buy?${buyParams.toString()}`
+  const next = `/api/checkout/buy?${buyParams.toString()}`;
+  return redirectTo(
+    request,
+    `/login?next=${encodeURIComponent(next)}`
   );
-  return NextResponse.redirect(url);
 }
 
 /**
@@ -31,7 +35,7 @@ export async function GET(request: Request) {
   const packageId = Number.parseInt(packageIdRaw, 10);
 
   if (!packageIdRaw || !Number.isFinite(packageId)) {
-    return NextResponse.redirect(new URL("/courses", request.url));
+    return redirectTo(request, "/courses");
   }
 
   const jar = await cookies();
@@ -43,13 +47,13 @@ export async function GET(request: Request) {
   try {
     await clearStudentCart(accessToken);
     await addPackageToCart(accessToken, packageId);
-    return NextResponse.redirect(new URL("/account/checkout", request.url));
+    return redirectTo(request, "/account/checkout");
   } catch (error) {
     console.error("[api/checkout/buy]", error);
     const message =
       error instanceof ApiError ? error.message : "Unable to start checkout";
-    const fail = new URL(slug ? `/courses/${slug}` : "/courses", request.url);
-    fail.searchParams.set("checkoutError", message);
-    return NextResponse.redirect(fail);
+    const failPath = slug ? `/courses/${slug}` : "/courses";
+    const fail = new URLSearchParams({ checkoutError: message });
+    return redirectTo(request, `${failPath}?${fail.toString()}`);
   }
 }

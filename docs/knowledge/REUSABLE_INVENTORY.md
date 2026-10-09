@@ -84,6 +84,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | HeroCounsellingForm | `home/HeroCounsellingForm.tsx` |
 | HeroNeuralCanvas | `home/HeroNeuralCanvas.tsx` |
 | HeroVideoEmbed | `home/HeroVideoEmbed.tsx` |
+| HeroBannerMedia | `home/HeroBannerMedia.tsx` | Home and category hero media: YouTube, then direct video file, then image |
 | HeroFloatingStats | `home/HeroFloatingStats.tsx` |
 | HeroTrustMetrics | `home/HeroTrustMetrics.tsx` |
 | HomeCategoriesSection | `home/HomeCategoriesSection.tsx` |
@@ -254,6 +255,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | course-filters | `course-filters.ts` | Course type chips/dropdowns + paid/free helpers (`isCourseFree`, `isTestSeriesFree`) |
 | course-sort | `course-sort.ts` | Packages listing sort presets (`sortBy`/`sortOrder` pairs for `/courses`) |
 | session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers; `Secure` follows request scheme |
+| public-url | `http/public-url.ts` | Redirect origin from `Host` / `x-forwarded-host`, not the bind address |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
 | api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |
 | form-validation | `form-validation.ts` | Name/phone/email/exam/message + password/confirm validators |

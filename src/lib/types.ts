@@ -193,6 +193,8 @@ export interface Faculty {
   publications?: FacultyPublication[];
   reviews?: FacultyReview[];
   videos?: FacultyVideo[];
+  /** YouTube playlist for the Videos “View All” link. Omitted when missing or invalid. */
+  youtubePlaylistUrl?: string;
   resultStats?: FacultyResultStat[];
   reviewCountLabel?: string;
   honorificSuffix?: "Sir" | "Ma'am";
@@ -393,7 +395,9 @@ export interface CategoryLandingHero {
   primaryCta?: CategoryCta | null;
   /** YouTube video id for the category hero embed */
   videoId?: string;
-  /** Image banner when no YouTube video is present */
+  /** Direct video file. Used when no YouTube id is present. */
+  videoUrl?: string;
+  /** Image banner when no video is present */
   imageUrl?: string;
 }
 

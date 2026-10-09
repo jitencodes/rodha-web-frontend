@@ -97,7 +97,15 @@ export function FacultyVideosPanel({
   viewAllLabel = "View All Videos →",
   className,
 }: FacultyVideosPanelProps) {
-  const viewAllIsExternal = Boolean(viewAllHref?.startsWith("http"));
+  const playlistHref = viewAllHref?.trim() || "";
+  let viewAllIsExternal = false;
+  try {
+    const parsed = new URL(playlistHref);
+    viewAllIsExternal =
+      parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    viewAllIsExternal = false;
+  }
 
   return (
     <div
@@ -109,24 +117,16 @@ export function FacultyVideosPanel({
     >
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-h4 font-semibold text-neutral-900">{title}</h3>
-        {viewAllHref &&
-          (viewAllIsExternal ? (
+        {viewAllIsExternal ? (
             <a
-              href={viewAllHref}
+              href={playlistHref}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-view-all text-caption text-orange-500 hover:text-orange-600 whitespace-nowrap"
             >
               {viewAllLabel}
             </a>
-          ) : (
-            <Link
-              href={viewAllHref}
-              className="btn-view-all text-caption text-orange-500 hover:text-orange-600 whitespace-nowrap"
-            >
-              {viewAllLabel}
-            </Link>
-          ))}
+          ) : null}
       </div>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">

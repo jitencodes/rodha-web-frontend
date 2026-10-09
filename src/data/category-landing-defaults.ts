@@ -244,6 +244,7 @@ export function withCategoryLandingDefaults(
                   ? fallbackHero.primaryCta
                   : null,
             videoId: landing.hero?.videoId,
+            videoUrl: landing.hero?.videoUrl,
             imageUrl: landing.hero?.imageUrl,
           },
     sectionCopy: mergeSectionCopy(landing.sectionCopy, fallback.sectionCopy),

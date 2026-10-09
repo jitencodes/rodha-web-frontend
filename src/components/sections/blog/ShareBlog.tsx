@@ -1,8 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
+
+function sharePath(url: string): string {
+  if (url.startsWith("/") && !url.startsWith("//")) return url;
+  try {
+    const parsed = new URL(url);
+    return `${parsed.pathname}${parsed.search}`;
+  } catch {
+    return url.startsWith("/") ? url : `/${url}`;
+  }
+}
 
 interface ShareBlogProps {
   url: string;
@@ -64,11 +74,17 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function ShareBlog({ url, title, className }: ShareBlogProps) {
+  const path = sharePath(url);
+  const [shareUrl, setShareUrl] = useState(path);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setShareUrl(`${window.location.origin}${path}`);
+  }, [path]);
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(`${window.location.origin}${path}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -96,7 +112,7 @@ export function ShareBlog({ url, title, className }: ShareBlogProps) {
 
         {/* WhatsApp */}
         <a
-          href={whatsappHref(url, title)}
+          href={whatsappHref(shareUrl, title)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-10 w-10 items-center justify-center rounded-full border border-section-beige bg-white text-neutral-500 hover:text-green-600 hover:border-green-300 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500/30"
@@ -107,7 +123,7 @@ export function ShareBlog({ url, title, className }: ShareBlogProps) {
 
         {/* Facebook */}
         <a
-          href={facebookHref(url)}
+          href={facebookHref(shareUrl)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-10 w-10 items-center justify-center rounded-full border border-section-beige bg-white text-neutral-500 hover:text-blue-600 hover:border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/30"
@@ -118,7 +134,7 @@ export function ShareBlog({ url, title, className }: ShareBlogProps) {
 
         {/* Twitter / X */}
         <a
-          href={twitterHref(url, title)}
+          href={twitterHref(shareUrl, title)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-10 w-10 items-center justify-center rounded-full border border-section-beige bg-white text-neutral-500 hover:text-neutral-800 hover:border-neutral-400 transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500/30"
@@ -129,7 +145,7 @@ export function ShareBlog({ url, title, className }: ShareBlogProps) {
 
         {/* LinkedIn */}
         <a
-          href={linkedinHref(url)}
+          href={linkedinHref(shareUrl)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-10 w-10 items-center justify-center rounded-full border border-section-beige bg-white text-neutral-500 hover:text-blue-700 hover:border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/30"

@@ -356,6 +356,7 @@ export function mapCategoryPage(
             ? { label: primaryCta.label, href: primaryCta.href }
             : null,
           videoId: banner.videoId || undefined,
+          videoUrl: banner.videoUrl || undefined,
           imageUrl: banner.imageUrl || undefined,
         }
       : null,
