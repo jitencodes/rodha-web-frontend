@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
@@ -49,7 +49,7 @@ export function FacultyDetailHeroSection({
         <RevealGroup>
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] gap-8 lg:gap-10 items-end lg:items-center">
             <div className="reveal-child reveal-delay-1 relative mx-auto lg:mx-0 w-full max-w-[300px] lg:max-w-none h-[280px] sm:h-[320px] lg:h-[400px]">
-              <Image
+              <AppImage
                 src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
                 alt={faculty.name}
                 fill

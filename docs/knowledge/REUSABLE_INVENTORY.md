@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-10-07 (Account course learning hub)
+**Last updated:** 2026-10-10 (AppImage)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -13,6 +13,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | Accordion | `Accordion.tsx` |
 | AccentUnderline | `AccentUnderline.tsx` |
+| AppImage | `AppImage.tsx` (next/image for rasters; plain img for SVG so the optimizer does not reject them) |
 | AmbientBackground | `AmbientBackground.tsx` |
 | Badge | `Badge.tsx` |
 | Breadcrumb | `Breadcrumb.tsx` |

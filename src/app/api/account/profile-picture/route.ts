@@ -38,7 +38,7 @@ export async function PATCH(request: Request) {
         { ok: false, error: "Session expired" },
         { status: error.status }
       );
-      clearAuthCookie(res);
+      clearAuthCookie(res, request);
       return res;
     }
     const message =

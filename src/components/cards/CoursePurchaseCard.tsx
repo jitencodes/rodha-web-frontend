@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { Badge } from "@/components/ui/Badge";
 import { PackagePurchaseActions } from "@/components/cards/PackagePurchaseActions";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
@@ -38,7 +38,7 @@ export function CoursePurchaseCard({
       )}
     >
       <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#FFF8F1]">
-        <Image
+        <AppImage
           src={posterSrc}
           alt={course.title}
           fill

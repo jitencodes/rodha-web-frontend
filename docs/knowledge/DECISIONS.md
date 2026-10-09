@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-10 — Public origin for auth cookies and checkout redirects
+- **Decision:** Set cookie `Secure` from the request scheme (`x-forwarded-proto`, otherwise the request URL). Build checkout, login, and session-expired redirects with `x-forwarded-host` / `x-forwarded-proto`. Buy links use a same-tab document navigation instead of a client `<Link>` or `router.push`.
+- **Rationale:** Production cookies were always `Secure`, so browsers dropped them on HTTP IP deployments and Buy looked like a no-op. Route Handler redirects built from `request.url` could point at an internal host. App Router soft navigation does not follow `/api/checkout/buy` redirects.
+- **Alternatives considered:** Force `Secure` off in all production (rejected — weakens HTTPS). `SameSite=None` (rejected).
+- **Consequences:** HTTPS deployments stay `Secure`. HTTP IP deployments can store the session. Do not hardcode a public host. `images.dangerouslyAllowLocalIP` is on because this network resolves S3 to NAT64 addresses that Next otherwise rejects; hostnames remain limited to YouTube and `*.s3.ap-south-1.amazonaws.com`.
+
 ### 2026-10-08 — Committed env files, one API URL per environment
 - **Decision:** Commit `.env` (development, `https://innowrap.co.in/rodha/`) and `.env.production` (production, `https://api.rodha.co.in/rodha/`). `scripts/select-env.mjs` copies the file for `APP_ENV` and removes `.env.production` before `next build`. Docker `APP_ENV` and GitLab jobs follow the same split. SMTP passwords stay in `.env.local` / CI secrets, not in git.
 - **Rationale:** Next loads `.env.production` on every production-mode build, so leaving both files in the tree makes development builds call the production API. GitLab-scoped duplicates of `NEXT_PUBLIC_API_BASE_URL` were colliding the same way.

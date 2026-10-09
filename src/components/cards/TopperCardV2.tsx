@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import type { TopperResult } from "@/lib/types";
 
@@ -61,7 +61,7 @@ export function TopperCardV2({ topper, className }: TopperCardV2Props) {
         />
 
         {/* 2. Sharp Foreground Image Layer */}
-        <Image
+        <AppImage
           src={topper.image || "/assets/images/placeholders/topper-photo.svg"}
           alt={topper.name}
           fill

@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       phoneNumber,
       stateId,
     });
-    return sessionResponse(session);
+    return sessionResponse(session, request);
   } catch (error) {
     return authCatch(error, "Unable to create your account right now.");
   }

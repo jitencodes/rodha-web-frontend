@@ -7,7 +7,10 @@ export function jsonError(message: string, status: number) {
   return NextResponse.json({ ok: false, error: message }, { status });
 }
 
-export function sessionResponse(session: AuthSessionViewModel) {
+export function sessionResponse(
+  session: AuthSessionViewModel,
+  request: Request
+) {
   const response = NextResponse.json({
     ok: true,
     user: session.user,
@@ -18,11 +21,15 @@ export function sessionResponse(session: AuthSessionViewModel) {
         }
       : null,
   });
-  applySessionCookies(response, {
-    accessToken: session.accessToken,
-    user: session.user,
-    graphy: session.graphy,
-  });
+  applySessionCookies(
+    response,
+    {
+      accessToken: session.accessToken,
+      user: session.user,
+      graphy: session.graphy,
+    },
+    request
+  );
   return response;
 }
 

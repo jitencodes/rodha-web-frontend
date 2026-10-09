@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import type { TopperResult } from "@/lib/types";
 
@@ -15,7 +15,7 @@ export function TopperCard({ topper, className }: TopperCardProps) {
         className
       )}
     >
-      <Image
+      <AppImage
         src={topper.image || "/assets/images/placeholders/topper-photo.svg"}
         alt={topper.name}
         fill

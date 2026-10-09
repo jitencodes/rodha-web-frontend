@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-08 (Rodha Buddy auto-login token)
+**Last updated:** 2026-10-10 (localhost images, Buy navigation, course overflow)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Localhost images, Buy navigation, course overflow (2026-10-10):** Image optimizer allows `*.s3.ap-south-1.amazonaws.com` and `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources render through `AppImage` instead of `next/image`. Buy uses a same-tab document navigation; checkout redirects use the public origin; cookie `Secure` follows the request scheme. Checkout failures show `checkoutError`. Course detail full-bleed backgrounds no longer use `w-screen`.
 - **Rodha Buddy auto-login (2026-10-08):** Header and account Buddy buttons open `/api/buddy/auto-login`, which redirects to `{NEXT_PUBLIC_RODHA_BUDDY_URL}/#/auto-login?authToken=<encoded JWT>` when the login cookie is present. Dev `.env` is `https://rodhabuddy.innowrap.co.in`; `.env.production` is `https://buddy.rodha.co.in`.
 - **Account/catalog UX (2026-10-08):** Buy Now uses `isSelfEnrolled` (View Course) on `/courses`, account buy tab, and dashboard recommendations, with the student token on package fetches. Title tooltips on course, recommended, continue-watching, live-class, and order product cells. Orders show payment status and hide Order ID. Category courses no longer fall back to static packages. Blog detail category tags use the header category list. Signup fields marked required with live password strength. Password-update dialog closes on API error. Sidebar support mailto assigns `window.location` so the client router does not swallow it. Test and certificate quick links commented out.
 - **Production branch reset + env-separated CI (2026-10-08):** Recreated `production` from current `main` after merging `gitlab/main` (ARM runner, Node 22, ECR, EC2 deploy, non-blocking lint). `main` builds `APP_ENV=development` (`https://innowrap.co.in/rodha/`); `production` builds `APP_ENV=production` (`https://api.rodha.co.in/rodha/`) via `select-env.mjs`.

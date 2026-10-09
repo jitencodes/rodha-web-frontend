@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 
 import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/ui/RevealGroup";
@@ -117,7 +117,7 @@ export function HomeAppPromotionSection({
                     )}
                   >
                     <div className="relative w-full max-w-[280px]">
-                      <Image
+                      <AppImage
                         src={app.mockupSrc}
                         alt={app.alt}
                         width={800}
@@ -174,7 +174,7 @@ export function HomeAppPromotionSection({
                         className={storeButtonClassName}
                         aria-label={`Get ${app.name} on Google Play`}
                       >
-                        <Image
+                        <AppImage
                           src="/assets/icons/playstore-svgrepo-com.svg"
                           alt=""
                           width={18}
@@ -190,7 +190,7 @@ export function HomeAppPromotionSection({
                         className={storeButtonClassName}
                         aria-label={`Get ${app.name} on App Store`}
                       >
-                        <Image
+                        <AppImage
                           src="/assets/icons/apple-logo-svgrepo-com.svg"
                           alt=""
                           width={25}

@@ -8,6 +8,7 @@ import { CourseTestimonialsSection } from "@/components/sections/course/CourseTe
 import { CourseRelatedSection } from "@/components/sections/course/CourseRelatedSection";
 import { CourseFaqSection } from "@/components/sections/course/CourseFaqSection";
 import { CourseEnquireStickyBar } from "@/components/sections/course/CourseEnquireStickyBar";
+import { CheckoutErrorNotice } from "@/components/sections/course/CheckoutErrorNotice";
 import {
   getCourseCategoryHref,
   getCourseFaqs,
@@ -44,6 +45,7 @@ interface CourseDetailPageProps {
   testimonialsOverride?: Testimonial[];
   /** When true, do not invent missing section content (package API path). */
   apiBacked?: boolean;
+  checkoutError?: string;
 }
 
 export function CourseDetailPageView({
@@ -57,6 +59,7 @@ export function CourseDetailPageView({
   facultyOverride,
   testimonialsOverride,
   apiBacked = false,
+  checkoutError,
 }: CourseDetailPageProps) {
   const course = withCourseDetailDefaults(rawCourse, {
     fillMissing: !apiBacked,
@@ -119,6 +122,7 @@ export function CourseDetailPageView({
       )}
 
       {/* Sticky purchase card scope: hero → testimonials (stops before Related) */}
+      <CheckoutErrorNotice message={checkoutError} />
       <div className="relative course-sticky-scope [&_.container-rodha]:lg:pr-[380px]">
         <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 hidden lg:block">
           <div className="container-rodha relative h-full !pr-4 xl:!pr-6">
@@ -138,11 +142,11 @@ export function CourseDetailPageView({
 
         <div className="relative py-6 md:py-8 lg:py-10">
           <div
-            className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-bg-primary"
+            className="pointer-events-none absolute inset-y-0 inset-x-0 -z-10 bg-bg-primary"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 opacity-40"
+            className="pointer-events-none absolute inset-y-0 inset-x-0 -z-10 opacity-40"
             style={{
               background:
                 "radial-gradient(ellipse 50% 60% at 80% 20%, rgba(249,115,22,0.18) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 80%, rgba(249,115,22,0.08) 0%, transparent 70%)",
@@ -170,7 +174,7 @@ export function CourseDetailPageView({
 
         <div className="relative home-section-spacing home-on-light">
           <div
-            className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-section-white"
+            className="pointer-events-none absolute inset-y-0 inset-x-0 -z-10 bg-section-white"
             aria-hidden
           />
           <Container>

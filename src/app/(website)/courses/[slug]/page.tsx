@@ -15,6 +15,7 @@ import type { CategoryLandingConfig } from "@/lib/types";
 
 interface CourseDetailPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ checkoutError?: string }>;
 }
 
 function fallbackLanding(name = "Courses"): CategoryLandingConfig {
@@ -63,8 +64,10 @@ export async function generateMetadata({
 
 export default async function CourseDetailPage({
   params,
+  searchParams,
 }: CourseDetailPageProps) {
   const { slug } = await params;
+  const { checkoutError } = await searchParams;
   const accessToken = await getAccessToken();
   const pkg = await getPackageBySlug(slug, {
     accessToken: accessToken ?? undefined,
@@ -86,6 +89,7 @@ export default async function CourseDetailPage({
         facultyOverride={pkg.faculty}
         testimonialsOverride={pkg.testimonials}
         apiBacked
+        checkoutError={checkoutError}
       />
     );
   }
@@ -96,6 +100,10 @@ export default async function CourseDetailPage({
   }
 
   return (
-    <CourseDetailPageView course={match.course} landing={match.landing} />
+    <CourseDetailPageView
+      course={match.course}
+      landing={match.landing}
+      checkoutError={checkoutError}
+    />
   );
 }

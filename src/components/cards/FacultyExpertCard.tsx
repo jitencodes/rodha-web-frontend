@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import type { Faculty } from "@/lib/types";
@@ -40,7 +40,7 @@ export function FacultyExpertCard({ faculty, className }: FacultyExpertCardProps
         className
       )}
     >
-      <Image
+      <AppImage
         src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
         alt={faculty.name}
         fill

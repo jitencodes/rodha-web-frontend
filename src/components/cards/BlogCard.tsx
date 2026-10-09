@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
@@ -69,7 +69,7 @@ function OverlayCard({ post, featured, className }: Omit<BlogCardProps, "variant
         className
       )}
     >
-      <Image
+      <AppImage
         src={imgSrc}
         alt={post.title}
         fill
@@ -134,7 +134,7 @@ function ArticleCard({ post, featured, className }: Omit<BlogCardProps, "variant
           href={`/blog/${post.slug}`}
           className="relative aspect-[16/10] md:aspect-auto md:min-h-[280px] overflow-hidden group"
         >
-          <Image
+          <AppImage
             src={imgSrc}
             alt={post.title}
             fill
@@ -187,7 +187,7 @@ function ArticleCard({ post, featured, className }: Omit<BlogCardProps, "variant
         href={`/blog/${post.slug}`}
         className="relative aspect-[16/10] overflow-hidden"
       >
-        <Image
+        <AppImage
           src={imgSrc}
           alt={post.title}
           fill

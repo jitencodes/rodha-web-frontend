@@ -11,7 +11,7 @@ import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(request: Request) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
@@ -29,7 +29,7 @@ export async function GET() {
     const jar = await cookies();
     const token = jar.get(AUTH_COOKIE_NAME)?.value || accessToken;
     const response = NextResponse.json({ ok: true, user });
-    applySessionCookies(response, { accessToken: token, user });
+    applySessionCookies(response, { accessToken: token, user }, request);
     return response;
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {

@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
   },
   images: {
+    // This network resolves S3 to NAT64 (64:ff9b::/96). Next blocks those
+    // as private IPs and returns 400 for every CMS image on localhost.
+    // Hostnames stay limited to the remotePatterns below.
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -30,17 +34,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "rodha-dev-bucket.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "rodha-dev-bucket.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "*.s3.*.amazonaws.com",
+        hostname: "*.s3.ap-south-1.amazonaws.com",
         pathname: "/**",
       },
     ],
