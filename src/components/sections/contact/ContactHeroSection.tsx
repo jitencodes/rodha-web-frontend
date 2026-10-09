@@ -36,7 +36,7 @@ export function ContactHeroSection({ className }: ContactHeroSectionProps) {
                 <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
                   {CONTACT_HERO.eyebrow}
                 </p>
-                <h1 className="text-[32px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
+                <h1 className="text-[26px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
                   {CONTACT_HERO.titleBefore}{" "} <br />
                   <span className="text-orange-500">{CONTACT_HERO.titleHighlight}</span>
                 </h1>

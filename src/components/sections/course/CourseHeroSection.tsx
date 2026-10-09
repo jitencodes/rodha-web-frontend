@@ -43,7 +43,7 @@ export function CourseHeroSection({
         {categoryLabel}
       </Badge>
 
-      <h1 className="mt-4 text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
+      <h1 className="mt-4 text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
         {course.title}
       </h1>
 

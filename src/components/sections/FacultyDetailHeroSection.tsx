@@ -67,7 +67,7 @@ export function FacultyDetailHeroSection({
                 {badgeLabel}
               </Badge>
 
-              <h1 className="mt-3 text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
+              <h1 className="mt-3 text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
                 {faculty.name}
               </h1>
 

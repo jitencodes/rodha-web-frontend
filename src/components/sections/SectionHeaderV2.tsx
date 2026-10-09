@@ -48,7 +48,7 @@ export function SectionHeaderV2({
         {badge && (
           <p
             className={cn(
-              "section-header-badge text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit font-semibold mb-5 md:mb-6.5",
+              "section-header-badge text-[10px] sm:text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit font-semibold mb-5 md:mb-6.5",
               align === "center" && "mx-auto"
             )}
           >

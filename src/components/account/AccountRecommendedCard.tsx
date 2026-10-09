@@ -114,19 +114,6 @@ export function AccountRecommendedCard({
             ) : isBuyNow ? (
               <a
                 href={actionHref}
-                onClick={(event) => {
-                  if (
-                    event.metaKey ||
-                    event.ctrlKey ||
-                    event.shiftKey ||
-                    event.altKey ||
-                    event.button !== 0
-                  ) {
-                    return;
-                  }
-                  event.preventDefault();
-                  window.location.assign(actionHref);
-                }}
                 className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 {label}

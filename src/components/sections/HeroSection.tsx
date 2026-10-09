@@ -81,7 +81,7 @@ export function HeroSection({ title, subtitle, children, className }: HeroSectio
       <div className="container-rodha relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-5 items-center min-h-[380px] lg:min-h-[460px]">
           <div className="lg:col-span-6 xl:col-span-5">
-            <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
+            <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               Expert Mentorship.
               <br />
               Proven Strategies.

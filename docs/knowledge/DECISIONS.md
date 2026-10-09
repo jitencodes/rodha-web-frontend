@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-10 — Dashboard Buy links stay plain anchors
+- **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
+- **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.
+- **Alternatives considered:** Mark the card `"use client"` (rejected — pulls the tile into the client bundle). Encode the handler as a server action (rejected — checkout must be a document navigation).
+- **Consequences:** Do not pass event handlers from this server card. Cart "Add to Cart" remains a button only when a client parent supplies `onAddToCart`.
+
 ### 2026-10-10 — Localhost image hosts and course-detail overflow
 - **Decision:** Allow `*.s3.ap-south-1.amazonaws.com` in the image optimizer and set `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources use `AppImage`. Course detail full-bleed backgrounds use `inset-x-0` instead of `w-screen`.
 - **Rationale:** CMS media is on `rodha-prod-bucket`, and this network resolves that host to `64:ff9b::/96`, which Next blocks. `w-screen` backgrounds were wider than the layout by the scrollbar.

@@ -79,7 +79,7 @@ export function AboutHeroSection({
                 {eyebrow}
               </p>
             ) : null}
-            <h1 className="text-[32px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
+            <h1 className="text-[26px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
               {title}{" "}
               {highlight ? (
                 <span className="text-orange-500">{highlight}</span>

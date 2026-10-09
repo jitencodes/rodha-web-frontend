@@ -81,7 +81,7 @@ export function CategoryHeroSection({
       <div className="container-rodha relative z-10 pt-2 md:pt-4 lg:pt-6 pb-10 md:pb-12 lg:pb-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           <div className="lg:col-span-6 xl:col-span-6">
-            <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
+            <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {headline}
             </h1>
 

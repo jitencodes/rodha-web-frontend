@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (localhost images and course overflow)
+**Last updated:** 2026-10-10 (dashboard Buy link server error, mobile layout)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Account dashboard on the HTTP production host (2026-10-10):** Recommendation Buy controls are native anchors. A Server Component `onClick` on those links failed RSC serialization and the production IP showed Next's "This page couldn't load" page. HTTPS Vercel did not render that handler.
+- **Mobile layout, gallery loop, team SVG color (2026-10-10):** Smaller hero and section titles below 640px, wrapping hero CTAs, `h-fit` stat strips, smaller category result cards, carousel `touch-action: pan-x pan-y`, course breadcrumb wrap, course-detail footer clearance, team gallery on `InfiniteMarquee`, team stat SVGs inlined in orange.
 - **Localhost images and course overflow (2026-10-10):** Image optimizer allows `*.s3.ap-south-1.amazonaws.com` and `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources render through `AppImage`. Checkout failures show `checkoutError`. Course detail full-bleed backgrounds no longer use `w-screen`. Footer email can wrap instead of widening the page.
 - **Share, buy navigation, faculty playlist, mobile announcement (2026-10-10):** Blog share/copy uses the current origin. Checkout and account redirects use the request Host instead of `0.0.0.0`. Buy Now stays in the same tab. Faculty “View All” videos shows only for a valid `youtubePlaylistUrl` and opens a new tab. Mobile announcement is a one-way ticker with a stationary countdown and no dismiss button.
 - **Hero video priority (2026-10-09):** Home and category heroes play a YouTube link or a direct banner video before the image when both are present.
