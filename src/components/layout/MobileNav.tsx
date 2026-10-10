@@ -6,9 +6,7 @@ import { cn, isExternalHref } from "@/lib/utils";
 import {
   EXTERNAL_URLS,
   HEADER_NAV,
-  getFreeResourceUrl,
 } from "@/lib/constants";
-import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { usePathname } from "next/navigation";
 
@@ -56,10 +54,6 @@ export function MobileNav({
   const [isOpen, setIsOpen] = useState(false);
   const activeCategory =
     categories.find((cat) => cat.slug === activeCategorySlug) ?? null;
-  const freeResourceHref = getFreeResourceUrl(
-    activeCategory?.counsellingExamId ??
-      (activeCategorySlug ? slugToCategoryId(activeCategorySlug) : null)
-  );
 
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
@@ -123,16 +117,9 @@ export function MobileNav({
 
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;
-            const children = hasChildren
-              ? item.children.map((child) => ({
-                  ...child,
-                  href:
-                    child.label === "Free Resources"
-                      ? freeResourceHref
-                      : child.href,
-                }))
-              : [];
+            const children = hasChildren ? item.children : [];
             const itemHref = "href" in item ? item.href : "";
+            const isHighlighted = "highlight" in item && item.highlight;
 
             if (hasChildren) {
               const isExpanded = expandedItem === item.label;
@@ -224,7 +211,9 @@ export function MobileNav({
                   "block py-3 text-body font-medium transition-colors",
                   isActive
                     ? "text-orange-400"
-                    : "text-text-primary hover:text-orange-400"
+                    : isHighlighted
+                      ? "text-orange-300"
+                      : "text-text-primary hover:text-orange-400"
                 )}
               >
                 {item.label}

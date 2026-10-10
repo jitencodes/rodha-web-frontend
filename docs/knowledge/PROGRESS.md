@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (dashboard Buy link server error, mobile layout)
+**Last updated:** 2026-10-10 (listing hero images and toolbar overlap)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Listing hero images + toolbar (2026-10-10):** Courses and blog listing heroes use a smaller bottom-aligned image. Course and blog toolbars overlap the hero from `lg` up, and sit below it on tablet and mobile.
+- **Header Courses + listing heroes (2026-10-10):** Header and mobile nav include a highlighted Courses link to `/courses`. Free Resources opens the CAT 2027 free course. Courses listing hero uses `courses-hero.png`; blog listing hero uses `Blogs.png`.
 - **Account dashboard on the HTTP production host (2026-10-10):** Recommendation Buy controls are native anchors. A Server Component `onClick` on those links failed RSC serialization and the production IP showed Next's "This page couldn't load" page. HTTPS Vercel did not render that handler.
 - **Mobile layout, gallery loop, team SVG color (2026-10-10):** Smaller hero and section titles below 640px, wrapping hero CTAs, `h-fit` stat strips, smaller category result cards, carousel `touch-action: pan-x pan-y`, course breadcrumb wrap, course-detail footer clearance, team gallery on `InfiniteMarquee`, team stat SVGs inlined in orange.
 - **Localhost images, Buy navigation, course overflow (2026-10-10):** Image optimizer allows `*.s3.ap-south-1.amazonaws.com` and `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources render through `AppImage` instead of `next/image`. Buy uses a same-tab document navigation; checkout redirects use the public origin; cookie `Secure` follows the request scheme. Checkout failures show `checkoutError`. Course detail full-bleed backgrounds no longer use `w-screen`.

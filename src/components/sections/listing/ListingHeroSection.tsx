@@ -11,6 +11,7 @@ interface ListingHeroSectionProps {
   subtitle: string;
   imageSrc: string;
   imageAlt: string;
+  imageClassName?: string;
   className?: string;
 }
 
@@ -22,12 +23,13 @@ export function ListingHeroSection({
   subtitle,
   imageSrc,
   imageAlt,
+  imageClassName,
   className,
 }: ListingHeroSectionProps) {
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-bg-primary min-h-[380px] lg:min-h-[530px]",
+        "relative overflow-hidden bg-bg-primary min-h-[380px] md:min-h-[530px]",
         className
       )}
     >
@@ -36,12 +38,15 @@ export function ListingHeroSection({
         aria-hidden
       />
 
-      <div className="pointer-events-none absolute -translate-y-20 inset-y-0 right-0 hidden lg:block w-[40%] xl:w-[42%]">
+      <div className="pointer-events-none absolute bottom-30 right-0 hidden h-[62%] w-[28%] lg:block xlgl:h-[76%] lg:w-[70%]">
         <Image
           src={imageSrc}
           alt={imageAlt}
           fill
-          className="object-contain object-right-bottom"
+          className={cn(
+            "object-contain object-right-bottom",
+            imageClassName
+          )}
           sizes="42vw"
           fetchPriority="high"
         />

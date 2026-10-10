@@ -383,7 +383,7 @@ export function CategoryLandingPage({
         title={category.cta.title}
         subtitle={category.cta.subtitle}
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/award-to-boy.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={category.cta.primaryAction}
         secondaryAction={category.cta.secondaryAction}
       />

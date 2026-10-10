@@ -39,7 +39,7 @@ export function CourseTestimonialsSection({
           align="center"
           className="mx-auto lg:!mb-6"
         />
-        {rating && (
+        {/* {rating && (
           <p className="mb-8 flex items-center justify-center gap-2 text-body font-semibold text-neutral-800">
             <FacultyIcon name="star" size={16} className="text-orange-500" />
             <span>
@@ -47,7 +47,7 @@ export function CourseTestimonialsSection({
               {rating.suffix ?? ""} Google Rating
             </span>
           </p>
-        )}
+        )} */}
         <RevealGroup>
           <div className="overflow-hidden">
             <InfiniteMarquee speed={35} direction="left" gap={20}>

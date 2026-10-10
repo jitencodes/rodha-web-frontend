@@ -20,7 +20,7 @@ export interface LegalPageContent {
 export const LEGAL_CONTACT = {
   email: "raviprakash@rodha.co.in",
   phone: "+91-7982212160",
-  address: "No. 7714, 7th Floor, Block C, Pranavas BSR Gitaaar, Panthur, Bangalore, Karnataka, 560103",
+  address: "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
   grievanceOfficer: "Grievance Officer, Rodha Educational Services Private Limited",
 };
 

@@ -67,7 +67,7 @@ export default async function TeamPage() {
         title="Be a Part of Our Mission"
         subtitle="Join thousands of successful students who trusted Rodha for their exam preparation journey."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/award-to-boy.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={{ label: "Explore Programs", href: "/category/cat" }}
         secondaryAction={{ label: "Book Free Counselling", href: "/contact" }}
       />

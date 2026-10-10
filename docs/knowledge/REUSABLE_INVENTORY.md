@@ -309,7 +309,7 @@ rodha-logo.webp (official brand), rodha-logo.svg, rodha-logo-white.svg, rodha-lo
 **Faculty listing hero:** `images/faculty/listings page/hero-faulty.png`  
 **Faculty detail:** `images/faculty/detail/results-podium.png` (results banner); achievements reuse `images/icons/rank.png`; hero decoration reuses listing `hero-faulty.png`  
 **Courses / faculty / results / blog:** JPG assets under `images/courses`, `images/faculty`, `images/results`, `images/blog` (legacy)  
-**Catalog listing hero:** `images/courses/banner/banner.png` (courses + test series listing)  
+**Catalog listing hero:** `images/courses/courses-hero.png` (courses listing). Test series listing still uses `images/courses/banner/banner.png`. Blog listing hero: `images/blog/Blogs.png`.  
 **Auth banner:** `auth/login-banner.png` (login/signup left panel)  
 **CAT 2025 students:** 46 optimized WebP portraits under `images/category/cat/students/`, named by student slug and shared by result/testimonial records  
 **IPMAT 2026 students:** 16 optimized WebP portraits under `images/category/ipmat/students/`, used on the IPMAT landing and homepage IPMAT results carousel  

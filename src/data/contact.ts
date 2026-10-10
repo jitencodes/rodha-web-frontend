@@ -7,11 +7,11 @@ export const CONTACT_HERO = {
   titleBefore: "Let's start a",
   titleHighlight: "conversation.",
   description:
-    "Whether you need course guidance, a callback, or help choosing the right exam track — the Rodha team is ready to support your next step.",
+    "Whether you need course guidance, a callback, or help choosing the right exam track. The Rodha team is ready to support your next step.",
 } as const;
 
 export const CONTACT_CHANNELS = {
-  phone: "+91-7982212160",
+  phone: "+91-8049368628",
   phoneHref: "tel:+919394324046",
   phoneHours: "Available 9 AM – 8 PM",
   whatsapp: "+91-9304491484",
@@ -24,7 +24,7 @@ export const CONTACT_CHANNELS = {
   buddyNote: "Ask doubts, get guidance",
   buddyHref: EXTERNAL_URLS.rodhaBuddy,
   address:
-    "No. 7714, 7th Floor, Block C, Pranavas BSR Gitaaar, Panthur, Bangalore, Karnataka, 560103",
+    "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
   mapEmbedSrc:
     "https://maps.google.com/maps?q=No.%207714%2C%207th%20Floor%2C%20Block%20C%2C%20Pranavas%20BSR%20Gitaaar%2C%20Panthur%2C%20Bangalore%2C%20Karnataka%2C%20560103&z=16&output=embed",
 } as const;

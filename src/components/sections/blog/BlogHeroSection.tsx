@@ -20,9 +20,9 @@ export function BlogHeroSection({ className }: BlogHeroSectionProps) {
         aria-hidden
       />
 
-      <div className="pointer-events-none absolute -translate-y-20 inset-y-0 right-0 hidden lg:block w-[40%] xl:w-[42%]">
+      <div className="pointer-events-none absolute bottom-0 right-0 hidden w-[68%] lg:block xl:w-[62%] h-[90%]">
         <Image
-          src="/assets/images/blog/hero-blog.png"
+          src="/assets/images/blog/Blogs.png"
           alt="Blog & Insights"
           fill
           className="object-contain object-right-bottom"
@@ -52,12 +52,11 @@ export function BlogHeroSection({ className }: BlogHeroSectionProps) {
             Blogs &amp; Insights
           </p>
           <h1 className="text-[26px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
-            Insights that Inspire,{" "}
-            <span className="text-orange-500">Knowledge</span> that Empowers
+          Everything You Need to Navigate Your {" "}
+            <span className="text-orange-500">CAT Journey</span>
           </h1>
-          <p className="mt-4 max-w-md text-body-lg text-text-secondary leading-relaxed">
-            Stay updated with expert perspectives, exam strategies, and career
-            guidance from Rodha&apos;s mentors and industry leaders.
+          <p className="mt-4 max-w-2xl text-body-lg text-text-secondary leading-relaxed">
+          From CAT preparation strategies and score-versus-percentile analysis to college applications, form-filling guides, and admission insights, get the guidance you need at every step towards your dream B-school.
           </p>
         </div>
       </Container>
