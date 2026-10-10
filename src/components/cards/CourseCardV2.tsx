@@ -125,7 +125,7 @@ export function CourseCardV2({
           <div className="mt-auto flex items-end justify-between gap-3 pt-5">
             <div className="min-w-0">
               <span className="block text-[1.4rem] font-bold leading-none text-neutral-900">
-                {course.price === 0 ? "FREE" : formatPrice(course.price)}
+                {course.price === 0 ? "FREE" : formatPrice(course.price)} 
               </span>
               {hasDiscount && discountPercent > 0 ? (
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">

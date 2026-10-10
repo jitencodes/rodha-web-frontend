@@ -44,7 +44,7 @@ export function CourseIncludedScheduleSection({
       )}
     >
       <Container>
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-1 lg:gap-10">
           {included.length > 0 && (
             <div className="flex h-full flex-col">
               <SectionHeaderV2

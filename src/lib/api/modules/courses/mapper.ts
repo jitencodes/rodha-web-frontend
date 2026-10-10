@@ -79,10 +79,10 @@ export function mapCourse(
     category,
     description,
     shortDescription,
-    price: asNumber(course.price),
+    price: asNumber(course.discountedPrice),
     originalPrice:
-      course.originalPrice !== null && course.originalPrice !== undefined
-        ? asNumber(course.originalPrice)
+      course.price !== null && course.price !== undefined 
+        ? asNumber(course.price)
         : undefined,
     duration: course.duration?.trim() || "",
     mode: course.mode?.trim() || undefined,

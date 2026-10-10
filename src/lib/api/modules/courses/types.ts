@@ -10,6 +10,7 @@ export interface CourseApi {
   description?: string | null;
   shortDescription?: string | null;
   price?: number | string | null;
+  discountedPrice?: number | string | null;
   duration?: string | null;
   mode?: string | null;
   features?: string[] | null;
