@@ -122,7 +122,7 @@ export default async function FacultyPage({ searchParams }: FacultyPageProps) {
           title="Ready to Begin Your Journey?"
           subtitle="Book a Demo Class or Explore our Courses."
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award-to-girl.png"
+          decorativeImage="/assets/images/about us/footer-cta-award 4.png"
           primaryAction={{ label: "Book a Demo Class", href: "/contact" }}
           secondaryAction={{ label: "Explore Courses", href: "/category/cat" }}
           className="reveal-child reveal-delay-1"

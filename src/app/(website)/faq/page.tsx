@@ -73,7 +73,7 @@ export default async function FAQPage({
         title="Still Have Questions?"
         subtitle="Our team is here to help you find the right program for your goals."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/award-to-girl.png"
+        decorativeImage="/assets/images/about us/footer-cta-award 4.png"
         primaryAction={{ label: "Contact Us", href: "/contact" }}
         secondaryAction={{ label: "Ask Rodha Buddy", href: EXTERNAL_URLS.rodhaBuddy }}
       />
