@@ -90,7 +90,7 @@ export function mapCourse(
     highlights: course.highlights?.filter(Boolean) ?? [],
     enrollmentUrl,
     externalLink: course.externalLink?.trim() || undefined,
-    thumbnail: course.thumbnail?.trim() || course.image?.trim() || undefined,
+    thumbnail: course.thumbnail?.trim() || course.image?.trim() || course.bannerImageUrl?.trim() || undefined,
     image: course.image?.trim() || course.thumbnail?.trim() || undefined,
     badge: course.badge?.trim() || undefined,
     badgeType: course.badgeType === "audience" ? "audience" : undefined,

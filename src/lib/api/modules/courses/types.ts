@@ -21,6 +21,7 @@ export interface CourseApi {
   details?: string[] | null;
   thumbnail?: string | null;
   image?: string | null;
+  bannerImageUrl?: string | null;
   showFaculty?: boolean | null;
   externalLink?: string | null;
   courseType?: string | null;

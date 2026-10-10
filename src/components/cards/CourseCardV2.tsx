@@ -56,7 +56,7 @@ export function CourseCardV2({
   const isExternalCta = !isBuyNow && Boolean(actionHref.startsWith("http"));
   const posterSrc =
     course.thumbnail ||
-    course.facultyImage ||
+    course.facultyImage || 
     COURSE_IMAGE_FALLBACK;
   const label = ctaLabel || course.detailsLabel || "View Details";
   const ctaIsDistinct = actionHref !== courseHref;
@@ -78,12 +78,12 @@ export function CourseCardV2({
       />
 
       <div className="relative z-[1] flex h-full flex-col pointer-events-none">
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#FFF3E8]">
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
           <Image
             src={posterSrc}
             alt={course.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
           {course.badge && (
@@ -115,11 +115,11 @@ export function CourseCardV2({
             </p>
           )}
           <div className="mt-2 text-caption leading-relaxed text-neutral-500 flex items-center gap-1 justify-between capitalize">
-            {course.caourseCount != null ? (
+            {/* {course.caourseCount != null ? (
               <span>{course.caourseCount} Courses</span>
             ) : (
               <span />
-            )}
+            )} */}
             {course.language ? <span>{course.language}</span> : null}
           </div>
           <div className="mt-auto flex items-end justify-between gap-3 pt-5">

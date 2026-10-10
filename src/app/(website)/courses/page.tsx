@@ -186,9 +186,9 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           { label: "Courses" },
         ]}
         eyebrow="Courses"
-        title="Programs that turn preparation into"
-        accent="selection"
-        subtitle="Browse comprehensive programs, sectional courses, and crash batches across CAT, IPMAT, CLAT, SSC, and Skill House."
+        title="Your CAT 2027 journey"
+        accent="starts here"
+        subtitle="Explore comprehensive programs, sectional courses, and focused practice batches designed to help CAT 2027 aspirants build strong fundamentals, sharpen their problem-solving skills, and move closer to their dream B-school."
         imageSrc={LISTING_BANNER}
         imageAlt="CAT 2027 first batch, now live"
         imageLayout="section"

@@ -210,17 +210,17 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CONTACT_INFO: ContactInfo = {
-  phone: "+91 8049368628",
+  phone: "08049368628",
   email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in",
   address: "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { platform: "Instagram", url: "https://instagram.com/rodha.in", icon: "instagram" },
-  { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
+  { platform: "Instagram", url: "https://www.instagram.com/rodhaplanet/", icon: "instagram" },
+  // { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
   { platform: "YouTube", url: "https://youtube.com/@rodha", icon: "youtube" },
-  { platform: "LinkedIn", url: "https://linkedin.com/company/rodha", icon: "linkedin" },
-  { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
+  { platform: "LinkedIn", url: "https://www.linkedin.com/company/rodha-educational-services-private-limited/", icon: "linkedin" },
+  // { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
 ];
 
 export const HEADER_NAV = [

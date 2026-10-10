@@ -52,6 +52,7 @@ export default async function FAQPage({
           <SectionHeaderV2
             badge="GOOD TO KNOW"
             title="Frequently Asked Questions"
+            titleAs="h1"
             subtitle="Find answers about Rodha's CAT, IPMAT, SSC, CLAT, and Skill House programs, plus general coaching questions."
             align="center"
             className="mx-auto max-w-3xl"

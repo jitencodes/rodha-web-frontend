@@ -11,11 +11,11 @@ export const CONTACT_HERO = {
 } as const;
 
 export const CONTACT_CHANNELS = {
-  phone: "+91-8049368628",
-  phoneHref: "tel:+919394324046",
+  phone: "08049368628",
+  phoneHref: "tel:08049368628",
   phoneHours: "Available 9 AM – 8 PM",
   whatsapp: "+91-9304491484",
-  whatsappHref: "https://wa.me/917982212251",
+  whatsappHref: "https://wa.me/919304491484",
   whatsappNote: "Chat with us",
   email: getSupportEmail(),
   emailHref: getSupportMailto(),
@@ -25,8 +25,8 @@ export const CONTACT_CHANNELS = {
   buddyHref: EXTERNAL_URLS.rodhaBuddy,
   address:
     "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
-  mapEmbedSrc:
-    "https://maps.google.com/maps?q=No.%207714%2C%207th%20Floor%2C%20Block%20C%2C%20Pranavas%20BSR%20Gitaaar%2C%20Panthur%2C%20Bangalore%2C%20Karnataka%2C%20560103&z=16&output=embed",
+    mapEmbedSrc:
+    "https://maps.google.com/maps?q=113%2C%202nd%20Main%20Road%2C%20Radiant%20Lotus%20Apartment%2C%20Bannerghatta%20Road%2C%20Bangalore%20South%2C%20Bangalore%2C%20Karnataka%2C%20India%2C%20560076&z=16&output=embed",
 } as const;
 
 export const CONTACT_SUPPORT_HOURS = [
