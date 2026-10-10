@@ -1,35 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
-import { userHasState } from "@/lib/api/modules/auth/mapper";
+import { missingAccountProfileFields } from "@/lib/api/modules/auth/mapper";
 import { userAtom } from "@/lib/store/user";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 
-/** Opens a blocking Update State dialog when `/auth/me` has `state: null`. */
+/** Opens a blocking dialog for whichever of mobile and state is still missing. */
 export function RequireStateGate() {
   const user = useAtomValue(userAtom);
-  const [open, setOpen] = useState(false);
+  const missing = missingAccountProfileFields(user);
 
-  useEffect(() => {
-    if (user && !userHasState(user)) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  }, [user]);
-
-  if (!user) return null;
+  if (!user || missing.length === 0) return null;
 
   return (
     <UpdateStateDialog
-      open={open}
+      open
       required
+      fields={missing}
       initialStateId={user.stateId}
-      title="Update your state"
-      description="Please select your state to continue using your Rodha account."
+      initialMobile={user.mobile}
       onClose={() => {
-        /* required — only closes after successful update via atom refresh */
+        /* required — unmounts once the saved user has both fields */
       }}
     />
   );

@@ -11,6 +11,7 @@ import {
 import type { AuthGraphyViewModel } from "@/lib/api/modules/auth/types";
 import { ApiError } from "@/lib/api/types";
 import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
+import { validatePhone } from "@/lib/form-validation";
 
 export const runtime = "nodejs";
 
@@ -30,29 +31,42 @@ export async function PATCH(request: Request) {
     );
   }
 
-  const stateId =
-    body &&
-    typeof body === "object" &&
-    "stateId" in body &&
-    typeof (body as { stateId: unknown }).stateId === "number"
-      ? (body as { stateId: number }).stateId
-      : Number(
-          body &&
-            typeof body === "object" &&
-            "stateId" in body
-            ? (body as { stateId: unknown }).stateId
-            : NaN
-        );
+  const record =
+    body && typeof body === "object"
+      ? (body as { stateId?: unknown; mobile?: unknown })
+      : {};
 
-  if (!Number.isFinite(stateId) || stateId <= 0) {
+  const hasState = "stateId" in record && record.stateId != null && record.stateId !== "";
+  const hasMobile = typeof record.mobile === "string" && record.mobile.trim().length > 0;
+
+  if (!hasState && !hasMobile) {
+    return NextResponse.json(
+      { ok: false, error: "Nothing to update." },
+      { status: 400 }
+    );
+  }
+
+  const stateId = hasState ? Number(record.stateId) : undefined;
+  if (hasState && (!Number.isFinite(stateId) || (stateId ?? 0) <= 0)) {
     return NextResponse.json(
       { ok: false, error: "Please select a valid state." },
       { status: 400 }
     );
   }
 
+  const mobile = hasMobile ? String(record.mobile).replace(/\D/g, "").slice(-10) : undefined;
+  if (hasMobile && validatePhone(mobile ?? "")) {
+    return NextResponse.json(
+      { ok: false, error: "Enter a 10-digit mobile number." },
+      { status: 400 }
+    );
+  }
+
   try {
-    const user = await updateUserState(accessToken, stateId);
+    const user = await updateUserState(accessToken, {
+      ...(hasState ? { stateId } : {}),
+      ...(hasMobile ? { mobile } : {}),
+    });
     const jar = await cookies();
     const token = jar.get(AUTH_COOKIE_NAME)?.value || accessToken;
     const graphy = parseCookieJson<AuthGraphyViewModel>(

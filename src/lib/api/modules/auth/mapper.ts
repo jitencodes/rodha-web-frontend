@@ -78,3 +78,22 @@ export function mapAuthSession(
 export function userHasState(user: AuthUserViewModel | null | undefined): boolean {
   return Boolean(user?.stateId && user.state);
 }
+
+/** True when a 10-digit mobile number is already stored. */
+export function userHasMobile(user: AuthUserViewModel | null | undefined): boolean {
+  const digits = (user?.mobile ?? "").replace(/\D/g, "");
+  return digits.length >= 10;
+}
+
+export type AccountProfileField = "state" | "mobile";
+
+/** Fields the blocking account dialog should ask for. */
+export function missingAccountProfileFields(
+  user: AuthUserViewModel | null | undefined
+): AccountProfileField[] {
+  if (!user) return [];
+  const fields: AccountProfileField[] = [];
+  if (!userHasState(user)) fields.push("state");
+  if (!userHasMobile(user)) fields.push("mobile");
+  return fields;
+}

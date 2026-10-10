@@ -47,6 +47,11 @@ export interface PackageFacultyApi {
   experienceYears?: number | null;
   isFeatured?: boolean | null;
   isActive?: boolean | null;
+  subjects?: {
+    id: number;
+    name?: string | null;
+    isActive?: boolean;
+  }[] | null;
 }
 
 export interface PackageFaqApi {

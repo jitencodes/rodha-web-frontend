@@ -12,6 +12,8 @@ interface ListingHeroSectionProps {
   imageSrc: string;
   imageAlt: string;
   imageClassName?: string;
+  /** `section` matches the category hero: image sits in the container grid. */
+  imageLayout?: "overlay" | "section";
   className?: string;
 }
 
@@ -24,8 +26,57 @@ export function ListingHeroSection({
   imageSrc,
   imageAlt,
   imageClassName,
+  imageLayout = "overlay",
   className,
 }: ListingHeroSectionProps) {
+  const copy = (
+    <>
+      <Breadcrumb className="py-0 pb-4 md:pb-5" items={breadcrumb} />
+      <div className="max-w-xl lg:max-w-none">
+        <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
+          {eyebrow}
+        </p>
+        <h1 className="text-[26px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
+          {title}{" "}
+          <span className="text-orange-500">{accent}</span>
+        </h1>
+        <p className="mt-4 max-w-md text-body-lg text-text-secondary leading-relaxed">
+          {subtitle}
+        </p>
+      </div>
+    </>
+  );
+
+  if (imageLayout === "section") {
+    return (
+      <section
+        className={cn("relative overflow-hidden bg-bg-primary", className)}
+      >
+        <div
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-orange-500/15 blur-3xl"
+          aria-hidden
+        />
+        <Container className="relative z-10 py-6 md:py-8 lg:pt-10 lg:pb-28">
+          <div className="grid min-h-[380px] grid-cols-1 items-center gap-6 lg:min-h-[426px] lg:grid-cols-12 lg:gap-8 xl:gap-10">
+            <div className="lg:col-span-6">{copy}</div>
+            <div className="lg:col-span-6">
+              <div className="relative aspect-video w-full overflow-hidden rounded-[6px] border border-white/10 bg-bg-tertiary shadow-lg">
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt}
+                  fill
+                  className={cn("object-cover", imageClassName)}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  fetchPriority="high"
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
   return (
     <section
       className={cn(
@@ -38,7 +89,7 @@ export function ListingHeroSection({
         aria-hidden
       />
 
-      <div className="pointer-events-none absolute bottom-30 right-0 hidden h-[62%] w-[28%] lg:block xlgl:h-[76%] lg:w-[70%]">
+      <div className="pointer-events-none absolute bottom-0 right-0 hidden h-[62%] w-[28%] lg:block xl:h-[66%] xl:w-[30%]">
         <Image
           src={imageSrc}
           alt={imageAlt}

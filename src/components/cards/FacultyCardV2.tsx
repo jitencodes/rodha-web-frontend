@@ -11,6 +11,24 @@ interface FacultyCardV2Props {
   variant?: "default" | "detail";
 }
 
+/** Up to two API subjects, then a remainder count. Designation only when subjects are absent. */
+function facultyFocusLabel(faculty: Faculty): { text: string; extra?: number } | null {
+  const subjects = faculty.specialization
+    .map((name) => name.trim())
+    .filter(Boolean);
+
+  if (subjects.length > 0) {
+    const extra = subjects.length - 2;
+    return {
+      text: subjects.slice(0, 2).join(", "),
+      extra: extra > 0 ? extra : undefined,
+    };
+  }
+
+  const designation = faculty.designation?.trim();
+  return designation ? { text: designation } : null;
+}
+
 /** Light vertical faculty card for MBA (white on peach; no ratings). */
 export function FacultyCardV2({
   faculty,
@@ -18,9 +36,10 @@ export function FacultyCardV2({
   variant = "default",
 }: FacultyCardV2Props) {
   const expYears = parseExperienceYears(faculty.experience);
-  const subject = faculty.specialization[0] ?? faculty.title;
+  const focus = facultyFocusLabel(faculty);
   const experienceLabel =
-    expYears > 0 ? `${expYears}+ years experience` : faculty.experience;
+    expYears > 0 ? `${expYears}+ years experience` : "";
+  const bio = faculty.bio.trim();
   const isDetail = variant === "detail";
 
   if (isDetail) {
@@ -46,13 +65,22 @@ export function FacultyCardV2({
           <h3 className="text-h4 font-semibold leading-snug text-neutral-900">
             {faculty.name}
           </h3>
-          <p className="mt-1 text-body-sm font-medium text-orange-500">
-            {subject}
-          </p>
-          <p className="mt-1 text-caption text-neutral-500">{experienceLabel}</p>
-          <p className="mt-3 line-clamp-3 text-body-sm leading-relaxed text-neutral-600">
-            {faculty.bio}
-          </p>
+          {focus ? (
+            <p className="mt-1 flex min-w-0 items-center gap-1 text-body-sm font-medium text-orange-500">
+              <span className="truncate">{focus.text}</span>
+              {focus.extra ? (
+                <span className="shrink-0">+{focus.extra}</span>
+              ) : null}
+            </p>
+          ) : null}
+          {experienceLabel ? (
+            <p className="mt-1 text-caption text-neutral-500">{experienceLabel}</p>
+          ) : null}
+          {bio ? (
+            <p className="mt-3 line-clamp-3 text-body-sm leading-relaxed text-neutral-600">
+              {bio}
+            </p>
+          ) : null}
           <Link
             href={`/faculty/${faculty.slug}`}
             className="mt-auto inline-flex items-center gap-2 pt-4 text-body-sm font-semibold text-orange-500 hover:text-orange-600 hover:gap-3 transition-all"
@@ -98,12 +126,19 @@ export function FacultyCardV2({
         <h3 className="truncate text-body font-semibold leading-snug text-neutral-900">
           {faculty.name}
         </h3>
-        <p className="mt-1 truncate text-caption font-medium text-orange-500">
-          {subject}
-        </p>
-        <p className="mt-1 truncate text-caption text-neutral-500">
-          {experienceLabel}
-        </p>
+        {focus ? (
+          <p className="mt-1 flex min-w-0 items-center gap-1 text-caption font-medium text-orange-500">
+            <span className="truncate">{focus.text}</span>
+            {focus.extra ? (
+              <span className="shrink-0">+{focus.extra}</span>
+            ) : null}
+          </p>
+        ) : null}
+        {experienceLabel ? (
+          <p className="mt-1 truncate text-caption text-neutral-500">
+            {experienceLabel}
+          </p>
+        ) : null}
       </div>
     </Link>
   );

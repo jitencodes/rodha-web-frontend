@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (listing hero images and toolbar overlap)
+**Last updated:** 2026-10-10 (courses hero layout, profile mobile and state)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field to `PATCH api/auth/me/state`.
+- **Faculty card subjects (2026-10-10):** `FacultyCardV2` lists up to two API subjects and a `+n` remainder. Designation shows only when subjects are missing. Empty experience and bio stay hidden.
 - **Listing hero images + toolbar (2026-10-10):** Courses and blog listing heroes use a smaller bottom-aligned image. Course and blog toolbars overlap the hero from `lg` up, and sit below it on tablet and mobile.
 - **Header Courses + listing heroes (2026-10-10):** Header and mobile nav include a highlighted Courses link to `/courses`. Free Resources opens the CAT 2027 free course. Courses listing hero uses `courses-hero.png`; blog listing hero uses `Blogs.png`.
 - **Account dashboard on the HTTP production host (2026-10-10):** Recommendation Buy controls are native anchors. A Server Component `onClick` on those links failed RSC serialization and the production IP showed Next's "This page couldn't load" page. HTTPS Vercel did not render that handler.

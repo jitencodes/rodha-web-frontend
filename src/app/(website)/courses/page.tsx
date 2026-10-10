@@ -42,7 +42,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/courses",
 });
 
-const LISTING_BANNER = "/assets/images/courses/courses-hero.png";
+const LISTING_BANNER = "/assets/images/courses/courses-list-hero.png";
 const PAGE_SIZE = 12;
 
 interface CoursesPageProps {
@@ -191,6 +191,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         subtitle="Browse comprehensive programs, sectional courses, and crash batches across CAT, IPMAT, CLAT, SSC, and Skill House."
         imageSrc={LISTING_BANNER}
         imageAlt="CAT 2027 first batch, now live"
+        imageLayout="section"
       />
 
       <section className="relative z-20 bg-section-white home-on-light">

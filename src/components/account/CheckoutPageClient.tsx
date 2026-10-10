@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 import { formatCartMoney } from "@/lib/account/cart-totals";
-import { userHasState } from "@/lib/api/modules/auth/mapper";
+import { missingAccountProfileFields } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { userAtom } from "@/lib/store/user";
 
@@ -161,10 +161,17 @@ export function CheckoutPageClient({
 
   async function handlePay(options?: { skipStateCheck?: boolean }) {
     if (!item) return;
-    if (!options?.skipStateCheck && !userHasState(authUser)) {
+    const missing = missingAccountProfileFields(authUser);
+    if (!options?.skipStateCheck && missing.length > 0) {
       setResumePayAfterState(true);
       setStateDialogOpen(true);
-      setError("Please select your state before continuing to pay.");
+      setError(
+        missing.includes("state") && missing.includes("mobile")
+          ? "Please add your mobile number and state before continuing to pay."
+          : missing.includes("mobile")
+            ? "Please add your mobile number before continuing to pay."
+            : "Please select your state before continuing to pay."
+      );
       return;
     }
     setPending(true);
@@ -265,9 +272,9 @@ export function CheckoutPageClient({
     <UpdateStateDialog
       open={stateDialogOpen}
       required={resumePayAfterState}
+      fields={missingAccountProfileFields(authUser)}
       initialStateId={authUser?.stateId}
-      title="Select your state to continue"
-      description="State is required before you can complete checkout."
+      initialMobile={authUser?.mobile}
       onClose={() => {
         setStateDialogOpen(false);
         setResumePayAfterState(false);
