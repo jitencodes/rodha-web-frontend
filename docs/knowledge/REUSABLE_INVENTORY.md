@@ -145,7 +145,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | PricingPlanCard | `PricingPlanCard.tsx` (light pricing tier card; optional Most Popular) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
 | FacultyCard | `FacultyCard.tsx` |
-| FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white; optional `variant="detail"` with bio + View Profile) |
+| FacultyCardV2 | `FacultyCardV2.tsx` (up to two API subjects, `+n` remainder, designation when subjects are empty; no title fallback) |
 | FacultyExpertCard | `FacultyExpertCard.tsx` |
 | FacultyListingCard | `FacultyListingCard.tsx` |
 | FacultyStatCard | `FacultyStatCard.tsx` (dark hero stat; `FacultyIcon` / react-icons) |

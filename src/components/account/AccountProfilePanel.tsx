@@ -12,6 +12,7 @@ import {
   Lock,
   Mail,
   MapPin,
+  Pencil,
   Phone,
   ShieldCheck,
 } from "lucide-react";
@@ -19,6 +20,7 @@ import { useAtomValue } from "jotai";
 import { toast } from "sonner";
 import { ProfileAvatarCropModal } from "@/components/account/ProfileAvatarCropModal";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
+import type { AccountProfileField } from "@/lib/api/modules/auth/mapper";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import type { AccountProfile } from "@/lib/account/types";
 import { fetchAuthed } from "@/lib/auth/session-expired";
@@ -90,7 +92,7 @@ export function AccountProfilePanel({
   const [profile, setProfile] = useState(initialProfile);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [stateDialogOpen, setStateDialogOpen] = useState(false);
+  const [profileEdit, setProfileEdit] = useState<AccountProfileField | null>(null);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -285,30 +287,36 @@ export function AccountProfilePanel({
               </span>
             </span>
           </a>
-          <a
-            href={
-              profile.phone
-                ? `tel:${profile.phone.replace(/\s+/g, "")}`
-                : undefined
-            }
-            className={cn(
-              "flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 transition-colors",
-              profile.phone &&
-                "hover:border-[var(--account-accent)] hover:bg-[var(--account-nav-active-bg)]"
-            )}
-          >
+          <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
               <Phone className="size-4" strokeWidth={1.75} aria-hidden />
             </span>
-            <span className="min-w-0">
+            <span className="min-w-0 flex-1">
               <span className="block text-caption font-medium text-[var(--account-text-muted)]">
                 Phone
               </span>
-              <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
-                {profile.phone || "—"}
-              </span>
+              {profile.phone ? (
+                <a
+                  href={`tel:${profile.phone.replace(/\s+/g, "")}`}
+                  className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)] hover:text-[var(--account-accent)]"
+                >
+                  {profile.phone}
+                </a>
+              ) : (
+                <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
+                  —
+                </span>
+              )}
             </span>
-          </a>
+            <button
+              type="button"
+              onClick={() => setProfileEdit("mobile")}
+              aria-label="Update mobile"
+              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+            >
+              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
+            </button>
+          </div>
           <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 sm:col-span-2">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
               <MapPin className="size-4" strokeWidth={1.75} aria-hidden />
@@ -323,10 +331,11 @@ export function AccountProfilePanel({
             </div>
             <button
               type="button"
-              onClick={() => setStateDialogOpen(true)}
-              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] px-3 py-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              onClick={() => setProfileEdit("state")}
+              aria-label="Update state"
+              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
             >
-              Update State
+              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
             </button>
           </div>
         </div>
@@ -518,14 +527,15 @@ export function AccountProfilePanel({
       />
 
       <UpdateStateDialog
-        open={stateDialogOpen}
+        open={profileEdit != null}
+        fields={profileEdit ? [profileEdit] : []}
         initialStateId={stateId}
-        title="Update State"
-        description="Choose the state linked to your Rodha account."
-        onClose={() => setStateDialogOpen(false)}
+        initialMobile={profile.phone || authUser?.mobile || ""}
+        onClose={() => setProfileEdit(null)}
         onUpdated={(user) => {
           setProfile((prev) => ({
             ...prev,
+            phone: user.mobile || prev.phone,
             stateId: user.stateId,
             stateName: user.state?.name || "",
             stateCode: user.state?.code || "",

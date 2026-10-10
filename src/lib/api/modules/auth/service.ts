@@ -131,16 +131,20 @@ export async function getCurrentUser(
 
 export async function updateUserState(
   accessToken: string,
-  stateId: number
+  patch: { stateId?: number; mobile?: string }
 ): Promise<AuthUserViewModel> {
-  await apiPatch<unknown, { stateId: number }>(
+  const body: { stateId?: number; mobile?: string } = {};
+  if (patch.stateId != null) body.stateId = patch.stateId;
+  if (patch.mobile) body.mobile = patch.mobile;
+
+  await apiPatch<unknown, { stateId?: number; mobile?: string }>(
     ME_STATE_PATH,
-    { stateId },
+    body,
     { accessToken }
   );
   const user = await getCurrentUser(accessToken);
   if (!user) {
-    throw new ApiError("Unable to refresh user after state update", 502);
+    throw new ApiError("Unable to refresh user after profile update", 502);
   }
   return user;
 }

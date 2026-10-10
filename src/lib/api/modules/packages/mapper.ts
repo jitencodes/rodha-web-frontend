@@ -235,6 +235,7 @@ function toFacultyApi(item: PackageFacultyApi): FacultyApi | null {
       typeof item.experienceYears === "number" ? item.experienceYears : null,
     isFeatured: item.isFeatured === true,
     isActive: item.isActive !== false,
+    subjects: item.subjects ?? null,
   };
 }
 
