@@ -80,6 +80,12 @@ Format:
 - **Alternatives considered:** Keep Plans from `pricingPlans`; invent static section defaults; Buy Now → checkout from category cards; show all subcategory masters.
 - **Consequences:** Checkout stays on the detail purchase CTA. Empty subcategory tabs disappear. `CourseCardV2` is a single link (no nested anchors).
 
+### 2026-10-10 — Profile mobile and state via `PATCH api/auth/me/details`
+- **Decision:** `PATCH api/auth/me/state` and `/me/mobile` are retired. Account updates go through `PATCH api/auth/me/details` with `{ stateId?, mobile? }` via BFF `/api/account/state`. At least one field must be a real value. Null, `""`, or an omitted key leaves that field unchanged. Students only. The response is the updated profile and replaces the session user. `UpdateStateDialog` still renders only the fields that are missing (auto popup) or the single pencil field.
+- **Rationale:** One endpoint covers both profile fields and must not overwrite a saved value when the dialog is not editing it.
+- **Alternatives considered:** Keep sending both keys with null for the unused field; call the removed `/me/state` and `/me/mobile` routes.
+- **Consequences:** Partial edits cannot clear mobile or state. The dialog payload matches the fields on screen.
+
 ### 2026-10-06 — State selection via `/auth/me` + shared dialog
 - **Decision:** Collect `stateId` at signup; persist/read via `GET api/auth/me` (`stateId` + nested `state`); update via `PATCH api/auth/me/state` (BFF `/api/account/state`). Account shell hydrates Jotai `userAtom`. Missing `state` opens shared blocking `UpdateStateDialog` (account gate + checkout). States list from `GET api/website/states/dropdown` via `/api/states/dropdown`.
 - **Rationale:** Single source of truth on the auth user, one dialog for all required updates, matches existing module/BFF patterns.

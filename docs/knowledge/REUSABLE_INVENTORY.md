@@ -200,8 +200,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountQuickContentToolbar | `AccountQuickContentToolbar.tsx` (search outside sheet; completion/live/result filters) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
 | AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
-| UpdateStateDialog | `UpdateStateDialog.tsx` (shared state picker → `PATCH /api/account/state`) |
-| RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
+| UpdateStateDialog | `UpdateStateDialog.tsx` (shows only missing or pencil-edited mobile/state; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
+| RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (Time Spent / Valid Till / Language in body; progress + Continue CTA) |
 | AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + Reset Filters + mobile BottomSheet) |

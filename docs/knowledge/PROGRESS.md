@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (courses hero layout, profile mobile and state)
+**Last updated:** 2026-10-10 (profile details endpoint)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,7 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
-- **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field to `PATCH api/auth/me/state`.
+- **Profile details endpoint (2026-10-10):** Account mobile/state updates use `PATCH api/auth/me/details`. The dialog still shows only the missing or pencil-edited field, and the request includes only that real value. Empty or omitted keys are left unchanged. The response profile refreshes the session.
+- **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field.
 - **Faculty card subjects (2026-10-10):** `FacultyCardV2` lists up to two API subjects and a `+n` remainder. Designation shows only when subjects are missing. Empty experience and bio stay hidden.
 - **Listing hero images + toolbar (2026-10-10):** Courses and blog listing heroes use a smaller bottom-aligned image. Course and blog toolbars overlap the hero from `lg` up, and sit below it on tablet and mobile.
 - **Header Courses + listing heroes (2026-10-10):** Header and mobile nav include a highlighted Courses link to `/courses`. Free Resources opens the CAT 2027 free course. Courses listing hero uses `courses-hero.png`; blog listing hero uses `Blogs.png`.
