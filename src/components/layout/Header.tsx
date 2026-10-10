@@ -8,9 +8,7 @@ import { cn, isExternalHref } from "@/lib/utils";
 import {
   EXTERNAL_URLS,
   HEADER_NAV,
-  getFreeResourceUrl,
 } from "@/lib/constants";
-import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { MobileNav } from "./MobileNav";
 import { LayoutDashboard, User } from "lucide-react";
@@ -73,10 +71,6 @@ export function Header({
   const activeSlug = getCategorySlugFromPathname(pathname);
   const activeCategory =
     categories.find((cat) => cat.slug === activeSlug) ?? null;
-  const freeResourceHref = getFreeResourceUrl(
-    activeCategory?.counsellingExamId ??
-      (activeSlug ? slugToCategoryId(activeSlug) : null)
-  );
 
   const [examOpen, setExamOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
@@ -128,16 +122,9 @@ export function Header({
         <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center min-w-0">
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;
-            const children = hasChildren
-              ? item.children.map((child) => ({
-                  ...child,
-                  href:
-                    child.label === "Free Resources"
-                      ? freeResourceHref
-                      : child.href,
-                }))
-              : [];
+            const children = hasChildren ? item.children : [];
             const itemHref = "href" in item ? item.href : "";
+            const isHighlighted = "highlight" in item && item.highlight;
 
             const isActive = hasChildren
               ? children.some(
@@ -235,7 +222,9 @@ export function Header({
                   "relative px-2 xl:px-2.5 py-1.5 text-body-sm transition-colors whitespace-nowrap after:absolute after:left-2 after:right-2 after:bottom-0 after:h-0.5 after:origin-left after:rounded-full after:bg-orange-500 after:transition-transform after:duration-300",
                   isActive
                     ? "text-orange-400 [text-shadow:0_0_14px_rgba(249,115,22,0.18)] after:scale-x-100"
-                    : "text-text-secondary hover:text-text-primary after:scale-x-0 hover:after:scale-x-100"
+                    : isHighlighted
+                      ? "rounded-md bg-orange-500/12 font-semibold text-orange-300 hover:bg-orange-500/20 hover:text-orange-200 after:scale-x-0"
+                      : "text-text-secondary hover:text-text-primary after:scale-x-0 hover:after:scale-x-100"
                 )}
               >
                 {item.label}

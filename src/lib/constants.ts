@@ -89,7 +89,7 @@ export function getSupportMailto(): string {
 }
 
 export const CAT_FREE_COURSE_URL =
-  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2026--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-68df9c431bf5c8479d8dd7c3";
+  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2027--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-6aabe69f33d4b6e5c07b234f";
 
 export const FREE_RESOURCE_URLS: Record<string, string> = {
   cat: CAT_FREE_COURSE_URL,
@@ -210,9 +210,9 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CONTACT_INFO: ContactInfo = {
-  phone: "+91 98765 43210",
+  phone: "+91 8049368628",
   email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in",
-  address: "No. 7714, 7th Floor, Block C, Pranavas BSR Gitaaar, Panthur, Bangalore, Karnataka, 560103",
+  address: "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
@@ -231,6 +231,11 @@ export const HEADER_NAV = [
   {
     label: "Faculty",
     href: "/faculty",
+  },
+  {
+    label: "Courses",
+    href: "/courses",
+    highlight: true,
   },
   {
     label: "Resources",

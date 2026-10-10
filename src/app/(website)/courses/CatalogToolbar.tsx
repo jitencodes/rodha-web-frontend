@@ -330,7 +330,7 @@ function PackagesCatalogToolbar({
   );
 
   return (
-    <div className="relative z-30 flex flex-col gap-4 overflow-visible border border-[#fee8dd] rounded-md p-4 sm:p-6 bg-white shadow-sm -translate-y-1/2 shadow-[#fee8dd]">
+    <div className="relative z-30 mt-5 flex flex-col gap-4 overflow-visible rounded-md border border-[#fee8dd] bg-white p-4 shadow-sm shadow-[#fee8dd] sm:p-6 lg:mt-0 lg:-translate-y-1/2">
       {showTabs ? (
         <div
           ref={tabsRef}
@@ -604,7 +604,7 @@ function LegacyCatalogToolbar({
   );
 
   return (
-    <div className="relative z-30 flex flex-col gap-4 overflow-visible border border-[#fee8dd] rounded-md p-4 sm:p-6 bg-white shadow-sm -translate-y-1/2 shadow-[#fee8dd]">
+    <div className="relative z-30 mt-5 flex flex-col gap-4 overflow-visible rounded-md border border-[#fee8dd] bg-white p-4 shadow-sm shadow-[#fee8dd] sm:p-6 lg:mt-0 lg:-translate-y-1/2">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4">
         <div
           ref={tabsRef}

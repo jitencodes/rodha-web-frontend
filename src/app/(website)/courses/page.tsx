@@ -42,7 +42,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/courses",
 });
 
-const LISTING_BANNER = "/assets/images/courses/banner/banner.png";
+const LISTING_BANNER = "/assets/images/courses/courses-hero.png";
 const PAGE_SIZE = 12;
 
 interface CoursesPageProps {
@@ -190,7 +190,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         accent="selection"
         subtitle="Browse comprehensive programs, sectional courses, and crash batches across CAT, IPMAT, CLAT, SSC, and Skill House."
         imageSrc={LISTING_BANNER}
-        imageAlt="Graduation cap and books"
+        imageAlt="CAT 2027 first batch, now live"
       />
 
       <section className="relative z-20 bg-section-white home-on-light">
@@ -311,7 +311,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           title="Ready to Begin Your Journey?"
           subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/award-to-boy.png"
+          decorativeImage="/assets/images/about us/award-to-girl.png"
           primaryAction={{
             label: "Browse Courses",
             href: "/courses",

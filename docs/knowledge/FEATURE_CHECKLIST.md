@@ -11,7 +11,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Promotional banner + countdown | Complete | API-driven announcements; 3D flip every 8s (env); countdown only when `endAt` present |
-| Header — global nav state | Partial | Exam switcher from Active Categories API; Test Series → mocks.rodha.co.in; Free Resources category-aware |
+| Header — global nav state | Partial | Exam switcher from Active Categories API; Courses link highlighted to `/courses`; Free Resources → CAT 2027 free course |
 | Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]` via API slugs; Free Resources uses that vertical's Graphy course |
 | Mobile nav | Partial | Same Active Categories API as desktop; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
@@ -109,7 +109,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Canonical listing route | Complete | `/courses` beside existing `/courses/[slug]` detail |
-| Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/banner/banner.png` |
+| Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/courses-hero.png` |
 | URL filters | Complete | Master-driven: `categoryId`, subCategory1 tabs, faculty, subject, sort, search `q`; Type (`type`→graphyCategory) UI temporarily hidden; mobile Filter bottom sheet; desktop dropdowns portaled above cards |
 | Cards + pagination | Complete | `CourseCardV2` (category card); 12 per page; URL `Pagination` light |
 | Stories + CTA | Complete | Merged category stories (hidden if empty) then `CTABandV2Decorative` |

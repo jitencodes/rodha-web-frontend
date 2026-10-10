@@ -47,7 +47,7 @@ export function BlogToolbar({
   }
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border border-[#fee8dd] rounded-md p-6 bg-white shadow-sm -translate-y-1/2 shadow-[#fee8dd]">
+    <div className="mt-5 flex flex-col gap-4 rounded-md border border-[#fee8dd] bg-white p-6 shadow-sm shadow-[#fee8dd] md:flex-row md:items-center md:justify-between lg:mt-0 lg:-translate-y-1/2">
       <div
         className="flex max-w-full gap-2 overflow-x-auto scrollbar-hide pb-1"
         role="tablist"
