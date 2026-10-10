@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { updateUserState } from "@/lib/api/modules/auth/service";
+import { updateUserDetails } from "@/lib/api/modules/auth/service";
 import { getAccessToken } from "@/lib/auth/server-session";
 import {
   applySessionCookies,
@@ -36,8 +36,10 @@ export async function PATCH(request: Request) {
       ? (body as { stateId?: unknown; mobile?: unknown })
       : {};
 
-  const hasState = "stateId" in record && record.stateId != null && record.stateId !== "";
-  const hasMobile = typeof record.mobile === "string" && record.mobile.trim().length > 0;
+  const hasState =
+    record.stateId != null && record.stateId !== "" && record.stateId !== "null";
+  const hasMobile =
+    typeof record.mobile === "string" && record.mobile.replace(/\D/g, "").length > 0;
 
   if (!hasState && !hasMobile) {
     return NextResponse.json(
@@ -63,7 +65,7 @@ export async function PATCH(request: Request) {
   }
 
   try {
-    const user = await updateUserState(accessToken, {
+    const user = await updateUserDetails(accessToken, {
       ...(hasState ? { stateId } : {}),
       ...(hasMobile ? { mobile } : {}),
     });
@@ -90,7 +92,7 @@ export async function PATCH(request: Request) {
     const message =
       error instanceof ApiError
         ? error.message
-        : "Unable to update state right now.";
+        : "Unable to update your profile right now.";
     const status =
       error instanceof ApiError && error.status >= 400 && error.status < 600
         ? error.status
