@@ -36,10 +36,11 @@ import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Courses — Rodha",
+  title: "CAT 2027 Courses - Comprehensive & Sectional Batches | Rodha",
   description:
-    "Browse Rodha courses across CAT, IPMAT, CLAT, SSC, and Skill House — comprehensive programs, sectional courses, crash batches, paid and free.",
+    "Explore Rodha's CAT 2027 courses: comprehensive Quant, LRDI and VARC batches plus individual sectional courses. Live + recorded Hinglish classes.",
   path: "/courses",
+  keywords: ["CAT 2027", "CAT Online Coaching", "CAT Faculty", "CAT Courses", "CAT Preparation", "CAT 2027 Preparation", "CAT 2027 Online Coaching", "CAT 2027 Faculty", "CAT 2027 Courses"],
 });
 
 const LISTING_BANNER = "/assets/images/courses/courses-list-hero.png";

@@ -16,10 +16,11 @@ import {
 import type { FacultyFiltersState } from "@/components/sections/FacultyFiltersBar";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Our Faculty — Rodha",
+  title: "CAT Faculty - Learn from Ravi Sir, KD Sir & Experts | Rodha",
   description:
-    "Meet Rodha's expert faculty — IIM and NLU alumni mentors across MBA, Law, Banking, IPMAT, and Skill House programs.",
+    "Meet Rodha's CAT faculty: Ravi Prakash, Krishnendu Dutta (KD) and 10 more experts in Quant, LRDI and VARC with up to 23 years of teaching experience.",
   path: "/faculty",
+  keywords: ["CAT 2027", "CAT Online Coaching", "CAT Faculty", "CAT Courses", "CAT Preparation", "CAT 2027 Preparation", "CAT 2027 Online Coaching", "CAT 2027 Faculty", "CAT 2027 Courses"],
 });
 
 const SORT_TO_API: Record<FacultySortKey, string> = {
