@@ -199,7 +199,7 @@ export function CategoryHeroSectionV2({
           ) : null}
         </div>
         {hasStats ? (
-        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
+        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 py-5 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
           <div className="flex gap-4.5">
             <svg
               className="h-8 w-8 shrink-0 lg:h-12 lg:w-12"
