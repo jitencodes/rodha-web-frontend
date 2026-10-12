@@ -33,7 +33,7 @@ export function CourseDetailsCurriculumSection({
         </p>
         {/* Static Demo Class Link */}
         <div className="mt-2">
-          <a href="https://www.rodha.co.in/courses/Free-Course-for-CAT-2027--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-6aabe69f33d4b6e5c07b234f" className="text-body-sm text-orange-500">
+          <a href="https://www.rodha.co.in/courses/CAT-2027-Free-Course-6ac92652096a0dd757979b6f" className="text-body-sm text-orange-500">
           Check our demo classes for free
           </a>
         </div>

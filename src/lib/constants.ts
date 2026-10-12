@@ -89,7 +89,7 @@ export function getSupportMailto(): string {
 }
 
 export const CAT_FREE_COURSE_URL =
-  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2027--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-6aabe69f33d4b6e5c07b234f";
+  "https://www.rodha.co.in/courses/CAT-2027-Free-Course-6ac92652096a0dd757979b6f";
 
 export const FREE_RESOURCE_URLS: Record<string, string> = {
   cat: CAT_FREE_COURSE_URL,
