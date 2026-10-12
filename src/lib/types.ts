@@ -57,6 +57,7 @@ export interface CoursePricingPlan {
 }
 
 export interface Course {
+  appliedCouponCode?: string;
   id: string;
   title: string;
   slug: string;

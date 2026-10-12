@@ -54,7 +54,7 @@ export function PackagePurchaseActions({
           className
         )}
       >
-        View Details
+        View
       </Link>
     );
   }

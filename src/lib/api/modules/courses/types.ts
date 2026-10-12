@@ -31,6 +31,10 @@ export interface CourseApi {
   startDate?: string | null;
   faculty?: string | null;
   isActive?: boolean;
+  promocode?: {
+    code?: string | null;
+    discount?: number | string | null;
+  } | null;
 }
 
 export const COURSE_FILTER_TYPES: readonly CourseFilterType[] = [

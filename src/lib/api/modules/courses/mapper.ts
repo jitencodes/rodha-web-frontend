@@ -84,6 +84,7 @@ export function mapCourse(
       course.price !== null && course.price !== undefined 
         ? asNumber(course.price)
         : undefined,
+    appliedCouponCode: course.promocode?.code?.trim() || undefined,
     duration: course.duration?.trim() || "",
     mode: course.mode?.trim() || undefined,
     features: course.features?.filter(Boolean) ?? [],

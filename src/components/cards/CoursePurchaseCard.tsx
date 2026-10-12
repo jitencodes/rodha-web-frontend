@@ -85,18 +85,29 @@ export function CoursePurchaseCard({
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-end gap-2">
-          <span className="text-[1.5rem] font-bold leading-none text-orange-500">
-            {course.price === 0 ? "FREE" : formatPrice(course.price)}
-          </span>
-          {course.originalPrice != null &&
-            course.originalPrice > course.price && (
-              <span className="text-body-sm text-neutral-400 line-through">
-                {formatPrice(course.originalPrice)}
-              </span>
-            )}
+        <div className="flex justify-between items-center gap-2">
+          <div className="mt-4 flex flex-wrap items-end gap-2">
+            <span className="text-[1.5rem] font-bold leading-none text-orange-500">
+              {course.price === 0 ? "FREE" : formatPrice(course.price)}
+            </span>
+            {course.originalPrice != null &&
+              course.originalPrice > course.price && (
+                <span className="text-body-sm text-neutral-400 line-through">
+                  {formatPrice(course.originalPrice)}
+                </span>
+              )}
+          </div>
+          {course.appliedCouponCode?.trim() && (
+            <div className="flex flex-col gap-1 items-end">
+              <span className="text-caption font-bold text-orange-500">Coupon:</span>
+                <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 ">
+                  <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
+                    {course.appliedCouponCode.trim()}
+                  </span>
+                </div>
+            </div>
+          )}
         </div>
-
         {usePackageCheckout ? (
           <div className="mt-4">
             <PackagePurchaseActions

@@ -13,13 +13,16 @@ import { cn } from "@/lib/utils";
 
 interface ClampTooltipProps {
   text: string;
-  lines: 2 | 5;
+  lines: 1 | 2 | 3 | 4 | 5;
   className?: string;
   tooltipClassName?: string;
 }
 
 const LINE_CLAMP: Record<ClampTooltipProps["lines"], string> = {
+  1: "line-clamp-1",
   2: "line-clamp-2",
+  3: "line-clamp-3",
+  4: "line-clamp-4",
   5: "line-clamp-5",
 };
 

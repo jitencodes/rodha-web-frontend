@@ -85,20 +85,39 @@ export function AccountRecommendedCard({
         </h3>
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
-          <div className="min-w-0">
-            <span className="block text-base font-bold leading-none text-[var(--account-text)]">
-              {formatPrice(product.price)}
+        {/* Existing price section — unchanged */}
+        <div className="min-w-0">
+          <span className="block text-base font-bold leading-none text-[var(--account-text)]">
+            {formatPrice(product.price)}
+          </span>
+
+          {hasDiscount ? (
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span className="text-[12px] text-[var(--account-text-muted)] line-through">
+                {formatPrice(product.originalPrice)}
+              </span>
+              <span className="text-[11px] font-bold text-[var(--account-accent)]">
+                {product.discountPercent}% OFF
+              </span>
+            </div>
+          ) : null}
+        </div>
+
+        {/* Coupon + CTA aligned together */}
+        <div className="flex min-w-0 flex-col items-end gap-2">
+          <div className="flex max-w-full flex-col items-end gap-1">
+            <span className="text-caption font-medium text-orange-500">
+              Coupon
             </span>
-            {hasDiscount ? (
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <span className="text-[12px] text-[var(--account-text-muted)] line-through">
-                  {formatPrice(product.originalPrice)}
-                </span>
-                <span className="text-[11px] font-bold text-[var(--account-accent)]">
-                  {product.discountPercent}% OFF
-                </span>
-              </div>
-            ) : null}
+            
+            <div className="max-w-full rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+              <span
+                title={product.appliedCouponCode?.trim() || "CAT2027BOOST"}
+                className="block max-w-[120px] truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
+              >
+                {product.appliedCouponCode?.trim() || "CAT2027BOOST"}
+              </span>
+            </div>
           </div>
 
           {showCta ? (
@@ -152,6 +171,7 @@ export function AccountRecommendedCard({
             )
           ) : null}
         </div>
+      </div>
       </div>
     </article>
   );

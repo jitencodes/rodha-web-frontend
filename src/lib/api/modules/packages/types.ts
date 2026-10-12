@@ -9,6 +9,10 @@ export interface PackageListItemApi {
   language?: string | null;
   price?: number | null;
   discountedPrice?: number | null;
+  promocode?: {
+    code?: string | null;
+    discount?: number | string | null;
+  } | null;
   averageRating?: number | null;
   ratingCount?: number | null;
   courseCount?: number | null;
@@ -158,6 +162,7 @@ export interface PackageMasterQuery {
 }
 
 export interface PackageCardViewModel {
+  appliedCouponCode?: string;
   id: string;
   packageId: number | null;
   slug: string;
