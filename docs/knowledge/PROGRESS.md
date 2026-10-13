@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (courses hero layout, profile mobile and state)
+**Last updated:** 2026-10-13 (checkout confetti, GPS state, Indian mobile, GTM, UTM)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Checkout confetti, GPS state, Indian mobile, GTM, UTM (2026-10-13):** Checkout shows a full-page overlay and confetti when a coupon is already on the cart or successfully applied. The card reads “{code} Applied Successfully” and the extra discount. Account users without a saved state can be prefilled from browser GPS when `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set; the location control stays hidden otherwise. Signup and the update-mobile dialog require a 10-digit number starting with 6–9. GTM loads only when `NEXT_PUBLIC_GTM_ID` is set. Landing `utm_*` params are stored in `rodha_utm` and sent on `POST /website/student/checkout`.
 - **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field to `PATCH api/auth/me/state`.
 - **Faculty card subjects (2026-10-10):** `FacultyCardV2` lists up to two API subjects and a `+n` remainder. Designation shows only when subjects are missing. Empty experience and bio stay hidden.
 - **Listing hero images + toolbar (2026-10-10):** Courses and blog listing heroes use a smaller bottom-aligned image. Course and blog toolbars overlap the hero from `lg` up, and sit below it on tablet and mobile.

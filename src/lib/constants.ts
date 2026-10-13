@@ -77,6 +77,14 @@ export function getMetaPixelId(): string {
   return process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
 }
 
+export function getGtmId(): string {
+  return process.env.NEXT_PUBLIC_GTM_ID?.trim() || "";
+}
+
+export function getGoogleMapsApiKey(): string {
+  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim() || "";
+}
+
 /** Public support / contact inbox (Footer, account help, mailto links). */
 export function getSupportEmail(): string {
   return (

@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-13 — GPS state, Indian mobile, GTM, and checkout UTM
+- **Decision:** Detected GPS location lives in `detectedLocationAtom` and only prefills `UpdateStateDialog` when the saved state is empty. Reverse geocoding uses `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`; an empty key hides the current-location control and skips the permission prompt. Signup and account mobile updates use `validateIndianMobile` (`Please enter valid indian number`). GTM loads from `NEXT_PUBLIC_GTM_ID` beside the existing Meta Pixel. Any `utm_*` query param is stored in the `rodha_utm` cookie and forwarded as the checkout POST body, with no other fields added.
+- **Rationale:** Saved profile state must not change until the user confirms. The checkout API previously sent `{}`; captured attribution is attached only for keys that were present.
+- **Alternatives considered:** Writing GPS into `userAtom` before save; a shared phone rule for contact forms; inventing non-`utm_*` order fields.
+- **Consequences:** Contact and lead forms still use `validatePhone`. Checkout fails closed to `{}` when the cookie is missing or invalid.
+
 ### 2026-10-10 — Dashboard Buy links stay plain anchors
 - **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
 - **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.

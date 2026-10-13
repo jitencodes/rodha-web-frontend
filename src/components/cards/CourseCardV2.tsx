@@ -141,7 +141,7 @@ export function CourseCardV2({
             <div className="flex flex-col items-end gap-2">
             {course.appliedCouponCode?.trim() && (
               <div className="flex flex-col gap-1 items-end">
-                <span className="text-caption font-bold text-orange-500">Coupon:</span>
+                <span className="text-caption font-bold text-orange-500">Eligible Coupon</span>
                   <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 ">
                     <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
                       {course.appliedCouponCode.trim()}

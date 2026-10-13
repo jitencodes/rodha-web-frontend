@@ -104,17 +104,17 @@ export function AccountRecommendedCard({
         </div>
 
         {/* Coupon + CTA aligned together */}
-        <div className="flex min-w-0 flex-col items-end gap-2">
+      <div className="flex min-w-0 flex-col items-end gap-2">
         {product.appliedCouponCode?.trim() && (
           <div className="flex max-w-full flex-col items-end gap-1">
-            <span className="text-caption font-medium text-orange-500">
-              Coupon
+            <span className="text-caption whitespace-nowrap font-medium text-orange-500">
+              Eligible Coupon
             </span>
             
             <div className="max-w-full rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
               <span
                 title={product.appliedCouponCode?.trim()}
-                className="block max-w-[120px] truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
+                className="block w-[80px] max-w-fit truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
               >
                 {product.appliedCouponCode?.trim()}
               </span>
@@ -127,7 +127,7 @@ export function AccountRecommendedCard({
               <button
                 type="button"
                 onClick={() => onAddToCart(product)}
-                className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
+                className="flex shrink-0 flex-nowrap cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
               >
                 <ShoppingCart className="size-3.5" aria-hidden />
                 {label}
@@ -135,7 +135,7 @@ export function AccountRecommendedCard({
             ) : isBuyNow ? (
               <a
                 href={actionHref}
-                className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
+                className="flex min-w-[80px] justify-end shrink-0 flex-nowrap items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 {label}
                 <svg

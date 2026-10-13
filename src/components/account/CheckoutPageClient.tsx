@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
+import { CouponAppliedOverlay } from "@/components/account/CouponAppliedOverlay";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 import { formatCartMoney } from "@/lib/account/cart-totals";
+import { fireCouponConfetti } from "@/lib/checkout/coupon-confetti";
 import { missingAccountProfileFields } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { userAtom } from "@/lib/store/user";
@@ -69,8 +71,25 @@ export function CheckoutPageClient({
   const [discount, setDiscount] = useState(discountAmount);
   const [payable, setPayable] = useState(payableAmount);
   const [appliedCode, setAppliedCode] = useState(item?.promocodeCode || null);
+  const celebratedCodeRef = useRef<string | null>(null);
+  const [celebration, setCelebration] = useState<{
+    code: string;
+    discountAmount: number;
+  } | null>(null);
   const [stateDialogOpen, setStateDialogOpen] = useState(false);
   const [resumePayAfterState, setResumePayAfterState] = useState(false);
+
+  useEffect(() => {
+    if (!appliedCode) {
+      celebratedCodeRef.current = null;
+      setCelebration(null);
+      return;
+    }
+    if (celebratedCodeRef.current === appliedCode) return;
+    celebratedCodeRef.current = appliedCode;
+    setCelebration({ code: appliedCode, discountAmount: discount });
+    void fireCouponConfetti();
+  }, [appliedCode, discount]);
 
   async function applyCoupon() {
     if (!item || !couponInput.trim()) return;
@@ -407,6 +426,13 @@ export function CheckoutPageClient({
       </aside>
     </div>
     {stateDialog}
+    {celebration ? (
+      <CouponAppliedOverlay
+        code={celebration.code}
+        discountAmount={celebration.discountAmount}
+        onClose={() => setCelebration(null)}
+      />
+    ) : null}
     </>
   );
 }
