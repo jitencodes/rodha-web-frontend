@@ -105,6 +105,7 @@ export function AccountRecommendedCard({
 
         {/* Coupon + CTA aligned together */}
         <div className="flex min-w-0 flex-col items-end gap-2">
+        {product.appliedCouponCode?.trim() && (
           <div className="flex max-w-full flex-col items-end gap-1">
             <span className="text-caption font-medium text-orange-500">
               Coupon
@@ -112,13 +113,14 @@ export function AccountRecommendedCard({
             
             <div className="max-w-full rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
               <span
-                title={product.appliedCouponCode?.trim() || "CAT2027BOOST"}
+                title={product.appliedCouponCode?.trim()}
                 className="block max-w-[120px] truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
               >
-                {product.appliedCouponCode?.trim() || "CAT2027BOOST"}
+                {product.appliedCouponCode?.trim()}
               </span>
             </div>
           </div>
+        )}
 
           {showCta ? (
             onAddToCart ? (
