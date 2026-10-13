@@ -11,7 +11,7 @@ import {
 import type { AuthGraphyViewModel } from "@/lib/api/modules/auth/types";
 import { ApiError } from "@/lib/api/types";
 import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
-import { validatePhone } from "@/lib/form-validation";
+import { validateIndianMobile } from "@/lib/form-validation";
 
 export const runtime = "nodejs";
 
@@ -57,11 +57,9 @@ export async function PATCH(request: Request) {
   }
 
   const mobile = hasMobile ? String(record.mobile).replace(/\D/g, "").slice(-10) : undefined;
-  if (hasMobile && validatePhone(mobile ?? "")) {
-    return NextResponse.json(
-      { ok: false, error: "Enter a 10-digit mobile number." },
-      { status: 400 }
-    );
+  const mobileError = hasMobile ? validateIndianMobile(mobile ?? "") : undefined;
+  if (mobileError) {
+    return NextResponse.json({ ok: false, error: mobileError }, { status: 400 });
   }
 
   try {

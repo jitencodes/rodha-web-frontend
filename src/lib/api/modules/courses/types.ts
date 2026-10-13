@@ -10,6 +10,7 @@ export interface CourseApi {
   description?: string | null;
   shortDescription?: string | null;
   price?: number | string | null;
+  discountedPrice?: number | string | null;
   duration?: string | null;
   mode?: string | null;
   features?: string[] | null;
@@ -21,6 +22,7 @@ export interface CourseApi {
   details?: string[] | null;
   thumbnail?: string | null;
   image?: string | null;
+  bannerImageUrl?: string | null;
   showFaculty?: boolean | null;
   externalLink?: string | null;
   courseType?: string | null;
@@ -29,6 +31,10 @@ export interface CourseApi {
   startDate?: string | null;
   faculty?: string | null;
   isActive?: boolean;
+  promocode?: {
+    code?: string | null;
+    discount?: number | string | null;
+  } | null;
 }
 
 export const COURSE_FILTER_TYPES: readonly CourseFilterType[] = [

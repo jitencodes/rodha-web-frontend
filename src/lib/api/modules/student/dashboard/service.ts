@@ -31,6 +31,10 @@ interface DashboardApi {
     language?: string | null;
     price?: number | null;
     discountedPrice?: number | null;
+    promocode?: {
+      code?: string | null;
+      discount?: number | string | null;
+    } | null;
     isSelfEnrolled?: boolean | null;
   }>;
   latestOrders?: unknown[];
@@ -67,6 +71,7 @@ export async function getStudentDashboard(
     const slug = typeof item.slug === "string" ? item.slug : "";
     if (!title || !id) continue;
     const price = asNumber(item.discountedPrice ?? item.price);
+    const appliedCouponCode = typeof item.promocode?.code === "string" ? item.promocode?.code.trim() : undefined;
     const original = asNumber(item.price);
     const discountPercent =
       original > price && original > 0
@@ -83,6 +88,7 @@ export async function getStudentDashboard(
       price,
       originalPrice: original > price ? original : price,
       discountPercent,
+      appliedCouponCode,
       href: slug ? `/courses/${slug}` : "/courses",
       ctaHref: isSelfEnrolled
         ? packageViewCourseHref(id)

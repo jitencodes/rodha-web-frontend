@@ -317,8 +317,7 @@ export function mapCategoryPage(
   const primaryCta = banner?.ctas[0];
   const mappedCourses = mapCourses(api.courses, categoryId);
   const mappedTestSeries = mapTestSeries(api);
-  const mappedFaqs =
-    api.faqs
+  const mappedFaqs = api.faqs
       ?.filter((faq) => faq.isActive !== false)
       .filter(
         (faq) => Boolean(faq.question?.trim()) && Boolean(faq.answer?.trim())
@@ -356,6 +355,7 @@ export function mapCategoryPage(
             ? { label: primaryCta.label, href: primaryCta.href }
             : null,
           videoId: banner.videoId || undefined,
+          videoUrl: banner.videoUrl || undefined,
           imageUrl: banner.imageUrl || undefined,
         }
       : null,

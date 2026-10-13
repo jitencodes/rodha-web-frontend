@@ -6,28 +6,52 @@ import type {
   WebsiteBannerViewModel,
 } from "@/lib/api/modules/banners/types";
 
+const YOUTUBE_ID = /^[\w-]{11}$/;
+const VIDEO_FILE = /\.(mp4|webm|ogg|ogv|mov|m4v)(\?|#|$)/i;
+const IMAGE_FILE = /\.(png|jpe?g|webp|gif|svg|avif)(\?|#|$)/i;
+
 export function extractYoutubeId(
   url: string | null | undefined
 ): string | null {
   if (!url?.trim()) return null;
   const trimmed = url.trim();
+  const iframeSrc = trimmed.match(/src=["']([^"']+)["']/i)?.[1];
+  const candidate = (iframeSrc ?? trimmed).trim();
+  const withProtocol = /^https?:\/\//i.test(candidate)
+    ? candidate
+    : `https://${candidate}`;
 
   try {
-    const parsed = new URL(trimmed);
-    if (parsed.hostname.includes("youtu.be")) {
+    const parsed = new URL(withProtocol);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") {
       const id = parsed.pathname.replace(/^\//, "").split("/")[0];
-      return id || null;
+      return YOUTUBE_ID.test(id) ? id : null;
     }
-    const v = parsed.searchParams.get("v");
-    if (v) return v;
-    const embedMatch = parsed.pathname.match(/\/embed\/([^/]+)/);
-    if (embedMatch?.[1]) return embedMatch[1];
+    if (host === "youtube.com" || host === "youtube-nocookie.com" || host === "m.youtube.com") {
+      const v = parsed.searchParams.get("v");
+      if (v && YOUTUBE_ID.test(v)) return v;
+      const pathId = parsed.pathname.match(
+        /\/(?:embed|shorts|live|v)\/([^/?#]+)/
+      )?.[1];
+      if (pathId && YOUTUBE_ID.test(pathId)) return pathId;
+    }
   } catch {
     // fall through — maybe a bare id
   }
 
-  if (/^[\w-]{11}$/.test(trimmed)) return trimmed;
+  if (YOUTUBE_ID.test(trimmed)) return trimmed;
   return null;
+}
+
+function isDirectVideoUrl(
+  url: string | null,
+  mediaType: string | null | undefined
+): boolean {
+  if (!url || extractYoutubeId(url)) return false;
+  if (IMAGE_FILE.test(url)) return false;
+  if (VIDEO_FILE.test(url)) return true;
+  return mediaType?.trim().toUpperCase() === "VIDEO";
 }
 
 export function normalizeTitleHighlights(raw: unknown): string[] {
@@ -160,8 +184,11 @@ export function mapWebsiteBanner(
   const title = banner.title?.trim();
   if (!title) return null;
 
-  const videoId = extractYoutubeId(banner.videoYoutubeLink);
-  const imageUrl = banner.mediaUrl?.trim() || null;
+  const mediaUrl = banner.mediaUrl?.trim() || null;
+  const videoId =
+    extractYoutubeId(banner.videoYoutubeLink) || extractYoutubeId(mediaUrl);
+  const videoUrl =
+    !videoId && isDirectVideoUrl(mediaUrl, banner.mediaType) ? mediaUrl : null;
 
   return {
     overline: banner.overline?.trim() || null,
@@ -169,7 +196,8 @@ export function mapWebsiteBanner(
     titleHighlights: normalizeTitleHighlights(banner.titleHighlights),
     description: banner.description?.trim() || null,
     videoId,
-    imageUrl: videoId ? null : imageUrl,
+    videoUrl,
+    imageUrl: videoId ? null : mediaUrl,
     stacks: normalizeStacks(banner.stacks),
     listItems: normalizeListItems(banner.listItems),
     ctas: normalizeBannerCtas(banner.cats),

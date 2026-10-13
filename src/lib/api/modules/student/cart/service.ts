@@ -66,11 +66,12 @@ export async function getPackagePromocodes(
 }
 
 export async function checkoutStudentCart(
-  accessToken: string
+  accessToken: string,
+  utm: Record<string, string> = {}
 ): Promise<CheckoutResponseApi> {
-  return apiPost<CheckoutResponseApi, Record<string, never>>(
+  return apiPost<CheckoutResponseApi, Record<string, string>>(
     CHECKOUT_PATH,
-    {},
+    utm,
     { accessToken }
   );
 }

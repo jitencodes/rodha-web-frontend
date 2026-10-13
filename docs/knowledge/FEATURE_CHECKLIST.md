@@ -76,8 +76,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Split-panel screen | Complete | Full-bleed left slides + `rodha-logo.webp`; desktop viewport lock, form-only scroll |
-| Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field |
-| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login` |
+| Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field; 10 digits starting 6–9 |
+| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login`. Session cookies are `Secure` only on HTTPS so plain-HTTP production hosts keep the session. |
 | Forgot password | Complete | `/forgot-password` → `/api/auth/forgot-password` → `api/auth/user/forgot-password` |
 | Reset password | Complete | `/reset-password` → `/api/auth/reset-password` → `api/auth/user/reset-password` (`email`/`token` query prefill) |
 | Google | Complete (client) | GIS ID token → `/api/auth/google` → `api/auth/user/google` (not in Postman) |
@@ -100,8 +100,9 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor), progress ring, orders preview, quick links |
 | Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |
 | Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
-| Profile | Complete | `/account/profile` avatar, edit name + change password (client-only) |
+| Profile | Complete | `/account/profile` avatar, edit name + change password (client-only); mobile dialog uses Indian 10-digit validation; empty state can prefill from GPS when the maps key is set |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
+| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie forwarded on pay; GTM only when `NEXT_PUBLIC_GTM_ID` is set |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
 
 ## Course Listing `/courses`

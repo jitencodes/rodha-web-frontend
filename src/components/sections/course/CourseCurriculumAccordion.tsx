@@ -32,12 +32,12 @@ export function CourseCurriculumAccordion({
             key={module.id}
             className={cn(
               "w-full rounded-2xl border border-[#FFE8DE] p-4 md:p-6",
-              isOpen && "bg-[#FFF3E8]"
+              // isOpen && "bg-[#FFF3E8]"
             )}
           >
             <button
               type="button"
-              onClick={() => setOpenId(isOpen ? null : module.id)}
+              // onClick={() => setOpenId(isOpen ? null : module.id)}
               aria-expanded={isOpen}
               className={cn(
                 "flex w-full items-start gap-3 text-left md:items-center md:gap-4",
@@ -51,17 +51,17 @@ export function CourseCurriculumAccordion({
                 <span className="block font-semibold text-body text-[#333333]">
                   {module.title}
                 </span>
-                {meta && (
+                {/* {meta && (
                   <span className="mt-1 block text-caption text-neutral-500">
                     {meta}
                   </span>
-                )}
+                )} */}
               </span>
-              {isOpen ? (
+              {/* {isOpen ? (
                 <ChevronUp className="relative mt-0.5 h-5 w-5 shrink-0 text-orange-400" />
               ) : (
                 <ChevronDown className="relative mt-0.5 h-5 w-5 shrink-0 text-orange-400" />
-              )}
+              )} */}
             </button>
             <div
               className={cn(
@@ -71,12 +71,12 @@ export function CourseCurriculumAccordion({
                   : "grid-rows-[0fr] opacity-0"
               )}
             >
-              <div className="overflow-hidden pl-10 md:pl-12">
+              {/* <div className="overflow-hidden pl-10 md:pl-12">
                 <p className="text-sm leading-relaxed text-[#696969]">
                   {module.description ||
                     `Explore ${module.title.toLowerCase()} with structured sessions, practice, and mentor support.`}
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         );

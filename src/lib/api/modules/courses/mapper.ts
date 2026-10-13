@@ -79,18 +79,19 @@ export function mapCourse(
     category,
     description,
     shortDescription,
-    price: asNumber(course.price),
+    price: asNumber(course.discountedPrice),
     originalPrice:
-      course.originalPrice !== null && course.originalPrice !== undefined
-        ? asNumber(course.originalPrice)
+      course.price !== null && course.price !== undefined 
+        ? asNumber(course.price)
         : undefined,
+    appliedCouponCode: course.promocode?.code?.trim() || undefined,
     duration: course.duration?.trim() || "",
     mode: course.mode?.trim() || undefined,
     features: course.features?.filter(Boolean) ?? [],
     highlights: course.highlights?.filter(Boolean) ?? [],
     enrollmentUrl,
     externalLink: course.externalLink?.trim() || undefined,
-    thumbnail: course.thumbnail?.trim() || course.image?.trim() || undefined,
+    thumbnail: course.thumbnail?.trim() || course.image?.trim() || course.bannerImageUrl?.trim() || undefined,
     image: course.image?.trim() || course.thumbnail?.trim() || undefined,
     badge: course.badge?.trim() || undefined,
     badgeType: course.badgeType === "audience" ? "audience" : undefined,

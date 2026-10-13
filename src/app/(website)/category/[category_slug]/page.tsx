@@ -25,14 +25,24 @@ export async function generateMetadata({
 
   if (!detail) {
     return {
-      title: "Category — Rodha",
+      title: "Best CAT 2027 Online Coaching",
     };
   }
-
+  const categoryName = detail.category.slug 
+  .split("-")
+  .filter(Boolean)
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+  const facultyMembers = detail.category.facultyMembers || [];
   return buildPageMetadata({
-    title: detail.category.metadata.title,
-    description: detail.category.metadata.description,
+    title: `Best ${categoryName} 2027 Online Coaching`,
+      description: `Crack ${categoryName} 2027 with Rodha's online coaching${
+        facultyMembers.length
+          ? ` by ${facultyMembers.map((faculty) => faculty.name).join(" & ")}`
+          : ""
+      }. Live Hinglish classes, 30 mocks, 105 sectionals and 1:1 mentorship. 10,000+ selections.`,
     path: `/category/${detail.category.slug}`,
+    keywords: ["CAT 2027", "CAT Online Coaching", "CAT Faculty", "CAT Courses", "CAT Preparation", "CAT 2027 Preparation", "CAT 2027 Online Coaching", "CAT 2027 Faculty", "CAT 2027 Courses"],
   });
 }
 

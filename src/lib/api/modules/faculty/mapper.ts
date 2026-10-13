@@ -64,6 +64,18 @@ function mapReviews(
     .filter((item): item is FacultyReview => item !== null);
 }
 
+function validPlaylistUrl(raw: string | null | undefined): string | undefined {
+  const value = raw?.trim();
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return undefined;
+    return url.toString();
+  } catch {
+    return undefined;
+  }
+}
+
 function mapVideos(links: string[] | null | undefined): FacultyVideo[] {
   if (!links?.length) return [];
 
@@ -173,6 +185,7 @@ export function mapFacultyDetail(
       .filter(Boolean),
     reviews: reviews.length > 0 ? reviews : undefined,
     videos: videos.length > 0 ? videos : undefined,
+    youtubePlaylistUrl: validPlaylistUrl(api.youtubePlaylistUrl),
     courses: courses.length > 0 ? courses : undefined,
     heroStats,
   };

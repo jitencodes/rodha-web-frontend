@@ -77,6 +77,14 @@ export function getMetaPixelId(): string {
   return process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
 }
 
+export function getGtmId(): string {
+  return process.env.NEXT_PUBLIC_GTM_ID?.trim() || "";
+}
+
+export function getGoogleMapsApiKey(): string {
+  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim() || "";
+}
+
 /** Public support / contact inbox (Footer, account help, mailto links). */
 export function getSupportEmail(): string {
   return (
@@ -216,11 +224,11 @@ export const CONTACT_INFO: ContactInfo = {
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { platform: "Instagram", url: "https://instagram.com/rodha.in", icon: "instagram" },
-  { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
+  { platform: "Instagram", url: "https://www.instagram.com/rodhaplanet/", icon: "instagram" },
+  // { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
   { platform: "YouTube", url: "https://youtube.com/@rodha", icon: "youtube" },
-  { platform: "LinkedIn", url: "https://linkedin.com/company/rodha", icon: "linkedin" },
-  { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
+  { platform: "LinkedIn", url: "https://www.linkedin.com/company/rodha-educational-services-private-limited/", icon: "linkedin" },
+  // { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
 ];
 
 export const HEADER_NAV = [
