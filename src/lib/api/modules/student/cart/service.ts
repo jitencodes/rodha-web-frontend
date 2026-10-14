@@ -71,7 +71,8 @@ export async function checkoutStudentCart(
 ): Promise<CheckoutResponseApi> {
   return apiPost<CheckoutResponseApi, Record<string, string>>(
     CHECKOUT_PATH,
-    utm,
+    // utm,
+    {},
     { accessToken }
   );
 }
