@@ -14,6 +14,7 @@ import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
 import { userAtom } from "@/lib/store/user";
+import { readStoredUtm } from "@/lib/tracking/utm";
 
 type CheckoutItem = {
   cartItemId: string;
@@ -197,7 +198,10 @@ export function CheckoutPageClient({
       const res = await fetchAuthed("/api/checkout/pay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(stateName ? { stateName } : {}),
+        body: JSON.stringify({
+          ...readStoredUtm(),
+          ...(stateName ? { stateName } : {}),
+        }),
       });
       const data = (await res.json()) as {
         ok: boolean;
