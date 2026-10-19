@@ -69,7 +69,7 @@ No barrel `index.ts`. Import from explicit paths.
 
 | Mapper | Use |
 |--------|-----|
-| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. Video (`videoYoutubeLink`) wins over `mediaUrl`. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
+| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. YouTube (`videoYoutubeLink`, or a YouTube `mediaUrl`) wins over an image. A direct video file in `mediaUrl` is `videoUrl` and home/category heroes play that before the image. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
 | `mapCourses` / `mapCourseType` | Category + faculty course lists. `courseType` drives existing static chips (`comprehensive` / `individual` / `crash` / `other`) in `CategoryCoursesSlider`. |
 | `mapFacultyCards` | Category page `faculty[]`, faculty listing, team featured faculty |
 

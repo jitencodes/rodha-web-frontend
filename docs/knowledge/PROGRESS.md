@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-10 (profile details endpoint)
+**Last updated:** 2026-10-13 (production features merged onto main)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Production sync plus checkout, GPS, and tracking (2026-10-13):** Merged production features onto main. Checkout shows a coupon success overlay, empty account state can prefill from GPS, signup and mobile updates require an Indian mobile number, and GTM plus `utm_*` attribution load when configured. `NEXT_PUBLIC_API_BASE_URL` in `.env` stays `https://innowrap.co.in/rodha/`.
 - **Profile details endpoint (2026-10-10):** Account mobile/state updates use `PATCH api/auth/me/details`. The dialog still shows only the missing or pencil-edited field, and the request includes only that real value. Empty or omitted keys are left unchanged. The response profile refreshes the session.
 - **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field.
 - **Faculty card subjects (2026-10-10):** `FacultyCardV2` lists up to two API subjects and a `+n` remainder. Designation shows only when subjects are missing. Empty experience and bio stay hidden.

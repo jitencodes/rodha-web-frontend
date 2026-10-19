@@ -31,7 +31,6 @@ const QUICK_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Faculty", href: "/faculty" },
   { label: "Meet the Team", href: "/team" },
-  { label: "Blogs", href: "/blog" },
   { label: "Contact Us", href: "/contact" },
 ];
 
@@ -214,8 +213,8 @@ export function Footer() {
       )}
     >
       <div className="container-rodha relative py-10 md:py-12">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-2 text-left">
+        <div className="flex justify-between flex-col md:flex-row gap-8 lg:gap-6">
+          <div className="text-left">
             <Link href="/" className="inline-block">
               <Image
                 src="/assets/images/rodha-logo.webp"
@@ -280,7 +279,7 @@ export function Footer() {
             theme={footerTheme}
           />
 
-          <div className="col-span-2 sm:col-span-1 text-left">
+          <div className="max-w-xs text-left">
             <h4 className={cn("text-body font-semibold mb-4", footerTheme.heading)}>
               Contact Us
             </h4>

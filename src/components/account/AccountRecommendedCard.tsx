@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { ClampTooltip } from "@/components/ui/ClampTooltip";
+import { isPackageBuyNowHref, sameOriginBuyHref } from "@/lib/packages/buy-now";
 import { cn, formatPrice } from "@/lib/utils";
 import type { RecommendedProduct } from "@/lib/account/types";
 
@@ -35,7 +36,10 @@ export function AccountRecommendedCard({
       : onAddToCart
         ? "Add to Cart"
         : "Buy Now");
-  const actionHref = product.ctaHref || product.href;
+  const rawActionHref = product.ctaHref || product.href;
+  const actionHref = isPackageBuyNowHref(rawActionHref)
+    ? sameOriginBuyHref(rawActionHref)
+    : rawActionHref;
   const badgeLabel =
     product.productType === "test-series" ? "Test Series" : product.tag || "Course";
 
@@ -80,28 +84,49 @@ export function AccountRecommendedCard({
         </h3>
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
-          <div className="min-w-0">
-            <span className="block text-base font-bold leading-none text-[var(--account-text)]">
-              {formatPrice(product.price)}
+        {/* Existing price section — unchanged */}
+        <div className="min-w-0">
+          <span className="block text-base font-bold leading-none text-[var(--account-text)]">
+            {formatPrice(product.price)}
+          </span>
+
+          {hasDiscount ? (
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span className="text-[12px] text-[var(--account-text-muted)] line-through">
+                {formatPrice(product.originalPrice)}
+              </span>
+              <span className="text-[11px] font-bold text-[var(--account-accent)]">
+                {product.discountPercent}% OFF
+              </span>
+            </div>
+          ) : null}
+        </div>
+
+        {/* Coupon + CTA aligned together */}
+      <div className="flex min-w-0 flex-col items-end gap-2">
+        {product.appliedCouponCode?.trim() && (
+          <div className="flex max-w-full flex-col items-end gap-1">
+            <span className="text-caption whitespace-nowrap font-medium text-orange-500">
+              Eligible Coupon
             </span>
-            {hasDiscount ? (
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <span className="text-[12px] text-[var(--account-text-muted)] line-through">
-                  {formatPrice(product.originalPrice)}
-                </span>
-                <span className="text-[11px] font-bold text-[var(--account-accent)]">
-                  {product.discountPercent}% OFF
-                </span>
-              </div>
-            ) : null}
+            
+            <div className="max-w-full rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+              <span
+                title={product.appliedCouponCode?.trim()}
+                className="block w-[80px] max-w-fit truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
+              >
+                {product.appliedCouponCode?.trim()}
+              </span>
+            </div>
           </div>
+        )}
 
           {showCta ? (
             onAddToCart ? (
               <button
                 type="button"
                 onClick={() => onAddToCart(product)}
-                className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
+                className="flex shrink-0 flex-nowrap cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
               >
                 <ShoppingCart className="size-3.5" aria-hidden />
                 {label}
@@ -147,6 +172,7 @@ export function AccountRecommendedCard({
             )
           ) : null}
         </div>
+      </div>
       </div>
     </article>
   );

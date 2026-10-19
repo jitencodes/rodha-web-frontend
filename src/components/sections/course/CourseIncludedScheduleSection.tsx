@@ -26,7 +26,7 @@ export function CourseIncludedScheduleSection({
   const schedule = course.schedule;
   const scheduleRows = schedule
     ? [
-        { label: "Next Batch Starts", value: schedule.nextBatch },
+        { label: "Batch Starts", value: schedule.nextBatch },
         { label: "Days", value: schedule.days },
         { label: "Class Timing", value: schedule.timing },
         { label: "Batch Duration", value: schedule.duration },
@@ -44,7 +44,7 @@ export function CourseIncludedScheduleSection({
       )}
     >
       <Container>
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-1 lg:gap-10">
           {included.length > 0 && (
             <div className="flex h-full flex-col">
               <SectionHeaderV2
@@ -74,7 +74,7 @@ export function CourseIncludedScheduleSection({
           )}
 
           {scheduleRows.length > 0 && (
-            <div className="flex h-full flex-col">
+            <div className="flex h-fit flex-col">
               <SectionHeaderV2
                 badge="TIMELINE"
                 title="Batch / Schedule"

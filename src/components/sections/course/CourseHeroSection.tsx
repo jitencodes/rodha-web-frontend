@@ -55,7 +55,7 @@ export function CourseHeroSection({
         </p>
       )}
 
-      <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted">
+      <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted line-clamp-2">
         {course.description}
       </p>
 

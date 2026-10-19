@@ -69,6 +69,8 @@ export interface WebsiteBannerViewModel {
   titleHighlights: string[];
   description: string | null;
   videoId: string | null;
+  /** Direct file when `mediaUrl` is a video and no YouTube id is present. */
+  videoUrl: string | null;
   imageUrl: string | null;
   stacks: BannerStackViewModel[];
   listItems: BannerListItemViewModel[];

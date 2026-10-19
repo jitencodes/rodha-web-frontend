@@ -23,7 +23,7 @@ import {
   validateName,
   validatePassword,
   validatePasswordConfirm,
-  validatePhone,
+  validateIndianMobile,
 } from "@/lib/form-validation";
 import { cn } from "@/lib/utils";
 
@@ -123,7 +123,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     };
     if (isSignup) {
       nextErrors.fullName = validateName(fullName);
-      nextErrors.phone = validatePhone(phone);
+      nextErrors.phone = validateIndianMobile(phone);
       nextErrors.confirmPassword = validatePasswordConfirm(
         password,
         confirmPassword

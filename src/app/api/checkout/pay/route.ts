@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { getAccessToken } from "@/lib/auth/server-session";
 import {
   checkoutStudentCart,
   refreshEnrollments,
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
+import { parseUtmCookie, UTM_COOKIE_NAME } from "@/lib/tracking/utm";
 
 export const runtime = "nodejs";
 
@@ -18,7 +20,9 @@ export async function POST() {
   }
 
   try {
-    const checkout = await checkoutStudentCart(accessToken);
+    const jar = await cookies();
+    const utm = parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value);
+    const checkout = await checkoutStudentCart(accessToken, utm);
     if ((checkout.mode || "").toLowerCase() === "free") {
       try {
         await refreshEnrollments(accessToken);

@@ -4,7 +4,7 @@ import {
   validateEmail,
   validateName,
   validatePassword,
-  validatePhone,
+  validateIndianMobile,
 } from "@/lib/form-validation";
 
 export const runtime = "nodejs";
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   const fieldError =
     validateName(fullName) ||
     validateEmail(email) ||
-    validatePhone(phoneNumber) ||
+    validateIndianMobile(phoneNumber) ||
     validatePassword(password);
   if (fieldError) {
     return jsonError(fieldError, 400);

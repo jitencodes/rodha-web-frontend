@@ -71,6 +71,7 @@ export interface RecommendedProduct {
   originalPrice: number;
   /** Whole-number percent off, e.g. 38 */
   discountPercent: number;
+  appliedCouponCode?: string;
   href: string;
   /** Buy Now / View Course destination when it differs from the card href. */
   ctaHref?: string;
