@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Testimonial } from "@/lib/types";
+import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { Icon } from "@/components/ui/Icon";
 import { getInitials } from "@/lib/initials";
 
@@ -49,14 +50,16 @@ export function TestimonialCardV2({
         <Icon src="/assets/icons/quote.svg" size={18} />
       </div>
 
-      <p
-        className={cn(
-          "mt-4 line-clamp-5 flex-1 text-body-sm leading-relaxed",
-          isLight ? "text-neutral-600" : "text-text-secondary"
-        )}
-      >
-        &ldquo;{testimonial.quote}&rdquo;
-      </p>
+      <div className="mt-4 flex-1">
+        <ClampTooltip
+          text={`\u201C${testimonial.quote}\u201D`}
+          lines={5}
+          className={cn(
+            "text-body-sm leading-relaxed",
+            isLight ? "text-neutral-600" : "text-text-secondary"
+          )}
+        />
+      </div>
 
       <div
         className={cn(
