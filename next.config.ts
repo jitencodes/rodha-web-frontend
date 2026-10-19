@@ -42,6 +42,11 @@ images: {
       hostname: "*.s3.ap-south-1.amazonaws.com",
       pathname: "/**",
     },
+    {
+      protocol: "https",
+      hostname: "placehold.co",
+      pathname: "/**",
+    },
 
     // Google account/profile images
     {

@@ -20,11 +20,13 @@ export interface ApiGetOptions {
 export interface ApiMutateOptions {
   signal?: AbortSignal;
   accessToken?: string;
+  headers?: Record<string, string>;
 }
 
 function buildHeaders(options: {
   accessToken?: string;
   json?: boolean;
+  extra?: Record<string, string>;
 }): HeadersInit {
   const headers: Record<string, string> = {
     Accept: "application/json",
@@ -39,6 +41,9 @@ function buildHeaders(options: {
   }
   if (options.accessToken) {
     headers.Authorization = `Bearer ${options.accessToken}`;
+  }
+  if (options.extra) {
+    Object.assign(headers, options.extra);
   }
   return headers;
 }
@@ -140,6 +145,7 @@ export async function apiPost<TResponse, TBody>(
     headers: buildHeaders({
       accessToken: options.accessToken,
       json: true,
+      extra: options.headers,
     }),
     body: JSON.stringify(body),
     signal: options.signal,
@@ -170,6 +176,7 @@ export async function apiPatch<TResponse, TBody>(
     headers: buildHeaders({
       accessToken: options.accessToken,
       json: true,
+      extra: options.headers,
     }),
     body: JSON.stringify(body),
     signal: options.signal,

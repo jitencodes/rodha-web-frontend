@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -5,9 +6,23 @@ import { cn } from "@/lib/utils";
 
 interface BlogHeroSectionProps {
   className?: string;
+  eyebrow?: string;
+  title?: ReactNode;
+  accent?: string;
+  description?: string;
+  breadcrumbLabel?: string;
+  imageAlt?: string;
 }
 
-export function BlogHeroSection({ className }: BlogHeroSectionProps) {
+export function BlogHeroSection({
+  className,
+  eyebrow = "Blogs & Insights",
+  title = "Everything You Need to Navigate Your",
+  accent = "CAT Journey",
+  description = "From CAT preparation strategies and score-versus-percentile analysis to college applications, form-filling guides, and admission insights, get the guidance you need at every step towards your dream B-school.",
+  breadcrumbLabel = "Blogs",
+  imageAlt = "Blog & Insights",
+}: BlogHeroSectionProps) {
   return (
     <section
       className={cn(
@@ -23,7 +38,7 @@ export function BlogHeroSection({ className }: BlogHeroSectionProps) {
       <div className="pointer-events-none absolute bottom-0 right-0 hidden w-[68%] lg:block xl:w-[62%] h-[90%]">
         <Image
           src="/assets/images/blog/Blogs.png"
-          alt="Blog & Insights"
+          alt={imageAlt}
           fill
           className="object-contain object-right-bottom"
           sizes="42vw"
@@ -43,20 +58,25 @@ export function BlogHeroSection({ className }: BlogHeroSectionProps) {
           className="py-0 pb-4 md:pb-5"
           items={[
             { label: "Home", href: "/" },
-            { label: "Blogs" },
+            { label: breadcrumbLabel },
           ]}
         />
 
         <div className="max-w-xl lg:max-w-lg">
           <p className="text-body-sm uppercase tracking-wider text-orange-400 font-semibold mb-2">
-            Blogs &amp; Insights
+            {eyebrow}
           </p>
           <h1 className="text-[26px] sm:text-[38px] md:text-[42px] font-montserrat font-bold leading-[1.15] tracking-tight text-text-primary">
-          Everything You Need to Navigate Your {" "}
-            <span className="text-orange-500">CAT Journey</span>
+            {title}
+            {accent ? (
+              <>
+                {" "}
+                <span className="text-orange-500">{accent}</span>
+              </>
+            ) : null}
           </h1>
           <p className="mt-4 max-w-2xl text-body-lg text-text-secondary leading-relaxed">
-          From CAT preparation strategies and score-versus-percentile analysis to college applications, form-filling guides, and admission insights, get the guidance you need at every step towards your dream B-school.
+            {description}
           </p>
         </div>
       </Container>

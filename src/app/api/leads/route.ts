@@ -74,6 +74,7 @@ export async function POST(request: Request) {
       email: payload.email,
       websiteCategoryId,
       message: contactMessage(payload),
+      examYear: payload.examYear,
     });
   } catch (error) {
     console.error("[api/leads] CMS contact POST failed:", error);

@@ -14,6 +14,18 @@ Format:
 
 ---
 
+### 2026-10-15 — Search dialog, promo popup, and listing APIs
+- **Decision:** Marketing and account search share one dialog. Queries go through `GET /api/search`, which calls `GET api/website/search` with `scope=website` or `scope=account`. Entity filters include modules the index does not register yet; a 400 for an unknown type shows an empty filter state. The promo dialog and purchase toast soft-fail when their endpoints are empty. Showing the promo, or closing it, suppresses it for 24 hours. Only a manual toast close suppresses the toast for 24 hours. Checkout adds `channel: "WEB"` and `x-channel: WEB` beside UTM fields. Contact submits `examYear` as its own field.
+- **Rationale:** Search needs a server proxy so `API_KEY` stays off the client, and the dialog has to work before the index covers every public module. The popup and purchase feed are not in Postman yet, so the UI hides them instead of inventing content.
+- **Alternatives considered:** Calling the search API from the browser; keeping static listing rows as a fallback.
+- **Consequences:** Backend contract is in `docs/api-requirements-website-ui.md`. Listing pages no longer read `category-landings.json` or `src/data/resources.ts`.
+
+### 2026-10-14 — Static listing pages until APIs exist
+- **Decision:** `/results`, `/testimonials`, and `/success-stories` read flattened `category-landings.json` (parent slug for the category filter). `/resources` reads `src/data/resources.ts`. Page size is two full rows at the widest breakpoint: 10 results (204px cards), 6 testimonials, 6 stories (300px cards), and 8 resources (4-column grid). `BlogHeroSection` and `BlogToolbar` take optional copy and `basePath` so the blog page stays the default.
+- **Rationale:** Listing APIs are not available yet. Existing cards stay fixed-width, so a page size that is not a multiple of the row leaves a short last row on a full page.
+- **Alternatives considered:** One item row per page; copying the blog hero instead of parameterizing it.
+- **Consequences:** Swap the flatten helpers for module services when the APIs land. Category pills still come from `categoriesAtom`, so a CMS slug that does not match a landing slug returns an empty list.
+
 ### 2026-10-13 — GPS state, Indian mobile, GTM, and checkout UTM
 - **Decision:** Detected GPS location lives in `detectedLocationAtom` and only prefills `UpdateStateDialog` when the saved state is empty. Reverse geocoding uses `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`; an empty key hides the current-location control and skips the permission prompt. Signup and account mobile updates use `validateIndianMobile` (`Please enter valid indian number`). GTM loads from `NEXT_PUBLIC_GTM_ID` beside the existing Meta Pixel. Any `utm_*` query param is stored in the `rodha_utm` cookie and forwarded as the checkout POST body, with no other fields added.
 - **Rationale:** Saved profile state must not change until the user confirms. The checkout API previously sent `{}`; captured attribution is attached only for keys that were present.

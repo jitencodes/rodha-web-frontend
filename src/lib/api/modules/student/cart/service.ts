@@ -71,9 +71,8 @@ export async function checkoutStudentCart(
 ): Promise<CheckoutResponseApi> {
   return apiPost<CheckoutResponseApi, Record<string, string>>(
     CHECKOUT_PATH,
-    // utm,
-    {},
-    { accessToken }
+    { ...utm, channel: "WEB" },
+    { accessToken, headers: { "x-channel": "WEB" } }
   );
 }
 

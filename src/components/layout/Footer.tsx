@@ -36,6 +36,10 @@ const QUICK_LINKS = [
 
 const RESOURCES_LINKS = [
   { label: "Blog", href: "/blog" },
+  { label: "Results", href: "/results" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "Success Stories", href: "/success-stories" },
+  { label: "Resource Hub", href: "/resources" },
   { label: "FAQ", href: "/faq" },
   { label: "Free Resources", href: CAT_FREE_COURSE_URL },
 ];
@@ -50,6 +54,10 @@ const LEGAL_LINKS = [
 const PREFERRED_ACTIVE_LABEL: Record<string, string> = {
   "/category/cat": "MBA (CAT + GDPI)",
   "/blog": "Blog",
+  "/results": "Results",
+  "/testimonials": "Testimonials",
+  "/success-stories": "Success Stories",
+  "/resources": "Resource Hub",
   "/contact": "Contact Us",
   "/faq": "FAQ",
   "/team": "Meet the Team",

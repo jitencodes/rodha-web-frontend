@@ -154,6 +154,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Faculty listing `/faculty` | Complete | SSR list + URL filters stay on `#faculty-list`; CMS banner + featured |
 | Faculty detail `/faculty/[slug]` | Complete | Nested CMS `{ faculty, packages }`; courses with `courseType` chips; empty sections hidden |
 | Blog listing `/blog` | Complete | Unfiltered listing shows `isFeatured` post; filters All/MBA/IPMAT/SSC |
+| Student results `/results` | Complete | `GET api/website/student-results`; `TopperCardV2`; 10 per page; optional `resultId` |
+| Testimonials `/testimonials` | Complete | `GET api/website/testimonials`; light `TestimonialCardV2`; 6 per page |
+| Success stories `/success-stories` | Complete | `GET api/website/success-stories`; `YoutubeStoryCard` + `StoriesModal`; 6 per page |
+| Resource hub `/resources` | Complete | `GET api/website/resources`; API type filters; `general=true` for the general category; 8 per page |
 | Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
 | Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
 | FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
@@ -190,4 +194,4 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ## Explicitly Out of Scope (Phase 2)
 
-Do not mark these as remaining Phase 1 work: payments, full student dashboard, admin, resources hub, search results page, mock tests page. Login `/login` and signup `/signup` were requested and are implemented (password APIs from Graphy collection under `api/auth/user/*`; Google backend path `api/auth/user/google` is not in Postman). Course listing `/courses` and test series listing `/test-series` are implemented. Header Test Series still points at mocks.rodha.co.in.
+Do not mark these as remaining Phase 1 work: payments, full student dashboard, admin, search results page, mock tests page. The resource hub listing at `/resources` is a static shell until a resources API exists. Login `/login` and signup `/signup` were requested and are implemented (password APIs from Graphy collection under `api/auth/user/*`; Google backend path `api/auth/user/google` is not in Postman). Course listing `/courses` and test series listing `/test-series` are implemented. Header Test Series still points at mocks.rodha.co.in.

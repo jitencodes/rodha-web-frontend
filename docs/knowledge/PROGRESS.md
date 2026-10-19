@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-13 (checkout confetti, GPS state, Indian mobile, GTM, UTM)
+**Last updated:** 2026-10-15 (global search, promo dialog, listing APIs)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,8 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Global search, promo, checkout channel, listing APIs (2026-10-15):** Header and account search open one dialog (click or Ctrl/Cmd+K) through `GET /api/search`. Promo dialog and recent-purchase toast mount on the public site and hide when their APIs are empty. Checkout sends `channel: WEB`. `/results`, `/testimonials`, `/success-stories`, and `/resources` read their website list endpoints. Backend gaps are in `docs/api-requirements-website-ui.md`.
+- **Listing pages (2026-10-14):** `/results`, `/testimonials`, `/success-stories`, and `/resources` reuse the blog banner (`Blogs.png`), category toolbar, and light pagination. Page sizes are two full desktop rows: 10, 6, 6, and 8. `TestimonialCardV2` keeps a 5-line clamp and shows the full quote in `ClampTooltip`. Footer links point at the four routes.
 - **Checkout confetti, GPS state, Indian mobile, GTM, UTM (2026-10-13):** Checkout shows a full-page overlay and confetti when a coupon is already on the cart or successfully applied. The card reads “{code} Applied Successfully” and the extra discount. Account users without a saved state can be prefilled from browser GPS when `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set; the location control stays hidden otherwise. Signup and the update-mobile dialog require a 10-digit number starting with 6–9. GTM loads only when `NEXT_PUBLIC_GTM_ID` is set. Landing `utm_*` params are stored in `rodha_utm` and sent on `POST /website/student/checkout`.
 - **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field to `PATCH api/auth/me/state`.
 - **Faculty card subjects (2026-10-10):** `FacultyCardV2` lists up to two API subjects and a `+n` remainder. Designation shows only when subjects are missing. Empty experience and bio stay hidden.

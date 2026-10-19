@@ -11,7 +11,9 @@ import {
 } from "@/lib/constants";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { MobileNav } from "./MobileNav";
-import { LayoutDashboard, User } from "lucide-react";
+import { LayoutDashboard, Search, User } from "lucide-react";
+import { GlobalSearchDialog } from "@/components/layout/GlobalSearchDialog";
+import { websiteQuickLinks } from "@/lib/search/quick-links";
 import { AUTH_LOGGED_IN_COOKIE_NAME } from "@/lib/auth/session-cookie";
 
 interface HeaderProps {
@@ -73,6 +75,7 @@ export function Header({
     categories.find((cat) => cat.slug === activeSlug) ?? null;
 
   const [examOpen, setExamOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
   const examRef = useRef<HTMLDivElement>(null);
@@ -81,6 +84,17 @@ export function Header({
   useEffect(() => {
     setIsLoggedIn(isLoggedInProp || readLoggedInCookie());
   }, [isLoggedInProp, pathname]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -234,6 +248,14 @@ export function Header({
         </nav>
 
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="inline-flex size-9.5 items-center justify-center rounded-sm border border-white/15 text-white/80 transition-colors hover:border-orange-400/50 hover:bg-orange-500/10 hover:text-orange-300"
+            aria-label="Search"
+          >
+            <Search className="size-4" strokeWidth={1.75} />
+          </button>
           {showExamSwitcher ? (
             <div
               onMouseLeave={() => setExamOpen(false)}
@@ -439,9 +461,24 @@ export function Header({
             </div>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => setSearchOpen(true)}
+          className="inline-flex size-10 items-center justify-center text-text-secondary lg:hidden"
+          aria-label="Search"
+        >
+          <Search className="size-5" strokeWidth={1.75} />
+        </button>
         <MobileNav
           activeCategorySlug={activeSlug}
           categories={categories}
+          onSearch={() => setSearchOpen(true)}
+        />
+        <GlobalSearchDialog
+          open={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          scope="website"
+          quickLinks={websiteQuickLinks(categories)}
         />
       </div>
     </header>

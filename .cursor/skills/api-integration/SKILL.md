@@ -80,6 +80,8 @@ No barrel `index.ts`. Import from explicit paths.
 | `NEXT_PUBLIC_API_BASE_URL` | API host with trailing `/` |
 | `NEXT_PUBLIC_API_SOURCE` | `x-source` header |
 | `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS` | Banner flip interval (default 8000) |
+| `NEXT_PUBLIC_PROMO_DIALOG_DELAY_MS` | Delay before the promo dialog opens (default 2500) |
+| `NEXT_PUBLIC_PURCHASE_TOAST_MS` | Recent-purchase toast auto-close (default 10000) |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google Identity Services OAuth Web client id (auth screen) |
 | `API_KEY` | Optional server-only key |
 | `API_REVALIDATE_SECONDS` | ISR window (default 60) |
@@ -121,10 +123,19 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/orders` | My Orders |
 | student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
 | graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |
+| search | `GET api/website/search` | Global search dialog via `GET /api/search` (`scope=website\|account`). Unregistered entity types return an empty filter state |
+| success-stories | `GET api/website/success-stories` | `/success-stories` |
+| testimonials | `GET api/website/testimonials` | `/testimonials` |
+| student-results | `GET api/website/student-results` | `/results` |
+| resources | `GET api/website/resources` | `/resources` (`general=true` for the general category) |
+| promotional-popup | `GET api/website/promotional-popup` | Site promo dialog; hidden when empty |
+| recent-purchases | `GET api/website/recent-purchases` | Bottom-left purchase toast; hidden when empty |
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
 
-Gaps: `docs/graphy-api-requirements.txt`
+Checkout sends `channel: "WEB"` and header `x-channel: WEB`. Contact POST includes optional `examYear`.
+
+Gaps: `docs/graphy-api-requirements.txt`, `docs/api-requirements-website-ui.md`
 
 ## Checklist for a new endpoint
 
