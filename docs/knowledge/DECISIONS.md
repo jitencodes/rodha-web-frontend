@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-19 — Checkout state is order attribution, not a profile update
+- **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`). The browser resolves it from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
+- **Rationale:** The order needs the buyer's current state and campaign params. That state is not the saved profile state.
+- **Alternatives considered:** Reuse the blocking Update State dialog and send `stateId` (rejected — it writes the profile and stops checkout). Send only the profile state (rejected — checkout must use the current location).
+- **Consequences:** Account gates can still require a saved mobile number and profile state. Checkout asks for mobile only, then resolves `stateName` for the checkout payload.
+
 ### 2026-10-10 — Dashboard Buy links stay plain anchors
 - **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
 - **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.

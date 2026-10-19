@@ -117,7 +117,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/dashboard` | Account dashboard |
 | student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
-| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout` |
+| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
 | student | `GET api/website/student/orders` | My Orders |
 | student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
 | graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |

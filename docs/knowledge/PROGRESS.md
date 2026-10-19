@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-13 (production features merged onto main)
+**Last updated:** 2026-10-19 (checkout stateName)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Checkout state and UTM (2026-10-19):** Continue to Pay sends stored `utm_*` params and a checkout-only `stateName` from GPS reverse geocoding, or from the states dropdown when location permission or geocoding is unavailable. Skipping the dialog still checks out. The value is not saved on the student profile. A missing profile state no longer blocks payment; a missing mobile number still does.
 - **Production sync plus checkout, GPS, and tracking (2026-10-13):** Merged production features onto main. Checkout shows a coupon success overlay, empty account state can prefill from GPS, signup and mobile updates require an Indian mobile number, and GTM plus `utm_*` attribution load when configured. `NEXT_PUBLIC_API_BASE_URL` in `.env` stays `https://innowrap.co.in/rodha/`.
 - **Profile details endpoint (2026-10-10):** Account mobile/state updates use `PATCH api/auth/me/details`. The dialog still shows only the missing or pencil-edited field, and the request includes only that real value. Empty or omitted keys are left unchanged. The response profile refreshes the session.
 - **Courses hero and profile fields (2026-10-10):** Courses listing hero image sits in the container grid, matching the category hero frame. The account dialog asks only for missing mobile and/or state on the auto popup, and a pencil edit sends only that field.
