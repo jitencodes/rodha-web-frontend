@@ -6,7 +6,12 @@ import {
   refreshEnrollments,
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
-import { parseUtmCookie, UTM_COOKIE_NAME } from "@/lib/tracking/utm";
+import {
+  parseUtmCookie,
+  readUtmCookieHeader,
+  sanitizeUtmRecord,
+  UTM_COOKIE_NAME,
+} from "@/lib/tracking/utm";
 
 export const runtime = "nodejs";
 
@@ -31,15 +36,22 @@ export async function POST(request: Request) {
   }
 
   let stateName: string | undefined;
+  let bodyUtm: Record<string, string> = {};
   try {
-    stateName = readStateName(await request.json());
+    const body: unknown = await request.json();
+    stateName = readStateName(body);
+    bodyUtm = sanitizeUtmRecord(body);
   } catch {
     stateName = undefined;
   }
 
   try {
     const jar = await cookies();
-    const utm = parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value);
+    const utm = {
+      ...parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value),
+      ...readUtmCookieHeader(request.headers.get("cookie")),
+      ...bodyUtm,
+    };
     const checkout = await checkoutStudentCart(accessToken, {
       ...utm,
       ...(stateName ? { stateName } : {}),

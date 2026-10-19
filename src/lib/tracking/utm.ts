@@ -25,6 +25,29 @@ export function readUtmFromSearch(search: string): Record<string, string> {
   return sanitizeUtmRecord(raw);
 }
 
+function readCookieValue(header: string, name: string): string | undefined {
+  for (const part of header.split(";")) {
+    const idx = part.indexOf("=");
+    if (idx < 0) continue;
+    if (part.slice(0, idx).trim() !== name) continue;
+    return part.slice(idx + 1).trim();
+  }
+  return undefined;
+}
+
+/** UTM saved in `rodha_utm`, read in the browser at pay time. */
+export function readStoredUtm(): Record<string, string> {
+  if (typeof document === "undefined") return {};
+  return parseUtmCookie(readCookieValue(document.cookie, UTM_COOKIE_NAME));
+}
+
+export function readUtmCookieHeader(
+  cookieHeader: string | null | undefined
+): Record<string, string> {
+  if (!cookieHeader) return {};
+  return parseUtmCookie(readCookieValue(cookieHeader, UTM_COOKIE_NAME));
+}
+
 export function parseUtmCookie(raw: string | undefined | null): Record<string, string> {
   if (!raw) return {};
   const candidates = [raw];
