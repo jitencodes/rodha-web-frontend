@@ -21,7 +21,7 @@ const SUPPORTED_CONTENT_TYPES = new Set([
 
 /** UI model for todayContents / productContents live class cards. */
 export type AccountLiveContentItem = {
-  id: string;
+  id: string | number;
   title: string;
   type: string;
   contentType?: string;
@@ -208,9 +208,8 @@ export function mapLiveContentItem(
   const id =
     item.id != null ? String(item.id) : asString(item.graphyItemId);
   if (!title || !id) return null;
-
-  const startTime = asString(item.startTime) || undefined;
-  const endTime = asString(item.endTime) || undefined;
+  const startTime = formatLiveClassTime(asString(item.startTime) || "");
+  const endTime = formatLiveClassTime(asString(item.endTime) || "");
   const startLabel = formatDateTimeLabel(startTime);
   const endLabel = formatDateTimeLabel(endTime);
   let timeRangeLabel: string | undefined;
@@ -238,6 +237,18 @@ export function mapLiveContentItem(
   };
 }
 
+export function formatLiveClassTime(value: string): string {
+  let dateValue = value;
+ 
+const TEMPORARY_TIME_FIX = process.env.NEXT_PUBLIC_TEMPORARY_TIME_FIX === "true";
+  if (TEMPORARY_TIME_FIX && value.endsWith("+05:30")) {
+    // TEMPORARY: Interpret the timestamp as UTC instead of +05:30. 
+    dateValue = value.replace(/\+05:30$/, "Z");
+  }
+ 
+  const date = new Date(dateValue);
+  return date.toISOString();
+}
 export function mapLiveContentItems(
   items: StudentLiveContentApi[] | null | undefined
 ): AccountLiveContentItem[] {
