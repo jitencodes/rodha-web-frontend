@@ -183,12 +183,16 @@ function formatDateTimeLabel(value: string | undefined): string | undefined {
   if (!value) return undefined;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
+  // Force IST so SSR (UTC hosts) and the browser show the same clock.
+  const formatted = date.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
     minute: "2-digit",
+    hour12: true,
   });
+  return `${formatted.replace(/\b(am|pm)\b/gi, (part) => part.toUpperCase())}`;
 }
 
 function formatLiveStatusLabel(status: string | undefined): string | undefined {
@@ -237,16 +241,25 @@ export function mapLiveContentItem(
   };
 }
 
+/**
+ * Normalize live-class timestamps for display.
+ * TEMPORARY: when `NEXT_PUBLIC_TEMPORARY_TIME_FIX=true`, API values ending in
+ * `+05:30` are Graphy UTC wall-clock times that were re-labeled as IST without
+ * converting — treat them as UTC (`Z`) so IST labels land at +5:30.
+ */
 export function formatLiveClassTime(value: string): string {
-  let dateValue = value;
- 
-const TEMPORARY_TIME_FIX = process.env.NEXT_PUBLIC_TEMPORARY_TIME_FIX === "true";
-  if (TEMPORARY_TIME_FIX && value.endsWith("+05:30")) {
-    // TEMPORARY: Interpret the timestamp as UTC instead of +05:30. 
-    dateValue = value.replace(/\+05:30$/, "Z");
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+
+  let dateValue = trimmed;
+  const temporaryTimeFix =
+    process.env.NEXT_PUBLIC_TEMPORARY_TIME_FIX === "true";
+  if (temporaryTimeFix && /\+05:30$/.test(trimmed)) {
+    dateValue = trimmed.replace(/\+05:30$/, "Z");
   }
- 
+
   const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return trimmed;
   return date.toISOString();
 }
 export function mapLiveContentItems(
