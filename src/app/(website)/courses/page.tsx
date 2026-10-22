@@ -36,11 +36,10 @@ import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "CAT 2027 Courses - Comprehensive & Sectional Batches | Rodha",
+  title: "Courses — Rodha",
   description:
-    "Explore Rodha's CAT 2027 courses: comprehensive Quant, LRDI and VARC batches plus individual sectional courses. Live + recorded Hinglish classes.",
+    "Browse Rodha courses across CAT, IPMAT, CLAT, SSC, and Skill House — comprehensive programs, sectional courses, crash batches, paid and free.",
   path: "/courses",
-  keywords: ["CAT 2027", "CAT Online Coaching", "CAT Faculty", "CAT Courses", "CAT Preparation", "CAT 2027 Preparation", "CAT 2027 Online Coaching", "CAT 2027 Faculty", "CAT 2027 Courses"],
 });
 
 const LISTING_BANNER = "/assets/images/courses/courses-list-hero.png";
@@ -187,9 +186,9 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           { label: "Courses" },
         ]}
         eyebrow="Courses"
-        title="Your CAT 2027 journey"
-        accent="starts here"
-        subtitle="Explore comprehensive programs, sectional courses, and focused practice batches designed to help CAT 2027 aspirants build strong fundamentals, sharpen their problem-solving skills, and move closer to their dream B-school."
+        title="Programs that turn preparation into"
+        accent="selection"
+        subtitle="Browse comprehensive programs, sectional courses, and crash batches across CAT, IPMAT, CLAT, SSC, and Skill House."
         imageSrc={LISTING_BANNER}
         imageAlt="CAT 2027 first batch, now live"
         imageLayout="section"
@@ -313,7 +312,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           title="Ready to Begin Your Journey?"
           subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/footer-cta-award 4.png"
+          decorativeImage="/assets/images/about us/award-to-girl.png"
           primaryAction={{
             label: "Browse Courses",
             href: "/courses",

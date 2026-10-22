@@ -6,11 +6,27 @@ import {
   refreshEnrollments,
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
-import { parseUtmCookie, UTM_COOKIE_NAME } from "@/lib/tracking/utm";
+import {
+  parseUtmCookie,
+  readUtmCookieHeader,
+  sanitizeUtmRecord,
+  UTM_COOKIE_NAME,
+} from "@/lib/tracking/utm";
 
 export const runtime = "nodejs";
 
-export async function POST() {
+const STATE_NAME_MAX = 80;
+
+function readStateName(body: unknown): string | undefined {
+  if (!body || typeof body !== "object") return undefined;
+  const value = (body as { stateName?: unknown }).stateName;
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > STATE_NAME_MAX) return undefined;
+  return trimmed;
+}
+
+export async function POST(request: Request) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     return NextResponse.json(
@@ -19,10 +35,27 @@ export async function POST() {
     );
   }
 
+  let stateName: string | undefined;
+  let bodyUtm: Record<string, string> = {};
+  try {
+    const body: unknown = await request.json();
+    stateName = readStateName(body);
+    bodyUtm = sanitizeUtmRecord(body);
+  } catch {
+    stateName = undefined;
+  }
+
   try {
     const jar = await cookies();
-    const utm = parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value);
-    const checkout = await checkoutStudentCart(accessToken, utm);
+    const utm = {
+      ...parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value),
+      ...readUtmCookieHeader(request.headers.get("cookie")),
+      ...bodyUtm,
+    };
+    const checkout = await checkoutStudentCart(accessToken, {
+      ...utm,
+      ...(stateName ? { stateName } : {}),
+    });
     if ((checkout.mode || "").toLowerCase() === "free") {
       try {
         await refreshEnrollments(accessToken);

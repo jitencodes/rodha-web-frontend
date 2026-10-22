@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-10-19 — Checkout state is order attribution, not a profile update
+- **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`), and still sends `channel: "WEB"` / `x-channel: WEB`. The browser resolves state from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
+- **Rationale:** The order needs the buyer's current state and campaign params. That state is not the saved profile state.
+- **Alternatives considered:** Reuse the blocking Update State dialog and send `stateId` (rejected — it writes the profile and stops checkout). Send only the profile state (rejected — checkout must use the current location).
+- **Consequences:** Account gates can still require a saved mobile number and profile state. Checkout asks for mobile only, then resolves `stateName` for the checkout payload.
+
 ### 2026-10-15 — Search dialog, promo popup, and listing APIs
 - **Decision:** Marketing and account search share one dialog. Queries go through `GET /api/search`, which calls `GET api/website/search` with `scope=website` or `scope=account`. Entity filters include modules the index does not register yet; a 400 for an unknown type shows an empty filter state. The promo dialog and purchase toast soft-fail when their endpoints are empty. Showing the promo, or closing it, suppresses it for 24 hours. Only a manual toast close suppresses the toast for 24 hours. Checkout adds `channel: "WEB"` and `x-channel: WEB` beside UTM fields. Contact submits `examYear` as its own field.
 - **Rationale:** Search needs a server proxy so `API_KEY` stays off the client, and the dialog has to work before the index covers every public module. The popup and purchase feed are not in Postman yet, so the UI hides them instead of inventing content.
@@ -32,29 +38,18 @@ Format:
 - **Alternatives considered:** Writing GPS into `userAtom` before save; a shared phone rule for contact forms; inventing non-`utm_*` order fields.
 - **Consequences:** Contact and lead forms still use `validatePhone`. Checkout fails closed to `{}` when the cookie is missing or invalid.
 
+
 ### 2026-10-10 — Dashboard Buy links stay plain anchors
 - **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
 - **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.
 - **Alternatives considered:** Mark the card `"use client"` (rejected — pulls the tile into the client bundle). Encode the handler as a server action (rejected — checkout must be a document navigation).
 - **Consequences:** Do not pass event handlers from this server card. Cart "Add to Cart" remains a button only when a client parent supplies `onAddToCart`.
 
-### 2026-10-10 — Localhost image hosts and course-detail overflow
-- **Decision:** Allow `*.s3.ap-south-1.amazonaws.com` in the image optimizer and set `dangerouslyAllowLocalIP` so NAT64 S3 DNS is not rejected. SVG sources use `AppImage`. Course detail full-bleed backgrounds use `inset-x-0` instead of `w-screen`.
-- **Rationale:** CMS media is on `rodha-prod-bucket`, and this network resolves that host to `64:ff9b::/96`, which Next blocks. `w-screen` backgrounds were wider than the layout by the scrollbar.
-- **Alternatives considered:** `dangerouslyAllowSVG` for remote files; `overflow-x-hidden` on the page.
-- **Consequences:** Hostnames stay limited to YouTube and the ap-south-1 S3 buckets.
-
-### 2026-10-10 — Redirects use the browser Host
-- **Decision:** Middleware and `GET /api/checkout/buy` build redirect URLs from `x-forwarded-host` or the `Host` header. Buy Now is a normal same-tab navigation to that relative API path. Blog share/copy uses `window.location.origin`.
-- **Rationale:** Docker `HOSTNAME=0.0.0.0` makes `request.url` point at the bind address, so an IP deployment redirected to `http://0.0.0.0:3000`. `SITE_URL` (`https://rodha.in`) made shared blog links ignore localhost, IP, and staging hosts.
-- **Alternatives considered:** Hardcode the EC2 IP; keep Next `<Link>` client navigation into the checkout route.
-- **Consequences:** Domain and localhost redirects stay on the host the browser used. HTTPS stays HTTPS only when `x-forwarded-proto` is sent with `x-forwarded-host`.
-
-### 2026-10-09 — Auth cookies follow the request scheme
-- **Decision:** `Secure` on `rodha_access_token`, `rodha_user`, `rodha_graphy`, and `rodha_logged_in` is set from `x-forwarded-proto` or the request URL, not from `NODE_ENV === "production"`.
-- **Rationale:** The GitLab EC2 app is served at `http://13.207.165.22:3000`. Production builds set `NODE_ENV=production`, so login returned `Set-Cookie` with `Secure`. Browsers ignore that on non-localhost HTTP, middleware then sees no token and sends `/account/dashboard` back to `/login`. `npm run dev` keeps `NODE_ENV=development` (no `Secure`). Vercel is HTTPS, so `Secure` cookies stick. Localhost is a secure context, so a local production build would not show the bug.
-- **Alternatives considered:** Force `COOKIE_SECURE=false` in the EC2 env; turn off middleware; store the token in localStorage.
-- **Consequences:** HTTP deploys persist the session. HTTPS deploys, including Vercel and any proxy that sends `x-forwarded-proto: https`, still set `Secure`. Logout and session-expired clear cookies with the same flag.
+### 2026-10-10 — Public origin for auth cookies and checkout redirects
+- **Decision:** Set cookie `Secure` from the request scheme (`x-forwarded-proto`, otherwise the request URL). Build checkout, login, and session-expired redirects with `x-forwarded-host` / `x-forwarded-proto`. Buy links use a same-tab document navigation instead of a client `<Link>` or `router.push`.
+- **Rationale:** Production cookies were always `Secure`, so browsers dropped them on HTTP IP deployments and Buy looked like a no-op. Route Handler redirects built from `request.url` could point at an internal host. App Router soft navigation does not follow `/api/checkout/buy` redirects.
+- **Alternatives considered:** Force `Secure` off in all production (rejected — weakens HTTPS). `SameSite=None` (rejected).
+- **Consequences:** HTTPS deployments stay `Secure`. HTTP IP deployments can store the session. Do not hardcode a public host. `images.dangerouslyAllowLocalIP` is on because this network resolves S3 to NAT64 addresses that Next otherwise rejects; hostnames remain limited to YouTube and `*.s3.ap-south-1.amazonaws.com`.
 
 ### 2026-10-08 — Committed env files, one API URL per environment
 - **Decision:** Commit `.env` (development, `https://innowrap.co.in/rodha/`) and `.env.production` (production, `https://api.rodha.co.in/rodha/`). `scripts/select-env.mjs` copies the file for `APP_ENV` and removes `.env.production` before `next build`. Docker `APP_ENV` and GitLab jobs follow the same split. SMTP passwords stay in `.env.local` / CI secrets, not in git.
@@ -109,6 +104,12 @@ Format:
 - **Rationale:** Matches Graphy Share Postman payloads, avoids blank/invented UI, and keeps category browse → detail before checkout.
 - **Alternatives considered:** Keep Plans from `pricingPlans`; invent static section defaults; Buy Now → checkout from category cards; show all subcategory masters.
 - **Consequences:** Checkout stays on the detail purchase CTA. Empty subcategory tabs disappear. `CourseCardV2` is a single link (no nested anchors).
+
+### 2026-10-10 — Profile mobile and state via `PATCH api/auth/me/details`
+- **Decision:** `PATCH api/auth/me/state` and `/me/mobile` are retired. Account updates go through `PATCH api/auth/me/details` with `{ stateId?, mobile? }` via BFF `/api/account/state`. At least one field must be a real value. Null, `""`, or an omitted key leaves that field unchanged. Students only. The response is the updated profile and replaces the session user. `UpdateStateDialog` still renders only the fields that are missing (auto popup) or the single pencil field.
+- **Rationale:** One endpoint covers both profile fields and must not overwrite a saved value when the dialog is not editing it.
+- **Alternatives considered:** Keep sending both keys with null for the unused field; call the removed `/me/state` and `/me/mobile` routes.
+- **Consequences:** Partial edits cannot clear mobile or state. The dialog payload matches the fields on screen.
 
 ### 2026-10-06 — State selection via `/auth/me` + shared dialog
 - **Decision:** Collect `stateId` at signup; persist/read via `GET api/auth/me` (`stateId` + nested `state`); update via `PATCH api/auth/me/state` (BFF `/api/account/state`). Account shell hydrates Jotai `userAtom`. Missing `state` opens shared blocking `UpdateStateDialog` (account gate + checkout). States list from `GET api/website/states/dropdown` via `/api/states/dropdown`.

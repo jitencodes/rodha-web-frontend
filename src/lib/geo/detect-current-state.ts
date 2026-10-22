@@ -112,6 +112,49 @@ async function matchStateId(place: {
   return null;
 }
 
+export type CheckoutStateResolution =
+  | { status: "resolved"; stateName: string }
+  | { status: "permission_denied" }
+  | { status: "needs_manual" };
+
+/**
+ * Checkout-only state from GPS + Google reverse geocode.
+ * Sends the administrative area long name, or the short code when that is all Google returns.
+ * Does not write the student profile.
+ */
+export async function resolveCheckoutState(): Promise<CheckoutStateResolution> {
+  if (typeof navigator === "undefined" || !navigator.geolocation) {
+    return { status: "needs_manual" };
+  }
+  const apiKey = getGoogleMapsApiKey();
+  if (!apiKey) return { status: "needs_manual" };
+
+  let position: GeolocationPosition;
+  try {
+    position = await readPosition();
+  } catch (error) {
+    const code =
+      error && typeof error === "object" && "code" in error
+        ? Number((error as GeolocationPositionError).code)
+        : 0;
+    if (code === 1) return { status: "permission_denied" };
+    return { status: "needs_manual" };
+  }
+
+  try {
+    const place = await reverseGeocodeState(
+      position.coords.latitude,
+      position.coords.longitude,
+      apiKey
+    );
+    const stateName = place?.longName || place?.shortName || "";
+    if (!stateName) return { status: "needs_manual" };
+    return { status: "resolved", stateName };
+  } catch {
+    return { status: "needs_manual" };
+  }
+}
+
 /** Browser GPS + Google reverse geocode. Returns null on any failure. */
 export async function detectCurrentState(): Promise<DetectedLocation | null> {
   const apiKey = getGoogleMapsApiKey();

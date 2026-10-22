@@ -102,7 +102,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
 | Profile | Complete | `/account/profile` avatar, edit name + change password (client-only); mobile dialog uses Indian 10-digit validation; empty state can prefill from GPS when the maps key is set |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
-| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie forwarded on pay; GTM only when `NEXT_PUBLIC_GTM_ID` is set |
+| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM only when `NEXT_PUBLIC_GTM_ID` is set |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
 
 ## Course Listing `/courses`

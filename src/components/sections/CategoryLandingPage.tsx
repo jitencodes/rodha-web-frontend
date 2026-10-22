@@ -133,7 +133,6 @@ export function CategoryLandingPage({
           enrollCoursesHref={viewAllCoursesHref}
           isLoggedIn={isLoggedIn}
           videoId={category.hero.videoId}
-          videoUrl={category.hero.videoUrl}
           imageUrl={category.hero.imageUrl}
         />
       ) : null}
@@ -384,7 +383,7 @@ export function CategoryLandingPage({
         title={category.cta.title}
         subtitle={category.cta.subtitle}
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/footer-cta-award 4.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={category.cta.primaryAction}
         secondaryAction={category.cta.secondaryAction}
       />

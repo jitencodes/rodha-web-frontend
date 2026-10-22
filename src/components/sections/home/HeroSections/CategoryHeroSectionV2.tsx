@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,7 +9,7 @@ import {
   getCatCommunityUrl,
 } from "@/lib/constants";
 import { CounsellingCtaAction } from "../../CounsellingCtaAction";
-import { HeroBannerMedia } from "../HeroBannerMedia";
+import { HeroVideoEmbed } from "../HeroVideoEmbed";
 import { HomeHeroShell } from "../HomeHeroShell";
 import { Container } from "@/components/layout/Container";
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -30,7 +31,6 @@ interface CategoryHeroSectionV2Props {
   enrollCoursesHref?: string;
   isLoggedIn?: boolean;
   videoId?: string;
-  videoUrl?: string;
   imageUrl?: string;
   className?: string;
 }
@@ -99,14 +99,15 @@ export function CategoryHeroSectionV2({
   enrollCoursesHref,
   isLoggedIn = false,
   videoId,
-  videoUrl,
   imageUrl,
   className,
 }: CategoryHeroSectionV2Props) {
   const selectionStat = quickStats[0];
   const aspirantStat = quickStats[1];
   const hasStats = quickStats.length > 0;
-  const hasMedia = Boolean(videoId || videoUrl || imageUrl);
+  const hasVideo = Boolean(videoId);
+  const hasImage = Boolean(imageUrl) && !hasVideo;
+  const hasMedia = hasVideo || hasImage;
   const hasSubtitle = Boolean(subtitle?.trim());
   const hasEyebrow = Boolean(eyebrow?.trim());
   const hasPrimaryCta = Boolean(
@@ -189,17 +190,27 @@ export function CategoryHeroSectionV2({
           {hasMedia ? (
             <div className="lg:col-span-6 flex flex-col items-center min-h-0">
               <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-                <HeroBannerMedia
-                  videoId={videoId}
-                  videoUrl={videoUrl}
-                  imageUrl={imageUrl}
-                />
+                {hasVideo && videoId ? (
+                  <HeroVideoEmbed videoId={videoId} />
+                ) : null}
+                {hasImage && imageUrl ? (
+                  <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
+                    <Image
+                      src={imageUrl}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      fetchPriority="high"
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           ) : null}
         </div>
         {hasStats ? (
-        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 py-5 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
+        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
           <div className="flex gap-4.5">
             <svg
               className="h-8 w-8 shrink-0 lg:h-12 lg:w-12"

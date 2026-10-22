@@ -52,7 +52,6 @@ export default async function FAQPage({
           <SectionHeaderV2
             badge="GOOD TO KNOW"
             title="Frequently Asked Questions"
-            titleAs="h1"
             subtitle="Find answers about Rodha's CAT, IPMAT, SSC, CLAT, and Skill House programs, plus general coaching questions."
             align="center"
             className="mx-auto max-w-3xl"
@@ -73,7 +72,7 @@ export default async function FAQPage({
         title="Still Have Questions?"
         subtitle="Our team is here to help you find the right program for your goals."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/footer-cta-award 4.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={{ label: "Contact Us", href: "/contact" }}
         secondaryAction={{ label: "Ask Rodha Buddy", href: EXTERNAL_URLS.rodhaBuddy }}
       />

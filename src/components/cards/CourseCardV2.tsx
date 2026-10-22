@@ -7,7 +7,6 @@ import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { COURSE_IMAGE_FALLBACK, getCategoryPath } from "@/lib/constants";
-import { isPackageBuyNowHref, sameOriginBuyHref } from "@/lib/packages/buy-now";
 import type { Course } from "@/lib/types";
 
 interface CourseCardV2Props {
@@ -47,18 +46,15 @@ export function CourseCardV2({
 
   const detailsHref = `${getCategoryPath(course.category)}/courses/${course.slug}`;
   const courseHref = href || course.externalLink || detailsHref;
-  const rawActionHref = ctaHref || courseHref;
-  const actionHref = isPackageBuyNowHref(rawActionHref)
-    ? sameOriginBuyHref(rawActionHref)
-    : rawActionHref;
+  const actionHref = ctaHref || courseHref;
   const isExternalCard = Boolean(!href && course.externalLink);
-  const isBuyNow = isPackageBuyNowHref(actionHref);
-  const isExternalCta = !isBuyNow && Boolean(actionHref.startsWith("http"));
+  const isExternalCta = Boolean(ctaHref?.startsWith("http"));
+  const ctaNeedsDocumentNavigation = actionHref.startsWith("/api/");
   const posterSrc =
     course.thumbnail ||
-    course.facultyImage || 
+    course.facultyImage ||
     COURSE_IMAGE_FALLBACK;
-  const label = ctaLabel || course.detailsLabel || "View";
+  const label = ctaLabel || course.detailsLabel || "View Details";
   const ctaIsDistinct = actionHref !== courseHref;
 
   return (
@@ -78,12 +74,12 @@ export function CourseCardV2({
       />
 
       <div className="relative z-[1] flex h-full flex-col pointer-events-none">
-        <div className="relative aspect-[16/10] w-full overflow-hidden">
+        <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#FFF3E8]">
           <Image
             src={posterSrc}
             alt={course.title}
             fill
-            className="object-contain object-top transition-transform duration-500 group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
           {course.badge && (
@@ -115,7 +111,7 @@ export function CourseCardV2({
             </p>
           )}
           <div className="mt-2 text-caption leading-relaxed text-neutral-500 flex items-center gap-1 justify-between capitalize">
-            {course.caourseCount != null && course.caourseCount > 0 ? (
+            {course.caourseCount != null ? (
               <span>{course.caourseCount} Courses</span>
             ) : (
               <span />
@@ -125,7 +121,7 @@ export function CourseCardV2({
           <div className="mt-auto flex items-end justify-between gap-3 pt-5">
             <div className="min-w-0">
               <span className="block text-[1.4rem] font-bold leading-none text-neutral-900">
-                {course.price === 0 ? "FREE" : formatPrice(course.price)} 
+                {course.price === 0 ? "FREE" : formatPrice(course.price)}
               </span>
               {hasDiscount && discountPercent > 0 ? (
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
@@ -138,38 +134,28 @@ export function CourseCardV2({
                 </div>
               ) : null}
             </div>
+
             <div className="flex flex-col items-end gap-2">
-            {course.appliedCouponCode?.trim() && (
-              <div className="flex flex-col gap-1 items-end">
-                <span className="text-caption font-bold text-orange-500">Eligible Coupon</span>
-                  <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 ">
+              {course.appliedCouponCode?.trim() ? (
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-caption font-bold text-orange-500">
+                    Eligible Coupon
+                  </span>
+                  <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
                     <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
                       {course.appliedCouponCode.trim()}
                     </span>
                   </div>
-              </div>
-              )}
-              {ctaIsDistinct ? (
-                isBuyNow ? (
+                </div>
+              ) : null}
+            {ctaIsDistinct ? (
+              ctaNeedsDocumentNavigation ? (
                 <a
                   href={actionHref}
                   data-carousel-ignore
                   onPointerDown={stopCarouselDrag}
-                  onClick={(event) => {
-                    stopCarouselDrag(event);
-                    if (
-                      event.metaKey ||
-                      event.ctrlKey ||
-                      event.shiftKey ||
-                      event.altKey ||
-                      event.button !== 0
-                    ) {
-                      return;
-                    }
-                    event.preventDefault();
-                    window.location.assign(actionHref);
-                  }}
-                  className="inline-flex shrink-0 items-center gap-1.5 text-body-md font-semibold bg-orange-500 text-white transition-all duration-300 group-hover:gap-2.5 group-hover:bg-orange-500/80 px-2 py-1 rounded-lg"
+                  onClick={stopCarouselDrag}
+                  className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
                 >
                   {label}
                   <svg
@@ -185,7 +171,7 @@ export function CourseCardV2({
                     />
                   </svg>
                 </a>
-                ) : (
+              ) : (
                 <Link
                   href={actionHref}
                   target={isExternalCta ? "_blank" : undefined}
@@ -209,24 +195,24 @@ export function CourseCardV2({
                     />
                   </svg>
                 </Link>
-                )
-              ) : (
-                <span className="inline-flex shrink-0 items-center gap-1.5 text-body-md font-semibold bg-orange-500 text-white transition-all duration-300 group-hover:gap-2.5 group-hover:bg-orange-500/80 px-2 py-1 rounded-lg">
-                  {label}
-                  <svg
-                    className="h-3.5 w-3.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.25 4.25a.75.75 0 010 1.08l-4.25 4.25a.75.75 0 01-1.06-.02z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              )}
+              )
+            ) : (
+              <span className="inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 group-hover:gap-2.5 group-hover:text-orange-500/80">
+                {label}
+                <svg
+                  className="h-3.5 w-3.5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.25 4.25a.75.75 0 010 1.08l-4.25 4.25a.75.75 0 01-1.06-.02z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            )}
             </div>
           </div>
         </div>

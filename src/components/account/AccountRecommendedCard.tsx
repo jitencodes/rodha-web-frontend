@@ -40,7 +40,6 @@ export function AccountRecommendedCard({
   const actionHref = isPackageBuyNowHref(rawActionHref)
     ? sameOriginBuyHref(rawActionHref)
     : rawActionHref;
-  const isBuyNow = isPackageBuyNowHref(actionHref);
   const badgeLabel =
     product.productType === "test-series" ? "Test Series" : product.tag || "Course";
 
@@ -132,10 +131,10 @@ export function AccountRecommendedCard({
                 <ShoppingCart className="size-3.5" aria-hidden />
                 {label}
               </button>
-            ) : isBuyNow ? (
+            ) : actionHref.startsWith("/api/") ? (
               <a
                 href={actionHref}
-                className="flex min-w-[80px] justify-end shrink-0 flex-nowrap items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
+                className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 {label}
                 <svg

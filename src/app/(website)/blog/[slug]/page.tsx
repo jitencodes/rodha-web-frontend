@@ -108,6 +108,9 @@ export default async function BlogPostPage({
 
   const relatedPosts = post.relatedPosts ?? [];
 
+  const shareUrl =
+    `${SITE_URL}/blog/${post.slug}`;
+
   const breadcrumbItems = [
     {
       label: "Home",
@@ -249,7 +252,7 @@ export default async function BlogPostPage({
 
                 <div className="rounded-xl border shadow-sm shadow-[#fbdfd1]/50 border-[#fbdfd1] bg-[#fdf8f5a0] p-5">
                   <ShareBlog
-                    url={`/blog/${post.slug}`}
+                    url={shareUrl}
                     title={post.title}
                   />
                 </div>
@@ -288,7 +291,7 @@ export default async function BlogPostPage({
         title="Ready to Take the Next Step?"
         subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/footer-cta-award 4.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={{
           label: "Explore Courses",
           href: "/category/cat",

@@ -88,7 +88,6 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | HeroCounsellingForm | `home/HeroCounsellingForm.tsx` |
 | HeroNeuralCanvas | `home/HeroNeuralCanvas.tsx` |
 | HeroVideoEmbed | `home/HeroVideoEmbed.tsx` |
-| HeroBannerMedia | `home/HeroBannerMedia.tsx` | Home and category hero media: YouTube, then direct video file, then image |
 | HeroFloatingStats | `home/HeroFloatingStats.tsx` |
 | HeroTrustMetrics | `home/HeroTrustMetrics.tsx` |
 | HomeCategoriesSection | `home/HomeCategoriesSection.tsx` |
@@ -206,9 +205,10 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountContentTypeTabs | `AccountContentTypeTabs.tsx` (Videos/Quizzes/PDFs/Live/Assignments; no All) |
 | AccountQuickContentToolbar | `AccountQuickContentToolbar.tsx` (search outside sheet; completion/live/result filters) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
-| AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`; GPS detect when state is empty) |
-| UpdateStateDialog | `UpdateStateDialog.tsx` (shared state picker → `PATCH /api/account/state`) |
-| RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
+| AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
+| UpdateStateDialog | `UpdateStateDialog.tsx` (shows only missing or pencil-edited mobile/state; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
+| CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
+| RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (Time Spent / Valid Till / Language in body; progress + Continue CTA) |
 | AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + Reset Filters + mobile BottomSheet) |
@@ -262,18 +262,10 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | content-listings | `content-listings.ts` | Shared listing query and pagination query for results, testimonials, stories, and resources |
 | course-filters | `course-filters.ts` | Course type chips/dropdowns + paid/free helpers (`isCourseFree`, `isTestSeriesFree`) |
 | course-sort | `course-sort.ts` | Packages listing sort presets (`sortBy`/`sortOrder` pairs for `/courses`) |
-| session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers; `Secure` follows request scheme |
-| public-url | `http/public-url.ts` | Redirect origin from `Host` / `x-forwarded-host`, not the bind address |
+| session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers |
 | email/* | `email/config.ts`, `email/send.ts`, `email/parse-lead.ts`, `email/templates/lead-notification.ts` | SMTP + light Rodha lead email template |
 | api blogs | `api/modules/blogs/*` | Listing + by-slug; `isFeatured` + `relatedBlogs` |
-| form-validation | `form-validation.ts` | Name/phone/email/exam/message + password/confirm validators; `validateIndianMobile` for signup and account mobile |
-| detectedLocationAtom | `store/user.ts` | GPS lat/lng and matched state id; does not update `userAtom` |
-| detect-current-state | `geo/detect-current-state.ts` | Browser GPS + Google reverse geocode matched to `/api/states/dropdown` |
-| coupon-confetti | `checkout/coupon-confetti.ts` | `canvas-confetti` burst for an applied checkout coupon |
-| CouponAppliedOverlay | `account/CouponAppliedOverlay.tsx` | Full-page coupon success card (code + extra savings) |
-| utm | `tracking/utm.ts` | Capture `utm_*` into `rodha_utm` and parse it for checkout |
-| GoogleTagManager | `providers/GoogleTagManager.tsx` | GTM bootstrap when `NEXT_PUBLIC_GTM_ID` is set |
-| UtmCapture | `providers/UtmCapture.tsx` | Writes landing `utm_*` params into the attribution cookie |
+| form-validation | `form-validation.ts` | Name/phone/email/exam/message + password/confirm validators |
 | account types | `account/types.ts` | Student dashboard models (user, continue watching, cart, orders, profile, widgets) |
 | account cart totals | `account/cart-totals.ts` | `computeCartTotals` / `formatCartMoney` for cart summary |
 | account pagination | `account/pagination.ts` | `paginateItems`, `parseCoursesTab` (continue/buy + aliases), page size 6 |

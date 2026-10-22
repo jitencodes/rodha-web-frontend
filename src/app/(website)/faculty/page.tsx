@@ -16,11 +16,10 @@ import {
 import type { FacultyFiltersState } from "@/components/sections/FacultyFiltersBar";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "CAT Faculty - Learn from Ravi Sir, KD Sir & Experts | Rodha",
+  title: "Our Faculty — Rodha",
   description:
-    "Meet Rodha's CAT faculty: Ravi Prakash, Krishnendu Dutta (KD) and 10 more experts in Quant, LRDI and VARC with up to 23 years of teaching experience.",
+    "Meet Rodha's expert faculty — IIM and NLU alumni mentors across MBA, Law, Banking, IPMAT, and Skill House programs.",
   path: "/faculty",
-  keywords: ["CAT 2027", "CAT Online Coaching", "CAT Faculty", "CAT Courses", "CAT Preparation", "CAT 2027 Preparation", "CAT 2027 Online Coaching", "CAT 2027 Faculty", "CAT 2027 Courses"],
 });
 
 const SORT_TO_API: Record<FacultySortKey, string> = {
@@ -123,7 +122,7 @@ export default async function FacultyPage({ searchParams }: FacultyPageProps) {
           title="Ready to Begin Your Journey?"
           subtitle="Book a Demo Class or Explore our Courses."
           backgroundImage="/assets/images/background/cta background image.JPG"
-          decorativeImage="/assets/images/about us/footer-cta-award 4.png"
+          decorativeImage="/assets/images/about us/award-to-girl.png"
           primaryAction={{ label: "Book a Demo Class", href: "/contact" }}
           secondaryAction={{ label: "Explore Courses", href: "/category/cat" }}
           className="reveal-child reveal-delay-1"

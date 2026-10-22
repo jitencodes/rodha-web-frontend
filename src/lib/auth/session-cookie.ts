@@ -3,6 +3,7 @@ import type {
   AuthGraphyViewModel,
   AuthUserViewModel,
 } from "@/lib/api/modules/auth/types";
+import { requestIsSecure } from "@/lib/http/public-origin";
 
 export const AUTH_COOKIE_NAME = "rodha_access_token";
 export const AUTH_USER_COOKIE_NAME = "rodha_user";
@@ -31,25 +32,6 @@ function tokenMaxAgeSeconds(accessToken: string): number {
   return seconds > 60 ? seconds : DEFAULT_MAX_AGE;
 }
 
-/**
- * Secure follows the browser scheme. Production `NODE_ENV` on plain HTTP
- * (for example EC2 port 3000) makes browsers drop Set-Cookie, so the dashboard
- * navigation looks logged out. HTTPS, including `x-forwarded-proto: https`, stays Secure.
- */
-export function authCookieSecure(request: Request): boolean {
-  const forwarded = request.headers.get("x-forwarded-proto");
-  if (forwarded) {
-    const proto = forwarded.split(",")[0]?.trim().toLowerCase();
-    if (proto === "https") return true;
-    if (proto === "http") return false;
-  }
-  try {
-    return new URL(request.url).protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
 function cookieBase(maxAge: number, httpOnly: boolean, secure: boolean) {
   return {
     httpOnly,
@@ -60,15 +42,15 @@ function cookieBase(maxAge: number, httpOnly: boolean, secure: boolean) {
   };
 }
 
-function applyAuthCookie(
+export function applyAuthCookie(
   response: NextResponse,
   accessToken: string,
-  secure: boolean
+  request?: Request
 ): void {
   response.cookies.set(
     AUTH_COOKIE_NAME,
     accessToken,
-    cookieBase(tokenMaxAgeSeconds(accessToken), true, secure)
+    cookieBase(tokenMaxAgeSeconds(accessToken), true, requestIsSecure(request))
   );
 }
 
@@ -79,11 +61,11 @@ export function applySessionCookies(
     user: AuthUserViewModel;
     graphy?: AuthGraphyViewModel | null;
   },
-  request: Request
+  request?: Request
 ): void {
-  const secure = authCookieSecure(request);
   const maxAge = tokenMaxAgeSeconds(input.accessToken);
-  applyAuthCookie(response, input.accessToken, secure);
+  const secure = requestIsSecure(request);
+  applyAuthCookie(response, input.accessToken, request);
 
   response.cookies.set(
     AUTH_USER_COOKIE_NAME,
@@ -110,9 +92,9 @@ export function applySessionCookies(
 
 export function clearAuthCookie(
   response: NextResponse,
-  request: Request
+  request?: Request
 ): void {
-  const secure = authCookieSecure(request);
+  const secure = requestIsSecure(request);
   const cleared = cookieBase(0, true, secure);
   response.cookies.set(AUTH_COOKIE_NAME, "", cleared);
   response.cookies.set(AUTH_USER_COOKIE_NAME, "", cleared);

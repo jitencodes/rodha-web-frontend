@@ -5,13 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
+import { CheckoutLocationDialog } from "@/components/account/CheckoutLocationDialog";
 import { CouponAppliedOverlay } from "@/components/account/CouponAppliedOverlay";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 import { formatCartMoney } from "@/lib/account/cart-totals";
 import { fireCouponConfetti } from "@/lib/checkout/coupon-confetti";
-import { missingAccountProfileFields } from "@/lib/api/modules/auth/mapper";
+import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
+import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
 import { userAtom } from "@/lib/store/user";
+import { readStoredUtm } from "@/lib/tracking/utm";
 
 type CheckoutItem = {
   cartItemId: string;
@@ -72,12 +75,15 @@ export function CheckoutPageClient({
   const [payable, setPayable] = useState(payableAmount);
   const [appliedCode, setAppliedCode] = useState(item?.promocodeCode || null);
   const celebratedCodeRef = useRef<string | null>(null);
+  const payStartedRef = useRef(false);
   const [celebration, setCelebration] = useState<{
     code: string;
     discountAmount: number;
   } | null>(null);
-  const [stateDialogOpen, setStateDialogOpen] = useState(false);
-  const [resumePayAfterState, setResumePayAfterState] = useState(false);
+  const [mobileDialogOpen, setMobileDialogOpen] = useState(false);
+  const [resumePayAfterMobile, setResumePayAfterMobile] = useState(false);
+  const [locationDialogOpen, setLocationDialogOpen] = useState(false);
+  const [locationPermissionDenied, setLocationPermissionDenied] = useState(false);
 
   useEffect(() => {
     if (!appliedCode) {
@@ -178,25 +184,25 @@ export function CheckoutPageClient({
     }
   }
 
-  async function handlePay(options?: { skipStateCheck?: boolean }) {
-    if (!item) return;
-    const missing = missingAccountProfileFields(authUser);
-    if (!options?.skipStateCheck && missing.length > 0) {
-      setResumePayAfterState(true);
-      setStateDialogOpen(true);
-      setError(
-        missing.includes("state") && missing.includes("mobile")
-          ? "Please add your mobile number and state before continuing to pay."
-          : missing.includes("mobile")
-            ? "Please add your mobile number before continuing to pay."
-            : "Please select your state before continuing to pay."
-      );
-      return;
-    }
+  function releasePay() {
+    payStartedRef.current = false;
+    setPending(false);
+  }
+
+  async function submitPayment(stateName: string | null) {
+    if (!item || payStartedRef.current) return;
+    payStartedRef.current = true;
     setPending(true);
     setError(null);
     try {
-      const res = await fetchAuthed("/api/checkout/pay", { method: "POST" });
+      const res = await fetchAuthed("/api/checkout/pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...readStoredUtm(),
+          ...(stateName ? { stateName } : {}),
+        }),
+      });
       const data = (await res.json()) as {
         ok: boolean;
         error?: string;
@@ -248,7 +254,7 @@ export function CheckoutPageClient({
           };
           if (!verifyRes.ok || !verifyData.ok) {
             setError(verifyData.error || "Payment verification failed");
-            setPending(false);
+            releasePay();
             return;
           }
           router.push("/account/checkout/success");
@@ -256,16 +262,55 @@ export function CheckoutPageClient({
         },
         modal: {
           ondismiss: () => {
-            setPending(false);
             setError("Payment cancelled");
+            releasePay();
           },
         },
       });
       rzp.open();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed");
-      setPending(false);
+      releasePay();
     }
+  }
+
+  async function handlePay(options?: {
+    skipMobileCheck?: boolean;
+    stateName?: string | null;
+  }) {
+    if (!item) return;
+    if (authUser && !options?.skipMobileCheck && !userHasMobile(authUser)) {
+      setResumePayAfterMobile(true);
+      setMobileDialogOpen(true);
+      setError("Please add your mobile number before continuing to pay.");
+      return;
+    }
+
+    if (options?.stateName !== undefined) {
+      await submitPayment(options.stateName);
+      return;
+    }
+
+    setPending(true);
+    setError(null);
+    const resolution = await resolveCheckoutState();
+    if (resolution.status !== "resolved") {
+      setPending(false);
+      setLocationPermissionDenied(resolution.status === "permission_denied");
+      setLocationDialogOpen(true);
+      return;
+    }
+    await submitPayment(resolution.stateName);
+  }
+
+  async function retryCheckoutLocation() {
+    const resolution = await resolveCheckoutState();
+    setLocationPermissionDenied(resolution.status === "permission_denied");
+    if (resolution.status === "resolved") {
+      setLocationDialogOpen(false);
+      await submitPayment(resolution.stateName);
+    }
+    return resolution;
   }
 
   if (!item) {
@@ -287,23 +332,22 @@ export function CheckoutPageClient({
     );
   }
 
-  const stateDialog = (
+  const profileDialog = (
     <UpdateStateDialog
-      open={stateDialogOpen}
-      required={resumePayAfterState}
-      fields={missingAccountProfileFields(authUser)}
-      initialStateId={authUser?.stateId}
+      open={mobileDialogOpen}
+      required={resumePayAfterMobile}
+      fields={["mobile"]}
       initialMobile={authUser?.mobile}
       onClose={() => {
-        setStateDialogOpen(false);
-        setResumePayAfterState(false);
+        setMobileDialogOpen(false);
+        setResumePayAfterMobile(false);
       }}
       onUpdated={() => {
-        setStateDialogOpen(false);
+        setMobileDialogOpen(false);
         setError(null);
-        if (resumePayAfterState) {
-          setResumePayAfterState(false);
-          void handlePay({ skipStateCheck: true });
+        if (resumePayAfterMobile) {
+          setResumePayAfterMobile(false);
+          void handlePay({ skipMobileCheck: true });
         }
       }}
     />
@@ -425,7 +469,20 @@ export function CheckoutPageClient({
         </div>
       </aside>
     </div>
-    {stateDialog}
+    {profileDialog}
+    <CheckoutLocationDialog
+      open={locationDialogOpen}
+      permissionDenied={locationPermissionDenied}
+      onUseCurrentLocation={retryCheckoutLocation}
+      onConfirm={(stateName) => {
+        setLocationDialogOpen(false);
+        void handlePay({ skipMobileCheck: true, stateName });
+      }}
+      onSkip={() => {
+        setLocationDialogOpen(false);
+        void handlePay({ skipMobileCheck: true, stateName: null });
+      }}
+    />
     {celebration ? (
       <CouponAppliedOverlay
         code={celebration.code}

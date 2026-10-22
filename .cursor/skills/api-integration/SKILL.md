@@ -110,7 +110,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | auth | `POST api/auth/user/forgot-password` | `/api/auth/forgot-password` (`email`, `is_web: true`) |
 | auth | `POST api/auth/user/reset-password` | `/api/auth/reset-password` (`email`, `token`, `newPassword`, `is_web: true`) |
 | auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state` |
-| auth | `PATCH api/auth/me/state` | `/api/account/state` — update state + refresh user cookie/atom |
+| auth | `PATCH api/auth/me/details` | `/api/account/state` — send only a real `stateId` and/or `mobile`; omitted/empty keys stay unchanged; response is the updated student profile |
 | states | `GET api/website/states/dropdown` | `/api/states/dropdown` — registration + Update State dialog |
 | packages | `GET api/website/packages` | `/courses`, account buy tab; filters `search`, `categoryId`, `graphyCategory` (UI Type), `subCategory1`, `facultyId`, `subjectId`, `sortBy`, `sortOrder` (skip tag/language — no masters) |
 | packages | `GET api/website/packages/:slug` | `/courses/[slug]` — map faculty (`fullName`/`profileImageUrl`), testimonials, curriculum; hide empty sections; no Plans UI; discount % from `price`/`discountedPrice` |
@@ -119,7 +119,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/dashboard` | Account dashboard |
 | student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
-| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout` |
+| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
 | student | `GET api/website/student/orders` | My Orders |
 | student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
 | graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |
