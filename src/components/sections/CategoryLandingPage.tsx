@@ -184,6 +184,14 @@ export function CategoryLandingPage({
               </InfiniteMarquee>
             </div>
           )}
+          <div className="mt-8 flex justify-center md:mt-10">
+            <Link
+              href={`/results?category=${category.slug}`}
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline inline-flex"
+            >
+              View All Results
+            </Link>
+          </div>
         </Container>
       </section>}
 
@@ -375,6 +383,14 @@ export function CategoryLandingPage({
               )}
             </div>
           </RevealGroup>
+          <div className="mt-8 flex justify-center md:mt-10">
+            <Link
+              href={`/testimonials?category=${category.slug}`}
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline inline-flex"
+            >
+              View All Testimonials
+            </Link>
+          </div>
         </Container>
       </section>
       )}
@@ -392,6 +408,7 @@ export function CategoryLandingPage({
         stories={category.stories}
         subtitle={category.sectionCopy.storiesSubtitle}
         className={sectionSurface(category.sectionThemes.stories)}
+        viewAllHref={`/success-stories?category=${category.slug}`}
       />
 
       <HomeAppPromotionSection />

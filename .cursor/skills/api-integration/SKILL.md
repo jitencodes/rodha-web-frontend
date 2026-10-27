@@ -129,7 +129,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | testimonials | `GET api/website/testimonials` | `/testimonials` |
 | student-results | `GET api/website/student-results` | `/results` |
 | resources | `GET api/website/resources` | `/resources` (`general=true` for the general category) |
-| promotional-popup | `GET api/website/promotional-popup` | Site promo dialog; hidden when empty |
+| promotional-banner | `GET api/website/promotional-banner` | Site promo dialog (date window; IMAGE/VIDEO + link); hidden when empty |
 | recent-purchases | `GET api/website/recent-purchases` | Bottom-left purchase toast; hidden when empty |
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.

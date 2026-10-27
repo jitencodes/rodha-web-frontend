@@ -19,7 +19,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Breadcrumb | `Breadcrumb.tsx` |
 | Button | `Button.tsx` |
 | Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
-| ClampTooltip | `ClampTooltip.tsx` (line-clamp + viewport-aware full-text tooltip when truncated) |
+| ClampTooltip | `ClampTooltip.tsx` (line-clamp + flips above/below on viewport space; portal tip) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
 | DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`; menu portaled to `document.body`) |
@@ -48,7 +48,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources by vertical) |
 | MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
 | PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
-| PromoDialog | `PromoDialog.tsx` (once per 24h; image or YouTube; lead form when logged out) |
+| PromoDialog | `PromoDialog.tsx` (once per 24h; `promotional-banner` API; IMAGE→link; VIDEO thumbnail→autoplay 1.5s; lead form when logged out) |
 | PurchaseToast | `PurchaseToast.tsx` (bottom-left recent purchase; auto-close; 24h after manual close) |
 | GlobalSearchDialog | `GlobalSearchDialog.tsx` (Ctrl/Cmd+K; quick links; entity-type filters) |
 | SiteFrame | `SiteFrame.tsx` (public `(website)` layout only; hides marketing chrome on `/login` and `/signup`) |
@@ -60,7 +60,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | CategoryHeroSection | `CategoryHeroSection.tsx` |
 | CategoryLandingPage | `CategoryLandingPage.tsx` (CMS category page + JSON copy/themes; faculty from same payload as testimonials/FAQs; stories via `SuccessStoriesSection`) |
-| SuccessStoriesSection | `SuccessStoriesSection.tsx` (“Watch how they Did it.” marquee + `YoutubeStoryCard`; hide when empty) |
+| SuccessStoriesSection | `SuccessStoriesSection.tsx` (“Watch how they Did it.” marquee + `YoutubeStoryCard`; optional `viewAllHref`; hide when empty) |
+| HtmlSitemapPage | `HtmlSitemapPage.tsx` (section-wise public sitemap links) |
 | ListingHeroSection | `listing/ListingHeroSection.tsx` (dark listing hero: breadcrumb, eyebrow, title/accent, subtitle, right-side art) |
 | CategoryCoursesSlider | `CategoryCoursesSlider.tsx` (client island: data-driven courseType chips — hide bar when ≤1 type; existing course carousel) |
 | LovedTeamSection | `LovedTeamSection.tsx` (full-width image-only carousel; autoplay 3s; team CTA assets) |
@@ -278,8 +279,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | submit-lead | `submit-lead.ts` | Client helper → `POST /api/leads` |
 | faculty-icons | `faculty-icons.tsx` | `FacultyIcon` — maps JSON icon keys to `react-icons` glyphs |
 | initials | `initials.ts` | `getInitials(name)` for avatar fallbacks |
-| structured-data | `structured-data.ts` | Server-rendered JSON-LD helpers (Organization, WebSite, Breadcrumb, FAQ, Person, BlogPosting) |
-| seo | `seo.ts` | `buildPageMetadata` + `DEFAULT_OG_IMAGE` for canonical/OG/Twitter across marketing pages |
+| structured-data | `structured-data.ts` | Server-rendered JSON-LD helpers (Organization, WebSite, Breadcrumb, FAQ, Person, BlogPosting, Course, WebPage, CollectionPage) |
+| seo | `seo.ts` | `buildPageMetadata` (+ optional `noIndex`) + `DEFAULT_OG_IMAGE` for canonical/OG/Twitter |
+| sitemap-entries | `seo/sitemap-entries.ts` | Modular XML sitemap builders + HTML sitemap groups |
 | types | `types.ts` | Shared domain types |
 | utils | `utils.ts` | `cn()` helper |
 

@@ -13,7 +13,7 @@ import { getStudentResults } from "@/lib/api/modules/student-results/service";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { listingPaginationQuery, readListingQuery } from "@/lib/content-listings";
 import { buildPageMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Student Results — Rodha",
@@ -59,6 +59,23 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
               { label: "Home", href: "/" },
               { label: "Results" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Student Results — Rodha",
+              description:
+                "Browse Rodha student results across CAT, IPMAT, and other exams.",
+              url: "/results",
+              items: pageItems.map((item) => ({
+                name: item.name,
+                url: `/results?resultId=${item.id}`,
+              })),
+            })
           ),
         }}
       />

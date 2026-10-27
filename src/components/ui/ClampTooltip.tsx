@@ -26,9 +26,16 @@ const LINE_CLAMP: Record<ClampTooltipProps["lines"], string> = {
   5: "line-clamp-5",
 };
 
+const GAP = 8;
+/** Fallback tip height before the portal tip has been measured. */
+const ESTIMATED_TIP_HEIGHT = 80;
+
+type Placement = "above" | "below";
+
 /**
  * Truncates text with line-clamp and shows a viewport-aware custom tooltip
  * with the full copy when truncated (hover on pointer devices, tap on touch).
+ * Flips above/below based on available scroll/viewport space.
  * Renders the tooltip in a portal so card `overflow-hidden` cannot clip it.
  */
 export function ClampTooltip({
@@ -39,11 +46,15 @@ export function ClampTooltip({
 }: ClampTooltipProps) {
   const tipId = useId();
   const textRef = useRef<HTMLParagraphElement>(null);
+  const tipRef = useRef<HTMLSpanElement>(null);
   const [truncated, setTruncated] = useState(false);
   const [open, setOpen] = useState(false);
-  const [coords, setCoords] = useState<{ top: number; left: number; width: number } | null>(
-    null
-  );
+  const [coords, setCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    placement: Placement;
+  } | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -65,16 +76,47 @@ export function ClampTooltip({
     if (left + maxWidth > window.innerWidth - 16) {
       left = Math.max(16, window.innerWidth - 16 - maxWidth);
     }
-    setCoords({
-      top: rect.top,
-      left,
-      width: Math.min(Math.max(rect.width, 12 * 16), maxWidth),
-    });
+    const width = Math.min(Math.max(rect.width, 12 * 16), maxWidth);
+
+    const tipHeight =
+      tipRef.current?.offsetHeight && tipRef.current.offsetHeight > 0
+        ? tipRef.current.offsetHeight
+        : ESTIMATED_TIP_HEIGHT;
+    const spaceAbove = rect.top;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const need = tipHeight + GAP;
+
+    let placement: Placement;
+    if (spaceAbove >= need) {
+      placement = "above";
+    } else if (spaceBelow >= need) {
+      placement = "below";
+    } else {
+      placement = spaceAbove >= spaceBelow ? "above" : "below";
+    }
+
+    // For "above", `top` is the bottom edge of the tip (with translateY(-100%)).
+    // For "below", `top` is the top edge of the tip.
+    let top = placement === "above" ? rect.top - GAP : rect.bottom + GAP;
+
+    if (placement === "below" && top + tipHeight > window.innerHeight - 8) {
+      top = Math.max(8, window.innerHeight - 8 - tipHeight);
+    }
+    if (placement === "above" && top - tipHeight < 8) {
+      top = Math.min(window.innerHeight - 8, tipHeight + 8);
+    }
+
+    setCoords({ top, left, width, placement });
   }, []);
 
   useLayoutEffect(() => {
     measure();
   }, [measure, text, lines]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    updateCoords();
+  }, [open, updateCoords, text]);
 
   useEffect(() => {
     const el = textRef.current;
@@ -116,6 +158,7 @@ export function ClampTooltip({
     mounted && truncated && open && coords
       ? createPortal(
           <span
+            ref={tipRef}
             id={tipId}
             role="tooltip"
             style={{
@@ -123,7 +166,10 @@ export function ClampTooltip({
               top: coords.top,
               left: coords.left,
               width: coords.width,
-              transform: "translateY(calc(-100% - 8px))",
+              transform:
+                coords.placement === "above"
+                  ? "translateY(-100%)"
+                  : undefined,
             }}
             className={cn(
               "z-80 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-left text-[13px] leading-snug font-medium text-neutral-700 shadow-lg",

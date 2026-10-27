@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-26 (registration gate polling)
+**Last updated:** 2026-10-27 (SEO sitemap promo tooltip)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **SEO, sitemap, promo banner, tooltip, View All (2026-10-27):** `ClampTooltip` flips above/below on viewport space. Category landing View All → `/results|testimonials|success-stories?category={slug}`. HTML `/sitemap` + modular XML via `generateSitemaps` (static/categories/courses/faculty/blogs) + `robots.ts` (disallow account/api/auth). Promo dialog uses `GET api/website/promotional-banner` (date window; IMAGE link; VIDEO thumbnail → autoplay 1.5s, click opens YouTube). SEO gaps: team/legal JSON-LD, dynamic category keywords, CollectionPage on listings, noindex auth/account. Branch `fix/seo-sitemap-promo-tooltip`.
 - **Registration gate polling (2026-10-26):** Site-wide `RegistrationGateProvider` polls dashboard registration status every 2 min. Shows registration dialog when `required`; 1-hour dismiss reminder; overdue is mandatory on `/account/*` with deadline/overdue header + toast on dismiss. Soft-block `REGISTRATION_REQUIRED` (201) handled in BFF + dashboard SSR.
 - **GTM purchase dataLayer (2026-10-26):** After successful Razorpay verify or free checkout, success page pushes `event: "purchase"` with `ecommerce.transaction_id` / `value` / `currency: "INR"` from the order (once per transaction). Meta Pixel Purchase uses the same amounts.
 - **Student registration + profile detail (2026-10-26):** Replaced Complete/Edit Profile with Postman registration APIs. Masters and gate from `GET api/website/student/registration`; one-time multipart submit via BFF `POST /api/account/registration`. 3-step dialog (sheet A–F / G–J / K–N) auto-opens when not submitted. Submitted students get View Profile → `/account/profile/detail` (hero + personal/contact/address + Academics / Work / Books & others tabs) from expanded `GET api/website/student/profile`. Account form primitives: MultiSelect, RadioGroup, Checkbox, DateField, FileUpload.
@@ -201,13 +202,14 @@ Update this file after every meaningful implementation task.
 - [x] Dynamic category landings `/category/[category_slug]`
 - [x] Login `/login` + Signup `/signup`
 - [x] Student account pages (`/account/*`) — dashboard, courses, test-series, cart, orders, profile, settings
-- [ ] Promo popup
+- [x] Promo dialog (`api/website/promotional-banner`)
 
 ### Integrations
 - [x] Homepage + layout CMS APIs (announcements, categories, Get Home) — SSR-first
 - [x] Category page + faculty + about + team + legal + contact POST (SSR-first; category faculty in the same payload as testimonials/stories/FAQs; `courseType` on category/faculty courses)
 - [ ] FAQ listing API, blogs
-- [ ] Final external URLs, sitemap
+- [x] Modular sitemap.xml + robots.txt + HTML `/sitemap`
+- [ ] Final external URLs
 
 ---
 

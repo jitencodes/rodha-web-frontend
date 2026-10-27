@@ -32,7 +32,7 @@ import {
   packageViewCourseHref,
 } from "@/lib/packages/buy-now";
 import { buildPageMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -176,6 +176,23 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               { label: "Home", href: "/" },
               { label: "Courses" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Courses — Rodha",
+              description:
+                "Browse Rodha courses across CAT, IPMAT, CLAT, SSC, and Skill House.",
+              url: "/courses",
+              items: items.map((item) => ({
+                name: item.title,
+                url: item.href || `/courses/${item.slug}`,
+              })),
+            })
           ),
         }}
       />

@@ -8,7 +8,7 @@ import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -99,6 +99,23 @@ export default async function BlogPage({
               { label: "Home", href: "/" },
               { label: "Blogs" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Blog — Rodha",
+              description:
+                "CAT, IPMAT, and SSC preparation guides from Rodha.",
+              url: "/blog",
+              items: pageItems.map((post) => ({
+                name: post.title,
+                url: `/blog/${post.slug}`,
+              })),
+            })
           ),
         }}
       />
