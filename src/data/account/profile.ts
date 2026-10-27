@@ -15,6 +15,8 @@ export const ACCOUNT_PROFILE_PAGE_COPY = {
   title: "My Profile",
   subtitle: "Manage your personal information and account security.",
   editLabel: "Edit Profile",
+  viewProfileLabel: "View Profile",
+  completeRegistrationLabel: "Complete registration",
   updateNameTitle: "Update Name",
   changePasswordTitle: "Change Password",
   successName: "Your name has been updated.",

@@ -24,24 +24,53 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID ?? "",
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
   },
-  images: {
-    // This network resolves S3 to NAT64 (64:ff9b::/96). Next blocks those
-    // as private IPs and returns 400 for every CMS image on localhost.
-    // Hostnames stay limited to the remotePatterns below.
-    dangerouslyAllowLocalIP: true,
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "img.youtube.com",
-        pathname: "/vi/**",
-      },
-      {
-        protocol: "https",
-        hostname: "*.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
-    ],
-  },
+images: {
+  // Keep only if your existing S3/NAT64 setup requires it.
+  dangerouslyAllowLocalIP: true,
+
+  remotePatterns: [
+    // YouTube thumbnails
+    {
+      protocol: "https",
+      hostname: "img.youtube.com",
+      pathname: "/vi/**",
+    },
+
+    // AWS S3 — ap-south-1
+    {
+      protocol: "https",
+      hostname: "*.s3.ap-south-1.amazonaws.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "placehold.co",
+      pathname: "/**",
+    },
+
+    // Google account/profile images
+    {
+      protocol: "https",
+      hostname: "lh3.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh4.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh5.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh6.googleusercontent.com",
+      pathname: "/**",
+    },
+  ],
+},
   async redirects() {
     const homeRedirects =
       defaultHomePath === "/"

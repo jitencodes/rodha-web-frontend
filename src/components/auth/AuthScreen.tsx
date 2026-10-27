@@ -67,6 +67,29 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const isSignup = mode === "signup";
 
   useEffect(() => {
+    // #region agent log
+    fetch("http://127.0.0.1:7331/ingest/539f300b-4ba6-49bb-83d3-9fd84c4ec31d", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Debug-Session-Id": "227c1e",
+      },
+      body: JSON.stringify({
+        sessionId: "227c1e",
+        runId: "pre-fix",
+        hypothesisId: "C",
+        location: "AuthScreen.tsx:session-reason-effect",
+        message: "AuthScreen mount/reason effect",
+        data: {
+          reason: searchParams.get("reason"),
+          next: searchParams.get("next"),
+          href:
+            typeof window !== "undefined" ? window.location.href : null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     if (searchParams.get("reason") === SESSION_EXPIRED_QUERY) {
       toast.error("Session expired", {
         description: "Please log in again to continue.",

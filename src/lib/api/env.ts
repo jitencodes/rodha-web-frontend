@@ -4,6 +4,8 @@
  */
 
 const DEFAULT_ANNOUNCEMENT_INTERVAL_MS = 8000;
+const DEFAULT_PROMO_DIALOG_DELAY_MS = 2500;
+const DEFAULT_PURCHASE_TOAST_MS = 10000;
 const DEFAULT_REVALIDATE_SECONDS = 60;
 
 export function getApiBaseUrl(): string | null {
@@ -23,12 +25,31 @@ export function getApiKey(): string | null {
 }
 
 export function getAnnouncementIntervalMs(): number {
-  const raw = process.env.NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS?.trim();
-  if (!raw) return DEFAULT_ANNOUNCEMENT_INTERVAL_MS;
-  const parsed = Number.parseInt(raw, 10);
-  return Number.isFinite(parsed) && parsed > 0
-    ? parsed
-    : DEFAULT_ANNOUNCEMENT_INTERVAL_MS;
+  return readPositiveInt(
+    process.env.NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS,
+    DEFAULT_ANNOUNCEMENT_INTERVAL_MS
+  );
+}
+
+export function getPromoDialogDelayMs(): number {
+  return readPositiveInt(
+    process.env.NEXT_PUBLIC_PROMO_DIALOG_DELAY_MS,
+    DEFAULT_PROMO_DIALOG_DELAY_MS
+  );
+}
+
+export function getPurchaseToastMs(): number {
+  return readPositiveInt(
+    process.env.NEXT_PUBLIC_PURCHASE_TOAST_MS,
+    DEFAULT_PURCHASE_TOAST_MS
+  );
+}
+
+function readPositiveInt(raw: string | undefined, fallback: number): number {
+  const trimmed = raw?.trim();
+  if (!trimmed) return fallback;
+  const parsed = Number.parseInt(trimmed, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 export function getApiRevalidateSeconds(): number {

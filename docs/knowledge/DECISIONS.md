@@ -14,11 +14,54 @@ Format:
 
 ---
 
+### 2026-10-26 — Site-wide registration gate via dashboard polling
+- **Decision:** Logged-in students poll `GET /api/account/dashboard-status` every 2 minutes. Status comes from dashboard `data.registration` (`completed` / `required` / `overdue` / `deadlineAt`). Soft-block `REGISTRATION_REQUIRED` (HTTP 201 + `success: false`) maps to overdue+required. Dismissible dialog when required (re-prompt every 1 hour via `REGISTRATION_REMINDER_INTERVAL_MS` + localStorage). On `/account/*` when overdue, dialog is mandatory (no close). Public pages keep dismissible close when overdue. Single `RegistrationGateProvider` + `RegistrationDialog`; profile CTA dispatches `rodha:open-registration`.
+- **Rationale:** Product needs frequent reminders before deadline and a hard block after soft-block without inventing a separate status API.
+- **Alternatives considered:** Only gating `/account/profile`; middleware soft-block for all routes.
+- **Consequences:** Constants live in `src/lib/constants.ts`. Dashboard SSR treats soft-block as empty lists so the page still renders under the mandatory dialog.
+
+### 2026-10-26 — GTM purchase dataLayer after payment verify
+- **Decision:** After Razorpay verify (or free checkout) succeeds, stash `{ transaction_id, value, currency }` in `sessionStorage`, redirect to `/account/checkout/success`, then push `event: "purchase"` with `ecommerce` to `window.dataLayer` once per `transaction_id`. Values come from checkout/verify (`orderNumber`, `payableAmount`, `currency` default `INR`). Meta Pixel Purchase uses the same payload.
+- **Rationale:** Marketing needs dynamic transaction id / amount / INR only after confirmed payment to avoid duplicate or unpaid conversions.
+- **Alternatives considered:** Firing from Razorpay handler before verify; query-string params on the success URL.
+- **Consequences:** Refreshing success does not re-fire. GTM must listen for the `purchase` event; container still loads only when `NEXT_PUBLIC_GTM_ID` is set (dataLayer push still runs).
+
+### 2026-10-26 — Student registration form + read-only profile detail
+- **Decision:** Replace Complete/Edit Profile with the Postman student registration flow. `GET`/`POST api/website/student/registration` (multipart + passport photo) via BFF `/api/account/registration`. Masters come from the GET payload (not hardcoded). Keep a 3-step dialog grouped as sheet sections A–F / G–J / K–N; auto-open when not submitted. After submit, students cannot edit — **View Profile** opens `/account/profile/detail` (read-only from `GET api/website/student/profile`). Mobile/state pencils still use `PATCH api/auth/me/details`.
+- **Rationale:** Registration collection is the real contract; one-time submit matches product (course unlock). Sheet defines labels, types, conditionals, and validation.
+- **Alternatives considered:** Keep `PATCH api/auth/me/details` nested JSON; dedicated multi-page registration route; student-facing update after submit (not in Postman).
+- **Consequences:** Soft-block redirects across all student APIs remain out of scope for this change. Admin registration upsert is CMS-only.
+
+### 2026-10-23 — Complete profile UI ahead of expanded API
+- **Decision:** Ship a 3-step Complete/Edit Profile dialog and Request email update UI on `/account/profile`. Dropdown masters live in `src/data/account/profile-options.ts` (verified batch/course lists; degree presets with Other → manual). Submit the full form JSON through `PATCH /api/account/profile` → existing `PATCH api/auth/me/details`. Email update uses stub `POST /api/account/email-update-request` → placeholder `api/auth/me/email-update-request`.
+- **Rationale:** Product needs the form and validation now; backend field contracts for the expanded profile and email-change request are still pending.
+- **Alternatives considered:** Blocking the UI until APIs ship; inventing a second profile PATCH path without a Postman contract.
+- **Consequences:** Superseded for registration fields by 2026-10-26 decision (registration APIs + read-only detail). Email-update stub and mobile/state details PATCH remain.
+
 ### 2026-10-19 — Checkout state is order attribution, not a profile update
-- **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`). The browser resolves it from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
+- **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`), and still sends `channel: "WEB"` / `x-channel: WEB`. The browser resolves state from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
 - **Rationale:** The order needs the buyer's current state and campaign params. That state is not the saved profile state.
 - **Alternatives considered:** Reuse the blocking Update State dialog and send `stateId` (rejected — it writes the profile and stops checkout). Send only the profile state (rejected — checkout must use the current location).
 - **Consequences:** Account gates can still require a saved mobile number and profile state. Checkout asks for mobile only, then resolves `stateName` for the checkout payload.
+
+### 2026-10-15 — Search dialog, promo popup, and listing APIs
+- **Decision:** Marketing and account search share one dialog. Queries go through `GET /api/search`, which calls `GET api/website/search` with `scope=website` or `scope=account`. Entity filters include modules the index does not register yet; a 400 for an unknown type shows an empty filter state. The promo dialog and purchase toast soft-fail when their endpoints are empty. Showing the promo, or closing it, suppresses it for 24 hours. Only a manual toast close suppresses the toast for 24 hours. Checkout adds `channel: "WEB"` and `x-channel: WEB` beside UTM fields. Contact submits `examYear` as its own field.
+- **Rationale:** Search needs a server proxy so `API_KEY` stays off the client, and the dialog has to work before the index covers every public module. The popup and purchase feed are not in Postman yet, so the UI hides them instead of inventing content.
+- **Alternatives considered:** Calling the search API from the browser; keeping static listing rows as a fallback.
+- **Consequences:** Backend contract is in `docs/api-requirements-website-ui.md`. Listing pages no longer read `category-landings.json` or `src/data/resources.ts`.
+
+### 2026-10-14 — Static listing pages until APIs exist
+- **Decision:** `/results`, `/testimonials`, and `/success-stories` read flattened `category-landings.json` (parent slug for the category filter). `/resources` reads `src/data/resources.ts`. Page size is two full rows at the widest breakpoint: 10 results (204px cards), 6 testimonials, 6 stories (300px cards), and 8 resources (4-column grid). `BlogHeroSection` and `BlogToolbar` take optional copy and `basePath` so the blog page stays the default.
+- **Rationale:** Listing APIs are not available yet. Existing cards stay fixed-width, so a page size that is not a multiple of the row leaves a short last row on a full page.
+- **Alternatives considered:** One item row per page; copying the blog hero instead of parameterizing it.
+- **Consequences:** Swap the flatten helpers for module services when the APIs land. Category pills still come from `categoriesAtom`, so a CMS slug that does not match a landing slug returns an empty list.
+
+### 2026-10-13 — GPS state, Indian mobile, GTM, and checkout UTM
+- **Decision:** Detected GPS location lives in `detectedLocationAtom` and only prefills `UpdateStateDialog` when the saved state is empty. Reverse geocoding uses `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`; an empty key hides the current-location control and skips the permission prompt. Signup and account mobile updates use `validateIndianMobile` (`Please enter valid indian number`). GTM loads from `NEXT_PUBLIC_GTM_ID` beside the existing Meta Pixel. Any `utm_*` query param is stored in the `rodha_utm` cookie and forwarded as the checkout POST body, with no other fields added.
+- **Rationale:** Saved profile state must not change until the user confirms. The checkout API previously sent `{}`; captured attribution is attached only for keys that were present.
+- **Alternatives considered:** Writing GPS into `userAtom` before save; a shared phone rule for contact forms; inventing non-`utm_*` order fields.
+- **Consequences:** Contact and lead forms still use `validatePhone`. Checkout fails closed to `{}` when the cookie is missing or invalid.
+
 
 ### 2026-10-10 — Dashboard Buy links stay plain anchors
 - **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.

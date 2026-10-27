@@ -14,6 +14,7 @@ export function mapContactRequest(input: {
   email?: string;
   websiteCategoryId?: number;
   message?: string;
+  examYear?: string;
 }): ContactSubmitRequest {
   let phone = input.phone.trim();
   let countryCode = "+91";
@@ -39,6 +40,7 @@ export function mapContactRequest(input: {
     payload.websiteCategoryId = input.websiteCategoryId;
   }
   if (input.message?.trim()) payload.message = input.message.trim();
+  if (input.examYear?.trim()) payload.examYear = input.examYear.trim();
 
   return payload;
 }

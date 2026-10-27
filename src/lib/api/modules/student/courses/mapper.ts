@@ -21,7 +21,7 @@ const SUPPORTED_CONTENT_TYPES = new Set([
 
 /** UI model for todayContents / productContents live class cards. */
 export type AccountLiveContentItem = {
-  id: string;
+  id: string | number;
   title: string;
   type: string;
   contentType?: string;
@@ -208,7 +208,6 @@ export function mapLiveContentItem(
   const id =
     item.id != null ? String(item.id) : asString(item.graphyItemId);
   if (!title || !id) return null;
-
   const startTime = asString(item.startTime) || undefined;
   const endTime = asString(item.endTime) || undefined;
   const startLabel = formatDateTimeLabel(startTime);

@@ -20,11 +20,13 @@ export interface ApiGetOptions {
 export interface ApiMutateOptions {
   signal?: AbortSignal;
   accessToken?: string;
+  headers?: Record<string, string>;
 }
 
 function buildHeaders(options: {
   accessToken?: string;
   json?: boolean;
+  extra?: Record<string, string>;
 }): HeadersInit {
   const headers: Record<string, string> = {
     Accept: "application/json",
@@ -39,6 +41,9 @@ function buildHeaders(options: {
   }
   if (options.accessToken) {
     headers.Authorization = `Bearer ${options.accessToken}`;
+  }
+  if (options.extra) {
+    Object.assign(headers, options.extra);
   }
   return headers;
 }
@@ -140,6 +145,7 @@ export async function apiPost<TResponse, TBody>(
     headers: buildHeaders({
       accessToken: options.accessToken,
       json: true,
+      extra: options.headers,
     }),
     body: JSON.stringify(body),
     signal: options.signal,
@@ -170,6 +176,7 @@ export async function apiPatch<TResponse, TBody>(
     headers: buildHeaders({
       accessToken: options.accessToken,
       json: true,
+      extra: options.headers,
     }),
     body: JSON.stringify(body),
     signal: options.signal,
@@ -224,6 +231,34 @@ export async function apiGetOrNull<T>(
   try {
     return await apiGet<T>(path, options);
   } catch (error) {
+    // #region agent log
+    {
+      const status =
+        error instanceof ApiError ? error.status : undefined;
+      fetch("http://127.0.0.1:7331/ingest/539f300b-4ba6-49bb-83d3-9fd84c4ec31d", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Debug-Session-Id": "227c1e",
+        },
+        body: JSON.stringify({
+          sessionId: "227c1e",
+          runId: "pre-fix",
+          hypothesisId: "A",
+          location: "client.ts:apiGetOrNull:catch",
+          message: "apiGetOrNull soft-fail",
+          data: {
+            path,
+            status,
+            isApiError: error instanceof ApiError,
+            errorMessage:
+              error instanceof Error ? error.message : String(error),
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+    }
+    // #endregion
     if (process.env.NODE_ENV === "development") {
       console.warn(`[apiGetOrNull] ${path}`, error);
     }
