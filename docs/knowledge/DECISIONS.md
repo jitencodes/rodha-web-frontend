@@ -14,6 +14,18 @@ Format:
 
 ---
 
+### 2026-10-28 — Registration selects via react-select + Class 12 rules
+- **Decision:** Account form single/multi selects use `react-select` (searchable) with a shared orange account theme (`accountReactSelectStyles`). Menus portal to `document.body` at z-index 1100. Class 12 Appearing is only for school/unknown status; UG/graduate force Passed. Appearing skips mandatory graduation / PG / work (UI + validation + submit payload).
+- **Rationale:** Long exam/college/board lists need search; product rules forbid Appearing once the student is UG/graduate.
+- **Alternatives considered:** Custom searchable DropdownSelect; keeping Appearing visible but disabled.
+- **Consequences:** Filter toolbars still use `DropdownSelect`. New dep: `react-select`.
+
+### 2026-10-27 — Registration dialog: manual vs auto open
+- **Decision:** Manual open keys off `completed` only (open when not completed; toast “already complete” only when `completed === true`). Auto-pop still requires dashboard `registration.required` (plus overdue-on-account / 1-hour dismiss reminder). Poll/`evaluateOpen` no longer treats `!required` as completed, so a missing registration object cannot close a manually opened dialog.
+- **Rationale:** Backend may omit `registration` until deploy; pending students were wrongly told registration was complete when `required` defaulted to false.
+- **Alternatives considered:** Treating missing registration as required for auto-pop (rejected — would false-prompt guests without enrollment).
+- **Consequences:** Profile “Complete registration” works without the status object; auto reminders resume when API returns `required: true`.
+
 ### 2026-10-26 — Site-wide registration gate via dashboard polling
 - **Decision:** Logged-in students poll `GET /api/account/dashboard-status` every 2 minutes. Status comes from dashboard `data.registration` (`completed` / `required` / `overdue` / `deadlineAt`). Soft-block `REGISTRATION_REQUIRED` (HTTP 201 + `success: false`) maps to overdue+required. Dismissible dialog when required (re-prompt every 1 hour via `REGISTRATION_REMINDER_INTERVAL_MS` + localStorage). On `/account/*` when overdue, dialog is mandatory (no close). Public pages keep dismissible close when overdue. Single `RegistrationGateProvider` + `RegistrationDialog`; profile CTA dispatches `rodha:open-registration`.
 - **Rationale:** Product needs frequent reminders before deadline and a hard block after soft-block without inventing a separate status API.

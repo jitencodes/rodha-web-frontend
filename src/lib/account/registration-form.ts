@@ -165,7 +165,13 @@ export function classifyCurrentStatus(
   const match = statuses.find((s) => s.id === id);
   const name = (match?.label || "").toLowerCase();
   if (name.includes("school")) return "school";
-  if (name.includes("college")) return "college";
+  if (
+    name.includes("college") ||
+    name.includes("undergrad") ||
+    /\bug\b/.test(name)
+  ) {
+    return "college";
+  }
   if (name.includes("working")) return "working";
   if (name.includes("graduate")) return "graduate";
   return "unknown";
@@ -179,6 +185,13 @@ export function needsHigherEducation(
 
 export function needsGradOrWorking(kind: RegistrationStatusKind): boolean {
   return kind === "graduate" || kind === "working";
+}
+
+/** UG / graduate (and working) cannot still be Appearing in Class 12. */
+export function class12AppearingAllowed(
+  kind: RegistrationStatusKind
+): boolean {
+  return kind === "school" || kind === "unknown";
 }
 
 export function calculateAge(dobIso: string, now = new Date()): number | null {
@@ -355,9 +368,11 @@ export function validateRegistrationStep(
   const kind = classifyCurrentStatus(values.currentStatusId, ctx.statuses);
   const age = calculateAge(values.dateOfBirth);
   const under18 = age !== null && age < 18;
+  const class12Appearing = values.class12Status === "APPEARING";
   const showLinkedIn = needsHigherEducation(kind);
-  const showGrad = needsHigherEducation(kind);
-  const showPgWork = needsGradOrWorking(kind);
+  // Class 12 Appearing → graduation / PG / work are not mandatory (and hidden in UI).
+  const showGrad = needsHigherEducation(kind) && !class12Appearing;
+  const showPgWork = needsGradOrWorking(kind) && !class12Appearing;
 
   if (step === 1) {
     const e = requiredSelect(values.targetVerticalId, "Target Vertical");
@@ -738,8 +753,9 @@ export function buildRegistrationFormData(
   const kind = classifyCurrentStatus(values.currentStatusId, ctx.statuses);
   const age = calculateAge(values.dateOfBirth);
   const under18 = age !== null && age < 18;
-  const showGrad = needsHigherEducation(kind);
-  const showPgWork = needsGradOrWorking(kind);
+  const class12Appearing = values.class12Status === "APPEARING";
+  const showGrad = needsHigherEducation(kind) && !class12Appearing;
+  const showPgWork = needsGradOrWorking(kind) && !class12Appearing;
 
   if (passportFile) {
     form.append("passportPhoto", passportFile, passportFile.name);

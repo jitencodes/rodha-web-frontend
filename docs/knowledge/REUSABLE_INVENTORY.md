@@ -210,7 +210,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
 | RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
 | ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
-| Account form controls | `forms/AccountTextField`, `AccountSelect`, `AccountMultiSelect`, `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell` |
+| Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
 | EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
 | CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |

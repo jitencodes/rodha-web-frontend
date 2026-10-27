@@ -7,5 +7,14 @@ export const accountInputClassName = cn(
   "disabled:cursor-not-allowed disabled:opacity-60"
 );
 
+/**
+ * Form-only override for DropdownSelect `variant="account"` triggers.
+ * Matches `accountInputClassName` height/type; do not use on filter toolbars.
+ */
+export const accountFormSelectTriggerClassName = cn(
+  "!h-auto rounded-[var(--account-radius)] px-3.5 py-2.5 text-body font-normal",
+  "hover:border-[var(--account-accent)]/60"
+);
+
 export const accountLabelClassName =
   "mb-1.5 block text-body-sm font-medium text-[var(--account-text-secondary)]";

@@ -316,7 +316,7 @@ export function AccountProfilePanel({
                 </span>
               )}
             </span>
-            <button
+            {/* <button
               type="button"
               onClick={() => setEmailUpdateOpen(true)}
               aria-label="Request email update"
@@ -324,7 +324,7 @@ export function AccountProfilePanel({
               className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
             >
               <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
-            </button>
+            </button> */}
           </div>
           <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">

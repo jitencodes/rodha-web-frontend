@@ -87,11 +87,26 @@ export function RegistrationGateProvider({
 
   const evaluateOpen = useCallback(
     (next: StudentRegistrationStatusViewModel, forceManual = false) => {
-      if (next.completed || !next.required) {
+      if (next.completed) {
         setDialogOpen(false);
         setMandatory(false);
         manualOpenRef.current = false;
         clearRegistrationDismissedAt();
+        return;
+      }
+
+      // Manual open (profile CTA): allow when not completed, even if API omits
+      // `required` / registration object (maps to required: false).
+      if (forceManual || manualOpenRef.current) {
+        setDialogOpen(true);
+        void loadForm(true);
+        return;
+      }
+
+      // Auto-prompt only when registration object says required.
+      if (!next.required) {
+        setDialogOpen(false);
+        setMandatory(false);
         return;
       }
 
@@ -102,12 +117,6 @@ export function RegistrationGateProvider({
         clearRegistrationDismissedAt();
         setDialogOpen(true);
         void loadForm(false);
-        return;
-      }
-
-      if (forceManual || manualOpenRef.current) {
-        setDialogOpen(true);
-        void loadForm(true);
         return;
       }
 
@@ -158,11 +167,11 @@ export function RegistrationGateProvider({
   useEffect(() => {
     if (!enabled) return;
     function onOpenRequest() {
-      manualOpenRef.current = true;
-      if (status && (status.completed || !status.required)) {
+      if (status?.completed) {
         toast.message("Registration is already complete.");
         return;
       }
+      manualOpenRef.current = true;
       setDialogOpen(true);
       void loadForm();
     }

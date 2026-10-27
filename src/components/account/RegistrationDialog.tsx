@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -30,6 +30,7 @@ import type { StudentRegistrationFormViewModel } from "@/lib/api/modules/student
 import {
   buildRegistrationFormData,
   calculateAge,
+  class12AppearingAllowed,
   classifyCurrentStatus,
   createEmptyRegistrationForm,
   needsGradOrWorking,
@@ -119,6 +120,7 @@ export function RegistrationDialog({
   const [errors, setErrors] = useState<RegistrationFieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [passportFile, setPassportFile] = useState<File | null>(null);
+  const bodyScrollRef = useRef<HTMLDivElement>(null);
 
   const targetYears = useMemo(() => profileTargetYearOptions(), []);
   const passingYears = useMemo(() => profilePassingYearOptions(), []);
@@ -129,9 +131,18 @@ export function RegistrationDialog({
     values.currentStatusId,
     statusOptions
   );
+  const allowClass12Appearing = class12AppearingAllowed(statusKind);
+  const class12Appearing = values.class12Status === "APPEARING";
+  const class12StatusOptions = useMemo(
+    () =>
+      allowClass12Appearing
+        ? PROFILE_CLASS12_STATUS_OPTIONS
+        : PROFILE_CLASS12_STATUS_OPTIONS.filter((o) => o.value !== "APPEARING"),
+    [allowClass12Appearing]
+  );
   const showLinkedIn = needsHigherEducation(statusKind);
-  const showGrad = needsHigherEducation(statusKind);
-  const showPgWork = needsGradOrWorking(statusKind);
+  const showGrad = needsHigherEducation(statusKind) && !class12Appearing;
+  const showPgWork = needsGradOrWorking(statusKind) && !class12Appearing;
   const age = calculateAge(values.dateOfBirth);
   const under18 = age !== null && age < 18;
 
@@ -213,6 +224,18 @@ export function RegistrationDialog({
       setValues((prev) => ({ ...prev, hasWorkExperience: "true" }));
     }
   }, [statusKind, values.hasWorkExperience]);
+
+  // UG / graduate: Class 12 Appearing is not allowed — default/force Passed.
+  useEffect(() => {
+    if (allowClass12Appearing) return;
+    if (values.class12Status === "PASSED") return;
+    setValues((prev) => ({ ...prev, class12Status: "PASSED" }));
+  }, [allowClass12Appearing, values.class12Status]);
+
+  // Scroll form body to top when changing steps.
+  useEffect(() => {
+    bodyScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
 
   function patch<K extends keyof RegistrationFormValues>(
     key: K,
@@ -413,7 +436,10 @@ export function RegistrationDialog({
           </nav>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+        <div
+          ref={bodyScrollRef}
+          className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6"
+        >
           <form
             id={formId}
             className="space-y-6"
@@ -820,7 +846,7 @@ export function RegistrationDialog({
                       required
                       value={values.class12Status}
                       onChange={(v) => patch("class12Status", v)}
-                      options={PROFILE_CLASS12_STATUS_OPTIONS}
+                      options={class12StatusOptions}
                       error={errors.class12Status}
                     />
                     {values.class12Status === "PASSED" ? (

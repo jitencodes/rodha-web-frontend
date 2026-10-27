@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, BookOpen, CalendarCheck, Mail, MapPin, Phone, Users } from "lucide-react";
 import type { StudentProfileViewModel } from "@/lib/api/modules/student/profile/types";
 import type { StudentRegistrationRecord } from "@/lib/api/modules/student/registration/types";
 import { getInitials } from "@/lib/initials";
@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 
 type ProfileDetailViewProps = {
   profile: StudentProfileViewModel;
-  courseEnrolledLabel?: string;
+  /** Individual enrolled course titles (not a comma-joined string). */
+  courseEnrolledLabels?: string[];
   batchEnrolledLabel?: string;
 };
 
@@ -267,13 +268,14 @@ function BooksOthersTab({
 
 export function ProfileDetailView({
   profile,
-  courseEnrolledLabel,
+  courseEnrolledLabels = [],
   batchEnrolledLabel,
 }: ProfileDetailViewProps) {
   const [tab, setTab] = useState<DetailTab>("academics");
   const reg = profile.registration;
   const fullName = profile.fullName || "Student";
   const avatar = profile.profilePicturePath || reg?.passportPhotoPath || "";
+  const enrolledCourses = courseEnrolledLabels.filter((title) => title.trim());
 
   if (!reg) {
     return (
@@ -302,74 +304,113 @@ export function ProfileDetailView({
       </Link>
 
       <section className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="relative size-20 shrink-0 overflow-hidden rounded-full bg-[var(--account-accent-soft)] sm:size-24">
-            {avatar ? (
-              <Image
-                src={avatar}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="96px"
-              />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center font-montserrat text-xl font-bold text-[var(--account-accent)]">
-                {getInitials(fullName)}
-              </span>
-            )}
-          </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+
+          {/* Student Information */}
           <div className="min-w-0 flex-1">
-            <h1 className="font-montserrat text-h3 font-bold text-[var(--account-text)]">
-              {fullName}
-            </h1>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-body-sm text-[var(--account-text-muted)]">
-              {profile.email ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <Mail className="size-3.5" />
-                  {profile.email}
-                </span>
-              ) : null}
-              {profile.mobile ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <Phone className="size-3.5" />
-                  {profile.mobile}
-                </span>
-              ) : null}
-              {reg.stateName ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="size-3.5" />
-                  {reg.stateName}
-                </span>
-              ) : null}
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              {/* Avatar */}
+              <div className="relative size-20 shrink-0 overflow-hidden rounded-full bg-[var(--account-accent-soft)] sm:size-24">
+                {avatar ? (
+                  <Image
+                    src={avatar}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                  />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center font-montserrat text-xl font-bold text-[var(--account-accent)]">
+                    {getInitials(fullName)}
+                  </span>
+                )}
+              </div>
+              <div className="block">
+                <h1 className="font-montserrat text-h3 font-bold text-[var(--account-text)]">
+                  {fullName}
+                </h1>
+
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-body-sm text-[var(--account-text-muted)]">
+                  {profile.email ? (
+                    <span className="inline-flex min-w-0 items-center gap-1.5 break-all">
+                      <Mail className="size-3.5 shrink-0" />
+                      {profile.email}
+                    </span>
+                  ) : null}
+
+                  {profile.mobile ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Phone className="size-3.5 shrink-0" />
+                      {profile.mobile}
+                    </span>
+                  ) : null}
+
+                  {reg.stateName ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin className="size-3.5 shrink-0" />
+                      {reg.stateName}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
             </div>
-            <dl className="mt-3 grid gap-2 text-body-sm sm:grid-cols-2">
-              {courseEnrolledLabel ? (
-                <div>
-                  <dt className="text-caption text-[var(--account-text-muted)]">
-                    Course enrolled
-                  </dt>
-                  <dd className="text-[var(--account-text)]">
-                    {courseEnrolledLabel}
-                  </dd>
+
+            {/* Enrollment Summary */}
+            <dl className="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-2">
+              {enrolledCourses.length > 0 ? (
+                <div className="col-span-2 flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
+                    <BookOpen className="size-4" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <dt className="text-caption text-[var(--account-text-muted)]">
+                      Courses enrolled
+                    </dt>
+                    <dd className="mt-1">
+                      <ul className="list-disc space-y-1 pl-4 text-body-sm font-semibold text-[var(--account-text)]">
+                        {enrolledCourses.map((title, index) => (
+                          <li key={`${title}-${index}`} className="break-words">
+                            {title}
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
                 </div>
               ) : null}
+
               {batchEnrolledLabel ? (
-                <div>
-                  <dt className="text-caption text-[var(--account-text-muted)]">
-                    Batch enrolled
-                  </dt>
-                  <dd className="text-[var(--account-text)]">
-                    {batchEnrolledLabel}
-                  </dd>
+                <div className="flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
+                    <Users className="size-4" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <dt className="text-caption text-[var(--account-text-muted)]">
+                      Batch Enrolled
+                    </dt>
+                    <dd className="mt-1 break-words text-body-sm font-semibold text-[var(--account-text)]">
+                      {batchEnrolledLabel}
+                    </dd>
+                  </div>
                 </div>
               ) : null}
-              <div>
-                <dt className="text-caption text-[var(--account-text-muted)]">
-                  Submitted
-                </dt>
-                <dd className="text-[var(--account-text)]">
-                  {formatDate(reg.submittedAt)}
-                </dd>
+
+              <div className="flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
+                <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
+                  <CalendarCheck className="size-4" />
+                </div>
+
+                <div className="min-w-0">
+                  <dt className="text-caption text-[var(--account-text-muted)]">
+                    Submitted
+                  </dt>
+                  <dd className="mt-1 text-body-sm font-semibold text-[var(--account-text)]">
+                    {formatDate(reg.submittedAt)}
+                  </dd>
+                </div>
               </div>
             </dl>
           </div>
