@@ -85,7 +85,7 @@ export function MobileNav({
         )}
       >
         <nav className="flex flex-col p-6 space-y-1 bg-black">
-          {onSearch ? (
+          {/* {onSearch ? (
             <button
               type="button"
               className="mb-3 flex items-center gap-2 rounded-md border border-white/15 px-3 py-2.5 text-left text-body-sm text-text-secondary"
@@ -96,7 +96,7 @@ export function MobileNav({
             >
               Search the site
             </button>
-          ) : null}
+          ) : null} */}
           {categories.length > 0 ? (
             <>
               <p className="text-caption text-text-dimmed uppercase tracking-wider mb-2">
