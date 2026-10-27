@@ -81,6 +81,16 @@ export function getGtmId(): string {
   return process.env.NEXT_PUBLIC_GTM_ID?.trim() || "";
 }
 
+/** How often to re-prompt after the user dismisses the registration dialog. */
+export const REGISTRATION_REMINDER_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
+/** Background poll interval for dashboard registration status. */
+export const REGISTRATION_STATUS_POLL_INTERVAL_MS = 2 * 60 * 1000; // 2 min
+
+/** localStorage key for last registration dialog dismiss time. */
+export const REGISTRATION_DISMISS_STORAGE_KEY =
+  "rodha.registration.dismissedAt";
+
 export function getGoogleMapsApiKey(): string {
   return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim() || "";
 }

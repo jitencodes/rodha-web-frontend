@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-10-10 (AppImage)
+**Last updated:** 2026-10-23 (complete profile dialog)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -207,6 +207,11 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
 | AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
 | UpdateStateDialog | `UpdateStateDialog.tsx` (shows only missing or pencil-edited mobile/state; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
+| RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
+| RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
+| ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
+| Account form controls | `forms/AccountTextField`, `AccountSelect`, `AccountMultiSelect`, `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell` |
+| EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
 | CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
@@ -227,7 +232,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | OrdersPreviewCard | `OrdersPreviewCard.tsx` (dashboard My Orders preview) |
 | QuickLinksCard | `QuickLinksCard.tsx` (dashboard quick links) |
 | AccountOrdersList | `AccountOrdersList.tsx` (desktop table + mobile cards; payment/order status badges) |
-| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, edit name + change password; client-only) |
+| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, Complete registration / View Profile, email update request, phone/state pencils, change password) |
 | CartPageClient | `CartPageClient.tsx` (cart/coupon state, recommended rail) |
 | CartItemCard | `CartItemCard.tsx` (line item + remove) |
 | CartOrderSummary | `CartOrderSummary.tsx` (sticky totals, coupon, Continue to Pay) |
@@ -282,7 +287,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Module | File |
 |--------|------|
-| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile` (static student dashboard foundation; types in `src/lib/account/types.ts`) |
+| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; registration API module `src/lib/api/modules/student/registration/` |
 | blog | `blog.ts` |
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |

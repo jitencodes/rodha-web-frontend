@@ -14,6 +14,30 @@ Format:
 
 ---
 
+### 2026-10-26 — Site-wide registration gate via dashboard polling
+- **Decision:** Logged-in students poll `GET /api/account/dashboard-status` every 2 minutes. Status comes from dashboard `data.registration` (`completed` / `required` / `overdue` / `deadlineAt`). Soft-block `REGISTRATION_REQUIRED` (HTTP 201 + `success: false`) maps to overdue+required. Dismissible dialog when required (re-prompt every 1 hour via `REGISTRATION_REMINDER_INTERVAL_MS` + localStorage). On `/account/*` when overdue, dialog is mandatory (no close). Public pages keep dismissible close when overdue. Single `RegistrationGateProvider` + `RegistrationDialog`; profile CTA dispatches `rodha:open-registration`.
+- **Rationale:** Product needs frequent reminders before deadline and a hard block after soft-block without inventing a separate status API.
+- **Alternatives considered:** Only gating `/account/profile`; middleware soft-block for all routes.
+- **Consequences:** Constants live in `src/lib/constants.ts`. Dashboard SSR treats soft-block as empty lists so the page still renders under the mandatory dialog.
+
+### 2026-10-26 — GTM purchase dataLayer after payment verify
+- **Decision:** After Razorpay verify (or free checkout) succeeds, stash `{ transaction_id, value, currency }` in `sessionStorage`, redirect to `/account/checkout/success`, then push `event: "purchase"` with `ecommerce` to `window.dataLayer` once per `transaction_id`. Values come from checkout/verify (`orderNumber`, `payableAmount`, `currency` default `INR`). Meta Pixel Purchase uses the same payload.
+- **Rationale:** Marketing needs dynamic transaction id / amount / INR only after confirmed payment to avoid duplicate or unpaid conversions.
+- **Alternatives considered:** Firing from Razorpay handler before verify; query-string params on the success URL.
+- **Consequences:** Refreshing success does not re-fire. GTM must listen for the `purchase` event; container still loads only when `NEXT_PUBLIC_GTM_ID` is set (dataLayer push still runs).
+
+### 2026-10-26 — Student registration form + read-only profile detail
+- **Decision:** Replace Complete/Edit Profile with the Postman student registration flow. `GET`/`POST api/website/student/registration` (multipart + passport photo) via BFF `/api/account/registration`. Masters come from the GET payload (not hardcoded). Keep a 3-step dialog grouped as sheet sections A–F / G–J / K–N; auto-open when not submitted. After submit, students cannot edit — **View Profile** opens `/account/profile/detail` (read-only from `GET api/website/student/profile`). Mobile/state pencils still use `PATCH api/auth/me/details`.
+- **Rationale:** Registration collection is the real contract; one-time submit matches product (course unlock). Sheet defines labels, types, conditionals, and validation.
+- **Alternatives considered:** Keep `PATCH api/auth/me/details` nested JSON; dedicated multi-page registration route; student-facing update after submit (not in Postman).
+- **Consequences:** Soft-block redirects across all student APIs remain out of scope for this change. Admin registration upsert is CMS-only.
+
+### 2026-10-23 — Complete profile UI ahead of expanded API
+- **Decision:** Ship a 3-step Complete/Edit Profile dialog and Request email update UI on `/account/profile`. Dropdown masters live in `src/data/account/profile-options.ts` (verified batch/course lists; degree presets with Other → manual). Submit the full form JSON through `PATCH /api/account/profile` → existing `PATCH api/auth/me/details`. Email update uses stub `POST /api/account/email-update-request` → placeholder `api/auth/me/email-update-request`.
+- **Rationale:** Product needs the form and validation now; backend field contracts for the expanded profile and email-change request are still pending.
+- **Alternatives considered:** Blocking the UI until APIs ship; inventing a second profile PATCH path without a Postman contract.
+- **Consequences:** Superseded for registration fields by 2026-10-26 decision (registration APIs + read-only detail). Email-update stub and mobile/state details PATCH remain.
+
 ### 2026-10-19 — Checkout state is order attribution, not a profile update
 - **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`), and still sends `channel: "WEB"` / `x-channel: WEB`. The browser resolves state from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
 - **Rationale:** The order needs the buyer's current state and campaign params. That state is not the saved profile state.

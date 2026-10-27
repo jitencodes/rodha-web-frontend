@@ -22,7 +22,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/results",
 });
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 15;
 
 interface ResultsPageProps {
   searchParams: Promise<{
@@ -102,12 +102,14 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
           </div>
 
           {pageItems.length > 0 ? (
-            <div className="flex flex-wrap gap-5">
-              {pageItems.map((topper) => (
-                <div key={`${topper.categorySlug}-${topper.id}`} className="w-fit">
-                  <TopperCardV2 topper={topper} />
-                </div>
-              ))}
+            <div className="flex justify-center w-full">
+              <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+                {pageItems.map((topper) => (
+                  <div key={`${topper.categorySlug}-${topper.id}`} className="w-fit">
+                    <TopperCardV2 topper={topper} />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <ListingEmptyState

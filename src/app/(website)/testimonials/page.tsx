@@ -22,7 +22,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/testimonials",
 });
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 
 interface TestimonialsPageProps {
   searchParams: Promise<{
@@ -102,12 +102,13 @@ export default async function TestimonialsPage({
           </div>
 
           {pageItems.length > 0 ? (
-            <div className="flex flex-wrap gap-5">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
               {pageItems.map((testimonial) => (
                 <TestimonialCardV2
                   key={`${testimonial.categorySlug}-${testimonial.id}`}
                   testimonial={testimonial}
                   variant="light"
+                  className="w-full max-w-full shrink-0"
                 />
               ))}
             </div>

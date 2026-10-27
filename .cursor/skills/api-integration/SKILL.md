@@ -15,6 +15,7 @@ Default reference for all website API work. Read Postman first; type real payloa
 
 - Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS)
 - Student auth: `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (`api/auth/user/signup`, `api/auth/user/login` on `NEXT_PUBLIC_API_BASE_URL`)
+- Student registration: `docs/api-collection/Rodha Website Student Registration & Books.postman_collection.json` (`GET`/`POST api/website/student/registration`, `GET api/website/student/profile`)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
 - Base URL: `NEXT_PUBLIC_API_BASE_URL` with trailing slash (Postman `{{baseUrl}}`)
@@ -52,7 +53,7 @@ No barrel `index.ts`. Import from explicit paths.
 4. Do **not** install TanStack Query unless a feature needs client refetch; then update this skill
 5. Soft-fail with `apiGetOrNull` on chrome/page loads — hide UI on null/empty; do not crash SSR
 6. Cache: `fetch(..., { next: { revalidate } })` via `apiGet` (`API_REVALIDATE_SECONDS`, default 60)
-7. Mutations (contact POST, student auth) go through a Route Handler so `API_KEY` and `accessToken` never live in client JS
+7. Mutations (contact POST, student auth, student registration multipart) go through a Route Handler so `API_KEY` and `accessToken` never live in client JS. For multipart (e.g. registration passport photo), forward `FormData` without setting `Content-Type` so the boundary is preserved.
 
 ## Rules
 

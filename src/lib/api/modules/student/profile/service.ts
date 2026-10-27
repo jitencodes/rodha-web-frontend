@@ -5,43 +5,30 @@ import {
   getApiSource,
 } from "@/lib/api/env";
 import { ApiError, type ApiEnvelope } from "@/lib/api/types";
+import type { StudentProfileDetailApi } from "@/lib/api/modules/student/registration/types";
+import { mapStudentProfileDetail } from "./mapper";
+import type { StudentProfileViewModel } from "./types";
 
-export interface StudentProfileViewModel {
-  id: string;
-  email: string;
-  mobile: string;
-  fullName: string;
-  profilePicturePath: string | null;
-}
-
-interface ProfileApi {
-  id?: string;
-  email?: string;
-  mobile?: string;
-  fullName?: string;
-  profilePicturePath?: string | null;
-}
+export type { StudentProfileViewModel } from "./types";
 
 export async function getStudentProfile(
   accessToken: string
 ): Promise<StudentProfileViewModel | null> {
-  const data = await apiGet<ProfileApi>("api/website/student/profile", {
-    accessToken,
-    cache: "no-store",
-  });
-  const id = typeof data.id === "string" ? data.id : "";
-  const email = typeof data.email === "string" ? data.email : "";
-  if (!id || !email) return null;
-  return {
-    id,
-    email,
-    mobile: typeof data.mobile === "string" ? data.mobile : "",
-    fullName: typeof data.fullName === "string" ? data.fullName : "",
-    profilePicturePath:
-      typeof data.profilePicturePath === "string"
-        ? data.profilePicturePath
-        : null,
-  };
+  try {
+    const data = await apiGet<StudentProfileDetailApi>(
+      "api/website/student/profile",
+      {
+        accessToken,
+        cache: "no-store",
+      }
+    );
+    return mapStudentProfileDetail(data ?? {});
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[getStudentProfile]", error);
+    }
+    return null;
+  }
 }
 
 export async function updateStudentPassword(
@@ -49,10 +36,14 @@ export async function updateStudentPassword(
   currentPassword: string,
   newPassword: string
 ): Promise<void> {
-  await apiPatch("api/website/student/password", {
-    currentPassword,
-    newPassword,
-  }, { accessToken });
+  await apiPatch(
+    "api/website/student/password",
+    {
+      currentPassword,
+      newPassword,
+    },
+    { accessToken }
+  );
 }
 
 export async function updateProfilePicture(
@@ -76,15 +67,12 @@ export async function updateProfilePicture(
   const apiKey = getApiKey();
   if (apiKey) headers["x-api-key"] = apiKey;
 
-  const response = await fetch(
-    `${baseUrl}api/auth/me/profile-picture`,
-    {
-      method: "PATCH",
-      headers,
-      body: form,
-      cache: "no-store",
-    }
-  );
+  const response = await fetch(`${baseUrl}api/auth/me/profile-picture`, {
+    method: "PATCH",
+    headers,
+    body: form,
+    cache: "no-store",
+  });
 
   let body: unknown;
   try {

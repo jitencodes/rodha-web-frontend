@@ -8,6 +8,7 @@ import { FloatingCounsellingCta } from "@/components/layout/FloatingCounsellingC
 import { CounsellingModalProvider } from "@/components/layout/CounsellingModalProvider";
 import { PromoDialog } from "@/components/layout/PromoDialog";
 import { PurchaseToast } from "@/components/layout/PurchaseToast";
+import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
 import type { PromotionalPopupViewModel } from "@/lib/api/modules/promotional-popup/types";
 import type { RecentPurchaseViewModel } from "@/lib/api/modules/recent-purchases/types";
 import type { AnnouncementViewModel } from "@/lib/api/modules/announcements/types";
@@ -71,6 +72,7 @@ export function SiteFrame({
         categories={categories}
       />
       <PurchaseToast purchase={recentPurchase} durationMs={purchaseToastMs} />
+      <RegistrationGateProvider enabled={isLoggedIn} />
     </>
   );
 }

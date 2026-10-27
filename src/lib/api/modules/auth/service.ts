@@ -171,3 +171,44 @@ export async function updateUserDetails(
   }
   return user;
 }
+
+/**
+ * PATCH api/auth/me/details with the full complete-profile payload.
+ * Backend field contract is pending; extra keys may be ignored until expanded.
+ */
+export async function updateCompleteProfile(
+  accessToken: string,
+  payload: Record<string, unknown>
+): Promise<AuthUserViewModel> {
+  const data = await apiPatch<
+    AuthUserApi | { user?: AuthUserApi },
+    Record<string, unknown>
+  >(ME_DETAILS_PATH, payload, { accessToken });
+
+  const mapped =
+    data && typeof data === "object" && "user" in data
+      ? mapAuthUser(data.user)
+      : mapAuthUser(data as AuthUserApi);
+  if (mapped) return mapped;
+
+  const user = await getCurrentUser(accessToken);
+  if (!user) {
+    throw new ApiError("Unable to refresh user after profile update", 502);
+  }
+  return user;
+}
+
+/** Placeholder upstream path — swap when the email-update request API lands. */
+export const EMAIL_UPDATE_REQUEST_PATH =
+  "api/auth/me/email-update-request";
+
+export async function requestEmailUpdate(
+  accessToken: string,
+  requestedEmail: string
+): Promise<{ message?: string } | null> {
+  return apiPost<{ message?: string } | null, { requestedEmail: string }>(
+    EMAIL_UPDATE_REQUEST_PATH,
+    { requestedEmail: requestedEmail.trim() },
+    { accessToken }
+  );
+}

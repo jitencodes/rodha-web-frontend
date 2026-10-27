@@ -14,6 +14,7 @@ import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
 import { userAtom } from "@/lib/store/user";
+import { storePendingPurchase } from "@/lib/tracking/purchase";
 import { readStoredUtm } from "@/lib/tracking/utm";
 
 type CheckoutItem = {
@@ -211,6 +212,7 @@ export function CheckoutPageClient({
         razorpayOrderId?: string;
         amountPaise?: number;
         currency?: string;
+        orderId?: number;
         orderNumber?: string;
         payableAmount?: number;
         prefill?: { name?: string; email?: string; contact?: string };
@@ -220,6 +222,14 @@ export function CheckoutPageClient({
       }
 
       if (data.mode === "free") {
+        storePendingPurchase({
+          transaction_id:
+            data.orderNumber ||
+            (typeof data.orderId === "number" ? String(data.orderId) : ""),
+          value:
+            typeof data.payableAmount === "number" ? data.payableAmount : 0,
+          currency: data.currency || "INR",
+        });
         router.push("/account/checkout/success");
         router.refresh();
         return;
@@ -251,12 +261,32 @@ export function CheckoutPageClient({
           const verifyData = (await verifyRes.json()) as {
             ok: boolean;
             error?: string;
+            orderId?: number;
+            orderNumber?: string;
+            payableAmount?: number;
           };
           if (!verifyRes.ok || !verifyData.ok) {
             setError(verifyData.error || "Payment verification failed");
             releasePay();
             return;
           }
+          storePendingPurchase({
+            transaction_id:
+              verifyData.orderNumber ||
+              data.orderNumber ||
+              (typeof verifyData.orderId === "number"
+                ? String(verifyData.orderId)
+                : typeof data.orderId === "number"
+                  ? String(data.orderId)
+                  : ""),
+            value:
+              typeof verifyData.payableAmount === "number"
+                ? verifyData.payableAmount
+                : typeof data.payableAmount === "number"
+                  ? data.payableAmount
+                  : 0,
+            currency: data.currency || "INR",
+          });
           router.push("/account/checkout/success");
           router.refresh();
         },
