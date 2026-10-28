@@ -39,6 +39,7 @@ const RESOURCES_LINKS = [
   { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "/faq" },
   { label: "Free Resources", href: CAT_FREE_COURSE_URL },
+  { label: "Discussion Forum", href: "/discussion-forum" },
 ];
 
 const LEGAL_LINKS = [

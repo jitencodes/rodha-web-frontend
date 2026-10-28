@@ -243,6 +243,10 @@ export const HEADER_NAV = [
         label: "Free Resources",
         href: CAT_FREE_COURSE_URL,
       },
+      {
+        label: "Discussion Forum",
+        href: "/discussion-forum",
+      },
     ],
   },
   // Test Series hidden from public header (Graphy integration).
