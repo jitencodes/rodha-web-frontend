@@ -5,6 +5,8 @@ import Script from "next/script";
 import { cn } from "@/lib/utils";
 
 const GIS_SRC = "https://accounts.google.com/gsi/client";
+/** Ignore repeat GIS clicks / credential callbacks within this window. */
+const GOOGLE_CLICK_DEBOUNCE_MS = 2000;
 
 interface GoogleContinueButtonProps {
   disabled?: boolean;
@@ -68,11 +70,33 @@ export function GoogleContinueButton({
   const onCredentialRef = useRef(onCredential);
   const onErrorRef = useRef(onError);
   const lastWidthRef = useRef(0);
+  const lastCredentialAtRef = useRef(0);
+  const lastCredentialRef = useRef("");
   const [scriptReady, setScriptReady] = useState(false);
+  const [clickLocked, setClickLocked] = useState(false);
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim() ?? "";
+  const interactionDisabled = Boolean(disabled || clickLocked);
 
   onCredentialRef.current = onCredential;
   onErrorRef.current = onError;
+
+  const emitCredential = useCallback((credential: string) => {
+    const now = Date.now();
+    // Drop duplicate/rapid GIS callbacks (double-click or popup re-fire).
+    if (now - lastCredentialAtRef.current < GOOGLE_CLICK_DEBOUNCE_MS) {
+      return;
+    }
+    if (credential && credential === lastCredentialRef.current) {
+      return;
+    }
+    lastCredentialAtRef.current = now;
+    lastCredentialRef.current = credential;
+    setClickLocked(true);
+    window.setTimeout(() => {
+      setClickLocked(false);
+    }, GOOGLE_CLICK_DEBOUNCE_MS);
+    onCredentialRef.current(credential);
+  }, []);
 
   const markScriptReady = useCallback(() => {
     if (typeof window !== "undefined" && window.google?.accounts?.id) {
@@ -104,7 +128,7 @@ export function GoogleContinueButton({
         use_fedcm_for_button: true,
         callback: (response) => {
           if (response.credential) {
-            onCredentialRef.current(response.credential);
+            emitCredential(response.credential);
             return;
           }
           onErrorRef.current?.("Google sign-in did not return a credential.");
@@ -127,7 +151,7 @@ export function GoogleContinueButton({
         logo_alignment: "left",
       });
     },
-    [clientId]
+    [clientId, emitCredential]
   );
 
   useEffect(() => {
@@ -160,7 +184,7 @@ export function GoogleContinueButton({
         <span
           className={cn(
             "pointer-events-none inline-flex h-11 w-full items-center justify-center gap-2 rounded-[8px] border border-neutral-200 bg-white text-body-sm font-semibold text-neutral-800",
-            (disabled || !clientId) && "opacity-50"
+            (interactionDisabled || !clientId) && "opacity-50"
           )}
         >
           <GoogleMark />
@@ -175,7 +199,9 @@ export function GoogleContinueButton({
               "absolute inset-0 z-10 flex items-center justify-center overflow-hidden opacity-[0.02]",
               "[&_iframe]:!h-full [&_iframe]:!max-h-none [&_iframe]:!w-full",
               "[&>div]:!h-full [&>div]:!w-full",
-              disabled ? "pointer-events-none" : "pointer-events-auto"
+              interactionDisabled
+                ? "pointer-events-none"
+                : "pointer-events-auto"
             )}
             aria-hidden
           />

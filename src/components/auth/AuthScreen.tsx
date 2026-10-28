@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -110,6 +110,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const googleInFlightRef = useRef(false);
 
   async function submitAuth(
     path: string,
@@ -190,7 +191,9 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   }
 
   async function handleGoogle(idToken: string) {
-    if (loading) return;
+    if (loading || googleInFlightRef.current) return;
+    if (!idToken.trim()) return;
+    googleInFlightRef.current = true;
     setFormError("");
     setSuccessMessage("");
     setLoading(true);
@@ -205,6 +208,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
           : "Unable to continue with Google right now."
       );
     } finally {
+      googleInFlightRef.current = false;
       setLoading(false);
     }
   }

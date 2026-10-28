@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-28 (profile detail course list)
+**Last updated:** 2026-10-29 (Google auth click debounce)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Google auth click debounce (2026-10-29):** `GoogleContinueButton` ignores repeat GIS credentials for 2s and locks pointer events; `AuthScreen.handleGoogle` uses a sync in-flight ref so duplicate login/signup requests cannot start.
 - **Profile detail course list (2026-10-28):** `ProfileDetailView` shows enrolled courses as a bullet list from `purchasedCourses` titles (`courseEnrolledLabels`) instead of a single comma-joined `courseEnrolledLabel`.
 - **Registration searchable selects + Class 12 rules (2026-10-28):** `AccountSelect` / `AccountMultiSelect` use `react-select` with orange account theme (searchable, portaled menus). Step changes scroll the dialog body to top. UG/graduate (and working) hide Class 12 Appearing and default to Passed; when Appearing is chosen, graduation / PG / work are not required or shown.
 - **Registration multi-select portal (2026-10-27):** `AccountMultiSelect` (Target Exams / Target Colleges) portals into nearest `.account-shell` with z-index above the registration dialog and solid CSS-var fallbacks, fixing transparent menus and unselectable options. Shared `getAccountPortalParent` also used by account `DropdownSelect`.
