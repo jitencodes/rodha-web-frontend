@@ -14,7 +14,10 @@ import {
 import { toast } from "sonner";
 
 import { ForumAvatar } from "@/components/sections/discussion-forum/ForumAvatar";
-import { DiscussionForumShell } from "@/components/sections/discussion-forum/DiscussionForumShell";
+import {
+  DiscussionForumShell,
+  type DiscussionForumHero,
+} from "@/components/sections/discussion-forum/DiscussionForumShell";
 import { ForumMessageComposer } from "@/components/sections/discussion-forum/ForumMessageComposer";
 import { isForumRichTextEmpty } from "@/components/sections/discussion-forum/ForumRichTextEditor";
 import { Input } from "@/components/ui/Input";
@@ -23,6 +26,7 @@ import {
   FORUM_SPACE_MESSAGES,
   formatForumCount,
   formatForumRelativeTime,
+  type ForumPreviewQuestion,
   type ForumSpaceItem,
   type ForumSpaceMessage,
 } from "@/data/discussion-forum";
@@ -32,6 +36,8 @@ type DiscussionForumSpaceDetailProps = {
   space: ForumSpaceItem;
   kind: "groups" | "channels";
   basePath?: string;
+  forum?: DiscussionForumHero;
+  questions?: ForumPreviewQuestion[];
 };
 
 type ReactionState = Record<number, { like: number; dislike: number; mine: "like" | "dislike" | null }>;
@@ -41,6 +47,8 @@ export function DiscussionForumSpaceDetail({
   space,
   kind,
   basePath = "/discussion-forum",
+  forum,
+  questions,
 }: DiscussionForumSpaceDetailProps) {
   const listHref = `${basePath}/${kind}`;
   const members = FORUM_SPACE_MEMBERS[space.id] ?? [];
@@ -91,7 +99,12 @@ export function DiscussionForumSpaceDetail({
   };
 
   return (
-    <DiscussionForumShell basePath={basePath} hideComposer>
+    <DiscussionForumShell
+      basePath={basePath}
+      forum={forum}
+      questions={questions}
+      hideComposer
+    >
       <Link
         href={listHref}
         className="mb-3 inline-flex h-9 items-center gap-1.5 px-1 text-body-sm text-text-muted transition-colors hover:text-orange-400"

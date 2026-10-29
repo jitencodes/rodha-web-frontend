@@ -5,10 +5,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 
 import { DiscussionForumQuestionCard } from "@/components/sections/discussion-forum/DiscussionForumQuestionCard";
-import { DiscussionForumShell } from "@/components/sections/discussion-forum/DiscussionForumShell";
-import { Input } from "@/components/ui/Input";
 import {
-  FORUM_PREVIEW_QUESTIONS,
+  DiscussionForumShell,
+  type DiscussionForumHero,
+} from "@/components/sections/discussion-forum/DiscussionForumShell";
+import { Input } from "@/components/ui/Input";
+import { Pagination } from "@/components/ui/Pagination";
+import {
   type ForumPreviewQuestion,
 } from "@/data/discussion-forum";
 import { cn } from "@/lib/utils";
@@ -22,7 +25,10 @@ const TABS: Array<{ id: SortTab; label: string }> = [
   { id: "unanswered", label: "Unanswered" },
 ];
 
-function sortQuestions(items: ForumPreviewQuestion[], tab: SortTab): ForumPreviewQuestion[] {
+function sortQuestions(
+  items: ForumPreviewQuestion[],
+  tab: SortTab
+): ForumPreviewQuestion[] {
   const copy = [...items];
   if (tab === "unanswered") {
     return copy
@@ -30,11 +36,14 @@ function sortQuestions(items: ForumPreviewQuestion[], tab: SortTab): ForumPrevie
       .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
   }
   if (tab === "active") {
-    return copy.sort((a, b) => +new Date(b.lastActivityAt) - +new Date(a.lastActivityAt));
+    return copy.sort(
+      (a, b) => +new Date(b.lastActivityAt) - +new Date(a.lastActivityAt)
+    );
   }
   if (tab === "for-you") {
     return copy.sort(
-      (a, b) => b.voteScore + b.answerCount * 3 - (a.voteScore + a.answerCount * 3)
+      (a, b) =>
+        b.voteScore + b.answerCount * 3 - (a.voteScore + a.answerCount * 3)
     );
   }
   return copy.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
@@ -42,10 +51,18 @@ function sortQuestions(items: ForumPreviewQuestion[], tab: SortTab): ForumPrevie
 
 type DiscussionForumFeedProps = {
   basePath?: string;
+  forum: DiscussionForumHero;
+  questions: ForumPreviewQuestion[];
+  page?: number;
+  totalPages?: number;
 };
 
 export function DiscussionForumFeed({
   basePath = "/discussion-forum",
+  forum,
+  questions,
+  page = 1,
+  totalPages = 1,
 }: DiscussionForumFeedProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,7 +72,7 @@ export function DiscussionForumFeed({
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    let base = FORUM_PREVIEW_QUESTIONS;
+    let base = questions;
     if (tagFilter) {
       base = base.filter((item) =>
         item.tags.some((tag) => tag.toLowerCase() === tagFilter.toLowerCase())
@@ -66,14 +83,19 @@ export function DiscussionForumFeed({
         (item) =>
           item.title.toLowerCase().includes(q) ||
           item.excerpt.toLowerCase().includes(q) ||
-          item.tags.some((tag) => tag.toLowerCase().includes(q))
+          item.tags.some((tag) => tag.toLowerCase().includes(q)) ||
+          item.author.fullName.toLowerCase().includes(q)
       );
     }
     return sortQuestions(base, tab);
-  }, [tab, search, tagFilter]);
+  }, [tab, search, tagFilter, questions]);
 
   return (
-    <DiscussionForumShell basePath={basePath}>
+    <DiscussionForumShell
+      basePath={basePath}
+      forum={forum}
+      questions={questions}
+    >
       <div className="mb-4 flex min-w-0 items-center gap-3">
         <div className="relative w-40 shrink-0 sm:w-48 md:w-52">
           <Search
@@ -132,10 +154,22 @@ export function DiscussionForumFeed({
           ))
         ) : (
           <div className="rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-12 text-center text-body-sm text-text-muted">
-            No posts match this filter. Try another tag or ask a new question.
+            {questions.length
+              ? "No posts match this filter. Try another tag or ask a new question."
+              : "No questions in this forum yet."}
           </div>
         )}
       </div>
+
+      {totalPages > 1 ? (
+        <div className="mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            basePath={basePath}
+          />
+        </div>
+      ) : null}
     </DiscussionForumShell>
   );
 }

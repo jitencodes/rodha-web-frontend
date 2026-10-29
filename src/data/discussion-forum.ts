@@ -38,6 +38,14 @@ export type ForumPreviewQuestion = {
   author: ForumPreviewAuthor;
 };
 
+export type ForumPreviewAttachment = {
+  id: number;
+  filePath: string;
+  fileName: string;
+  mimeType: string;
+  isImage: boolean;
+};
+
 export type ForumPreviewAnswer = {
   id: number;
   topicId: number;
@@ -48,6 +56,7 @@ export type ForumPreviewAnswer = {
   editedAt: string | null;
   author: ForumPreviewAuthor;
   reactionTypeCount: { like: number; dislike: number };
+  attachments: ForumPreviewAttachment[];
 };
 
 export type ForumPreviewGroup = {
@@ -587,6 +596,7 @@ export const FORUM_PREVIEW_ANSWERS: Record<number, ForumPreviewAnswer[]> = {
         reputation: 12400,
       },
       reactionTypeCount: { like: 19, dislike: 0 },
+      attachments: [],
     },
     {
       id: 1002,
@@ -604,6 +614,7 @@ export const FORUM_PREVIEW_ANSWERS: Record<number, ForumPreviewAnswer[]> = {
         reputation: 1120,
       },
       reactionTypeCount: { like: 8, dislike: 1 },
+      attachments: [],
     },
   ],
   102: [
@@ -623,6 +634,7 @@ export const FORUM_PREVIEW_ANSWERS: Record<number, ForumPreviewAnswer[]> = {
         reputation: 9800,
       },
       reactionTypeCount: { like: 11, dislike: 0 },
+      attachments: [],
     },
   ],
   105: [],

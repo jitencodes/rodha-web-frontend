@@ -48,7 +48,8 @@ export function DiscussionForumQuestionCard({
 
       <h3 className="mt-3 text-body-lg font-semibold leading-snug tracking-tight text-text-primary">
         <Link
-          href={`${basePath}/${question.id}`}
+          href={`${basePath}/${encodeURIComponent(question.slug)}`}
+          prefetch={false}
           className="transition-colors duration-200 hover:text-orange-400"
         >
           {question.title}

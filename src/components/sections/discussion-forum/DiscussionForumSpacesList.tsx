@@ -4,11 +4,15 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Eye, MessageSquare, Search, Users } from "lucide-react";
 
-import { DiscussionForumShell } from "@/components/sections/discussion-forum/DiscussionForumShell";
+import {
+  DiscussionForumShell,
+  type DiscussionForumHero,
+} from "@/components/sections/discussion-forum/DiscussionForumShell";
 import { Input } from "@/components/ui/Input";
 import {
   formatForumCount,
   formatForumRelativeTime,
+  type ForumPreviewQuestion,
   type ForumSpaceItem,
 } from "@/data/discussion-forum";
 import { cn } from "@/lib/utils";
@@ -19,6 +23,8 @@ type DiscussionForumSpacesListProps = {
   items: ForumSpaceItem[];
   kind: "groups" | "channels";
   basePath?: string;
+  forum?: DiscussionForumHero;
+  questions?: ForumPreviewQuestion[];
 };
 
 /** Student list: view only — no add / edit / delete / archive. */
@@ -28,6 +34,8 @@ export function DiscussionForumSpacesList({
   items,
   kind,
   basePath = "/discussion-forum",
+  forum,
+  questions,
 }: DiscussionForumSpacesListProps) {
   const Icon = kind === "groups" ? Users : MessageSquare;
   const [search, setSearch] = useState("");
@@ -44,7 +52,12 @@ export function DiscussionForumSpacesList({
   }, [items, search]);
 
   return (
-    <DiscussionForumShell basePath={basePath} hideComposer>
+    <DiscussionForumShell
+      basePath={basePath}
+      forum={forum}
+      questions={questions}
+      hideComposer
+    >
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-h4 font-semibold tracking-tight text-text-primary">{title}</h2>

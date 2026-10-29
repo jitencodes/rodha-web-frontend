@@ -4,11 +4,15 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 
-import { DiscussionForumShell } from "@/components/sections/discussion-forum/DiscussionForumShell";
+import {
+  DiscussionForumShell,
+  type DiscussionForumHero,
+} from "@/components/sections/discussion-forum/DiscussionForumShell";
 import { Input } from "@/components/ui/Input";
 import {
   FORUM_PREVIEW_TAGS,
   formatForumCount,
+  type ForumPreviewQuestion,
   type ForumPreviewTagInfo,
 } from "@/data/discussion-forum";
 import { cn } from "@/lib/utils";
@@ -30,10 +34,14 @@ function sortTags(items: ForumPreviewTagInfo[], sort: TagSort): ForumPreviewTagI
 
 type DiscussionForumTagsProps = {
   basePath?: string;
+  forum?: DiscussionForumHero;
+  questions?: ForumPreviewQuestion[];
 };
 
 export function DiscussionForumTags({
   basePath = "/discussion-forum",
+  forum,
+  questions,
 }: DiscussionForumTagsProps) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<TagSort>("popular");
@@ -50,7 +58,12 @@ export function DiscussionForumTags({
   }, [search, sort]);
 
   return (
-    <DiscussionForumShell basePath={basePath} hideComposer>
+    <DiscussionForumShell
+      basePath={basePath}
+      forum={forum}
+      questions={questions}
+      hideComposer
+    >
       <div className="mb-1">
         <h2 className="text-h4 font-semibold tracking-tight text-text-primary">Browse tags</h2>
         <p className="mt-1 text-body-sm leading-relaxed text-text-muted">

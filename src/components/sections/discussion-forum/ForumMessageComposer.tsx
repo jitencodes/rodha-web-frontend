@@ -20,7 +20,7 @@ type ForumMessageComposerProps = {
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
-/** Portal-style rich answer/discussion composer (preview — no API yet). */
+/** Portal-style rich answer/discussion composer (posts via parent onSubmit). */
 export function ForumMessageComposer({
   placeholder = "Write an answer...",
   submitLabel = "Post Answer",

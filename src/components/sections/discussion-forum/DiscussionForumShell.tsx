@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
+  ArrowLeft,
   BookOpen,
   Flame,
   HelpCircle,
@@ -23,14 +24,29 @@ import {
   FORUM_PREVIEW_QUESTIONS,
   FORUM_PREVIEW_TAGS,
   formatForumCount,
+  formatForumRelativeTime,
+  type ForumPreviewQuestion,
 } from "@/data/discussion-forum";
 import { AUTH_LOGGED_IN_COOKIE_NAME } from "@/lib/auth/session-cookie";
 import { cn } from "@/lib/utils";
+
+export type DiscussionForumHero = {
+  name: string;
+  description: string;
+  memberCount: number;
+  topicCount: number;
+  lastActivityAt?: string | null;
+};
 
 type DiscussionForumShellProps = {
   basePath?: string;
   children: React.ReactNode;
   hideComposer?: boolean;
+  /** Live forum chrome from groups API when available. */
+  forum?: DiscussionForumHero;
+  /** Prefer live topics for trending when provided. */
+  questions?: ForumPreviewQuestion[];
+  directoryHref?: string;
 };
 
 type SpaceMatch = "questions" | "tags" | "groups" | "channels";
@@ -147,10 +163,15 @@ export function DiscussionForumShell({
   basePath = "/discussion-forum",
   children,
   hideComposer = false,
+  forum,
+  questions,
+  directoryHref = "/discussion-forum",
 }: DiscussionForumShellProps) {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const active = resolveActiveSpace(pathname, basePath);
+  const hero = forum ?? FORUM_PREVIEW_GROUP;
+  const feedQuestions = questions ?? FORUM_PREVIEW_QUESTIONS;
 
   useEffect(() => {
     setIsLoggedIn(readLoggedInCookie());
@@ -161,7 +182,11 @@ export function DiscussionForumShell({
     [isLoggedIn]
   );
 
-  const trending = [...FORUM_PREVIEW_QUESTIONS]
+  const lastActiveLabel = forum?.lastActivityAt
+    ? formatForumRelativeTime(forum.lastActivityAt)
+    : "";
+
+  const trending = [...feedQuestions]
     .sort((a, b) => b.voteScore + b.answerCount * 2 - (a.voteScore + a.answerCount * 2))
     .slice(0, 4);
 
@@ -182,28 +207,37 @@ export function DiscussionForumShell({
         />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="min-w-0">
-            <p className="forum-hero-badge inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-0.5 text-caption font-medium text-orange-400">
+            <Link
+              href={directoryHref}
+              className="inline-flex items-center gap-1.5 text-caption font-medium text-text-muted transition-colors duration-200 hover:text-orange-400"
+            >
+              <ArrowLeft className="size-3.5" aria-hidden />
+              All forums
+            </Link>
+            <p className="forum-hero-badge mt-3 inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-0.5 text-caption font-medium text-orange-400">
               <Sparkles className="size-3 animate-pulse" aria-hidden />
               Community space
             </p>
             <h1 className="forum-hero-title mt-2 text-h2 font-semibold tracking-tight text-text-primary sm:text-h1">
-              {FORUM_PREVIEW_GROUP.name}
+              {hero.name}
             </h1>
-            <p className="forum-hero-subtitle mt-1.5 max-w-xl text-body-sm leading-relaxed text-text-muted">
-              {FORUM_PREVIEW_GROUP.description}
-            </p>
+            {hero.description ? (
+              <p className="forum-hero-subtitle mt-1.5 max-w-xl text-body-sm leading-relaxed text-text-muted">
+                {hero.description}
+              </p>
+            ) : null}
             <div className="forum-hero-stats mt-3 flex flex-wrap gap-3 text-caption text-text-muted">
               <span className="inline-flex items-center gap-1.5">
                 <Users className="size-3.5 text-orange-400" aria-hidden />
-                {formatForumCount(FORUM_PREVIEW_GROUP.memberCount)} members
+                {formatForumCount(hero.memberCount)} members
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <HelpCircle className="size-3.5 text-orange-400" aria-hidden />
-                {formatForumCount(FORUM_PREVIEW_GROUP.topicCount)} questions
+                {formatForumCount(hero.topicCount)} questions
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <Flame className="size-3.5 text-orange-400" aria-hidden />
-                Active today
+                {lastActiveLabel ? `Active ${lastActiveLabel}` : "Active today"}
               </span>
             </div>
           </div>
@@ -301,7 +335,8 @@ export function DiscussionForumShell({
               {trending.map((q) => (
                 <li key={q.id}>
                   <Link
-                    href={`${basePath}/${q.id}`}
+                    href={`${basePath}/${encodeURIComponent(q.slug)}`}
+                    prefetch={false}
                     className="block text-body-sm leading-snug text-text-secondary transition-colors duration-200 hover:text-orange-400"
                   >
                     {q.title}

@@ -205,6 +205,37 @@ export async function apiDelete<TResponse>(
 }
 
 /**
+ * Multipart POST — do not set Content-Type (boundary is set by fetch).
+ * Used for profile picture, forum message attachments, etc.
+ */
+export async function apiPostFormData<TResponse>(
+  path: string,
+  form: FormData,
+  options: ApiMutateOptions = {}
+): Promise<TResponse> {
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) {
+    throw new ApiError(
+      "NEXT_PUBLIC_API_BASE_URL is not configured",
+      0
+    );
+  }
+
+  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+  const url = `${baseUrl}${normalizedPath}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: buildHeaders({ accessToken: options.accessToken }),
+    body: form,
+    signal: options.signal,
+    cache: "no-store",
+  });
+
+  return parseEnvelope<TResponse>(path, response);
+}
+
+/**
  * Soft-fail wrapper for layout/page loads — returns null on any error
  * so empty UI can hide instead of crashing SSR.
  */
