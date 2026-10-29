@@ -65,13 +65,15 @@ export async function getPackagePromocodes(
   );
 }
 
+/** UTM fields plus an optional checkout-only `stateName`. Does not update the profile. */
 export async function checkoutStudentCart(
-  accessToken: string
+  accessToken: string,
+  body: Record<string, string> = {}
 ): Promise<CheckoutResponseApi> {
-  return apiPost<CheckoutResponseApi, Record<string, never>>(
+  return apiPost<CheckoutResponseApi, Record<string, string>>(
     CHECKOUT_PATH,
-    {},
-    { accessToken }
+    { ...body, channel: "WEB" },
+    { accessToken, headers: { "x-channel": "WEB" } }
   );
 }
 

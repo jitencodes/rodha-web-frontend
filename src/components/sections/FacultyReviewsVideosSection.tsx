@@ -41,7 +41,7 @@ export function FacultyReviewsVideosSection({
               <div className="reveal-child reveal-delay-2 h-full">
                 <FacultyVideosPanel
                   videos={videos!}
-                  viewAllHref="https://youtube.com/@rodha"
+                  viewAllHref={faculty.youtubePlaylistUrl}
                 />
               </div>
             )}

@@ -15,6 +15,7 @@ Default reference for all website API work. Read Postman first; type real payloa
 
 - Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS)
 - Student auth: `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (`api/auth/user/signup`, `api/auth/user/login` on `NEXT_PUBLIC_API_BASE_URL`)
+- Student registration: `docs/api-collection/Rodha Website Student Registration & Books.postman_collection.json` (`GET`/`POST api/website/student/registration`, `GET api/website/student/profile`)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
 - Base URL: `NEXT_PUBLIC_API_BASE_URL` with trailing slash (Postman `{{baseUrl}}`)
@@ -52,7 +53,7 @@ No barrel `index.ts`. Import from explicit paths.
 4. Do **not** install TanStack Query unless a feature needs client refetch; then update this skill
 5. Soft-fail with `apiGetOrNull` on chrome/page loads — hide UI on null/empty; do not crash SSR
 6. Cache: `fetch(..., { next: { revalidate } })` via `apiGet` (`API_REVALIDATE_SECONDS`, default 60)
-7. Mutations (contact POST, student auth) go through a Route Handler so `API_KEY` and `accessToken` never live in client JS
+7. Mutations (contact POST, student auth, student registration multipart) go through a Route Handler so `API_KEY` and `accessToken` never live in client JS. For multipart (e.g. registration passport photo), forward `FormData` without setting `Content-Type` so the boundary is preserved.
 
 ## Rules
 
@@ -69,7 +70,7 @@ No barrel `index.ts`. Import from explicit paths.
 
 | Mapper | Use |
 |--------|-----|
-| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. Video (`videoYoutubeLink`) wins over `mediaUrl`. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
+| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. YouTube (`videoYoutubeLink`, or a YouTube `mediaUrl`) wins over an image. A direct video file in `mediaUrl` is `videoUrl` and home/category heroes play that before the image. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
 | `mapCourses` / `mapCourseType` | Category + faculty course lists. `courseType` drives existing static chips (`comprehensive` / `individual` / `crash` / `other`) in `CategoryCoursesSlider`. |
 | `mapFacultyCards` | Category page `faculty[]`, faculty listing, team featured faculty |
 
@@ -80,6 +81,8 @@ No barrel `index.ts`. Import from explicit paths.
 | `NEXT_PUBLIC_API_BASE_URL` | API host with trailing `/` |
 | `NEXT_PUBLIC_API_SOURCE` | `x-source` header |
 | `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS` | Banner flip interval (default 8000) |
+| `NEXT_PUBLIC_PROMO_DIALOG_DELAY_MS` | Delay before the promo dialog opens (default 2500) |
+| `NEXT_PUBLIC_PURCHASE_TOAST_MS` | Recent-purchase toast auto-close (default 10000) |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google Identity Services OAuth Web client id (auth screen) |
 | `API_KEY` | Optional server-only key |
 | `API_REVALIDATE_SECONDS` | ISR window (default 60) |
@@ -108,7 +111,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | auth | `POST api/auth/user/forgot-password` | `/api/auth/forgot-password` (`email`, `is_web: true`) |
 | auth | `POST api/auth/user/reset-password` | `/api/auth/reset-password` (`email`, `token`, `newPassword`, `is_web: true`) |
 | auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state` |
-| auth | `PATCH api/auth/me/state` | `/api/account/state` — update state + refresh user cookie/atom |
+| auth | `PATCH api/auth/me/details` | `/api/account/state` — send only a real `stateId` and/or `mobile`; omitted/empty keys stay unchanged; response is the updated student profile |
 | states | `GET api/website/states/dropdown` | `/api/states/dropdown` — registration + Update State dialog |
 | packages | `GET api/website/packages` | `/courses`, account buy tab; filters `search`, `categoryId`, `graphyCategory` (UI Type), `subCategory1`, `facultyId`, `subjectId`, `sortBy`, `sortOrder` (skip tag/language — no masters) |
 | packages | `GET api/website/packages/:slug` | `/courses/[slug]` — map faculty (`fullName`/`profileImageUrl`), testimonials, curriculum; hide empty sections; no Plans UI; discount % from `price`/`discountedPrice` |
@@ -117,14 +120,23 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/dashboard` | Account dashboard |
 | student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
-| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout` |
+| student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
 | student | `GET api/website/student/orders` | My Orders |
 | student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
 | graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |
+| search | `GET api/website/search` | Global search dialog via `GET /api/search` (`scope=website\|account`). Unregistered entity types return an empty filter state |
+| success-stories | `GET api/website/success-stories` | `/success-stories` |
+| testimonials | `GET api/website/testimonials` | `/testimonials` |
+| student-results | `GET api/website/student-results` | `/results` |
+| resources | `GET api/website/resources` | `/resources` (`general=true` for the general category) |
+| promotional-popup | `GET api/website/promotional-popup` | Site promo dialog; hidden when empty |
+| recent-purchases | `GET api/website/recent-purchases` | Bottom-left purchase toast; hidden when empty |
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
 
-Gaps: `docs/graphy-api-requirements.txt`
+Checkout sends `channel: "WEB"` and header `x-channel: WEB`. Contact POST includes optional `examYear`.
+
+Gaps: `docs/graphy-api-requirements.txt`, `docs/api-requirements-website-ui.md`
 
 ## Checklist for a new endpoint
 

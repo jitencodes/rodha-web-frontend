@@ -114,7 +114,8 @@ export function FloatingCounsellingCta() {
         "transition-[opacity,transform] duration-300",
         isVisible
           ? "pointer-events-auto opacity-100"
-          : "pointer-events-none opacity-0"
+          : "pointer-events-none opacity-0",
+        isCoursePage?"hidden md:block":""
       )}
     >
       <button

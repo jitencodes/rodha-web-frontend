@@ -115,6 +115,7 @@ export function mapPackageListItem(
     price: sale,
     originalPrice,
     discountPercent,
+    appliedCouponCode: item.promocode?.code?.trim() || undefined,
     thumbnail: asString(item.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     tags: asStringList(item.tags),
     courseCount: asNumber(item.courseCount),
@@ -155,6 +156,7 @@ export function packageCardToCourse(
     price: pkg.price,
     originalPrice: pkg.originalPrice,
     discountPercent: pkg.discountPercent,
+    appliedCouponCode: pkg.appliedCouponCode,
     duration: pkg.courseCount > 0 ? `${pkg.courseCount} courses` : "",
     features: [],
     highlights: pkg.tags,
@@ -235,6 +237,7 @@ function toFacultyApi(item: PackageFacultyApi): FacultyApi | null {
       typeof item.experienceYears === "number" ? item.experienceYears : null,
     isFeatured: item.isFeatured === true,
     isActive: item.isActive !== false,
+    subjects: item.subjects ?? null,
   };
 }
 

@@ -6,11 +6,12 @@ import {
   clearStudentCart,
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
+import { publicUrl } from "@/lib/http/public-origin";
 
 export const runtime = "nodejs";
 
 function redirectToLogin(request: Request, packageId: string, slug: string) {
-  const url = new URL("/login", request.url);
+  const url = publicUrl(request, "/login");
   const buyParams = new URLSearchParams({ packageId });
   if (slug) buyParams.set("slug", slug);
   url.searchParams.set(
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
   const packageId = Number.parseInt(packageIdRaw, 10);
 
   if (!packageIdRaw || !Number.isFinite(packageId)) {
-    return NextResponse.redirect(new URL("/courses", request.url));
+    return NextResponse.redirect(publicUrl(request, "/courses"));
   }
 
   const jar = await cookies();
@@ -43,12 +44,12 @@ export async function GET(request: Request) {
   try {
     await clearStudentCart(accessToken);
     await addPackageToCart(accessToken, packageId);
-    return NextResponse.redirect(new URL("/account/checkout", request.url));
+    return NextResponse.redirect(publicUrl(request, "/account/checkout"));
   } catch (error) {
     console.error("[api/checkout/buy]", error);
     const message =
       error instanceof ApiError ? error.message : "Unable to start checkout";
-    const fail = new URL(slug ? `/courses/${slug}` : "/courses", request.url);
+    const fail = publicUrl(request, slug ? `/courses/${slug}` : "/courses");
     fail.searchParams.set("checkoutError", message);
     return NextResponse.redirect(fail);
   }

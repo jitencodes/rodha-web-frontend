@@ -1,6 +1,6 @@
 import { Container } from "@/components/layout/Container";
+import { HeroBannerMedia } from "@/components/sections/home/HeroBannerMedia";
 import { HomeHeroShell } from "@/components/sections/home/HomeHeroShell";
-import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
 import Typewritter from "@/components/Typewriter";
 import Image from "next/image";
 import type {
@@ -19,7 +19,7 @@ function HeroStacksStrip({ stacks }: { stacks: HeroStackViewModel[] }) {
   if (stacks.length === 0) return null;
 
   return (
-    <div className="bg-[#F06B23]/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
+    <div className="bg-[#F06B23]/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
       {stacks.map((stack) => (
         <div key={stack.id} className="flex gap-4.5 items-center">
           {stack.icon ? (
@@ -50,7 +50,7 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
 
   const hasHighlights = banner.titleHighlights.length > 0;
   const hasDescription = Boolean(banner.description);
-  const hasVideo = Boolean(banner.videoId);
+  const hasMedia = Boolean(banner.videoId || banner.videoUrl || banner.imageUrl);
   const hasStacks = banner.stacks.length > 0;
 
   return (
@@ -61,7 +61,7 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
             className={`lg:col-span-6 min-h-0 overflow-visible ${HERO_CONTENT_MAX} lg:max-w-none`}
           >
             <div className={HERO_CONTENT_MAX}>
-              <h1 className="text-[32px] sm:text-[38px] md:text-[40px] lg:text-[3rem] font-bold leading-[1.4] tracking-tight">
+              <h1 className="text-[26px] sm:text-[38px] md:text-[40px] lg:text-[3rem] font-bold leading-[1.4] tracking-tight">
                 {banner.title}
                 {hasHighlights ? (
                   <>
@@ -86,19 +86,12 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
 
           <div className="lg:col-span-6 flex flex-col items-center min-h-0">
             <div className="flex w-full flex-col gap-2.5 sm:gap-3">
-              {hasVideo && banner.videoId ? (
-                <HeroVideoEmbed videoId={banner.videoId} />
-              ) : banner.imageUrl ? (
-                <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
-                  <Image
-                    src={banner.imageUrl}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    fetchPriority="high"
-                  />
-                </div>
+              {hasMedia ? (
+                <HeroBannerMedia
+                  videoId={banner.videoId}
+                  videoUrl={banner.videoUrl}
+                  imageUrl={banner.imageUrl}
+                />
               ) : null}
             </div>
           </div>

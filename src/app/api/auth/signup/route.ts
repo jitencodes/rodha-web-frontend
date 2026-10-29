@@ -4,7 +4,7 @@ import {
   validateEmail,
   validateName,
   validatePassword,
-  validatePhone,
+  validateIndianMobile,
 } from "@/lib/form-validation";
 
 export const runtime = "nodejs";
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   const fieldError =
     validateName(fullName) ||
     validateEmail(email) ||
-    validatePhone(phoneNumber) ||
+    validateIndianMobile(phoneNumber) ||
     validatePassword(password);
   if (fieldError) {
     return jsonError(fieldError, 400);
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       phoneNumber,
       stateId,
     });
-    return sessionResponse(session);
+    return sessionResponse(session, request);
   } catch (error) {
     return authCatch(error, "Unable to create your account right now.");
   }

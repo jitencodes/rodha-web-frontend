@@ -90,8 +90,8 @@
   --text-h1--line-height: 1.2;
   --text-h2: 28px;
   --text-h2--line-height: 1.3;
-  --text-h2-v2: 32px;
-  --text-h2-v2--line-height: 40px;
+  --text-h2-v2: 24px;
+  --text-h2-v2--line-height: 32px;
   --text-h3: 22px;
   --text-h3--line-height: 1.3;
   --text-h4: 18px;
@@ -268,7 +268,6 @@
   animation: forum-hero-enter 560ms var(--ease-premium, ease-out) both;
   animation-delay: 240ms;
 }
-
 /* ─── Base Styles ─── */
 @layer base {
   html {
@@ -299,22 +298,22 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--border-default);
-    border-radius: 4px;
+    background: var(--color-primary);
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--border-hover);
+    background: var(--color-primary);
   }
 
   /* Firefox scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--border-default) var(--bg-secondary);
+    scrollbar-color: var(--color-primary) transparent;
   }
 }
 
@@ -1637,4 +1636,36 @@ background-size: cover;
   display: block;
   max-width: 100%;
   overflow-x: auto;
+}
+
+
+@keyframes announcement-ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.announcement-ticker {
+  animation: announcement-ticker 22s linear infinite;
+}
+
+.announcement-ticker .announcement-html,
+.announcement-ticker .announcement-html * {
+  display: inline;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-ticker {
+    animation: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .announcement-ticker-clone {
+    display: none;
+  }
 }

@@ -49,6 +49,7 @@ export function CourseCardV2({
   const actionHref = ctaHref || courseHref;
   const isExternalCard = Boolean(!href && course.externalLink);
   const isExternalCta = Boolean(ctaHref?.startsWith("http"));
+  const ctaNeedsDocumentNavigation = actionHref.startsWith("/api/");
   const posterSrc =
     course.thumbnail ||
     course.facultyImage ||
@@ -134,30 +135,67 @@ export function CourseCardV2({
               ) : null}
             </div>
 
+            <div className="flex flex-col items-end gap-2">
+              {course.appliedCouponCode?.trim() ? (
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-caption font-bold text-orange-500">
+                    Eligible Coupon
+                  </span>
+                  <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+                    <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
+                      {course.appliedCouponCode.trim()}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
             {ctaIsDistinct ? (
-              <Link
-                href={actionHref}
-                target={isExternalCta ? "_blank" : undefined}
-                rel={isExternalCta ? "noopener noreferrer" : undefined}
-                data-carousel-ignore
-                onPointerDown={stopCarouselDrag}
-                onClick={stopCarouselDrag}
-                className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
-              >
-                {label}
-                <svg
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden
+              ctaNeedsDocumentNavigation ? (
+                <a
+                  href={actionHref}
+                  data-carousel-ignore
+                  onPointerDown={stopCarouselDrag}
+                  onClick={stopCarouselDrag}
+                  className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.25 4.25a.75.75 0 010 1.08l-4.25 4.25a.75.75 0 01-1.06-.02z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Link>
+                  {label}
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.25 4.25a.75.75 0 010 1.08l-4.25 4.25a.75.75 0 01-1.06-.02z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+              ) : (
+                <Link
+                  href={actionHref}
+                  target={isExternalCta ? "_blank" : undefined}
+                  rel={isExternalCta ? "noopener noreferrer" : undefined}
+                  data-carousel-ignore
+                  onPointerDown={stopCarouselDrag}
+                  onClick={stopCarouselDrag}
+                  className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
+                >
+                  {label}
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.25 4.25a.75.75 0 010 1.08l-4.25 4.25a.75.75 0 01-1.06-.02z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </Link>
+              )
             ) : (
               <span className="inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 group-hover:gap-2.5 group-hover:text-orange-500/80">
                 {label}
@@ -175,6 +213,7 @@ export function CourseCardV2({
                 </svg>
               </span>
             )}
+            </div>
           </div>
         </div>
       </div>

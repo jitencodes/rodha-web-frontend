@@ -668,7 +668,7 @@ export const mbaCourses: Course[] = [
     price: 24999,
     originalPrice: 34999,
 
-    detailsLabel: "View Details",
+    detailsLabel: "View",
 
     details: [
       "Full VARC, DILR & Quant — Live + Recorded",
@@ -723,7 +723,7 @@ export const mbaCourses: Course[] = [
 
     originalPrice: 14999,
 
-    detailsLabel: "View Details",
+    detailsLabel: "View",
 
     details: [
       "Complete CAT Syllabus",
@@ -774,7 +774,7 @@ export const mbaCourses: Course[] = [
 
     originalPrice: 14999,
 
-    detailsLabel: "View Details",
+    detailsLabel: "View",
 
     details: [
       "Fast-track Revision",
@@ -824,7 +824,7 @@ export const mbaCourses: Course[] = [
 
     originalPrice: 8999,
 
-    detailsLabel: "View Details",
+    detailsLabel: "View",
 
     details: [
       "Build Fundamentals",

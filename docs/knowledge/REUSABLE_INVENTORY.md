@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-10-07 (Account course learning hub)
+**Last updated:** 2026-10-23 (complete profile dialog)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -13,6 +13,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | Accordion | `Accordion.tsx` |
 | AccentUnderline | `AccentUnderline.tsx` |
+| AppImage | `AppImage.tsx` (next/image for rasters; plain img for SVG so the optimizer does not reject them) |
 | AmbientBackground | `AmbientBackground.tsx` |
 | Badge | `Badge.tsx` |
 | Breadcrumb | `Breadcrumb.tsx` |
@@ -47,6 +48,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources by vertical) |
 | MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
 | PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
+| PromoDialog | `PromoDialog.tsx` (once per 24h; image or YouTube; lead form when logged out) |
+| PurchaseToast | `PurchaseToast.tsx` (bottom-left recent purchase; auto-close; 24h after manual close) |
+| GlobalSearchDialog | `GlobalSearchDialog.tsx` (Ctrl/Cmd+K; quick links; entity-type filters) |
 | SiteFrame | `SiteFrame.tsx` (public `(website)` layout only; hides marketing chrome on `/login` and `/signup`) |
 | StoriesModal | `VideoModal.tsx` (YouTube iframe modal for `YoutubeStoryCard` clicks) |
 
@@ -117,7 +121,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ContactCtaSection | `contact/ContactCtaSection.tsx` |
 | ContactFaqSection | `contact/ContactFaqSection.tsx` (`AccordionV2`) |
 | ContactBuddyCtaSection | `contact/ContactBuddyCtaSection.tsx` |
-| BlogHeroSection | `blog/BlogHeroSection.tsx` (light hero with breadcrumb, eyebrow, heading, hero-blog image) |
+| BlogHeroSection | `blog/BlogHeroSection.tsx` (dark banner, breadcrumb, optional `eyebrow` / `title` / `accent` / `description` / `breadcrumbLabel`; image `/assets/images/blog/Blogs.png`) |
+| BlogToolbar | `src/app/(website)/blog/BlogToolbar.tsx` (category pills + search; optional `basePath`, placeholders, `extraParams`) |
+| ListingEmptyState | `listings/ListingEmptyState.tsx` (filtered listing empty state + clear link) |
 | BlogCategories | `blog/BlogCategories.tsx` (category badge links to `/blog?category=…`; optional `activeCategory`) |
 | ShareBlog | `blog/ShareBlog.tsx` (client; Copy Link, WhatsApp, Facebook, X, LinkedIn share buttons; `url`+`title` props) |
 | CourseDetailPageView | `course/CourseDetailPage.tsx` (assembler for `/courses/[slug]`) |
@@ -144,7 +150,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | PricingPlanCard | `PricingPlanCard.tsx` (light pricing tier card; optional Most Popular) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
 | FacultyCard | `FacultyCard.tsx` |
-| FacultyCardV2 | `FacultyCardV2.tsx` (MBA premium white; optional `variant="detail"` with bio + View Profile) |
+| FacultyCardV2 | `FacultyCardV2.tsx` (up to two API subjects, `+n` remainder, designation when subjects are empty; no title fallback) |
 | FacultyExpertCard | `FacultyExpertCard.tsx` |
 | FacultyListingCard | `FacultyListingCard.tsx` |
 | FacultyStatCard | `FacultyStatCard.tsx` (dark hero stat; `FacultyIcon` / react-icons) |
@@ -166,7 +172,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | TopperCardV2 | `TopperCardV2.tsx` (homepage + category results; CAT percentile, IPMAT AIR rank, or Achiever/Topper placeholder) |
 | TopperCardAlternate | `TopperCardAlternate.tsx` |
 | ValuePropCard | `ValuePropCard.tsx` |
-| YoutubeStoryCard | `YoutubeStoryCard.tsx` (YouTube thumbnail + student/subtitle; opens `StoriesModal`)
+| ResourceCard | `ResourceCard.tsx` (API thumbnail, type badge, category, title, description) |
+| YoutubeStoryCard | `YoutubeStoryCard.tsx` (YouTube thumbnail + student/subtitle; opens `StoriesModal`) |
 
 ## Forms — `src/components/forms/`
 
@@ -191,7 +198,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 |-----------|------|
 | AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme + `AccountUserProvider` / `userAtom`) |
 | AccountSidebar | `AccountSidebar.tsx` (nav accordion, cart badge, Need Help) |
-| AccountHeader | `AccountHeader.tsx` (search → `/account/content`, clear button, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
+| AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
 | AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |
 | AccountQuickActionTiles | `AccountQuickActionTiles.tsx` (Continue Watching → Quick Content types) |
@@ -199,8 +206,14 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountQuickContentToolbar | `AccountQuickContentToolbar.tsx` (search outside sheet; completion/live/result filters) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
 | AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
-| UpdateStateDialog | `UpdateStateDialog.tsx` (shared state picker → `PATCH /api/account/state`) |
-| RequireStateGate | `RequireStateGate.tsx` (blocking dialog when `user.state` is null) |
+| UpdateStateDialog | `UpdateStateDialog.tsx` (shows only missing or pencil-edited mobile/state; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
+| RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
+| RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
+| ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
+| Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
+| EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
+| CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
+| RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (Time Spent / Valid Till / Language in body; progress + Continue CTA) |
 | AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + Reset Filters + mobile BottomSheet) |
@@ -219,7 +232,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | OrdersPreviewCard | `OrdersPreviewCard.tsx` (dashboard My Orders preview) |
 | QuickLinksCard | `QuickLinksCard.tsx` (dashboard quick links) |
 | AccountOrdersList | `AccountOrdersList.tsx` (desktop table + mobile cards; payment/order status badges) |
-| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, edit name + change password; client-only) |
+| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, Complete registration / View Profile, email update request, phone/state pencils, change password) |
 | CartPageClient | `CartPageClient.tsx` (cart/coupon state, recommended rail) |
 | CartItemCard | `CartItemCard.tsx` (line item + remove) |
 | CartOrderSummary | `CartOrderSummary.tsx` (sticky totals, coupon, Continue to Pay) |
@@ -251,6 +264,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | api contact | `api/modules/contact/*` | CMS contact POST (proxied by `/api/leads`) |
 | api auth | `api/modules/auth/*` | Student signup/login/google; session mapped; cookie set in Route Handlers |
 | api home | `api/modules/home/*` | Get Home service + homepage view-model mapper |
+| content-listings | `content-listings.ts` | Shared listing query and pagination query for results, testimonials, stories, and resources |
 | course-filters | `course-filters.ts` | Course type chips/dropdowns + paid/free helpers (`isCourseFree`, `isTestSeriesFree`) |
 | course-sort | `course-sort.ts` | Packages listing sort presets (`sortBy`/`sortOrder` pairs for `/courses`) |
 | session-cookie | `auth/session-cookie.ts` | httpOnly `rodha_access_token` apply/clear helpers |
@@ -273,11 +287,12 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Module | File |
 |--------|------|
-| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile` (static student dashboard foundation; types in `src/lib/account/types.ts`) |
+| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; registration API module `src/lib/api/modules/student/registration/` |
 | blog | `blog.ts` |
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |
-| category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings) |
+| category-landings | `category-landings.json` + `category-landings.ts` (SoT for all five category landings; `getListedResults` / `getListedTestimonials` / `getListedStories`) |
+| resources | `src/lib/api/modules/resources` (resource hub listing) |
 | category-landing-defaults | `category-landing-defaults.ts` (`buildCategoryLandingFallback`, `withCategoryLandingDefaults` — name-based chrome for CMS categories without JSON) |
 | course-details | `course-details.ts` (course detail resolver: slug lookup, defaults, faculty, related, FAQs) |
 | courses | `courses.ts` (homepage / legacy) |
@@ -308,7 +323,7 @@ rodha-logo.webp (official brand), rodha-logo.svg, rodha-logo-white.svg, rodha-lo
 **Faculty listing hero:** `images/faculty/listings page/hero-faulty.png`  
 **Faculty detail:** `images/faculty/detail/results-podium.png` (results banner); achievements reuse `images/icons/rank.png`; hero decoration reuses listing `hero-faulty.png`  
 **Courses / faculty / results / blog:** JPG assets under `images/courses`, `images/faculty`, `images/results`, `images/blog` (legacy)  
-**Catalog listing hero:** `images/courses/banner/banner.png` (courses + test series listing)  
+**Catalog listing hero:** `images/courses/courses-hero.png` (courses listing). Test series listing still uses `images/courses/banner/banner.png`. Blog listing hero: `images/blog/Blogs.png`.  
 **Auth banner:** `auth/login-banner.png` (login/signup left panel)  
 **CAT 2025 students:** 46 optimized WebP portraits under `images/category/cat/students/`, named by student slug and shared by result/testimonial records  
 **IPMAT 2026 students:** 16 optimized WebP portraits under `images/category/ipmat/students/`, used on the IPMAT landing and homepage IPMAT results carousel  

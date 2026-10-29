@@ -3,6 +3,7 @@ import { buildPageMetadata } from "@/lib/seo";
 import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
 import { AccountProfilePanel } from "@/components/account/AccountProfilePanel";
 import { getCurrentUser } from "@/lib/api/modules/auth/service";
+import { getStudentRegistration } from "@/lib/api/modules/student/registration/service";
 import { getStudentProfile } from "@/lib/api/modules/student/profile/service";
 import {
   isUnauthorizedError,
@@ -17,7 +18,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function AccountProfilePage() {
-  const profile = await withStudentAuth(async (accessToken) => {
+  const { profile, registration } = await withStudentAuth(async (accessToken) => {
     let next = {
       fullName: "",
       email: "",
@@ -57,6 +58,9 @@ export default async function AccountProfilePage() {
             email: data.email,
             phone: data.mobile || next.phone,
             avatarUrl: data.profilePicturePath || next.avatarUrl,
+            stateId: data.stateId ?? next.stateId,
+            stateName: data.stateName || next.stateName,
+            stateCode: data.stateCode || next.stateCode,
           };
         }
       } catch (error) {
@@ -66,7 +70,17 @@ export default async function AccountProfilePage() {
       }
     }
 
-    return next;
+    const registrationData = await getStudentRegistration(accessToken);
+    if (registrationData?.account) {
+      next = {
+        ...next,
+        fullName: registrationData.account.fullName || next.fullName,
+        email: registrationData.account.email || next.email,
+        phone: registrationData.account.mobile || next.phone,
+      };
+    }
+
+    return { profile: next, registration: registrationData };
   }, "/account/profile");
 
   return (
@@ -79,7 +93,10 @@ export default async function AccountProfilePage() {
           {ACCOUNT_PROFILE_PAGE_COPY.subtitle}
         </p>
       </header>
-      <AccountProfilePanel initialProfile={profile} />
+      <AccountProfilePanel
+        initialProfile={profile}
+        registration={registration}
+      />
     </div>
   );
 }

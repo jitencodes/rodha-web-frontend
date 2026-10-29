@@ -3,6 +3,7 @@ import type {
   AuthGraphyViewModel,
   AuthUserViewModel,
 } from "@/lib/api/modules/auth/types";
+import { requestIsSecure } from "@/lib/http/public-origin";
 
 export const AUTH_COOKIE_NAME = "rodha_access_token";
 export const AUTH_USER_COOKIE_NAME = "rodha_user";
@@ -31,10 +32,10 @@ function tokenMaxAgeSeconds(accessToken: string): number {
   return seconds > 60 ? seconds : DEFAULT_MAX_AGE;
 }
 
-function cookieBase(maxAge: number, httpOnly: boolean) {
+function cookieBase(maxAge: number, httpOnly: boolean, secure: boolean) {
   return {
     httpOnly,
-    secure: process.env.NODE_ENV === "production",
+    secure,
     sameSite: "lax" as const,
     path: "/",
     maxAge,
@@ -43,12 +44,13 @@ function cookieBase(maxAge: number, httpOnly: boolean) {
 
 export function applyAuthCookie(
   response: NextResponse,
-  accessToken: string
+  accessToken: string,
+  request?: Request
 ): void {
   response.cookies.set(
     AUTH_COOKIE_NAME,
     accessToken,
-    cookieBase(tokenMaxAgeSeconds(accessToken), true)
+    cookieBase(tokenMaxAgeSeconds(accessToken), true, requestIsSecure(request))
   );
 }
 
@@ -58,43 +60,49 @@ export function applySessionCookies(
     accessToken: string;
     user: AuthUserViewModel;
     graphy?: AuthGraphyViewModel | null;
-  }
+  },
+  request?: Request
 ): void {
   const maxAge = tokenMaxAgeSeconds(input.accessToken);
-  applyAuthCookie(response, input.accessToken);
+  const secure = requestIsSecure(request);
+  applyAuthCookie(response, input.accessToken, request);
 
   response.cookies.set(
     AUTH_USER_COOKIE_NAME,
     encodeURIComponent(JSON.stringify(input.user)),
-    cookieBase(maxAge, true)
+    cookieBase(maxAge, true, secure)
   );
 
   if (input.graphy?.ssoToken || input.graphy?.ssoUrl) {
     response.cookies.set(
       AUTH_GRAPHY_COOKIE_NAME,
       encodeURIComponent(JSON.stringify(input.graphy)),
-      cookieBase(maxAge, true)
+      cookieBase(maxAge, true, secure)
     );
   } else {
-    response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cookieBase(0, true));
+    response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cookieBase(0, true, secure));
   }
 
   response.cookies.set(
     AUTH_LOGGED_IN_COOKIE_NAME,
     "1",
-    cookieBase(maxAge, false)
+    cookieBase(maxAge, false, secure)
   );
 }
 
-export function clearAuthCookie(response: NextResponse): void {
-  const cleared = cookieBase(0, true);
+export function clearAuthCookie(
+  response: NextResponse,
+  request?: Request
+): void {
+  const secure = requestIsSecure(request);
+  const cleared = cookieBase(0, true, secure);
   response.cookies.set(AUTH_COOKIE_NAME, "", cleared);
   response.cookies.set(AUTH_USER_COOKIE_NAME, "", cleared);
   response.cookies.set(AUTH_GRAPHY_COOKIE_NAME, "", cleared);
   response.cookies.set(
     AUTH_LOGGED_IN_COOKIE_NAME,
     "",
-    cookieBase(0, false)
+    cookieBase(0, false, secure)
   );
 }
 

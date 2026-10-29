@@ -4,9 +4,17 @@ import { useEffect, useState } from "react";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { cn } from "@/lib/utils";
 
+type StateSelectOption = {
+  value: string;
+  name: string;
+  code: string;
+};
+
 type StateSelectFieldProps = {
   value: string;
   onChange: (value: string) => void;
+  /** Selected master row, including name and code for checkout payloads. */
+  onSelect?: (option: StateSelectOption | null) => void;
   error?: string;
   label?: string;
   placeholder?: string;
@@ -19,7 +27,13 @@ type StateSelectFieldProps = {
 
 type StatesApiResponse = {
   ok: boolean;
-  items?: Array<{ value: string; label: string; stateId: number }>;
+  items?: Array<{
+    value: string;
+    label: string;
+    stateId: number;
+    name?: string;
+    code?: string;
+  }>;
   total?: number;
   totalPages?: number;
   error?: string;
@@ -29,6 +43,7 @@ type StatesApiResponse = {
 export function StateSelectField({
   value,
   onChange,
+  onSelect,
   error,
   label = "State",
   placeholder = "Select your state",
@@ -37,9 +52,9 @@ export function StateSelectField({
   className,
   required = false,
 }: StateSelectFieldProps) {
-  const [options, setOptions] = useState<Array<{ value: string; label: string }>>(
-    []
-  );
+  const [options, setOptions] = useState<
+    Array<{ value: string; label: string; name: string; code: string }>
+  >([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
 
@@ -59,6 +74,8 @@ export function StateSelectField({
           (data.items ?? []).map((item) => ({
             value: item.value,
             label: item.label,
+            name: item.name?.trim() || "",
+            code: item.code?.trim() || "",
           }))
         );
       })
@@ -83,18 +100,21 @@ export function StateSelectField({
         label={required ? `${label} *` : label}
         options={options}
         value={value}
-        onChange={onChange}
+        onChange={(next) => {
+          onChange(next);
+          const match = options.find((option) => option.value === next);
+          onSelect?.(
+            match
+              ? { value: match.value, name: match.name, code: match.code }
+              : null
+          );
+        }}
         placeholder={loading ? "Loading states…" : placeholder}
         error={error || loadError || undefined}
         aria-label={label}
+        className="w-full"
         triggerWidth="full"
-        triggerMinWidth={140}
-        menuWidth="content"
-        menuMaxWidth={420}
-        className={cn(
-          disabled ? "pointer-events-none opacity-60" : undefined,
-          className
-        )}
+        menuWidth="trigger"
       />
     </div>
   );

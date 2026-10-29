@@ -31,12 +31,15 @@ const QUICK_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Faculty", href: "/faculty" },
   { label: "Meet the Team", href: "/team" },
-  { label: "Blogs", href: "/blog" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const RESOURCES_LINKS = [
   { label: "Blog", href: "/blog" },
+  { label: "Results", href: "/results" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "Success Stories", href: "/success-stories" },
+  { label: "Resource Hub", href: "/resources" },
   { label: "FAQ", href: "/faq" },
   { label: "Free Resources", href: CAT_FREE_COURSE_URL },
   { label: "Discussion Forum", href: "/discussion-forum" },
@@ -52,6 +55,10 @@ const LEGAL_LINKS = [
 const PREFERRED_ACTIVE_LABEL: Record<string, string> = {
   "/category/cat": "MBA (CAT + GDPI)",
   "/blog": "Blog",
+  "/results": "Results",
+  "/testimonials": "Testimonials",
+  "/success-stories": "Success Stories",
+  "/resources": "Resource Hub",
   "/contact": "Contact Us",
   "/faq": "FAQ",
   "/team": "Meet the Team",
@@ -202,16 +209,21 @@ export function Footer() {
       : item
   );
   const isCategoryRoute = pathname.startsWith("/category/");
+  const isCourseDetail = /^\/courses\/[^/]+$/.test(pathname);
   const footerTheme = LIGHT_FOOTER_THEME;
 
   return (
     <footer
       data-home-zone={pathname === "/" || isCategoryRoute ? "footer" : undefined}
-      className="relative bg-section-cream border-t-[10px] border-brand-orange"
+      className={cn(
+        "relative border-t-[10px] border-brand-orange bg-section-cream",
+        isCourseDetail &&
+          "max-md:pb-[calc(4.75rem+env(safe-area-inset-bottom))]"
+      )}
     >
       <div className="container-rodha relative py-10 md:py-12">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-2 text-left">
+        <div className="flex justify-between flex-col md:flex-row gap-8 lg:gap-6">
+          <div className="text-left">
             <Link href="/" className="inline-block">
               <Image
                 src="/assets/images/rodha-logo.webp"
@@ -276,7 +288,7 @@ export function Footer() {
             theme={footerTheme}
           />
 
-          <div className="col-span-2 sm:col-span-1 text-left">
+          <div className="max-w-xs text-left">
             <h4 className={cn("text-body font-semibold mb-4", footerTheme.heading)}>
               Contact Us
             </h4>
@@ -307,7 +319,7 @@ export function Footer() {
                 />
                 <a
                   href={`mailto:${getSupportEmail()}`}
-                  className="transition-colors hover:text-orange-600"
+                  className="min-w-0 break-all transition-colors hover:text-orange-600"
                 >
                   {getSupportEmail()}
                 </a>

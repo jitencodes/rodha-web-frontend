@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import type { Advisor } from "@/lib/types";
 import { Icon } from "@/components/ui/Icon";
@@ -17,7 +17,7 @@ export function AdvisorCard({ advisor, className }: AdvisorCardProps) {
       )}
     >
       <div className="relative w-[100px] sm:w-[112px] shrink-0 self-stretch">
-        <Image
+        <AppImage
           src={advisor.image}
           alt={advisor.name}
           fill

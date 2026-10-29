@@ -193,7 +193,8 @@ export function AccountContinueCoursesToolbar({
         ]}
         aria-label="Category"
         className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-        triggerWidth="auto"
+        triggerWidth="full"
+        // triggerMaxWidth={120}
         menuWidth="trigger"
         variant="account"
       />
@@ -208,7 +209,7 @@ export function AccountContinueCoursesToolbar({
         ]}
         aria-label="Sub-category"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-        triggerWidth="auto"
+        triggerWidth="full"
         menuWidth="trigger"
         variant="account"
       />
@@ -223,7 +224,7 @@ export function AccountContinueCoursesToolbar({
         ]}
         aria-label="Package"
         className="w-full min-w-0 md:w-auto md:min-w-[10rem]"
-        triggerWidth="auto"
+        triggerWidth="full"
         triggerMinWidth={160}
         menuWidth="content"
         menuMaxWidth={420}
@@ -239,7 +240,7 @@ export function AccountContinueCoursesToolbar({
         }))}
         aria-label="Sort by"
         className="w-full min-w-0 md:w-auto md:min-w-[11rem]"
-        triggerWidth="auto"
+        triggerWidth="full"
         menuWidth="trigger"
         variant="account"
       />

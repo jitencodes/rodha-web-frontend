@@ -1,15 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
+import { CheckoutLocationDialog } from "@/components/account/CheckoutLocationDialog";
+import { CouponAppliedOverlay } from "@/components/account/CouponAppliedOverlay";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
 import { formatCartMoney } from "@/lib/account/cart-totals";
-import { userHasState } from "@/lib/api/modules/auth/mapper";
+import { fireCouponConfetti } from "@/lib/checkout/coupon-confetti";
+import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
+import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
 import { userAtom } from "@/lib/store/user";
+import { storePendingPurchase } from "@/lib/tracking/purchase";
+import { readStoredUtm } from "@/lib/tracking/utm";
 
 type CheckoutItem = {
   cartItemId: string;
@@ -69,8 +75,28 @@ export function CheckoutPageClient({
   const [discount, setDiscount] = useState(discountAmount);
   const [payable, setPayable] = useState(payableAmount);
   const [appliedCode, setAppliedCode] = useState(item?.promocodeCode || null);
-  const [stateDialogOpen, setStateDialogOpen] = useState(false);
-  const [resumePayAfterState, setResumePayAfterState] = useState(false);
+  const celebratedCodeRef = useRef<string | null>(null);
+  const payStartedRef = useRef(false);
+  const [celebration, setCelebration] = useState<{
+    code: string;
+    discountAmount: number;
+  } | null>(null);
+  const [mobileDialogOpen, setMobileDialogOpen] = useState(false);
+  const [resumePayAfterMobile, setResumePayAfterMobile] = useState(false);
+  const [locationDialogOpen, setLocationDialogOpen] = useState(false);
+  const [locationPermissionDenied, setLocationPermissionDenied] = useState(false);
+
+  useEffect(() => {
+    if (!appliedCode) {
+      celebratedCodeRef.current = null;
+      setCelebration(null);
+      return;
+    }
+    if (celebratedCodeRef.current === appliedCode) return;
+    celebratedCodeRef.current = appliedCode;
+    setCelebration({ code: appliedCode, discountAmount: discount });
+    void fireCouponConfetti();
+  }, [appliedCode, discount]);
 
   async function applyCoupon() {
     if (!item || !couponInput.trim()) return;
@@ -159,18 +185,25 @@ export function CheckoutPageClient({
     }
   }
 
-  async function handlePay(options?: { skipStateCheck?: boolean }) {
-    if (!item) return;
-    if (!options?.skipStateCheck && !userHasState(authUser)) {
-      setResumePayAfterState(true);
-      setStateDialogOpen(true);
-      setError("Please select your state before continuing to pay.");
-      return;
-    }
+  function releasePay() {
+    payStartedRef.current = false;
+    setPending(false);
+  }
+
+  async function submitPayment(stateName: string | null) {
+    if (!item || payStartedRef.current) return;
+    payStartedRef.current = true;
     setPending(true);
     setError(null);
     try {
-      const res = await fetchAuthed("/api/checkout/pay", { method: "POST" });
+      const res = await fetchAuthed("/api/checkout/pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...readStoredUtm(),
+          ...(stateName ? { stateName } : {}),
+        }),
+      });
       const data = (await res.json()) as {
         ok: boolean;
         error?: string;
@@ -179,6 +212,7 @@ export function CheckoutPageClient({
         razorpayOrderId?: string;
         amountPaise?: number;
         currency?: string;
+        orderId?: number;
         orderNumber?: string;
         payableAmount?: number;
         prefill?: { name?: string; email?: string; contact?: string };
@@ -188,6 +222,14 @@ export function CheckoutPageClient({
       }
 
       if (data.mode === "free") {
+        storePendingPurchase({
+          transaction_id:
+            data.orderNumber ||
+            (typeof data.orderId === "number" ? String(data.orderId) : ""),
+          value:
+            typeof data.payableAmount === "number" ? data.payableAmount : 0,
+          currency: data.currency || "INR",
+        });
         router.push("/account/checkout/success");
         router.refresh();
         return;
@@ -219,27 +261,86 @@ export function CheckoutPageClient({
           const verifyData = (await verifyRes.json()) as {
             ok: boolean;
             error?: string;
+            orderId?: number;
+            orderNumber?: string;
+            payableAmount?: number;
           };
           if (!verifyRes.ok || !verifyData.ok) {
             setError(verifyData.error || "Payment verification failed");
-            setPending(false);
+            releasePay();
             return;
           }
+          storePendingPurchase({
+            transaction_id:
+              verifyData.orderNumber ||
+              data.orderNumber ||
+              (typeof verifyData.orderId === "number"
+                ? String(verifyData.orderId)
+                : typeof data.orderId === "number"
+                  ? String(data.orderId)
+                  : ""),
+            value:
+              typeof verifyData.payableAmount === "number"
+                ? verifyData.payableAmount
+                : typeof data.payableAmount === "number"
+                  ? data.payableAmount
+                  : 0,
+            currency: data.currency || "INR",
+          });
           router.push("/account/checkout/success");
           router.refresh();
         },
         modal: {
           ondismiss: () => {
-            setPending(false);
             setError("Payment cancelled");
+            releasePay();
           },
         },
       });
       rzp.open();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed");
-      setPending(false);
+      releasePay();
     }
+  }
+
+  async function handlePay(options?: {
+    skipMobileCheck?: boolean;
+    stateName?: string | null;
+  }) {
+    if (!item) return;
+    if (authUser && !options?.skipMobileCheck && !userHasMobile(authUser)) {
+      setResumePayAfterMobile(true);
+      setMobileDialogOpen(true);
+      setError("Please add your mobile number before continuing to pay.");
+      return;
+    }
+
+    if (options?.stateName !== undefined) {
+      await submitPayment(options.stateName);
+      return;
+    }
+
+    setPending(true);
+    setError(null);
+    const resolution = await resolveCheckoutState();
+    if (resolution.status !== "resolved") {
+      setPending(false);
+      setLocationPermissionDenied(resolution.status === "permission_denied");
+      setLocationDialogOpen(true);
+      return;
+    }
+    await submitPayment(resolution.stateName);
+  }
+
+  async function retryCheckoutLocation() {
+    const resolution = await resolveCheckoutState();
+    setLocationPermissionDenied(resolution.status === "permission_denied");
+    if (resolution.status === "resolved") {
+      setLocationDialogOpen(false);
+      await submitPayment(resolution.stateName);
+    }
+    return resolution;
   }
 
   if (!item) {
@@ -261,23 +362,22 @@ export function CheckoutPageClient({
     );
   }
 
-  const stateDialog = (
+  const profileDialog = (
     <UpdateStateDialog
-      open={stateDialogOpen}
-      required={resumePayAfterState}
-      initialStateId={authUser?.stateId}
-      title="Select your state to continue"
-      description="State is required before you can complete checkout."
+      open={mobileDialogOpen}
+      required={resumePayAfterMobile}
+      fields={["mobile"]}
+      initialMobile={authUser?.mobile}
       onClose={() => {
-        setStateDialogOpen(false);
-        setResumePayAfterState(false);
+        setMobileDialogOpen(false);
+        setResumePayAfterMobile(false);
       }}
       onUpdated={() => {
-        setStateDialogOpen(false);
+        setMobileDialogOpen(false);
         setError(null);
-        if (resumePayAfterState) {
-          setResumePayAfterState(false);
-          void handlePay({ skipStateCheck: true });
+        if (resumePayAfterMobile) {
+          setResumePayAfterMobile(false);
+          void handlePay({ skipMobileCheck: true });
         }
       }}
     />
@@ -399,7 +499,27 @@ export function CheckoutPageClient({
         </div>
       </aside>
     </div>
-    {stateDialog}
+    {profileDialog}
+    <CheckoutLocationDialog
+      open={locationDialogOpen}
+      permissionDenied={locationPermissionDenied}
+      onUseCurrentLocation={retryCheckoutLocation}
+      onConfirm={(stateName) => {
+        setLocationDialogOpen(false);
+        void handlePay({ skipMobileCheck: true, stateName });
+      }}
+      onSkip={() => {
+        setLocationDialogOpen(false);
+        void handlePay({ skipMobileCheck: true, stateName: null });
+      }}
+    />
+    {celebration ? (
+      <CouponAppliedOverlay
+        code={celebration.code}
+        discountAmount={celebration.discountAmount}
+        onClose={() => setCelebration(null)}
+      />
+    ) : null}
     </>
   );
 }

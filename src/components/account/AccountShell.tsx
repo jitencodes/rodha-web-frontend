@@ -13,6 +13,7 @@ import {
   type AccountHeaderUser,
 } from "@/components/account/AccountHeader";
 import { RequireStateGate } from "@/components/account/RequireStateGate";
+import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
 import { AccountUserProvider } from "@/components/providers/AccountUserProvider";
 import type { AuthUserViewModel } from "@/lib/api/modules/auth/types";
 import { useEnrollmentRefresh } from "@/hooks/useEnrollmentRefresh";
@@ -80,6 +81,7 @@ function AccountShellFrame({
         </main>
       </div>
       <RequireStateGate />
+      <RegistrationGateProvider enabled />
       <Toaster position="top-center" richColors closeButton />
     </div>
   );

@@ -5,6 +5,7 @@ export interface ContactSubmitRequest {
   email?: string;
   websiteCategoryId?: number;
   message?: string;
+  examYear?: string;
 }
 
 export interface ContactSubmitApi {

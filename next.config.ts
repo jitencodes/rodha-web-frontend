@@ -19,32 +19,58 @@ const nextConfig: NextConfig = {
     // without a redeploy leaves an empty client bundle — rebuild after changes.
     NEXT_PUBLIC_GOOGLE_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
+    NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID ?? "",
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "img.youtube.com",
-        pathname: "/vi/**",
-      },
-      {
-        protocol: "https",
-        hostname: "rodha-dev-bucket.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "rodha-dev-bucket.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "*.s3.*.amazonaws.com",
-        pathname: "/**",
-      },
-    ],
-  },
+images: {
+  // Keep only if your existing S3/NAT64 setup requires it.
+  dangerouslyAllowLocalIP: true,
+
+  remotePatterns: [
+    // YouTube thumbnails
+    {
+      protocol: "https",
+      hostname: "img.youtube.com",
+      pathname: "/vi/**",
+    },
+
+    // AWS S3 — ap-south-1
+    {
+      protocol: "https",
+      hostname: "*.s3.ap-south-1.amazonaws.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "placehold.co",
+      pathname: "/**",
+    },
+
+    // Google account/profile images
+    {
+      protocol: "https",
+      hostname: "lh3.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh4.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh5.googleusercontent.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "lh6.googleusercontent.com",
+      pathname: "/**",
+    },
+  ],
+},
   async redirects() {
     const homeRedirects =
       defaultHomePath === "/"

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 
 import { Container } from "@/components/layout/Container";
 
@@ -38,7 +38,7 @@ export function AboutFounderSection({
           {/* Founder Image */}
           <div className="lg:col-span-5">
             <div className="relative h-auto rounded-[8px]">
-              <Image
+              <AppImage
                 src="/assets/images/faculty/rodha faculty profile/Ravi Sir.png"
                 alt="Ravi Prakash - Founder & CEO of Rodha"
                 width={500}
@@ -63,10 +63,6 @@ export function AboutFounderSection({
               Ravi Prakash
             </h3>
 
-            <p className="mt-1 text-body font-medium text-orange-500">
-              Founder & CEO, Rodha
-            </p>
-
             <p className="mt-5 text-body-lg leading-relaxed text-text-primary">
               Ravi Prakash started Rodha on 25 January 2018 with a camera and
               a laptop, teaching Quant and LRDI to whoever would watch. In the
@@ -78,7 +74,7 @@ export function AboutFounderSection({
               Today he leads a company of teachers, content creators and
               mentors across six verticals, and still teaches. Students name
               him more often than any other faculty member when they describe
-              what changed their preparation — usually for the same two
+              what changed their preparation. Usually for the same two
               reasons: he refuses to sugarcoat where you stand, and he
               doesn't stop pushing once you know.
             </p>

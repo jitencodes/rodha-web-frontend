@@ -17,9 +17,11 @@ interface PromotionalBannerProps {
 function AnnouncementCountdown({
   endAt,
   paused = false,
+  className,
 }: {
   endAt: string;
   paused?: boolean;
+  className?: string;
 }) {
   const { days, hours, minutes, seconds, isExpired } =
     useCountdown(endAt);
@@ -36,7 +38,8 @@ function AnnouncementCountdown({
   return (
     <div
       className={cn(
-        "hidden sm:flex items-center gap-2 shrink-0",
+        "flex items-center gap-2 shrink-0",
+        className,
         paused && "pointer-events-none"
       )}
     >
@@ -61,6 +64,26 @@ function AnnouncementCountdown({
   );
 }
 
+function AnnouncementTicker({ html }: { html: string }) {
+  const copy = (
+    <span
+      className="announcement-html inline-block whitespace-nowrap px-8 text-caption leading-snug text-text-secondary [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:underline [&_a]:underline-offset-2"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+
+  return (
+    <div className="w-full overflow-hidden">
+      <div className="announcement-ticker flex w-max items-center">
+        {copy}
+        <span aria-hidden className="announcement-ticker-clone inline-flex">
+          {copy}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 interface AnnouncementFaceProps {
   announcement: AnnouncementViewModel;
   onDismiss: () => void;
@@ -81,12 +104,23 @@ function AnnouncementFace({
         WebkitBackfaceVisibility: "hidden",
       }}
     >
-      <div className="container-rodha w-full h-full flex items-center justify-center gap-3 sm:gap-5 relative lg:justify-end">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-3 sm:hidden">
+        <AnnouncementTicker html={announcement.descriptionHtml || ""} />
+        {announcement.endAt ? (
+          <AnnouncementCountdown
+            key={`countdown-mobile-${announcement.id}-${announcement.endAt}`}
+            endAt={announcement.endAt}
+            paused={back}
+          />
+        ) : null}
+      </div>
+
+      <div className="container-rodha relative hidden h-full w-full items-center justify-center gap-3 sm:flex sm:gap-5 lg:justify-end">
         {/* Announcement */}
         <div className="flex-1 min-w-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:w-[min(100%,42rem)]">
-          <p className="text-caption sm:text-body-sm text-center text-text-secondary leading-snug">
+          <p className="text-center text-body-sm leading-snug text-text-secondary">
             <span
-              className="announcement-html [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:hover:text-orange-400 [&_a]:underline [&_a]:underline-offset-2 sm:[&_a]:no-underline"
+              className="announcement-html [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:underline-offset-2 [&_a]:hover:text-orange-400 sm:[&_a]:no-underline"
               suppressHydrationWarning
               dangerouslySetInnerHTML={{
                 __html: announcement.descriptionHtml || "",
@@ -96,18 +130,19 @@ function AnnouncementFace({
         </div>
 
         {/* Countdown + close */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           {announcement.endAt ? (
             <AnnouncementCountdown
               key={`countdown-${announcement.id}-${announcement.endAt}`}
               endAt={announcement.endAt}
+              paused={back}
             />
           ) : null}
 
           <button
             type="button"
             onClick={onDismiss}
-            className="absolute right-0 sm:static flex items-center justify-center w-6 h-6 text-text-dimmed hover:text-text-primary transition-colors shrink-0"
+            className="flex h-6 w-6 shrink-0 items-center justify-center text-text-dimmed transition-colors hover:text-text-primary"
             aria-label="Dismiss banner"
           >
             <svg
@@ -287,8 +322,6 @@ export function PromotionalBanner({
     return null;
   }
 
-  const BAR_HEIGHT = 40;
-
   return (
     <div
       className={cn(
@@ -313,9 +346,8 @@ export function PromotionalBanner({
        * Everything below it stays at exactly the same position.
        */}
       <div
-        className="relative w-full overflow-hidden"
+        className="relative h-[4.25rem] w-full overflow-hidden sm:h-10"
         style={{
-          height: `${BAR_HEIGHT}px`,
           perspective: "1200px",
           perspectiveOrigin: "50% 50%",
         }}
@@ -361,9 +393,8 @@ export function PromotionalBanner({
 
           {/* TOP CUBE EDGE */}
           <div
-            className="absolute left-0 top-0 w-full bg-[#100600]"
+            className="absolute left-0 top-0 h-full w-full bg-[#100600]"
             style={{
-              height: `${BAR_HEIGHT}px`,
               transform: "rotateX(90deg)",
               transformOrigin: "center top",
               backfaceVisibility: "hidden",
@@ -373,9 +404,8 @@ export function PromotionalBanner({
 
           {/* BOTTOM CUBE EDGE */}
           <div
-            className="absolute left-0 bottom-0 w-full bg-[#0D0500]"
+            className="absolute left-0 bottom-0 h-full w-full bg-[#0D0500]"
             style={{
-              height: `${BAR_HEIGHT}px`,
               transform: "rotateX(-90deg)",
               transformOrigin: "center bottom",
               backfaceVisibility: "hidden",

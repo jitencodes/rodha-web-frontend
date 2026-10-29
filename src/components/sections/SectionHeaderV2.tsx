@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 interface SectionHeaderProps {
   title: React.ReactNode;
   subtitle?: string;
+  titleAs?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   label?: string;
   badge?: string;
   description?: string;
@@ -16,6 +17,7 @@ interface SectionHeaderProps {
 
 export function SectionHeaderV2({
   title,
+  titleAs,
   subtitle,
   label,
   description,
@@ -48,14 +50,28 @@ export function SectionHeaderV2({
         {badge && (
           <p
             className={cn(
-              "section-header-badge text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit font-semibold mb-5 md:mb-6.5",
+              "section-header-badge text-[10px] sm:text-body-sm uppercase tracking-wider text-white bg-[#F06B23] rounded-full px-4 py-1.5 w-fit font-semibold mb-5 md:mb-6.5",
               align === "center" && "mx-auto"
             )}
           >
             {badge}
           </p>
         )}
-        <h2 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h2>
+        {titleAs === "h1" ? (
+          <h1 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h1>
+        ) : titleAs === "h2" ? (
+          <h2 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h2>
+        ) : titleAs === "h3" ? (
+          <h3 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h3>
+        ) : titleAs === "h4" ? (
+          <h4 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h4>
+        ) : titleAs === "h5" ? (
+          <h5 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h5>
+        ) : titleAs === "h6" ? (
+          <h6 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h6>
+        ) : (
+          <h2 className="text-h2-v2 text-black font-montserrat font-normal">{title}</h2>
+        )}
         {subtitle && (
           <p
             className={cn(

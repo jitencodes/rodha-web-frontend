@@ -135,7 +135,7 @@ export function CategoryHeroSectionV2({
                 </p>
               ) : null}
 
-              <h1 className="text-[32px] sm:text-[38px] md:text-[40px] font-bold leading-[1.4] tracking-tight">
+              <h1 className="text-[26px] sm:text-[38px] md:text-[40px] font-bold leading-[1.4] tracking-tight">
                 {headline}
               </h1>
 
@@ -146,7 +146,7 @@ export function CategoryHeroSectionV2({
               ) : (
                 <div className="mb-8" />
               )}
-              <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
+              <div className="mt-3 flex flex-wrap items-start gap-3">
                 {hasPrimaryCta && primaryCta ? (
                   <HeroCtaLink
                     cta={primaryCta}
@@ -210,11 +210,10 @@ export function CategoryHeroSectionV2({
           ) : null}
         </div>
         {hasStats ? (
-        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
+        <div className="bg-brand-orange/80 backdrop-blur-[12px] shadow-[0px_10px_20px_0px_rgba(0,0,0,0.25)] flex h-fit gap-5 p-2 lg:p-6 rounded-2xl lg:rounded-[22px] sm:absolute -bottom-10 lg:-bottom-17 translate-y-1/2 left-1/2 sm:left-auto w-fit mx-auto">
           <div className="flex gap-4.5">
             <svg
-              width="48"
-              height="48"
+              className="h-8 w-8 shrink-0 lg:h-12 lg:w-12"
               viewBox="0 0 48 48"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -266,8 +265,7 @@ export function CategoryHeroSectionV2({
           </div>
           <div className="flex gap-4.5 items-center">
             <svg
-              width="36"
-              height="34"
+              className="h-7 w-8 shrink-0 lg:h-9 lg:w-9"
               viewBox="0 0 36 34"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

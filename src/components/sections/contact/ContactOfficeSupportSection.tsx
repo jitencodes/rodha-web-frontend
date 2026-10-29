@@ -61,22 +61,22 @@ export function ContactOfficeSupportSection({ className }: ContactOfficeSupportS
                 {
                   id: "cat-3",
                   vertical: "CAT",
-                  phone: "9997577571",
+                  phone: "8049368628",
                 },
                 {
                   id: "ssc",
                   vertical: "SSC",
-                  phone: "9874218242",
+                  phone: "8062362085",
                 },
                 {
                   id: "ipmat",
                   vertical: "IPMAT",
-                  phone: "6363176378",
+                  phone: "8062362087",
                 },
                 {
                   id: "clat",
                   vertical: "CLAT",
-                  phone: "8796192115",
+                  phone: "8062362096",
                 },
               ].map((row, index) => (
                 <li

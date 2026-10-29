@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
@@ -46,7 +46,7 @@ export function FacultyListingCard({
       )}
     >
       <div className="relative h-[200px] sm:h-[210px] bg-bg-tertiary overflow-hidden">
-        <Image
+        <AppImage
           src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
           alt={faculty.name}
           fill

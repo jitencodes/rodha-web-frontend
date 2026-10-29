@@ -291,7 +291,7 @@ export default async function BlogPostPage({
         title="Ready to Take the Next Step?"
         subtitle="Explore our programs or connect with Rodha Buddy for personalised guidance."
         backgroundImage="/assets/images/background/cta background image.JPG"
-        decorativeImage="/assets/images/about us/award-to-boy.png"
+        decorativeImage="/assets/images/about us/award-to-girl.png"
         primaryAction={{
           label: "Explore Courses",
           href: "/category/cat",

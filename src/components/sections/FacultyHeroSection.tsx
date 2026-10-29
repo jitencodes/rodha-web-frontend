@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
@@ -36,7 +36,7 @@ export function FacultyHeroSection({
     >
       {showImage && imageUrl ? (
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]">
-          <Image
+          <AppImage
             src={imageUrl}
             alt=""
             fill
@@ -77,7 +77,7 @@ export function FacultyHeroSection({
               </p>
             ) : null}
 
-            <h1 className="text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
+            <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
               {highlight ? (
                 <span className="relative inline-block text-orange-500">
@@ -125,7 +125,7 @@ export function FacultyHeroSection({
             </div>
           ) : showImage && imageUrl ? (
             <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden bg-bg-primary">
-              <Image
+              <AppImage
                 src={imageUrl}
                 alt=""
                 fill

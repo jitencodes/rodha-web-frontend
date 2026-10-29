@@ -11,7 +11,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Promotional banner + countdown | Complete | API-driven announcements; 3D flip every 8s (env); countdown only when `endAt` present |
-| Header — global nav state | Partial | Exam switcher from Active Categories API; Test Series → mocks.rodha.co.in; Free Resources category-aware |
+| Header — global nav state | Partial | Exam switcher from Active Categories API; Courses link highlighted to `/courses`; Free Resources → CAT 2027 free course |
 | Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]` via API slugs; Free Resources uses that vertical's Graphy course |
 | Mobile nav | Partial | Same Active Categories API as desktop; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
@@ -76,8 +76,8 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Split-panel screen | Complete | Full-bleed left slides + `rodha-logo.webp`; desktop viewport lock, form-only scroll |
-| Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field |
-| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login` |
+| Password signup | Complete | `POST api/auth/user/signup` via `/api/auth/signup`; +91 mobile field; 10 digits starting 6–9 |
+| Password login | Complete | `POST api/auth/user/login` with `is_web: true` via `/api/auth/login`. Session cookies are `Secure` only on HTTPS so plain-HTTP production hosts keep the session. |
 | Forgot password | Complete | `/forgot-password` → `/api/auth/forgot-password` → `api/auth/user/forgot-password` |
 | Reset password | Complete | `/reset-password` → `/api/auth/reset-password` → `api/auth/user/reset-password` (`email`/`token` query prefill) |
 | Google | Complete (client) | GIS ID token → `/api/auth/google` → `api/auth/user/google` (not in Postman) |
@@ -97,11 +97,12 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
 | Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
-| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended, progress ring, orders preview, quick links |
+| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor), progress ring, orders preview, quick links |
 | Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |
 | Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
-| Profile | Complete | `/account/profile` avatar, edit name + change password (client-only) |
+| Profile | Complete | `/account/profile` avatar; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
+| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
 
 ## Course Listing `/courses`
@@ -109,7 +110,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Canonical listing route | Complete | `/courses` beside existing `/courses/[slug]` detail |
-| Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/banner/banner.png` |
+| Dark hero | Complete | `ListingHeroSection` + `/assets/images/courses/courses-hero.png` |
 | URL filters | Complete | Master-driven: `categoryId`, subCategory1 tabs, faculty, subject, sort, search `q`; Type (`type`→graphyCategory) UI temporarily hidden; mobile Filter bottom sheet; desktop dropdowns portaled above cards |
 | Cards + pagination | Complete | `CourseCardV2` (category card); 12 per page; URL `Pagination` light |
 | Stories + CTA | Complete | Merged category stories (hidden if empty) then `CTABandV2Decorative` |
@@ -131,7 +132,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
 | Package Detail By Slug API | Complete (`getPackageBySlug` + mapper; empty sections hidden) |
 | Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
-| Sticky purchase card | Complete (package Buy Now checkout + Rodha Buddy) |
+| Sticky purchase card | Complete (same-tab Buy Now → login or checkout; checkout errors surfaced) |
 | Curriculum accordion | Complete (`CourseCurriculumAccordion`; hidden when no modules) |
 | Faculty for course | Complete (package `faculty[]` via `FacultyCardV2`; hidden when empty) |
 | What's included + schedule | Complete (API benefits/schedule only; no invented defaults on package path) |
@@ -153,6 +154,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Faculty listing `/faculty` | Complete | SSR list + URL filters stay on `#faculty-list`; CMS banner + featured |
 | Faculty detail `/faculty/[slug]` | Complete | Nested CMS `{ faculty, packages }`; courses with `courseType` chips; empty sections hidden |
 | Blog listing `/blog` | Complete | Unfiltered listing shows `isFeatured` post; filters All/MBA/IPMAT/SSC |
+| Student results `/results` | Complete | `GET api/website/student-results`; `TopperCardV2`; 10 per page; optional `resultId` |
+| Testimonials `/testimonials` | Complete | `GET api/website/testimonials`; light `TestimonialCardV2`; 6 per page |
+| Success stories `/success-stories` | Complete | `GET api/website/success-stories`; `YoutubeStoryCard` + `StoriesModal`; 6 per page |
+| Resource hub `/resources` | Complete | `GET api/website/resources`; API type filters; `general=true` for the general category; 8 per page |
 | Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
 | Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
 | FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
@@ -189,4 +194,4 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 
 ## Explicitly Out of Scope (Phase 2)
 
-Do not mark these as remaining Phase 1 work: payments, full student dashboard, admin, resources hub, search results page, mock tests page. Login `/login` and signup `/signup` were requested and are implemented (password APIs from Graphy collection under `api/auth/user/*`; Google backend path `api/auth/user/google` is not in Postman). Course listing `/courses` and test series listing `/test-series` are implemented. Header Test Series still points at mocks.rodha.co.in.
+Do not mark these as remaining Phase 1 work: payments, full student dashboard, admin, search results page, mock tests page. The resource hub listing at `/resources` is a static shell until a resources API exists. Login `/login` and signup `/signup` were requested and are implemented (password APIs from Graphy collection under `api/auth/user/*`; Google backend path `api/auth/user/google` is not in Postman). Course listing `/courses` and test series listing `/test-series` are implemented. Header Test Series still points at mocks.rodha.co.in.

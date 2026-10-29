@@ -6,15 +6,14 @@ import { cn, isExternalHref } from "@/lib/utils";
 import {
   EXTERNAL_URLS,
   HEADER_NAV,
-  getFreeResourceUrl,
 } from "@/lib/constants";
-import { slugToCategoryId } from "@/lib/api/modules/categories/mapper";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
 import { usePathname } from "next/navigation";
 
 interface MobileNavProps {
   activeCategorySlug?: string | null;
   categories?: WebsiteCategoryViewModel[];
+  onSearch?: () => void;
 }
 
 function MobileNavLink({
@@ -52,14 +51,11 @@ function MobileNavLink({
 export function MobileNav({
   activeCategorySlug = null,
   categories = [],
+  onSearch,
 }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const activeCategory =
     categories.find((cat) => cat.slug === activeCategorySlug) ?? null;
-  const freeResourceHref = getFreeResourceUrl(
-    activeCategory?.counsellingExamId ??
-      (activeCategorySlug ? slugToCategoryId(activeCategorySlug) : null)
-  );
 
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
@@ -89,6 +85,18 @@ export function MobileNav({
         )}
       >
         <nav className="flex flex-col p-6 space-y-1 bg-black">
+          {/* {onSearch ? (
+            <button
+              type="button"
+              className="mb-3 flex items-center gap-2 rounded-md border border-white/15 px-3 py-2.5 text-left text-body-sm text-text-secondary"
+              onClick={() => {
+                setIsOpen(false);
+                onSearch();
+              }}
+            >
+              Search the site
+            </button>
+          ) : null} */}
           {categories.length > 0 ? (
             <>
               <p className="text-caption text-text-dimmed uppercase tracking-wider mb-2">
@@ -123,16 +131,9 @@ export function MobileNav({
 
           {HEADER_NAV.map((item) => {
             const hasChildren = "children" in item;
-            const children = hasChildren
-              ? item.children.map((child) => ({
-                  ...child,
-                  href:
-                    child.label === "Free Resources"
-                      ? freeResourceHref
-                      : child.href,
-                }))
-              : [];
+            const children = hasChildren ? item.children : [];
             const itemHref = "href" in item ? item.href : "";
+            const isHighlighted = "highlight" in item && item.highlight;
 
             if (hasChildren) {
               const isExpanded = expandedItem === item.label;
@@ -224,7 +225,9 @@ export function MobileNav({
                   "block py-3 text-body font-medium transition-colors",
                   isActive
                     ? "text-orange-400"
-                    : "text-text-primary hover:text-orange-400"
+                    : isHighlighted
+                      ? "text-orange-300"
+                      : "text-text-primary hover:text-orange-400"
                 )}
               >
                 {item.label}

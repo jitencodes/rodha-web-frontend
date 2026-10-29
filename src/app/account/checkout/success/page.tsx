@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { Lottie } from "lottie-react";
 import { trackMetaPurchase } from "@/components/providers/MetaPixel";
+import { consumePendingPurchase } from "@/lib/tracking/purchase";
 
 export default function CheckoutSuccessPage() {
   useEffect(() => {
-    trackMetaPurchase();
+    const purchase = consumePendingPurchase();
+    if (!purchase) return;
+    trackMetaPurchase(purchase.value, purchase.currency);
   }, []);
 
   return (

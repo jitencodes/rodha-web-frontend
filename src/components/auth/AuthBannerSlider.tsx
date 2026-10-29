@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 
@@ -138,13 +139,19 @@ export function AuthBannerSlider() {
         );
       })}
 
-      <Image
-        src="/assets/images/rodha-logo.webp"
-        alt="Rodha"
-        width={120}
-        height={36}
-        className="absolute hidden sm:block right-6 bottom-6 z-10 h-8 w-auto sm:right-8 sm:bottom-8 sm:h-9 2xl:left-10 2xl:top-10"
-      />
+      <Link
+        href="/"
+        aria-label="Rodha home"
+        className="absolute hidden sm:block right-6 bottom-6 z-10 sm:right-8 sm:bottom-8 2xl:left-10 2xl:top-10"
+      >
+        <Image
+          src="/assets/images/rodha-logo.webp"
+          alt="Rodha"
+          width={120}
+          height={36}
+          className="h-8 w-auto sm:h-9"
+        />
+      </Link>
 
       <div
         className="absolute bottom-6 left-6 z-10 flex items-center gap-2 sm:bottom-8 sm:left-8 lg:bottom-10 lg:left-10"

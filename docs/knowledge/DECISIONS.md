@@ -14,6 +14,79 @@ Format:
 
 ---
 
+### 2026-10-28 — Registration selects via react-select + Class 12 rules
+- **Decision:** Account form single/multi selects use `react-select` (searchable) with a shared orange account theme (`accountReactSelectStyles`). Menus portal to `document.body` at z-index 1100. Class 12 Appearing is only for school/unknown status; UG/graduate force Passed. Appearing skips mandatory graduation / PG / work (UI + validation + submit payload).
+- **Rationale:** Long exam/college/board lists need search; product rules forbid Appearing once the student is UG/graduate.
+- **Alternatives considered:** Custom searchable DropdownSelect; keeping Appearing visible but disabled.
+- **Consequences:** Filter toolbars still use `DropdownSelect`. New dep: `react-select`.
+
+### 2026-10-27 — Registration dialog: manual vs auto open
+- **Decision:** Manual open keys off `completed` only (open when not completed; toast “already complete” only when `completed === true`). Auto-pop still requires dashboard `registration.required` (plus overdue-on-account / 1-hour dismiss reminder). Poll/`evaluateOpen` no longer treats `!required` as completed, so a missing registration object cannot close a manually opened dialog.
+- **Rationale:** Backend may omit `registration` until deploy; pending students were wrongly told registration was complete when `required` defaulted to false.
+- **Alternatives considered:** Treating missing registration as required for auto-pop (rejected — would false-prompt guests without enrollment).
+- **Consequences:** Profile “Complete registration” works without the status object; auto reminders resume when API returns `required: true`.
+
+### 2026-10-26 — Site-wide registration gate via dashboard polling
+- **Decision:** Logged-in students poll `GET /api/account/dashboard-status` every 2 minutes. Status comes from dashboard `data.registration` (`completed` / `required` / `overdue` / `deadlineAt`). Soft-block `REGISTRATION_REQUIRED` (HTTP 201 + `success: false`) maps to overdue+required. Dismissible dialog when required (re-prompt every 1 hour via `REGISTRATION_REMINDER_INTERVAL_MS` + localStorage). On `/account/*` when overdue, dialog is mandatory (no close). Public pages keep dismissible close when overdue. Single `RegistrationGateProvider` + `RegistrationDialog`; profile CTA dispatches `rodha:open-registration`.
+- **Rationale:** Product needs frequent reminders before deadline and a hard block after soft-block without inventing a separate status API.
+- **Alternatives considered:** Only gating `/account/profile`; middleware soft-block for all routes.
+- **Consequences:** Constants live in `src/lib/constants.ts`. Dashboard SSR treats soft-block as empty lists so the page still renders under the mandatory dialog.
+
+### 2026-10-26 — GTM purchase dataLayer after payment verify
+- **Decision:** After Razorpay verify (or free checkout) succeeds, stash `{ transaction_id, value, currency }` in `sessionStorage`, redirect to `/account/checkout/success`, then push `event: "purchase"` with `ecommerce` to `window.dataLayer` once per `transaction_id`. Values come from checkout/verify (`orderNumber`, `payableAmount`, `currency` default `INR`). Meta Pixel Purchase uses the same payload.
+- **Rationale:** Marketing needs dynamic transaction id / amount / INR only after confirmed payment to avoid duplicate or unpaid conversions.
+- **Alternatives considered:** Firing from Razorpay handler before verify; query-string params on the success URL.
+- **Consequences:** Refreshing success does not re-fire. GTM must listen for the `purchase` event; container still loads only when `NEXT_PUBLIC_GTM_ID` is set (dataLayer push still runs).
+
+### 2026-10-26 — Student registration form + read-only profile detail
+- **Decision:** Replace Complete/Edit Profile with the Postman student registration flow. `GET`/`POST api/website/student/registration` (multipart + passport photo) via BFF `/api/account/registration`. Masters come from the GET payload (not hardcoded). Keep a 3-step dialog grouped as sheet sections A–F / G–J / K–N; auto-open when not submitted. After submit, students cannot edit — **View Profile** opens `/account/profile/detail` (read-only from `GET api/website/student/profile`). Mobile/state pencils still use `PATCH api/auth/me/details`.
+- **Rationale:** Registration collection is the real contract; one-time submit matches product (course unlock). Sheet defines labels, types, conditionals, and validation.
+- **Alternatives considered:** Keep `PATCH api/auth/me/details` nested JSON; dedicated multi-page registration route; student-facing update after submit (not in Postman).
+- **Consequences:** Soft-block redirects across all student APIs remain out of scope for this change. Admin registration upsert is CMS-only.
+
+### 2026-10-23 — Complete profile UI ahead of expanded API
+- **Decision:** Ship a 3-step Complete/Edit Profile dialog and Request email update UI on `/account/profile`. Dropdown masters live in `src/data/account/profile-options.ts` (verified batch/course lists; degree presets with Other → manual). Submit the full form JSON through `PATCH /api/account/profile` → existing `PATCH api/auth/me/details`. Email update uses stub `POST /api/account/email-update-request` → placeholder `api/auth/me/email-update-request`.
+- **Rationale:** Product needs the form and validation now; backend field contracts for the expanded profile and email-change request are still pending.
+- **Alternatives considered:** Blocking the UI until APIs ship; inventing a second profile PATCH path without a Postman contract.
+- **Consequences:** Superseded for registration fields by 2026-10-26 decision (registration APIs + read-only detail). Email-update stub and mobile/state details PATCH remain.
+
+### 2026-10-19 — Checkout state is order attribution, not a profile update
+- **Decision:** `POST api/website/student/checkout` receives stored `utm_*` fields plus an optional `stateName` (`Maharashtra` or `MH`), and still sends `channel: "WEB"` / `x-channel: WEB`. The browser resolves state from GPS and Google reverse geocoding, or from the states dropdown when location or geocoding is unavailable. Checkout does not call `PATCH api/auth/me/details` for this value. A missing state does not block payment.
+- **Rationale:** The order needs the buyer's current state and campaign params. That state is not the saved profile state.
+- **Alternatives considered:** Reuse the blocking Update State dialog and send `stateId` (rejected — it writes the profile and stops checkout). Send only the profile state (rejected — checkout must use the current location).
+- **Consequences:** Account gates can still require a saved mobile number and profile state. Checkout asks for mobile only, then resolves `stateName` for the checkout payload.
+
+### 2026-10-15 — Search dialog, promo popup, and listing APIs
+- **Decision:** Marketing and account search share one dialog. Queries go through `GET /api/search`, which calls `GET api/website/search` with `scope=website` or `scope=account`. Entity filters include modules the index does not register yet; a 400 for an unknown type shows an empty filter state. The promo dialog and purchase toast soft-fail when their endpoints are empty. Showing the promo, or closing it, suppresses it for 24 hours. Only a manual toast close suppresses the toast for 24 hours. Checkout adds `channel: "WEB"` and `x-channel: WEB` beside UTM fields. Contact submits `examYear` as its own field.
+- **Rationale:** Search needs a server proxy so `API_KEY` stays off the client, and the dialog has to work before the index covers every public module. The popup and purchase feed are not in Postman yet, so the UI hides them instead of inventing content.
+- **Alternatives considered:** Calling the search API from the browser; keeping static listing rows as a fallback.
+- **Consequences:** Backend contract is in `docs/api-requirements-website-ui.md`. Listing pages no longer read `category-landings.json` or `src/data/resources.ts`.
+
+### 2026-10-14 — Static listing pages until APIs exist
+- **Decision:** `/results`, `/testimonials`, and `/success-stories` read flattened `category-landings.json` (parent slug for the category filter). `/resources` reads `src/data/resources.ts`. Page size is two full rows at the widest breakpoint: 10 results (204px cards), 6 testimonials, 6 stories (300px cards), and 8 resources (4-column grid). `BlogHeroSection` and `BlogToolbar` take optional copy and `basePath` so the blog page stays the default.
+- **Rationale:** Listing APIs are not available yet. Existing cards stay fixed-width, so a page size that is not a multiple of the row leaves a short last row on a full page.
+- **Alternatives considered:** One item row per page; copying the blog hero instead of parameterizing it.
+- **Consequences:** Swap the flatten helpers for module services when the APIs land. Category pills still come from `categoriesAtom`, so a CMS slug that does not match a landing slug returns an empty list.
+
+### 2026-10-13 — GPS state, Indian mobile, GTM, and checkout UTM
+- **Decision:** Detected GPS location lives in `detectedLocationAtom` and only prefills `UpdateStateDialog` when the saved state is empty. Reverse geocoding uses `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`; an empty key hides the current-location control and skips the permission prompt. Signup and account mobile updates use `validateIndianMobile` (`Please enter valid indian number`). GTM loads from `NEXT_PUBLIC_GTM_ID` beside the existing Meta Pixel. Any `utm_*` query param is stored in the `rodha_utm` cookie and forwarded as the checkout POST body, with no other fields added.
+- **Rationale:** Saved profile state must not change until the user confirms. The checkout API previously sent `{}`; captured attribution is attached only for keys that were present.
+- **Alternatives considered:** Writing GPS into `userAtom` before save; a shared phone rule for contact forms; inventing non-`utm_*` order fields.
+- **Consequences:** Contact and lead forms still use `validatePhone`. Checkout fails closed to `{}` when the cookie is missing or invalid.
+
+
+### 2026-10-10 — Dashboard Buy links stay plain anchors
+- **Decision:** Dashboard recommendation Buy links render a native `<a href="/api/checkout/buy">` with no `onClick`. In-app destinations stay `Link`.
+- **Rationale:** `AccountRecommendedCard` is a Server Component. An `onClick` that calls `window.location.assign` cannot be serialized into the RSC payload, so `/account/dashboard` renders Next's "This page couldn't load" error on the HTTP production host. Vercel was serving the version that uses `Link` and did not hit that failure. A native anchor already performs a full navigation, which is what checkout needs.
+- **Alternatives considered:** Mark the card `"use client"` (rejected — pulls the tile into the client bundle). Encode the handler as a server action (rejected — checkout must be a document navigation).
+- **Consequences:** Do not pass event handlers from this server card. Cart "Add to Cart" remains a button only when a client parent supplies `onAddToCart`.
+
+### 2026-10-10 — Public origin for auth cookies and checkout redirects
+- **Decision:** Set cookie `Secure` from the request scheme (`x-forwarded-proto`, otherwise the request URL). Build checkout, login, and session-expired redirects with `x-forwarded-host` / `x-forwarded-proto`. Buy links use a same-tab document navigation instead of a client `<Link>` or `router.push`.
+- **Rationale:** Production cookies were always `Secure`, so browsers dropped them on HTTP IP deployments and Buy looked like a no-op. Route Handler redirects built from `request.url` could point at an internal host. App Router soft navigation does not follow `/api/checkout/buy` redirects.
+- **Alternatives considered:** Force `Secure` off in all production (rejected — weakens HTTPS). `SameSite=None` (rejected).
+- **Consequences:** HTTPS deployments stay `Secure`. HTTP IP deployments can store the session. Do not hardcode a public host. `images.dangerouslyAllowLocalIP` is on because this network resolves S3 to NAT64 addresses that Next otherwise rejects; hostnames remain limited to YouTube and `*.s3.ap-south-1.amazonaws.com`.
+
 ### 2026-10-08 — Committed env files, one API URL per environment
 - **Decision:** Commit `.env` (development, `https://innowrap.co.in/rodha/`) and `.env.production` (production, `https://api.rodha.co.in/rodha/`). `scripts/select-env.mjs` copies the file for `APP_ENV` and removes `.env.production` before `next build`. Docker `APP_ENV` and GitLab jobs follow the same split. SMTP passwords stay in `.env.local` / CI secrets, not in git.
 - **Rationale:** Next loads `.env.production` on every production-mode build, so leaving both files in the tree makes development builds call the production API. GitLab-scoped duplicates of `NEXT_PUBLIC_API_BASE_URL` were colliding the same way.
@@ -67,6 +140,12 @@ Format:
 - **Rationale:** Matches Graphy Share Postman payloads, avoids blank/invented UI, and keeps category browse → detail before checkout.
 - **Alternatives considered:** Keep Plans from `pricingPlans`; invent static section defaults; Buy Now → checkout from category cards; show all subcategory masters.
 - **Consequences:** Checkout stays on the detail purchase CTA. Empty subcategory tabs disappear. `CourseCardV2` is a single link (no nested anchors).
+
+### 2026-10-10 — Profile mobile and state via `PATCH api/auth/me/details`
+- **Decision:** `PATCH api/auth/me/state` and `/me/mobile` are retired. Account updates go through `PATCH api/auth/me/details` with `{ stateId?, mobile? }` via BFF `/api/account/state`. At least one field must be a real value. Null, `""`, or an omitted key leaves that field unchanged. Students only. The response is the updated profile and replaces the session user. `UpdateStateDialog` still renders only the fields that are missing (auto popup) or the single pencil field.
+- **Rationale:** One endpoint covers both profile fields and must not overwrite a saved value when the dialog is not editing it.
+- **Alternatives considered:** Keep sending both keys with null for the unused field; call the removed `/me/state` and `/me/mobile` routes.
+- **Consequences:** Partial edits cannot clear mobile or state. The dialog payload matches the fields on screen.
 
 ### 2026-10-06 — State selection via `/auth/me` + shared dialog
 - **Decision:** Collect `stateId` at signup; persist/read via `GET api/auth/me` (`stateId` + nested `state`); update via `PATCH api/auth/me/state` (BFF `/api/account/state`). Account shell hydrates Jotai `userAtom`. Missing `state` opens shared blocking `UpdateStateDialog` (account gate + checkout). States list from `GET api/website/states/dropdown` via `/api/states/dropdown`.

@@ -38,6 +38,7 @@ export async function submitContact(input: {
   email?: string;
   websiteCategoryId?: number;
   message?: string;
+  examYear?: string;
 }): Promise<ContactSubmitViewModel> {
   const body = mapContactRequest(input);
   const data = await apiPost<ContactSubmitApi, typeof body>(PATH, body);

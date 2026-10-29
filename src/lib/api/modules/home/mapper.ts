@@ -30,6 +30,7 @@ export function mapHomeBanner(
       icon,
     })),
     videoId: mapped.videoId,
+    videoUrl: mapped.videoUrl,
     imageUrl: mapped.imageUrl,
   };
 }

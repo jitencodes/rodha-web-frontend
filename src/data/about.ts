@@ -42,7 +42,7 @@ export const ABOUT_MISSION_VISION = [
     id: "mission",
     title: "Our Mission",
     description:
-      "To make expert-led competitive exam preparation accessible, personal, and result-driven for every aspirant in India — with mentors who stay invested until the outcome.",
+      "To make expert-led competitive exam preparation accessible, personal, and result-driven for every aspirant in India with mentors who stay invested until the outcome.",
     icon: "/assets/icons/result-oriented.svg",
   },
   {
@@ -139,9 +139,9 @@ export const ABOUT_DIFFERENTIATORS = [
   },
   {
     id: "founder-led",
-    title: "Founder-Led Faculty",
+    title: "Founder Led Faculty",
     description:
-      "Our mentors are the founders' bench, not a rotating panel. The same faculty who built each vertical still teach it — Sanchit Sir leads IPMAT, Divya Sir leads CLAT, Neeraj Sir leads SSC, and Ravi Sir continues to teach CAT.",
+      "Our mentors are the founders' bench, not a rotating panel. The same faculty who built each vertical still teach it. Sanchit Sir leads IPMAT, Divya Sir leads CLAT, Neeraj Sir leads SSC, and Ravi Sir continues to teach CAT.",
     icon: "/assets/icons/top-faculty.svg",
   },
   {
@@ -155,7 +155,7 @@ export const ABOUT_DIFFERENTIATORS = [
     id: "proven-results",
     title: "Results That Compound",
     description:
-      "Our results are a curve, not a claim — 30+ conversions in CAT 2023, 100+ in CAT 2024, and 200+ in CAT 2025 and counting.",
+      "Our results are a curve, not a claim. 30+ conversions in CAT 2023, 100+ in CAT 2024, and 200+ in CAT 2025 and counting.",
     icon: "/assets/icons/result-oriented.svg",
   },
   {

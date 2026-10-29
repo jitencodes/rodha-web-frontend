@@ -167,7 +167,7 @@ async function toCourse(row, category, usedSlugs) {
     enrollmentUrl: row.cta,
     badge: badgeFor(row.type, courseType),
     badgeType: "audience",
-    detailsLabel: "View Details",
+    detailsLabel: "View",
     details: row.faculty ? [row.faculty] : [],
     thumbnail,
     showFaculty: Boolean(row.faculty),

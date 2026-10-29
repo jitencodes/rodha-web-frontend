@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import { cn } from "@/lib/utils";
 import { Rating } from "@/components/ui/Rating";
 import type { Faculty } from "@/lib/types";
@@ -19,7 +19,7 @@ export function FacultyCard({ faculty, className }: FacultyCardProps) {
       )}
     >
       <div className="relative w-[42%] min-h-[150px] shrink-0 bg-transparent">
-        <Image
+        <AppImage
           src={faculty.image || "/assets/images/placeholders/faculty-avatar.svg"}
           alt={faculty.name}
           fill

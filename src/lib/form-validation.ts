@@ -8,6 +8,8 @@ export const PASSWORD_MIN_LENGTH = 8;
 
 const NAME_PATTERN = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 const PHONE_PATTERN = /^[0-9]{10}$/;
+const INDIAN_MOBILE_PATTERN = /^[6-9][0-9]{9}$/;
+export const INDIAN_MOBILE_ERROR = "Please enter valid indian number";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BLOCKED_PHONE_KEYS = new Set(["e", "E", "+", "-", ".", " "]);
 
@@ -40,6 +42,16 @@ export function validatePhone(value: string): string | undefined {
   if (!phone) return "Mobile number is required.";
   if (!PHONE_PATTERN.test(phone)) {
     return "Enter a 10-digit mobile number.";
+  }
+  return undefined;
+}
+
+/** Signup and account mobile update: 10 digits, first digit 6–9. */
+export function validateIndianMobile(value: string): string | undefined {
+  const phone = value.trim();
+  if (!phone) return "Mobile number is required.";
+  if (!INDIAN_MOBILE_PATTERN.test(phone)) {
+    return INDIAN_MOBILE_ERROR;
   }
   return undefined;
 }
@@ -84,27 +96,27 @@ export function getPasswordRules(value: string): PasswordRule[] {
   return [
     {
       id: "length",
-      label: `At least ${PASSWORD_MIN_LENGTH} characters`,
+      label: `${PASSWORD_MIN_LENGTH}+ characters`,
       met: value.length >= PASSWORD_MIN_LENGTH,
     },
     {
       id: "lower",
-      label: "One lowercase letter",
+      label: "Lowercase",
       met: /[a-z]/.test(value),
     },
     {
       id: "upper",
-      label: "One uppercase letter",
+      label: "Uppercase",
       met: /[A-Z]/.test(value),
     },
     {
       id: "number",
-      label: "One number",
+      label: "Number",
       met: /\d/.test(value),
     },
     {
       id: "special",
-      label: "One special character",
+      label: "Special character",
       met: /[^A-Za-z0-9]/.test(value),
     },
   ];

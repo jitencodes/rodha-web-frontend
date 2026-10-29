@@ -2,6 +2,7 @@
 
 import { useId, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Camera,
@@ -12,17 +13,24 @@ import {
   Lock,
   Mail,
   MapPin,
+  Pencil,
   Phone,
   ShieldCheck,
+  UserRound,
+  UserRoundPen,
 } from "lucide-react";
 import { useAtomValue } from "jotai";
 import { toast } from "sonner";
+import { EmailUpdateRequestDialog } from "@/components/account/EmailUpdateRequestDialog";
 import { ProfileAvatarCropModal } from "@/components/account/ProfileAvatarCropModal";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
+import type { AccountProfileField } from "@/lib/api/modules/auth/mapper";
+import type { StudentRegistrationFormViewModel } from "@/lib/api/modules/student/registration/types";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import type { AccountProfile } from "@/lib/account/types";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { getInitials } from "@/lib/initials";
+import { requestOpenRegistrationDialog } from "@/lib/registration-gate";
 import { userAtom } from "@/lib/store/user";
 import { cn } from "@/lib/utils";
 import {
@@ -33,6 +41,7 @@ import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
 
 type AccountProfilePanelProps = {
   initialProfile: AccountProfile;
+  registration: StudentRegistrationFormViewModel | null;
 };
 
 type PasswordErrors = {
@@ -82,6 +91,7 @@ const inputClassName = cn(
 
 export function AccountProfilePanel({
   initialProfile,
+  registration,
 }: AccountProfilePanelProps) {
   const router = useRouter();
   const formIds = useId();
@@ -90,7 +100,9 @@ export function AccountProfilePanel({
   const [profile, setProfile] = useState(initialProfile);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [stateDialogOpen, setStateDialogOpen] = useState(false);
+  const [profileEdit, setProfileEdit] = useState<AccountProfileField | null>(null);
+  const alreadySubmitted = Boolean(registration?.alreadySubmitted);
+  const [emailUpdateOpen, setEmailUpdateOpen] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -247,7 +259,7 @@ export function AccountProfilePanel({
             className="hidden"
             onChange={(e) => onPickFile(e.target.files?.[0])}
           />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h2 className="truncate font-montserrat text-xl font-bold text-[var(--account-text)] sm:text-2xl">
               {fullName}
             </h2>
@@ -256,6 +268,24 @@ export function AccountProfilePanel({
                 ? "Uploading photo…"
                 : "Hover or tap the photo to update your avatar"}
             </p>
+            {alreadySubmitted ? (
+              <Link
+                href="/account/profile/detail"
+                className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-[var(--account-radius)] border border-[var(--account-accent)] px-3 py-2 text-body-sm font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              >
+                <UserRound className="size-4" strokeWidth={1.75} aria-hidden />
+                {ACCOUNT_PROFILE_PAGE_COPY.viewProfileLabel}
+              </Link>
+            ) : registration ? (
+              <button
+                type="button"
+                onClick={() => requestOpenRegistrationDialog()}
+                className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-[var(--account-radius)] border border-[var(--account-accent)] px-3 py-2 text-body-sm font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              >
+                <UserRoundPen className="size-4" strokeWidth={1.75} aria-hidden />
+                {ACCOUNT_PROFILE_PAGE_COPY.completeRegistrationLabel}
+              </button>
+            ) : null}
           </div>
         </div>
       </section>
@@ -265,50 +295,67 @@ export function AccountProfilePanel({
           Profile details
         </h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <a
-            href={profile.email ? `mailto:${profile.email}` : undefined}
-            className={cn(
-              "flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 transition-colors",
-              profile.email &&
-                "hover:border-[var(--account-accent)] hover:bg-[var(--account-nav-active-bg)]"
-            )}
-          >
+          <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
               <Mail className="size-4" strokeWidth={1.75} aria-hidden />
             </span>
-            <span className="min-w-0">
+            <span className="min-w-0 flex-1">
               <span className="block text-caption font-medium text-[var(--account-text-muted)]">
                 Email
               </span>
-              <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
-                {profile.email || "—"}
-              </span>
+              {profile.email ? (
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)] hover:text-[var(--account-accent)]"
+                >
+                  {profile.email}
+                </a>
+              ) : (
+                <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
+                  —
+                </span>
+              )}
             </span>
-          </a>
-          <a
-            href={
-              profile.phone
-                ? `tel:${profile.phone.replace(/\s+/g, "")}`
-                : undefined
-            }
-            className={cn(
-              "flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 transition-colors",
-              profile.phone &&
-                "hover:border-[var(--account-accent)] hover:bg-[var(--account-nav-active-bg)]"
-            )}
-          >
+            {/* <button
+              type="button"
+              onClick={() => setEmailUpdateOpen(true)}
+              aria-label="Request email update"
+              title="Request email update"
+              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+            >
+              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
+            </button> */}
+          </div>
+          <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
               <Phone className="size-4" strokeWidth={1.75} aria-hidden />
             </span>
-            <span className="min-w-0">
+            <span className="min-w-0 flex-1">
               <span className="block text-caption font-medium text-[var(--account-text-muted)]">
                 Phone
               </span>
-              <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
-                {profile.phone || "—"}
-              </span>
+              {profile.phone ? (
+                <a
+                  href={`tel:${profile.phone.replace(/\s+/g, "")}`}
+                  className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)] hover:text-[var(--account-accent)]"
+                >
+                  {profile.phone}
+                </a>
+              ) : (
+                <span className="mt-0.5 block truncate text-body font-medium text-[var(--account-text)]">
+                  —
+                </span>
+              )}
             </span>
-          </a>
+            <button
+              type="button"
+              onClick={() => setProfileEdit("mobile")}
+              aria-label="Update mobile"
+              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+            >
+              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
+            </button>
+          </div>
           <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 sm:col-span-2">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
               <MapPin className="size-4" strokeWidth={1.75} aria-hidden />
@@ -323,10 +370,11 @@ export function AccountProfilePanel({
             </div>
             <button
               type="button"
-              onClick={() => setStateDialogOpen(true)}
-              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] px-3 py-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              onClick={() => setProfileEdit("state")}
+              aria-label="Update state"
+              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
             >
-              Update State
+              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
             </button>
           </div>
         </div>
@@ -518,20 +566,27 @@ export function AccountProfilePanel({
       />
 
       <UpdateStateDialog
-        open={stateDialogOpen}
+        open={profileEdit != null}
+        fields={profileEdit ? [profileEdit] : []}
         initialStateId={stateId}
-        title="Update State"
-        description="Choose the state linked to your Rodha account."
-        onClose={() => setStateDialogOpen(false)}
+        initialMobile={profile.phone || authUser?.mobile || ""}
+        onClose={() => setProfileEdit(null)}
         onUpdated={(user) => {
           setProfile((prev) => ({
             ...prev,
+            phone: user.mobile || prev.phone,
             stateId: user.stateId,
             stateName: user.state?.name || "",
             stateCode: user.state?.code || "",
           }));
           router.refresh();
         }}
+      />
+
+      <EmailUpdateRequestDialog
+        open={emailUpdateOpen}
+        currentEmail={profile.email}
+        onClose={() => setEmailUpdateOpen(false)}
       />
     </div>
   );

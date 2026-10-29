@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/ui/AppImage";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -43,7 +43,7 @@ export function CourseHeroSection({
         {categoryLabel}
       </Badge>
 
-      <h1 className="mt-4 text-[32px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
+      <h1 className="mt-4 text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.1] tracking-tight text-text-primary">
         {course.title}
       </h1>
 
@@ -55,7 +55,7 @@ export function CourseHeroSection({
         </p>
       )}
 
-      <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted">
+      <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted line-clamp-2">
         {course.description}
       </p>
 
@@ -91,7 +91,7 @@ export function CourseHeroSection({
                   className="group flex items-center gap-2.5"
                 >
                   <span className="relative h-10 w-10 overflow-hidden rounded-full border border-white/15 bg-bg-tertiary">
-                    <Image
+                    <AppImage
                       src={
                         member.image ||
                         "/assets/images/placeholders/faculty-avatar.svg"

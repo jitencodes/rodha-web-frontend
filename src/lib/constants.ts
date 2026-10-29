@@ -77,6 +77,24 @@ export function getMetaPixelId(): string {
   return process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
 }
 
+export function getGtmId(): string {
+  return process.env.NEXT_PUBLIC_GTM_ID?.trim() || "";
+}
+
+/** How often to re-prompt after the user dismisses the registration dialog. */
+export const REGISTRATION_REMINDER_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
+/** Background poll interval for dashboard registration status. */
+export const REGISTRATION_STATUS_POLL_INTERVAL_MS = 2 * 60 * 1000; // 2 min
+
+/** localStorage key for last registration dialog dismiss time. */
+export const REGISTRATION_DISMISS_STORAGE_KEY =
+  "rodha.registration.dismissedAt";
+
+export function getGoogleMapsApiKey(): string {
+  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim() || "";
+}
+
 /** Public support / contact inbox (Footer, account help, mailto links). */
 export function getSupportEmail(): string {
   return (
@@ -89,7 +107,7 @@ export function getSupportMailto(): string {
 }
 
 export const CAT_FREE_COURSE_URL =
-  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2026--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-68df9c431bf5c8479d8dd7c3";
+  "https://www.rodha.co.in/courses/Free-Course-for-CAT-2027--Free-Classes--Strategy-Sessions--Practice-Sessions-Copy-6aabe69f33d4b6e5c07b234f";
 
 export const FREE_RESOURCE_URLS: Record<string, string> = {
   cat: CAT_FREE_COURSE_URL,
@@ -210,17 +228,17 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CONTACT_INFO: ContactInfo = {
-  phone: "+91 98765 43210",
+  phone: "+91 8049368628",
   email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || "contactus@rodha.co.in",
-  address: "No. 7714, 7th Floor, Block C, Pranavas BSR Gitaaar, Panthur, Bangalore, Karnataka, 560103",
+  address: "113, 2nd Main Road, Radiant Lotus Apartment, Bannerghatta Road, Bangalore South, Bangalore, Karnataka, India, 560076",
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { platform: "Instagram", url: "https://instagram.com/rodha.in", icon: "instagram" },
-  { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
+  { platform: "Instagram", url: "https://www.instagram.com/rodhaplanet/", icon: "instagram" },
+  // { platform: "Facebook", url: "https://facebook.com/rodha.in", icon: "facebook" },
   { platform: "YouTube", url: "https://youtube.com/@rodha", icon: "youtube" },
-  { platform: "LinkedIn", url: "https://linkedin.com/company/rodha", icon: "linkedin" },
-  { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
+  { platform: "LinkedIn", url: "https://www.linkedin.com/company/rodha-educational-services-private-limited/", icon: "linkedin" },
+  // { platform: "Twitter", url: "https://twitter.com/rodha_in", icon: "twitter" },
 ];
 
 export const HEADER_NAV = [
@@ -231,6 +249,11 @@ export const HEADER_NAV = [
   {
     label: "Faculty",
     href: "/faculty",
+  },
+  {
+    label: "Courses",
+    href: "/courses",
+    highlight: true,
   },
   {
     label: "Resources",

@@ -12,11 +12,36 @@ import { categoriesAtom } from "@/lib/store/categories";
 interface BlogToolbarProps {
   activeCategory: string;
   initialQuery: string;
+  basePath?: string;
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+  tablistLabel?: string;
+  /** Extra query params kept when the category or search changes (for example `type`). */
+  extraParams?: Record<string, string>;
+}
+
+function listingHref(basePath: string, params: URLSearchParams) {
+  const qs = params.toString();
+  return qs ? `${basePath}?${qs}` : basePath;
+}
+
+function withExtraParams(extraParams?: Record<string, string>) {
+  const params = new URLSearchParams();
+  if (!extraParams) return params;
+  for (const [key, value] of Object.entries(extraParams)) {
+    if (value) params.set(key, value);
+  }
+  return params;
 }
 
 export function BlogToolbar({
   activeCategory,
   initialQuery,
+  basePath = "/blog",
+  searchPlaceholder = "Search blogs...",
+  searchAriaLabel = "Search blog articles",
+  tablistLabel = "Blog categories",
+  extraParams,
 }: BlogToolbarProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -28,7 +53,7 @@ export function BlogToolbar({
     setQuery(value);
 
     startTransition(() => {
-      const params = new URLSearchParams();
+      const params = withExtraParams(extraParams);
 
       if (activeCategory && activeCategory !== "all") {
         params.set("category", activeCategory);
@@ -40,22 +65,20 @@ export function BlogToolbar({
         params.set("q", trimmedValue);
       }
 
-      const qs = params.toString();
-
-      router.push(qs ? `/blog?${qs}` : "/blog");
+      router.push(listingHref(basePath, params));
     });
   }
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border border-[#fee8dd] rounded-md p-6 bg-white shadow-sm -translate-y-1/2 shadow-[#fee8dd]">
+    <div className="mt-5 flex flex-col gap-4 rounded-md border border-[#fee8dd] bg-white p-6 shadow-sm shadow-[#fee8dd] md:flex-row md:items-center md:justify-between lg:mt-0 lg:-translate-y-1/2">
       <div
         className="flex max-w-full gap-2 overflow-x-auto scrollbar-hide pb-1"
         role="tablist"
-        aria-label="Blog categories"
+        aria-label={tablistLabel}
       >
         {/* All category */}
         <Link
-          href="/blog"
+          href={listingHref(basePath, withExtraParams(extraParams))}
           role="tab"
           aria-selected={activeCategory === "all"}
           className={cn(
@@ -73,7 +96,9 @@ export function BlogToolbar({
           const categorySlug = cat.slug;
           const isActive = activeCategory === categorySlug;
 
-          const href = `/blog?category=${encodeURIComponent(categorySlug)}`;
+          const params = withExtraParams(extraParams);
+          params.set("category", categorySlug);
+          const href = listingHref(basePath, params);
 
           return (
             <Link
@@ -98,8 +123,8 @@ export function BlogToolbar({
         <SearchInput
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Search blogs..."
-          aria-label="Search blog articles"
+          placeholder={searchPlaceholder}
+          aria-label={searchAriaLabel}
           variant="light"
         />
       </div>

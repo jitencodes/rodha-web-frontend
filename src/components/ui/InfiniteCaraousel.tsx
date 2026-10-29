@@ -511,7 +511,7 @@ export function InfiniteCarousel({
         ref={scrollRef}
         className={cn(
           "flex gap-5 overflow-x-auto scroll-smooth scrollbar-hide py-1.5",
-          "snap-x snap-mandatory touch-pan-x cursor-grab",
+          "snap-x snap-mandatory cursor-grab [touch-action:pan-x_pan-y]",
           isDragging &&
             "cursor-grabbing scroll-auto snap-none select-none",
           itemClassName

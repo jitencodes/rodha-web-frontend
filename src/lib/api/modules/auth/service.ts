@@ -20,7 +20,7 @@ const GOOGLE_PATH = "api/auth/user/google";
 const FORGOT_PASSWORD_PATH = "api/auth/user/forgot-password";
 const RESET_PASSWORD_PATH = "api/auth/user/reset-password";
 const ME_PATH = "api/auth/me";
-const ME_STATE_PATH = "api/auth/me/state";
+const ME_DETAILS_PATH = "api/auth/me/details";
 
 async function postSession<TBody>(
   path: string,
@@ -129,18 +129,86 @@ export async function getCurrentUser(
   return mapAuthUser(data as AuthUserApi);
 }
 
-export async function updateUserState(
+/**
+ * PATCH api/auth/me/details — students only.
+ * Send only fields with a real value. Null, "", or omitted keys stay unchanged.
+ * Returns the updated profile.
+ */
+export async function updateUserDetails(
   accessToken: string,
-  stateId: number
+  patch: { stateId?: number | null; mobile?: string | null }
 ): Promise<AuthUserViewModel> {
-  await apiPatch<unknown, { stateId: number }>(
-    ME_STATE_PATH,
-    { stateId },
-    { accessToken }
-  );
+  const body: { stateId?: number; mobile?: string } = {};
+  if (
+    typeof patch.stateId === "number" &&
+    Number.isFinite(patch.stateId) &&
+    patch.stateId > 0
+  ) {
+    body.stateId = patch.stateId;
+  }
+  const mobileDigits = (patch.mobile ?? "").replace(/\D/g, "");
+  if (mobileDigits.length >= 10) {
+    body.mobile = mobileDigits.slice(-10);
+  }
+  if (body.stateId == null && !body.mobile) {
+    throw new ApiError("At least one of state or mobile is required", 400);
+  }
+
+  const data = await apiPatch<
+    AuthUserApi | { user?: AuthUserApi },
+    { stateId?: number; mobile?: string }
+  >(ME_DETAILS_PATH, body, { accessToken });
+
+  const mapped =
+    data && typeof data === "object" && "user" in data
+      ? mapAuthUser(data.user)
+      : mapAuthUser(data as AuthUserApi);
+  if (mapped) return mapped;
+
   const user = await getCurrentUser(accessToken);
   if (!user) {
-    throw new ApiError("Unable to refresh user after state update", 502);
+    throw new ApiError("Unable to refresh user after profile update", 502);
   }
   return user;
+}
+
+/**
+ * PATCH api/auth/me/details with the full complete-profile payload.
+ * Backend field contract is pending; extra keys may be ignored until expanded.
+ */
+export async function updateCompleteProfile(
+  accessToken: string,
+  payload: Record<string, unknown>
+): Promise<AuthUserViewModel> {
+  const data = await apiPatch<
+    AuthUserApi | { user?: AuthUserApi },
+    Record<string, unknown>
+  >(ME_DETAILS_PATH, payload, { accessToken });
+
+  const mapped =
+    data && typeof data === "object" && "user" in data
+      ? mapAuthUser(data.user)
+      : mapAuthUser(data as AuthUserApi);
+  if (mapped) return mapped;
+
+  const user = await getCurrentUser(accessToken);
+  if (!user) {
+    throw new ApiError("Unable to refresh user after profile update", 502);
+  }
+  return user;
+}
+
+/** Placeholder upstream path — swap when the email-update request API lands. */
+export const EMAIL_UPDATE_REQUEST_PATH =
+  "api/auth/me/email-update-request";
+
+export async function requestEmailUpdate(
+  accessToken: string,
+  requestedEmail: string
+): Promise<{ message?: string } | null> {
+  return apiPost<{ message?: string } | null, { requestedEmail: string }>(
+    EMAIL_UPDATE_REQUEST_PATH,
+    { requestedEmail: requestedEmail.trim() },
+    { accessToken }
+  );
 }

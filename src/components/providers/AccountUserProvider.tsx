@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { Provider, useSetAtom } from "jotai";
+import { Provider, useAtomValue, useSetAtom } from "jotai";
 import { createStore } from "jotai/vanilla";
+import { userHasState } from "@/lib/api/modules/auth/mapper";
 import type { AuthUserViewModel } from "@/lib/api/modules/auth/types";
-import { userAtom } from "@/lib/store/user";
+import { detectCurrentState } from "@/lib/geo/detect-current-state";
+import { getGoogleMapsApiKey } from "@/lib/constants";
+import { detectedLocationAtom, userAtom } from "@/lib/store/user";
 
 function HydrateUser({
   user,
@@ -20,6 +23,24 @@ function HydrateUser({
   }, [user, setUser]);
 
   return <>{children}</>;
+}
+
+function DetectCurrentState() {
+  const user = useAtomValue(userAtom);
+  const setDetected = useSetAtom(detectedLocationAtom);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current) return;
+    if (!getGoogleMapsApiKey()) return;
+    if (!user || userHasState(user)) return;
+    started.current = true;
+    void detectCurrentState().then((location) => {
+      if (location) setDetected(location);
+    });
+  }, [user, setDetected]);
+
+  return null;
 }
 
 /** Jotai provider for account routes — seeds `userAtom` from `/auth/me`. */
@@ -38,7 +59,10 @@ export function AccountUserProvider({
 
   return (
     <Provider store={storeRef.current}>
-      <HydrateUser user={user}>{children}</HydrateUser>
+      <HydrateUser user={user}>
+        <DetectCurrentState />
+        {children}
+      </HydrateUser>
     </Provider>
   );
 }

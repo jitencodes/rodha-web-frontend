@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   try {
     const session = await loginWithGoogle({ idToken });
-    return sessionResponse(session);
+    return sessionResponse(session, request);
   } catch (error) {
     return authCatch(error, "Unable to continue with Google right now.");
   }

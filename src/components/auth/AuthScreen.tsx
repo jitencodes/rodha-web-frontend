@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ import {
   validateName,
   validatePassword,
   validatePasswordConfirm,
-  validatePhone,
+  validateIndianMobile,
 } from "@/lib/form-validation";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +67,29 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const isSignup = mode === "signup";
 
   useEffect(() => {
+    // #region agent log
+    fetch("http://127.0.0.1:7331/ingest/539f300b-4ba6-49bb-83d3-9fd84c4ec31d", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Debug-Session-Id": "227c1e",
+      },
+      body: JSON.stringify({
+        sessionId: "227c1e",
+        runId: "pre-fix",
+        hypothesisId: "C",
+        location: "AuthScreen.tsx:session-reason-effect",
+        message: "AuthScreen mount/reason effect",
+        data: {
+          reason: searchParams.get("reason"),
+          next: searchParams.get("next"),
+          href:
+            typeof window !== "undefined" ? window.location.href : null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     if (searchParams.get("reason") === SESSION_EXPIRED_QUERY) {
       toast.error("Session expired", {
         description: "Please log in again to continue.",
@@ -87,6 +110,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const googleInFlightRef = useRef(false);
 
   async function submitAuth(
     path: string,
@@ -123,7 +147,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     };
     if (isSignup) {
       nextErrors.fullName = validateName(fullName);
-      nextErrors.phone = validatePhone(phone);
+      nextErrors.phone = validateIndianMobile(phone);
       nextErrors.confirmPassword = validatePasswordConfirm(
         password,
         confirmPassword
@@ -167,7 +191,9 @@ export function AuthScreen({ mode }: AuthScreenProps) {
   }
 
   async function handleGoogle(idToken: string) {
-    if (loading) return;
+    if (loading || googleInFlightRef.current) return;
+    if (!idToken.trim()) return;
+    googleInFlightRef.current = true;
     setFormError("");
     setSuccessMessage("");
     setLoading(true);
@@ -182,6 +208,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
           : "Unable to continue with Google right now."
       );
     } finally {
+      googleInFlightRef.current = false;
       setLoading(false);
     }
   }
@@ -543,13 +570,17 @@ function PasswordRequirements({
           </span>
         </div>
       ) : null}
-      <ul className="space-y-1">
+      <ul className="flex items-center flex-wrap gap-x-1 gap-y-1">
         {rules.map((rule) => (
           <li
             key={rule.id}
             className={cn(
-              "text-caption",
-              rule.met ? "text-emerald-600" : showError ? "text-accent-red" : "text-neutral-500"
+              "shrink-0 !text-body-sm text-accent-red",
+              rule.met
+                ? "text-emerald-600"
+                : showError
+                  ? "text-accent-red"
+                  : "text-neutral-500"
             )}
           >
             {rule.met ? "✓" : "•"} {rule.label}
