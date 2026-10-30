@@ -1,20 +1,31 @@
 import type {
   DoubtForumApi,
+  DoubtForumCreatorViewModel,
   DoubtForumListApi,
   DoubtForumListViewModel,
+  DoubtForumUserApi,
   DoubtForumViewModel,
   ForumMessageApi,
   ForumMessageAttachmentApi,
   ForumMessageAttachmentViewModel,
   ForumMessageListApi,
   ForumMessageListViewModel,
+  ForumMessageReactionResultApi,
+  ForumMessageReactionResultViewModel,
   ForumMessageViewModel,
+  ForumReactionType,
   ForumTopicApi,
   ForumTopicAuthorApi,
   ForumTopicAuthorViewModel,
   ForumTopicListApi,
   ForumTopicListViewModel,
   ForumTopicViewModel,
+  GroupDetailViewModel,
+  GroupMemberApi,
+  GroupMemberRoleApi,
+  GroupMemberViewModel,
+  GroupMembershipApi,
+  GroupMembershipViewModel,
 } from "./types";
 
 function asCount(value: number | null | undefined): number {
@@ -63,6 +74,21 @@ function mapAuthor(
   };
 }
 
+function mapCreator(
+  user: DoubtForumUserApi | null | undefined
+): DoubtForumCreatorViewModel | null {
+  const fullName = user?.fullName?.trim() ?? "";
+  if (!fullName) return null;
+  const role =
+    user?.userType?.trim() ||
+    (user?.email?.toLowerCase().includes("admin") ? "Admin" : "Member");
+  return {
+    id: user?.id?.trim() || "",
+    fullName,
+    role,
+  };
+}
+
 export function mapDoubtForum(
   forum: DoubtForumApi
 ): DoubtForumViewModel | null {
@@ -82,6 +108,10 @@ export function mapDoubtForum(
     memberCount: asCount(forum.memberCount),
     topicCount: asCount(forum.topicCount),
     lastActivityAt: forum.lastActivityAt?.trim() || null,
+    lastMessagePreview: toForumPlainText(forum.lastMessagePreview) || null,
+    type: forum.type?.trim() || null,
+    isMember: forum.isMember === true,
+    createdBy: mapCreator(forum.createdByUser),
   };
 }
 
@@ -217,11 +247,22 @@ export function mapForumMessageAttachment(
   };
 }
 
+export function mapMyReaction(
+  value: string | null | undefined
+): ForumReactionType | null {
+  const key = value?.trim().toLowerCase() ?? "";
+  if (key === "like" || key === "dislike") return key;
+  return null;
+}
+
 export function mapForumMessage(
   message: ForumMessageApi
 ): ForumMessageViewModel | null {
   if (!Number.isFinite(message.id) || message.deletedAt) return null;
-  if (message.status && message.status.toLowerCase() !== "active") return null;
+
+  const status = message.status?.trim().toLowerCase() || null;
+  // Keep active + moderated in chat; hide other non-active statuses.
+  if (status && status !== "active" && status !== "moderated") return null;
 
   const attachments = (message.attachments ?? [])
     .map(mapForumMessageAttachment)
@@ -235,9 +276,24 @@ export function mapForumMessage(
     author: mapAuthor(message.user),
     likeCount: asNonNegativeCount(message.reactionTypeCount?.like),
     dislikeCount: asNonNegativeCount(message.reactionTypeCount?.dislike),
+    myReaction: mapMyReaction(message.myReaction),
     attachments,
+    status,
   };
 }
+
+export function mapForumMessageReactionResult(
+  data: ForumMessageReactionResultApi | null | undefined
+): ForumMessageReactionResultViewModel | null {
+  if (!data?.message) return null;
+  const message = mapForumMessage(data.message);
+  if (!message) return null;
+  return {
+    action: data.action?.trim() || "",
+    message,
+  };
+}
+
 
 export function mapForumMessages(
   items: ForumMessageApi[] | null | undefined
@@ -266,5 +322,98 @@ export function mapForumMessageList(
     limit,
     total,
     totalPages,
+  };
+}
+
+function roleLabelFromApi(
+  role: string | GroupMemberRoleApi | null | undefined
+): string {
+  if (!role) return "";
+  if (typeof role === "string") return role.trim();
+  return role.label?.trim() || role.name?.trim() || "";
+}
+
+function mapMemberRole(member: GroupMemberApi): string {
+  const raw =
+    roleLabelFromApi(member.role) ||
+    member.roleName?.trim() ||
+    member.memberRole?.trim() ||
+    member.user?.userType?.trim() ||
+    member.userType?.trim() ||
+    "";
+  if (!raw) return "Member";
+  const key = raw.toLowerCase();
+  if (key.includes("admin")) return "Admin";
+  if (key.includes("mentor") || key.includes("teacher")) return "Mentor";
+  if (key.includes("student")) return "Student";
+  return raw;
+}
+
+export function mapGroupMember(
+  member: GroupMemberApi
+): GroupMemberViewModel | null {
+  if (member.leftAt) return null;
+
+  const user = member.user;
+  const fullName =
+    user?.fullName?.trim() || member.fullName?.trim() || "";
+  if (!fullName) return null;
+
+  const id =
+    user?.id?.trim() ||
+    member.userId?.trim() ||
+    (member.id != null ? String(member.id) : "") ||
+    fullName;
+
+  return {
+    id,
+    fullName,
+    role: mapMemberRole(member),
+    email: user?.email?.trim() || member.email?.trim() || null,
+    profilePicturePath:
+      asHttpUrl(user?.profilePicturePath) ||
+      asHttpUrl(member.profilePicturePath),
+  };
+}
+
+export function mapGroupMembers(
+  items: GroupMemberApi[] | null | undefined
+): GroupMemberViewModel[] {
+  if (!items?.length) return [];
+  return items
+    .map(mapGroupMember)
+    .filter((item): item is GroupMemberViewModel => item !== null);
+}
+
+export function mapGroupDetail(
+  data: DoubtForumApi | null | undefined
+): GroupDetailViewModel | null {
+  const base = data ? mapDoubtForum(data) : null;
+  if (!base) return null;
+
+  const members = mapGroupMembers(data?.members);
+  return {
+    ...base,
+    memberCount: base.memberCount || members.length,
+    members,
+  };
+}
+
+export function mapGroupMembership(
+  data: GroupMembershipApi | null | undefined
+): GroupMembershipViewModel | null {
+  if (!data) return null;
+  const groupId = data.groupId;
+  if (typeof groupId !== "number" || !Number.isFinite(groupId) || groupId <= 0) {
+    return null;
+  }
+
+  return {
+    groupId,
+    groupName: data.groupName?.trim() || `Group ${groupId}`,
+    groupType: data.groupType?.trim() || null,
+    isArchived: data.isArchived === true,
+    isMember: data.isMember === true,
+    leftAt: data.leftAt?.trim() || null,
   };
 }

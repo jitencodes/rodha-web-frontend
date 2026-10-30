@@ -58,6 +58,11 @@ export default async function DiscussionForumDetailPage({
   const topicSlug = decodeURIComponent(questionId).trim();
   if (!topicSlug) notFound();
 
+  const [accessToken, sessionUser] = await Promise.all([
+    getAccessToken(),
+    getSessionUser(),
+  ]);
+
   const [topic, messages, topics] = await Promise.all([
     getGroupTopic(forum.slug, topicSlug, forum.id),
     getGroupTopicMessages({
@@ -66,16 +71,13 @@ export default async function DiscussionForumDetailPage({
       topicSlug,
       page: 1,
       limit: 50,
+      accessToken: accessToken ?? undefined,
     }),
     getGroupTopics(forum.id, { page: 1, limit: 20 }),
   ]);
 
   if (!topic) notFound();
 
-  const [accessToken, sessionUser] = await Promise.all([
-    getAccessToken(),
-    getSessionUser(),
-  ]);
   const detailPath = `${forumBasePath(forum.slug)}/${topic.slug}`;
 
   return (

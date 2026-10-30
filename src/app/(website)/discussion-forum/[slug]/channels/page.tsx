@@ -3,9 +3,14 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { DiscussionForumSpacesList } from "@/components/sections/discussion-forum/DiscussionForumSpacesList";
-import { FORUM_PREVIEW_CHANNELS } from "@/data/discussion-forum";
-import { getGroupTopics } from "@/lib/api/modules/groups/service";
-import { toForumPreviewQuestions } from "@/lib/api/modules/groups/ui";
+import {
+  getBroadcastChannels,
+  getGroupTopics,
+} from "@/lib/api/modules/groups/service";
+import {
+  toForumPreviewQuestions,
+  toForumSpaceItems,
+} from "@/lib/api/modules/groups/ui";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -36,7 +41,12 @@ export default async function DiscussionForumChannelsPage({ params }: PageProps)
     redirect(`/login?next=${encodeURIComponent(`${base}/channels`)}`);
   }
 
-  const topics = await getGroupTopics(forum.id, { page: 1, limit: 20 });
+  const [channels, topics] = await Promise.all([
+    getBroadcastChannels({ page: 1, limit: 20, accessToken: token }),
+    getGroupTopics(forum.id, { page: 1, limit: 20 }),
+  ]);
+
+  const items = toForumSpaceItems(channels?.items ?? []);
 
   return (
     <section className="bg-bg-primary pb-8 pt-6 md:pt-8">
@@ -44,7 +54,7 @@ export default async function DiscussionForumChannelsPage({ params }: PageProps)
         <DiscussionForumSpacesList
           title="Channels"
           description="Topic channels for announcements, mock analysis, and section practice."
-          items={FORUM_PREVIEW_CHANNELS}
+          items={items}
           kind="channels"
           basePath={base}
           forum={forum}

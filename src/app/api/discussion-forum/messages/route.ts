@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 
 import { postGroupMessage } from "@/lib/api/modules/groups/service";
-import { toForumPreviewAnswer } from "@/lib/api/modules/groups/ui";
+import {
+  toForumPreviewAnswer,
+  toForumSpaceMessage,
+} from "@/lib/api/modules/groups/ui";
 import { ApiError } from "@/lib/api/types";
 import { clearAuthCookie } from "@/lib/auth/session-cookie";
 import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
@@ -20,11 +23,16 @@ function asTrimmedString(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/**
+ * POST multipart → `api/app/groups/messages`.
+ * - Forum answer: `group_id` + `topic_slug` (+ optional parent / files)
+ * - Group chat: `group_id` + `content` / `files` (no topic_slug)
+ */
 export async function POST(request: Request) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     return NextResponse.json(
-      { ok: false, error: "Log in to post an answer." },
+      { ok: false, error: "Log in to send a message." },
       { status: 401 }
     );
   }
@@ -42,37 +50,43 @@ export async function POST(request: Request) {
       .getAll("files")
       .filter((entry): entry is File => entry instanceof File && entry.size > 0);
 
-    if (!groupId || !topicSlug) {
+    if (!groupId) {
       return NextResponse.json(
-        { ok: false, error: "group_id and topic_slug are required." },
+        { ok: false, error: "group_id is required." },
         { status: 400 }
       );
     }
 
     if (!content && files.length === 0) {
       return NextResponse.json(
-        { ok: false, error: "Write an answer before posting." },
+        { ok: false, error: "Write a message before posting." },
         { status: 400 }
       );
     }
 
     const message = await postGroupMessage(accessToken, {
       groupId,
-      topicSlug,
+      topicSlug: topicSlug || null,
       content,
-      parentMessageId,
+      parentMessageId: topicSlug ? parentMessageId : null,
       files,
     });
 
-    if (forumSlug) {
+    if (forumSlug && topicSlug) {
       revalidateForumTopicPaths(forumSlug, topicSlug);
+    }
+
+    if (topicSlug) {
+      return NextResponse.json({
+        ok: true,
+        data: toForumPreviewAnswer(message, topicId ?? 0),
+      });
     }
 
     return NextResponse.json({
       ok: true,
-      data: toForumPreviewAnswer(message, topicId ?? 0),
+      data: toForumSpaceMessage(message, groupId),
     });
-
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {
       const res = NextResponse.json(
@@ -88,7 +102,7 @@ export async function POST(request: Request) {
         ? error.message
         : error instanceof Error
           ? error.message
-          : "Unable to post answer";
+          : "Unable to send message";
 
     return NextResponse.json(
       { ok: false, error: message },

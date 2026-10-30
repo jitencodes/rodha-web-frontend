@@ -16,9 +16,13 @@ export interface DoubtForumApi {
   isArchived?: boolean | null;
   deletedAt?: string | null;
   lastActivityAt?: string | null;
+  lastMessagePreview?: string | null;
   memberCount?: number | null;
   topicCount?: number | null;
+  isMember?: boolean | null;
   createdByUser?: DoubtForumUserApi | null;
+  /** Present on `GET api/app/groups/:id` detail. */
+  members?: GroupMemberApi[] | null;
 }
 
 export interface DoubtForumListApi {
@@ -31,6 +35,12 @@ export interface DoubtForumListApi {
   } | null;
 }
 
+export interface DoubtForumCreatorViewModel {
+  id: string;
+  fullName: string;
+  role: string;
+}
+
 export interface DoubtForumViewModel {
   id: number;
   name: string;
@@ -40,6 +50,40 @@ export interface DoubtForumViewModel {
   memberCount: number;
   topicCount: number;
   lastActivityAt: string | null;
+  lastMessagePreview: string | null;
+  type: string | null;
+  isMember: boolean;
+  createdBy: DoubtForumCreatorViewModel | null;
+}
+
+/** Detail payload from `GET api/app/groups/:id` (includes members). */
+export interface GroupDetailViewModel extends DoubtForumViewModel {
+  members: GroupMemberViewModel[];
+}
+
+/** `GET api/app/groups/:groupId/membership` */
+export interface GroupMembershipApi {
+  groupId?: number | null;
+  groupName?: string | null;
+  groupType?: string | null;
+  isArchived?: boolean | null;
+  isMember?: boolean | null;
+  leftAt?: string | null;
+}
+
+export interface GroupMembershipViewModel {
+  groupId: number;
+  groupName: string;
+  groupType: string | null;
+  isArchived: boolean;
+  isMember: boolean;
+  leftAt: string | null;
+}
+
+export interface GetAppGroupsParams {
+  page?: number;
+  limit?: number;
+  accessToken?: string;
 }
 
 export interface DoubtForumListViewModel {
@@ -140,6 +184,60 @@ export interface GetForumMessagesParams {
   topicSlug: string;
   page?: number;
   limit?: number;
+  accessToken?: string;
+}
+
+/** Channel / group chat wall — `group_id` only (no topic). */
+export interface GetGroupMessagesParams {
+  groupId: number;
+  page?: number;
+  limit?: number;
+  accessToken?: string;
+}
+
+export interface GetGroupDetailParams {
+  groupId: number;
+  accessToken?: string;
+  /** When set, reject details whose `type` does not match (e.g. group_chat). */
+  expectedType?: string;
+}
+
+export interface GroupMemberUserApi {
+  id?: string | null;
+  fullName?: string | null;
+  email?: string | null;
+  profilePicturePath?: string | null;
+  userType?: string | null;
+  isActive?: boolean | null;
+}
+
+export interface GroupMemberRoleApi {
+  id?: number | null;
+  name?: string | null;
+  label?: string | null;
+}
+
+export interface GroupMemberApi {
+  id?: number | string | null;
+  groupId?: number | null;
+  userId?: string | null;
+  role?: string | GroupMemberRoleApi | null;
+  roleName?: string | null;
+  memberRole?: string | null;
+  userType?: string | null;
+  email?: string | null;
+  fullName?: string | null;
+  profilePicturePath?: string | null;
+  leftAt?: string | null;
+  user?: GroupMemberUserApi | null;
+}
+
+export interface GroupMemberViewModel {
+  id: string;
+  fullName: string;
+  role: string;
+  email: string | null;
+  profilePicturePath: string | null;
 }
 
 export interface CreateForumTopicParams {
@@ -150,8 +248,13 @@ export interface CreateForumTopicParams {
 
 export interface PostForumMessageParams {
   groupId: number;
-  topicSlug: string;
+  /**
+   * Required for doubt_forum answers. Omit for group_chat / broadcast wall posts
+   * (`POST api/app/groups/messages` with `group_id` only).
+   */
+  topicSlug?: string | null;
   content: string;
+  /** Forum threaded replies only — omit for group_chat. */
   parentMessageId?: number | null;
   files?: File[];
 }
@@ -159,6 +262,25 @@ export interface PostForumMessageParams {
 export interface UpdateForumMessageParams {
   messageId: number;
   content: string;
+}
+
+export type ForumReactionType = "like" | "dislike";
+
+export interface ReactToForumMessageParams {
+  messageId: number;
+  reactionType: ForumReactionType;
+}
+
+export interface ForumMessageReactionResultApi {
+  action?: string | null;
+  reaction?: ForumMessageReactionApi | null;
+  message?: ForumMessageApi | null;
+}
+
+export interface ForumMessageReactionResultViewModel {
+  action: string;
+  /** Null when DELETE returns no message payload — client clears `myReaction` locally. */
+  message: ForumMessageViewModel | null;
 }
 
 export interface ForumMessageAttachmentApi {
@@ -234,7 +356,10 @@ export interface ForumMessageViewModel {
   author: ForumTopicAuthorViewModel;
   likeCount: number;
   dislikeCount: number;
+  myReaction: ForumReactionType | null;
   attachments: ForumMessageAttachmentViewModel[];
+  /** API status, e.g. active / moderated. */
+  status: string | null;
 }
 
 export interface ForumMessageListViewModel {

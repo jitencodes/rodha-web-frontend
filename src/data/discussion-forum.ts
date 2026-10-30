@@ -56,6 +56,7 @@ export type ForumPreviewAnswer = {
   editedAt: string | null;
   author: ForumPreviewAuthor;
   reactionTypeCount: { like: number; dislike: number };
+  myReaction?: "like" | "dislike" | null;
   attachments: ForumPreviewAttachment[];
 };
 
@@ -84,6 +85,10 @@ export type ForumSpaceItem = {
   memberCount: number;
   messageCount: number;
   lastActiveAt: string;
+  iconUrl?: string | null;
+  lastMessagePreview?: string | null;
+  createdByName?: string | null;
+  createdByRole?: string | null;
 };
 
 /** Mock group chats — visible only to logged-in users (portal Groups). */
@@ -145,7 +150,7 @@ export const FORUM_PREVIEW_CHANNELS: ForumSpaceItem[] = [
 export type ForumSpaceMember = {
   id: string;
   fullName: string;
-  role: "Mentor" | "Student" | "Admin";
+  role: string;
   email?: string;
 };
 
@@ -156,7 +161,10 @@ export type ForumSpaceMessage = {
   createdAt: string;
   author: ForumPreviewAuthor;
   reactionTypeCount: { like: number; dislike: number };
+  myReaction?: "like" | "dislike" | null;
+  attachments?: ForumPreviewAttachment[];
   parentMessageId?: number | null;
+  status?: string | null;
 };
 
 export const FORUM_SPACE_MEMBERS: Record<number, ForumSpaceMember[]> = {

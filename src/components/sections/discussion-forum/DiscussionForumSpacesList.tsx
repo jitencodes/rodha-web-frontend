@@ -8,6 +8,7 @@ import {
   DiscussionForumShell,
   type DiscussionForumHero,
 } from "@/components/sections/discussion-forum/DiscussionForumShell";
+import { ForumGroupIcon } from "@/components/sections/discussion-forum/ForumGroupIcon";
 import { Input } from "@/components/ui/Input";
 import {
   formatForumCount,
@@ -102,9 +103,17 @@ export function DiscussionForumSpacesList({
                 )}
               >
                 <div className="flex min-w-0 items-start gap-3">
-                  <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
-                    <Icon className="size-4" aria-hidden />
-                  </span>
+                  {item.iconUrl ? (
+                    <ForumGroupIcon
+                      name={item.name}
+                      src={item.iconUrl}
+                      className="size-9 rounded-full"
+                    />
+                  ) : (
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
+                      <Icon className="size-4" aria-hidden />
+                    </span>
+                  )}
                   <div className="min-w-0">
                     <p className="truncate text-body-sm font-semibold text-text-primary">
                       {item.name}
@@ -125,12 +134,18 @@ export function DiscussionForumSpacesList({
 
                 <p className="text-caption text-text-muted">
                   <span className="md:hidden text-text-dimmed">Active · </span>
-                  {formatForumRelativeTime(item.lastActiveAt)}
+                  {item.lastActiveAt
+                    ? formatForumRelativeTime(item.lastActiveAt)
+                    : "—"}
                 </p>
 
                 <p className="truncate text-caption text-text-muted">
                   <span className="md:hidden text-text-dimmed">Msgs · </span>
-                  {formatForumCount(item.messageCount)} messages
+                  {item.lastMessagePreview?.trim()
+                    ? item.lastMessagePreview
+                    : item.messageCount > 0
+                      ? `${formatForumCount(item.messageCount)} messages`
+                      : "—"}
                 </p>
 
                 <div className="flex items-center justify-start gap-1 md:justify-end">
@@ -150,7 +165,9 @@ export function DiscussionForumSpacesList({
             ))
           ) : (
             <li className="px-4 py-10 text-center text-body-sm text-text-muted">
-              No {kind} match your search.
+              {search.trim()
+                ? `No ${kind} match your search.`
+                : `No ${kind} available yet.`}
             </li>
           )}
         </ul>

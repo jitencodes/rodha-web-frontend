@@ -3,9 +3,14 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { DiscussionForumSpacesList } from "@/components/sections/discussion-forum/DiscussionForumSpacesList";
-import { FORUM_PREVIEW_GROUPS } from "@/data/discussion-forum";
-import { getGroupTopics } from "@/lib/api/modules/groups/service";
-import { toForumPreviewQuestions } from "@/lib/api/modules/groups/ui";
+import {
+  getGroupChats,
+  getGroupTopics,
+} from "@/lib/api/modules/groups/service";
+import {
+  toForumPreviewQuestions,
+  toForumSpaceItems,
+} from "@/lib/api/modules/groups/ui";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -36,7 +41,12 @@ export default async function DiscussionForumGroupsPage({ params }: PageProps) {
     redirect(`/login?next=${encodeURIComponent(`${base}/groups`)}`);
   }
 
-  const topics = await getGroupTopics(forum.id, { page: 1, limit: 20 });
+  const [groups, topics] = await Promise.all([
+    getGroupChats({ page: 1, limit: 20, accessToken: token }),
+    getGroupTopics(forum.id, { page: 1, limit: 20 }),
+  ]);
+
+  const items = toForumSpaceItems(groups?.items ?? []);
 
   return (
     <section className="bg-bg-primary pb-8 pt-6 md:pt-8">
@@ -44,7 +54,7 @@ export default async function DiscussionForumGroupsPage({ params }: PageProps) {
         <DiscussionForumSpacesList
           title="Groups"
           description="Private study circles and mentor-led group chats for logged-in members."
-          items={FORUM_PREVIEW_GROUPS}
+          items={items}
           kind="groups"
           basePath={base}
           forum={forum}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { AppToaster } from "@/components/providers/AppToaster";
+import { RealtimeProvider } from "@/components/providers/RealtimeProvider";
 import { GoogleTagManager } from "@/components/providers/GoogleTagManager";
 import { MetaPixel } from "@/components/providers/MetaPixel";
 import { UtmCapture } from "@/components/providers/UtmCapture";
@@ -91,7 +92,7 @@ export default function RootLayout({
 
         <GoogleTagManager />
         <UtmCapture />
-        {children}
+        <RealtimeProvider>{children}</RealtimeProvider>
         <AppToaster />
         <MetaPixel />
       </body>

@@ -14,6 +14,20 @@ export function getApiBaseUrl(): string | null {
   return raw.endsWith("/") ? raw : `${raw}/`;
 }
 
+/**
+ * Socket.IO server origin. The REST base includes a path (`/rodha/`);
+ * the socket connects to the host only, on the default `/socket.io` path.
+ */
+export function getRealtimeServerUrl(): string | null {
+  const base = getApiBaseUrl();
+  if (!base) return null;
+  try {
+    return new URL(base).origin;
+  } catch {
+    return null;
+  }
+}
+
 export function getApiSource(): string {
   return process.env.NEXT_PUBLIC_API_SOURCE?.trim() || "website";
 }

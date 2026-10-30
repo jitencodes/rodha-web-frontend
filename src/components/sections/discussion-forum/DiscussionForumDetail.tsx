@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   BadgeCheck,
-  ChevronDown,
-  ChevronUp,
   FileText,
   LogIn,
   Pencil,
@@ -50,40 +48,6 @@ type DiscussionForumDetailProps = {
   currentUserId: string | null;
   loginHref: string;
 };
-
-function VoteColumn({
-  score,
-  onUp,
-  onDown,
-}: {
-  score: number;
-  onUp: () => void;
-  onDown: () => void;
-}) {
-  return (
-    <div className="flex shrink-0 flex-col items-center gap-1">
-      <button
-        type="button"
-        onClick={onUp}
-        className="rounded-md p-1 text-text-dimmed transition-colors hover:bg-orange-500/10 hover:text-orange-400"
-        aria-label="Upvote"
-      >
-        <ChevronUp className="size-5" />
-      </button>
-      <span className="min-w-8 text-center text-body font-semibold tabular-nums text-orange-400">
-        {formatForumCount(score)}
-      </span>
-      <button
-        type="button"
-        onClick={onDown}
-        className="rounded-md p-1 text-text-dimmed transition-colors hover:bg-bg-hover hover:text-text-secondary"
-        aria-label="Downvote"
-      >
-        <ChevronDown className="size-5" />
-      </button>
-    </div>
-  );
-}
 
 function AnswerAttachments({
   attachments,
@@ -140,10 +104,6 @@ function AnswerAttachments({
   );
 }
 
-function answerScore(answer: ForumPreviewAnswer): number {
-  return answer.reactionTypeCount.like - answer.reactionTypeCount.dislike;
-}
-
 function forumSlugFromBasePath(basePath: string): string {
   const parts = basePath.split("/").filter(Boolean);
   return parts[parts.length - 1] ?? "";
@@ -164,41 +124,113 @@ export function DiscussionForumDetail({
   const router = useRouter();
   const forumSlug = forumSlugFromBasePath(basePath);
   const [answers, setAnswers] = useState<ForumPreviewAnswer[]>(initialAnswers);
-  const [questionVotes, setQuestionVotes] = useState(question.voteScore);
   const [editingAnswerId, setEditingAnswerId] = useState<number | null>(null);
   const [editDraft, setEditDraft] = useState("");
   const [savingEdit, setSavingEdit] = useState(false);
   const [deletingAnswerId, setDeletingAnswerId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [reactingAnswerId, setReactingAnswerId] = useState<number | null>(null);
 
   // Keep local list in sync when RSC refetch / revisit returns fresh answers.
   useEffect(() => {
     setAnswers(initialAnswers);
   }, [initialAnswers]);
 
-  useEffect(() => {
-    setQuestionVotes(question.voteScore);
-  }, [question.voteScore, question.id]);
+  const requireLogin = () => {
+    toast.error("Log in to react to an answer.");
+    router.push(loginHref);
+  };
 
-  const bumpReaction = (
-    answerId: number,
-    type: "like" | "dislike",
-    delta: 1 | -1
-  ) => {
-    setAnswers((prev) =>
-      prev.map((item) => {
-        if (item.id !== answerId) return item;
-        const nextCount = {
-          ...item.reactionTypeCount,
-          [type]: Math.max(0, item.reactionTypeCount[type] + delta),
-        };
-        return {
-          ...item,
-          reactionTypeCount: nextCount,
-          voteScore: nextCount.like - nextCount.dislike,
-        };
-      })
-    );
+  const toggleLike = async (answerId: number) => {
+    if (!canAnswer) {
+      requireLogin();
+      return;
+    }
+    if (reactingAnswerId != null) return;
+
+    const current = answers.find((item) => item.id === answerId);
+    const removing = current?.myReaction === "like";
+
+    try {
+      setReactingAnswerId(answerId);
+      const response = await fetchAuthed(
+        `/api/discussion-forum/messages/${answerId}/reactions`,
+        {
+          method: removing ? "DELETE" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(
+            removing
+              ? {
+                  topic_id: question.id,
+                  topic_slug: topicSlug,
+                  forum_slug: forumSlug,
+                }
+              : {
+                  reaction_type: "like",
+                  topic_id: question.id,
+                  topic_slug: topicSlug,
+                  forum_slug: forumSlug,
+                }
+          ),
+        }
+      );
+
+      const body = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+        data?: ForumPreviewAnswer;
+      } | null;
+
+      if (!response.ok || !body?.ok) {
+        throw new Error(body?.error || "Unable to update reaction.");
+      }
+
+      if (body.data) {
+        setAnswers((prev) =>
+          prev.map((item) =>
+            item.id === answerId
+              ? {
+                  ...item,
+                  ...body.data!,
+                  attachments: body.data!.attachments?.length
+                    ? body.data!.attachments
+                    : item.attachments,
+                  reactionTypeCount:
+                    body.data!.reactionTypeCount ?? item.reactionTypeCount,
+                  myReaction: body.data!.myReaction ?? null,
+                  author: body.data!.author?.id
+                    ? body.data!.author
+                    : item.author,
+                }
+              : item
+          )
+        );
+      } else if (removing) {
+        setAnswers((prev) =>
+          prev.map((item) =>
+            item.id === answerId
+              ? {
+                  ...item,
+                  myReaction: null,
+                  reactionTypeCount: {
+                    ...item.reactionTypeCount,
+                    like: Math.max(0, item.reactionTypeCount.like - 1),
+                  },
+                }
+              : item
+          )
+        );
+      } else {
+        throw new Error("Unable to update reaction.");
+      }
+      router.refresh();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to update reaction."
+      );
+    } finally {
+      setReactingAnswerId(null);
+    }
   };
 
   const startEdit = (answer: ForumPreviewAnswer) => {
@@ -326,78 +358,67 @@ export function DiscussionForumDetail({
       </Link>
 
       <article className="min-w-0 overflow-hidden rounded-2xl border border-border-default bg-bg-surface p-4 sm:p-6">
-        <div className="flex min-w-0 gap-3 sm:gap-4">
-          <VoteColumn
-            score={questionVotes}
-            onUp={() => setQuestionVotes((n) => n + 1)}
-            onDown={() => setQuestionVotes((n) => n - 1)}
-          />
-          <div className="min-w-0 flex-1 overflow-hidden">
-            <h2 className="break-words text-h3 font-semibold tracking-tight text-text-primary">
-              {question.title}
-            </h2>
-            <div
-              className="forum-answer-prose mt-3 space-y-2 text-body-sm leading-relaxed text-text-secondary [&_p]:mb-2"
-              dangerouslySetInnerHTML={{ __html: question.content }}
+        <h2 className="break-words text-h3 font-semibold tracking-tight text-text-primary">
+          {question.title}
+        </h2>
+        <div
+          className="forum-answer-prose mt-3 space-y-2 text-body-sm leading-relaxed text-text-secondary [&_p]:mb-2"
+          dangerouslySetInnerHTML={{ __html: question.content }}
+        />
+        <ul className="mt-4 flex flex-wrap gap-1.5">
+          {question.tags.map((tag) => (
+            <li key={tag}>
+              <Link
+                href={`${basePath}?tag=${encodeURIComponent(tag)}`}
+                className="inline-flex items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-0.5 text-caption font-medium text-text-secondary transition-colors hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400"
+              >
+                {tag}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle pt-3">
+          <p className="text-caption text-text-dimmed">
+            asked {formatForumRelativeTime(question.createdAt)}
+          </p>
+          <div className="flex items-center gap-2.5">
+            <ForumAvatar
+              name={question.author.fullName}
+              className="size-8"
+              textClassName="text-[10px]"
             />
-            <ul className="mt-4 flex flex-wrap gap-1.5">
-              {question.tags.map((tag) => (
-                <li key={tag}>
-                  <Link
-                    href={`${basePath}?tag=${encodeURIComponent(tag)}`}
-                    className="inline-flex items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-0.5 text-caption font-medium text-text-secondary transition-colors hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400"
-                  >
-                    {tag}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle pt-3">
-              <p className="text-caption text-text-dimmed">
-                asked {formatForumRelativeTime(question.createdAt)}
+            <div>
+              <p className="text-body-sm font-medium text-text-primary">
+                {question.author.fullName}
               </p>
-              <div className="flex items-center gap-2.5">
-                <ForumAvatar
-                  name={question.author.fullName}
-                  className="size-8"
-                  textClassName="text-[10px]"
-                />
-                <div>
-                  <p className="text-body-sm font-medium text-text-primary">
-                    {question.author.fullName}
-                  </p>
-                  {question.author.reputation != null ? (
-                    <p className="text-caption text-text-dimmed">
-                      {formatForumCount(question.author.reputation)}
-                    </p>
-                  ) : null}
-                </div>
-              </div>
+              {question.author.reputation != null ? (
+                <p className="text-caption text-text-dimmed">
+                  {formatForumCount(question.author.reputation)}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
       </article>
 
-      <h3 className="mt-6 text-h4 font-semibold text-text-primary">
-        {answers.length} {answers.length === 1 ? "Answer" : "Answers"}
-      </h3>
+      <div className="mt-6 flex h-[min(70vh,40rem)] min-h-[16rem] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
+        <div className="shrink-0 border-b border-border-subtle px-4 py-3 sm:px-5">
+          <h3 className="text-h4 font-semibold text-text-primary">
+            {answers.length} {answers.length === 1 ? "Answer" : "Answers"}
+          </h3>
+        </div>
 
-      <div className="mt-3 space-y-3">
-        {answers.map((answer) => (
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4">
+        {answers.length ? (
+        answers.map((answer, index) => (
           <article
             key={answer.id}
             className={cn(
-              "min-w-0 overflow-hidden rounded-2xl border border-border-default bg-bg-surface p-4 sm:p-5",
+              "min-w-0 overflow-hidden rounded-2xl border border-border-default bg-bg-tertiary/40 p-4 sm:p-5",
               answer.isAccepted && "border-accent-green/40 bg-accent-green/5"
             )}
           >
-            <div className="flex min-w-0 gap-3 sm:gap-4">
-              <VoteColumn
-                score={answerScore(answer)}
-                onUp={() => bumpReaction(answer.id, "like", 1)}
-                onDown={() => bumpReaction(answer.id, "dislike", 1)}
-              />
-              <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="min-w-0">
                 {answer.isAccepted ? (
                   <p className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-accent-green/35 bg-accent-green/10 px-2.5 py-0.5 text-caption font-medium text-accent-green">
                     <BadgeCheck className="size-3.5" aria-hidden />
@@ -434,21 +455,51 @@ export function DiscussionForumDetail({
                   </div>
                 ) : (
                   <>
-                    {answer.content ? (
-                      <div
-                        className="forum-answer-prose space-y-2 text-body-sm leading-relaxed text-text-secondary [&_p]:mb-2"
-                        dangerouslySetInnerHTML={{ __html: answer.content }}
-                      />
-                    ) : null}
-                    <AnswerAttachments attachments={answer.attachments} />
-                    <div className="mt-3 flex flex-wrap items-center gap-1">
-                      <span className="inline-flex h-7 items-center gap-1 rounded-md bg-orange-500/10 px-2 text-caption text-orange-400">
-                        <ThumbsUp className="size-3.5" aria-hidden />
-                        {formatForumCount(answer.reactionTypeCount.like)}
+                    <div className="flex min-w-0 items-start gap-2">
+                      <span className="shrink-0 pt-0.5 text-body-sm font-semibold tabular-nums text-orange-400">
+                        {index + 1}.
                       </span>
-                      <span className="inline-flex h-7 items-center gap-1 rounded-md bg-bg-tertiary px-2 text-caption text-text-muted">
-                        <ThumbsDown className="size-3.5" aria-hidden />
-                        {formatForumCount(answer.reactionTypeCount.dislike)}
+                      <div className="min-w-0 flex-1">
+                        {answer.content ? (
+                          <div
+                            className="forum-answer-prose space-y-2 text-body-sm leading-relaxed text-text-secondary [&_p]:mb-2 [&_p:first-child]:mt-0"
+                            dangerouslySetInnerHTML={{ __html: answer.content }}
+                          />
+                        ) : null}
+                        <AnswerAttachments attachments={answer.attachments} />
+                      </div>
+                    </div>
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => void toggleLike(answer.id)}
+                        disabled={reactingAnswerId === answer.id}
+                        className={cn(
+                          "inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-body-sm tabular-nums transition-colors disabled:opacity-50",
+                          answer.myReaction === "like"
+                            ? "bg-orange-500/20 font-semibold text-orange-400"
+                            : "bg-orange-500/10 text-orange-400 hover:bg-orange-500/20"
+                        )}
+                        aria-pressed={answer.myReaction === "like"}
+                        aria-label={
+                          answer.myReaction === "like" ? "Remove like" : "Like"
+                        }
+                      >
+                        <ThumbsUp className="size-3.5 shrink-0" aria-hidden />
+                        <span>
+                          {formatForumCount(answer.reactionTypeCount?.like ?? 0)}
+                        </span>
+                      </button>
+                      <span
+                        className="inline-flex h-8 items-center gap-1.5 rounded-md bg-bg-tertiary px-2.5 text-body-sm tabular-nums text-text-muted"
+                        aria-label={`${formatForumCount(answer.reactionTypeCount?.dislike ?? 0)} dislikes`}
+                      >
+                        <ThumbsDown className="size-3.5 shrink-0" aria-hidden />
+                        <span>
+                          {formatForumCount(
+                            answer.reactionTypeCount?.dislike ?? 0
+                          )}
+                        </span>
                       </span>
                       {currentUserId &&
                       answer.author.id &&
@@ -493,10 +544,15 @@ export function DiscussionForumDetail({
                     </p>
                   </div>
                 </div>
-              </div>
             </div>
           </article>
-        ))}
+        ))
+        ) : (
+          <p className="py-12 text-center text-body-sm text-text-muted">
+            No answers yet. Be the first to reply.
+          </p>
+        )}
+        </div>
       </div>
 
       <div className="mt-6">

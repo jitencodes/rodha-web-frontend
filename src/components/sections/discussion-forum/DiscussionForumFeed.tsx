@@ -143,33 +143,34 @@ export function DiscussionForumFeed({
         </div>
       ) : null}
 
-      <div className="space-y-3">
-        {filtered.length ? (
-          filtered.map((question) => (
-            <DiscussionForumQuestionCard
-              key={question.id}
-              question={question}
+      <div className="flex h-[min(70vh,40rem)] min-h-[20rem] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4">
+          {filtered.length ? (
+            filtered.map((question) => (
+              <DiscussionForumQuestionCard
+                key={question.id}
+                question={question}
+                basePath={basePath}
+              />
+            ))
+          ) : (
+            <div className="rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-12 text-center text-body-sm text-text-muted">
+              {questions.length
+                ? "No posts match this filter. Try another tag or ask a new question."
+                : "No questions in this forum yet."}
+            </div>
+          )}
+        </div>
+        {totalPages > 1 ? (
+          <div className="shrink-0 border-t border-border-subtle px-3 py-3 sm:px-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
               basePath={basePath}
             />
-          ))
-        ) : (
-          <div className="rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-12 text-center text-body-sm text-text-muted">
-            {questions.length
-              ? "No posts match this filter. Try another tag or ask a new question."
-              : "No questions in this forum yet."}
           </div>
-        )}
+        ) : null}
       </div>
-
-      {totalPages > 1 ? (
-        <div className="mt-6">
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            basePath={basePath}
-          />
-        </div>
-      ) : null}
     </DiscussionForumShell>
   );
 }

@@ -170,6 +170,8 @@ export function DiscussionForumShell({
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const active = resolveActiveSpace(pathname, basePath);
+  /** Free horizontal space for group/channel chat — hide Trending rail. */
+  const hideCommunityRail = active === "groups" || active === "channels";
   const hero = forum ?? FORUM_PREVIEW_GROUP;
   const feedQuestions = questions ?? FORUM_PREVIEW_QUESTIONS;
 
@@ -214,7 +216,7 @@ export function DiscussionForumShell({
               <ArrowLeft className="size-3.5" aria-hidden />
               All forums
             </Link>
-            <p className="forum-hero-badge mt-3 inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-0.5 text-caption font-medium text-orange-400">
+            <p className="forum-hero-badge mt-3 inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-0.5 text-caption font-medium text-orange-400 ml-4">
               <Sparkles className="size-3 animate-pulse" aria-hidden />
               Community space
             </p>
@@ -251,7 +253,14 @@ export function DiscussionForumShell({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 xl:grid-cols-[13rem_minmax(0,1fr)_17rem]">
+      <div
+        className={cn(
+          "mt-5 grid gap-5",
+          hideCommunityRail
+            ? "xl:grid-cols-[13rem_minmax(0,1fr)]"
+            : "xl:grid-cols-[13rem_minmax(0,1fr)_17rem]"
+        )}
+      >
         <aside className="hidden xl:block">
           <p className="mb-2 px-2 text-caption font-semibold uppercase tracking-wider text-text-dimmed">
             Spaces
@@ -325,71 +334,76 @@ export function DiscussionForumShell({
           {children}
         </div>
 
-        <aside className="hidden space-y-4 xl:block">
-          <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
-            <p className="mb-3 flex items-center gap-1.5 text-body-sm font-semibold text-text-primary">
-              <TrendingUp className="size-4 text-orange-400" aria-hidden />
-              Trending
-            </p>
-            <ul className="space-y-3">
-              {trending.map((q) => (
-                <li key={q.id}>
-                  <Link
-                    href={`${basePath}/${encodeURIComponent(q.slug)}`}
-                    prefetch={false}
-                    className="block text-body-sm leading-snug text-text-secondary transition-colors duration-200 hover:text-orange-400"
-                  >
-                    {q.title}
-                  </Link>
-                  <p className="mt-0.5 text-caption text-text-dimmed">
-                    {q.voteScore} votes · {q.answerCount} answers
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
-            <p className="mb-3 flex items-center gap-1.5 text-body-sm font-semibold text-text-primary">
-              <Flame className="size-4 text-orange-400" aria-hidden />
-              Top helpers
-            </p>
-            <ul className="space-y-3">
-              {TOP_HELPERS.map((helper) => (
-                <li key={helper.name} className="flex items-center gap-2.5">
-                  <ForumAvatar
-                    name={helper.name}
-                    className="size-8"
-                    textClassName="text-[10px]"
-                  />
-                  <div className="min-w-0">
-                    <p className="truncate text-body-sm font-medium text-text-primary">
-                      {helper.name}
+        {!hideCommunityRail ? (
+          <aside className="hidden space-y-4 xl:block">
+            <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
+              <p className="mb-3 flex items-center gap-1.5 text-body-sm font-semibold text-text-primary">
+                <TrendingUp className="size-4 text-orange-400" aria-hidden />
+                Trending
+              </p>
+              <ul className="space-y-3">
+                {trending.map((q) => (
+                  <li key={q.id}>
+                    <Link
+                      href={`${basePath}/${encodeURIComponent(q.slug)}`}
+                      prefetch={false}
+                      className="block text-body-sm leading-snug text-text-secondary transition-colors duration-200 hover:text-orange-400"
+                    >
+                      {q.title}
+                    </Link>
+                    <p className="mt-0.5 text-caption text-text-dimmed">
+                      {q.voteScore} votes · {q.answerCount} answers
                     </p>
-                    <p className="text-caption text-text-dimmed">
-                      {formatForumCount(helper.reputation)} · {helper.answers} answers
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
-            <p className="mb-3 text-body-sm font-semibold text-text-primary">Popular tags</p>
-            <div className="flex flex-wrap gap-1.5">
-              {popularTags.map((tag) => (
-                <Link
-                  key={tag.name}
-                  href={`${basePath}?tag=${encodeURIComponent(tag.name)}`}
-                  className="inline-flex items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-1 text-caption text-text-secondary transition-colors duration-200 hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400"
-                >
-                  {tag.name}
-                </Link>
-              ))}
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        </aside>
+
+            <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
+              <p className="mb-3 flex items-center gap-1.5 text-body-sm font-semibold text-text-primary">
+                <Flame className="size-4 text-orange-400" aria-hidden />
+                Top helpers
+              </p>
+              <ul className="space-y-3">
+                {TOP_HELPERS.map((helper) => (
+                  <li key={helper.name} className="flex items-center gap-2.5">
+                    <ForumAvatar
+                      name={helper.name}
+                      className="size-8"
+                      textClassName="text-[10px]"
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate text-body-sm font-medium text-text-primary">
+                        {helper.name}
+                      </p>
+                      <p className="text-caption text-text-dimmed">
+                        {formatForumCount(helper.reputation)} · {helper.answers}{" "}
+                        answers
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border-default bg-bg-surface p-4">
+              <p className="mb-3 text-body-sm font-semibold text-text-primary">
+                Popular tags
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {popularTags.map((tag) => (
+                  <Link
+                    key={tag.name}
+                    href={`${basePath}?tag=${encodeURIComponent(tag.name)}`}
+                    className="inline-flex items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-1 text-caption text-text-secondary transition-colors duration-200 hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400"
+                  >
+                    {tag.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </aside>
+        ) : null}
       </div>
     </section>
   );

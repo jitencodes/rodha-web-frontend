@@ -23,6 +23,7 @@ import { getInitials } from "@/lib/initials";
 import { getGraphyDashboardUrl } from "@/lib/constants";
 import { withSsoToken } from "@/lib/auth/sso";
 import { expireSessionClient, isUnauthorizedStatus } from "@/lib/auth/session-expired";
+import { disconnectRealtime } from "@/lib/realtime/socket";
 import { cn } from "@/lib/utils";
 import { ACCOUNT_SEARCH_PLACEHOLDER } from "@/data/account/user";
 
@@ -79,6 +80,7 @@ export function AccountHeader({ onMenuClick, user }: AccountHeaderProps) {
     if (loggingOut) return;
     setLoggingOut(true);
     try {
+      disconnectRealtime();
       await fetch("/api/auth/logout", { method: "POST" });
       router.push("/login");
       router.refresh();
