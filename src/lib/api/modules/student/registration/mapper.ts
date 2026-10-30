@@ -382,6 +382,8 @@ export function mapStudentRegistrationForm(
       mobile:
         typeof data.account?.mobile === "string" ? data.account.mobile : "",
     },
+    batch: typeof data.batch === "string" ? data.batch : "—",
+    batchCourse: typeof data.batchCourse === "string" ? data.batchCourse : "—",
     alreadySubmitted: Boolean(data.alreadySubmitted),
     registration: mapRegistrationRecord(data.registration),
     gate: {

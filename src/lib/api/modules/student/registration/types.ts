@@ -173,6 +173,8 @@ export type BookDispatchViewModel = {
 };
 
 export type StudentRegistrationFormViewModel = {
+  batch?: string;
+  batchCourse?: string;
   account: RegistrationAccountViewModel;
   alreadySubmitted: boolean;
   registration: StudentRegistrationRecord | null;
@@ -235,6 +237,8 @@ export type PurchasedCourseApi = {
 export type RegistrationRecordApi = Record<string, unknown>;
 
 export type RegistrationFormApi = {
+  batch?: string;
+  batchCourse?: string;
   account?: {
     fullName?: string;
     email?: string;
