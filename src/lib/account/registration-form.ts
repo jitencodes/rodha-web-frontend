@@ -254,8 +254,8 @@ export function createEmptyRegistrationForm(
     fullName: account?.fullName || "",
     registeredEmail: account?.email || "",
     mobile: account?.mobile || "",
-    courseEnrolled: data?.courseEnrolledLabel || "",
-    batchEnrolled: data?.batchEnrolledLabel || "",
+    courseEnrolled: data?.batchCourse || "—",
+    batchEnrolled: data?.batch || "—",
 
     targetVerticalId:
       data?.preselectedTargetVerticalId != null

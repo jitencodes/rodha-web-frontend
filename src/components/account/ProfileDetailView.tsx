@@ -13,7 +13,8 @@ type ProfileDetailViewProps = {
   profile: StudentProfileViewModel;
   /** Individual enrolled course titles (not a comma-joined string). */
   courseEnrolledLabels?: string[];
-  batchEnrolledLabel?: string;
+  batch?: string;
+  batchCourse?: string;
 };
 
 type DetailTab = "academics" | "work" | "books";
@@ -269,7 +270,8 @@ function BooksOthersTab({
 export function ProfileDetailView({
   profile,
   courseEnrolledLabels = [],
-  batchEnrolledLabel,
+  batch,
+  batchCourse,
 }: ProfileDetailViewProps) {
   const [tab, setTab] = useState<DetailTab>("academics");
   const reg = profile.registration;
@@ -381,7 +383,7 @@ export function ProfileDetailView({
                 </div>
               ) : null}
 
-              {batchEnrolledLabel ? (
+              
                 <div className="flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
                   <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
                     <Users className="size-4" />
@@ -389,14 +391,28 @@ export function ProfileDetailView({
 
                   <div className="min-w-0">
                     <dt className="text-caption text-[var(--account-text-muted)]">
-                      Batch Enrolled
+                      Batch
                     </dt>
                     <dd className="mt-1 break-words text-body-sm font-semibold text-[var(--account-text)]">
-                      {batchEnrolledLabel}
+                      {batch ?? "—"}
                     </dd>
                   </div>
                 </div>
-              ) : null}
+
+                <div className="flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
+                    <Users className="size-4" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <dt className="text-caption text-[var(--account-text-muted)]">
+                      Batch Course
+                    </dt>
+                    <dd className="mt-1 break-words text-body-sm font-semibold text-[var(--account-text)]">
+                      {batchCourse ?? "—"}
+                    </dd>
+                  </div>
+                </div>
 
               <div className="flex min-w-0 items-start gap-3 rounded-lg border border-[var(--account-border)] bg-[var(--account-accent-soft)]/40 p-3">
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
