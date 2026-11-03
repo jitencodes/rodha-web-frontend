@@ -357,6 +357,7 @@ export function mapCategoryPage(
           videoId: banner.videoId || undefined,
           videoUrl: banner.videoUrl || undefined,
           imageUrl: banner.imageUrl || undefined,
+          redirectUrl: banner.redirectUrl || undefined,
         }
       : null,
     quickStats: banner?.stacks.length

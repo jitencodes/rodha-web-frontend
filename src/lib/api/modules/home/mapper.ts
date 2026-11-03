@@ -32,6 +32,7 @@ export function mapHomeBanner(
     videoId: mapped.videoId,
     videoUrl: mapped.videoUrl,
     imageUrl: mapped.imageUrl,
+    redirectUrl: mapped.redirectUrl,
   };
 }
 

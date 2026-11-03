@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-10-29 (Google auth click debounce)
+**Last updated:** 2026-11-03 (banner redirectUrl, sidebar registration CTA, registration drafts, recent-purchases list)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,7 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Banner links, registration draft, purchase toasts (2026-11-03):** CMS banner `redirectUrl` (via `mapWebsiteBanner`) makes the hero image clickable on home, `/category/[slug]`, `/about`, `/faculty`, and `/team` through `BannerImageLink` (internal → `next/link`, absolute → new tab). About/Faculty/Team desktop background images take clicks through the content layer's empty space. Category hero: `withCategoryLandingDefaults` rebuilds `hero` field by field, so it must carry `redirectUrl` (it was dropped there). `normalizeBannerRedirectUrl` makes a missing/non-string value `null` (no link), keeps `https://` absolute, adds https to `www.`, and prefixes `/` to relative paths like `courses/x`. Account sidebar shows **Complete registration** under My Profile while the gate reports registration incomplete (`useRegistrationIncomplete`, published by `RegistrationGateProvider`); it opens the registration dialog. The registration dialog saves an unsubmitted draft per account email (`registration-draft.ts`, 30-day TTL): field values in localStorage (read-only account fields excluded) and the passport photo in IndexedDB (`rodha-registration` / `passport-photos`); both restore on open. A successful submit, or the gate reporting `completed`, deletes both. Passport photo is limited on the frontend to JPG/JPEG/PNG up to 5 MB (`passport-photo.ts`), with inline errors for wrong type, empty file, or oversize. `GET api/website/recent-purchases` now maps `data.items[]` (`userName`, `itemName`, `itemSlug`, `itemType`, `purchasedAt`); `PurchaseToast` shows them one after another (`NEXT_PUBLIC_PURCHASE_TOAST_MS` open, `NEXT_PUBLIC_PURCHASE_TOAST_GAP_MS` gap, loops when more than one), and package items link to `/courses/{slug}`.
 - **Google auth click debounce (2026-10-29):** `GoogleContinueButton` ignores repeat GIS credentials for 2s and locks pointer events; `AuthScreen.handleGoogle` uses a sync in-flight ref so duplicate login/signup requests cannot start.
 - **Profile detail course list (2026-10-28):** `ProfileDetailView` shows enrolled courses as a bullet list from `purchasedCourses` titles (`courseEnrolledLabels`) instead of a single comma-joined `courseEnrolledLabel`.
 - **Registration searchable selects + Class 12 rules (2026-10-28):** `AccountSelect` / `AccountMultiSelect` use `react-select` with orange account theme (searchable, portaled menus). Step changes scroll the dialog body to top. UG/graduate (and working) hide Class 12 Appearing and default to Passed; when Appearing is chosen, graduation / PG / work are not required or shown.

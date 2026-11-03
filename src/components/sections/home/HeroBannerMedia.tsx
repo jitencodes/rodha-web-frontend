@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { HeroVideoEmbed } from "@/components/sections/home/HeroVideoEmbed";
+import { BannerImageLink } from "@/components/ui/BannerImageLink";
 
 interface HeroBannerMediaProps {
   videoId?: string | null;
   videoUrl?: string | null;
   imageUrl?: string | null;
+  /** CMS `redirectUrl` — makes the image clickable. */
+  redirectUrl?: string | null;
 }
 
 /** YouTube, then a direct video file, then an image. */
@@ -12,6 +15,7 @@ export function HeroBannerMedia({
   videoId,
   videoUrl,
   imageUrl,
+  redirectUrl,
 }: HeroBannerMediaProps) {
   if (videoId) {
     return <HeroVideoEmbed videoId={videoId} />;
@@ -34,15 +38,17 @@ export function HeroBannerMedia({
   if (!imageUrl) return null;
 
   return (
-    <div className="relative w-full aspect-video overflow-hidden rounded-[6px] border border-white/10 bg-bg-tertiary shadow-lg">
-      <Image
-        src={imageUrl}
-        alt=""
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
-        fetchPriority="high"
-      />
-    </div>
+    <BannerImageLink href={redirectUrl} className="w-full">
+      <div className="relative w-full aspect-video overflow-hidden rounded-[6px] border border-white/10 bg-bg-tertiary shadow-lg">
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          fetchPriority="high"
+        />
+      </div>
+    </BannerImageLink>
   );
 }

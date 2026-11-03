@@ -21,8 +21,9 @@ interface SiteFrameProps {
   isLoggedIn?: boolean;
   promo: PromotionalPopupViewModel | null;
   promoDelayMs: number;
-  recentPurchase: RecentPurchaseViewModel | null;
+  recentPurchases: RecentPurchaseViewModel[];
   purchaseToastMs: number;
+  purchaseToastGapMs: number;
   children: React.ReactNode;
 }
 
@@ -34,8 +35,9 @@ export function SiteFrame({
   isLoggedIn = false,
   promo,
   promoDelayMs,
-  recentPurchase,
+  recentPurchases,
   purchaseToastMs,
+  purchaseToastGapMs,
   children,
 }: SiteFrameProps) {
   const pathname = usePathname();
@@ -71,7 +73,11 @@ export function SiteFrame({
         isLoggedIn={isLoggedIn}
         categories={categories}
       />
-      <PurchaseToast purchase={recentPurchase} durationMs={purchaseToastMs} />
+      <PurchaseToast
+        purchases={recentPurchases}
+        durationMs={purchaseToastMs}
+        gapMs={purchaseToastGapMs}
+      />
       <RegistrationGateProvider enabled={isLoggedIn} />
     </>
   );

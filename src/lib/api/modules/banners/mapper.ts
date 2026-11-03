@@ -175,6 +175,22 @@ export function normalizeBannerCtas(raw: unknown): BannerCtaViewModel[] {
 }
 
 /**
+ * CMS banner `redirectUrl` → safe href, or null when missing/blank/non-string.
+ * `https://…` stays absolute, `www.…` gets https, `courses/x` becomes `/courses/x`
+ * (otherwise it would resolve relative to the current page).
+ */
+export function normalizeBannerRedirectUrl(raw: unknown): string | null {
+  const value = asTrimmedString(raw);
+  if (!value) return null;
+  if (/^(https?:)?\/\//i.test(value)) {
+    return value.startsWith("//") ? `https:${value}` : value;
+  }
+  if (/^(mailto:|tel:|#)/i.test(value)) return value;
+  if (/^www\./i.test(value)) return `https://${value}`;
+  return value.startsWith("/") ? value : `/${value}`;
+}
+
+/**
  * Map a CMS banner. Video wins when both `videoYoutubeLink` and `mediaUrl` exist.
  */
 export function mapWebsiteBanner(
@@ -198,6 +214,7 @@ export function mapWebsiteBanner(
     videoId,
     videoUrl,
     imageUrl: videoId ? null : mediaUrl,
+    redirectUrl: normalizeBannerRedirectUrl(banner.redirectUrl),
     stacks: normalizeStacks(banner.stacks),
     listItems: normalizeListItems(banner.listItems),
     ctas: normalizeBannerCtas(banner.cats),

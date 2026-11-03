@@ -1,12 +1,14 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { AccountFieldShell } from "./AccountFieldShell";
 import { cn } from "@/lib/utils";
-
-const MAX_BYTES = 2 * 1024 * 1024;
-const ACCEPT = "image/jpeg,image/png,.jpg,.jpeg,.png";
+import {
+  PASSPORT_PHOTO_ACCEPT,
+  PASSPORT_PHOTO_HELPER_TEXT,
+  validatePassportPhoto,
+} from "@/lib/account/passport-photo";
 
 type AccountFileUploadProps = {
   id?: string;
@@ -26,48 +28,65 @@ export function AccountFileUpload({
   onChange,
   required,
   error,
-  helperText = "JPG/PNG, max 2 MB, face clearly visible, plain background.",
+  helperText = PASSPORT_PHOTO_HELPER_TEXT,
   disabled,
 }: AccountFileUploadProps) {
   const autoId = useId();
   const id = idProp || autoId;
   const inputRef = useRef<HTMLInputElement>(null);
   const [localError, setLocalError] = useState<string | undefined>();
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{ file: File; url: string } | null>(
+    null
+  );
+
+  // Preview follows the `file` prop, so a photo restored from a saved draft shows too.
+  useEffect(() => {
+    if (!file) return;
+    let cancelled = false;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (!cancelled && typeof reader.result === "string") {
+        setPreview({ file, url: reader.result });
+      }
+    };
+    reader.readAsDataURL(file);
+    return () => {
+      cancelled = true;
+      if (reader.readyState === FileReader.LOADING) reader.abort();
+    };
+  }, [file]);
+  const previewUrl = file && preview?.file === file ? preview.url : null;
+
+  function resetInput() {
+    // Lets the same file be picked again after an error or removal.
+    if (inputRef.current) inputRef.current.value = "";
+  }
 
   function clearFile() {
     onChange(null);
-    setPreviewUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return null;
-    });
     setLocalError(undefined);
-    if (inputRef.current) inputRef.current.value = "";
+    resetInput();
   }
 
   function handleFile(next: File | null) {
     if (!next) {
-      clearFile();
+      // Picker cancelled — keep the current photo.
+      resetInput();
       return;
     }
-    const type = next.type.toLowerCase();
-    if (type !== "image/jpeg" && type !== "image/png") {
-      setLocalError("Only JPG or PNG files are allowed.");
-      return;
-    }
-    if (next.size > MAX_BYTES) {
-      setLocalError("File must be 2 MB or smaller.");
+    const problem = validatePassportPhoto(next);
+    if (problem) {
+      // Keep any previously accepted photo; just explain why this one was rejected.
+      setLocalError(problem);
+      resetInput();
       return;
     }
     setLocalError(undefined);
-    setPreviewUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return URL.createObjectURL(next);
-    });
     onChange(next);
   }
 
-  const displayError = error || localError;
+  // A rejected pick is the most recent, specific message — show it over the form's.
+  const displayError = localError || error;
 
   return (
     <AccountFieldShell
@@ -136,7 +155,7 @@ export function AccountFileUpload({
         ref={inputRef}
         id={id}
         type="file"
-        accept={ACCEPT}
+        accept={PASSPORT_PHOTO_ACCEPT}
         className="sr-only"
         disabled={disabled}
         onChange={(e) => handleFile(e.target.files?.[0] ?? null)}

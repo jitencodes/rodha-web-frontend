@@ -1,4 +1,5 @@
 import { AppImage } from "@/components/ui/AppImage";
+import { BannerImageLink } from "@/components/ui/BannerImageLink";
 import { cn } from "@/lib/utils";
 import { AccentUnderline } from "@/components/ui/AccentUnderline";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -72,6 +73,9 @@ export function TeamHeroSection({
   const imageUrl = banner.imageUrl;
   const showVideo = Boolean(videoId);
   const showImage = Boolean(imageUrl) && !showVideo;
+  const redirectUrl = banner.redirectUrl;
+  /** Desktop image sits behind the content layer; let empty space click through to it. */
+  const imageLinked = showImage && Boolean(redirectUrl);
 
   return (
     <section
@@ -81,41 +85,52 @@ export function TeamHeroSection({
       )}
     >
       {showImage && imageUrl ? (
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]">
-          <AppImage
-            src={imageUrl}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="54vw"
-            fetchPriority="high"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, var(--bg-primary) 0%, rgba(10,10,10,0.75) 10%, rgba(10,10,10,0.25) 32%, transparent 52%)",
-            }}
-          />
+        <div
+          className={cn(
+            "absolute inset-y-0 right-0 hidden lg:block w-[50%] xl:w-[54%]",
+            !imageLinked && "pointer-events-none"
+          )}
+        >
+          <BannerImageLink href={redirectUrl} className="absolute inset-0">
+            <AppImage
+              src={imageUrl}
+              alt=""
+              fill
+              className="object-cover object-center"
+              sizes="54vw"
+              fetchPriority="high"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to right, var(--bg-primary) 0%, rgba(10,10,10,0.75) 10%, rgba(10,10,10,0.25) 32%, transparent 52%)",
+              }}
+            />
+          </BannerImageLink>
         </div>
       ) : null}
 
-      <div className="container-rodha relative z-10 py-6 md:py-8 lg:py-10 lg:min-h-[460px] flex flex-col justify-center">
+      <div
+        className={cn(
+          "container-rodha relative z-10 py-6 md:py-8 lg:py-10 lg:min-h-[460px] flex flex-col justify-center",
+          imageLinked && "lg:pointer-events-none"
+        )}
+      >
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
             { label: "About Us", href: "/about" },
             { label: "Meet the Team" },
           ]}
-          className="py-0 pb-4 md:pb-5"
+          className="py-0 pb-4 md:pb-5 lg:pointer-events-auto"
         />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           <div
-            className={
-              showVideo || showImage
-                ? "lg:col-span-6"
-                : "lg:col-span-6 xl:col-span-5"
-            }
+            className={cn(
+              "lg:col-span-6 lg:pointer-events-auto",
+              !(showVideo || showImage) && "xl:col-span-5"
+            )}
           >
             <h1 className="text-[26px] sm:text-[40px] md:text-hero font-bold leading-[1.12] tracking-tight">
               {title}{" "}
@@ -157,20 +172,22 @@ export function TeamHeroSection({
           </div>
 
           {showVideo && videoId ? (
-            <div className="lg:col-span-6">
+            <div className="lg:col-span-6 lg:pointer-events-auto">
               <HeroVideoEmbed videoId={videoId} />
             </div>
           ) : showImage && imageUrl ? (
-            <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden">
-              <AppImage
-                src={imageUrl}
-                alt=""
-                fill
-                className="object-cover object-center"
-                sizes="100vw"
-                fetchPriority="high"
-              />
-            </div>
+            <BannerImageLink href={redirectUrl} className="lg:hidden">
+              <div className="lg:hidden relative -mx-4 sm:-mx-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-[260px] sm:h-[320px] overflow-hidden">
+                <AppImage
+                  src={imageUrl}
+                  alt=""
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                  fetchPriority="high"
+                />
+              </div>
+            </BannerImageLink>
           ) : null}
         </div>
       </div>
