@@ -1,4 +1,5 @@
 import { AppImage } from "@/components/ui/AppImage";
+import { BannerImageLink } from "@/components/ui/BannerImageLink";
 import { Container } from "@/components/layout/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Icon } from "@/components/ui/Icon";
@@ -26,6 +27,9 @@ export function AboutHeroSection({
   const stats = banner.listItems;
   const showVideo = Boolean(videoId);
   const showImage = Boolean(imageUrl) && !showVideo;
+  const redirectUrl = banner.redirectUrl;
+  /** Desktop image sits behind the content layer; let empty space click through to it. */
+  const imageLinked = showImage && Boolean(redirectUrl);
 
   return (
     <section
@@ -40,28 +44,37 @@ export function AboutHeroSection({
       />
 
       {showImage && imageUrl ? (
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block w-[46%] xl:w-[50%]">
-          <AppImage
-            src={imageUrl}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="50vw"
-            fetchPriority="high"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, var(--bg-primary) 0%, rgba(10,10,10,0.72) 12%, rgba(10,10,10,0.2) 38%, transparent 58%)",
-            }}
-          />
+        <div
+          className={cn(
+            "absolute inset-y-0 right-0 hidden lg:block w-[46%] xl:w-[50%]",
+            !imageLinked && "pointer-events-none"
+          )}
+        >
+          <BannerImageLink href={redirectUrl} className="absolute inset-0">
+            <AppImage
+              src={imageUrl}
+              alt=""
+              fill
+              className="object-cover object-center"
+              sizes="50vw"
+              fetchPriority="high"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to right, var(--bg-primary) 0%, rgba(10,10,10,0.72) 12%, rgba(10,10,10,0.2) 38%, transparent 58%)",
+              }}
+            />
+          </BannerImageLink>
         </div>
       ) : null}
 
-      <Container className="relative z-10">
+      <Container
+        className={cn("relative z-10", imageLinked && "lg:pointer-events-none")}
+      >
         <Breadcrumb
-          className="pt-0 pb-4 md:pb-5"
+          className="pt-0 pb-4 md:pb-5 lg:pointer-events-auto"
           items={[
             { label: "Home", href: "/" },
             { label: "About Us" },
@@ -69,11 +82,7 @@ export function AboutHeroSection({
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-          <div
-            className={
-              showVideo || showImage ? "lg:col-span-6" : "lg:col-span-6 xl:col-span-6"
-            }
-          >
+          <div className="lg:col-span-6 lg:pointer-events-auto">
             {eyebrow ? (
               <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
                 {eyebrow}
@@ -96,17 +105,19 @@ export function AboutHeroSection({
                 <HeroVideoEmbed videoId={videoId} />
               </div>
             ) : showImage && imageUrl ? (
-              <div className="mt-5 lg:hidden relative w-full overflow-hidden rounded-[8px]">
-                <AppImage
-                  src={imageUrl}
-                  alt=""
-                  width={300}
-                  height={300}
-                  className="object-cover object-center w-full h-auto"
-                  sizes="100vw"
-                  fetchPriority="high"
-                />
-              </div>
+              <BannerImageLink href={redirectUrl} className="mt-5 lg:hidden">
+                <div className="relative w-full overflow-hidden rounded-[8px]">
+                  <AppImage
+                    src={imageUrl}
+                    alt=""
+                    width={300}
+                    height={300}
+                    className="object-cover object-center w-full h-auto"
+                    sizes="100vw"
+                    fetchPriority="high"
+                  />
+                </div>
+              </BannerImageLink>
             ) : null}
 
             {stats.length > 0 ? (

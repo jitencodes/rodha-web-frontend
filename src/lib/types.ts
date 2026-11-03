@@ -400,6 +400,8 @@ export interface CategoryLandingHero {
   videoUrl?: string;
   /** Image banner when no video is present */
   imageUrl?: string;
+  /** Click-through target for the banner image */
+  redirectUrl?: string;
 }
 
 export interface CategoryLandingSectionCopy {

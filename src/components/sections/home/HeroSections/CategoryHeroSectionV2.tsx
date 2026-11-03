@@ -12,6 +12,7 @@ import { CounsellingCtaAction } from "../../CounsellingCtaAction";
 import { HeroVideoEmbed } from "../HeroVideoEmbed";
 import { HomeHeroShell } from "../HomeHeroShell";
 import { Container } from "@/components/layout/Container";
+import { BannerImageLink } from "@/components/ui/BannerImageLink";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 interface CategoryHeroCta {
@@ -32,6 +33,8 @@ interface CategoryHeroSectionV2Props {
   isLoggedIn?: boolean;
   videoId?: string;
   imageUrl?: string;
+  /** CMS banner `redirectUrl` — makes the hero image clickable. */
+  imageRedirectUrl?: string;
   className?: string;
 }
 
@@ -100,6 +103,7 @@ export function CategoryHeroSectionV2({
   isLoggedIn = false,
   videoId,
   imageUrl,
+  imageRedirectUrl,
   className,
 }: CategoryHeroSectionV2Props) {
   const selectionStat = quickStats[0];
@@ -131,7 +135,7 @@ export function CategoryHeroSectionV2({
             <div className={HERO_CONTENT_MAX}>
               {hasEyebrow ? (
                 <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
-                  {eyebrow}
+                  {eyebrow}{imageRedirectUrl}ok
                 </p>
               ) : null}
 
@@ -194,16 +198,18 @@ export function CategoryHeroSectionV2({
                   <HeroVideoEmbed videoId={videoId} />
                 ) : null}
                 {hasImage && imageUrl ? (
-                  <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
-                    <Image
-                      src={imageUrl}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      fetchPriority="high"
-                    />
-                  </div>
+                  <BannerImageLink href={imageRedirectUrl} className="w-full">
+                    <div className="relative w-full aspect-video rounded-[6px] overflow-hidden border border-white/10 shadow-lg bg-bg-tertiary">
+                      <Image
+                        src={imageUrl}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        fetchPriority="high"
+                      />
+                    </div>
+                  </BannerImageLink>
                 ) : null}
               </div>
             </div>

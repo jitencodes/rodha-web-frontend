@@ -6,6 +6,7 @@
 const DEFAULT_ANNOUNCEMENT_INTERVAL_MS = 8000;
 const DEFAULT_PROMO_DIALOG_DELAY_MS = 2500;
 const DEFAULT_PURCHASE_TOAST_MS = 10000;
+const DEFAULT_PURCHASE_TOAST_GAP_MS = 5000;
 const DEFAULT_REVALIDATE_SECONDS = 60;
 
 export function getApiBaseUrl(): string | null {
@@ -56,6 +57,14 @@ export function getPurchaseToastMs(): number {
   return readPositiveInt(
     process.env.NEXT_PUBLIC_PURCHASE_TOAST_MS,
     DEFAULT_PURCHASE_TOAST_MS
+  );
+}
+
+/** Pause between one recent-purchase toast closing and the next one opening. */
+export function getPurchaseToastGapMs(): number {
+  return readPositiveInt(
+    process.env.NEXT_PUBLIC_PURCHASE_TOAST_GAP_MS,
+    DEFAULT_PURCHASE_TOAST_GAP_MS
   );
 }
 

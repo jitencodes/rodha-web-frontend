@@ -39,6 +39,15 @@ import {
   type RegistrationFieldErrors,
   type RegistrationFormValues,
 } from "@/lib/account/registration-form";
+import {
+  applyRegistrationDraft,
+  clearRegistrationDraft,
+  deletePassportPhotoDraft,
+  loadPassportPhotoDraft,
+  savePassportPhotoDraft,
+  saveRegistrationDraft,
+} from "@/lib/account/registration-draft";
+import { validatePassportPhoto } from "@/lib/account/passport-photo";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import {
   isBlockedPhoneKey,
@@ -114,8 +123,14 @@ export function RegistrationDialog({
   const titleId = useId();
   const formId = useId();
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  /** Scopes the locally saved draft to the signed-in account. */
+  const draftAccountKey =
+    registration.account.email || registration.account.mobile;
   const [values, setValues] = useState<RegistrationFormValues>(() =>
-    createEmptyRegistrationForm(registration)
+    applyRegistrationDraft(
+      createEmptyRegistrationForm(registration),
+      draftAccountKey
+    )
   );
   const [errors, setErrors] = useState<RegistrationFieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -201,8 +216,36 @@ export function RegistrationDialog({
     setErrors({});
     setSubmitting(false);
     setPassportFile(null);
-    setValues(createEmptyRegistrationForm(registration));
-  }, [open, registration]);
+    setValues(
+      applyRegistrationDraft(
+        createEmptyRegistrationForm(registration),
+        draftAccountKey
+      )
+    );
+  }, [open, registration, draftAccountKey]);
+
+  // Restore the passport photo saved in IndexedDB (async; never overrides a fresh pick).
+  useEffect(() => {
+    if (!open || registration.alreadySubmitted) return;
+    let cancelled = false;
+    void loadPassportPhotoDraft(draftAccountKey).then((file) => {
+      if (cancelled || !file) return;
+      setPassportFile((current) => current ?? file);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, registration.alreadySubmitted, draftAccountKey]);
+
+  // Keep an unsubmitted draft locally so the form is prefilled on the next visit.
+  useEffect(() => {
+    if (!open) return;
+    if (registration.alreadySubmitted) {
+      clearRegistrationDraft(draftAccountKey);
+      return;
+    }
+    saveRegistrationDraft(values, draftAccountKey);
+  }, [open, values, registration.alreadySubmitted, draftAccountKey]);
 
   useEffect(() => {
     if (!open) return;
@@ -278,6 +321,10 @@ export function RegistrationDialog({
 
   function validateCurrentStep(): boolean {
     const next = validateRegistrationStep(step, values, validationCtx());
+    if (step === 1 && passportFile && !next.passportPhoto) {
+      const photoError = validatePassportPhoto(passportFile);
+      if (photoError) next.passportPhoto = photoError;
+    }
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -318,6 +365,7 @@ export function RegistrationDialog({
       if (!res.ok || !data?.ok) {
         throw new Error(data?.error || "Unable to submit registration.");
       }
+      clearRegistrationDraft(draftAccountKey);
       toast.success("Registration submitted successfully.");
       onSubmitted?.();
       onClose();
@@ -597,6 +645,11 @@ export function RegistrationDialog({
                         file={passportFile}
                         onChange={(file) => {
                           setPassportFile(file);
+                          if (file) {
+                            void savePassportPhotoDraft(draftAccountKey, file);
+                          } else {
+                            void deletePassportPhotoDraft(draftAccountKey);
+                          }
                           setErrors((prev) => {
                             if (!prev.passportPhoto) return prev;
                             const next = { ...prev };

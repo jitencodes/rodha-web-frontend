@@ -91,6 +91,7 @@ export function HomeHeroSection({ banner = null }: HomeHeroSectionProps) {
                   videoId={banner.videoId}
                   videoUrl={banner.videoUrl}
                   imageUrl={banner.imageUrl}
+                  redirectUrl={banner.redirectUrl}
                 />
               ) : null}
             </div>

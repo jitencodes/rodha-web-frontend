@@ -12,9 +12,13 @@ import {
   Package,
   ShoppingBag,
   UserRound,
+  UserRoundPen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ACCOUNT_SUPPORT_CARD } from "@/data/account/user";
+import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
+import { useRegistrationIncomplete } from "@/hooks/useRegistrationIncomplete";
+import { requestOpenRegistrationDialog } from "@/lib/registration-gate";
 
 type AccountSidebarProps = {
   open: boolean;
@@ -52,6 +56,7 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
     pathname.startsWith("/account/courses") &&
     (tab === "buy" || tab === "buy-courses");
   const testSeriesActive = pathname.startsWith("/account/test-series");
+  const registrationIncomplete = useRegistrationIncomplete();
 
   return (
     <aside
@@ -164,6 +169,22 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
         >
           My Profile
         </SidebarLink>
+
+        {registrationIncomplete ? (
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              requestOpenRegistrationDialog();
+            }}
+            className="mt-1 flex w-full cursor-pointer items-center gap-3 rounded-[var(--account-radius)] border border-[var(--account-accent)] px-3 py-2.5 text-left text-[14px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+          >
+            <UserRoundPen className="size-[18px] shrink-0" strokeWidth={1.75} aria-hidden />
+            <span className="flex-1">
+              {ACCOUNT_PROFILE_PAGE_COPY.completeRegistrationLabel}
+            </span>
+          </button>
+        ) : null}
       </nav>
 
       <div className="shrink-0 p-3">

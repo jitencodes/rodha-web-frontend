@@ -70,7 +70,7 @@ No barrel `index.ts`. Import from explicit paths.
 
 | Mapper | Use |
 |--------|-----|
-| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. YouTube (`videoYoutubeLink`, or a YouTube `mediaUrl`) wins over an image. A direct video file in `mediaUrl` is `videoUrl` and home/category heroes play that before the image. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
+| `mapWebsiteBanner` | Home, category, about, team, faculty heroes. `redirectUrl` → `BannerImageLink` around the hero image (no link when empty). YouTube (`videoYoutubeLink`, or a YouTube `mediaUrl`) wins over an image. A direct video file in `mediaUrl` is `videoUrl` and home/category heroes play that before the image. Home/category keep Typewriter for `titleHighlights`; other pages use the first highlight. |
 | `mapCourses` / `mapCourseType` | Category + faculty course lists. `courseType` drives existing static chips (`comprehensive` / `individual` / `crash` / `other`) in `CategoryCoursesSlider`. |
 | `mapFacultyCards` | Category page `faculty[]`, faculty listing, team featured faculty |
 
@@ -83,6 +83,7 @@ No barrel `index.ts`. Import from explicit paths.
 | `NEXT_PUBLIC_ANNOUNCEMENT_INTERVAL_MS` | Banner flip interval (default 8000) |
 | `NEXT_PUBLIC_PROMO_DIALOG_DELAY_MS` | Delay before the promo dialog opens (default 2500) |
 | `NEXT_PUBLIC_PURCHASE_TOAST_MS` | Recent-purchase toast auto-close (default 10000) |
+| `NEXT_PUBLIC_PURCHASE_TOAST_GAP_MS` | Pause before the next recent-purchase toast (default 5000) |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google Identity Services OAuth Web client id (auth screen) |
 | `API_KEY` | Optional server-only key |
 | `API_REVALIDATE_SECONDS` | ISR window (default 60) |
@@ -130,7 +131,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student-results | `GET api/website/student-results` | `/results` |
 | resources | `GET api/website/resources` | `/resources` (`general=true` for the general category) |
 | promotional-popup | `GET api/website/promotional-popup` | Site promo dialog; hidden when empty |
-| recent-purchases | `GET api/website/recent-purchases` | Bottom-left purchase toast; hidden when empty |
+| recent-purchases | `GET api/website/recent-purchases` | `data.items[]` → bottom-left purchase toast, shown sequentially; package items link to `/courses/{itemSlug}`; hidden when empty |
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
 

@@ -19,6 +19,7 @@ export interface HomeBannerApi {
   stacks?: unknown;
   listItems?: unknown;
   cats?: unknown;
+  redirectUrl?: string | null;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -94,6 +95,7 @@ export interface HomeBannerViewModel {
   videoId: string | null;
   videoUrl: string | null;
   imageUrl: string | null;
+  redirectUrl: string | null;
 }
 
 export interface HomeFaqViewModel {

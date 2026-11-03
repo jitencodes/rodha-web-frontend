@@ -36,6 +36,8 @@ export interface WebsiteBannerApi {
   stacks?: WebsiteBannerStackApi[] | unknown | null;
   listItems?: WebsiteBannerListItemApi[] | unknown | null;
   cats?: WebsiteBannerCtaApi[] | unknown | null;
+  /** Where a click on the banner image goes (internal path or absolute URL). */
+  redirectUrl?: string | null;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -72,6 +74,8 @@ export interface WebsiteBannerViewModel {
   /** Direct file when `mediaUrl` is a video and no YouTube id is present. */
   videoUrl: string | null;
   imageUrl: string | null;
+  /** Click-through target for the banner image. Null = image is not a link. */
+  redirectUrl: string | null;
   stacks: BannerStackViewModel[];
   listItems: BannerListItemViewModel[];
   ctas: BannerCtaViewModel[];
