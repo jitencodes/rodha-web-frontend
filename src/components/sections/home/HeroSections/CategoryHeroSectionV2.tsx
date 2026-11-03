@@ -135,7 +135,7 @@ export function CategoryHeroSectionV2({
             <div className={HERO_CONTENT_MAX}>
               {hasEyebrow ? (
                 <p className="text-body-sm uppercase tracking-wider text-orange-500 font-semibold mb-2">
-                  {eyebrow}{imageRedirectUrl}ok
+                  {eyebrow}
                 </p>
               ) : null}
 
