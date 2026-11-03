@@ -19,7 +19,6 @@ import { fetchAuthed } from "@/lib/auth/session-expired";
 type DiscussionForumAskProps = {
   basePath?: string;
   forum?: DiscussionForumHero;
-  questions?: ForumPreviewQuestion[];
   groupId: number;
   forumSlug: string;
   canAsk: boolean;
@@ -29,7 +28,6 @@ type DiscussionForumAskProps = {
 export function DiscussionForumAsk({
   basePath = "/discussion-forum",
   forum,
-  questions,
   groupId,
   forumSlug,
   canAsk,
@@ -39,12 +37,7 @@ export function DiscussionForumAsk({
   const [title, setTitle] = useState("");
 
   return (
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-      hideComposer
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <Link
         href={basePath}
         prefetch={false}

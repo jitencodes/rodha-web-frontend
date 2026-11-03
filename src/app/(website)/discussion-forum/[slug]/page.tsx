@@ -56,6 +56,7 @@ export default async function DiscussionForumQuestionsPage({
             questions={questions}
             page={topics?.page ?? page}
             totalPages={topics?.totalPages ?? 1}
+            total={topics?.total ?? questions.length}
           />
         </Suspense>
       </Container>

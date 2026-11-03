@@ -144,9 +144,12 @@ export function Header({
               ? children.some(
                   (child) =>
                     !isExternalHref(child.href) &&
-                    pathname.startsWith(child.href)
+                    (pathname === child.href ||
+                      pathname.startsWith(`${child.href}/`))
                 )
-              : !isExternalHref(itemHref) && pathname === itemHref;
+              : !isExternalHref(itemHref) &&
+                (pathname === itemHref ||
+                  pathname.startsWith(`${itemHref}/`));
 
             if (hasChildren) {
               return (

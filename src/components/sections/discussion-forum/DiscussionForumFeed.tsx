@@ -55,6 +55,7 @@ type DiscussionForumFeedProps = {
   questions: ForumPreviewQuestion[];
   page?: number;
   totalPages?: number;
+  total?: number;
 };
 
 export function DiscussionForumFeed({
@@ -63,12 +64,16 @@ export function DiscussionForumFeed({
   questions,
   page = 1,
   totalPages = 1,
+  total,
 }: DiscussionForumFeedProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tagFilter = searchParams.get("tag")?.trim() || "";
   const [tab, setTab] = useState<SortTab>("for-you");
   const [search, setSearch] = useState("");
+  const safeTotalPages = Math.max(1, totalPages);
+  const showPagination = safeTotalPages > 1;
+  const paginationQuery = tagFilter ? { tag: tagFilter } : undefined;
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -91,13 +96,9 @@ export function DiscussionForumFeed({
   }, [tab, search, tagFilter, questions]);
 
   return (
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <div className="mb-4 flex min-w-0 items-center gap-3">
-        <div className="relative w-40 shrink-0 sm:w-48 md:w-52">
+        <div className="relative min-w-0 flex-1 sm:max-w-md md:max-w-lg">
           <Search
             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-text-dimmed"
             aria-hidden
@@ -143,8 +144,8 @@ export function DiscussionForumFeed({
         </div>
       ) : null}
 
-      <div className="flex h-[min(70vh,40rem)] min-h-[20rem] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4">
+      <div className="flex max-h-[min(70vh,40rem)] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
+        <div className="space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4">
           {filtered.length ? (
             filtered.map((question) => (
               <DiscussionForumQuestionCard
@@ -154,20 +155,31 @@ export function DiscussionForumFeed({
               />
             ))
           ) : (
-            <div className="rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-12 text-center text-body-sm text-text-muted">
+            <div className="rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-8 text-center text-body-sm text-text-muted">
               {questions.length
-                ? "No posts match this filter. Try another tag or ask a new question."
+                ? tab === "unanswered"
+                  ? "No unanswered questions right now."
+                  : "No posts match this filter. Try another tag or ask a new question."
                 : "No questions in this forum yet."}
             </div>
           )}
         </div>
-        {totalPages > 1 ? (
-          <div className="shrink-0 border-t border-border-subtle px-3 py-3 sm:px-4">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              basePath={basePath}
-            />
+        {showPagination || (typeof total === "number" && total > 0) ? (
+          <div className="shrink-0 space-y-2 border-t border-border-subtle px-3 py-3 sm:px-4">
+            {typeof total === "number" && total > 0 ? (
+              <p className="text-center text-caption text-text-dimmed">
+                {total} question{total === 1 ? "" : "s"}
+                {showPagination ? ` · Page ${page} of ${safeTotalPages}` : null}
+              </p>
+            ) : null}
+            {showPagination ? (
+              <Pagination
+                currentPage={page}
+                totalPages={safeTotalPages}
+                basePath={basePath}
+                query={paginationQuery}
+              />
+            ) : null}
           </div>
         ) : null}
       </div>

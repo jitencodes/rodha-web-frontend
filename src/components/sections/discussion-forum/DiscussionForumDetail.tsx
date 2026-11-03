@@ -34,6 +34,7 @@ import {
   type ForumPreviewQuestion,
 } from "@/data/discussion-forum";
 import { fetchAuthed } from "@/lib/auth/session-expired";
+import { canEditForumMessage } from "@/lib/forum/format";
 import { cn } from "@/lib/utils";
 
 type DiscussionForumDetailProps = {
@@ -41,7 +42,6 @@ type DiscussionForumDetailProps = {
   answers: ForumPreviewAnswer[];
   basePath?: string;
   forum: DiscussionForumHero;
-  questions?: ForumPreviewQuestion[];
   groupId: number;
   topicSlug: string;
   canAnswer: boolean;
@@ -114,7 +114,6 @@ export function DiscussionForumDetail({
   answers: initialAnswers,
   basePath = "/discussion-forum",
   forum,
-  questions = [],
   groupId,
   topicSlug,
   canAnswer,
@@ -141,7 +140,10 @@ export function DiscussionForumDetail({
     router.push(loginHref);
   };
 
-  const toggleLike = async (answerId: number) => {
+  const toggleReaction = async (
+    answerId: number,
+    type: "like" | "dislike"
+  ) => {
     if (!canAnswer) {
       requireLogin();
       return;
@@ -149,7 +151,7 @@ export function DiscussionForumDetail({
     if (reactingAnswerId != null) return;
 
     const current = answers.find((item) => item.id === answerId);
-    const removing = current?.myReaction === "like";
+    const removing = current?.myReaction === type;
 
     try {
       setReactingAnswerId(answerId);
@@ -166,7 +168,7 @@ export function DiscussionForumDetail({
                   forum_slug: forumSlug,
                 }
               : {
-                  reaction_type: "like",
+                  reaction_type: type,
                   topic_id: question.id,
                   topic_slug: topicSlug,
                   forum_slug: forumSlug,
@@ -214,7 +216,7 @@ export function DiscussionForumDetail({
                   myReaction: null,
                   reactionTypeCount: {
                     ...item.reactionTypeCount,
-                    like: Math.max(0, item.reactionTypeCount.like - 1),
+                    [type]: Math.max(0, item.reactionTypeCount[type] - 1),
                   },
                 }
               : item
@@ -234,6 +236,10 @@ export function DiscussionForumDetail({
   };
 
   const startEdit = (answer: ForumPreviewAnswer) => {
+    if (!canEditForumMessage(answer.createdAt)) {
+      toast.error("Edit window of 4 hour(s) has expired for this message");
+      return;
+    }
     setEditingAnswerId(answer.id);
     setEditDraft(answer.content || "");
   };
@@ -342,12 +348,7 @@ export function DiscussionForumDetail({
 
   return (
     <>
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-      hideComposer
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <Link
         href={basePath}
         prefetch={false}
@@ -401,14 +402,24 @@ export function DiscussionForumDetail({
         </div>
       </article>
 
-      <div className="mt-6 flex h-[min(70vh,40rem)] min-h-[16rem] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
+      <div
+        className={cn(
+          "mt-6 flex flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface",
+          answers.length > 0 && "max-h-[min(70vh,40rem)]"
+        )}
+      >
         <div className="shrink-0 border-b border-border-subtle px-4 py-3 sm:px-5">
           <h3 className="text-h4 font-semibold text-text-primary">
             {answers.length} {answers.length === 1 ? "Answer" : "Answers"}
           </h3>
         </div>
 
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4">
+        <div
+          className={cn(
+            "space-y-3 p-3 sm:p-4",
+            answers.length > 0 && "min-h-0 overflow-y-auto overscroll-contain"
+          )}
+        >
         {answers.length ? (
         answers.map((answer, index) => (
           <article
@@ -425,7 +436,8 @@ export function DiscussionForumDetail({
                     Accepted answer
                   </p>
                 ) : null}
-                {editingAnswerId === answer.id ? (
+                {editingAnswerId === answer.id &&
+                canEditForumMessage(answer.createdAt) ? (
                   <div className="space-y-3">
                     <ForumRichTextEditor
                       value={editDraft}
@@ -472,10 +484,10 @@ export function DiscussionForumDetail({
                     <div className="mt-3 flex flex-wrap items-center gap-1.5">
                       <button
                         type="button"
-                        onClick={() => void toggleLike(answer.id)}
+                        onClick={() => void toggleReaction(answer.id, "like")}
                         disabled={reactingAnswerId === answer.id}
                         className={cn(
-                          "inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-body-sm tabular-nums transition-colors disabled:opacity-50",
+                          "inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-md px-2.5 text-body-sm tabular-nums transition-colors disabled:cursor-default disabled:opacity-50",
                           answer.myReaction === "like"
                             ? "bg-orange-500/20 font-semibold text-orange-400"
                             : "bg-orange-500/10 text-orange-400 hover:bg-orange-500/20"
@@ -490,9 +502,24 @@ export function DiscussionForumDetail({
                           {formatForumCount(answer.reactionTypeCount?.like ?? 0)}
                         </span>
                       </button>
-                      <span
-                        className="inline-flex h-8 items-center gap-1.5 rounded-md bg-bg-tertiary px-2.5 text-body-sm tabular-nums text-text-muted"
-                        aria-label={`${formatForumCount(answer.reactionTypeCount?.dislike ?? 0)} dislikes`}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void toggleReaction(answer.id, "dislike")
+                        }
+                        disabled={reactingAnswerId === answer.id}
+                        className={cn(
+                          "inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-md px-2.5 text-body-sm tabular-nums transition-colors disabled:cursor-default disabled:opacity-50",
+                          answer.myReaction === "dislike"
+                            ? "bg-accent-red/20 font-semibold text-accent-red"
+                            : "bg-bg-tertiary text-text-muted hover:bg-bg-hover hover:text-text-primary"
+                        )}
+                        aria-pressed={answer.myReaction === "dislike"}
+                        aria-label={
+                          answer.myReaction === "dislike"
+                            ? "Remove dislike"
+                            : "Dislike"
+                        }
                       >
                         <ThumbsDown className="size-3.5 shrink-0" aria-hidden />
                         <span>
@@ -500,19 +527,21 @@ export function DiscussionForumDetail({
                             answer.reactionTypeCount?.dislike ?? 0
                           )}
                         </span>
-                      </span>
+                      </button>
                       {currentUserId &&
                       answer.author.id &&
                       answer.author.id === currentUserId ? (
                         <>
-                          <button
-                            type="button"
-                            onClick={() => startEdit(answer)}
-                            className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-caption text-text-muted transition-colors hover:bg-bg-hover hover:text-orange-400"
-                          >
-                            <Pencil className="size-3.5" aria-hidden />
-                            Edit
-                          </button>
+                          {canEditForumMessage(answer.createdAt) ? (
+                            <button
+                              type="button"
+                              onClick={() => startEdit(answer)}
+                              className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-caption text-text-muted transition-colors hover:bg-bg-hover hover:text-orange-400"
+                            >
+                              <Pencil className="size-3.5" aria-hidden />
+                              Edit
+                            </button>
+                          ) : null}
                           <button
                             type="button"
                             onClick={() => setDeletingAnswerId(answer.id)}
@@ -548,7 +577,7 @@ export function DiscussionForumDetail({
           </article>
         ))
         ) : (
-          <p className="py-12 text-center text-body-sm text-text-muted">
+          <p className="py-4 text-center text-body-sm text-text-muted">
             No answers yet. Be the first to reply.
           </p>
         )}

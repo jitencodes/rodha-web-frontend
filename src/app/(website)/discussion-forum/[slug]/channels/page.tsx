@@ -3,14 +3,8 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { DiscussionForumSpacesList } from "@/components/sections/discussion-forum/DiscussionForumSpacesList";
-import {
-  getBroadcastChannels,
-  getGroupTopics,
-} from "@/lib/api/modules/groups/service";
-import {
-  toForumPreviewQuestions,
-  toForumSpaceItems,
-} from "@/lib/api/modules/groups/ui";
+import { getBroadcastChannels } from "@/lib/api/modules/groups/service";
+import { toForumSpaceItems } from "@/lib/api/modules/groups/ui";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -41,11 +35,11 @@ export default async function DiscussionForumChannelsPage({ params }: PageProps)
     redirect(`/login?next=${encodeURIComponent(`${base}/channels`)}`);
   }
 
-  const [channels, topics] = await Promise.all([
-    getBroadcastChannels({ page: 1, limit: 20, accessToken: token }),
-    getGroupTopics(forum.id, { page: 1, limit: 20 }),
-  ]);
-
+  const channels = await getBroadcastChannels({
+    page: 1,
+    limit: 20,
+    accessToken: token,
+  });
   const items = toForumSpaceItems(channels?.items ?? []);
 
   return (
@@ -58,7 +52,6 @@ export default async function DiscussionForumChannelsPage({ params }: PageProps)
           kind="channels"
           basePath={base}
           forum={forum}
-          questions={toForumPreviewQuestions(topics?.items ?? [])}
         />
       </Container>
     </section>

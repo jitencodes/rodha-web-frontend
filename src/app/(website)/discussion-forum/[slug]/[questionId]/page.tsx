@@ -6,12 +6,10 @@ import { DiscussionForumDetail } from "@/components/sections/discussion-forum/Di
 import {
   getGroupTopic,
   getGroupTopicMessages,
-  getGroupTopics,
 } from "@/lib/api/modules/groups/service";
 import {
   toForumPreviewAnswers,
   toForumPreviewQuestion,
-  toForumPreviewQuestions,
 } from "@/lib/api/modules/groups/ui";
 import {
   getAccessToken,
@@ -63,7 +61,7 @@ export default async function DiscussionForumDetailPage({
     getSessionUser(),
   ]);
 
-  const [topic, messages, topics] = await Promise.all([
+  const [topic, messages] = await Promise.all([
     getGroupTopic(forum.slug, topicSlug, forum.id),
     getGroupTopicMessages({
       groupId: forum.id,
@@ -73,7 +71,6 @@ export default async function DiscussionForumDetailPage({
       limit: 50,
       accessToken: accessToken ?? undefined,
     }),
-    getGroupTopics(forum.id, { page: 1, limit: 20 }),
   ]);
 
   if (!topic) notFound();
@@ -88,7 +85,6 @@ export default async function DiscussionForumDetailPage({
           answers={toForumPreviewAnswers(messages?.items ?? [], topic.id)}
           basePath={forumBasePath(forum.slug)}
           forum={forum}
-          questions={toForumPreviewQuestions(topics?.items ?? [])}
           groupId={forum.id}
           topicSlug={topic.slug}
           canAnswer={Boolean(accessToken)}

@@ -22,7 +22,7 @@ export default async function DiscussionForumPage({
 }: DiscussionForumPageProps) {
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
-  const list = await getDoubtForums({ page, limit: 20 });
+  const list = await getDoubtForums({ page, limit: 12 });
 
   return (
     <section className="bg-bg-primary pb-8 pt-6 md:pt-8">

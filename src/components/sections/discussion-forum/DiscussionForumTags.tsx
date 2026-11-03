@@ -10,7 +10,6 @@ import {
 } from "@/components/sections/discussion-forum/DiscussionForumShell";
 import { Input } from "@/components/ui/Input";
 import {
-  FORUM_PREVIEW_TAGS,
   formatForumCount,
   type ForumPreviewQuestion,
   type ForumPreviewTagInfo,
@@ -25,6 +24,24 @@ const SORT_TABS: Array<{ id: TagSort; label: string }> = [
   { id: "new", label: "New" },
 ];
 
+function tagsFromQuestions(questions: ForumPreviewQuestion[]): ForumPreviewTagInfo[] {
+  const counts = new Map<string, number>();
+  for (const question of questions) {
+    for (const tag of question.tags) {
+      const name = tag.trim().toLowerCase();
+      if (!name) continue;
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+  }
+  return Array.from(counts.entries()).map(([name, questionCount]) => ({
+    name,
+    description: "",
+    questionCount,
+    askedToday: 0,
+    askedThisWeek: 0,
+  }));
+}
+
 function sortTags(items: ForumPreviewTagInfo[], sort: TagSort): ForumPreviewTagInfo[] {
   const copy = [...items];
   if (sort === "name") return copy.sort((a, b) => a.name.localeCompare(b.name));
@@ -36,34 +53,37 @@ type DiscussionForumTagsProps = {
   basePath?: string;
   forum?: DiscussionForumHero;
   questions?: ForumPreviewQuestion[];
+  tags?: ForumPreviewTagInfo[];
 };
 
 export function DiscussionForumTags({
   basePath = "/discussion-forum",
   forum,
-  questions,
+  questions = [],
+  tags,
 }: DiscussionForumTagsProps) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<TagSort>("popular");
 
+  const sourceTags = useMemo(
+    () => (tags?.length ? tags : tagsFromQuestions(questions)),
+    [tags, questions]
+  );
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     const base = q
-      ? FORUM_PREVIEW_TAGS.filter(
+      ? sourceTags.filter(
           (tag) =>
-            tag.name.toLowerCase().includes(q) || tag.description.toLowerCase().includes(q)
+            tag.name.toLowerCase().includes(q) ||
+            tag.description.toLowerCase().includes(q)
         )
-      : FORUM_PREVIEW_TAGS;
+      : sourceTags;
     return sortTags(base, sort);
-  }, [search, sort]);
+  }, [search, sort, sourceTags]);
 
   return (
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-      hideComposer
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <div className="mb-1">
         <h2 className="text-h4 font-semibold tracking-tight text-text-primary">Browse tags</h2>
         <p className="mt-1 text-body-sm leading-relaxed text-text-muted">
@@ -104,26 +124,36 @@ export function DiscussionForumTags({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        {filtered.map((tag) => (
-          <Link
-            key={tag.name}
-            href={`${basePath}?tag=${encodeURIComponent(tag.name)}`}
-            className="group flex flex-col rounded-2xl border border-border-default bg-bg-surface p-4 transition-all duration-200 hover:border-orange-500/35"
-          >
-            <span className="inline-flex w-fit items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-1 text-body-sm font-medium text-text-primary transition-colors duration-200 group-hover:border-orange-500/40 group-hover:bg-orange-500/10 group-hover:text-orange-400">
-              {tag.name}
-            </span>
-            <p className="mt-3 line-clamp-3 flex-1 text-body-sm leading-relaxed text-text-muted">
-              {tag.description}
-            </p>
-            <p className="mt-3 text-caption text-text-dimmed">
-              {formatForumCount(tag.questionCount)} questions · {tag.askedToday} today ·{" "}
-              {tag.askedThisWeek} this week
-            </p>
-          </Link>
-        ))}
-      </div>
+      {filtered.length ? (
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {filtered.map((tag) => (
+            <Link
+              key={tag.name}
+              href={`${basePath}?tag=${encodeURIComponent(tag.name)}`}
+              className="group flex flex-col rounded-2xl border border-border-default bg-bg-surface p-4 transition-all duration-200 hover:border-orange-500/35"
+            >
+              <span className="inline-flex w-fit items-center rounded-full border border-border-default bg-bg-tertiary px-2.5 py-1 text-body-sm font-medium text-text-primary transition-colors duration-200 group-hover:border-orange-500/40 group-hover:bg-orange-500/10 group-hover:text-orange-400">
+                {tag.name}
+              </span>
+              {tag.description ? (
+                <p className="mt-3 line-clamp-3 flex-1 text-body-sm leading-relaxed text-text-muted">
+                  {tag.description}
+                </p>
+              ) : null}
+              <p className="mt-3 text-caption text-text-dimmed">
+                {formatForumCount(tag.questionCount)} question
+                {tag.questionCount === 1 ? "" : "s"}
+              </p>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-5 rounded-2xl border border-dashed border-border-default bg-bg-secondary px-4 py-12 text-center text-body-sm text-text-muted">
+          {sourceTags.length
+            ? "No tags match this filter."
+            : "No tags in this forum yet."}
+        </div>
+      )}
     </DiscussionForumShell>
   );
 }

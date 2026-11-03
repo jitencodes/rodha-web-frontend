@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/Input";
 import {
   formatForumCount,
   formatForumRelativeTime,
-  type ForumPreviewQuestion,
   type ForumSpaceItem,
 } from "@/data/discussion-forum";
 import { cn } from "@/lib/utils";
@@ -25,7 +24,6 @@ type DiscussionForumSpacesListProps = {
   kind: "groups" | "channels";
   basePath?: string;
   forum?: DiscussionForumHero;
-  questions?: ForumPreviewQuestion[];
 };
 
 /** Student list: view only — no add / edit / delete / archive. */
@@ -36,7 +34,6 @@ export function DiscussionForumSpacesList({
   kind,
   basePath = "/discussion-forum",
   forum,
-  questions,
 }: DiscussionForumSpacesListProps) {
   const Icon = kind === "groups" ? Users : MessageSquare;
   const [search, setSearch] = useState("");
@@ -53,12 +50,7 @@ export function DiscussionForumSpacesList({
   }, [items, search]);
 
   return (
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-      hideComposer
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-h4 font-semibold tracking-tight text-text-primary">{title}</h2>
