@@ -22,3 +22,17 @@ export function formatForumCount(n: number): string {
   }
   return String(n);
 }
+
+/** Backend rejects edits after this window (API: “Edit window of 4 hour(s)…”). */
+export const FORUM_MESSAGE_EDIT_WINDOW_MS = 4 * 60 * 60 * 1000;
+
+/** Whether a message/answer may still be edited (client gate matching API policy). */
+export function canEditForumMessage(
+  createdAt: string | null | undefined,
+  nowMs: number = Date.now()
+): boolean {
+  if (!createdAt?.trim()) return false;
+  const createdMs = Date.parse(createdAt);
+  if (Number.isNaN(createdMs)) return false;
+  return nowMs - createdMs < FORUM_MESSAGE_EDIT_WINDOW_MS;
+}

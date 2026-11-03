@@ -7,10 +7,8 @@ import {
   getGroupChatById,
   getGroupMembership,
   getGroupMessages,
-  getGroupTopics,
 } from "@/lib/api/modules/groups/service";
 import {
-  toForumPreviewQuestions,
   toForumSpaceItem,
   toForumSpaceMembers,
   toForumSpaceMessages,
@@ -68,9 +66,8 @@ export default async function DiscussionForumGroupDetailPage({ params }: PagePro
   const membership = await getGroupMembership(spaceId, token);
   if (!membership?.isMember) notFound();
 
-  const [group, topics, messageList] = await Promise.all([
+  const [group, messageList] = await Promise.all([
     getGroupChatById(spaceId, token),
-    getGroupTopics(forum.id, { page: 1, limit: 20 }),
     getGroupMessages({
       groupId: spaceId,
       page: 1,
@@ -89,7 +86,6 @@ export default async function DiscussionForumGroupDetailPage({ params }: PagePro
           kind="groups"
           basePath={base}
           forum={forum}
-          questions={toForumPreviewQuestions(topics?.items ?? [])}
           messages={toForumSpaceMessages(messageList?.items ?? [], group.id)}
           members={toForumSpaceMembers(group.members)}
           currentUserId={sessionUser?.id ?? null}

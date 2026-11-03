@@ -3,14 +3,8 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { DiscussionForumSpacesList } from "@/components/sections/discussion-forum/DiscussionForumSpacesList";
-import {
-  getGroupChats,
-  getGroupTopics,
-} from "@/lib/api/modules/groups/service";
-import {
-  toForumPreviewQuestions,
-  toForumSpaceItems,
-} from "@/lib/api/modules/groups/ui";
+import { getGroupChats } from "@/lib/api/modules/groups/service";
+import { toForumSpaceItems } from "@/lib/api/modules/groups/ui";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -41,11 +35,7 @@ export default async function DiscussionForumGroupsPage({ params }: PageProps) {
     redirect(`/login?next=${encodeURIComponent(`${base}/groups`)}`);
   }
 
-  const [groups, topics] = await Promise.all([
-    getGroupChats({ page: 1, limit: 20, accessToken: token }),
-    getGroupTopics(forum.id, { page: 1, limit: 20 }),
-  ]);
-
+  const groups = await getGroupChats({ page: 1, limit: 20, accessToken: token });
   const items = toForumSpaceItems(groups?.items ?? []);
 
   return (
@@ -58,7 +48,6 @@ export default async function DiscussionForumGroupsPage({ params }: PageProps) {
           kind="groups"
           basePath={base}
           forum={forum}
-          questions={toForumPreviewQuestions(topics?.items ?? [])}
         />
       </Container>
     </section>

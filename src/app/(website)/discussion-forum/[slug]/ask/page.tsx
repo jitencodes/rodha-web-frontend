@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/Container";
 import { DiscussionForumAsk } from "@/components/sections/discussion-forum/DiscussionForumAsk";
-import { getGroupTopics } from "@/lib/api/modules/groups/service";
-import { toForumPreviewQuestions } from "@/lib/api/modules/groups/ui";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -35,15 +33,12 @@ export default async function DiscussionForumAskPage({ params }: PageProps) {
     redirect(`/login?next=${encodeURIComponent(`${base}/ask`)}`);
   }
 
-  const topics = await getGroupTopics(forum.id, { page: 1, limit: 20 });
-
   return (
     <section className="bg-bg-primary pb-8 pt-6 md:pt-8">
       <Container>
         <DiscussionForumAsk
           basePath={base}
           forum={forum}
-          questions={toForumPreviewQuestions(topics?.items ?? [])}
           groupId={forum.id}
           forumSlug={forum.slug}
           canAsk

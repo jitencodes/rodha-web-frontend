@@ -29,7 +29,6 @@ import {
   FORUM_SPACE_MESSAGES,
   formatForumCount,
   type ForumPreviewAttachment,
-  type ForumPreviewQuestion,
   type ForumSpaceItem,
   type ForumSpaceMember,
   type ForumSpaceMessage,
@@ -42,7 +41,6 @@ type DiscussionForumSpaceDetailProps = {
   kind: "groups" | "channels";
   basePath?: string;
   forum?: DiscussionForumHero;
-  questions?: ForumPreviewQuestion[];
   /** When set (channels), use API messages. Groups may omit and use preview mock. */
   messages?: ForumSpaceMessage[];
   /** Channel/group roster from API; falls back to preview mock when omitted. */
@@ -179,7 +177,6 @@ export function DiscussionForumSpaceDetail({
   kind,
   basePath = "/discussion-forum",
   forum,
-  questions,
   messages: messagesProp,
   members: membersProp,
   currentUserId = null,
@@ -476,12 +473,7 @@ export function DiscussionForumSpaceDetail({
   };
 
   return (
-    <DiscussionForumShell
-      basePath={basePath}
-      forum={forum}
-      questions={questions}
-      hideComposer
-    >
+    <DiscussionForumShell basePath={basePath} forum={forum}>
       <Link
         href={listHref}
         className="mb-3 inline-flex h-9 items-center gap-1.5 px-1 text-body-sm text-text-muted transition-colors hover:text-orange-400"
@@ -502,8 +494,8 @@ export function DiscussionForumSpaceDetail({
         ) : null}
       </div>
 
-      <div className="grid items-stretch gap-4 xl:grid-cols-[19rem_minmax(0,1fr)]">
-        <aside className="flex max-h-[min(72vh,42rem)] flex-col gap-3 overflow-hidden rounded-2xl border border-border-default bg-bg-surface p-3.5">
+      <div className="grid items-start gap-4 xl:grid-cols-[19rem_minmax(0,1fr)]">
+        <aside className="flex h-fit max-h-[min(72vh,42rem)] flex-col gap-3 overflow-hidden rounded-2xl border border-border-default bg-bg-surface p-3.5">
           <div className="grid shrink-0 grid-cols-3 gap-2">
             <div className="rounded-xl border border-border-subtle bg-orange-500/10 px-2.5 py-2.5">
               <Users className="mb-1.5 size-3.5 text-orange-400" aria-hidden />
@@ -552,7 +544,7 @@ export function DiscussionForumSpaceDetail({
             </p>
           ) : null}
 
-          <div className="flex min-h-0 flex-1 flex-col">
+          <div className="flex min-h-0 flex-col">
             <p className="mb-2 shrink-0 text-body-sm font-semibold text-text-primary">
               Members{" "}
               <span className="font-normal text-text-dimmed">
@@ -571,7 +563,7 @@ export function DiscussionForumSpaceDetail({
                 className="h-9 rounded-lg pl-8 text-body-sm"
               />
             </div>
-            <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-0.5">
+            <ul className="max-h-72 space-y-2 overflow-y-auto overscroll-contain pr-0.5">
               {filteredMembers.length ? (
                 filteredMembers.map((member) => (
                   <li
@@ -608,7 +600,7 @@ export function DiscussionForumSpaceDetail({
                   </li>
                 ))
               ) : (
-                <li className="py-4 text-center text-caption text-text-muted">
+                <li className="py-2 text-center text-caption text-text-muted">
                   No members to show.
                 </li>
               )}
@@ -616,7 +608,7 @@ export function DiscussionForumSpaceDetail({
           </div>
         </aside>
 
-        <div className="flex h-[min(72vh,42rem)] min-h-[28rem] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
+        <div className="flex max-h-[min(72vh,42rem)] flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-surface">
           <div className="flex shrink-0 items-center justify-between gap-2 border-b border-border-subtle px-4 py-3">
             <div>
               <p className="text-body-sm font-semibold text-text-primary">
@@ -632,7 +624,7 @@ export function DiscussionForumSpaceDetail({
 
           <div
             ref={listRef}
-            className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4"
+            className="flex min-h-[10rem] max-h-[min(52vh,28rem)] flex-1 flex-col overflow-y-auto overscroll-contain px-4 py-3"
             onScroll={(event) => {
               if (!isGroupChat) return;
               const el = event.currentTarget;
@@ -641,7 +633,8 @@ export function DiscussionForumSpaceDetail({
             }}
           >
             {messages.length ? (
-              messages.map((message) => {
+              <div className="mt-auto flex flex-col gap-4">
+              {messages.map((message) => {
                 const reaction = reactions[message.id] ?? {
                   like: message.reactionTypeCount.like,
                   dislike: message.reactionTypeCount.dislike,
@@ -788,9 +781,10 @@ export function DiscussionForumSpaceDetail({
                     </div>
                   </article>
                 );
-              })
+              })}
+              </div>
             ) : (
-              <p className="py-12 text-center text-body-sm text-text-muted">
+              <p className="m-auto py-6 text-center text-body-sm text-text-muted">
                 {viewOnly
                   ? "No messages in this channel yet."
                   : readOnly
