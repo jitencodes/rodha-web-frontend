@@ -14,6 +14,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Accordion | `Accordion.tsx` |
 | AccentUnderline | `AccentUnderline.tsx` |
 | AppImage | `AppImage.tsx` (next/image for rasters; plain img for SVG so the optimizer does not reject them) |
+| BannerImageLink | `BannerImageLink.tsx` (wraps a hero banner image in a link when CMS `redirectUrl` is set; external → new tab) |
 | AmbientBackground | `AmbientBackground.tsx` |
 | Badge | `Badge.tsx` |
 | Breadcrumb | `Breadcrumb.tsx` |
@@ -49,7 +50,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
 | PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
 | PromoDialog | `PromoDialog.tsx` (once per 24h; `promotional-banner` API; IMAGE→link; VIDEO thumbnail→autoplay 1.5s; lead form when logged out) |
-| PurchaseToast | `PurchaseToast.tsx` (bottom-left recent purchase; auto-close; 24h after manual close) |
+| PurchaseToast | `PurchaseToast.tsx` (bottom-left recent purchases shown one at a time, loops; auto-close + gap from env; 24h after manual close) |
 | GlobalSearchDialog | `GlobalSearchDialog.tsx` (Ctrl/Cmd+K; quick links; entity-type filters) |
 | SiteFrame | `SiteFrame.tsx` (public `(website)` layout only; hides marketing chrome on `/login` and `/signup`) |
 | StoriesModal | `VideoModal.tsx` (YouTube iframe modal for `YoutubeStoryCard` clicks) |
@@ -211,7 +212,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
 | RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
 | ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
-| Account form controls | `forms/AccountTextField`, `AccountSelect`, `AccountMultiSelect`, `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell` |
+| Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
 | EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
 | CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
@@ -246,6 +247,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | useCountdown | `useCountdown.ts` |
 | useCounsellingModal | `useCounsellingModal.ts` |
 | useInView | `useInView.ts` |
+| useRegistrationIncomplete | `useRegistrationIncomplete.ts` (true while the registration gate reports registration not completed) |
 
 ## Lib — `src/lib/`
 
@@ -289,7 +291,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Module | File |
 |--------|------|
-| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; registration API module `src/lib/api/modules/student/registration/` |
+| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; local draft persistence (localStorage values + IndexedDB passport photo) in `src/lib/account/registration-draft.ts`; passport photo rules (5 MB, JPG/JPEG/PNG) in `src/lib/account/passport-photo.ts`; registration API module `src/lib/api/modules/student/registration/` |
 | blog | `blog.ts` |
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |

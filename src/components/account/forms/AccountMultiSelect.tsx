@@ -1,17 +1,19 @@
 "use client";
 
-import {
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { createPortal } from "react-dom";
-import { Check, ChevronDown } from "lucide-react";
+import { useId, useMemo } from "react";
+import Select, {
+  components,
+  type MultiValue,
+  type OptionProps,
+  type MenuListProps,
+} from "react-select";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AccountFieldShell } from "./AccountFieldShell";
-import { accountInputClassName } from "./accountFieldStyles";
+import {
+  accountReactSelectTheme,
+  createAccountReactSelectStyles,
+} from "./accountReactSelectStyles";
 
 export type AccountMultiSelectOption = { value: string; label: string };
 
@@ -32,6 +34,29 @@ type AccountMultiSelectProps = {
   className?: string;
 };
 
+function OptionWithCheck(
+  props: OptionProps<AccountMultiSelectOption, true>
+) {
+  return (
+    <components.Option {...props}>
+      <span className="flex items-center gap-2">
+        <span
+          className={cn(
+            "flex h-4 w-4 shrink-0 items-center justify-center rounded border",
+            props.isSelected
+              ? "border-[#f97316] bg-[#f97316] text-white"
+              : "border-[#e5e5e5]"
+          )}
+          aria-hidden
+        >
+          {props.isSelected ? <Check className="h-3 w-3" /> : null}
+        </span>
+        <span className="min-w-0">{props.label}</span>
+      </span>
+    </components.Option>
+  );
+}
+
 export function AccountMultiSelect({
   id: idProp,
   label,
@@ -49,69 +74,58 @@ export function AccountMultiSelect({
 }: AccountMultiSelectProps) {
   const autoId = useId();
   const id = idProp || autoId;
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
+  const styles = useMemo(
+    () =>
+      createAccountReactSelectStyles<AccountMultiSelectOption, true>(
+        Boolean(error)
+      ),
+    [error]
+  );
 
-  const allValues = options.map((o) => o.value);
+  const selected = useMemo(
+    () => options.filter((o) => value.includes(o.value)),
+    [options, value]
+  );
+
   const allSelected =
-    allValues.length > 0 && allValues.every((v) => value.includes(v));
+    options.length > 0 && options.every((o) => value.includes(o.value));
 
-  const selectedLabels = options
-    .filter((o) => value.includes(o.value))
-    .map((o) => o.label);
-
-  const summary =
-    selectedLabels.length === 0
-      ? placeholder
-      : selectedLabels.length <= 2
-        ? selectedLabels.join(", ")
-        : `${selectedLabels.slice(0, 2).join(", ")} +${selectedLabels.length - 2}`;
-
-  useLayoutEffect(() => {
-    if (!open || !triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    setMenuStyle({
-      position: "fixed",
-      top: rect.bottom + 4,
-      left: rect.left,
-      width: rect.width,
-      zIndex: 120,
-    });
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    function onDoc(e: MouseEvent) {
-      const t = e.target as Node;
-      if (triggerRef.current?.contains(t)) return;
-      if (menuRef.current?.contains(t)) return;
-      setOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    document.addEventListener("mousedown", onDoc);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDoc);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  function toggle(optionValue: string) {
-    if (value.includes(optionValue)) {
-      onChange(value.filter((v) => v !== optionValue));
-    } else {
-      onChange([...value, optionValue]);
-    }
+  function MenuListWithSelectAll(
+    props: MenuListProps<AccountMultiSelectOption, true>
+  ) {
+    return (
+      <components.MenuList {...props}>
+        {selectAll && options.length > 0 ? (
+          <button
+            type="button"
+            className="mb-1 flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-body-sm font-medium text-[#404040] transition-colors hover:bg-[#fff3e8] hover:text-[#f97316]"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onChange(allSelected ? [] : options.map((o) => o.value));
+            }}
+          >
+            <span
+              className={cn(
+                "flex h-4 w-4 shrink-0 items-center justify-center rounded border",
+                allSelected
+                  ? "border-[#f97316] bg-[#f97316] text-white"
+                  : "border-[#e5e5e5]"
+              )}
+              aria-hidden
+            >
+              {allSelected ? <Check className="h-3 w-3" /> : null}
+            </span>
+            {selectAllLabel}
+          </button>
+        ) : null}
+        {props.children}
+      </components.MenuList>
+    );
   }
 
-  function toggleAll() {
-    if (allSelected) onChange([]);
-    else onChange(allValues);
-  }
+  const portalTarget =
+    typeof document !== "undefined" ? document.body : undefined;
 
   return (
     <AccountFieldShell
@@ -121,92 +135,34 @@ export function AccountMultiSelect({
       error={error}
       helperText={helperText}
     >
-      <div className={cn("relative w-full", className)}>
-        <button
-          ref={triggerRef}
-          id={id}
-          type="button"
-          disabled={disabled}
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          aria-invalid={Boolean(error)}
-          onClick={() => setOpen((v) => !v)}
-          className={cn(
-            accountInputClassName,
-            "flex items-center justify-between gap-2 text-left",
-            selectedLabels.length === 0 && "text-[var(--account-text-muted)]"
-          )}
-        >
-          <span className="truncate">{summary}</span>
-          <ChevronDown
-            className={cn(
-              "h-4 w-4 shrink-0 text-[var(--account-text-muted)] transition-transform",
-              open && "rotate-180"
-            )}
-          />
-        </button>
-        {open && typeof document !== "undefined"
-          ? createPortal(
-              <div
-                ref={menuRef}
-                style={menuStyle}
-                role="listbox"
-                aria-multiselectable
-                className="max-h-60 overflow-auto rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-surface)] py-1 shadow-lg"
-              >
-                {selectAll && options.length > 0 ? (
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={allSelected}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-body-sm font-medium text-[var(--account-text)] hover:bg-[var(--account-accent)]/10"
-                    onClick={toggleAll}
-                  >
-                    <CheckIcon checked={allSelected} />
-                    {selectAllLabel}
-                  </button>
-                ) : null}
-                {options.map((option) => {
-                  const selected = value.includes(option.value);
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      role="option"
-                      aria-selected={selected}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-body-sm text-[var(--account-text)] hover:bg-[var(--account-accent)]/10"
-                      onClick={() => toggle(option.value)}
-                    >
-                      <CheckIcon checked={selected} />
-                      {option.label}
-                    </button>
-                  );
-                })}
-                {options.length === 0 ? (
-                  <p className="px-3 py-2 text-body-sm text-[var(--account-text-muted)]">
-                    No options
-                  </p>
-                ) : null}
-              </div>,
-              document.body
-            )
-          : null}
+      <div className={cn("w-full", className)}>
+        <Select<AccountMultiSelectOption, true>
+          inputId={id}
+          instanceId={`${id}-${autoId}`}
+          aria-label={label}
+          options={options}
+          value={selected}
+          onChange={(opts: MultiValue<AccountMultiSelectOption>) =>
+            onChange(opts.map((o) => o.value))
+          }
+          placeholder={placeholder}
+          isDisabled={disabled}
+          isMulti
+          isSearchable
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          menuPlacement="auto"
+          menuPortalTarget={portalTarget}
+          menuPosition="fixed"
+          theme={accountReactSelectTheme}
+          styles={styles}
+          classNamePrefix="account-multi-select"
+          components={{
+            Option: OptionWithCheck,
+            MenuList: MenuListWithSelectAll,
+          }}
+        />
       </div>
     </AccountFieldShell>
-  );
-}
-
-function CheckIcon({ checked }: { checked: boolean }) {
-  return (
-    <span
-      className={cn(
-        "flex h-4 w-4 shrink-0 items-center justify-center rounded border",
-        checked
-          ? "border-[var(--account-accent)] bg-[var(--account-accent)] text-white"
-          : "border-[var(--account-input-border)]"
-      )}
-    >
-      {checked ? <Check className="h-3 w-3" /> : null}
-    </span>
   );
 }

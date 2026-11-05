@@ -246,6 +246,8 @@ export function withCategoryLandingDefaults(
             videoId: landing.hero?.videoId,
             videoUrl: landing.hero?.videoUrl,
             imageUrl: landing.hero?.imageUrl,
+            // CMS banner click-through; never filled from static defaults.
+            redirectUrl: landing.hero?.redirectUrl?.trim() || undefined,
           },
     sectionCopy: mergeSectionCopy(landing.sectionCopy, fallback.sectionCopy),
     cta: {

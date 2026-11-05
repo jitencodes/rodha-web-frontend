@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -30,6 +30,7 @@ import type { StudentRegistrationFormViewModel } from "@/lib/api/modules/student
 import {
   buildRegistrationFormData,
   calculateAge,
+  class12AppearingAllowed,
   classifyCurrentStatus,
   createEmptyRegistrationForm,
   needsGradOrWorking,
@@ -38,6 +39,15 @@ import {
   type RegistrationFieldErrors,
   type RegistrationFormValues,
 } from "@/lib/account/registration-form";
+import {
+  applyRegistrationDraft,
+  clearRegistrationDraft,
+  deletePassportPhotoDraft,
+  loadPassportPhotoDraft,
+  savePassportPhotoDraft,
+  saveRegistrationDraft,
+} from "@/lib/account/registration-draft";
+import { validatePassportPhoto } from "@/lib/account/passport-photo";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import {
   isBlockedPhoneKey,
@@ -113,12 +123,19 @@ export function RegistrationDialog({
   const titleId = useId();
   const formId = useId();
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  /** Scopes the locally saved draft to the signed-in account. */
+  const draftAccountKey =
+    registration.account.email || registration.account.mobile;
   const [values, setValues] = useState<RegistrationFormValues>(() =>
-    createEmptyRegistrationForm(registration)
+    applyRegistrationDraft(
+      createEmptyRegistrationForm(registration),
+      draftAccountKey
+    )
   );
   const [errors, setErrors] = useState<RegistrationFieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [passportFile, setPassportFile] = useState<File | null>(null);
+  const bodyScrollRef = useRef<HTMLDivElement>(null);
 
   const targetYears = useMemo(() => profileTargetYearOptions(), []);
   const passingYears = useMemo(() => profilePassingYearOptions(), []);
@@ -129,9 +146,18 @@ export function RegistrationDialog({
     values.currentStatusId,
     statusOptions
   );
+  const allowClass12Appearing = class12AppearingAllowed(statusKind);
+  const class12Appearing = values.class12Status === "APPEARING";
+  const class12StatusOptions = useMemo(
+    () =>
+      allowClass12Appearing
+        ? PROFILE_CLASS12_STATUS_OPTIONS
+        : PROFILE_CLASS12_STATUS_OPTIONS.filter((o) => o.value !== "APPEARING"),
+    [allowClass12Appearing]
+  );
   const showLinkedIn = needsHigherEducation(statusKind);
-  const showGrad = needsHigherEducation(statusKind);
-  const showPgWork = needsGradOrWorking(statusKind);
+  const showGrad = needsHigherEducation(statusKind) && !class12Appearing;
+  const showPgWork = needsGradOrWorking(statusKind) && !class12Appearing;
   const age = calculateAge(values.dateOfBirth);
   const under18 = age !== null && age < 18;
 
@@ -190,8 +216,36 @@ export function RegistrationDialog({
     setErrors({});
     setSubmitting(false);
     setPassportFile(null);
-    setValues(createEmptyRegistrationForm(registration));
-  }, [open, registration]);
+    setValues(
+      applyRegistrationDraft(
+        createEmptyRegistrationForm(registration),
+        draftAccountKey
+      )
+    );
+  }, [open, registration, draftAccountKey]);
+
+  // Restore the passport photo saved in IndexedDB (async; never overrides a fresh pick).
+  useEffect(() => {
+    if (!open || registration.alreadySubmitted) return;
+    let cancelled = false;
+    void loadPassportPhotoDraft(draftAccountKey).then((file) => {
+      if (cancelled || !file) return;
+      setPassportFile((current) => current ?? file);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, registration.alreadySubmitted, draftAccountKey]);
+
+  // Keep an unsubmitted draft locally so the form is prefilled on the next visit.
+  useEffect(() => {
+    if (!open) return;
+    if (registration.alreadySubmitted) {
+      clearRegistrationDraft(draftAccountKey);
+      return;
+    }
+    saveRegistrationDraft(values, draftAccountKey);
+  }, [open, values, registration.alreadySubmitted, draftAccountKey]);
 
   useEffect(() => {
     if (!open) return;
@@ -213,6 +267,18 @@ export function RegistrationDialog({
       setValues((prev) => ({ ...prev, hasWorkExperience: "true" }));
     }
   }, [statusKind, values.hasWorkExperience]);
+
+  // UG / graduate: Class 12 Appearing is not allowed — default/force Passed.
+  useEffect(() => {
+    if (allowClass12Appearing) return;
+    if (values.class12Status === "PASSED") return;
+    setValues((prev) => ({ ...prev, class12Status: "PASSED" }));
+  }, [allowClass12Appearing, values.class12Status]);
+
+  // Scroll form body to top when changing steps.
+  useEffect(() => {
+    bodyScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
 
   function patch<K extends keyof RegistrationFormValues>(
     key: K,
@@ -255,6 +321,10 @@ export function RegistrationDialog({
 
   function validateCurrentStep(): boolean {
     const next = validateRegistrationStep(step, values, validationCtx());
+    if (step === 1 && passportFile && !next.passportPhoto) {
+      const photoError = validatePassportPhoto(passportFile);
+      if (photoError) next.passportPhoto = photoError;
+    }
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -295,6 +365,7 @@ export function RegistrationDialog({
       if (!res.ok || !data?.ok) {
         throw new Error(data?.error || "Unable to submit registration.");
       }
+      clearRegistrationDraft(draftAccountKey);
       toast.success("Registration submitted successfully.");
       onSubmitted?.();
       onClose();
@@ -413,7 +484,10 @@ export function RegistrationDialog({
           </nav>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+        <div
+          ref={bodyScrollRef}
+          className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6"
+        >
           <form
             id={formId}
             className="space-y-6"
@@ -571,6 +645,11 @@ export function RegistrationDialog({
                         file={passportFile}
                         onChange={(file) => {
                           setPassportFile(file);
+                          if (file) {
+                            void savePassportPhotoDraft(draftAccountKey, file);
+                          } else {
+                            void deletePassportPhotoDraft(draftAccountKey);
+                          }
                           setErrors((prev) => {
                             if (!prev.passportPhoto) return prev;
                             const next = { ...prev };
@@ -820,7 +899,7 @@ export function RegistrationDialog({
                       required
                       value={values.class12Status}
                       onChange={(v) => patch("class12Status", v)}
-                      options={PROFILE_CLASS12_STATUS_OPTIONS}
+                      options={class12StatusOptions}
                       error={errors.class12Status}
                     />
                     {values.class12Status === "PASSED" ? (

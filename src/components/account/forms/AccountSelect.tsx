@@ -1,7 +1,12 @@
 "use client";
 
-import { DropdownSelect } from "@/components/ui/DropdownSelect";
+import { useId, useMemo } from "react";
+import Select, { type SingleValue } from "react-select";
 import { AccountFieldShell } from "./AccountFieldShell";
+import {
+  accountReactSelectTheme,
+  createAccountReactSelectStyles,
+} from "./accountReactSelectStyles";
 
 type Option = { value: string; label: string };
 
@@ -30,6 +35,15 @@ export function AccountSelect({
   placeholder = "Select",
   disabled,
 }: AccountSelectProps) {
+  const reactId = useId();
+  const styles = useMemo(
+    () => createAccountReactSelectStyles<Option, false>(Boolean(error)),
+    [error]
+  );
+  const selected = options.find((o) => o.value === value) ?? null;
+  const portalTarget =
+    typeof document !== "undefined" ? document.body : undefined;
+
   return (
     <AccountFieldShell
       id={id}
@@ -38,17 +52,24 @@ export function AccountSelect({
       error={error}
       helperText={helperText}
     >
-      <DropdownSelect
-        options={options}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        triggerWidth="full"
-        variant="account"
+      <Select<Option, false>
+        inputId={id}
+        instanceId={`${id}-${reactId}`}
         aria-label={label}
-        triggerClassName={disabled ? "pointer-events-none opacity-60" : undefined}
+        options={options}
+        value={selected}
+        onChange={(opt: SingleValue<Option>) => onChange(opt?.value ?? "")}
+        placeholder={placeholder}
+        isDisabled={disabled}
+        isSearchable
+        isClearable={false}
+        menuPlacement="auto"
+        menuPortalTarget={portalTarget}
+        menuPosition="fixed"
+        theme={accountReactSelectTheme}
+        styles={styles}
+        classNamePrefix="account-select"
       />
-      <span className="sr-only" id={id} />
     </AccountFieldShell>
   );
 }

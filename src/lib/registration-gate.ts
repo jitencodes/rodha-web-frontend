@@ -62,3 +62,30 @@ export function formatRegistrationDeadline(deadlineAt: string | null): string {
     minute: "2-digit",
   });
 }
+
+/* ---- Shared "registration incomplete" flag (published by RegistrationGateProvider) ---- */
+
+let registrationIncomplete = false;
+const incompleteListeners = new Set<() => void>();
+
+/** Called by the gate provider whenever it learns the latest status. */
+export function publishRegistrationIncomplete(incomplete: boolean): void {
+  if (registrationIncomplete === incomplete) return;
+  registrationIncomplete = incomplete;
+  incompleteListeners.forEach((listener) => listener());
+}
+
+export function subscribeRegistrationIncomplete(listener: () => void) {
+  incompleteListeners.add(listener);
+  return () => {
+    incompleteListeners.delete(listener);
+  };
+}
+
+export function getRegistrationIncomplete(): boolean {
+  return registrationIncomplete;
+}
+
+export function getRegistrationIncompleteServer(): boolean {
+  return false;
+}

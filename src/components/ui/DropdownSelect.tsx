@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { getAccountPortalParent } from "@/lib/account/portal-parent";
 import { cn } from "@/lib/utils";
 
 export interface DropdownSelectOption {
@@ -297,10 +298,7 @@ export function DropdownSelect({
   const portalParent =
     typeof document !== "undefined"
       ? isAccount
-        ? (document.querySelector(
-            ".account-shell"
-          ) as HTMLElement | null) ??
-          document.body
+        ? getAccountPortalParent(triggerRef.current)
         : document.body
       : null;
 
@@ -324,7 +322,7 @@ export function DropdownSelect({
         className={cn(
           "z-[1000] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
           isAccount
-            ? "rounded-[6px] border border-[var(--account-border)] bg-[var(--account-surface)] py-1 shadow-[var(--account-shadow)]"
+            ? "rounded-[6px] border border-[var(--account-border,#ebe7e0)] bg-[var(--account-surface,#ffffff)] py-1 shadow-[var(--account-shadow,0_1px_3px_rgba(0,0,0,0.12))]"
             : isLight
               ? "rounded-[6px] border border-neutral-200 bg-white py-1 shadow-lg"
               : "dropdown-menu"
@@ -354,10 +352,10 @@ export function DropdownSelect({
 
                 isAccount
                   ? cn(
-                      "cursor-pointer px-4 py-2.5 text-body-sm text-[var(--account-text-secondary)] transition-colors",
-                      "hover:bg-[var(--account-nav-active-bg)] hover:text-[var(--account-accent)]",
+                      "cursor-pointer px-4 py-2.5 text-body-sm text-[var(--account-text-secondary,#404040)] transition-colors",
+                      "hover:bg-[var(--account-nav-active-bg,#fff3e8)] hover:text-[var(--account-accent,#f97316)]",
                       isActive &&
-                        "bg-[var(--account-nav-active-bg)] font-medium text-[var(--account-accent)]"
+                        "bg-[var(--account-nav-active-bg,#fff3e8)] font-medium text-[var(--account-accent,#f97316)]"
                     )
                   : isLight
                     ? cn(

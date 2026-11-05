@@ -3,12 +3,13 @@ import { WebsiteStoreProvider } from "@/components/providers/WebsiteStoreProvide
 import {
   getAnnouncementIntervalMs,
   getPromoDialogDelayMs,
+  getPurchaseToastGapMs,
   getPurchaseToastMs,
 } from "@/lib/api/env";
 import { getActiveAnnouncements } from "@/lib/api/modules/announcements/service";
 import { getActiveCategories } from "@/lib/api/modules/categories/service";
 import { getPromotionalBanner } from "@/lib/api/modules/promotional-banner/service";
-import { getRecentPurchase } from "@/lib/api/modules/recent-purchases/service";
+import { getRecentPurchases } from "@/lib/api/modules/recent-purchases/service";
 import { getAccessToken } from "@/lib/auth/server-session";
 
 export default async function WebsiteLayout({
@@ -16,13 +17,13 @@ export default async function WebsiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [announcements, categories, accessToken, promo, recentPurchase] =
+  const [announcements, categories, accessToken, promo, recentPurchases] =
     await Promise.all([
       getActiveAnnouncements(),
       getActiveCategories(),
       getAccessToken(),
       getPromotionalBanner(),
-      getRecentPurchase(),
+      getRecentPurchases(),
     ]);
 
   return (
@@ -34,8 +35,9 @@ export default async function WebsiteLayout({
         isLoggedIn={Boolean(accessToken)}
         promo={promo}
         promoDelayMs={getPromoDialogDelayMs()}
-        recentPurchase={recentPurchase}
+        recentPurchases={recentPurchases}
         purchaseToastMs={getPurchaseToastMs()}
+        purchaseToastGapMs={getPurchaseToastGapMs()}
       >
         {children}
       </SiteFrame>

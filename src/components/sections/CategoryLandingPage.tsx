@@ -134,6 +134,7 @@ export function CategoryLandingPage({
           isLoggedIn={isLoggedIn}
           videoId={category.hero.videoId}
           imageUrl={category.hero.imageUrl}
+          imageRedirectUrl={category.hero.redirectUrl}
         />
       ) : null}
 

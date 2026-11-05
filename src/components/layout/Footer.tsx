@@ -36,10 +36,10 @@ const QUICK_LINKS = [
 
 const RESOURCES_LINKS = [
   { label: "Blog", href: "/blog" },
-  { label: "Results", href: "/results" },
-  { label: "Testimonials", href: "/testimonials" },
-  { label: "Success Stories", href: "/success-stories" },
-  { label: "Resource Hub", href: "/resources" },
+  // { label: "Results", href: "/results" },
+  // { label: "Testimonials", href: "/testimonials" },
+  // { label: "Success Stories", href: "/success-stories" },
+  // { label: "Resource Hub", href: "/resources" },
   { label: "FAQ", href: "/faq" },
   { label: "Free Resources", href: CAT_FREE_COURSE_URL },
 ];

@@ -183,12 +183,16 @@ function formatDateTimeLabel(value: string | undefined): string | undefined {
   if (!value) return undefined;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
+  // Force IST so SSR (UTC hosts) and the browser show the same clock.
+  const formatted = date.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
     minute: "2-digit",
+    hour12: true,
   });
+  return `${formatted.replace(/\b(am|pm)\b/gi, (part) => part.toUpperCase())}`;
 }
 
 function formatLiveStatusLabel(status: string | undefined): string | undefined {

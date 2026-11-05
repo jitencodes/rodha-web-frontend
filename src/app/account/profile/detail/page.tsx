@@ -27,13 +27,18 @@ export default async function AccountProfileDetailPage() {
       }
     }
 
-    let courseEnrolledLabel = "";
-    let batchEnrolledLabel = "";
+    let courseEnrolledLabels: string[] = [];
+    let batch = "";
+    let batchCourse = "";
     try {
       const registration = await getStudentRegistration(accessToken);
       if (registration) {
-        courseEnrolledLabel = registration.courseEnrolledLabel;
-        batchEnrolledLabel = registration.batchEnrolledLabel;
+        courseEnrolledLabels = registration.purchasedCourses
+          .map((course) => course.courseTitle.trim())
+          .filter(Boolean);
+
+        batch = registration.batch ?? "";
+        batchCourse = registration.batchCourse ?? "";
         if (!profile?.registration && registration.registration) {
           profile = {
             id: profile?.id || "",
@@ -55,7 +60,7 @@ export default async function AccountProfileDetailPage() {
       }
     }
 
-    return { profile, courseEnrolledLabel, batchEnrolledLabel };
+    return { profile, courseEnrolledLabels, batch, batchCourse };
   }, "/account/profile/detail");
 
   if (!data.profile?.registration) {
@@ -65,8 +70,9 @@ export default async function AccountProfileDetailPage() {
   return (
     <ProfileDetailView
       profile={data.profile}
-      courseEnrolledLabel={data.courseEnrolledLabel}
-      batchEnrolledLabel={data.batchEnrolledLabel}
+      courseEnrolledLabels={data.courseEnrolledLabels}
+      batchCourse={data.batchCourse}
+      batch={data.batch}
     />
   );
 }

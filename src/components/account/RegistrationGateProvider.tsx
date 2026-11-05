@@ -16,8 +16,10 @@ import {
   formatRegistrationDeadline,
   isRegistrationReminderDue,
   OPEN_REGISTRATION_EVENT,
+  publishRegistrationIncomplete,
   writeRegistrationDismissedAt,
 } from "@/lib/registration-gate";
+import { clearAllRegistrationDrafts } from "@/lib/account/registration-draft";
 
 type RegistrationGateProviderProps = {
   /** When false, provider is idle (public guest). */
@@ -87,11 +89,27 @@ export function RegistrationGateProvider({
 
   const evaluateOpen = useCallback(
     (next: StudentRegistrationStatusViewModel, forceManual = false) => {
-      if (next.completed || !next.required) {
+      if (next.completed) {
         setDialogOpen(false);
         setMandatory(false);
         manualOpenRef.current = false;
         clearRegistrationDismissedAt();
+        clearAllRegistrationDrafts();
+        return;
+      }
+
+      // Manual open (profile CTA): allow when not completed, even if API omits
+      // `required` / registration object (maps to required: false).
+      if (forceManual || manualOpenRef.current) {
+        setDialogOpen(true);
+        void loadForm(true);
+        return;
+      }
+
+      // Auto-prompt only when registration object says required.
+      if (!next.required) {
+        setDialogOpen(false);
+        setMandatory(false);
         return;
       }
 
@@ -102,12 +120,6 @@ export function RegistrationGateProvider({
         clearRegistrationDismissedAt();
         setDialogOpen(true);
         void loadForm(false);
-        return;
-      }
-
-      if (forceManual || manualOpenRef.current) {
-        setDialogOpen(true);
-        void loadForm(true);
         return;
       }
 
@@ -126,6 +138,7 @@ export function RegistrationGateProvider({
       if (res.status === 401) {
         setStatus(null);
         setDialogOpen(false);
+        publishRegistrationIncomplete(false);
         return;
       }
       const data = (await res.json().catch(() => null)) as {
@@ -134,6 +147,7 @@ export function RegistrationGateProvider({
       } | null;
       if (!res.ok || !data?.ok || !data.registration) return;
       setStatus(data.registration);
+      publishRegistrationIncomplete(!data.registration.completed);
       evaluateOpen(data.registration);
     } catch {
       // soft-fail poll
@@ -158,11 +172,11 @@ export function RegistrationGateProvider({
   useEffect(() => {
     if (!enabled) return;
     function onOpenRequest() {
-      manualOpenRef.current = true;
-      if (status && (status.completed || !status.required)) {
+      if (status?.completed) {
         toast.message("Registration is already complete.");
         return;
       }
+      manualOpenRef.current = true;
       setDialogOpen(true);
       void loadForm();
     }
@@ -186,9 +200,11 @@ export function RegistrationGateProvider({
 
   function handleSubmitted() {
     clearRegistrationDismissedAt();
+    clearAllRegistrationDrafts();
     manualOpenRef.current = false;
     setDialogOpen(false);
     setMandatory(false);
+    publishRegistrationIncomplete(false);
     setStatus((prev) =>
       prev
         ? {
