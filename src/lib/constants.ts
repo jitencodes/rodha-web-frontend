@@ -10,7 +10,7 @@ import type {
 
 export const SITE_NAME = "Rodha";
 export const SITE_TAGLINE = "Expert Mentorship. Proven Strategies. Real Results.";
-export const SITE_URL = "https://rodha.in";
+export const SITE_URL = "https://www.rodha.co.in";
 
 export const EXTERNAL_URLS = {
   graphy: "https://rodha.graphy.com",
@@ -264,7 +264,7 @@ export const HEADER_NAV = [
       },
       {
         label: "Free Resources",
-        href: CAT_FREE_COURSE_URL,
+        href: "/resources",
       },
     ],
   },

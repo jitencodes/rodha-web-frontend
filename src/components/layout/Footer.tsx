@@ -10,9 +10,6 @@ import {
   SOCIAL_LINKS,
   SITE_NAME,
   SITE_TAGLINE,
-  CAT_FREE_COURSE_URL,
-  getCategoryIdFromPathname,
-  getFreeResourceUrl,
   getSupportEmail,
 } from "@/lib/constants";
 import { categoriesAtom } from "@/lib/store/categories";
@@ -41,7 +38,7 @@ const RESOURCES_LINKS = [
   { label: "Success Stories", href: "/success-stories" },
   { label: "Resource Hub", href: "/resources" },
   { label: "FAQ", href: "/faq" },
-  { label: "Free Resources", href: CAT_FREE_COURSE_URL },
+  { label: "Free Resources", href: "/resources" },
   { label: "Discussion Forum", href: "/discussion-forum" },
 ];
 
@@ -200,14 +197,6 @@ export function Footer() {
     href: `/category/${c.slug}`,
   }));
   const activeLabel = getActiveFooterLabel(pathname, hash, examLinks);
-  const resourceLinks = RESOURCES_LINKS.map((item) =>
-    item.label === "Free Resources"
-      ? {
-          ...item,
-          href: getFreeResourceUrl(getCategoryIdFromPathname(pathname)),
-        }
-      : item
-  );
   const isCategoryRoute = pathname.startsWith("/category/");
   const isCourseDetail = /^\/courses\/[^/]+$/.test(pathname);
   const footerTheme = LIGHT_FOOTER_THEME;
@@ -283,7 +272,7 @@ export function Footer() {
           />
           <FooterColumn
             title="Resources"
-            links={resourceLinks}
+            links={RESOURCES_LINKS}
             activeLabel={activeLabel}
             theme={footerTheme}
           />

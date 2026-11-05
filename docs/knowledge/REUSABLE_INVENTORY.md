@@ -43,10 +43,10 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Component | File |
 |-----------|------|
 | Container | `Container.tsx` |
-| Footer | `Footer.tsx` (no Success Stories; Free Resources is category-aware) |
+| Footer | `Footer.tsx` (no Success Stories; Free Resources → `/resources`) |
 | CounsellingModalProvider | `CounsellingModalProvider.tsx` |
 | FloatingCounsellingCta | `FloatingCounsellingCta.tsx` |
-| Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources by vertical) |
+| Header | `Header.tsx` (no login control; Test Series → mocks.rodha.co.in; Free Resources → `/resources`) |
 | MobileNav | `MobileNav.tsx` (mirrors header destinations; no Login / Sign Up) |
 | PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
 | PromoDialog | `PromoDialog.tsx` (once per 24h; `promotional-banner` API; IMAGE→link; VIDEO thumbnail→autoplay 1.5s; lead form when logged out) |
@@ -123,7 +123,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ContactCtaSection | `contact/ContactCtaSection.tsx` |
 | ContactFaqSection | `contact/ContactFaqSection.tsx` (`AccordionV2`) |
 | ContactBuddyCtaSection | `contact/ContactBuddyCtaSection.tsx` |
-| BlogHeroSection | `blog/BlogHeroSection.tsx` (dark banner, breadcrumb, optional `eyebrow` / `title` / `accent` / `description` / `breadcrumbLabel`; image `/assets/images/blog/Blogs.png`) |
+| BlogHeroSection | `blog/BlogHeroSection.tsx` (dark banner, breadcrumb, optional `eyebrow` / `title` / `accent` / `description` / `breadcrumbLabel` / `imageSrc`; default image `/assets/images/blog/Blogs.png`) |
 | BlogToolbar | `src/app/(website)/blog/BlogToolbar.tsx` (category pills + search; optional `basePath`, placeholders, `extraParams`) |
 | ListingEmptyState | `listings/ListingEmptyState.tsx` (filtered listing empty state + clear link) |
 | BlogCategories | `blog/BlogCategories.tsx` (category badge links to `/blog?category=…`; optional `activeCategory`) |

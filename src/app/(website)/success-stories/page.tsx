@@ -87,6 +87,7 @@ export default async function SuccessStoriesPage({
         accent="did it"
         description="Short films from Rodha students — the setbacks, the plan, and the result, in their own words."
         breadcrumbLabel="Success Stories"
+        imageSrc="/assets/images/hero/students-hero.png"
         imageAlt="Student success stories"
       />
 
