@@ -3,8 +3,8 @@ import { FacultyHeroSection } from "@/components/sections/FacultyHeroSection";
 import { FacultyWhySection } from "@/components/sections/FacultyWhySection";
 import { CTABandV2Decorative } from "@/components/sections/CTABandV2Decorative";
 import { RevealGroup } from "@/components/ui/RevealGroup";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { buildPageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 import { FacultyListingClient } from "./FacultyListingClient";
 import { getFacultyPage } from "@/lib/api/modules/faculty/service";
 import { getActiveCategories } from "@/lib/api/modules/categories/service";
@@ -98,6 +98,23 @@ export default async function FacultyPage({ searchParams }: FacultyPageProps) {
               { label: "Home", href: "/" },
               { label: "Faculty" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Our Faculty — Rodha",
+              description:
+                "Meet Rodha's expert faculty across MBA, Law, Banking, IPMAT, and Skill House programs.",
+              url: "/faculty",
+              items: (facultyPage?.items ?? []).map((member) => ({
+                name: member.name,
+                url: `/faculty/${member.slug}`,
+              })),
+            })
           ),
         }}
       />

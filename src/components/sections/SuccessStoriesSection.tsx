@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { YoutubeStoryCard } from "@/components/cards/YoutubeStoryCard";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
@@ -10,12 +11,15 @@ interface SuccessStoriesSectionProps {
   stories: StudentStory[];
   subtitle?: string;
   className?: string;
+  /** Optional listing deep-link (e.g. `/success-stories?category=cat`). */
+  viewAllHref?: string;
 }
 
 export function SuccessStoriesSection({
   stories,
   subtitle,
   className,
+  viewAllHref,
 }: SuccessStoriesSectionProps) {
   if (stories.length === 0) return null;
 
@@ -50,6 +54,18 @@ export function SuccessStoriesSection({
           ))}
         </InfiniteMarquee>
       </RevealGroup>
+      {viewAllHref ? (
+        <Container>
+          <div className="mt-8 flex justify-center md:mt-10">
+            <Link
+              href={viewAllHref}
+              className="btn-view-all btn-outlined-premium premium-border-glow glow-accent-orange shine-sweep shine-sweep-outline inline-flex"
+            >
+              View All Success Stories
+            </Link>
+          </div>
+        </Container>
+      ) : null}
     </section>
   );
 }

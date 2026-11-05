@@ -7,6 +7,7 @@ export const metadata: Metadata = buildPageMetadata({
   title: "Forgot Password — Rodha",
   description: "Request a Rodha password reset link by email.",
   path: "/forgot-password",
+  noIndex: true,
 });
 
 export default function ForgotPasswordPage() {

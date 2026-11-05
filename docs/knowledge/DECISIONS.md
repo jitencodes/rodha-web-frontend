@@ -26,6 +26,12 @@ Format:
 - **Alternatives considered:** Treating missing registration as required for auto-pop (rejected — would false-prompt guests without enrollment).
 - **Consequences:** Profile “Complete registration” works without the status object; auto reminders resume when API returns `required: true`.
 
+### 2026-10-27 — Modular sitemaps + promotional-banner dialog
+- **Decision:** Ship Next.js `generateSitemaps` modules (`static`, `categories`, `courses`, `faculty`, `blogs`) plus an HTML `/sitemap` page and `robots.ts` that disallows account/auth/API. Replace `promotional-popup` with `promotional-banner` for the site promo dialog (date window; IMAGE click→link; VIDEO thumbnail→autoplay after 1.5s, click opens YouTube).
+- **Rationale:** PRD requires sitemap/robots; crawlers benefit from per-module XML; CMS renamed/shaped the promo payload with link + date bounds.
+- **Alternatives considered:** Single flat `sitemap.ts`; keeping both popup APIs.
+- **Consequences:** Top announcements strip stays on `announcements`. Auth/account pages are noindex. Old `promotional-popup` module removed.
+
 ### 2026-10-26 — Site-wide registration gate via dashboard polling
 - **Decision:** Logged-in students poll `GET /api/account/dashboard-status` every 2 minutes. Status comes from dashboard `data.registration` (`completed` / `required` / `overdue` / `deadlineAt`). Soft-block `REGISTRATION_REQUIRED` (HTTP 201 + `success: false`) maps to overdue+required. Dismissible dialog when required (re-prompt every 1 hour via `REGISTRATION_REMINDER_INTERVAL_MS` + localStorage). On `/account/*` when overdue, dialog is mandatory (no close). Public pages keep dismissible close when overdue. Single `RegistrationGateProvider` + `RegistrationDialog`; profile CTA dispatches `rodha:open-registration`.
 - **Rationale:** Product needs frequent reminders before deadline and a hard block after soft-block without inventing a separate status API.

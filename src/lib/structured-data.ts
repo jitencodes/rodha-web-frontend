@@ -166,3 +166,52 @@ export function courseJsonLd(course: {
     },
   };
 }
+
+export function webPageJsonLd(page: {
+  name: string;
+  description: string;
+  url: string;
+}): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: page.name,
+    description: page.description,
+    url: `${SITE_URL}${page.url === "/" ? "" : page.url}`,
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  };
+}
+
+export function collectionPageJsonLd(page: {
+  name: string;
+  description: string;
+  url: string;
+  items?: Array<{ name: string; url: string }>;
+}): JsonLd {
+  const list = page.items?.filter((item) => item.name && item.url) ?? [];
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: page.name,
+    description: page.description,
+    url: `${SITE_URL}${page.url}`,
+    mainEntity:
+      list.length > 0
+        ? {
+            "@type": "ItemList",
+            itemListElement: list.map((item, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: item.name,
+              url: item.url.startsWith("http")
+                ? item.url
+                : `${SITE_URL}${item.url}`,
+            })),
+          }
+        : undefined,
+  };
+}

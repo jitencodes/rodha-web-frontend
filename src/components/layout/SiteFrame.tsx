@@ -9,7 +9,7 @@ import { CounsellingModalProvider } from "@/components/layout/CounsellingModalPr
 import { PromoDialog } from "@/components/layout/PromoDialog";
 import { PurchaseToast } from "@/components/layout/PurchaseToast";
 import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
-import type { PromotionalPopupViewModel } from "@/lib/api/modules/promotional-popup/types";
+import type { PromotionalBannerViewModel } from "@/lib/api/modules/promotional-banner/types";
 import type { RecentPurchaseViewModel } from "@/lib/api/modules/recent-purchases/types";
 import type { AnnouncementViewModel } from "@/lib/api/modules/announcements/types";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
@@ -19,7 +19,7 @@ interface SiteFrameProps {
   intervalMs: number;
   categories: WebsiteCategoryViewModel[];
   isLoggedIn?: boolean;
-  promo: PromotionalPopupViewModel | null;
+  promo: PromotionalBannerViewModel | null;
   promoDelayMs: number;
   recentPurchases: RecentPurchaseViewModel[];
   purchaseToastMs: number;

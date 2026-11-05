@@ -184,9 +184,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 |------|--------|
 | Per-page metadata (basic) | Complete | `buildPageMetadata` + category JSON titles; canonicals on key routes |
 | Open Graph / Twitter | Complete | Default `og-rodha.png`; blog/faculty use page images |
-| JSON-LD schemas | Partial | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting, Course; sitemap still TBD |
-| sitemap.xml | Not Started |
-| robots.txt | Not Started |
+| JSON-LD schemas | Complete | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting, Course, WebPage, CollectionPage |
+| sitemap.xml | Complete | `src/app/sitemap.ts` + `generateSitemaps` modules (static/categories/courses/faculty/blogs) |
+| robots.txt | Complete | `src/app/robots.ts` — allow public; disallow `/account/`, `/api/`, auth, health, legacy |
+| HTML sitemap | Complete | `/sitemap` section-wise public page |
 | Image alt / heading hierarchy | Partial |
 | Favicon / site icons | Complete | `/favicon.png` (+ apple reuse); distinct apple-touch asset missing |
 

@@ -8,6 +8,7 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Create your Rodha account to access courses, mocks, and mentorship.",
   path: "/signup",
+  noIndex: true,
 });
 
 export default function SignupPage() {

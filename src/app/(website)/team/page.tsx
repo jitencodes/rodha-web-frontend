@@ -9,6 +9,7 @@ import { InfiniteMarquee } from "@/components/ui/infiniteMarquee";
 import { RevealGroup } from "@/components/ui/RevealGroup";
 import { buildPageMetadata } from "@/lib/seo";
 import { getTeam } from "@/lib/api/modules/team/service";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/structured-data";
 
 export const metadata = buildPageMetadata({
   title: "Meet the Team — Rodha",
@@ -23,6 +24,30 @@ export default async function TeamPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { label: "Home", href: "/" },
+              { label: "Meet the Team" },
+            ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageJsonLd({
+              name: "Meet the Team — Rodha",
+              description:
+                "Meet the passionate educators, leaders, and advisors behind Rodha.",
+              url: "/team",
+            })
+          ),
+        }}
+      />
       <TeamHeroSection banner={team?.banner ?? null} />
 
       {featuredFaculty.length > 0 ? (

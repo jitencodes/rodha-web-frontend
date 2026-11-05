@@ -10,6 +10,8 @@ interface PageMetaInput {
   keywords?: string[];
   image?: string;
   type?: "website" | "article";
+  /** When true, emit noindex/nofollow (auth, account, and other non-public surfaces). */
+  noIndex?: boolean;
 }
 
 /** Shared title/description/canonical/OG/Twitter metadata for marketing pages. */
@@ -20,6 +22,7 @@ export function buildPageMetadata({
   keywords,
   image = DEFAULT_OG_IMAGE,
   type = "website",
+  noIndex = false,
 }: PageMetaInput): Metadata {
   const url = `${SITE_URL}${path === "/" ? "" : path}`;
   const imageUrl = image.startsWith("http") ? image : `${SITE_URL}${image}`;
@@ -28,6 +31,9 @@ export function buildPageMetadata({
     title,
     description,
     keywords,
+    robots: noIndex
+      ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+      : undefined,
     alternates: {
       canonical: path === "/" ? `${SITE_URL}/` : url,
     },

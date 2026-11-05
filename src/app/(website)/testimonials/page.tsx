@@ -13,7 +13,7 @@ import { getTestimonials } from "@/lib/api/modules/testimonials/service";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { listingPaginationQuery, readListingQuery } from "@/lib/content-listings";
 import { buildPageMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Testimonials — Rodha",
@@ -59,6 +59,23 @@ export default async function TestimonialsPage({
               { label: "Home", href: "/" },
               { label: "Testimonials" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Testimonials — Rodha",
+              description:
+                "Read reviews from Rodha students on classes, mocks, and mentorship.",
+              url: "/testimonials",
+              items: pageItems.map((item) => ({
+                name: item.name,
+                url: "/testimonials",
+              })),
+            })
           ),
         }}
       />

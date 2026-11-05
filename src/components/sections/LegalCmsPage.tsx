@@ -3,6 +3,7 @@ import { LegalPageLayout } from "@/components/sections/LegalPageLayout";
 import { getLegalPage } from "@/lib/api/modules/legal/service";
 import type { LegalPageType } from "@/lib/api/modules/legal/types";
 import { buildPageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/structured-data";
 
 const LEGAL_META: Record<
   LegalPageType,
@@ -48,5 +49,36 @@ export async function legalPageMetadata(pageType: LegalPageType) {
 export async function LegalCmsPage({ pageType }: { pageType: LegalPageType }) {
   const page = await getLegalPage(pageType);
   if (!page) notFound();
-  return <LegalPageLayout page={page} />;
+  const meta = LEGAL_META[pageType];
+  const title = `${page.title} — Rodha`;
+  const description = page.description || meta.fallbackDescription;
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { label: "Home", href: "/" },
+              { label: page.title },
+            ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageJsonLd({
+              name: title,
+              description,
+              url: meta.path,
+            })
+          ),
+        }}
+      />
+      <LegalPageLayout page={page} />
+    </>
+  );
 }

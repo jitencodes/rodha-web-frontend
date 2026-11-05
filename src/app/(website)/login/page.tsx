@@ -7,6 +7,7 @@ export const metadata: Metadata = buildPageMetadata({
   title: "Login — Rodha",
   description: "Log in to Rodha to continue your exam preparation.",
   path: "/login",
+  noIndex: true,
 });
 
 export default function LoginPage() {
