@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-11-05 — SITE_URL is https://www.rodha.co.in
+- **Decision:** Change `SITE_URL` from `https://rodha.in` to `https://www.rodha.co.in`.
+- **Rationale:** `rodha.in` returns 410 Gone, while `rodha.co.in` redirects to `www` and that is the canonical host of the current live site. Canonicals, sitemaps, OG tags and JSON-LD all use `SITE_URL`.
+- **Alternatives considered:** Keeping `rodha.in`; deriving it from `NEXT_PUBLIC_BASE_URL` (non-`www`, so every canonical would redirect).
+- **Consequences:** Canonicals on preview deployments also point to the production host.
+
 ### 2026-11-05 — Sitemap index at /sitemap.xml
 - **Decision:** Move `generateSitemaps` to `src/app/sitemaps/sitemap.ts` and serve a sitemap index from `src/app/sitemap.xml/route.ts`. Keep the HTML `/sitemap` page.
 - **Rationale:** `generateSitemaps` only serves per-id files, so `/sitemap.xml` returned 404 while `robots.ts` advertised it. Next rejects a `/sitemap.xml` route beside a root `app/sitemap.ts`.
