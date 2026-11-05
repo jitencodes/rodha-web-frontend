@@ -14,7 +14,7 @@ import { isResourceType } from "@/lib/api/modules/resources/types";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { listingPaginationQuery, readListingQuery } from "@/lib/content-listings";
 import { buildPageMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 
 import { ResourceTypeFilter } from "./ResourceTypeFilter";
 
@@ -65,6 +65,23 @@ export default async function ResourcesPage({
               { label: "Home", href: "/" },
               { label: "Resource Hub" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Resource Hub — Rodha",
+              description:
+                "Courses, PDFs, documents, community links, and external resources for Rodha programs.",
+              url: "/resources",
+              items: pageItems.map((item) => ({
+                name: item.title,
+                url: item.href || "/resources",
+              })),
+            })
           ),
         }}
       />

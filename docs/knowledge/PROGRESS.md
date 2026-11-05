@@ -13,6 +13,7 @@ Update this file after every meaningful implementation task.
 - **Google auth click debounce (2026-10-29):** `GoogleContinueButton` ignores repeat GIS credentials for 2s and locks pointer events; `AuthScreen.handleGoogle` uses a sync in-flight ref so duplicate login/signup requests cannot start.
 - **Profile detail course list (2026-10-28):** `ProfileDetailView` shows enrolled courses as a bullet list from `purchasedCourses` titles (`courseEnrolledLabels`) instead of a single comma-joined `courseEnrolledLabel`.
 - **Registration searchable selects + Class 12 rules (2026-10-28):** `AccountSelect` / `AccountMultiSelect` use `react-select` with orange account theme (searchable, portaled menus). Step changes scroll the dialog body to top. UG/graduate (and working) hide Class 12 Appearing and default to Passed; when Appearing is chosen, graduation / PG / work are not required or shown.
+- **SEO, sitemap, promo banner, tooltip, View All (2026-10-27):** `ClampTooltip` flips above/below on viewport space. Category landing View All → `/results|testimonials|success-stories?category={slug}`. HTML `/sitemap` + modular XML via `generateSitemaps` (static/categories/courses/faculty/blogs) + `robots.ts` (disallow account/api/auth). Promo dialog uses `GET api/website/promotional-banner` (date window; IMAGE link; VIDEO thumbnail → autoplay 1.5s, click opens YouTube). SEO gaps: team/legal JSON-LD, dynamic category keywords, CollectionPage on listings, noindex auth/account. Branch `fix/seo-sitemap-promo-tooltip`.
 - **Registration multi-select portal (2026-10-27):** `AccountMultiSelect` (Target Exams / Target Colleges) portals into nearest `.account-shell` with z-index above the registration dialog and solid CSS-var fallbacks, fixing transparent menus and unselectable options. Shared `getAccountPortalParent` also used by account `DropdownSelect`.
 - **Registration form select height (2026-10-27):** `AccountSelect` trigger uses form-only `accountFormSelectTriggerClassName` so dropdown height matches inputs (`py-2.5` / `text-body` / account radius). Account filter toolbars keep default `DropdownSelect` `h-9`. `AccountMultiSelect` (Target Exams) menu/chevron aligned with account select styling.
 - **Registration gate open conditions (2026-10-27):** Manual open (profile CTA / `rodha:open-registration`) shows the dialog whenever `completed` is not true — including when the dashboard omits `registration` (maps to `required: false`). “Already complete” toast only when `completed === true`. Auto-pop still requires `required` plus overdue/reminder rules so a missing registration object does not auto-open.
@@ -208,13 +209,14 @@ Update this file after every meaningful implementation task.
 - [x] Dynamic category landings `/category/[category_slug]`
 - [x] Login `/login` + Signup `/signup`
 - [x] Student account pages (`/account/*`) — dashboard, courses, test-series, cart, orders, profile, settings
-- [ ] Promo popup
+- [x] Promo dialog (`api/website/promotional-banner`)
 
 ### Integrations
 - [x] Homepage + layout CMS APIs (announcements, categories, Get Home) — SSR-first
 - [x] Category page + faculty + about + team + legal + contact POST (SSR-first; category faculty in the same payload as testimonials/stories/FAQs; `courseType` on category/faculty courses)
 - [ ] FAQ listing API, blogs
-- [ ] Final external URLs, sitemap
+- [x] Modular sitemap.xml + robots.txt + HTML `/sitemap`
+- [ ] Final external URLs
 
 ---
 

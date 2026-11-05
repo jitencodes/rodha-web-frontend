@@ -7,7 +7,7 @@ import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import type { WebsiteCategoryViewModel } from "@/lib/api/modules/categories/types";
-import type { PromotionalPopupViewModel } from "@/lib/api/modules/promotional-popup/types";
+import type { PromotionalBannerViewModel } from "@/lib/api/modules/promotional-banner/types";
 import {
   isBlockedPhoneKey,
   NAME_MAX_LENGTH,
@@ -25,9 +25,10 @@ import { cn } from "@/lib/utils";
 
 const EXAM_YEAR_START = 2007;
 const EXAM_YEAR_END = 2026;
+const VIDEO_AUTOPLAY_DELAY_MS = 1500;
 
 interface PromoDialogProps {
-  popup: PromotionalPopupViewModel | null;
+  popup: PromotionalBannerViewModel | null;
   delayMs: number;
   isLoggedIn: boolean;
   categories: WebsiteCategoryViewModel[];
@@ -98,34 +99,79 @@ export function PromoDialog({
   );
 }
 
-function PromoMedia({ popup }: { popup: PromotionalPopupViewModel }) {
-  if (popup.youtubeId) {
+function openExternal(url: string | null) {
+  if (!url?.trim()) return;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function PromoMedia({ popup }: { popup: PromotionalBannerViewModel }) {
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (popup.mediaType !== "VIDEO" || !popup.youtubeId) return;
+    const timer = window.setTimeout(() => setPlaying(true), VIDEO_AUTOPLAY_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [popup.mediaType, popup.youtubeId]);
+
+  if (popup.mediaType === "VIDEO" && popup.youtubeId) {
+    const watchUrl =
+      popup.link ||
+      popup.youtubeUrl ||
+      `https://www.youtube.com/watch?v=${popup.youtubeId}`;
+
     return (
-      <div className="aspect-video bg-black">
-        <iframe
-          title={popup.title}
-          src={`https://www.youtube.com/embed/${popup.youtubeId}`}
-          className="h-full w-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+      <button
+        type="button"
+        className="relative aspect-video w-full cursor-pointer overflow-hidden bg-black text-left"
+        aria-label={`${popup.title} — open video`}
+        onClick={() => openExternal(watchUrl)}
+      >
+        {playing ? (
+          <iframe
+            title={popup.title}
+            src={`https://www.youtube.com/embed/${popup.youtubeId}?autoplay=1&mute=1&rel=0&playsinline=1`}
+            className="pointer-events-none h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={popup.imageUrl ?? `https://img.youtube.com/vi/${popup.youtubeId}/hqdefault.jpg`}
+            alt={popup.title}
+            className="h-full w-full object-cover"
+          />
+        )}
+      </button>
     );
   }
 
   if (!popup.imageUrl) return null;
 
-  return (
-    <div className="relative min-h-[220px] bg-neutral-100">
-      {/* Promo images are CMS-hosted and may use hosts outside the image optimizer. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={popup.imageUrl}
-        alt={popup.title}
-        className="h-full max-h-[70vh] w-full object-cover"
-      />
-    </div>
+  const media = (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={popup.imageUrl}
+      alt={popup.title}
+      className="h-full max-h-[70vh] w-full object-cover"
+    />
   );
+
+  if (popup.link) {
+    return (
+      <a
+        href={popup.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative block min-h-[220px] bg-neutral-100"
+        aria-label={`${popup.title} — open link`}
+      >
+        {media}
+      </a>
+    );
+  }
+
+  return <div className="relative min-h-[220px] bg-neutral-100">{media}</div>;
 }
 
 function PromoLeadForm({

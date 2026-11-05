@@ -31,23 +31,26 @@ Resources that leave the site keep `redirectUrl`.
 
 Until `BLOG`, `FAQ`, `SUCCESS_STORY`, `TESTIMONIAL`, `STUDENT_RESULT`, and `CATEGORY` are registered, the website shows an empty state for those filters instead of treating a 400 as a crash.
 
-## Promotional popup
+## Promotional banner (promo dialog)
 
-`GET api/website/promotional-popup`
+`GET api/website/promotional-banner`
 
-Return `data: null` when nothing is scheduled. Otherwise:
+Return `data: null` when nothing is scheduled or outside the date window. Otherwise:
 
 ```json
 {
-  "id": 1,
+  "id": 2,
+  "title": "CAT 2027 Booster course live",
   "mediaType": "IMAGE",
-  "imageUrl": "https://cdn.example/banner.jpg",
-  "youtubeUrl": null,
-  "title": "CAT 2026 batch"
+  "mediaUrl": "https://cdn.example/banner.png",
+  "videoYoutubeLink": null,
+  "startDate": "2026-10-27T00:00:00.000+05:30",
+  "endDate": "2026-10-31T00:00:00.000+05:30",
+  "link": "https://www.youtube.com/watch?v=example"
 }
 ```
 
-`mediaType` is `IMAGE` or `YOUTUBE`. When `youtubeUrl` is a YouTube link, the dialog plays that video. Otherwise it shows `imageUrl`.
+`mediaType` is `IMAGE` or `VIDEO`. IMAGE media is clickable to `link`. VIDEO uses `videoYoutubeLink` (thumbnail → autoplay after 1.5s; click opens YouTube in a new tab).
 
 The site opens this once per browser after `NEXT_PUBLIC_PROMO_DIALOG_DELAY_MS`, then hides it for 24 hours.
 

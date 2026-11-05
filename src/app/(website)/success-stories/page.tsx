@@ -14,7 +14,7 @@ import { getSuccessStories } from "@/lib/api/modules/success-stories/service";
 import { EXTERNAL_URLS } from "@/lib/constants";
 import { listingPaginationQuery, readListingQuery } from "@/lib/content-listings";
 import { buildPageMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Success Stories — Rodha",
@@ -60,6 +60,23 @@ export default async function SuccessStoriesPage({
               { label: "Home", href: "/" },
               { label: "Success Stories" },
             ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            collectionPageJsonLd({
+              name: "Success Stories — Rodha",
+              description:
+                "Watch Rodha student success stories — short films on the plan, the setbacks, and the result.",
+              url: "/success-stories",
+              items: pageItems.map((item) => ({
+                name: item.student,
+                url: "/success-stories",
+              })),
+            })
           ),
         }}
       />

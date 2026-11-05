@@ -78,7 +78,7 @@ Required for Phase 1 (PRD §8):
 - Canonical URLs
 - JSON-LD where applicable: Organization, Course, FAQ, BreadcrumbList, Person, BlogPosting
 - Homepage FAQ JSON-LD uses Get Home FAQs when present
-- `sitemap.xml` and `robots.txt` (pending implementation)
+- `sitemap.xml` (`src/app/sitemap.ts` + modular `generateSitemaps`) and `robots.txt` (`src/app/robots.ts`)
 - Semantic HTML, heading hierarchy, image alt text
 
 ---
