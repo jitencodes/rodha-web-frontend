@@ -251,14 +251,14 @@ export function Header({
         </nav>
 
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-          {/* <button
+          <button
             type="button"
             onClick={() => setSearchOpen(true)}
             className="inline-flex size-9.5 items-center justify-center rounded-sm border border-white/15 text-white/80 transition-colors hover:border-orange-400/50 hover:bg-orange-500/10 hover:text-orange-300"
             aria-label="Search"
           >
             <Search className="size-4" strokeWidth={1.75} />
-          </button> */}
+          </button>
           {showExamSwitcher ? (
             <div
               onMouseLeave={() => setExamOpen(false)}
@@ -465,14 +465,14 @@ export function Header({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {/* <button
+          <button
             type="button"
             onClick={() => setSearchOpen(true)}
             className="inline-flex size-10 items-center justify-center text-text-secondary lg:hidden"
             aria-label="Search"
           >
             <Search className="size-5" strokeWidth={1.75} />
-          </button> */}
+          </button>
           <MobileNav
             activeCategorySlug={activeSlug}
             categories={categories}

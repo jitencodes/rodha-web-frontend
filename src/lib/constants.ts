@@ -264,7 +264,7 @@ export const HEADER_NAV = [
       },
       {
         label: "Free Resources",
-        href: CAT_FREE_COURSE_URL,
+        href: "/resources",
       },
     ],
   },

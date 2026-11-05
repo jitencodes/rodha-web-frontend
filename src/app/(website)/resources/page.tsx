@@ -92,6 +92,7 @@ export default async function ResourcesPage({
         accent="your preparation"
         description="Courses, PDFs, documents, community links, and external resources — filtered by exam and format."
         breadcrumbLabel="Resource Hub"
+        imageSrc="/assets/images/hero/resources-hub-hero.png"
         imageAlt="Resource hub"
       />
 

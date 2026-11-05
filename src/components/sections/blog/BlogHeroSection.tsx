@@ -11,6 +11,7 @@ interface BlogHeroSectionProps {
   accent?: string;
   description?: string;
   breadcrumbLabel?: string;
+  imageSrc?: string;
   imageAlt?: string;
 }
 
@@ -21,6 +22,7 @@ export function BlogHeroSection({
   accent = "CAT Journey",
   description = "From CAT preparation strategies and score-versus-percentile analysis to college applications, form-filling guides, and admission insights, get the guidance you need at every step towards your dream B-school.",
   breadcrumbLabel = "Blogs",
+  imageSrc = "/assets/images/blog/Blogs.png",
   imageAlt = "Blog & Insights",
 }: BlogHeroSectionProps) {
   return (
@@ -37,7 +39,7 @@ export function BlogHeroSection({
 
       <div className="pointer-events-none absolute bottom-0 right-0 hidden w-[68%] lg:block xl:w-[62%] h-[90%]">
         <Image
-          src="/assets/images/blog/Blogs.png"
+          src={imageSrc}
           alt={imageAlt}
           fill
           className="object-contain object-right-bottom"

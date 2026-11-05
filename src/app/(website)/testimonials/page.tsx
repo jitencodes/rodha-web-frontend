@@ -86,6 +86,7 @@ export default async function TestimonialsPage({
         accent="with Rodha"
         description="Honest notes on classes, mocks, and mentorship from aspirants across exams."
         breadcrumbLabel="Testimonials"
+        imageSrc="/assets/images/hero/students-hero.png"
         imageAlt="Student testimonials"
       />
 

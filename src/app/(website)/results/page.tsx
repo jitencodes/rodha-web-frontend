@@ -86,6 +86,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
         accent="Rodha students"
         description="Browse CAT, IPMAT, and other exam toppers — percentiles, ranks, and the colleges they converted."
         breadcrumbLabel="Results"
+        imageSrc="/assets/images/hero/students-hero.png"
         imageAlt="Student results"
       />
 

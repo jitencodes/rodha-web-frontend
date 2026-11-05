@@ -11,12 +11,12 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Promotional banner + countdown | Complete | API-driven announcements; 3D flip every 8s (env); countdown only when `endAt` present |
-| Header — global nav state | Partial | Exam switcher from Active Categories API; Courses link highlighted to `/courses`; Free Resources → CAT 2027 free course |
+| Header — global nav state | Partial | Exam switcher from Active Categories API; Courses link highlighted to `/courses`; Free Resources → `/resources` |
 | Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]` via API slugs; Free Resources uses that vertical's Graphy course |
 | Mobile nav | Partial | Same Active Categories API as desktop; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
 | Counselling modal (lead form) | Complete | Global provider + `HeroCounsellingForm` in `Modal`; site-wide CTABand counselling actions; homepage category cards pre-fill exam |
-| Footer | Partial | v2 5-column layout; Success Stories removed; Free Resources category-aware |
+| Footer | Partial | v2 5-column layout; Success Stories removed; Free Resources → `/resources` |
 | Rodha Buddy CTA (external) | Partial | Outline orange in header; final URL TBD |
 | Login / Sign Up → Graphy | Not Started | Removed from header/mobile until a live destination is ready |
 | Promotion popup + lead form | Not Started | Modal + trigger logic |
@@ -185,7 +185,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Per-page metadata (basic) | Complete | `buildPageMetadata` + category JSON titles; canonicals on key routes |
 | Open Graph / Twitter | Complete | Default `og-rodha.png`; blog/faculty use page images |
 | JSON-LD schemas | Complete | Organization, WebSite, Breadcrumb, FAQPage, Person, BlogPosting, Course, WebPage, CollectionPage |
-| sitemap.xml | Complete | `src/app/sitemap.ts` + `generateSitemaps` modules (static/categories/courses/faculty/blogs) |
+| sitemap.xml | Complete | `src/app/sitemap.xml/route.ts` index + `src/app/sitemaps/sitemap.ts` `generateSitemaps` modules (static/categories/courses/faculty/blogs) |
 | robots.txt | Complete | `src/app/robots.ts` — allow public; disallow `/account/`, `/api/`, auth, health, legacy |
 | HTML sitemap | Complete | `/sitemap` section-wise public page |
 | Image alt / heading hierarchy | Partial |

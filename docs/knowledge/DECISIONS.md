@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-11-05 — Sitemap index at /sitemap.xml
+- **Decision:** Move `generateSitemaps` to `src/app/sitemaps/sitemap.ts` and serve a sitemap index from `src/app/sitemap.xml/route.ts`. Keep the HTML `/sitemap` page.
+- **Rationale:** `generateSitemaps` only serves per-id files, so `/sitemap.xml` returned 404 while `robots.ts` advertised it. Next rejects a `/sitemap.xml` route beside a root `app/sitemap.ts`.
+- **Alternatives considered:** Rewrite `/sitemap.xml` to another route; one flat sitemap.
+- **Consequences:** Module URLs are `/sitemaps/sitemap/{id}.xml`. The HTML page is for visitors and the XML is for crawlers, so they are not duplicate content. Data sitemaps inherit a 60s revalidate from their API fetches.
+
 ### 2026-10-28 — Registration selects via react-select + Class 12 rules
 - **Decision:** Account form single/multi selects use `react-select` (searchable) with a shared orange account theme (`accountReactSelectStyles`). Menus portal to `document.body` at z-index 1100. Class 12 Appearing is only for school/unknown status; UG/graduate force Passed. Appearing skips mandatory graduation / PG / work (UI + validation + submit payload).
 - **Rationale:** Long exam/college/board lists need search; product rules forbid Appearing once the student is UG/graduate.
