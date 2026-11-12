@@ -635,10 +635,11 @@ export function validateRegistrationStep(
         values.postGraduationStatus === "YES" ||
         values.postGraduationStatus === "PURSUING"
       ) {
-        const pgd = requiredText(
+        const pgst = requiredSelect(values.pgStream, "PG Stream");
+        if (pgst) errors.pgStream = pgst;
+        const pgd = requiredSelect(
           values.pgDegreeSpecialization,
-          "PG Degree & Specialization",
-          100
+          "PG Degree & Specialization"
         );
         if (pgd) errors.pgDegreeSpecialization = pgd;
         const pgc = requiredText(

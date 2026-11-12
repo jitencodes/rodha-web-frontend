@@ -198,6 +198,17 @@ export function RegistrationDialog({
     );
     return nameOptionsFromMasters(stream?.degrees ?? []);
   }, [graduation, values.graduationStream]);
+  const postGraduation = getEducationLevel(
+    registration.masters.education,
+    "POST_GRADUATION"
+  );
+  const pgStreams = nameOptionsFromMasters(postGraduation?.streams ?? []);
+  const pgDegrees = useMemo(() => {
+    const stream = postGraduation?.streams.find(
+      (s) => s.label === values.pgStream
+    );
+    return nameOptionsFromMasters(stream?.degrees ?? []);
+  }, [postGraduation, values.pgStream]);
 
   const includesCat = useMemo(() => {
     const labels = values.targetExamIds
@@ -301,6 +312,9 @@ export function RegistrationDialog({
       if (key === "graduationStream") {
         next.graduationDegree = "";
         next.graduationDegreeOtherText = "";
+      }
+      if (key === "pgStream") {
+        next.pgDegreeSpecialization = "";
       }
       if (key === "bookSelectAll" && value === true) {
         next.bookIds = registration.availableBooks.map((b) => b.value);
@@ -1091,7 +1105,16 @@ export function RegistrationDialog({
                         {values.postGraduationStatus === "YES" ||
                         values.postGraduationStatus === "PURSUING" ? (
                           <>
-                            <AccountTextField
+                            <AccountSelect
+                              id={`${formId}-pg-stream`}
+                              label="PG Stream"
+                              required
+                              value={values.pgStream}
+                              onChange={(v) => patch("pgStream", v)}
+                              options={pgStreams}
+                              error={errors.pgStream}
+                            />
+                            <AccountSelect
                               id={`${formId}-pg-degree`}
                               label="PG Degree & Specialization"
                               required
@@ -1099,8 +1122,8 @@ export function RegistrationDialog({
                               onChange={(v) =>
                                 patch("pgDegreeSpecialization", v)
                               }
+                              options={pgDegrees}
                               error={errors.pgDegreeSpecialization}
-                              maxLength={100}
                             />
                             <AccountTextField
                               id={`${formId}-pg-college`}
