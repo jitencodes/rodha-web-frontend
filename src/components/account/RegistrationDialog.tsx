@@ -16,6 +16,7 @@ import {
   PROFILE_SCORING_SCHEME_OPTIONS,
   PROFILE_SOURCE_OPTIONS,
   PROFILE_YES_NO_OPTIONS,
+  profileGraduationYearOptions,
   profilePassingYearOptions,
   profilePreviousCatYearOptions,
   profileTargetYearOptions,
@@ -35,7 +36,9 @@ import {
   createEmptyRegistrationForm,
   needsGradOrWorking,
   needsHigherEducation,
+  normalizeLinkedInUrl,
   validateRegistrationStep,
+  workExperienceLocked,
   type RegistrationFieldErrors,
   type RegistrationFormValues,
 } from "@/lib/account/registration-form";
@@ -139,6 +142,7 @@ export function RegistrationDialog({
 
   const targetYears = useMemo(() => profileTargetYearOptions(), []);
   const passingYears = useMemo(() => profilePassingYearOptions(), []);
+  const graduationYears = useMemo(() => profileGraduationYearOptions(), []);
   const previousCatYears = useMemo(() => profilePreviousCatYearOptions(), []);
 
   const statusOptions = registration.masters.currentStatuses;
@@ -261,9 +265,10 @@ export function RegistrationDialog({
     };
   }, [open, onClose, submitting, required]);
 
-  // Auto-set work experience Yes for Working professional
+  // Working professional → work experience is mandatory Yes (locked).
+  // Graduates keep whatever they choose (Yes or No).
   useEffect(() => {
-    if (statusKind === "working" && values.hasWorkExperience !== "true") {
+    if (workExperienceLocked(statusKind) && values.hasWorkExperience !== "true") {
       setValues((prev) => ({ ...prev, hasWorkExperience: "true" }));
     }
   }, [statusKind, values.hasWorkExperience]);
@@ -729,9 +734,16 @@ export function RegistrationDialog({
                       <AccountTextField
                         id={`${formId}-linkedin`}
                         label="LinkedIn Profile URL"
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         value={values.linkedinUrl}
                         onChange={(v) => patch("linkedinUrl", v)}
+                        onBlur={() => {
+                          const clean = normalizeLinkedInUrl(values.linkedinUrl);
+                          if (clean && clean !== values.linkedinUrl) {
+                            patch("linkedinUrl", clean);
+                          }
+                        }}
                         error={errors.linkedinUrl}
                         placeholder="https://www.linkedin.com/in/…"
                       />
@@ -1036,7 +1048,7 @@ export function RegistrationDialog({
                         required
                         value={values.graduationYear}
                         onChange={(v) => patch("graduationYear", v)}
-                        options={passingYears}
+                        options={graduationYears}
                         error={errors.graduationYear}
                       />
                       <AccountRadioGroup
@@ -1137,7 +1149,7 @@ export function RegistrationDialog({
                           onChange={(v) => patch("hasWorkExperience", v)}
                           options={PROFILE_YES_NO_OPTIONS}
                           error={errors.hasWorkExperience}
-                          disabled={statusKind === "working"}
+                          disabled={workExperienceLocked(statusKind)}
                         />
                         {values.hasWorkExperience === "true" ? (
                           <>

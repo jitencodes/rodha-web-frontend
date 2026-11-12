@@ -7,9 +7,7 @@ import {
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
 import {
-  parseUtmCookie,
-  readUtmCookieHeader,
-  sanitizeUtmRecord,
+  resolveCheckoutUtm,
   UTM_COOKIE_NAME,
 } from "@/lib/tracking/utm";
 
@@ -36,22 +34,18 @@ export async function POST(request: Request) {
   }
 
   let stateName: string | undefined;
-  let bodyUtm: Record<string, string> = {};
+  let body: unknown = null;
   try {
-    const body: unknown = await request.json();
+    body = await request.json();
     stateName = readStateName(body);
-    bodyUtm = sanitizeUtmRecord(body);
   } catch {
     stateName = undefined;
   }
 
   try {
     const jar = await cookies();
-    const utm = {
-      ...parseUtmCookie(jar.get(UTM_COOKIE_NAME)?.value),
-      ...readUtmCookieHeader(request.headers.get("cookie")),
-      ...bodyUtm,
-    };
+    // Single source (body, else cookie) — never merged across campaigns.
+    const utm = resolveCheckoutUtm(body, jar.get(UTM_COOKIE_NAME)?.value);
     const checkout = await checkoutStudentCart(accessToken, {
       ...utm,
       ...(stateName ? { stateName } : {}),

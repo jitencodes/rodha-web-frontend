@@ -14,6 +14,12 @@ Format:
 
 ---
 
+### 2026-11-12 — UTM: server-side capture, replace-only, single source at checkout
+- **Decision:** `rodha_utm` is written by `middleware.ts` (all pages + `/api/checkout/buy`) and by `UtmCapture` on the client. Any URL with `utm_*` replaces the whole stored set (lowercased keys); URLs without UTM leave it alone. Checkout sends one set: the body UTM when present, else the cookie.
+- **Rationale:** Client-only capture lost UTMs on server redirects (unauthenticated `/account/*`, Buy Now → login). Merging cookie + header + body could mix two campaigns.
+- **Alternatives considered:** First-touch attribution; merging new keys into old; sending UTM on signup (the signup API has no UTM fields).
+- **Consequences:** Middleware runs on every page request (cheap; it only sets a cookie when UTM is present). Supersedes the 2026-10-19 "pay route merges body with cookie header" behaviour.
+
 ### 2026-11-05 — SITE_URL is https://www.rodha.co.in
 - **Decision:** Change `SITE_URL` from `https://rodha.in` to `https://www.rodha.co.in`.
 - **Rationale:** `rodha.in` returns 410 Gone, while `rodha.co.in` redirects to `www` and that is the canonical host of the current live site. Canonicals, sitemaps, OG tags and JSON-LD all use `SITE_URL`.

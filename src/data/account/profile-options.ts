@@ -101,6 +101,13 @@ export function profilePassingYearOptions(now = new Date()): ProfileOption[] {
   return profileYearOptions(1995, now.getFullYear() + 1);
 }
 
+/** Graduation year (actual/expected): up to current year + 3, newest first. */
+export function profileGraduationYearOptions(
+  now = new Date()
+): ProfileOption[] {
+  return profileYearOptions(1995, now.getFullYear() + 3);
+}
+
 /** Last 5 calendar years for previous CAT year */
 export function profilePreviousCatYearOptions(
   now = new Date()
