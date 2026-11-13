@@ -139,7 +139,7 @@ function PromoMedia({ popup }: { popup: PromotionalBannerViewModel }) {
           <img
             src={popup.imageUrl ?? `https://img.youtube.com/vi/${popup.youtubeId}/hqdefault.jpg`}
             alt={popup.title}
-            className="h-full w-full object-cover"
+            className="h-auto w-full object-contain"
           />
         )}
       </button>
@@ -153,7 +153,7 @@ function PromoMedia({ popup }: { popup: PromotionalBannerViewModel }) {
     <img
       src={popup.imageUrl}
       alt={popup.title}
-      className="h-full max-h-[70vh] w-full object-cover"
+      className="h-auto w-full object-contain my-auto"
     />
   );
 
@@ -163,7 +163,7 @@ function PromoMedia({ popup }: { popup: PromotionalBannerViewModel }) {
         href={popup.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative block min-h-[220px] bg-neutral-100"
+        className="relative flex min-h-[220px] items-center justify-center bg-neutral-100"
         aria-label={`${popup.title} — open link`}
       >
         {media}
@@ -171,7 +171,7 @@ function PromoMedia({ popup }: { popup: PromotionalBannerViewModel }) {
     );
   }
 
-  return <div className="relative min-h-[220px] bg-neutral-100">{media}</div>;
+  return <div className="relative min-h-[220px] flex items-center justify-center bg-neutral-100">{media}</div>;
 }
 
 function PromoLeadForm({
