@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 import { cn, isExternalHref } from "@/lib/utils";
 
 interface BannerImageLinkProps {
-  /** CMS banner `redirectUrl`. When empty, children render unwrapped. */
+  /**
+   * CMS banner `redirectUrl`. When empty, children render in a plain `div`
+   * that still receives `className` (layout/visibility classes like `lg:hidden`).
+   */
   href?: string | null;
   className?: string;
   children: ReactNode;
@@ -19,7 +22,9 @@ export function BannerImageLink({
   children,
 }: BannerImageLinkProps) {
   const target = href?.trim();
-  if (!target) return <>{children}</>;
+  if (!target) {
+    return className ? <div className={className}>{children}</div> : <>{children}</>;
+  }
 
   const linkClassName = cn("block cursor-pointer", className);
 
