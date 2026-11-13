@@ -102,7 +102,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
 | Profile | Complete | `/account/profile` avatar; sidebar Complete registration CTA while incomplete; registration draft saved locally until submit; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
-| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
+| Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie (server + client capture, replace-only, single source at pay) and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
 
 ## Course Listing `/courses`

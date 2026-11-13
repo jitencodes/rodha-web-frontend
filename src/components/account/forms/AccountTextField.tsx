@@ -19,6 +19,7 @@ type AccountTextFieldProps = {
   maxLength?: number;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
   className?: string;
 };
 
@@ -37,6 +38,7 @@ export function AccountTextField({
   maxLength,
   inputMode,
   onKeyDown,
+  onBlur,
   className,
 }: AccountTextFieldProps) {
   return (
@@ -53,6 +55,7 @@ export function AccountTextField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKeyDown}
+        onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readOnly}

@@ -16,6 +16,7 @@ import {
   PROFILE_SCORING_SCHEME_OPTIONS,
   PROFILE_SOURCE_OPTIONS,
   PROFILE_YES_NO_OPTIONS,
+  profileGraduationYearOptions,
   profilePassingYearOptions,
   profilePreviousCatYearOptions,
   profileTargetYearOptions,
@@ -35,7 +36,9 @@ import {
   createEmptyRegistrationForm,
   needsGradOrWorking,
   needsHigherEducation,
+  normalizeLinkedInUrl,
   validateRegistrationStep,
+  workExperienceLocked,
   type RegistrationFieldErrors,
   type RegistrationFormValues,
 } from "@/lib/account/registration-form";
@@ -139,6 +142,7 @@ export function RegistrationDialog({
 
   const targetYears = useMemo(() => profileTargetYearOptions(), []);
   const passingYears = useMemo(() => profilePassingYearOptions(), []);
+  const graduationYears = useMemo(() => profileGraduationYearOptions(), []);
   const previousCatYears = useMemo(() => profilePreviousCatYearOptions(), []);
 
   const statusOptions = registration.masters.currentStatuses;
@@ -194,6 +198,17 @@ export function RegistrationDialog({
     );
     return nameOptionsFromMasters(stream?.degrees ?? []);
   }, [graduation, values.graduationStream]);
+  const postGraduation = getEducationLevel(
+    registration.masters.education,
+    "POST_GRADUATION"
+  );
+  const pgStreams = nameOptionsFromMasters(postGraduation?.streams ?? []);
+  const pgDegrees = useMemo(() => {
+    const stream = postGraduation?.streams.find(
+      (s) => s.label === values.pgStream
+    );
+    return nameOptionsFromMasters(stream?.degrees ?? []);
+  }, [postGraduation, values.pgStream]);
 
   const includesCat = useMemo(() => {
     const labels = values.targetExamIds
@@ -261,9 +276,10 @@ export function RegistrationDialog({
     };
   }, [open, onClose, submitting, required]);
 
-  // Auto-set work experience Yes for Working professional
+  // Working professional → work experience is mandatory Yes (locked).
+  // Graduates keep whatever they choose (Yes or No).
   useEffect(() => {
-    if (statusKind === "working" && values.hasWorkExperience !== "true") {
+    if (workExperienceLocked(statusKind) && values.hasWorkExperience !== "true") {
       setValues((prev) => ({ ...prev, hasWorkExperience: "true" }));
     }
   }, [statusKind, values.hasWorkExperience]);
@@ -296,6 +312,9 @@ export function RegistrationDialog({
       if (key === "graduationStream") {
         next.graduationDegree = "";
         next.graduationDegreeOtherText = "";
+      }
+      if (key === "pgStream") {
+        next.pgDegreeSpecialization = "";
       }
       if (key === "bookSelectAll" && value === true) {
         next.bookIds = registration.availableBooks.map((b) => b.value);
@@ -729,9 +748,16 @@ export function RegistrationDialog({
                       <AccountTextField
                         id={`${formId}-linkedin`}
                         label="LinkedIn Profile URL"
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         value={values.linkedinUrl}
                         onChange={(v) => patch("linkedinUrl", v)}
+                        onBlur={() => {
+                          const clean = normalizeLinkedInUrl(values.linkedinUrl);
+                          if (clean && clean !== values.linkedinUrl) {
+                            patch("linkedinUrl", clean);
+                          }
+                        }}
                         error={errors.linkedinUrl}
                         placeholder="https://www.linkedin.com/in/…"
                       />
@@ -1036,7 +1062,7 @@ export function RegistrationDialog({
                         required
                         value={values.graduationYear}
                         onChange={(v) => patch("graduationYear", v)}
-                        options={passingYears}
+                        options={graduationYears}
                         error={errors.graduationYear}
                       />
                       <AccountRadioGroup
@@ -1079,7 +1105,16 @@ export function RegistrationDialog({
                         {values.postGraduationStatus === "YES" ||
                         values.postGraduationStatus === "PURSUING" ? (
                           <>
-                            <AccountTextField
+                            <AccountSelect
+                              id={`${formId}-pg-stream`}
+                              label="PG Stream"
+                              required
+                              value={values.pgStream}
+                              onChange={(v) => patch("pgStream", v)}
+                              options={pgStreams}
+                              error={errors.pgStream}
+                            />
+                            <AccountSelect
                               id={`${formId}-pg-degree`}
                               label="PG Degree & Specialization"
                               required
@@ -1087,8 +1122,8 @@ export function RegistrationDialog({
                               onChange={(v) =>
                                 patch("pgDegreeSpecialization", v)
                               }
+                              options={pgDegrees}
                               error={errors.pgDegreeSpecialization}
-                              maxLength={100}
                             />
                             <AccountTextField
                               id={`${formId}-pg-college`}
@@ -1137,7 +1172,7 @@ export function RegistrationDialog({
                           onChange={(v) => patch("hasWorkExperience", v)}
                           options={PROFILE_YES_NO_OPTIONS}
                           error={errors.hasWorkExperience}
-                          disabled={statusKind === "working"}
+                          disabled={workExperienceLocked(statusKind)}
                         />
                         {values.hasWorkExperience === "true" ? (
                           <>

@@ -124,8 +124,6 @@ export type RegistrationStatusKind =
 
 const PIN_PATTERN = /^[1-9][0-9]{5}$/;
 const LAST_FOUR_PATTERN = /^[0-9]{4}$/;
-const LINKEDIN_PATTERN =
-  /^https:\/\/www\.linkedin\.com\/in\/[A-Za-z0-9\-_%]+\/?$/i;
 
 function requiredSelect(value: string, label: string): string | undefined {
   if (!value.trim()) return `${label} is required.`;
@@ -172,9 +170,57 @@ export function classifyCurrentStatus(
   ) {
     return "college";
   }
-  if (name.includes("working")) return "working";
+  // "Graduate (Not working)" / "Non-working graduate" must stay "graduate",
+  // otherwise work experience gets forced to Yes and locked.
+  const notWorking =
+    /\bnot\s*(currently\s*)?working\b|\bnon[-\s]?working\b|\bunemployed\b|\bfresher\b/.test(
+      name
+    );
+  if (!notWorking && /\bworking\b|\bprofessional\b|\bemployed\b/.test(name)) {
+    return "working";
+  }
   if (name.includes("graduate")) return "graduate";
   return "unknown";
+}
+
+/**
+ * Work experience is mandatory "Yes" (locked) only for working professionals.
+ * Graduates may answer either way.
+ */
+export function workExperienceLocked(kind: RegistrationStatusKind): boolean {
+  return kind === "working";
+}
+
+/**
+ * Accepts common LinkedIn profile URL shapes (missing scheme, `http`,
+ * no/other subdomain like `in.` or `m.`, query strings, hash, trailing
+ * sub-paths such as `/details/…`) and returns the canonical
+ * `https://www.linkedin.com/in/<username>`. Returns null when the value is
+ * not a LinkedIn profile URL.
+ */
+export function normalizeLinkedInUrl(raw: string): string | null {
+  let input = raw.trim();
+  if (!input) return null;
+  if (!/^https?:\/\//i.test(input)) input = `https://${input}`;
+  let url: URL;
+  try {
+    url = new URL(input);
+  } catch {
+    return null;
+  }
+  const host = url.hostname.toLowerCase();
+  if (host !== "linkedin.com" && !host.endsWith(".linkedin.com")) return null;
+  const match = /^\/in\/([^/]+)/i.exec(url.pathname);
+  if (!match) return null;
+  let username = match[1];
+  try {
+    username = decodeURIComponent(username);
+  } catch {
+    // keep raw segment
+  }
+  username = username.trim();
+  if (!username || !/^[\p{L}\p{N}\-_.]{3,100}$/u.test(username)) return null;
+  return `https://www.linkedin.com/in/${encodeURIComponent(username)}`;
 }
 
 export function needsHigherEducation(
@@ -439,9 +485,9 @@ export function validateRegistrationStep(
     }
 
     if (showLinkedIn && values.linkedinUrl.trim()) {
-      if (!LINKEDIN_PATTERN.test(values.linkedinUrl.trim())) {
+      if (!normalizeLinkedInUrl(values.linkedinUrl)) {
         errors.linkedinUrl =
-          "URL must start with https://www.linkedin.com/in/";
+          "URL must start with https://www.linkedin.com/in/(username)";
       }
     }
 
@@ -589,10 +635,11 @@ export function validateRegistrationStep(
         values.postGraduationStatus === "YES" ||
         values.postGraduationStatus === "PURSUING"
       ) {
-        const pgd = requiredText(
+        const pgst = requiredSelect(values.pgStream, "PG Stream");
+        if (pgst) errors.pgStream = pgst;
+        const pgd = requiredSelect(
           values.pgDegreeSpecialization,
-          "PG Degree & Specialization",
-          100
+          "PG Degree & Specialization"
         );
         if (pgd) errors.pgDegreeSpecialization = pgd;
         const pgc = requiredText(
@@ -622,6 +669,13 @@ export function validateRegistrationStep(
         "Full-time Work Experience?"
       );
       if (we) errors.hasWorkExperience = we;
+      else if (
+        workExperienceLocked(kind) &&
+        values.hasWorkExperience !== "true"
+      ) {
+        errors.hasWorkExperience =
+          "Working professionals must have full-time work experience.";
+      }
       if (values.hasWorkExperience === "true") {
         const months = values.workExperienceMonths.trim();
         if (!months) {
@@ -785,7 +839,11 @@ export function buildRegistrationFormData(
   appendIf(form, "alternatePhone", values.alternatePhone.trim());
   appendIf(form, "alternateEmail", values.alternateEmail.trim());
   if (needsHigherEducation(kind)) {
-    appendIf(form, "linkedinUrl", values.linkedinUrl.trim());
+    appendIf(
+      form,
+      "linkedinUrl",
+      normalizeLinkedInUrl(values.linkedinUrl) ?? values.linkedinUrl.trim()
+    );
   }
 
   appendIf(form, "addressLine1", values.addressLine1.trim());

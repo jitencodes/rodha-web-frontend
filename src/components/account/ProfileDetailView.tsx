@@ -149,6 +149,7 @@ function AcademicsTab({ reg }: { reg: StudentRegistrationRecord }) {
       {reg.postGraduationStatus && reg.postGraduationStatus !== "NO" ? (
         <DetailSection title="Post Graduation">
           <DetailRow label="Status" value={reg.postGraduationStatus} />
+          <DetailRow label="Stream" value={reg.pgStream} />
           <DetailRow
             label="Degree & specialization"
             value={reg.pgDegreeSpecialization}
