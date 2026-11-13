@@ -263,7 +263,7 @@ export function Header({
             <div
               onMouseLeave={() => setExamOpen(false)}
               ref={examRef}
-              className="relative hidden lg:flex justify-end w-46"
+              className="relative hidden lg:flex justify-end w-fit"
             >
               <button
                 onMouseEnter={() => setExamOpen(!examOpen)}

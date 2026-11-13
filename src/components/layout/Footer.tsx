@@ -36,9 +36,8 @@ const RESOURCES_LINKS = [
   { label: "Results", href: "/results" },
   { label: "Testimonials", href: "/testimonials" },
   { label: "Success Stories", href: "/success-stories" },
-  { label: "Resource Hub", href: "/resources" },
+  { label: "Free Resource", href: "/resources" },
   { label: "FAQ", href: "/faq" },
-  { label: "Free Resources", href: "/resources" },
   { label: "Discussion Forum", href: "/discussion-forum" },
 ];
 
