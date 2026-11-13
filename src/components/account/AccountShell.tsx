@@ -16,7 +16,6 @@ import { RequireStateGate } from "@/components/account/RequireStateGate";
 import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
 import { AccountUserProvider } from "@/components/providers/AccountUserProvider";
 import type { AuthUserViewModel } from "@/lib/api/modules/auth/types";
-import { useEnrollmentRefresh } from "@/hooks/useEnrollmentRefresh";
 
 function AccountShellFrame({
   children,
@@ -28,7 +27,6 @@ function AccountShellFrame({
   const { theme } = useAccountTheme();
   const pathname = usePathname();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  useEnrollmentRefresh();
 
   useEffect(() => {
     setMobileNavOpen(false);

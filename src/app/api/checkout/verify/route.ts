@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/auth/server-session";
-import {
-  refreshEnrollments,
-  verifyRazorpayPayment,
-} from "@/lib/api/modules/student/cart/service";
+import { verifyRazorpayPayment } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
 
 export const runtime = "nodejs";
@@ -51,11 +48,6 @@ export async function POST(request: Request) {
       razorpay_payment_id,
       razorpay_signature,
     });
-    try {
-      await refreshEnrollments(accessToken);
-    } catch {
-      // non-blocking
-    }
     return NextResponse.json({ ok: true, ...verified });
   } catch (error) {
     const message =
