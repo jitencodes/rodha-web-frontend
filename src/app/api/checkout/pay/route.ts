@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAccessToken } from "@/lib/auth/server-session";
-import {
-  checkoutStudentCart,
-  refreshEnrollments,
-} from "@/lib/api/modules/student/cart/service";
+import { checkoutStudentCart } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
 import {
   resolveCheckoutUtm,
@@ -50,13 +47,6 @@ export async function POST(request: Request) {
       ...utm,
       ...(stateName ? { stateName } : {}),
     });
-    if ((checkout.mode || "").toLowerCase() === "free") {
-      try {
-        await refreshEnrollments(accessToken);
-      } catch {
-        // non-blocking
-      }
-    }
     return NextResponse.json({
       ok: true,
       mode: checkout.mode,

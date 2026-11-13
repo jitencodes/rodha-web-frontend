@@ -15,7 +15,6 @@ import type {
 const CART_PATH = "api/website/student/cart";
 const CHECKOUT_PATH = "api/website/student/checkout";
 const VERIFY_PATH = "api/website/student/payments/verify";
-const REFRESH_PATH = "api/website/student/enrollments/refresh";
 
 export async function getStudentCart(
   accessToken: string
@@ -84,16 +83,6 @@ export async function verifyRazorpayPayment(
   return apiPost<VerifyPaymentResponseApi, VerifyPaymentRequest>(
     VERIFY_PATH,
     body,
-    { accessToken }
-  );
-}
-
-export async function refreshEnrollments(
-  accessToken: string
-): Promise<unknown> {
-  return apiPost<unknown, Record<string, never>>(
-    REFRESH_PATH,
-    {},
     { accessToken }
   );
 }
