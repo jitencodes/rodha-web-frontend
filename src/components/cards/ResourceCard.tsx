@@ -92,10 +92,10 @@ export function ResourceCard({ resource, className }: ResourceCardProps) {
               {resource.description}
             </p>
           ) : null}
+          {resource.cta ? (
+            <p className="mt-3 text-caption font-medium text-orange-600">{resource.cta}</p>
+          ) : null}
         </Link>
-        {resource.cta ? (
-          <p className="mt-3 text-caption font-medium text-orange-600">{resource.cta}</p>
-        ) : null}
       </div>
     </article>
   );
