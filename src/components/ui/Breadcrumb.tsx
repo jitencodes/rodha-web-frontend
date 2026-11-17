@@ -9,12 +9,20 @@ export interface BreadcrumbItem {
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
   className?: string;
+  /** `light` for white / cream surfaces (e.g. Discussion Forum). */
+  variant?: "dark" | "light";
 }
 
-export function Breadcrumb({ items, className }: BreadcrumbProps) {
+export function Breadcrumb({ items, className, variant = "dark" }: BreadcrumbProps) {
+  const isLight = variant === "light";
   return (
     <nav aria-label="Breadcrumb" className={cn("py-4 md:py-5", className)}>
-      <ol className="flex flex-wrap items-center gap-1.5 text-caption md:text-body-sm text-text-dimmed">
+      <ol
+        className={cn(
+          "flex flex-wrap items-center gap-1.5 text-caption md:text-body-sm",
+          isLight ? "text-neutral-500" : "text-text-dimmed"
+        )}
+      >
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
@@ -40,14 +48,21 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="hover:text-orange-400 transition-colors"
+                  className={cn(
+                    "transition-colors",
+                    isLight ? "hover:text-orange-600" : "hover:text-orange-400"
+                  )}
                 >
                   {item.label}
                 </Link>
               ) : (
                 <span
                   className={cn(
-                    isLast && "min-w-0 break-words text-text-muted font-medium"
+                    isLast &&
+                      cn(
+                        "min-w-0 break-words font-medium",
+                        isLight ? "text-neutral-800" : "text-text-muted"
+                      )
                   )}
                   aria-current={isLast ? "page" : undefined}
                 >

@@ -165,6 +165,11 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Terms `/terms-and-conditions` | Complete | CMS HTML legal page |
 | Refund `/refund-policy` | Complete | CMS HTML legal page |
 | Disclaimer `/disclaimer` | Complete | CMS HTML legal page |
+| Discussion Forum home `/discussion-forum` | Partial | GMAT-style group sections + more groups live; home Latest/Best Posts wait for `GET /feed` (`docs/discussion-api-gaps.md`) |
+| Forum groups `/discussion-forum/groups` | Complete | `GET api/app/groups` search + pagination |
+| Forum group `/discussion-forum/[slug]` | Complete | Topic table, search, sort, pagination; Likes/Views columns appear when the API adds them |
+| Forum topic `/discussion-forum/[slug]/[topic]` | Complete | Threaded replies, reactions, reply/edit/delete; topic-level likes pending API |
+| Forum create topic `/discussion-forum/ask`, `/[slug]/ask` | Complete | `POST …/topics` `{ title, content }`, login required |
 
 ---
 

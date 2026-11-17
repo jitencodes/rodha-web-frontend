@@ -9,6 +9,8 @@ export function revalidateForumFeedPath(forumSlug: string): void {
   const forum = cleanSegment(forumSlug);
   if (!forum) return;
   revalidatePath(`/discussion-forum/${forum}`);
+  // Forum home lists the latest topics of featured groups.
+  revalidatePath("/discussion-forum");
 }
 
 /** Bust App Router cache for a forum feed + question detail after mutations. */

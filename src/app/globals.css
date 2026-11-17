@@ -1531,13 +1531,32 @@ background-size: cover;
     animation: none;
   }
 }
-/* ─── Discussion forum Quill (dark Rodha theme) ─── */
+/* ─── Discussion forum listing rows: zebra + hover highlight ─── */
+.forum-row {
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.forum-row:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.forum-row:nth-child(even) {
+  background-color: var(--section-cream);
+}
+
+.forum-row:hover,
+.forum-row:focus-within {
+  background-color: #ffedd5;
+  box-shadow: inset 3px 0 0 #f97316;
+}
+
+/* ─── Discussion forum Quill (light Rodha theme) ─── */
 .forum-rich-text .ql-toolbar.ql-snow {
   border: none !important;
-  border-bottom: 1px solid var(--color-border-default) !important;
-  background: color-mix(in srgb, var(--color-bg-tertiary) 80%, transparent);
+  border-bottom: 1px solid #f5f5f5 !important;
+  background: var(--section-cream);
   padding: 0.5rem 0.75rem;
-  border-radius: 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .forum-rich-text .ql-container.ql-snow {
@@ -1550,52 +1569,48 @@ background-size: cover;
   min-height: var(--forum-quill-min-h, 120px);
   padding: 0.75rem 1rem;
   line-height: 1.6;
-  color: var(--color-text-primary);
+  color: #171717;
 }
 
 .forum-rich-text .ql-editor.ql-blank::before {
-  color: var(--color-text-muted);
+  color: #a3a3a3;
   font-style: italic;
-  opacity: 0.8;
   left: 1rem;
 }
 
 .forum-rich-text .ql-snow .ql-stroke {
-  stroke: color-mix(in srgb, var(--color-text-secondary) 75%, transparent);
+  stroke: #525252;
 }
 
 .forum-rich-text .ql-snow .ql-fill {
-  fill: color-mix(in srgb, var(--color-text-secondary) 75%, transparent);
+  fill: #525252;
 }
 
-.forum-rich-text .ql-snow .ql-picker {
-  color: var(--color-text-secondary);
-}
-
+.forum-rich-text .ql-snow .ql-picker,
 .forum-rich-text .ql-snow .ql-picker-label {
-  color: var(--color-text-secondary);
+  color: #525252;
 }
 
 .forum-rich-text .ql-snow .ql-picker-options {
-  background: var(--color-bg-surface);
-  border-color: var(--color-border-default);
-  color: var(--color-text-primary);
+  background: #ffffff;
+  border-color: var(--section-beige-border);
+  color: #171717;
 }
 
 .forum-rich-text .ql-snow .ql-picker-item:hover,
 .forum-rich-text .ql-snow .ql-picker-item.ql-selected {
-  color: var(--color-orange-400);
+  color: var(--color-orange-600, #ea580c);
 }
 
 .forum-rich-text .ql-snow.ql-toolbar button:hover .ql-stroke,
 .forum-rich-text .ql-snow .ql-toolbar button:hover .ql-stroke,
 .forum-rich-text .ql-snow.ql-toolbar button.ql-active .ql-stroke {
-  stroke: var(--color-orange-400);
+  stroke: #ea580c;
 }
 
 .forum-rich-text .ql-snow.ql-toolbar button:hover .ql-fill,
 .forum-rich-text .ql-snow.ql-toolbar button.ql-active .ql-fill {
-  fill: var(--color-orange-400);
+  fill: #ea580c;
 }
 
 .forum-rich-text .ql-editor img {
@@ -1603,7 +1618,13 @@ background-size: cover;
   border-radius: 8px;
 }
 
-/* Rendered question/answer HTML (Quill output) — always wrap, never crop */
+/* Rendered question/answer HTML (Quill output): always wrap, never crop */
+.forum-answer-prose a {
+  color: #ea580c;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .forum-answer-prose {
   max-width: 100%;
   min-width: 0;

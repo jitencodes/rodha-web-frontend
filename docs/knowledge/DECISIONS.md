@@ -606,3 +606,18 @@ Format:
 - **Rationale:** Align all content pages to the locked category-page design system without affecting homepage or dark-page patterns.
 - **Alternatives considered:** Keeping per-page card styles; adding light variant to `FacultyListingCard`.
 - **Consequences:** Dark defaults preserved for counselling/FAQ/other forms. Homepage unchanged. Old card files can be deleted in a future cleanup pass.
+
+---
+
+### 2026-11-17 — Discussion Forum: GMAT Club layout, dedicated chrome, no fabricated metrics
+- **Decision:** The forum (`/discussion-forum/*`) uses its own header and 3-column layout instead of the website chrome, and follows the GMAT Club list/table style (Circle card grid and post-card feed dropped). Engagement columns (Likes, Views) and the home Latest/Best Posts render only from real API fields. Missing data hides the column or shows a "pending API" note; it never shows placeholder numbers.
+- **Rationale:** Product chose the compact GMAT reference. The API currently lacks topic likes/views and any cross-group feed (see `docs/discussion-api-gaps.md`), and fake engagement numbers would mislead users.
+- **Alternatives considered:** Dummy values for missing fields; building the home feed by merging per-group requests on the client.
+- **Consequences:** Columns appear automatically once the backend adds `reactionTypeCount` / `viewCount` to topics. The home rail needs `GET /api/app/groups/feed`. `/discussion-forum/groups` and `/discussion-forum/ask` are static segments, so a forum group with seoSlug `groups` or `ask` would be shadowed.
+
+---
+
+### 2026-11-17: Discussion Forum is light (dual tone) and discussion-only
+- **Decision:** The forum uses the light website surfaces (cream page, white cards, beige zebra rows) with dark header, footer and title bands, matching the website mixed theme. The public website exposes only `doubt_forum` discussions; study groups (`group_chat`) and channels (`broadcast_channel`) are removed from the website.
+- **Rationale:** Product request for theme consistency with the main site; group chats and channels are not part of the website scope.
+- **Consequences:** Forum components use neutral/orange light classes, not the dark `bg-bg-*` / `text-text-*` tokens. Group chat / channel APIs stay available to the app, but the website has no UI or service code for them.

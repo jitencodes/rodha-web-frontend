@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useRef,
-  useState,
-  type ChangeEvent,
-  type KeyboardEvent,
-} from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { Paperclip, Send, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,8 +14,6 @@ type ForumMessageComposerProps = {
   placeholder?: string;
   submitLabel?: string;
   className?: string;
-  /** `compact` = single-line chat bar (groups/channels). Default = rich answer editor. */
-  variant?: "rich" | "compact";
   onDraftChange?: (html: string) => void;
   onSubmit?: (payload: { html: string; files: File[] }) => void | Promise<void>;
 };
@@ -28,12 +21,11 @@ type ForumMessageComposerProps = {
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
-/** Portal-style rich answer/discussion composer (posts via parent onSubmit). */
+/** Light rich-text reply composer with attachments (posts via parent `onSubmit`). */
 export function ForumMessageComposer({
-  placeholder = "Write an answer...",
-  submitLabel = "Post Answer",
+  placeholder = "Write a reply...",
+  submitLabel = "Post Reply",
   className,
-  variant = "rich",
   onDraftChange,
   onSubmit,
 }: ForumMessageComposerProps) {
@@ -42,11 +34,7 @@ export function ForumMessageComposer({
   const [files, setFiles] = useState<File[]>([]);
   const [sending, setSending] = useState(false);
 
-  const isCompact = variant === "compact";
-  const hasContent = isCompact
-    ? content.trim().length > 0
-    : !isForumRichTextEmpty(content);
-  const canSend = !sending && (hasContent || files.length > 0);
+  const canSend = !sending && (!isForumRichTextEmpty(content) || files.length > 0);
 
   const handleFilesSelected = (event: ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(event.target.files ?? []);
@@ -82,7 +70,6 @@ export function ForumMessageComposer({
     if (!canSend) return;
     try {
       setSending(true);
-      // Compact chat bar sends plain text (group_chat API). Rich editor sends HTML.
       await onSubmit?.({ html: content.trim(), files });
       setContent("");
       setFiles([]);
@@ -94,103 +81,21 @@ export function ForumMessageComposer({
     }
   };
 
-  const onCompactKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      void handleSend();
-    }
-  };
-
-  if (isCompact) {
-    return (
-      <div className={cn("space-y-2", className)}>
-        {files.length ? (
-          <div className="flex flex-wrap gap-2">
-            {files.map((file, index) => (
-              <div
-                key={`${file.name}-${file.size}-${file.lastModified}`}
-                className="inline-flex max-w-full items-center gap-2 rounded-lg border border-border-default bg-bg-tertiary px-2.5 py-1.5 text-caption text-text-secondary"
-              >
-                <Paperclip className="size-3.5 shrink-0 text-text-dimmed" />
-                <span className="max-w-56 truncate" title={file.name}>
-                  {file.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFiles((current) =>
-                      current.filter((_, i) => i !== index)
-                    )
-                  }
-                  className="rounded p-0.5 text-text-dimmed hover:bg-bg-hover hover:text-text-primary"
-                  aria-label={`Remove ${file.name}`}
-                >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="flex items-center gap-2 rounded-xl border border-border-default bg-bg-tertiary/60 px-2.5 py-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            hidden
-            onChange={handleFilesSelected}
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,image/*,audio/*,video/*"
-          />
-          <button
-            type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary disabled:opacity-50"
-            disabled={sending || files.length >= MAX_FILES}
-            onClick={() => fileInputRef.current?.click()}
-            aria-label="Attach files"
-          >
-            <Paperclip className="size-4.5" />
-          </button>
-          <input
-            type="text"
-            value={content}
-            onChange={(event) => {
-              setContent(event.target.value);
-              onDraftChange?.(event.target.value);
-            }}
-            onKeyDown={onCompactKeyDown}
-            disabled={sending}
-            placeholder={placeholder}
-            className="min-w-0 flex-1 bg-transparent text-body-sm text-text-primary outline-none placeholder:text-text-dimmed"
-          />
-          <button
-            type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white transition-colors hover:bg-orange-400 disabled:opacity-40"
-            disabled={!canSend}
-            onClick={() => void handleSend()}
-            aria-label={sending ? "Sending" : submitLabel}
-          >
-            <Send className="size-4" />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn(
-        "rounded-xl border border-border-default bg-bg-surface shadow-sm",
+        "rounded-[8px] border border-neutral-200 bg-white shadow-sm",
         className
       )}
     >
       {files.length ? (
-        <div className="flex flex-wrap gap-2 border-b border-border-subtle px-3 py-2">
+        <div className="flex flex-wrap gap-2 border-b border-neutral-100 px-3 py-2">
           {files.map((file, index) => (
             <div
               key={`${file.name}-${file.size}-${file.lastModified}`}
-              className="inline-flex max-w-full items-center gap-2 rounded-lg border border-border-default bg-bg-tertiary px-2.5 py-1.5 text-caption text-text-secondary"
+              className="inline-flex max-w-full items-center gap-2 rounded-[6px] border border-section-beige bg-section-cream px-2.5 py-1.5 text-caption text-neutral-700"
             >
-              <Paperclip className="size-3.5 shrink-0 text-text-dimmed" />
+              <Paperclip className="size-3.5 shrink-0 text-neutral-500" aria-hidden />
               <span className="max-w-56 truncate" title={file.name}>
                 {file.name}
               </span>
@@ -199,10 +104,10 @@ export function ForumMessageComposer({
                 onClick={() =>
                   setFiles((current) => current.filter((_, i) => i !== index))
                 }
-                className="rounded p-0.5 text-text-dimmed hover:bg-bg-hover hover:text-text-primary"
+                className="rounded p-0.5 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
                 aria-label={`Remove ${file.name}`}
               >
-                <X className="size-3.5" />
+                <X className="size-3.5" aria-hidden />
               </button>
             </div>
           ))}
@@ -221,7 +126,7 @@ export function ForumMessageComposer({
           minHeight={88}
         />
 
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle pt-2">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100 pt-2">
           <div className="flex flex-wrap items-center gap-2">
             <input
               ref={fileInputRef}
@@ -233,14 +138,14 @@ export function ForumMessageComposer({
             />
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-body-sm text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-[6px] px-2.5 py-1.5 text-body-sm text-neutral-600 transition-colors hover:bg-section-beige hover:text-orange-600 disabled:opacity-50"
               disabled={sending || files.length >= MAX_FILES}
               onClick={() => fileInputRef.current?.click()}
             >
-              <Paperclip className="size-4" />
+              <Paperclip className="size-4" aria-hidden />
               Attach files
             </button>
-            <span className="text-[11px] text-text-dimmed">
+            <span className="text-caption text-neutral-500">
               {files.length}/{MAX_FILES} files · 10 MB each
             </span>
           </div>
@@ -251,7 +156,7 @@ export function ForumMessageComposer({
             disabled={!canSend}
             onClick={() => void handleSend()}
           >
-            <Send className="size-4" />
+            <Send className="size-4" aria-hidden />
             {sending ? "Sending…" : submitLabel}
           </button>
         </div>

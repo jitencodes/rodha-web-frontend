@@ -55,6 +55,21 @@ export function SiteFrame({
     );
   }
 
+  // Discussion forum renders its own minimal header + sidebars
+  // (`app/(website)/discussion-forum/layout.tsx`), not the website chrome.
+  const isForum =
+    pathname === "/discussion-forum" ||
+    pathname.startsWith("/discussion-forum/");
+
+  if (isForum) {
+    return (
+      <>
+        {children}
+        <RegistrationGateProvider enabled={isLoggedIn} />
+      </>
+    );
+  }
+
   return (
     <>
       <PromotionalBanner

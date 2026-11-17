@@ -13,7 +13,6 @@ import {
   mapForumMessageList,
   mapForumMessageReactionResult,
   mapGroupDetail,
-  mapGroupMembership,
   mapForumTopic,
   mapForumTopicList,
 } from "./mapper";
@@ -34,66 +33,18 @@ import type {
   ForumTopicViewModel,
   CreateForumTopicParams,
   GetDoubtForumsParams,
-  GetAppGroupsParams,
   GetForumMessagesParams,
-  GetGroupDetailParams,
-  GetGroupMessagesParams,
   GetForumTopicsParams,
-  GroupDetailViewModel,
-  GroupMembershipApi,
-  GroupMembershipViewModel,
   PostForumMessageParams,
   ReactToForumMessageParams,
   UpdateForumMessageParams,
 } from "./types";
 
 const PATH = "api/app/groups";
+/** The website only exposes discussion forums (not group chats / channels). */
 const GROUP_TYPE = "doubt_forum";
-const GROUP_CHAT_TYPE = "group_chat";
-const BROADCAST_CHANNEL_TYPE = "broadcast_channel";
 const LOOKUP_PAGE_SIZE = 20;
 const LOOKUP_MAX_PAGES = 10;
-
-async function getAppGroupsByType(
-  groupType: string,
-  params: GetAppGroupsParams = {}
-): Promise<DoubtForumListViewModel | null> {
-  const query = buildApiQuery({
-    page: params.page ?? 1,
-    limit: params.limit ?? LOOKUP_PAGE_SIZE,
-    group_type: groupType,
-  });
-
-  const data = await apiGetOrNull<DoubtForumListApi>(`${PATH}${query}`, {
-    accessToken: params.accessToken,
-    cache: "no-store",
-  });
-
-  return mapDoubtForumList(data);
-}
-
-async function getAppGroupById(
-  groupType: string,
-  id: number,
-  accessToken?: string
-): Promise<DoubtForumViewModel | null> {
-  if (!Number.isFinite(id) || id <= 0) return null;
-
-  for (let page = 1; page <= LOOKUP_MAX_PAGES; page += 1) {
-    const list = await getAppGroupsByType(groupType, {
-      page,
-      limit: LOOKUP_PAGE_SIZE,
-      accessToken,
-    });
-    if (!list) return null;
-
-    const match = list.items.find((item) => item.id === id);
-    if (match) return match;
-    if (page >= list.totalPages) break;
-  }
-
-  return null;
-}
 
 export async function getDoubtForums(
   params: GetDoubtForumsParams = {}
@@ -102,6 +53,9 @@ export async function getDoubtForums(
     page: params.page ?? 1,
     limit: params.limit ?? LOOKUP_PAGE_SIZE,
     group_type: GROUP_TYPE,
+    search: params.search?.trim(),
+    sort_by: params.sortBy,
+    sort_order: params.sortOrder,
   });
 
   const data = await apiGetOrNull<DoubtForumListApi>(`${PATH}${query}`);
@@ -113,6 +67,18 @@ export async function getDoubtForumBySlug(
 ): Promise<DoubtForumViewModel | null> {
   const normalized = decodeURIComponent(slug).trim().toLowerCase();
   if (!normalized) return null;
+
+  // `GET api/app/groups/:groupRef` accepts the seoSlug directly.
+  const detail = await apiGetOrNull<DoubtForumApi>(
+    `${PATH}/${encodeURIComponent(normalized)}`
+  );
+  const mappedDetail = detail ? mapGroupDetail(detail) : null;
+  if (mappedDetail && (!mappedDetail.type || mappedDetail.type === GROUP_TYPE)) {
+    // Drop `members` — the forum UI never shows them (and they carry PII).
+    const { members: _members, ...forum } = mappedDetail;
+    void _members;
+    return forum;
+  }
 
   for (let page = 1; page <= LOOKUP_MAX_PAGES; page += 1) {
     const list = await getDoubtForums({ page, limit: LOOKUP_PAGE_SIZE });
@@ -129,98 +95,6 @@ export async function getDoubtForumBySlug(
   return null;
 }
 
-/** Logged-in study / mentor group chats (`group_type=group_chat`). */
-export async function getGroupChats(
-  params: GetAppGroupsParams = {}
-): Promise<DoubtForumListViewModel | null> {
-  return getAppGroupsByType(GROUP_CHAT_TYPE, params);
-}
-
-/** Group/channel detail including `members` — `GET api/app/groups/:id`. */
-export async function getAppGroupDetail(
-  params: GetGroupDetailParams
-): Promise<GroupDetailViewModel | null> {
-  const groupId = params.groupId;
-  if (!Number.isFinite(groupId) || groupId <= 0) return null;
-
-  const data = await apiGetOrNull<DoubtForumApi>(`${PATH}/${groupId}`, {
-    accessToken: params.accessToken,
-    cache: "no-store",
-  });
-
-  const mapped = mapGroupDetail(data);
-  if (!mapped) return null;
-
-  if (
-    params.expectedType &&
-    mapped.type &&
-    mapped.type !== params.expectedType
-  ) {
-    return null;
-  }
-
-  return mapped;
-}
-
-export async function getGroupChatById(
-  id: number,
-  accessToken?: string
-): Promise<GroupDetailViewModel | null> {
-  const detail = await getAppGroupDetail({
-    groupId: id,
-    accessToken,
-    expectedType: GROUP_CHAT_TYPE,
-  });
-  if (detail) return detail;
-  // Fallback: list lookup when detail is unavailable.
-  const fromList = await getAppGroupById(GROUP_CHAT_TYPE, id, accessToken);
-  return fromList ? { ...fromList, members: [] } : null;
-}
-
-/**
- * Membership gate — `GET api/app/groups/:groupId/membership`.
- * Pass a positive `groupId` and Bearer token.
- */
-export async function getGroupMembership(
-  groupId: number,
-  accessToken: string
-): Promise<GroupMembershipViewModel | null> {
-  if (!Number.isFinite(groupId) || groupId <= 0) return null;
-  if (!accessToken.trim()) return null;
-
-  const data = await apiGetOrNull<GroupMembershipApi>(
-    `${PATH}/${groupId}/membership`,
-    { accessToken, cache: "no-store" }
-  );
-
-  return mapGroupMembership(data);
-}
-
-/** Logged-in broadcast channels (`group_type=broadcast_channel`). */
-export async function getBroadcastChannels(
-  params: GetAppGroupsParams = {}
-): Promise<DoubtForumListViewModel | null> {
-  return getAppGroupsByType(BROADCAST_CHANNEL_TYPE, params);
-}
-
-export async function getBroadcastChannelById(
-  id: number,
-  accessToken?: string
-): Promise<GroupDetailViewModel | null> {
-  const detail = await getAppGroupDetail({
-    groupId: id,
-    accessToken,
-    expectedType: BROADCAST_CHANNEL_TYPE,
-  });
-  if (detail) return detail;
-  const fromList = await getAppGroupById(
-    BROADCAST_CHANNEL_TYPE,
-    id,
-    accessToken
-  );
-  return fromList ? { ...fromList, members: [] } : null;
-}
-
 export async function getGroupTopics(
   groupId: number,
   params: GetForumTopicsParams = {}
@@ -230,6 +104,9 @@ export async function getGroupTopics(
   const query = buildApiQuery({
     page: params.page ?? 1,
     limit: params.limit ?? 20,
+    search: params.search?.trim(),
+    sort_by: params.sortBy,
+    sort_order: params.sortOrder,
   });
 
   const data = await apiGetOrNull<ForumTopicListApi>(
@@ -309,6 +186,11 @@ export async function getGroupTopicMessages(
     group_id: groupId,
     group_slug: groupSlug,
     topic_slug: topicSlug,
+    parent_message_id:
+      typeof params.parentMessageId === "number" && params.parentMessageId > 0
+        ? params.parentMessageId
+        : undefined,
+    sort_order: params.sortOrder,
     page: params.page ?? 1,
     limit: params.limit ?? 50,
   });
@@ -325,43 +207,50 @@ export async function getGroupTopicMessages(
   return mapForumMessageList(data);
 }
 
-/** Channel / group-chat messages by `group_id` only. */
-export async function getGroupMessages(
-  params: GetGroupMessagesParams
+/**
+ * Topic thread for the detail page: top-level posts (oldest first) plus the
+ * direct replies of every post that has `replyCount > 0`. Deeper levels are
+ * loaded on demand via `parent_message_id`. Returned flat; the UI nests by
+ * `parentMessageId`.
+ */
+export async function getGroupTopicThread(
+  params: Omit<GetForumMessagesParams, "parentMessageId" | "sortOrder">
 ): Promise<ForumMessageListViewModel | null> {
-  const groupId = params.groupId;
-  if (!Number.isFinite(groupId) || groupId <= 0) return null;
+  const topLevel = await getGroupTopicMessages({ ...params, sortOrder: "asc" });
+  if (!topLevel) return null;
 
-  const query = buildApiQuery({
-    group_id: groupId,
-    page: params.page ?? 1,
-    limit: params.limit ?? 50,
-  });
-
-  const data = await apiGetOrNull<ForumMessageListApi>(
-    `${PATH}/messages${query}`,
-    {
-      cache: "no-store",
-      accessToken: params.accessToken,
-    }
+  const withReplies = topLevel.items.filter((item) => item.replyCount > 0);
+  const replyLists = await Promise.all(
+    withReplies.map((item) =>
+      getGroupTopicMessages({
+        ...params,
+        page: 1,
+        limit: 50,
+        parentMessageId: item.id,
+        sortOrder: "asc",
+      })
+    )
   );
 
-  return mapForumMessageList(data);
+  return {
+    ...topLevel,
+    items: [
+      ...topLevel.items,
+      ...replyLists.flatMap((list) => list?.items ?? []),
+    ],
+  };
 }
 
 /**
- * Create a message. Requires Bearer token. Multipart form-data.
- * - doubt_forum: `group_id` + `topic_slug` (+ optional `parent_message_id`)
- * - group_chat: `group_id` + `content` / `files` only
+ * Post a forum reply. Requires Bearer token. Multipart form-data:
+ * `group_id` + `topic_slug` (+ optional `parent_message_id` / `files`).
  */
 export async function postGroupMessage(
   accessToken: string,
   params: PostForumMessageParams
 ): Promise<ForumMessageViewModel> {
   const groupId = params.groupId;
-  const topicSlug = params.topicSlug
-    ? decodeURIComponent(params.topicSlug).trim()
-    : "";
+  const topicSlug = decodeURIComponent(params.topicSlug).trim();
   const content = params.content.trim();
 
   if (!accessToken.trim()) {
@@ -370,6 +259,9 @@ export async function postGroupMessage(
   if (!Number.isFinite(groupId) || groupId <= 0) {
     throw new Error("Invalid group");
   }
+  if (!topicSlug) {
+    throw new Error("Invalid topic");
+  }
   if (!content && !(params.files?.length)) {
     throw new Error("Write a message before posting.");
   }
@@ -377,16 +269,13 @@ export async function postGroupMessage(
   const form = new FormData();
   form.append("group_id", String(groupId));
   form.append("content", content || "");
-
-  if (topicSlug) {
-    form.append("topic_slug", topicSlug);
-    if (
-      typeof params.parentMessageId === "number" &&
-      Number.isFinite(params.parentMessageId) &&
-      params.parentMessageId > 0
-    ) {
-      form.append("parent_message_id", String(params.parentMessageId));
-    }
+  form.append("topic_slug", topicSlug);
+  if (
+    typeof params.parentMessageId === "number" &&
+    Number.isFinite(params.parentMessageId) &&
+    params.parentMessageId > 0
+  ) {
+    form.append("parent_message_id", String(params.parentMessageId));
   }
 
   for (const file of params.files ?? []) {

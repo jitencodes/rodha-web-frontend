@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-13 (removed website enrollment refresh calls)
+**Last updated:** 2026-11-17 (Discussion Forum light theme; groups/channels removed)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,24 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Discussion Forum dashboard design (2026-11-17):** Restyled to `referrence/ui/discussion/redesign/Rodha Discussion Forum Dashboard.png`:
+  - **Header:** logo | divider | Feed (active pill + orange underline) · Groups | wide search | Rodha Buddy (orange outline + headset), Sign In (user icon), Join Now.
+  - **Layout:** flat sidebar with a right divider; large plain page heading; white rounded group cards (icon, name, description, See All Topics); normal-case table header; square author initials.
+  - **Hover:** rows tint orange and the title turns orange and underlines; the whole row is clickable via a stretched title link. Right-rail lists highlight on hover too.
+  - **Right rail:** white Latest/Best Posts cards with View More.
+  - **Footer:** the forum now uses the main website `Footer`.
+- **Discussion Forum light theme + scope trim (2026-11-17):**
+  - **Theme:** dual tone like the website. Dark `#191919` header, footer and section/rail title bands around a cream page, white cards and a beige table header row; topic, group and rail rows alternate white / `bg-section-beige`. The Quill editor, `ForumMessageComposer` and `Breadcrumb` (`variant="light"`) are light.
+  - **Author column:** `ForumTopicTable` shows the author's profile photo or initials (`ForumAvatar`, now a `<span>` so it is valid inside text).
+  - **Removed from the website:** study groups and channels (`[slug]/groups`, `[slug]/channels`, `[slug]/tags`, `DiscussionForumShell`, `DiscussionForumSpace*`, `DiscussionForumTags`, `useGroupChatRealtime`), along with the group-chat service/mapper/ui helpers, the chat-bar composer variant and the mock forum data. `/api/discussion-forum/messages` now requires `topic_slug`.
+- **Discussion Forum rebuild, GMAT Club–style (2026-11-17):** `/discussion-forum/*` has its own chrome (`discussion-forum/layout.tsx` + `ForumHeader`). `SiteFrame` skips the website header, footer, promo and toasts there. `ForumPageLayout` gives three columns: sticky `ForumSidebarNav` (Feed, collapsible Groups ×6, See more), the feed, and `ForumRightRail` (Latest/Best Posts), which stacks under the feed below `xl`. On phones the nav lives in the header drawer.
+  - **Home:** the 3 most recently active groups (or `isFeatured` once the API sends it) as `ForumGroupSection` (6 topics in a `ForumTopicTable`, then See more), followed by Explore more discussions (`ForumGroupList`).
+  - **Group pages:** new `/discussion-forum/groups` (search + pagination); `/discussion-forum/[slug]` is a topic table with API search, sorts (`lastActivityAt`/`createdAt`/`messageCount`/`title`) and pagination.
+  - **Topic page:** `ForumTopicThread`, a GMAT post view with an author column. Replies nest by `parent_message_id` (SSR loads top level + direct replies; deeper levels via `GET /api/discussion-forum/messages`), with like/dislike, inline reply, and edit/delete of your own replies.
+  - **Create Topic:** new `/discussion-forum/ask` with a group picker; the per-group `/[slug]/ask` stays.
+  - **Columns:** Likes/Views appear only when the API returns `reactionTypeCount`/`viewCount` on topics. Home Latest/Best Posts wait for the feed API. See `docs/discussion-api-gaps.md`.
+  - **`cn()` fix:** it now uses `extendTailwindMerge` with the custom `text-*` font-size scale, so `text-caption`/`text-body-sm` are no longer dropped when a text color follows them (site-wide fix).
+  - **Removed:** `DiscussionForumFeed`, `DiscussionForumQuestionCard`, `DiscussionForumsDirectory`, `DiscussionForumDetail`.
 - **Enrollment refresh removed (2026-11-13):** The backend now syncs enrollments itself. The website no longer calls `POST api/website/student/enrollments/refresh`: removed `useEnrollmentRefresh` (4-minute polling and `router.refresh()` in `AccountShell`), the `/api/account/enrollments/refresh` BFF route, the calls after free checkout (`/api/checkout/pay`) and Razorpay verify (`/api/checkout/verify`), and `refreshEnrollments` from the cart service.
 - **Hero duplicate banner image fix (2026-11-13):** `BannerImageLink` used to return a bare fragment when the banner had no `redirectUrl`, which dropped its `className`. The mobile hero image lost `lg:hidden` and showed on desktop beside the desktop background image on `/about`, `/faculty`, and `/team`. It now wraps children in a `div` with that `className` when no link is set.
 - **UTM retention + registration fixes (2026-11-12):** `middleware.ts` now runs on all pages plus `/api/checkout/buy` and writes the `rodha_utm` cookie server-side whenever the request URL has `utm_*` params, so UTMs survive server redirects (auth gate, Buy Now → login) that run before client JS. `UtmCapture` still writes it client-side for soft navigations. A new UTM set always replaces the stored one (keys lowercased, never merged). `/api/checkout/pay` uses one source (`resolveCheckoutUtm`: body UTM if present, else cookie) instead of merging cookie + header + body. Registration: LinkedIn accepts messy profile URLs (no scheme, `http`, `in.`/`m.` subdomain, query/hash, `/details/…`) and normalizes to `https://www.linkedin.com/in/<username>` on blur and on submit (`normalizeLinkedInUrl`); input is `type="text"` + `inputMode="url"` so native URL validation no longer blocks submit; error text is "URL must start with https://www.linkedin.com/in/(username)". Graduation Year options run to current year + 3 (`profileGraduationYearOptions`). `classifyCurrentStatus` no longer treats "not working" / "non-working" / "fresher" labels as working; only working professionals get work experience locked to Yes (`workExperienceLocked`, also enforced in validation), graduates can pick Yes or No. Post Graduation now uses the `POST_GRADUATION` education master like Graduation: **PG Stream** select (`pgStream`) and **PG Degree & Specialization** select from that stream's degrees (was free text); changing stream clears the degree; no extra specialisation text input. Profile detail shows PG Stream.

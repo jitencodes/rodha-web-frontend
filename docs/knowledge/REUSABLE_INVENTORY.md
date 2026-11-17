@@ -139,6 +139,14 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | CourseRelatedSection | `course/CourseRelatedSection.tsx` (category-style course carousel + 3s autoplay) |
 | CourseFaqSection | `course/CourseFaqSection.tsx` |
 | CourseEnquireStickyBar | `course/CourseEnquireStickyBar.tsx` (mobile Enquire Now → enquiry modal) |
+| ForumHeader | `discussion-forum/ForumHeader.tsx` (forum-only sticky header, scoped search, mobile nav drawer) |
+| ForumPageLayout | `discussion-forum/ForumPageLayout.tsx` (async 3-column shell: sidebar / feed / right rail) |
+| ForumSidebarNav | `discussion-forum/ForumSidebarNav.tsx` (Feed, collapsible Groups, See more) |
+| ForumTopicTable | `discussion-forum/ForumTopicTable.tsx` (light zebra topic table with author avatar; Likes/Views columns only when API data exists) |
+| ForumGroupSection / ForumGroupList | `discussion-forum/ForumGroupSection.tsx`, `ForumGroupList.tsx` |
+| ForumRightRail | `discussion-forum/ForumRightRail.tsx` (Latest / Best Posts from API-ranked lists) |
+| ForumTopicThread | `discussion-forum/ForumTopicThread.tsx` (GMAT post view, nested replies, reactions, edit/delete) |
+| ForumPageHeading / ForumSearchForm / ForumErrorState | `discussion-forum/*` (title + Create Topic, GET search form, retry panel) |
 
 ## Cards — `src/components/cards/`
 
@@ -260,6 +268,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | api categories | `api/modules/categories/*` | Active categories + category page mapper (faculty/testimonials/stories/FAQs/courses) |
 | api courses | `api/modules/courses/*` | Shared `mapCourses` + `mapCourseType` for static slider chips |
 | api faculty | `api/modules/faculty/*` | Listing + by-slug; reuses course/faculty card mappers |
+| forum paths / sidebar / rail | `forum/paths.ts`, `forum/sidebar.ts`, `forum/rail.ts` | Forum route builders, sidebar groups loader, group-scoped Latest/Best lists |
 | api subjects | `api/modules/subjects/*` | Faculty listing subject filter |
 | api about | `api/modules/about/*` | About banner, journeys, stacks, galleries |
 | api team | `api/modules/team/*` | Team banner, featured faculty, galleries |

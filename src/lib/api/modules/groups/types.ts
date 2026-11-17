@@ -20,6 +20,8 @@ export interface DoubtForumApi {
   memberCount?: number | null;
   topicCount?: number | null;
   isMember?: boolean | null;
+  /** 🆕 Proposed (docs/discussion-api-gaps.md): admin-pinned homepage group. */
+  isFeatured?: boolean | null;
   createdByUser?: DoubtForumUserApi | null;
   /** Present on `GET api/app/groups/:id` detail. */
   members?: GroupMemberApi[] | null;
@@ -53,37 +55,13 @@ export interface DoubtForumViewModel {
   lastMessagePreview: string | null;
   type: string | null;
   isMember: boolean;
+  isFeatured: boolean;
   createdBy: DoubtForumCreatorViewModel | null;
 }
 
 /** Detail payload from `GET api/app/groups/:id` (includes members). */
 export interface GroupDetailViewModel extends DoubtForumViewModel {
   members: GroupMemberViewModel[];
-}
-
-/** `GET api/app/groups/:groupId/membership` */
-export interface GroupMembershipApi {
-  groupId?: number | null;
-  groupName?: string | null;
-  groupType?: string | null;
-  isArchived?: boolean | null;
-  isMember?: boolean | null;
-  leftAt?: string | null;
-}
-
-export interface GroupMembershipViewModel {
-  groupId: number;
-  groupName: string;
-  groupType: string | null;
-  isArchived: boolean;
-  isMember: boolean;
-  leftAt: string | null;
-}
-
-export interface GetAppGroupsParams {
-  page?: number;
-  limit?: number;
-  accessToken?: string;
 }
 
 export interface DoubtForumListViewModel {
@@ -94,9 +72,19 @@ export interface DoubtForumListViewModel {
   totalPages: number;
 }
 
+/** `GET api/app/groups` — `sort_by` values accepted by the live API. */
+export type DoubtForumSortBy =
+  | "name"
+  | "createdAt"
+  | "updatedAt"
+  | "lastActivityAt";
+
 export interface GetDoubtForumsParams {
   page?: number;
   limit?: number;
+  search?: string;
+  sortBy?: DoubtForumSortBy;
+  sortOrder?: "asc" | "desc";
 }
 
 export interface ForumTopicAuthorApi {
@@ -113,6 +101,7 @@ export interface ForumTopicLastMessageApi {
   user?: ForumTopicAuthorApi | null;
   reactionCount?: number | null;
   attachmentCount?: number | null;
+  directReplyCount?: number | null;
 }
 
 export interface ForumTopicApi {
@@ -133,6 +122,10 @@ export interface ForumTopicApi {
   updatedAt?: string | null;
   author?: ForumTopicAuthorApi | null;
   lastMessage?: ForumTopicLastMessageApi | null;
+  /** 🆕 Proposed: topic-level likes (docs/discussion-api-gaps.md). */
+  reactionTypeCount?: { like?: number | null; dislike?: number | null } | null;
+  /** 🆕 Proposed: topic view counter. */
+  viewCount?: number | null;
 }
 
 export interface ForumTopicListApi {
@@ -151,6 +144,12 @@ export interface ForumTopicAuthorViewModel {
   profilePicturePath: string | null;
 }
 
+/** Latest reply on a topic (`lastMessage`). Drives the "Last post" column. */
+export interface ForumTopicLastPostViewModel {
+  authorName: string;
+  createdAt: string;
+}
+
 export interface ForumTopicViewModel {
   id: number;
   groupId: number;
@@ -163,6 +162,11 @@ export interface ForumTopicViewModel {
   createdAt: string;
   author: ForumTopicAuthorViewModel;
   lastMessagePreview: string | null;
+  lastPost: ForumTopicLastPostViewModel | null;
+  /** Null until the backend returns topic-level reactions. */
+  likeCount: number | null;
+  /** Null until the backend returns a view counter. */
+  viewCount: number | null;
 }
 
 export interface ForumTopicListViewModel {
@@ -173,33 +177,31 @@ export interface ForumTopicListViewModel {
   totalPages: number;
 }
 
+/** `GET api/app/groups/:ref/topics` — `sort_by` values accepted by the live API. */
+export type ForumTopicSortBy =
+  | "lastActivityAt"
+  | "createdAt"
+  | "title"
+  | "messageCount";
+
 export interface GetForumTopicsParams {
   page?: number;
   limit?: number;
+  search?: string;
+  sortBy?: ForumTopicSortBy;
+  sortOrder?: "asc" | "desc";
 }
 
 export interface GetForumMessagesParams {
   groupId: number;
   groupSlug: string;
   topicSlug: string;
+  /** Omit for top-level posts; set to load the direct replies of that message. */
+  parentMessageId?: number | null;
+  sortOrder?: "asc" | "desc";
   page?: number;
   limit?: number;
   accessToken?: string;
-}
-
-/** Channel / group chat wall — `group_id` only (no topic). */
-export interface GetGroupMessagesParams {
-  groupId: number;
-  page?: number;
-  limit?: number;
-  accessToken?: string;
-}
-
-export interface GetGroupDetailParams {
-  groupId: number;
-  accessToken?: string;
-  /** When set, reject details whose `type` does not match (e.g. group_chat). */
-  expectedType?: string;
 }
 
 export interface GroupMemberUserApi {
@@ -248,13 +250,9 @@ export interface CreateForumTopicParams {
 
 export interface PostForumMessageParams {
   groupId: number;
-  /**
-   * Required for doubt_forum answers. Omit for group_chat / broadcast wall posts
-   * (`POST api/app/groups/messages` with `group_id` only).
-   */
-  topicSlug?: string | null;
+  topicSlug: string;
   content: string;
-  /** Forum threaded replies only — omit for group_chat. */
+  /** Threaded reply target; omit for a top-level reply. */
   parentMessageId?: number | null;
   files?: File[];
 }
@@ -360,6 +358,8 @@ export interface ForumMessageViewModel {
   attachments: ForumMessageAttachmentViewModel[];
   /** API status, e.g. active / moderated. */
   status: string | null;
+  parentMessageId: number | null;
+  replyCount: number;
 }
 
 export interface ForumMessageListViewModel {

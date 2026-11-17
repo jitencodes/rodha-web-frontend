@@ -1,0 +1,3748 @@
+﻿{
+  "info": {
+    "name": "Rodha Groups ΓÇö App APIs",
+    "description": "Student/mentor app Groups APIs under `/rodha/api/app/groups`.\n\n**Auth**\n- Reads: optional Bearer (`studentAccessToken`). Guests only see public `doubt_forum` groups.\n- Authenticated list: member groups + all `doubt_forum` (open) groups.\n- Writes: required Bearer. For `doubt_forum`, membership is **not** required (auth only). Private groups still require membership.\n\n**Invite link**\n- `GET /:groupRef/membership` ΓÇö auth required; returns `isMember` for the token user.\n- `POST /:groupRef/join` ΓÇö auth required; students/mentors self-join (optional `show_prev_message`, default false).\n\n**Refs**\n- `groupRef` = numeric id (`/^\\d+$/`) **or** `seoSlug` (prefer id when digits).\n- `topicRef` = numeric id **or** topic `slug`.\n\n**Rules**\n- Private groups: non-members get **404** (not 403).\n- Archived groups: read-only.\n- Messages list: **Active** only (soft-deleted hidden).\n- Edit own: `forumMessageEditWindowHours` (default 4h).\n- Delete own: no time window; sets status=Deleted + deletedAt.\n- `broadcast_channel` members cannot send.\n- Reactions: `like` | `dislike`.\n\nUse env `Rodha Local` (`baseUrl`, `studentAccessToken`, `groupId`, `groupSlug`, `topicSlug`, `messageId`).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "groupId",
+      "value": "1"
+    },
+    {
+      "key": "groupSlug",
+      "value": "cat-open-forum"
+    },
+    {
+      "key": "topicId",
+      "value": "5"
+    },
+    {
+      "key": "topicSlug",
+      "value": "quant-doubts"
+    },
+    {
+      "key": "messageId",
+      "value": "100"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Auth (Student)",
+      "item": [
+        {
+          "name": "Student Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/auth/user/login",
+            "description": "Sets `studentAccessToken` from response.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"Student@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const j = pm.response.json();",
+                  "if (j?.data?.accessToken) pm.environment.set('studentAccessToken', j.data.accessToken);",
+                  "else if (j?.data?.token) pm.environment.set('studentAccessToken', j.data.token);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "200 ΓÇö Logged in",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"Student@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/auth/user/login"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"accessToken\": \"<jwt>\",\n    \"user\": {\n      \"id\": \"uuid\",\n      \"userType\": \"STUDENT\"\n    }\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 - Groups",
+      "item": [
+        {
+          "name": "List Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}api/app/groups?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "app",
+                "groups"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Max 100"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "group_type",
+                  "value": "doubt_forum",
+                  "disabled": true,
+                  "description": "doubt_forum | group_chat | broadcast_channel"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "lastActivityAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Optional auth.\n- Guest: public `doubt_forum` with seoSlug only.\n- Authenticated: groups where the user is a member **plus all** `doubt_forum` groups (no membership filter for open forums).",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "description": "Max 100"
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "group_type",
+                      "value": "doubt_forum",
+                      "disabled": true,
+                      "description": "doubt_forum | group_chat | broadcast_channel"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastActivityAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Groups fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 1,\n        \"name\": \"CAT Open Forum\",\n        \"description\": \"Public doubt forum\",\n        \"type\": \"doubt_forum\",\n        \"groupIcon\": null,\n        \"seoTitle\": \"CAT Forum\",\n        \"seoDescription\": null,\n        \"seoSlug\": \"cat-open-forum\",\n        \"isArchived\": false,\n        \"archivedAt\": null,\n        \"archivedBy\": null,\n        \"deletedAt\": null,\n        \"deletedBy\": null,\n        \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n        \"lastMessagePreview\": \"Hello\",\n        \"memberCount\": 12,\n        \"topicCount\": 3,\n        \"createdAt\": \"2026-09-01T10:00:00.000+05:30\",\n        \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\"\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 20,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token (Bad JWT when Authorization sent)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "description": "Max 100"
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "group_type",
+                      "value": "doubt_forum",
+                      "disabled": true,
+                      "description": "doubt_forum | group_chat | broadcast_channel"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastActivityAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Group (by id)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}",
+            "description": "Optional auth. Detail includes **members**. Non-members of private groups ΓåÆ 404.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Detail",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"CAT Open Forum\",\n    \"description\": \"Public doubt forum\",\n    \"type\": \"doubt_forum\",\n    \"groupIcon\": null,\n    \"seoTitle\": \"CAT Forum\",\n    \"seoDescription\": null,\n    \"seoSlug\": \"cat-open-forum\",\n    \"isArchived\": false,\n    \"archivedAt\": null,\n    \"archivedBy\": null,\n    \"deletedAt\": null,\n    \"deletedBy\": null,\n    \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"lastMessagePreview\": \"Hello\",\n    \"memberCount\": 12,\n    \"topicCount\": 3,\n    \"createdAt\": \"2026-09-01T10:00:00.000+05:30\",\n    \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"members\": [\n      {\n        \"id\": 10,\n        \"groupId\": 1,\n        \"userId\": \"uuid-student\",\n        \"userType\": \"STUDENT\",\n        \"roleId\": null,\n        \"joinedAt\": \"2026-09-01T10:05:00.000+05:30\",\n        \"lastReadAt\": null,\n        \"user\": {\n          \"id\": \"uuid-student\",\n          \"fullName\": \"Test Student\",\n          \"email\": \"student@example.com\",\n          \"mobile\": null,\n          \"userType\": \"STUDENT\",\n          \"profilePicturePath\": null\n        }\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found (Missing, deleted, or no access)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token (Bad JWT when Authorization sent)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Group (by seoSlug)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupSlug}}",
+            "description": "Same as by id; use slug for public SEO URLs.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Detail",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupSlug}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"CAT Open Forum\",\n    \"description\": \"Public doubt forum\",\n    \"type\": \"doubt_forum\",\n    \"groupIcon\": null,\n    \"seoTitle\": \"CAT Forum\",\n    \"seoDescription\": null,\n    \"seoSlug\": \"cat-open-forum\",\n    \"isArchived\": false,\n    \"archivedAt\": null,\n    \"archivedBy\": null,\n    \"deletedAt\": null,\n    \"deletedBy\": null,\n    \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"lastMessagePreview\": \"Hello\",\n    \"memberCount\": 12,\n    \"topicCount\": 3,\n    \"createdAt\": \"2026-09-01T10:00:00.000+05:30\",\n    \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"members\": [\n      {\n        \"id\": 10,\n        \"groupId\": 1,\n        \"userId\": \"uuid-student\",\n        \"userType\": \"STUDENT\",\n        \"roleId\": null,\n        \"joinedAt\": \"2026-09-01T10:05:00.000+05:30\",\n        \"lastReadAt\": null,\n        \"user\": {\n          \"id\": \"uuid-student\",\n          \"fullName\": \"Test Student\",\n          \"email\": \"student@example.com\",\n          \"mobile\": null,\n          \"userType\": \"STUDENT\",\n          \"profilePicturePath\": null\n        }\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupSlug}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Check Group Membership",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}/membership",
+            "description": "Auth required. Invite-link helper: returns whether the logged-in user is already a member. Works with group id or seoSlug. Does not require existing membership.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Not a member",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/membership"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group membership checked successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"groupId\": 1,\n    \"groupName\": \"Quant Chat\",\n    \"groupType\": \"group_chat\",\n    \"isArchived\": false,\n    \"isMember\": false\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Join Group (invite)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}/join",
+            "description": "Auth required. Students/mentors self-join via invite. userId from token. Optional body: show_prev_message (default false). Idempotent if already a member. Plain subadmins ΓåÆ 403. Archived ΓåÆ 400.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"show_prev_message\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Joined",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"show_prev_message\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/join"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Joined group successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"alreadyMember\": false,\n    \"groupId\": 1,\n    \"groupName\": \"Quant Chat\",\n    \"member\": {\n      \"id\": 10,\n      \"groupId\": 1,\n      \"userId\": \"uuid-student\",\n      \"showPrevMessage\": false\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Mark Group Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}/read",
+            "description": "Requires membership. Updates GroupMember.lastReadAt.",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Marked",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group marked as read\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 10,\n    \"groupId\": 1,\n    \"userId\": \"uuid-student\",\n    \"lastReadAt\": \"2026-09-03T11:30:00.000+05:30\"\n  }\n}"
+            },
+            {
+              "name": "403 ΓÇö You must be a group member",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You must be a group member\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Topics",
+      "item": [
+        {
+          "name": "List Topics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}api/app/groups/{{groupId}}/topics?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "app",
+                "groups",
+                "{{groupId}}",
+                "topics"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_by",
+                  "value": "lastActivityAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Optional auth. Only for `doubt_forum`.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/{{groupId}}/topics?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "{{groupId}}",
+                    "topics"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastActivityAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group topics fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 5,\n        \"groupId\": 1,\n        \"title\": \"Quant Doubts\",\n        \"slug\": \"quant-doubts\",\n        \"content\": \"Ask quant questions here\",\n        \"seoTitle\": \"Quant Doubts\",\n        \"seoDescription\": \"Ask quant questions here\",\n        \"seoSlug\": \"quant-doubts\",\n        \"messageCount\": 2,\n        \"replyCount\": 2,\n        \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n        \"lastMessagePreview\": \"Hello\",\n        \"createdAt\": \"2026-09-02T09:00:00.000+05:30\"\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 20,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Topics are only available for doubt forum groups",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/{{groupId}}/topics?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "{{groupId}}",
+                    "topics"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastActivityAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Topics are only available for doubt forum groups\",\n  \"statusCode\": 400,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/{{groupId}}/topics?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "{{groupId}}",
+                    "topics"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "lastActivityAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Topic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics",
+            "description": "Requires auth. `doubt_forum` only ΓÇö membership not required. Archived ΓåÆ 400.\nBody: title*, content* only for students.\nBackend auto: slug from title; seo_titleΓåÉtitle, seo_descriptionΓåÉcontent, seo_slugΓåÉslug when omitted.\nOptional overrides: seo_title, seo_description, seo_slug.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const j = pm.response.json();",
+                  "if (j?.data?.id) pm.collectionVariables.set('topicId', String(j.data.id));",
+                  "if (j?.data?.slug) pm.collectionVariables.set('topicSlug', j.data.slug);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "201 ΓÇö Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Topic created successfully\",\n  \"statusCode\": 201,\n  \"data\": {\n    \"id\": 5,\n    \"groupId\": 1,\n    \"title\": \"Quant Doubts\",\n    \"slug\": \"quant-doubts\",\n    \"content\": \"Ask quant questions here\",\n    \"seoTitle\": \"Quant Doubts\",\n    \"seoDescription\": \"Ask quant questions here\",\n    \"seoSlug\": \"quant-doubts\",\n    \"messageCount\": 2,\n    \"replyCount\": 2,\n    \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"lastMessagePreview\": \"Hello\",\n    \"createdAt\": \"2026-09-02T09:00:00.000+05:30\"\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"statusCode\": 400,\n  \"errors\": {\n    \"title\": [\n      \"Required\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Group is archived and read-only",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group is archived and read-only\",\n  \"statusCode\": 400,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "403 ΓÇö You must be a group member",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You must be a group member\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Quant Doubts\",\n  \"content\": \"Ask quant questions here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Topic (by slug)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupSlug}}/topics/{{topicSlug}}",
+            "description": "Optional auth. topicRef = id or slug.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Detail",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupSlug}}/topics/{{topicSlug}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Topic fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 5,\n    \"groupId\": 1,\n    \"title\": \"Quant Doubts\",\n    \"slug\": \"quant-doubts\",\n    \"content\": \"Ask quant questions here\",\n    \"seoTitle\": \"Quant Doubts\",\n    \"seoDescription\": \"Ask quant questions here\",\n    \"seoSlug\": \"quant-doubts\",\n    \"messageCount\": 2,\n    \"replyCount\": 2,\n    \"lastActivityAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"lastMessagePreview\": \"Hello\",\n    \"createdAt\": \"2026-09-02T09:00:00.000+05:30\"\n  }\n}"
+            },
+            {
+              "name": "404 ΓÇö Topic not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupSlug}}/topics/{{topicSlug}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Topic not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/{{groupSlug}}/topics/{{topicSlug}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Mark Topic Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read",
+            "description": "Requires membership. Upserts GroupTopicReadState.",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Marked",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Topic marked as read\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"groupTopicId\": 5,\n    \"userId\": \"uuid-student\",\n    \"lastReadAt\": \"2026-09-03T11:30:00.000+05:30\"\n  }\n}"
+            },
+            {
+              "name": "403 ΓÇö You must be a group member",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You must be a group member\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/{{groupId}}/topics/{{topicSlug}}/read"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Messages",
+      "item": [
+        {
+          "name": "List Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "app",
+                "groups",
+                "messages"
+              ],
+              "query": [
+                {
+                  "key": "group_id",
+                  "value": "{{groupId}}",
+                  "description": "or group_slug"
+                },
+                {
+                  "key": "group_slug",
+                  "value": "{{groupSlug}}",
+                  "disabled": true
+                },
+                {
+                  "key": "topic_id",
+                  "value": "{{topicId}}",
+                  "disabled": true
+                },
+                {
+                  "key": "topic_slug",
+                  "value": "{{topicSlug}}",
+                  "description": "Required for doubt_forum"
+                },
+                {
+                  "key": "parent_message_id",
+                  "value": "{{messageId}}",
+                  "disabled": true,
+                  "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "asc",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Optional auth. Returns **Active** messages only.\nIf the viewer is a member with show_prev_message=false, only messages at/after their joinedAt are returned.\nDefault: top-level posts only (`parentMessageId` null).\nWith `parent_message_id`: direct replies to that parent (forum only; 400 on group_chat).\nUse `replyCount` on each item to know when to load children.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "description": "or group_slug"
+                    },
+                    {
+                      "key": "group_slug",
+                      "value": "{{groupSlug}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_id",
+                      "value": "{{topicId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "description": "Required for doubt_forum"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "{{messageId}}",
+                      "disabled": true,
+                      "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "asc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Group messages fetched successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 100,\n        \"groupId\": 1,\n        \"groupTopicId\": 5,\n        \"parentMessageId\": null,\n        \"userId\": \"uuid-student\",\n        \"senderRoleName\": null,\n        \"content\": \"Hello from app\",\n        \"status\": \"Active\",\n        \"editedAt\": null,\n        \"deletedAt\": null,\n        \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n        \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n        \"user\": {\n          \"id\": \"uuid-student\",\n          \"fullName\": \"Test Student\",\n          \"profilePicturePath\": null\n        },\n        \"attachments\": [],\n        \"reactionTypeCount\": {\n          \"like\": 1,\n          \"dislike\": 0\n        },\n        \"reactions\": [],\n        \"replyCount\": 0\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 50,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Validation failed",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "description": "or group_slug"
+                    },
+                    {
+                      "key": "group_slug",
+                      "value": "{{groupSlug}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_id",
+                      "value": "{{topicId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "description": "Required for doubt_forum"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "{{messageId}}",
+                      "disabled": true,
+                      "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "asc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"statusCode\": 400,\n  \"errors\": {\n    \"groupId\": [\n      \"group_id or group_slug is required\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö parent_message_id is only allowed for doubt forum groups",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "description": "or group_slug"
+                    },
+                    {
+                      "key": "group_slug",
+                      "value": "{{groupSlug}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_id",
+                      "value": "{{topicId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "description": "Required for doubt_forum"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "{{messageId}}",
+                      "disabled": true,
+                      "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "asc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"parent_message_id is only allowed for doubt forum groups\",\n  \"statusCode\": 400,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Parent message not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "description": "or group_slug"
+                    },
+                    {
+                      "key": "group_slug",
+                      "value": "{{groupSlug}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_id",
+                      "value": "{{topicId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "description": "Required for doubt_forum"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "{{messageId}}",
+                      "disabled": true,
+                      "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "asc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Parent message not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Group not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}api/app/groups/messages?group_id={{groupId}}&topic_slug={{topicSlug}}&page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "app",
+                    "groups",
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "description": "or group_slug"
+                    },
+                    {
+                      "key": "group_slug",
+                      "value": "{{groupSlug}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_id",
+                      "value": "{{topicId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "description": "Required for doubt_forum"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "{{messageId}}",
+                      "disabled": true,
+                      "description": "Optional. Omit = top-level only (parent null). Set = direct replies to that message (doubt_forum only)."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "asc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/messages",
+            "description": "Requires membership + membersCanSend.\n`doubt_forum`: topic_id or topic_slug required.\n`broadcast_channel`: members cannot send (403).\n`group_chat`: no topic / parent.\nAlso accepts JSON body (content, group_id, topic_slug, ΓÇª).",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "group_id",
+                  "value": "{{groupId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "topic_slug",
+                  "value": "{{topicSlug}}",
+                  "type": "text"
+                },
+                {
+                  "key": "content",
+                  "value": "Hello from app",
+                  "type": "text"
+                },
+                {
+                  "key": "parent_message_id",
+                  "value": "",
+                  "type": "text",
+                  "disabled": true,
+                  "description": "Reply ΓÇö doubt_forum only"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "disabled": true,
+                  "description": "Optional attachments (repeatable)"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const j = pm.response.json();",
+                  "if (j?.data?.id) pm.collectionVariables.set('messageId', String(j.data.id));"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "201 ΓÇö Sent",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Message sent successfully\",\n  \"statusCode\": 201,\n  \"data\": {\n    \"id\": 100,\n    \"groupId\": 1,\n    \"groupTopicId\": 5,\n    \"parentMessageId\": null,\n    \"userId\": \"uuid-student\",\n    \"senderRoleName\": null,\n    \"content\": \"Hello from app\",\n    \"status\": \"Active\",\n    \"editedAt\": null,\n    \"deletedAt\": null,\n    \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"user\": {\n      \"id\": \"uuid-student\",\n      \"fullName\": \"Test Student\",\n      \"profilePicturePath\": null\n    },\n    \"attachments\": [],\n    \"reactionTypeCount\": {\n      \"like\": 1,\n      \"dislike\": 0\n    },\n    \"reactions\": [],\n    \"replyCount\": 0\n  }\n}"
+            },
+            {
+              "name": "403 ΓÇö Members cannot send messages in this group type (broadcast)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Members cannot send messages in this group type\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "403 ΓÇö You must be a group member",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You must be a group member\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "400 ΓÇö Group is archived and read-only",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Group is archived and read-only\",\n  \"statusCode\": 400,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "group_id",
+                      "value": "{{groupId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "topic_slug",
+                      "value": "{{topicSlug}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "content",
+                      "value": "Hello from app",
+                      "type": "text"
+                    },
+                    {
+                      "key": "parent_message_id",
+                      "value": "",
+                      "type": "text",
+                      "disabled": true,
+                      "description": "Reply ΓÇö doubt_forum only"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "src": [],
+                      "disabled": true,
+                      "description": "Optional attachments (repeatable)"
+                    }
+                  ]
+                },
+                "url": "{{baseUrl}}api/app/groups/messages"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Edit Own Message",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}",
+            "description": "Own messages only. Within `forumMessageEditWindowHours` (default 4).\nOptional body: group_id / group_slug (resolved from message if omitted).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Hello edited\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Edited",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Message updated successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 100,\n    \"groupId\": 1,\n    \"groupTopicId\": 5,\n    \"parentMessageId\": null,\n    \"userId\": \"uuid-student\",\n    \"senderRoleName\": null,\n    \"content\": \"Hello edited\",\n    \"status\": \"Active\",\n    \"editedAt\": \"2026-09-03T11:05:00.000+05:30\",\n    \"deletedAt\": null,\n    \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"user\": {\n      \"id\": \"uuid-student\",\n      \"fullName\": \"Test Student\",\n      \"profilePicturePath\": null\n    },\n    \"attachments\": [],\n    \"reactionTypeCount\": {\n      \"like\": 1,\n      \"dislike\": 0\n    },\n    \"reactions\": [],\n    \"replyCount\": 0\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Edit window of 4 hour(s) has expired for this message",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Edit window of 4 hour(s) has expired for this message\",\n  \"statusCode\": 400,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "403 ΓÇö You can only edit your own messages",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You can only edit your own messages\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello edited\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Own Message",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}",
+            "description": "Soft-delete: status=Deleted + deletedAt. **No time window.**\nOptional JSON body with group_id / group_slug.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Deleted",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Message deleted successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"id\": 100,\n    \"groupId\": 1,\n    \"groupTopicId\": 5,\n    \"parentMessageId\": null,\n    \"userId\": \"uuid-student\",\n    \"senderRoleName\": null,\n    \"content\": \"Hello from app\",\n    \"status\": \"Deleted\",\n    \"editedAt\": null,\n    \"deletedAt\": \"2026-09-03T11:10:00.000+05:30\",\n    \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n    \"user\": {\n      \"id\": \"uuid-student\",\n      \"fullName\": \"Test Student\",\n      \"profilePicturePath\": null\n    },\n    \"attachments\": [],\n    \"reactionTypeCount\": {\n      \"like\": 1,\n      \"dislike\": 0\n    },\n    \"reactions\": [],\n    \"replyCount\": 0\n  }\n}"
+            },
+            {
+              "name": "403 ΓÇö You can only delete your own messages",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You can only delete your own messages\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 ΓÇö Message not found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Message not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Reactions",
+      "item": [
+        {
+          "name": "Set Reaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions",
+            "description": "Body: reaction_type* (`like`|`dislike`). Optional group_id/group_slug. Upserts one reaction per user.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reaction_type\": \"like\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Set",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Reaction saved successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"action\": \"added\",\n    \"reaction\": {\n      \"key\": \"LIKE\",\n      \"label\": \"Like\"\n    },\n    \"message\": {\n      \"id\": 100,\n      \"groupId\": 1,\n      \"groupTopicId\": 5,\n      \"parentMessageId\": null,\n      \"userId\": \"uuid-student\",\n      \"senderRoleName\": null,\n      \"content\": \"Hello from app\",\n      \"status\": \"Active\",\n      \"editedAt\": null,\n      \"deletedAt\": null,\n      \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n      \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n      \"user\": {\n        \"id\": \"uuid-student\",\n        \"fullName\": \"Test Student\",\n        \"profilePicturePath\": null\n      },\n      \"attachments\": [],\n      \"reactionTypeCount\": {\n        \"like\": 1,\n        \"dislike\": 0\n      },\n      \"reactions\": [],\n      \"replyCount\": 0\n    }\n  }\n}"
+            },
+            {
+              "name": "400 ΓÇö Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"statusCode\": 400,\n  \"errors\": {\n    \"reactionType\": [\n      \"reaction_type must be like or dislike\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 ΓÇö Reactions are not allowed in this group type",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Reactions are not allowed in this group type\",\n  \"statusCode\": 403,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction_type\": \"like\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Remove Reaction",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman"
+              }
+            ],
+            "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions",
+            "description": "Removes the caller's reaction on the message.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 ΓÇö Removed",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Reaction removed successfully\",\n  \"statusCode\": 200,\n  \"data\": {\n    \"action\": \"removed\",\n    \"reaction\": null,\n    \"message\": {\n      \"id\": 100,\n      \"groupId\": 1,\n      \"groupTopicId\": 5,\n      \"parentMessageId\": null,\n      \"userId\": \"uuid-student\",\n      \"senderRoleName\": null,\n      \"content\": \"Hello from app\",\n      \"status\": \"Active\",\n      \"editedAt\": null,\n      \"deletedAt\": null,\n      \"createdAt\": \"2026-09-03T11:00:00.000+05:30\",\n      \"updatedAt\": \"2026-09-03T11:00:00.000+05:30\",\n      \"user\": {\n        \"id\": \"uuid-student\",\n        \"fullName\": \"Test Student\",\n        \"profilePicturePath\": null\n      },\n      \"attachments\": [],\n      \"reactionTypeCount\": {\n        \"like\": 0,\n        \"dislike\": 0\n      },\n      \"reactions\": [],\n      \"replyCount\": 0\n    }\n  }\n}"
+            },
+            {
+              "name": "404 ΓÇö Reaction not found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Reaction not found\",\n  \"statusCode\": 404,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Access token is required (Missing Authorization)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Access token is required\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Invalid or expired access token",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired access token\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session is invalid. Please login again",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session is invalid. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            },
+            {
+              "name": "401 ΓÇö Session has expired. Please login again",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman"
+                  }
+                ],
+                "url": "{{baseUrl}}api/app/groups/messages/{{messageId}}/reactions"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Session has expired. Please login again\",\n  \"statusCode\": 401,\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

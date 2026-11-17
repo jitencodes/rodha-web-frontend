@@ -17,6 +17,8 @@ import type {
   ForumTopicApi,
   ForumTopicAuthorApi,
   ForumTopicAuthorViewModel,
+  ForumTopicLastMessageApi,
+  ForumTopicLastPostViewModel,
   ForumTopicListApi,
   ForumTopicListViewModel,
   ForumTopicViewModel,
@@ -24,8 +26,6 @@ import type {
   GroupMemberApi,
   GroupMemberRoleApi,
   GroupMemberViewModel,
-  GroupMembershipApi,
-  GroupMembershipViewModel,
 } from "./types";
 
 function asCount(value: number | null | undefined): number {
@@ -62,6 +62,24 @@ export function toForumPlainText(value: string | null | undefined): string {
     .replace(/&#39;/gi, "'")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/** Keeps "not returned" (null) distinct from a real zero. */
+function asOptionalCount(value: number | null | undefined): number | null {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0
+    ? Math.floor(value)
+    : null;
+}
+
+function mapLastPost(
+  message: ForumTopicLastMessageApi | null | undefined
+): ForumTopicLastPostViewModel | null {
+  const createdAt = message?.createdAt?.trim() ?? "";
+  if (!message || !createdAt) return null;
+  return {
+    authorName: message.user?.fullName?.trim() || "Member",
+    createdAt,
+  };
 }
 
 function mapAuthor(
@@ -111,6 +129,7 @@ export function mapDoubtForum(
     lastMessagePreview: toForumPlainText(forum.lastMessagePreview) || null,
     type: forum.type?.trim() || null,
     isMember: forum.isMember === true,
+    isFeatured: forum.isFeatured === true,
     createdBy: mapCreator(forum.createdByUser),
   };
 }
@@ -182,6 +201,9 @@ export function mapForumTopic(
     createdAt: topic.createdAt?.trim() || "",
     author: mapAuthor(topic.author),
     lastMessagePreview: toForumPlainText(topic.lastMessagePreview) || null,
+    lastPost: mapLastPost(topic.lastMessage),
+    likeCount: asOptionalCount(topic.reactionTypeCount?.like),
+    viewCount: asOptionalCount(topic.viewCount),
   };
 }
 
@@ -279,6 +301,12 @@ export function mapForumMessage(
     myReaction: mapMyReaction(message.myReaction),
     attachments,
     status,
+    parentMessageId:
+      typeof message.parentMessageId === "number" &&
+      Number.isFinite(message.parentMessageId)
+        ? message.parentMessageId
+        : null,
+    replyCount: asNonNegativeCount(message.replyCount),
   };
 }
 
@@ -396,24 +424,5 @@ export function mapGroupDetail(
     ...base,
     memberCount: base.memberCount || members.length,
     members,
-  };
-}
-
-export function mapGroupMembership(
-  data: GroupMembershipApi | null | undefined
-): GroupMembershipViewModel | null {
-  if (!data) return null;
-  const groupId = data.groupId;
-  if (typeof groupId !== "number" || !Number.isFinite(groupId) || groupId <= 0) {
-    return null;
-  }
-
-  return {
-    groupId,
-    groupName: data.groupName?.trim() || `Group ${groupId}`,
-    groupType: data.groupType?.trim() || null,
-    isArchived: data.isArchived === true,
-    isMember: data.isMember === true,
-    leftAt: data.leftAt?.trim() || null,
   };
 }

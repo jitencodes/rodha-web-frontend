@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { getDoubtForumBySlug } from "@/lib/api/modules/groups/service";
 import type { DoubtForumViewModel } from "@/lib/api/modules/groups/types";
+import { forumGroupPath } from "@/lib/forum/paths";
 
 export async function loadDoubtForum(slug: string): Promise<DoubtForumViewModel> {
   const forum = await getDoubtForumBySlug(slug);
@@ -10,5 +11,5 @@ export async function loadDoubtForum(slug: string): Promise<DoubtForumViewModel>
 }
 
 export function forumBasePath(slug: string): string {
-  return `/discussion-forum/${slug}`;
+  return forumGroupPath(slug);
 }

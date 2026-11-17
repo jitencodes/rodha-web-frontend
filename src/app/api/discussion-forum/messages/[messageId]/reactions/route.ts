@@ -4,10 +4,7 @@ import {
   reactToGroupMessage,
   removeGroupMessageReaction,
 } from "@/lib/api/modules/groups/service";
-import {
-  toForumPreviewAnswer,
-  toForumSpaceMessage,
-} from "@/lib/api/modules/groups/ui";
+import { toForumPreviewAnswer } from "@/lib/api/modules/groups/ui";
 import type {
   ForumMessageViewModel,
   ForumReactionType,
@@ -28,7 +25,6 @@ type ReactionMeta = {
   topicSlug: string;
   forumSlug: string;
   topicId: number;
-  groupId: number;
 };
 
 function parseMessageId(raw: string): number | null {
@@ -62,15 +58,11 @@ function parseMeta(body: Record<string, unknown> | null): ReactionMeta {
     topicSlug,
     forumSlug,
     topicId: asPositiveInt(body?.topic_id),
-    groupId: asPositiveInt(body?.group_id),
   };
 }
 
 function reactionPayload(message: ForumMessageViewModel, meta: ReactionMeta) {
-  if (meta.topicSlug) {
-    return toForumPreviewAnswer(message, meta.topicId);
-  }
-  return toForumSpaceMessage(message, meta.groupId || 0);
+  return toForumPreviewAnswer(message, meta.topicId);
 }
 
 function unauthorizedResponse(status: number) {
@@ -100,7 +92,7 @@ function errorResponse(error: unknown, fallback: string) {
   );
 }
 
-/** Add / change reaction. Body `{ reaction_type, topic_id?, topic_slug?, forum_slug?, group_id? }`. */
+/** Add / change reaction. Body `{ reaction_type, topic_id?, topic_slug?, forum_slug? }`. */
 export async function POST(request: Request, context: RouteContext) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -163,7 +155,7 @@ export async function POST(request: Request, context: RouteContext) {
 /**
  * Remove the current user's reaction.
  * `DELETE api/app/groups/messages/:messageId/reactions`
- * Optional JSON body: `{ topic_id?, topic_slug?, forum_slug?, group_id? }` for response shape / revalidate.
+ * Optional JSON body: `{ topic_id?, topic_slug?, forum_slug? }` for response shape / revalidate.
  */
 export async function DELETE(request: Request, context: RouteContext) {
   const accessToken = await getAccessToken();

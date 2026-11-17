@@ -23,6 +23,11 @@ export function formatForumCount(n: number): string {
   return String(n);
 }
 
+/** "1 member", "12 topics", "1.2k replies". */
+export function formatForumCountLabel(n: number, singular: string, plural = `${singular}s`): string {
+  return `${formatForumCount(n)} ${n === 1 ? singular : plural}`;
+}
+
 /** Backend rejects edits after this window (API: “Edit window of 4 hour(s)…”). */
 export const FORUM_MESSAGE_EDIT_WINDOW_MS = 4 * 60 * 60 * 1000;
 

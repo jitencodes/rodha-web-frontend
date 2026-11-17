@@ -1,7 +1,14 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
 type ForumAvatarProps = {
   name: string;
+  /** Profile picture URL from the API. Falls back to initials when missing or broken. */
+  src?: string | null;
   className?: string;
   textClassName?: string;
 };
@@ -13,18 +20,40 @@ function getInitials(name: string): string {
   return `${parts[0][0] ?? ""}${parts[parts.length - 1][0] ?? ""}`.toUpperCase();
 }
 
-/** Initials circle using Rodha primary orange (approved forum avatar style). */
-export function ForumAvatar({ name, className, textClassName }: ForumAvatarProps) {
+/** Profile photo, or an initials circle in Rodha orange (light forum theme). */
+export function ForumAvatar({
+  name,
+  src,
+  className,
+  textClassName,
+}: ForumAvatarProps) {
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      <Image
+        src={src}
+        alt={name}
+        width={64}
+        height={64}
+        sizes="64px"
+        onError={() => setFailed(true)}
+        className={cn("shrink-0 rounded-full object-cover", className)}
+      />
+    );
+  }
+
+  // <span> keeps the fallback valid inside text elements (e.g. a <p> meta line).
   return (
-    <div
+    <span
       role="img"
       aria-label={name}
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-full bg-orange-500/15 font-semibold text-orange-400 select-none",
+        "inline-flex shrink-0 items-center justify-center rounded-full bg-orange-100 font-semibold text-orange-700 select-none",
         className
       )}
     >
       <span className={cn("leading-none", textClassName)}>{getInitials(name)}</span>
-    </div>
+    </span>
   );
 }

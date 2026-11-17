@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { postGroupMessage } from "@/lib/api/modules/groups/service";
+import {
+  getGroupTopicMessages,
+  postGroupMessage,
+} from "@/lib/api/modules/groups/service";
 import {
   toForumPreviewAnswer,
-  toForumSpaceMessage,
+  toForumPreviewAnswers,
 } from "@/lib/api/modules/groups/ui";
 import { ApiError } from "@/lib/api/types";
 import { clearAuthCookie } from "@/lib/auth/session-cookie";
@@ -24,9 +27,59 @@ function asTrimmedString(value: FormDataEntryValue | null): string {
 }
 
 /**
+ * GET → `api/app/groups/messages` direct replies of one forum message
+ * (`parent_message_id`). Used by the topic thread "Show replies" control.
+ * Optional auth so `myReaction` is filled for logged-in viewers.
+ */
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const groupId = asPositiveInt(url.searchParams.get("group_id"));
+  const groupSlug = asTrimmedString(url.searchParams.get("group_slug"));
+  const topicSlug = asTrimmedString(url.searchParams.get("topic_slug"));
+  const parentMessageId = asPositiveInt(
+    url.searchParams.get("parent_message_id")
+  );
+  const topicId = asPositiveInt(url.searchParams.get("topic_id"));
+
+  if (!groupId || !groupSlug || !topicSlug || !parentMessageId) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          "group_id, group_slug, topic_slug and parent_message_id are required.",
+      },
+      { status: 400 }
+    );
+  }
+
+  const accessToken = await getAccessToken();
+  const list = await getGroupTopicMessages({
+    groupId,
+    groupSlug,
+    topicSlug,
+    parentMessageId,
+    sortOrder: "asc",
+    page: 1,
+    limit: 50,
+    accessToken: accessToken ?? undefined,
+  });
+
+  if (!list) {
+    return NextResponse.json(
+      { ok: false, error: "Unable to load replies." },
+      { status: 502 }
+    );
+  }
+
+  return NextResponse.json({
+    ok: true,
+    data: toForumPreviewAnswers(list.items, topicId ?? 0),
+  });
+}
+
+/**
  * POST multipart → `api/app/groups/messages`.
- * - Forum answer: `group_id` + `topic_slug` (+ optional parent / files)
- * - Group chat: `group_id` + `content` / `files` (no topic_slug)
+ * Forum reply: `group_id` + `topic_slug` (+ optional `parent_message_id` / `files`).
  */
 export async function POST(request: Request) {
   const accessToken = await getAccessToken();
@@ -50,9 +103,9 @@ export async function POST(request: Request) {
       .getAll("files")
       .filter((entry): entry is File => entry instanceof File && entry.size > 0);
 
-    if (!groupId) {
+    if (!groupId || !topicSlug) {
       return NextResponse.json(
-        { ok: false, error: "group_id is required." },
+        { ok: false, error: "group_id and topic_slug are required." },
         { status: 400 }
       );
     }
@@ -66,26 +119,19 @@ export async function POST(request: Request) {
 
     const message = await postGroupMessage(accessToken, {
       groupId,
-      topicSlug: topicSlug || null,
+      topicSlug,
       content,
-      parentMessageId: topicSlug ? parentMessageId : null,
+      parentMessageId,
       files,
     });
 
-    if (forumSlug && topicSlug) {
+    if (forumSlug) {
       revalidateForumTopicPaths(forumSlug, topicSlug);
-    }
-
-    if (topicSlug) {
-      return NextResponse.json({
-        ok: true,
-        data: toForumPreviewAnswer(message, topicId ?? 0),
-      });
     }
 
     return NextResponse.json({
       ok: true,
-      data: toForumSpaceMessage(message, groupId),
+      data: toForumPreviewAnswer(message, topicId ?? 0),
     });
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {

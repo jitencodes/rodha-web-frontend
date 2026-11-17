@@ -1,5 +1,33 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+/**
+ * Teach tailwind-merge the custom type scale from `globals.css` (`--text-*`).
+ * Without this, `text-caption` / `text-body-sm` are treated as colors and get
+ * dropped whenever a `text-<color>` class follows them.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      "font-size": [
+        {
+          text: [
+            "hero",
+            "h1",
+            "h2",
+            "h2-v2",
+            "h3",
+            "h4",
+            "body-lg",
+            "body",
+            "body-sm",
+            "caption",
+          ],
+        },
+      ],
+    },
+  },
+});
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
