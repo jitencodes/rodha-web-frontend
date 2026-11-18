@@ -64,9 +64,11 @@ function AnnouncementCountdown({
   );
 }
 
+// CMS announcement HTML contains block tags (<p>), so it is always wrapped in
+// <div>s — a <p> inside <p>/<span> is invalid and breaks hydration.
 function AnnouncementTicker({ html }: { html: string }) {
   const copy = (
-    <span
+    <div
       className="announcement-html inline-block whitespace-nowrap px-8 text-caption leading-snug text-text-secondary [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:underline [&_a]:underline-offset-2"
       dangerouslySetInnerHTML={{ __html: html }}
     />
@@ -76,9 +78,9 @@ function AnnouncementTicker({ html }: { html: string }) {
     <div className="w-full overflow-hidden">
       <div className="announcement-ticker flex w-max items-center">
         {copy}
-        <span aria-hidden className="announcement-ticker-clone inline-flex">
+        <div aria-hidden className="announcement-ticker-clone inline-flex">
           {copy}
-        </span>
+        </div>
       </div>
     </div>
   );
@@ -118,15 +120,12 @@ function AnnouncementFace({
       <div className="container-rodha relative hidden h-full w-full items-center justify-center gap-3 sm:flex sm:gap-5 lg:justify-end">
         {/* Announcement */}
         <div className="flex-1 min-w-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:w-[min(100%,42rem)]">
-          <p className="text-center text-body-sm leading-snug text-text-secondary">
-            <span
-              className="announcement-html [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:underline-offset-2 [&_a]:hover:text-orange-400 sm:[&_a]:no-underline"
-              suppressHydrationWarning
-              dangerouslySetInnerHTML={{
-                __html: announcement.descriptionHtml || "",
-              }}
-            />
-          </p>
+          <div
+            className="announcement-html text-center text-body-sm leading-snug text-text-secondary [&_a]:font-semibold [&_a]:text-orange-500 [&_a]:underline-offset-2 [&_a]:hover:text-orange-400 sm:[&_a]:no-underline"
+            dangerouslySetInnerHTML={{
+              __html: announcement.descriptionHtml || "",
+            }}
+          />
         </div>
 
         {/* Countdown + close */}

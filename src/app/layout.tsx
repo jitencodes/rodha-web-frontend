@@ -74,6 +74,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${montserrat.variable} dark`}
+      // Browser extensions (e.g. screen recorders) add attributes to <html>
+      // before hydration; this only ignores attribute diffs on this element.
+      suppressHydrationWarning
     >
       <body className="min-h-screen bg-bg-primary text-text-primary font-sans antialiased">
         <script
