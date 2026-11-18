@@ -14,12 +14,15 @@ interface CallbackPaginationProps extends PaginationBaseProps {
   onPageChange: (page: number) => void;
   basePath?: never;
   query?: never;
+  scroll?: never;
 }
 
 interface UrlPaginationProps extends PaginationBaseProps {
   onPageChange?: never;
   basePath: string;
   query?: Record<string, string>;
+  /** Forwarded to the page links; pass `false` when the listing manages its own scroll position. */
+  scroll?: boolean;
 }
 
 type PaginationProps = CallbackPaginationProps | UrlPaginationProps;
@@ -30,6 +33,7 @@ export function Pagination({
   onPageChange,
   basePath,
   query,
+  scroll,
   variant = "dark",
   className,
 }: PaginationProps) {
@@ -84,7 +88,7 @@ export function Pagination({
         {currentPage <= 1 ? (
           <span className={cn(arrowBase, "opacity-30 cursor-not-allowed")} aria-hidden>{PrevArrow}</span>
         ) : (
-          <Link href={buildHref(currentPage - 1)} className={arrowBase} aria-label="Previous page">{PrevArrow}</Link>
+          <Link href={buildHref(currentPage - 1)} scroll={scroll} className={arrowBase} aria-label="Previous page">{PrevArrow}</Link>
         )}
 
         {pages.map((page, i) =>
@@ -94,6 +98,7 @@ export function Pagination({
             <Link
               key={page}
               href={buildHref(page as number)}
+              scroll={scroll}
               className={pageBase(page === currentPage)}
               aria-current={page === currentPage ? "page" : undefined}
             >
@@ -105,7 +110,7 @@ export function Pagination({
         {currentPage >= totalPages ? (
           <span className={cn(arrowBase, "opacity-30 cursor-not-allowed")} aria-hidden>{NextArrow}</span>
         ) : (
-          <Link href={buildHref(currentPage + 1)} className={arrowBase} aria-label="Next page">{NextArrow}</Link>
+          <Link href={buildHref(currentPage + 1)} scroll={scroll} className={arrowBase} aria-label="Next page">{NextArrow}</Link>
         )}
       </nav>
     );

@@ -51,7 +51,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | PromotionalBanner | `PromotionalBanner.tsx` (API announcements; 3D flip; countdown when `endAt`) |
 | PromoDialog | `PromoDialog.tsx` (once per 24h; `promotional-banner` API; IMAGE→link; VIDEO thumbnail→autoplay 1.5s; lead form when logged out) |
 | PurchaseToast | `PurchaseToast.tsx` (bottom-left recent purchases shown one at a time, loops; auto-close + gap from env; 24h after manual close) |
-| GlobalSearchDialog | `GlobalSearchDialog.tsx` (Ctrl/Cmd+K; quick links; entity-type filters) |
+| GlobalSearchDialog | `GlobalSearchDialog.tsx` (Ctrl/Cmd+K; quick links; entity-type filters; shimmer/stale-result loading; per-session result cache) |
 | SiteFrame | `SiteFrame.tsx` (public `(website)` layout only; hides marketing chrome on `/login` and `/signup`) |
 | StoriesModal | `VideoModal.tsx` (YouTube iframe modal for `YoutubeStoryCard` clicks) |
 

@@ -112,6 +112,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
             {!isDefaultView && (
               <Link
                 href="/results"
+                scroll={false}
                 className="text-body-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
               >
                 Clear filters
@@ -144,6 +145,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
               totalPages={totalPages}
               basePath="/results"
               query={listingPaginationQuery({ category, query })}
+              scroll={false}
               variant="light"
               className="pt-8"
             />

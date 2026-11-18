@@ -31,6 +31,7 @@ export function ListingEmptyState({
       <p className="mt-2 text-body text-neutral-500">{message}</p>
       <Link
         href={href}
+        scroll={false}
         className="mt-5 inline-block text-body-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
       >
         Clear filters

@@ -112,6 +112,7 @@ export default async function TestimonialsPage({
             {!isDefaultView && (
               <Link
                 href="/testimonials"
+                scroll={false}
                 className="text-body-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
               >
                 Clear filters
@@ -145,6 +146,7 @@ export default async function TestimonialsPage({
               totalPages={totalPages}
               basePath="/testimonials"
               query={listingPaginationQuery({ category, query })}
+              scroll={false}
               variant="light"
               className="pt-8"
             />

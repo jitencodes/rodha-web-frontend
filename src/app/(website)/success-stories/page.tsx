@@ -113,6 +113,7 @@ export default async function SuccessStoriesPage({
             {!isDefaultView && (
               <Link
                 href="/success-stories"
+                scroll={false}
                 className="text-body-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
               >
                 Clear filters
@@ -147,6 +148,7 @@ export default async function SuccessStoriesPage({
               totalPages={totalPages}
               basePath="/success-stories"
               query={listingPaginationQuery({ category, query })}
+              scroll={false}
               variant="light"
               className="pt-8"
             />

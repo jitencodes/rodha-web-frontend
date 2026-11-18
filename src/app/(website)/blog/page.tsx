@@ -175,6 +175,7 @@ export default async function BlogPage({
             {!isDefaultView && (
               <Link
                 href="/blog"
+                scroll={false}
                 className="text-body-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
               >
                 Clear filters
@@ -209,6 +210,7 @@ export default async function BlogPage({
 
               <Link
                 href="/blog"
+                scroll={false}
                 className="inline-block mt-5 text-body-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
               >
                 Clear filters
@@ -222,6 +224,7 @@ export default async function BlogPage({
               totalPages={totalPages}
               basePath="/blog"
               query={queryForPagination}
+              scroll={false}
               variant="light"
               className="pt-8"
             />

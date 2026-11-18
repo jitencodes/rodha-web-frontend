@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useAtomValue } from "jotai";
 
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -23,6 +23,30 @@ interface BlogToolbarProps {
 function listingHref(basePath: string, params: URLSearchParams) {
   const qs = params.toString();
   return qs ? `${basePath}?${qs}` : basePath;
+}
+
+/** Gap kept between the sticky site header and the toolbar after scrolling. */
+const TOOLBAR_SCROLL_GAP = 16;
+
+/**
+ * Next scrolls to the top of the page on every query-string navigation, which
+ * jumps users back to the hero. Navigations here opt out (`scroll: false`) and
+ * this brings the toolbar back into view only when it has left the viewport
+ * (e.g. after paginating from the bottom of the grid).
+ */
+function scrollToolbarIntoView(toolbar: HTMLElement) {
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const headerHeight = header?.getBoundingClientRect().height ?? 0;
+  const top = toolbar.getBoundingClientRect().top;
+  const maxVisibleTop = window.innerHeight - toolbar.offsetHeight;
+
+  if (top >= headerHeight && top <= maxVisibleTop) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({
+    top: window.scrollY + top - headerHeight - TOOLBAR_SCROLL_GAP,
+    behavior: reduceMotion ? "auto" : "smooth",
+  });
 }
 
 function withExtraParams(extraParams?: Record<string, string>) {
@@ -49,6 +73,17 @@ export function BlogToolbar({
 
   const categories = useAtomValue(categoriesAtom);
 
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const searchParamsKey = useSearchParams().toString();
+  const lastParamsKey = useRef(searchParamsKey);
+
+  // Runs once the new listing has rendered for the updated query string.
+  useEffect(() => {
+    if (lastParamsKey.current === searchParamsKey) return;
+    lastParamsKey.current = searchParamsKey;
+    if (toolbarRef.current) scrollToolbarIntoView(toolbarRef.current);
+  }, [searchParamsKey]);
+
   function handleSearch(value: string) {
     setQuery(value);
 
@@ -65,12 +100,15 @@ export function BlogToolbar({
         params.set("q", trimmedValue);
       }
 
-      router.push(listingHref(basePath, params));
+      router.push(listingHref(basePath, params), { scroll: false });
     });
   }
 
   return (
-    <div className="mt-5 flex flex-col gap-4 rounded-md border border-[#fee8dd] bg-white p-6 shadow-sm shadow-[#fee8dd] md:flex-row md:items-center md:justify-between lg:mt-0 lg:-translate-y-1/2">
+    <div
+      ref={toolbarRef}
+      className="mt-5 flex flex-col gap-4 rounded-md border border-[#fee8dd] bg-white p-6 shadow-sm shadow-[#fee8dd] md:flex-row md:items-center md:justify-between lg:mt-0 lg:-translate-y-1/2"
+    >
       <div
         className="flex max-w-full gap-2 overflow-x-auto scrollbar-hide pb-1"
         role="tablist"
@@ -79,6 +117,7 @@ export function BlogToolbar({
         {/* All category */}
         <Link
           href={listingHref(basePath, withExtraParams(extraParams))}
+          scroll={false}
           role="tab"
           aria-selected={activeCategory === "all"}
           className={cn(
@@ -104,6 +143,7 @@ export function BlogToolbar({
             <Link
               key={cat.id}
               href={href}
+              scroll={false}
               role="tab"
               aria-selected={isActive}
               className={cn(

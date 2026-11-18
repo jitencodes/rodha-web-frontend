@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-17 (Discussion Forum light theme; groups/channels removed)
+**Last updated:** 2026-11-18 (listing scroll, search dialog loading UX, forum group dropdown)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,11 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Hydration fixes (2026-11-18):** `PromotionalBanner` wraps CMS announcement HTML (which contains `<p>`) in `<div>`s instead of `<p>`/`<span>`, which had produced invalid nesting and a hydration mismatch on every page with the banner. `useCountdown` reads the clock through `useSyncExternalStore` with a `null` server snapshot, so SSR and hydration render a stable placeholder (`ready: false`) and the live digits appear after hydration (used by `PromotionalBanner` and `CountdownTimer`). The root `<html>` has `suppressHydrationWarning` for attributes injected by browser extensions (e.g. Scribe recorder: `style="filter:none"`, `data-scribe-recorder-ready`).
+- **Listing scroll, search loading UX, forum group picker (2026-11-18):**
+  - **Listing scroll:** `/blog`, `/results`, `/testimonials`, `/success-stories` and `/resources` no longer jump to the hero when search, category or page changes. `BlogToolbar` navigates with `scroll: false`, and once the new results render it scrolls the toolbar back under the sticky header only if the toolbar is off-screen. `Pagination` takes an optional `scroll` prop, and `ListingEmptyState` "Clear filters" uses `scroll={false}`.
+  - **`GlobalSearchDialog`:** shows a pending state as soon as the query or filter changes (spinner in the input plus an indeterminate `.search-progress-bar`). A filter switch shows shimmer rows, while typing within a filter keeps the previous results dimmed. Filter switches fetch without the 300ms debounce, and results are cached per filter and query while the dialog is open. The empty state offers "Search all categories". Filter tabs (`role=tab`), Clear/Close, quick links and results all use `cursor-pointer`. The dialog body unmounts on close, so its state resets.
+  - **Create Topic:** the Group field uses `DropdownSelect` (`variant="light"`, full width) instead of a native `<select>`.
 - **Discussion Forum dashboard design (2026-11-17):** Restyled to `referrence/ui/discussion/redesign/Rodha Discussion Forum Dashboard.png`:
   - **Header:** logo | divider | Feed (active pill + orange underline) · Groups | wide search | Rodha Buddy (orange outline + headset), Sign In (user icon), Join Now.
   - **Layout:** flat sidebar with a right divider; large plain page heading; white rounded group cards (icon, name, description, See All Topics); normal-case table header; square author initials.

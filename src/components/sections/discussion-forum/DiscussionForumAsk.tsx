@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { ForumMessageComposer } from "@/components/sections/discussion-forum/ForumMessageComposer";
 import { isForumRichTextEmpty } from "@/components/sections/discussion-forum/ForumRichTextEditor";
 import { Input } from "@/components/ui/Input";
@@ -39,6 +40,7 @@ export function DiscussionForumAsk({
   );
   const selectedGroup = groups.find((group) => group.id === groupId) ?? null;
   const showPicker = groups.length > 1;
+  const groupOptions = groups.map((group) => ({ value: String(group.id), label: group.name }));
 
   return (
     <div className="rounded-xl border border-orange-100 bg-white p-4 shadow-sm sm:p-6">
@@ -51,29 +53,16 @@ export function DiscussionForumAsk({
 
       <div className="mt-6 space-y-4">
         {showPicker ? (
-          <div>
-            <label
-              htmlFor="topic-group"
-              className="mb-1.5 block text-body-sm font-medium text-neutral-700"
-            >
-              Group
-            </label>
-            <select
-              id="topic-group"
-              value={groupId}
-              onChange={(event) =>
-                setGroupId(event.target.value ? Number(event.target.value) : "")
-              }
-              className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-body-sm text-neutral-900 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100"
-            >
-              <option value="">Select a group…</option>
-              {groups.map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <DropdownSelect
+            label="Group"
+            variant="light"
+            placeholder="Select a group…"
+            options={groupOptions}
+            value={groupId === "" ? "" : String(groupId)}
+            onChange={(value) => setGroupId(value ? Number(value) : "")}
+            triggerWidth="full"
+            menuWidth="trigger"
+          />
         ) : null}
 
         <div>

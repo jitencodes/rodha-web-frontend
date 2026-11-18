@@ -126,6 +126,7 @@ export default async function ResourcesPage({
             {!isDefaultView && (
               <Link
                 href="/resources"
+                scroll={false}
                 className="text-body-sm font-medium text-orange-500 transition-colors hover:text-orange-600 sm:ml-auto"
               >
                 Clear filters
@@ -159,6 +160,7 @@ export default async function ResourcesPage({
                 query,
                 type: activeType,
               })}
+              scroll={false}
               variant="light"
               className="pt-8"
             />
