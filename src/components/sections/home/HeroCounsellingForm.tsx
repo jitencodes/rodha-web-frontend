@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useAtomValue } from "jotai";
 import { Input } from "@/components/ui/Input";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Button } from "@/components/ui/Button";
-import { CATEGORIES } from "@/lib/constants";
+import { categoriesAtom } from "@/lib/store/categories";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/submit-lead";
 import {
@@ -40,6 +41,15 @@ export function HeroCounsellingForm({
   showHeader,
   onSuccess,
 }: HeroCounsellingFormProps) {
+  const categories = useAtomValue(categoriesAtom);
+  const examOptions = useMemo(
+    () =>
+      categories.map((category) => ({
+        value: category.counsellingExamId ?? category.slug,
+        label: category.menuLabel || category.name,
+      })),
+    [categories]
+  );
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [exam, setExam] = useState(defaultExam);
@@ -64,7 +74,7 @@ export function HeroCounsellingForm({
     const nextErrors: CounsellingFieldErrors = {
       name: validateName(name),
       phone: validatePhone(phone),
-      exam: validateExam(exam),
+      exam: examOptions.length > 0 ? validateExam(exam) : undefined,
     };
     setFieldErrors(nextErrors);
 
@@ -158,19 +168,21 @@ export function HeroCounsellingForm({
             <p className="mt-1 text-caption text-accent-red">{fieldErrors.phone}</p>
           )}
         </div>
-        <DropdownSelect
-          aria-label="Select exam of interest"
-          placeholder="Select Exam of Interest"
-          value={exam}
-          onChange={(value) => {
-            setExam(value);
-            setFieldErrors((prev) => ({ ...prev, exam: undefined }));
-          }}
-          options={CATEGORIES.map((c) => ({ value: c.id, label: c.menuLabel }))}
-          error={fieldErrors.exam}
-          className="w-full relative z-[100]"
-          triggerClassName="h-[42px] w-full min-w-0 text-body-sm border-border-default bg-bg-surface hover:border-orange-500/60"
-        />
+        {examOptions.length > 0 ? (
+          <DropdownSelect
+            aria-label="Select exam of interest"
+            placeholder="Select Exam of Interest"
+            value={exam}
+            onChange={(value) => {
+              setExam(value);
+              setFieldErrors((prev) => ({ ...prev, exam: undefined }));
+            }}
+            options={examOptions}
+            error={fieldErrors.exam}
+            className="w-full relative z-[100]"
+            triggerClassName="h-[42px] w-full min-w-0 text-body-sm border-border-default bg-bg-surface hover:border-orange-500/60"
+          />
+        ) : null}
         <Button type="submit" loading={loading} fullWidth size="lg">
           Book Free Counselling Now
         </Button>

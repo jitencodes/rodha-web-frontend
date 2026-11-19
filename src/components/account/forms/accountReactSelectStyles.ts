@@ -131,11 +131,11 @@ export function createAccountReactSelectStyles<
       border: `1px solid ${BORDER}`,
       boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
       overflow: "hidden",
-      zIndex: 1100,
+      zIndex: 12000,
     }),
     menuPortal: (base) => ({
       ...base,
-      zIndex: 1100,
+      zIndex: 12000,
     }),
     menuList: (base) => ({
       ...base,

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAtomValue } from "jotai";
 import { Input } from "@/components/ui/Input";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Button } from "@/components/ui/Button";
-import { CATEGORIES } from "@/lib/constants";
+import { categoriesAtom } from "@/lib/store/categories";
 import type { CategoryId, LeadFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/submit-lead";
@@ -62,6 +63,15 @@ export function LeadCaptureForm({
   hideTitle = false,
   onSuccess,
 }: LeadCaptureFormProps) {
+  const categories = useAtomValue(categoriesAtom);
+  const examOptions = useMemo(
+    () =>
+      categories.map((category) => ({
+        value: category.counsellingExamId ?? category.slug,
+        label: category.menuLabel || category.name,
+      })),
+    [categories]
+  );
   const [formData, setFormData] = useState<LeadFormData>({
     name: "",
     phone: "",
@@ -87,7 +97,7 @@ export function LeadCaptureForm({
     setErrorMessage("");
 
     const nextErrors: LeadFieldErrors = {
-      exam: validateExam(formData.exam),
+      exam: examOptions.length > 0 ? validateExam(formData.exam) : undefined,
       name: validateName(formData.name),
       phone: validatePhone(formData.phone),
       email: validateEmail(formData.email),
@@ -155,30 +165,29 @@ export function LeadCaptureForm({
           (!hideTitle && title) || subtitle ? "mt-4" : ""
         )}
       >
-        <DropdownSelect
-          aria-label="Select exam"
-          placeholder="Select Exam"
-          value={formData.exam}
-          onChange={(exam) => {
-            setFormData((prev) => ({
-              ...prev,
-              exam: exam as LeadFormData["exam"],
-            }));
-            setFieldErrors((prev) => ({ ...prev, exam: undefined }));
-          }}
-          options={CATEGORIES.map((c) => ({
-            value: c.id,
-            label: c.menuLabel,
-          }))}
-          variant={isLight ? "light" : "dark"}
-          error={fieldErrors.exam}
-          className="w-full relative z-40"
-          triggerClassName={cn(
-            "h-[42px] w-full min-w-0 text-body-sm",
-            isLight &&
-              "border-section-beige bg-white text-neutral-800 hover:border-orange-500/60"
-          )}
-        />
+        {examOptions.length > 0 ? (
+          <DropdownSelect
+            aria-label="Select exam"
+            placeholder="Select Exam"
+            value={formData.exam}
+            onChange={(exam) => {
+              setFormData((prev) => ({
+                ...prev,
+                exam: exam as LeadFormData["exam"],
+              }));
+              setFieldErrors((prev) => ({ ...prev, exam: undefined }));
+            }}
+            options={examOptions}
+            variant={isLight ? "light" : "dark"}
+            error={fieldErrors.exam}
+            className="w-full relative z-40"
+            triggerClassName={cn(
+              "h-[42px] w-full min-w-0 text-body-sm",
+              isLight &&
+                "border-section-beige bg-white text-neutral-800 hover:border-orange-500/60"
+            )}
+          />
+        ) : null}
         <Input
           variant={isLight ? "light" : "dark"}
           placeholder="Your Name"

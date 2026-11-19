@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-18 (listing scroll, search dialog loading UX, forum group dropdown)
+**Last updated:** 2026-11-20 (checkout offers dialog, sticky scroll, PREV_ATTEMPT UI)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,23 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Checkout offers dialog + purchase card polish + PREV_ATTEMPT (2026-11-20):**
+  - Checkout coupon heading is dynamic (`Have a coupon?` / `Coupon applied · {code}`); Available offers moved into `PackagePromocodeOffers` account-variant dialog with Apply.
+  - Course sticky shell no longer uses `max-h` + `overflow-y-auto` (page scrolls instead of nested card scrollbar).
+  - Purchase card shows **Best offer** (or Applied) badge + code chip instead of `Coupon:`.
+  - PREV_ATTEMPT: score type is read-only text (not a placeholder input); vertical options derive from exams when masters verticals are empty; clearer exam/year placeholders; select menu portal z-index raised.
+- **Purchase card coupon dialog (2026-11-20):** package detail no longer lists all codes on the sticky card. `PackagePromocodeOffers` is a compact **View available offers (N)** CTA that opens a light `Modal` with the full list (Best offer / Applied / saving / valid till). The card keeps a single applied-coupon chip next to price (no duplicate list row on the card). Card body no longer scrolls for offers.
+- **Package offers + category headers + enquiry categories (2026-11-20):**
+  - **Package detail Available offers:** logged-in course detail fetches `getPackagePromocodes` (dialog CTA on the purchase card); apply still happens on checkout. PENDING Request Discount CTA uses `Under review — {reviewSlaText}` via `discountStatusMessage`.
+  - **Account student GETs:** dashboard + student courses/filter-options/chapters/quick-actions/detail now send `x-website-category-id: 1` (MBA default) via `websiteCategoryHeaders()`. Package promocodes keep package vertical (fallback 1).
+  - **Enquiry dropdowns:** `HeroCounsellingForm`, `LeadCaptureForm`, and `ContactForm` use `categoriesAtom` (same active list as the header); no static `CATEGORIES` fallback.
+- **Promocodes + Discount Requests, student website (2026-11-19):** per `docs/FE_INTEGRATION_PROMOCODES_AND_DISCOUNT_REQUESTS.md` and the `Rodha_Promocodes_FE` / `Rodha_Discount_Requests_FE` Postman collections (admin panel side is in the separate admin repo).
+  - **`x-website-category-id`:** `apiGet` accepts `headers`; `src/lib/api/website-category.ts` builds the header. Package-scoped calls send the package `websiteCategoryId` (now mapped from package detail); calls with no package (dashboard list, form config, proof links) send the default `1`.
+  - **Checkout (cart) coupons:** the coupon box sends any typed code as `{ code }` (bulk/support codes work), listed offers apply by `promocodeId` from a new Available offers list (Best offer = `suggestedPromocodeId`, estimated saving, valid till). 400/409 API messages show under the input. A 409 at pay shows the message and refreshes the cart.
+  - **Request Discount CTA** (`DiscountRequestCta`): course purchase card (below Buy Now; paid, not enrolled; logged-out → login) and checkout aside. States follow `GET /student/discount-requests/current` (request / resubmit / under review / approved + countdown / used).
+  - **Discount form** (`DiscountRequestDialog`): config-driven COLLEGE / ACADEMIC / EWS / PREV_ATTEMPT sections built from `account/forms/*`; client validation mirrors the backend (`src/lib/account/discount-request-form.ts`); multipart via BFF; API `errors[field][0]` shown per field. Resubmit pre-fills from the rejected request and keeps proofs that are not re-uploaded.
+  - **Dashboard → My Discount Requests** (`DiscountRequestsSection`, hidden when empty): cards with status, Resubmit / Buy now / Request again, and a detail drawer with proofs (signed link fetched on each click). `?discountRequestId=` (email link) opens the drawer.
+  - **BFF:** `/api/discount-requests` (GET list, POST submit), `/config`, `/current`, `/[id]`, `/[id]/resubmit`, `/[id]/files/[fileId]`. `/api/checkout/promocode` accepts `code` or `promocodeId` and keeps 400/409 statuses; `/api/checkout/pay` keeps 409.
 - **Hydration fixes (2026-11-18):** `PromotionalBanner` wraps CMS announcement HTML (which contains `<p>`) in `<div>`s instead of `<p>`/`<span>`, which had produced invalid nesting and a hydration mismatch on every page with the banner. `useCountdown` reads the clock through `useSyncExternalStore` with a `null` server snapshot, so SSR and hydration render a stable placeholder (`ready: false`) and the live digits appear after hydration (used by `PromotionalBanner` and `CountdownTimer`). The root `<html>` has `suppressHydrationWarning` for attributes injected by browser extensions (e.g. Scribe recorder: `style="filter:none"`, `data-scribe-recorder-ready`).
 - **Listing scroll, search loading UX, forum group picker (2026-11-18):**
   - **Listing scroll:** `/blog`, `/results`, `/testimonials`, `/success-stories` and `/resources` no longer jump to the hero when search, category or page changes. `BlogToolbar` navigates with `scroll: false`, and once the new results render it scrolls the toolbar back under the sticky header only if the toolbar is off-screen. `Pagination` takes an optional `scroll` prop, and `ListingEmptyState` "Clear filters" uses `scroll={false}`.

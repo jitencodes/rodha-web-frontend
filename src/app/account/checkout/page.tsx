@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { CheckoutPageClient } from "@/components/account/CheckoutPageClient";
+import { getPackageBySlug } from "@/lib/api/modules/packages/service";
+import { mapCheckoutPromocodeOptions } from "@/lib/api/modules/student/cart/mapper";
 import {
   getPackagePromocodes,
   getStudentCart,
 } from "@/lib/api/modules/student/cart/service";
+import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
+import { getCurrentDiscountRequestOrNull } from "@/lib/api/modules/student/discount-requests/service";
+import type { DiscountCurrentViewModel } from "@/lib/api/modules/student/discount-requests/types";
 import {
   isUnauthorizedError,
   redirectSessionExpired,
@@ -24,8 +29,9 @@ export default async function AccountCheckoutPage() {
     let subtotalAmount = 0;
     let discountAmount = 0;
     let payableAmount = 0;
-    let promocodeOptions: Array<{ id: string; code: string; title: string }> =
-      [];
+    let websiteCategoryId: number | null = null;
+    let promocodeOptions: CheckoutPromocodeOption[] = [];
+    let discountRequest: DiscountCurrentViewModel | null = null;
 
     try {
       const cart = await getStudentCart(accessToken);
@@ -59,23 +65,34 @@ export default async function AccountCheckoutPage() {
           detailsHref: slug ? `/courses/${slug}` : "/courses",
         };
 
+        // The cart item has no vertical; the package detail does
+        // (needed for `x-website-category-id` on promocode / discount APIs).
+        if (slug) {
+          const pkg = await getPackageBySlug(slug, { accessToken });
+          websiteCategoryId = pkg?.websiteCategoryId ?? null;
+        }
+
         if (first.packageId != null) {
-          try {
-            const promos = await getPackagePromocodes(
-              accessToken,
-              first.packageId
-            );
-            promocodeOptions = (promos.items ?? []).map((promo) => ({
-              id: String(promo.id),
-              code: promo.code || String(promo.id),
-              title: promo.title || promo.code || "",
-            }));
-          } catch (error) {
-            if (isUnauthorizedError(error)) {
-              redirectSessionExpired("/account/checkout");
-            }
-            promocodeOptions = [];
-          }
+          const packageId = first.packageId;
+          const [promos, current] = await Promise.all([
+            // Auth errors bubble to the outer catch (session-expired redirect);
+            // anything else just hides the offers list.
+            getPackagePromocodes(accessToken, packageId, websiteCategoryId).catch(
+              (error: unknown) => {
+                if (isUnauthorizedError(error)) throw error;
+                return null;
+              }
+            ),
+            (first.salePrice ?? 0) > 0
+              ? getCurrentDiscountRequestOrNull(
+                  accessToken,
+                  packageId,
+                  websiteCategoryId
+                )
+              : Promise.resolve(null),
+          ]);
+          promocodeOptions = mapCheckoutPromocodeOptions(promos);
+          discountRequest = current;
         }
       }
     } catch (error) {
@@ -90,7 +107,9 @@ export default async function AccountCheckoutPage() {
       subtotalAmount,
       discountAmount,
       payableAmount,
+      websiteCategoryId,
       promocodeOptions,
+      discountRequest,
     };
   }, "/account/checkout");
 
@@ -100,7 +119,9 @@ export default async function AccountCheckoutPage() {
       subtotalAmount={checkout.subtotalAmount}
       discountAmount={checkout.discountAmount}
       payableAmount={checkout.payableAmount}
+      websiteCategoryId={checkout.websiteCategoryId}
       promocodeOptions={checkout.promocodeOptions}
+      discountRequest={checkout.discountRequest}
     />
   );
 }

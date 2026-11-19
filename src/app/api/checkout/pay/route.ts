@@ -43,10 +43,20 @@ export async function POST(request: Request) {
     const jar = await cookies();
     // Single source (body, else cookie) — never merged across campaigns.
     const utm = resolveCheckoutUtm(body, jar.get(UTM_COOKIE_NAME)?.value);
-    const checkout = await checkoutStudentCart(accessToken, {
-      ...utm,
-      ...(stateName ? { stateName } : {}),
-    });
+    const categoryId =
+      body && typeof body === "object"
+        ? (body as { websiteCategoryId?: unknown }).websiteCategoryId
+        : undefined;
+    const checkout = await checkoutStudentCart(
+      accessToken,
+      {
+        ...utm,
+        ...(stateName ? { stateName } : {}),
+      },
+      typeof categoryId === "number" || typeof categoryId === "string"
+        ? categoryId
+        : null
+    );
     return NextResponse.json({
       ok: true,
       mode: checkout.mode,
@@ -64,6 +74,9 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof ApiError ? error.message : "Checkout failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 502 });
+    // 409 = a code valid in the cart was refused (e.g. usage limit reached meanwhile).
+    const status =
+      error instanceof ApiError && error.status === 409 ? 409 : 502;
+    return NextResponse.json({ ok: false, error: message }, { status });
   }
 }

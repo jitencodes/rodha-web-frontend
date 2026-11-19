@@ -12,7 +12,10 @@ import { AccountRecommendedCard } from "@/components/account/AccountRecommendedC
 import { LearningProgressCard } from "@/components/account/LearningProgressCard";
 import { OrdersPreviewCard } from "@/components/account/OrdersPreviewCard";
 import { QuickLinksCard } from "@/components/account/QuickLinksCard";
+import { DiscountRequestsSection } from "@/components/account/discount-requests/DiscountRequestsSection";
 import { getStudentDashboard } from "@/lib/api/modules/student/dashboard/service";
+import { getMyDiscountRequests } from "@/lib/api/modules/student/discount-requests/service";
+import type { DiscountRequestApi } from "@/lib/api/modules/student/discount-requests/types";
 import type { AccountLiveContentItem } from "@/lib/api/modules/student/courses/mapper";
 import { getStudentOrders } from "@/lib/api/modules/student/orders/service";
 import { getStudentProfile } from "@/lib/api/modules/student/profile/service";
@@ -28,7 +31,18 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/account/dashboard",
 });
 
-export default async function AccountDashboardPage() {
+interface AccountDashboardPageProps {
+  searchParams: Promise<{ discountRequestId?: string | string[] }>;
+}
+
+export default async function AccountDashboardPage({
+  searchParams,
+}: AccountDashboardPageProps) {
+  const { discountRequestId } = await searchParams;
+  const openDiscountRequestId =
+    typeof discountRequestId === "string" && /^\d+$/.test(discountRequestId)
+      ? discountRequestId
+      : null;
   const {
     firstName,
     todayContents,
@@ -36,6 +50,7 @@ export default async function AccountDashboardPage() {
     recommended,
     learningProgress,
     previewOrders,
+    discountRequests,
   } = await withStudentAuth(async (accessToken) => {
       let firstName = "there";
       let todayContents: AccountLiveContentItem[] = [];
@@ -48,6 +63,15 @@ export default async function AccountDashboardPage() {
       let learningProgress = ACCOUNT_DASHBOARD_WIDGETS.learningProgress;
       let previewOrders: Awaited<ReturnType<typeof getStudentOrders>>["items"] =
         [];
+      // Separate soft-fail: a discount API error must not blank the dashboard.
+      const discountRequestsPromise = getMyDiscountRequests(accessToken).catch(
+        (error: unknown) => {
+          if (process.env.NODE_ENV === "development") {
+            console.warn("[getMyDiscountRequests]", error);
+          }
+          return [] as DiscountRequestApi[];
+        }
+      );
 
       try {
         const [dashboard, profile, orders] = await Promise.all([
@@ -79,6 +103,7 @@ export default async function AccountDashboardPage() {
         recommended,
         learningProgress,
         previewOrders,
+        discountRequests: await discountRequestsPromise,
       };
     }, "/account/dashboard");
 
@@ -89,6 +114,11 @@ export default async function AccountDashboardPage() {
           <WelcomeBanner welcome={ACCOUNT_WELCOME} firstName={firstName} />
 
           <AccountLiveClassesSection items={todayContents} />
+
+          <DiscountRequestsSection
+            requests={discountRequests}
+            initialOpenId={openDiscountRequestId}
+          />
 
           <section aria-labelledby="continue-watching-heading">
             <AccountSectionHeader

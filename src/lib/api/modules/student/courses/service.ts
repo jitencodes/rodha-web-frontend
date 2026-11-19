@@ -24,6 +24,7 @@ import type {
 } from "@/lib/api/modules/student/courses/types";
 import { parseQuickActionType } from "@/lib/account/course-content-filters";
 import type { ContinueWatchingItem } from "@/lib/account/types";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 
 const COURSES_PATH = "api/website/student/courses";
 
@@ -78,6 +79,7 @@ export async function getStudentCourses(
   const data = await apiGet<StudentCoursesListDataApi>(`${COURSES_PATH}${qs}`, {
     accessToken,
     cache: "no-store",
+    headers: websiteCategoryHeaders(),
   });
 
   return {
@@ -108,7 +110,11 @@ export async function getStudentCourseDetail(
 
   const data = await apiGet<StudentCourseDetailDataApi>(
     `${COURSES_PATH}/${encodeURIComponent(courseId)}${qs}`,
-    { accessToken, cache: "no-store" }
+    {
+      accessToken,
+      cache: "no-store",
+      headers: websiteCategoryHeaders(),
+    }
   );
   return mapStudentCourseDetail(data);
 }
@@ -124,7 +130,11 @@ export async function getStudentCourseFilterOptions(
   try {
     const data = await apiGet<StudentCourseFilterOptionsDataApi>(
       `${COURSES_PATH}/filter-options`,
-      { accessToken, cache: "no-store" }
+      {
+        accessToken,
+        cache: "no-store",
+        headers: websiteCategoryHeaders(),
+      }
     );
     return mapStudentCourseFilterOptions(data);
   } catch {
@@ -148,7 +158,11 @@ export async function getStudentCourseChapterOptions(
   try {
     const data = await apiGet<StudentCourseChapterOptionsDataApi>(
       `${COURSES_PATH}/filter-options/chapters${qs}`,
-      { accessToken, cache: "no-store" }
+      {
+        accessToken,
+        cache: "no-store",
+        headers: websiteCategoryHeaders(),
+      }
     );
     return mapStudentCourseChapterOptions(data.items);
   } catch {
@@ -191,7 +205,11 @@ export async function getQuickActions(
 
   const data = await apiGet<QuickActionsDataApi>(
     `${COURSES_PATH}/quick-actions${qs}`,
-    { accessToken, cache: "no-store" }
+    {
+      accessToken,
+      cache: "no-store",
+      headers: websiteCategoryHeaders(),
+    }
   );
 
   const items = mapQuickActionItems(data.items);

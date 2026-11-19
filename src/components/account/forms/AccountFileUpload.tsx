@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { FileText, ImagePlus, X } from "lucide-react";
 import { AccountFieldShell } from "./AccountFieldShell";
 import { cn } from "@/lib/utils";
 import {
@@ -9,6 +9,12 @@ import {
   PASSPORT_PHOTO_HELPER_TEXT,
   validatePassportPhoto,
 } from "@/lib/account/passport-photo";
+
+function isImageFile(file: File): boolean {
+  return file.type
+    ? file.type.startsWith("image/")
+    : /\.(jpe?g|png|webp|gif)$/i.test(file.name);
+}
 
 type AccountFileUploadProps = {
   id?: string;
@@ -19,6 +25,14 @@ type AccountFileUploadProps = {
   error?: string;
   helperText?: string;
   disabled?: boolean;
+  /** `accept` for the picker. Defaults to the passport-photo types. */
+  accept?: string;
+  /** Returns an error message, or null when the file is fine. Defaults to passport-photo rules. */
+  validate?: (file: File) => string | null;
+  /** Empty-state caption inside the drop box. */
+  uploadLabel?: string;
+  /** Name of a file already on record (e.g. a proof carried over on resubmit). */
+  existingFileName?: string;
 };
 
 export function AccountFileUpload({
@@ -30,6 +44,10 @@ export function AccountFileUpload({
   error,
   helperText = PASSPORT_PHOTO_HELPER_TEXT,
   disabled,
+  accept = PASSPORT_PHOTO_ACCEPT,
+  validate = validatePassportPhoto,
+  uploadLabel = "Upload photo",
+  existingFileName,
 }: AccountFileUploadProps) {
   const autoId = useId();
   const id = idProp || autoId;
@@ -41,7 +59,7 @@ export function AccountFileUpload({
 
   // Preview follows the `file` prop, so a photo restored from a saved draft shows too.
   useEffect(() => {
-    if (!file) return;
+    if (!file || !isImageFile(file)) return;
     let cancelled = false;
     const reader = new FileReader();
     reader.onload = () => {
@@ -74,7 +92,7 @@ export function AccountFileUpload({
       resetInput();
       return;
     }
-    const problem = validatePassportPhoto(next);
+    const problem = validate(next);
     if (problem) {
       // Keep any previously accepted photo; just explain why this one was rejected.
       setLocalError(problem);
@@ -112,21 +130,32 @@ export function AccountFileUpload({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={previewUrl}
-              alt="Passport preview"
+              alt={`${label} preview`}
               className="h-24 w-20 rounded object-cover"
             />
+          ) : file ? (
+            <>
+              <FileText className="h-6 w-6 text-[var(--account-accent)]" />
+              <span className="text-caption text-[var(--account-text-muted)]">
+                File selected
+              </span>
+            </>
           ) : (
             <>
               <ImagePlus className="h-6 w-6 text-[var(--account-accent)]" />
               <span className="text-caption text-[var(--account-text-muted)]">
-                Upload photo
+                {uploadLabel}
               </span>
             </>
           )}
         </button>
         <div className="min-w-0 flex-1 space-y-2">
           <p className="truncate text-body-sm text-[var(--account-text)]">
-            {file ? file.name : "No file selected"}
+            {file
+              ? file.name
+              : existingFileName
+                ? `Current: ${existingFileName}`
+                : "No file selected"}
           </p>
           <div className="flex flex-wrap gap-2">
             <button
@@ -155,7 +184,7 @@ export function AccountFileUpload({
         ref={inputRef}
         id={id}
         type="file"
-        accept={PASSPORT_PHOTO_ACCEPT}
+        accept={accept}
         className="sr-only"
         disabled={disabled}
         onChange={(e) => handleFile(e.target.files?.[0] ?? null)}

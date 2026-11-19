@@ -8,7 +8,11 @@ import { useAtomValue } from "jotai";
 import { CheckoutLocationDialog } from "@/components/account/CheckoutLocationDialog";
 import { CouponAppliedOverlay } from "@/components/account/CouponAppliedOverlay";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
+import { DiscountRequestCta } from "@/components/account/discount-requests/DiscountRequestCta";
+import { PackagePromocodeOffers } from "@/components/cards/PackagePromocodeOffers";
 import { formatCartMoney } from "@/lib/account/cart-totals";
+import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
+import type { DiscountCurrentViewModel } from "@/lib/api/modules/student/discount-requests/types";
 import { fireCouponConfetti } from "@/lib/checkout/coupon-confetti";
 import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
@@ -35,7 +39,23 @@ type CheckoutPageClientProps = {
   subtotalAmount: number;
   discountAmount: number;
   payableAmount: number;
-  promocodeOptions: Array<{ id: string; code: string; title: string }>;
+  /** Package vertical for `x-website-category-id` (null → API default). */
+  websiteCategoryId: number | null;
+  /** Listed codes for this package (best offer first). */
+  promocodeOptions: CheckoutPromocodeOption[];
+  /** Request Discount button state; null = unavailable (hidden). */
+  discountRequest: DiscountCurrentViewModel | null;
+};
+
+type PromocodeResponse = {
+  ok: boolean;
+  error?: string;
+  totals?: {
+    subtotalAmount: number;
+    discountAmount: number;
+    payableAmount: number;
+  };
+  code?: string | null;
 };
 
 declare global {
@@ -64,7 +84,9 @@ export function CheckoutPageClient({
   subtotalAmount,
   discountAmount,
   payableAmount,
+  websiteCategoryId,
   promocodeOptions,
+  discountRequest,
 }: CheckoutPageClientProps) {
   const router = useRouter();
   const authUser = useAtomValue(userAtom);
@@ -98,45 +120,63 @@ export function CheckoutPageClient({
     void fireCouponConfetti();
   }, [appliedCode, discount]);
 
-  async function applyCoupon() {
-    if (!item || !couponInput.trim()) return;
-    const match = promocodeOptions.find(
-      (opt) => opt.code.toUpperCase() === couponInput.trim().toUpperCase()
-    );
-    if (!match) {
-      setError("Invalid coupon code");
-      return;
+  /** PATCH the cart item promocode via the BFF; returns the response or throws the API message. */
+  async function updatePromocode(
+    update: { code: string } | { promocodeId: string | null },
+    fallbackError: string
+  ): Promise<PromocodeResponse> {
+    if (!item) throw new Error(fallbackError);
+    const res = await fetchAuthed("/api/checkout/promocode", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cartItemId: item.cartItemId,
+        websiteCategoryId,
+        ...update,
+      }),
+    });
+    const data = (await res.json().catch(() => null)) as PromocodeResponse | null;
+    if (!res.ok || !data?.ok) {
+      // 400 → invalid / expired / not eligible; 409 → usage limit reached.
+      throw new Error(data?.error || fallbackError);
     }
+    if (data.totals) {
+      setSubtotal(data.totals.subtotalAmount);
+      setDiscount(data.totals.discountAmount);
+      setPayable(data.totals.payableAmount);
+    }
+    return data;
+  }
+
+  /** Typed code ("Have a coupon?") — any code, incl. bulk/support codes. */
+  async function applyCoupon() {
+    const code = couponInput.trim();
+    if (!item || !code || pending) return;
     setPending(true);
     setError(null);
     try {
-      const res = await fetchAuthed("/api/checkout/promocode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cartItemId: item.cartItemId,
-          promocodeId: match.id,
-        }),
-      });
-      const data = (await res.json()) as {
-        ok: boolean;
-        error?: string;
-        totals?: {
-          subtotalAmount: number;
-          discountAmount: number;
-          payableAmount: number;
-        };
-        code?: string | null;
-      };
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Unable to apply coupon");
-      }
-      if (data.totals) {
-        setSubtotal(data.totals.subtotalAmount);
-        setDiscount(data.totals.discountAmount);
-        setPayable(data.totals.payableAmount);
-      }
-      setAppliedCode(data.code ?? match.code);
+      const data = await updatePromocode({ code }, "Unable to apply coupon");
+      setAppliedCode(data.code ?? code.toUpperCase());
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to apply coupon");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  /** Listed offer picked by the student. */
+  async function applyListedCoupon(option: CheckoutPromocodeOption) {
+    if (!item || pending) return;
+    setPending(true);
+    setError(null);
+    try {
+      const data = await updatePromocode(
+        { promocodeId: option.id },
+        "Unable to apply coupon"
+      );
+      setAppliedCode(data.code ?? option.code);
+      setCouponInput("");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to apply coupon");
@@ -146,35 +186,11 @@ export function CheckoutPageClient({
   }
 
   async function removeCoupon() {
-    if (!item) return;
+    if (!item || pending) return;
     setPending(true);
     setError(null);
     try {
-      const res = await fetchAuthed("/api/checkout/promocode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cartItemId: item.cartItemId,
-          promocodeId: null,
-        }),
-      });
-      const data = (await res.json()) as {
-        ok: boolean;
-        error?: string;
-        totals?: {
-          subtotalAmount: number;
-          discountAmount: number;
-          payableAmount: number;
-        };
-      };
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Unable to remove coupon");
-      }
-      if (data.totals) {
-        setSubtotal(data.totals.subtotalAmount);
-        setDiscount(data.totals.discountAmount);
-        setPayable(data.totals.payableAmount);
-      }
+      await updatePromocode({ promocodeId: null }, "Unable to remove coupon");
       setAppliedCode(null);
       setCouponInput("");
       router.refresh();
@@ -202,8 +218,24 @@ export function CheckoutPageClient({
         body: JSON.stringify({
           ...readStoredUtm(),
           ...(stateName ? { stateName } : {}),
+          ...(websiteCategoryId != null ? { websiteCategoryId } : {}),
         }),
       });
+      if (res.status === 409) {
+        // A code valid in the cart was refused at checkout (e.g. usage limit
+        // reached meanwhile). Show why and reload the cart so the student can
+        // pick another code.
+        const refused = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        setError(
+          refused?.error ||
+            "This coupon can no longer be applied. Please review your coupon and try again."
+        );
+        releasePay();
+        router.refresh();
+        return;
+      }
       const data = (await res.json()) as {
         ok: boolean;
         error?: string;
@@ -455,7 +487,9 @@ export function CheckoutPageClient({
 
         <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-4 shadow-[var(--account-shadow)]">
           <p className="text-[14px] font-semibold text-[var(--account-text)]">
-            Have a coupon?
+            {appliedCode
+              ? `Coupon applied · ${appliedCode}`
+              : "Have a coupon?"}
           </p>
           <div className="mt-3 space-y-2">
             {appliedCode ? (
@@ -476,14 +510,26 @@ export function CheckoutPageClient({
               <div className="flex gap-2">
                 <input
                   value={couponInput}
-                  onChange={(e) => setCouponInput(e.target.value)}
+                  onChange={(e) => {
+                    setCouponInput(e.target.value);
+                    if (error) setError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      void applyCoupon();
+                    }
+                  }}
                   placeholder="Enter coupon code"
-                  className="min-w-0 flex-1 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 py-2 text-[13px]"
+                  aria-label="Coupon code"
+                  autoCapitalize="characters"
+                  maxLength={100}
+                  className="min-w-0 flex-1 rounded-[var(--account-radius)] border border-[var(--account-input-border)] bg-[var(--account-input-bg)] px-3 py-2 text-[13px] uppercase placeholder:normal-case"
                 />
                 <button
                   type="button"
                   onClick={applyCoupon}
-                  disabled={pending}
+                  disabled={pending || !couponInput.trim()}
                   className="cursor-pointer rounded-[var(--account-radius)] bg-[var(--account-accent)] px-3 py-2 text-[13px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Apply
@@ -496,7 +542,36 @@ export function CheckoutPageClient({
               {error}
             </p>
           ) : null}
+
+          {promocodeOptions.length > 0 ? (
+            <PackagePromocodeOffers
+              className="mt-4"
+              variant="account"
+              offers={promocodeOptions}
+              appliedCode={appliedCode}
+              onApply={applyListedCoupon}
+              applyPending={pending}
+            />
+          ) : null}
         </div>
+
+        {item.packageId != null && discountRequest ? (
+          <DiscountRequestCta
+            className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-4 shadow-[var(--account-shadow)]"
+            packageId={item.packageId}
+            packageTitle={item.title}
+            websiteCategoryId={websiteCategoryId}
+            isLoggedIn
+            current={discountRequest}
+            student={{
+              name: authUser?.fullName ?? "",
+              email: authUser?.email ?? "",
+              mobile: authUser?.mobile ?? "",
+            }}
+            loginHref="/login?next=/account/checkout"
+            variant="account"
+          />
+        ) : null}
       </aside>
     </div>
     {profileDialog}

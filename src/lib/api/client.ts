@@ -15,6 +15,8 @@ export interface ApiGetOptions {
   accessToken?: string;
   /** Force no-store (authenticated GETs). */
   cache?: RequestCache;
+  /** Extra request headers (e.g. `x-website-category-id`). */
+  headers?: Record<string, string>;
 }
 
 export interface ApiMutateOptions {
@@ -101,7 +103,10 @@ export async function apiGet<T>(
   const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
   const url = `${baseUrl}${normalizedPath}`;
 
-  const headers = buildHeaders({ accessToken: options.accessToken });
+  const headers = buildHeaders({
+    accessToken: options.accessToken,
+    extra: options.headers,
+  });
   const revalidate = options.revalidate ?? getApiRevalidateSeconds();
   const useNoStore =
     options.cache === "no-store" || Boolean(options.accessToken);

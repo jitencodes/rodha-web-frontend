@@ -15,7 +15,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Header — category nav state | Partial | Exam switcher syncs under `/category/[slug]` via API slugs; Free Resources uses that vertical's Graphy course |
 | Mobile nav | Partial | Same Active Categories API as desktop; login removed; Free Resources / Test Series match desktop |
 | Floating counselling CTA | Complete | Observes `[data-counselling-cta]` only; hidden when any counselling CTA is in view or modal is open; fade/slide + idle pulse; opens counselling modal on click |
-| Counselling modal (lead form) | Complete | Global provider + `HeroCounsellingForm` in `Modal`; site-wide CTABand counselling actions; homepage category cards pre-fill exam |
+| Counselling modal (lead form) | Complete | Global provider + `HeroCounsellingForm` in `Modal`; exam options from active `categoriesAtom` (same as header); site-wide CTABand counselling actions; homepage category cards pre-fill exam |
 | Footer | Partial | v2 5-column layout; Success Stories removed; Free Resources → `/resources` |
 | Rodha Buddy CTA (external) | Partial | Outline orange in header; final URL TBD |
 | Login / Sign Up → Graphy | Not Started | Removed from header/mobile until a live destination is ready |
@@ -103,6 +103,9 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Profile | Complete | `/account/profile` avatar; sidebar Complete registration CTA while incomplete; registration draft saved locally until submit; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
 | Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie (server + client capture, replace-only, single source at pay) and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
+| Checkout coupons (Promocodes) | Complete | Typed code `{ code }` (any code incl. bulk); dynamic heading when applied; Available offers via dialog CTA with Apply; 400/409 under input; 409 at pay → message + cart refresh |
+| Request Discount (checkout) | Complete | `DiscountRequestCta` in checkout aside; approved discount shown with validity countdown |
+| Dashboard — My Discount Requests | Complete | Cards + detail drawer (proofs via 5-min signed link), Resubmit dialog, `?discountRequestId=` deep link; hidden when empty |
 | Responsive polish | Complete | Drawer, stacked grids, orders overflow-x inside table, mobile search |
 
 ## Course Listing `/courses`
@@ -132,7 +135,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
 | Package Detail By Slug API | Complete (`getPackageBySlug` + mapper; empty sections hidden) |
 | Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
-| Sticky purchase card | Complete (same-tab Buy Now → login or checkout; checkout errors surfaced) |
+| Sticky purchase card | Complete (same-tab Buy Now → login or checkout; checkout errors surfaced; View available offers CTA → dialog when logged in) |
 | Curriculum accordion | Complete (`CourseCurriculumAccordion`; hidden when no modules) |
 | Faculty for course | Complete (package `faculty[]` via `FacultyCardV2`; hidden when empty) |
 | What's included + schedule | Complete (API benefits/schedule only; no invented defaults on package path) |
@@ -140,8 +143,10 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Testimonials | Complete (package testimonials; hidden when empty) |
 | Related courses | Complete (`similarPackages` → `CourseCardV2` → `/courses/[slug]`) |
 | FAQ | Complete (package FAQs; hidden when empty) |
-| Floating enquiry | Complete (`LeadCaptureForm` light Enquire Now + mobile sticky) |
+| Floating enquiry | Complete (`LeadCaptureForm` light Enquire Now + mobile sticky; active categories only) |
 | Course card discount % | Complete (derived from `price` / `discountedPrice` on `CourseCard` / `CourseCardV2`) |
+| Request Discount | Complete (`DiscountRequestCta` under Buy Now — request / resubmit / `Under review — {SLA}` / approved; 4-type form dialog; logged-out → login) |
+| Package promocode list | Complete (CTA opens dialog with Best offer / saving / valid till; single applied chip on card; apply on checkout) |
 
 ---
 
@@ -159,7 +164,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Success stories `/success-stories` | Complete | `GET api/website/success-stories`; `YoutubeStoryCard` + `StoriesModal`; 6 per page |
 | Resource hub `/resources` | Complete | `GET api/website/resources`; API type filters; `general=true` for the general category; 8 per page |
 | Blog detail `/blog/[slug]` | Complete | Related posts from `relatedBlogs`; BlogPosting JSON-LD with author |
-| Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify |
+| Contact `/contact` | Complete | Form posts through `/api/leads` → CMS contact + SMTP notify; category dropdown = active `categoriesAtom` only |
 | FAQ `/faq` | Complete | 42 real FAQs; filters All/General/CAT/IPMAT/SSC/CLAT/Skill House |
 | Privacy `/privacy-policy` | Complete | CMS HTML legal page + TOC from headings |
 | Terms `/terms-and-conditions` | Complete | CMS HTML legal page |

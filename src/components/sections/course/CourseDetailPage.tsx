@@ -1,5 +1,8 @@
 import { Container } from "@/components/layout/Container";
-import { CoursePurchaseCard } from "@/components/cards/CoursePurchaseCard";
+import {
+  CoursePurchaseCard,
+  type CoursePurchaseDiscountProps,
+} from "@/components/cards/CoursePurchaseCard";
 import { CourseHeroSection } from "@/components/sections/course/CourseHeroSection";
 import { CourseDetailsCurriculumSection } from "@/components/sections/course/CourseDetailsCurriculumSection";
 import { CourseFacultySection } from "@/components/sections/course/CourseFacultySection";
@@ -18,6 +21,7 @@ import {
   getRelatedCourses,
   withCourseDetailDefaults,
 } from "@/data/course-details";
+import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
 import type { PackageCardViewModel } from "@/lib/api/modules/packages/types";
 import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
 import {
@@ -39,6 +43,10 @@ interface CourseDetailPageProps {
   packageId?: number | null;
   isSelfEnrolled?: boolean;
   isLoggedIn?: boolean;
+  /** Request Discount CTA data (API-backed packages only). */
+  discount?: CoursePurchaseDiscountProps;
+  /** Listed package promocodes for the purchase card. */
+  promocodeOffers?: CheckoutPromocodeOption[];
   faqsOverride?: FaqItem[];
   similarPackages?: PackageCardViewModel[];
   facultyOverride?: Faculty[];
@@ -54,6 +62,8 @@ export function CourseDetailPageView({
   packageId = null,
   isSelfEnrolled = false,
   isLoggedIn = false,
+  discount,
+  promocodeOffers = [],
   faqsOverride,
   similarPackages,
   facultyOverride,
@@ -127,13 +137,15 @@ export function CourseDetailPageView({
         <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 hidden lg:block">
           <div className="container-rodha relative h-full !pr-4 xl:!pr-6">
             <div className="pointer-events-auto absolute top-0 right-4 xl:right-6 h-full w-[340px]">
-              <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto py-8">
+              <div className="sticky top-24 py-8">
                 <CoursePurchaseCard
                   course={course}
                   categoryLabel={landing.name}
                   packageId={packageId}
                   isSelfEnrolled={isSelfEnrolled}
                   isLoggedIn={isLoggedIn}
+                  discount={discount}
+                  promocodeOffers={promocodeOffers}
                 />
               </div>
             </div>
@@ -167,6 +179,8 @@ export function CourseDetailPageView({
                 packageId={packageId}
                 isSelfEnrolled={isSelfEnrolled}
                 isLoggedIn={isLoggedIn}
+                discount={discount}
+                promocodeOffers={promocodeOffers}
               />
             </div>
           </Container>

@@ -1,0 +1,2794 @@
+{
+  "info": {
+    "name": "Rodha Promocodes (FE)",
+    "description": "Rodha-owned promocodes: create, bulk, update, batches, export (admin) and apply-by-code (student). Send only the fields you have; omitted = no condition (create) / unchanged (update). Dates YYYY-MM-DD (IST, inclusive). discountType PERCENT|FLAT. No packageIds/courseIds = applies to all products.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/rodha/"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": ""
+    },
+    {
+      "key": "studentAccessToken",
+      "value": ""
+    },
+    {
+      "key": "promocodeId",
+      "value": ""
+    },
+    {
+      "key": "promocodeBatchId",
+      "value": ""
+    },
+    {
+      "key": "cartItemId",
+      "value": ""
+    },
+    {
+      "key": "websitePackageId",
+      "value": ""
+    },
+    {
+      "key": "websiteCategoryId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Create — general (auto-applied)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"WELCOME10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"maxDiscountValue\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "code optional: omit to auto-generate (or send prefix).\n\n### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"WELCOME10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"maxDiscountValue\": 2000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 8,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"EDITME\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 20,\n    \"maxDiscountValue\": 3000,\n    \"minCartValue\": 0,\n    \"validFrom\": \"2026-01-01\",\n    \"validTill\": \"2030-12-31\",\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"WELCOME10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"maxDiscountValue\": 2000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"discountValue\": [\n      \"Percentage discount cannot be more than 100\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"WELCOME10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"maxDiscountValue\": 2000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"WELCOME10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"maxDiscountValue\": 2000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create — event (date range)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"DIWALI25\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 25,\n  \"maxDiscountValue\": 5000,\n  \"validFrom\": \"2026-11-01\",\n  \"validTill\": \"2026-11-15\",\n  \"packageIds\": [\n    1\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"DIWALI25\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 25,\n  \"maxDiscountValue\": 5000,\n  \"validFrom\": \"2026-11-01\",\n  \"validTill\": \"2026-11-15\",\n  \"packageIds\": [\n    1\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 8,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"EDITME\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 20,\n    \"maxDiscountValue\": 3000,\n    \"minCartValue\": 0,\n    \"validFrom\": \"2026-01-01\",\n    \"validTill\": \"2030-12-31\",\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"DIWALI25\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 25,\n  \"maxDiscountValue\": 5000,\n  \"validFrom\": \"2026-11-01\",\n  \"validTill\": \"2026-11-15\",\n  \"packageIds\": [\n    1\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"validTill\": [\n      \"validTill must be on or after validFrom\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"DIWALI25\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 25,\n  \"maxDiscountValue\": 5000,\n  \"validFrom\": \"2026-11-01\",\n  \"validTill\": \"2026-11-15\",\n  \"packageIds\": [\n    1\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"DIWALI25\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 25,\n  \"maxDiscountValue\": 5000,\n  \"validFrom\": \"2026-11-01\",\n  \"validTill\": \"2026-11-15\",\n  \"packageIds\": [\n    1\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create — special students",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SPECIAL20\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 20,\n  \"userIds\": [\n    \"00000000-0000-0000-0000-000000000001\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SPECIAL20\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 20,\n  \"userIds\": [\n    \"00000000-0000-0000-0000-000000000001\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 4,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"YTGANEGT\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 5,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SPECIAL20\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 20,\n  \"userIds\": [\n    \"00000000-0000-0000-0000-000000000001\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"userIds\": [\n      \"Students not found\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SPECIAL20\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 20,\n  \"userIds\": [\n    \"00000000-0000-0000-0000-000000000001\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SPECIAL20\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 20,\n  \"userIds\": [\n    \"00000000-0000-0000-0000-000000000001\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create — repeater (enrolled in package)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"REPEAT15\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 15,\n  \"conditionPackageIds\": [\n    2\n  ],\n  \"isRepeater\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"REPEAT15\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 15,\n  \"conditionPackageIds\": [\n    2\n  ],\n  \"isRepeater\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 4,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"YTGANEGT\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 5,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"REPEAT15\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 15,\n  \"conditionPackageIds\": [\n    2\n  ],\n  \"isRepeater\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"conditionPackageIds\": [\n      \"Packages not found: 999999\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"REPEAT15\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 15,\n  \"conditionPackageIds\": [\n    2\n  ],\n  \"isRepeater\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"REPEAT15\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 15,\n  \"conditionPackageIds\": [\n    2\n  ],\n  \"isRepeater\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create — manual apply (listed, not auto-applied)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"MANUAL10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"autoApply\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"MANUAL10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 4,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"YTGANEGT\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 5,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.263+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"MANUAL10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"discountValue\": [\n      \"Percentage discount cannot be more than 100\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"MANUAL10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"MANUAL10\",\n  \"discountType\": \"PERCENT\",\n  \"discountValue\": 10,\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create — limited uses",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"FIRST100\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 500,\n  \"maxUseCount\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "maxUseCount 0 = unlimited.\n\n### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"FIRST100\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 500,\n  \"maxUseCount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode created\",\n  \"data\": {\n    \"id\": 7,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"RACE-CODE\",\n    \"discountType\": \"FLAT\",\n    \"discountValue\": 10,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.678+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.678+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.678+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"FIRST100\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 500,\n  \"maxUseCount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"discountValue\": [\n      \"Invalid input: expected number, received string\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"FIRST100\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 500,\n  \"maxUseCount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"FIRST100\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 500,\n  \"maxUseCount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Bulk create — support team (single-use)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/bulk",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": 100,\n  \"prefix\": \"SUP\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 1000,\n  \"validTill\": \"2026-12-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Max 5000. Always single-use, never auto-applied, never listed to students (apply by typing). Returns batchId + codes.\n\n### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `count` | integer 1–5000 | yes | How many codes. |\n| `prefix` | string 1–20 | no | Codes look like `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | yes |  |\n| `discountValue` | number > 0 | yes | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n\nBulk codes are always single-use, never auto-applied and never listed; `code`, `maxUseCount`, `autoApply` are ignored."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/bulk",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": 100,\n  \"prefix\": \"SUP\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 1000,\n  \"validTill\": \"2026-12-31\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"200 promocodes created\",\n  \"data\": {\n    \"batchId\": \"1a78ae47-631b-487a-9bf0-0ae420f5cb7c\",\n    \"count\": 200,\n    \"prefix\": \"PAR\",\n    \"codes\": [\n      \"PAR-BVYYS5AY\",\n      \"PAR-KHHP3Z3P\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/bulk",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": 100,\n  \"prefix\": \"SUP\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 1000,\n  \"validTill\": \"2026-12-31\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"prefix\": [\n      \"Prefix must be 1-20 characters: letters, digits, '-' or '_' (start with a letter or digit)\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/bulk",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": 100,\n  \"prefix\": \"SUP\",\n  \"discountType\": \"FLAT\",\n  \"discountValue\": 1000,\n  \"validTill\": \"2026-12-31\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update (Rodha only, partial)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated\",\n  \"validTill\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Omitted = unchanged, null/[] = clear. Graphy codes → 400.\n\n### Fields\n\nEvery field optional; send only what changes. `null` / `[]` clears. At least one field. Graphy codes → 400.\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string | no | 3–40 chars: A–Z 0–9 - _ (upper-cased). Omit to auto-generate. Duplicate (any case, incl. Graphy) → 409. |\n| `prefix` | string | no | 1–20 chars. Only when code is omitted → `PREFIX-XXXXXXXX`. |\n| `websiteCategoryId` | number | no | Website category (CAT, IPMAT, …). Omitted on create = 1. The code only works on products of this category; packageIds/courseIds must belong to it. |\n| `discountType` | `PERCENT` \\| `FLAT` | no |  |\n| `discountValue` | number > 0 | no | PERCENT: max 100. FLAT: rupees. |\n| `maxDiscountValue` | number ≥ 0 | no | Cap in ₹ for PERCENT. 0 / omitted = no cap. Ignored for FLAT. |\n| `minCartValue` | number ≥ 0 | no | Item price must be at least this. |\n| `validFrom` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Omitted = no start limit. |\n| `validTill` | `YYYY-MM-DD` \\| null | no | IST, inclusive. Must be ≥ validFrom. |\n| `description` | string ≤ 2000 \\| null | no |  |\n| `isActive` | boolean | no | Default true. |\n| `forNewUser` | boolean | no | Only students with no previous enrollment. |\n| `isRepeater` | boolean | no | Label only (shown in admin). |\n| `packageIds` | number[] (≤ 1000) | no | Products the code works on. packageIds and courseIds both empty = all products. |\n| `courseIds` | number[] (≤ 1000) | no | As above, for courses. |\n| `userIds` | uuid[] (≤ 1000) | no | Only these students (special students). |\n| `conditionPackageIds` | number[] (≤ 1000) | no | Only students already enrolled in one of these packages (repeaters). userIds OR conditionPackageIds is enough. |\n| `maxUseCount` | integer ≥ 0 | no | Total uses across all students. 0 / omitted = unlimited. |\n| `autoApply` | boolean | no | Default true. false = listed for the student but never auto-applied. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated\",\n  \"validTill\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode updated\",\n  \"data\": {\n    \"id\": 8,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"EDITME\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 20,\n    \"maxDiscountValue\": 3000,\n    \"minCartValue\": 0,\n    \"validFrom\": \"2026-01-01\",\n    \"validTill\": \"2030-12-31\",\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": \"Edited\",\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.744+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:12.789+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": true,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated\",\n  \"validTill\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {}\n}"
+            },
+            {
+              "name": "409 Validation failed",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated\",\n  \"validTill\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"code\": [\n      \"This code already exists\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 Promocode not found",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated\",\n  \"validTill\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode not found\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update conditions (Graphy + Rodha codes)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}/conditions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"packageIds\": [\n    2\n  ],\n  \"userIds\": [],\n  \"autoApply\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Works for Graphy and Rodha codes. Send only what changes: omitted = unchanged, null/[] = clear. packageIds = student already enrolled in one of these packages (repeater). Graphy sync never overwrites these.\n\n### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `packageIds` | number[] | no | Students already enrolled in one of these packages. `[]` clears. |\n| `userIds` | uuid[] | no | Only these students. `[]` clears. |\n| `autoApply` | boolean | no | Bulk codes cannot be auto-applied (400). |\n\nAt least one field."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}/conditions",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"packageIds\": [\n    2\n  ],\n  \"userIds\": [],\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode conditions updated\",\n  \"data\": {\n    \"id\": 679,\n    \"source\": \"GRAPHY\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": \"g-mwlxkugv42\",\n    \"code\": \"GCOND\",\n    \"discountType\": \"FLAT\",\n    \"discountValue\": 400,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": false,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:34.496+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:34.496+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:34.742+05:30\",\n    \"createdBy\": null,\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": false,\n    \"packages\": [\n      {\n        \"id\": 8,\n        \"slug\": \"graphy-cond-mwlxkugh41\",\n        \"title\": \"Graphy Cond\",\n        \"isActive\": true\n      }\n    ],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": [\n      {\n        \"id\": \"c2370235-9af9-4ef9-9c27-4063c02d9919\",\n        \"fullName\": \"special-student\",\n        \"email\": \"special-student-mwlxkd1k3@example.com\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}/conditions",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"packageIds\": [\n    2\n  ],\n  \"userIds\": [],\n  \"autoApply\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"userIds\": [\n      \"Students not found\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "List (filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes?page=1&limit=20&source=RODHA&autoApply=true&usage=unused&isActive=true&search=",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Bulk codes hidden unless includeBulk=true or batchId given.\n\n### Fields\n\n| Query param | Type | Notes |\n|---|---|---|\n| `search` | string | Code, description or Graphy id. |\n| `isActive` | `true` \\| `false` |  |\n| `packageId` | number | Codes that apply to this package. |\n| `source` | `GRAPHY` \\| `RODHA` |  |\n| `autoApply` | `true` \\| `false` |  |\n| `usage` | `used` \\| `unused` | used = at least one paid/free order. |\n| `batchId` | uuid | Codes of one bulk run (bulk codes are hidden otherwise). |\n| `includeBulk` | `true` \\| `false` | Show bulk codes in the main list. |\n| `websiteCategoryId` | number | Codes of one website category. |\n| `page / limit` | number | limit ≤ 100. Default 1 / 10. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes?page=1&limit=20&source=RODHA&autoApply=true&usage=unused&isActive=true&search="
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocodes fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 668,\n        \"source\": \"RODHA\",\n        \"websiteCategoryId\": 1,\n        \"graphyPromocodeId\": null,\n        \"code\": \"PAR-C4QX4MSM\",\n        \"discountType\": \"FLAT\",\n        \"discountValue\": 100,\n        \"maxDiscountValue\": 0,\n        \"minCartValue\": 0,\n        \"validFrom\": null,\n        \"validTill\": null,\n        \"maxUseCount\": 1,\n        \"usedCount\": 0,\n        \"autoApply\": false,\n        \"batchId\": \"3e7cc67d-bab0-436f-a29a-60bb10bf64b5\",\n        \"forNewUser\": false,\n        \"description\": null,\n        \"contentIdRaw\": null,\n        \"isActive\": true,\n        \"isRepeater\": false,\n        \"lastSyncedAt\": \"2026-11-18T15:10:14.114+05:30\",\n        \"createdAt\": \"2026-11-18T15:10:14.114+05:30\",\n        \"updatedAt\": \"2026-11-18T15:10:14.114+05:30\",\n        \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"appliesToAllProducts\": true,\n        \"packages\": [],\n        \"courses\": [],\n        \"conditionPackages\": [],\n        \"conditionUsers\": []\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 1,\n      \"total\": 667,\n      \"totalPages\": 667\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get one",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\nPath: promocode id. 404 if not found."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode fetched successfully\",\n  \"data\": {\n    \"id\": 674,\n    \"source\": \"RODHA\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": null,\n    \"code\": \"FREE3\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 100,\n    \"maxDiscountValue\": 0,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 3,\n    \"usedCount\": 3,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": true,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:25.669+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:25.669+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:25.669+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"appliesToAllProducts\": false,\n    \"packages\": [\n      {\n        \"id\": 6,\n        \"slug\": \"package-c-mwlxkd4d8\",\n        \"title\": \"Package C\",\n        \"isActive\": true\n      }\n    ],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            },
+            {
+              "name": "404 Promocode not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode not found\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Set active/inactive",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `isActive` | boolean | yes |  |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/{{promocodeId}}/status",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode status updated\",\n  \"data\": {\n    \"id\": 6,\n    \"source\": \"GRAPHY\",\n    \"websiteCategoryId\": 1,\n    \"graphyPromocodeId\": \"g-mwlxkdgc11\",\n    \"code\": \"GRAPHYCODE\",\n    \"discountType\": \"PERCENT\",\n    \"discountValue\": 10,\n    \"maxDiscountValue\": 100,\n    \"minCartValue\": 0,\n    \"validFrom\": null,\n    \"validTill\": null,\n    \"maxUseCount\": 0,\n    \"usedCount\": 0,\n    \"autoApply\": true,\n    \"batchId\": null,\n    \"forNewUser\": false,\n    \"description\": null,\n    \"contentIdRaw\": null,\n    \"isActive\": false,\n    \"isRepeater\": false,\n    \"lastSyncedAt\": \"2026-11-18T15:10:12.444+05:30\",\n    \"createdAt\": \"2026-11-18T15:10:12.444+05:30\",\n    \"updatedAt\": \"2026-11-18T15:10:13.261+05:30\",\n    \"createdBy\": null,\n    \"updatedBy\": null,\n    \"appliesToAllProducts\": false,\n    \"packages\": [],\n    \"courses\": [],\n    \"conditionPackages\": [],\n    \"conditionUsers\": []\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "List batches",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/batches?page=1&limit=20",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Query param | Type | Notes |\n|---|---|---|\n| `search` | string | Code prefix. |\n| `page / limit` | number | limit ≤ 100. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches?page=1&limit=20"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode batches fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"batchId\": \"3e7cc67d-bab0-436f-a29a-60bb10bf64b5\",\n        \"prefix\": \"PAR\",\n        \"totalCount\": 200,\n        \"usedCount\": 0,\n        \"unusedCount\": 200,\n        \"activeCount\": 200,\n        \"createdAt\": \"2026-11-18T15:10:14.113+05:30\",\n        \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"settings\": {\n          \"discountType\": \"FLAT\",\n          \"discountValue\": 100,\n          \"maxDiscountValue\": 0,\n          \"minCartValue\": 0,\n          \"validFrom\": null,\n          \"validTill\": null,\n          \"description\": null,\n          \"forNewUser\": false,\n          \"isRepeater\": false,\n          \"appliesToAllProducts\": true,\n          \"packages\": [],\n          \"courses\": [],\n          \"conditionPackages\": [],\n          \"conditionUsers\": []\n        }\n      },\n      {\n        \"batchId\": \"3a9f7dd9-9654-4dd6-824e-33ec528228d8\",\n        \"prefix\": \"PAR\",\n        \"totalCount\": 200,\n        \"usedCount\": 0,\n        \"unusedCount\": 200,\n        \"activeCount\": 200,\n        \"createdAt\": \"2026-11-18T15:10:13.942+05:30\",\n        \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"settings\": {\n          \"discountType\": \"FLAT\",\n          \"discountValue\": 100,\n          \"maxDiscountValue\": 0,\n          \"minCartValue\": 0,\n          \"validFrom\": null,\n          \"validTill\": null,\n          \"description\": null,\n          \"forNewUser\": false,\n          \"isRepeater\": false,\n          \"appliesToAllProducts\": true,\n          \"packages\": [],\n          \"courses\": [],\n          \"conditionPackages\": [],\n          \"conditionUsers\": []\n        }\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 4,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "403 You do not have the required permissions",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches?page=1&limit=20"
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You do not have the required permissions\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get batch",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\nPath: batchId (uuid). 400 if not a uuid, 404 if unknown."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode batch fetched successfully\",\n  \"data\": {\n    \"batchId\": \"57437bc1-c28a-49e1-b9f3-01f4c68d376e\",\n    \"prefix\": \"SUP\",\n    \"totalCount\": 60,\n    \"usedCount\": 0,\n    \"unusedCount\": 60,\n    \"activeCount\": 60,\n    \"createdAt\": \"2026-11-18T15:10:13.418+05:30\",\n    \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n    \"settings\": {\n      \"discountType\": \"PERCENT\",\n      \"discountValue\": 15,\n      \"maxDiscountValue\": 0,\n      \"minCartValue\": 0,\n      \"validFrom\": null,\n      \"validTill\": null,\n      \"description\": \"Support team\",\n      \"forNewUser\": false,\n      \"isRepeater\": false,\n      \"appliesToAllProducts\": false,\n      \"packages\": [\n        {\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"isActive\": true\n        },\n        {\n          \"id\": 5,\n          \"slug\": \"package-b-mwlxkd3z7\",\n          \"title\": \"Package B\",\n          \"isActive\": true\n        }\n      ],\n      \"courses\": [],\n      \"conditionPackages\": [],\n      \"conditionUsers\": []\n    }\n  }\n}"
+            },
+            {
+              "name": "404 Batch not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Batch not found\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "List codes in a batch",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes?batchId={{promocodeBatchId}}&usage=unused&page=1&limit=100",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Query param | Type | Notes |\n|---|---|---|\n| `search` | string | Code, description or Graphy id. |\n| `isActive` | `true` \\| `false` |  |\n| `packageId` | number | Codes that apply to this package. |\n| `source` | `GRAPHY` \\| `RODHA` |  |\n| `autoApply` | `true` \\| `false` |  |\n| `usage` | `used` \\| `unused` | used = at least one paid/free order. |\n| `batchId` | uuid | Codes of one bulk run (bulk codes are hidden otherwise). |\n| `includeBulk` | `true` \\| `false` | Show bulk codes in the main list. |\n| `websiteCategoryId` | number | Codes of one website category. |\n| `page / limit` | number | limit ≤ 100. Default 1 / 10. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes?batchId={{promocodeBatchId}}&usage=unused&page=1&limit=100"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocodes fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 68,\n        \"source\": \"RODHA\",\n        \"websiteCategoryId\": 1,\n        \"graphyPromocodeId\": null,\n        \"code\": \"SUP-PSS5QK8Z\",\n        \"discountType\": \"PERCENT\",\n        \"discountValue\": 15,\n        \"maxDiscountValue\": 0,\n        \"minCartValue\": 0,\n        \"validFrom\": null,\n        \"validTill\": null,\n        \"maxUseCount\": 1,\n        \"usedCount\": 0,\n        \"autoApply\": false,\n        \"batchId\": \"57437bc1-c28a-49e1-b9f3-01f4c68d376e\",\n        \"forNewUser\": false,\n        \"description\": \"Support team\",\n        \"contentIdRaw\": null,\n        \"isActive\": true,\n        \"isRepeater\": false,\n        \"lastSyncedAt\": \"2026-11-18T15:10:13.418+05:30\",\n        \"createdAt\": \"2026-11-18T15:10:13.418+05:30\",\n        \"updatedAt\": \"2026-11-18T15:10:13.418+05:30\",\n        \"createdBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"updatedBy\": \"f8f80689-2527-433b-8487-21d0d47d293e\",\n        \"appliesToAllProducts\": false,\n        \"packages\": [\n          {\n            \"id\": 4,\n            \"slug\": \"package-a-mwlxkd3k6\",\n            \"title\": \"Package A\",\n            \"isActive\": true\n          },\n          {\n            \"id\": 5,\n            \"slug\": \"package-b-mwlxkd3z7\",\n            \"title\": \"Package B\",\n            \"isActive\": true\n          }\n        ],\n        \"courses\": [],\n        \"conditionPackages\": [],\n        \"conditionUsers\": []\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 1,\n      \"total\": 60,\n      \"totalPages\": 60\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Export (same filters as list)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/export?source=RODHA",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Returns { headers, rows, truncated } — build the CSV on FE.\n\n### Fields\n\n| Query param | Type | Notes |\n|---|---|---|\n| `search` | string | Code, description or Graphy id. |\n| `isActive` | `true` \\| `false` |  |\n| `packageId` | number | Codes that apply to this package. |\n| `source` | `GRAPHY` \\| `RODHA` |  |\n| `autoApply` | `true` \\| `false` |  |\n| `usage` | `used` \\| `unused` | used = at least one paid/free order. |\n| `batchId` | uuid | Codes of one bulk run (bulk codes are hidden otherwise). |\n| `includeBulk` | `true` \\| `false` | Show bulk codes in the main list. |\n| `websiteCategoryId` | number | Codes of one website category. |\n| `page / limit` | number | limit ≤ 100. Default 1 / 10. |\n\nReturns `{ headers, rows, truncated }` (max 20,000 rows); build the CSV on the FE."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/export?source=RODHA"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocodes export fetched successfully\",\n  \"data\": {\n    \"headers\": [\n      \"ID\",\n      \"Code\"\n    ],\n    \"rows\": [\n      {\n        \"ID\": 8,\n        \"Code\": \"EDITED\",\n        \"Source\": \"RODHA\",\n        \"Active\": \"Yes\",\n        \"Discount Type\": \"FLAT\",\n        \"Discount Value\": 500,\n        \"Max Discount\": 0,\n        \"Min Cart Value\": 0,\n        \"Valid From\": \"2026-01-01\",\n        \"Valid Till\": \"\",\n        \"Max Uses\": 0,\n        \"Used\": 0,\n        \"Auto Apply\": \"Yes\",\n        \"Batch ID\": \"\",\n        \"New Users Only\": \"No\",\n        \"Repeater\": \"No\",\n        \"Packages\": \"Package B\",\n        \"Courses\": \"\",\n        \"Condition Packages\": \"\",\n        \"Condition Students\": \"\",\n        \"Description\": \"Edited\",\n        \"Created At\": \"2026-11-18T15:10:12.744+05:30\"\n      },\n      {\n        \"ID\": 7,\n        \"Code\": \"RACE-CODE\",\n        \"Source\": \"RODHA\",\n        \"Active\": \"Yes\",\n        \"Discount Type\": \"FLAT\",\n        \"Discount Value\": 10,\n        \"Max Discount\": 0,\n        \"Min Cart Value\": 0,\n        \"Valid From\": \"\",\n        \"Valid Till\": \"\",\n        \"Max Uses\": 0,\n        \"Used\": 0,\n        \"Auto Apply\": \"Yes\",\n        \"Batch ID\": \"\",\n        \"New Users Only\": \"No\",\n        \"Repeater\": \"No\",\n        \"Packages\": \"All\",\n        \"Courses\": \"All\",\n        \"Condition Packages\": \"\",\n        \"Condition Students\": \"\",\n        \"Description\": \"\",\n        \"Created At\": \"2026-11-18T15:10:12.678+05:30\"\n      }\n    ],\n    \"truncated\": false\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Export batch",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}/export?usage=unused",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Query param | Type | Notes |\n|---|---|---|\n| `usage` | `used` \\| `unused` | Optional. e.g. export only unused codes to hand out. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}/export?usage=unused"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocode batch export fetched successfully\",\n  \"data\": {\n    \"headers\": [\n      \"ID\",\n      \"Code\"\n    ],\n    \"rows\": [\n      {\n        \"ID\": 68,\n        \"Code\": \"SUP-PSS5QK8Z\",\n        \"Source\": \"RODHA\",\n        \"Active\": \"Yes\",\n        \"Discount Type\": \"PERCENT\",\n        \"Discount Value\": 15,\n        \"Max Discount\": 0,\n        \"Min Cart Value\": 0,\n        \"Valid From\": \"\",\n        \"Valid Till\": \"\",\n        \"Max Uses\": 1,\n        \"Used\": 0,\n        \"Auto Apply\": \"No\",\n        \"Batch ID\": \"57437bc1-c28a-49e1-b9f3-01f4c68d376e\",\n        \"New Users Only\": \"No\",\n        \"Repeater\": \"No\",\n        \"Packages\": \"Package A, Package B, Package C\",\n        \"Courses\": \"\",\n        \"Condition Packages\": \"\",\n        \"Condition Students\": \"\",\n        \"Description\": \"Support team\",\n        \"Created At\": \"2026-11-18T15:10:13.418+05:30\"\n      },\n      {\n        \"ID\": 67,\n        \"Code\": \"SUP-PDBJAU69\",\n        \"Source\": \"RODHA\",\n        \"Active\": \"Yes\",\n        \"Discount Type\": \"PERCENT\",\n        \"Discount Value\": 15,\n        \"Max Discount\": 0,\n        \"Min Cart Value\": 0,\n        \"Valid From\": \"\",\n        \"Valid Till\": \"\",\n        \"Max Uses\": 1,\n        \"Used\": 0,\n        \"Auto Apply\": \"No\",\n        \"Batch ID\": \"57437bc1-c28a-49e1-b9f3-01f4c68d376e\",\n        \"New Users Only\": \"No\",\n        \"Repeater\": \"No\",\n        \"Packages\": \"Package A, Package B, Package C\",\n        \"Courses\": \"\",\n        \"Condition Packages\": \"\",\n        \"Condition Students\": \"\",\n        \"Description\": \"Support team\",\n        \"Created At\": \"2026-11-18T15:10:13.418+05:30\"\n      }\n    ],\n    \"truncated\": false\n  }\n}"
+            },
+            {
+              "name": "400 usage must be used or unused",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/promocodes/batches/{{promocodeBatchId}}/export?usage=unused"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"usage must be used or unused\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "List package promocodes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/packages/{{websitePackageId}}/promocodes",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n**Header:** `x-website-category-id: <category id>` is required (400 if missing, 404 if the package is in another category).\n\nPath: package id. Returns `items` (codes this student can use) and `suggestedPromocodeId` (best auto-apply code, or null)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/packages/{{websitePackageId}}/promocodes"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Promocodes fetched successfully\",\n  \"data\": {\n    \"packageId\": 4,\n    \"salePrice\": 20000,\n    \"listPrice\": 20000,\n    \"isNewUser\": true,\n    \"suggestedPromocodeId\": 4,\n    \"items\": [\n      {\n        \"id\": 4,\n        \"code\": \"YTGANEGT\",\n        \"source\": \"RODHA\",\n        \"websiteCategoryId\": 1,\n        \"discountType\": \"PERCENT\",\n        \"forNewUser\": false,\n        \"validFrom\": null,\n        \"validTill\": null,\n        \"maxUseCount\": 0,\n        \"discountValue\": 5,\n        \"maxDiscountValue\": 0,\n        \"minCartValue\": 0,\n        \"description\": null,\n        \"isActive\": true,\n        \"autoApply\": true,\n        \"estimatedDiscount\": 1000,\n        \"estimatedPayable\": 19000,\n        \"applicable\": true,\n        \"applyTier\": 3\n      },\n      {\n        \"id\": 5,\n        \"code\": \"WELCOME10\",\n        \"source\": \"RODHA\",\n        \"websiteCategoryId\": 1,\n        \"discountType\": \"FLAT\",\n        \"forNewUser\": false,\n        \"validFrom\": null,\n        \"validTill\": null,\n        \"maxUseCount\": 0,\n        \"discountValue\": 1000,\n        \"maxDiscountValue\": 0,\n        \"minCartValue\": 0,\n        \"description\": null,\n        \"isActive\": true,\n        \"autoApply\": true,\n        \"estimatedDiscount\": 1000,\n        \"estimatedPayable\": 19000,\n        \"applicable\": true,\n        \"applyTier\": 3\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Apply typed code",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SUP-ABCD2345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "409 = usage limit reached; 400 = invalid/expired/not eligible (message says why).\n\n### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `code` | string 1–100 | yes* | *Send exactly one of `code` or `promocodeId`. Case-insensitive. |\n\n400 = invalid / expired / not eligible (message says why), 409 = usage limit reached."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SUP-ABCD2345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Cart item updated\",\n  \"data\": {\n    \"id\": 6,\n    \"userId\": \"9044fb1e-c002-40f6-9112-e11cc0c0a1b1\",\n    \"items\": [\n      {\n        \"id\": 6,\n        \"packageId\": 4,\n        \"courseId\": null,\n        \"promocodeId\": 9,\n        \"listPrice\": 20000,\n        \"salePrice\": 20000,\n        \"discountAmount\": 3000,\n        \"payableAmount\": 17000,\n        \"product\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"package\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"course\": null,\n        \"promocode\": {\n          \"id\": 9,\n          \"code\": \"SUP-Q8QRA3WR\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 15,\n          \"maxDiscountValue\": 0,\n          \"description\": \"Support team\"\n        }\n      }\n    ],\n    \"related\": [\n      {\n        \"type\": \"package\",\n        \"id\": 6,\n        \"slug\": \"package-c-mwlxkd4d8\",\n        \"title\": \"Package C\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 5000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      },\n      {\n        \"type\": \"package\",\n        \"id\": 5,\n        \"slug\": \"package-b-mwlxkd3z7\",\n        \"title\": \"Package B\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 10000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      }\n    ],\n    \"totals\": {\n      \"itemCount\": 1,\n      \"subtotalAmount\": 20000,\n      \"discountAmount\": 3000,\n      \"payableAmount\": 17000\n    },\n    \"updatedAt\": \"2026-11-18T15:10:16.468+05:30\"\n  }\n}"
+            },
+            {
+              "name": "400 You are not eligible for this promocode",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SUP-ABCD2345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You are not eligible for this promocode\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "409 Promocode usage limit has been reached",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"SUP-ABCD2345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode usage limit has been reached\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Apply listed code by id",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"promocodeId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `promocodeId` | number | yes* | *Exactly one of `code` or `promocodeId`. Only codes from the list. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Cart item updated\",\n  \"data\": {\n    \"id\": 6,\n    \"userId\": \"9044fb1e-c002-40f6-9112-e11cc0c0a1b1\",\n    \"items\": [\n      {\n        \"id\": 6,\n        \"packageId\": 4,\n        \"courseId\": null,\n        \"promocodeId\": 9,\n        \"listPrice\": 20000,\n        \"salePrice\": 20000,\n        \"discountAmount\": 3000,\n        \"payableAmount\": 17000,\n        \"product\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"package\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"course\": null,\n        \"promocode\": {\n          \"id\": 9,\n          \"code\": \"SUP-Q8QRA3WR\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 15,\n          \"maxDiscountValue\": 0,\n          \"description\": \"Support team\"\n        }\n      }\n    ],\n    \"related\": [\n      {\n        \"type\": \"package\",\n        \"id\": 6,\n        \"slug\": \"package-c-mwlxkd4d8\",\n        \"title\": \"Package C\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 5000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      },\n      {\n        \"type\": \"package\",\n        \"id\": 5,\n        \"slug\": \"package-b-mwlxkd3z7\",\n        \"title\": \"Package B\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 10000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      }\n    ],\n    \"totals\": {\n      \"itemCount\": 1,\n      \"subtotalAmount\": 20000,\n      \"discountAmount\": 3000,\n      \"payableAmount\": 17000\n    },\n    \"updatedAt\": \"2026-11-18T15:10:16.468+05:30\"\n  }\n}"
+            },
+            {
+              "name": "400 Promocode is not valid for this package",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode is not valid for this package\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "409 Promocode usage limit has been reached",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode usage limit has been reached\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Remove code",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"promocodeId\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "### Fields\n\n| Field | Type | Required | Notes |\n|---|---|---|---|\n| `promocodeId` | null | yes | Removes the code from the cart item. |"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Cart item updated\",\n  \"data\": {\n    \"id\": 6,\n    \"userId\": \"9044fb1e-c002-40f6-9112-e11cc0c0a1b1\",\n    \"items\": [\n      {\n        \"id\": 6,\n        \"packageId\": 4,\n        \"courseId\": null,\n        \"promocodeId\": null,\n        \"listPrice\": 20000,\n        \"salePrice\": 20000,\n        \"discountAmount\": 0,\n        \"payableAmount\": 20000,\n        \"product\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"package\": {\n          \"type\": \"package\",\n          \"id\": 4,\n          \"slug\": \"package-a-mwlxkd3k6\",\n          \"title\": \"Package A\",\n          \"bannerImageUrl\": null,\n          \"isActive\": true,\n          \"language\": null,\n          \"validTill\": null,\n          \"duration\": null,\n          \"includes\": {\n            \"liveClass\": 0,\n            \"video\": 0,\n            \"quiz\": 0,\n            \"pdf\": 0,\n            \"assignment\": 0\n          }\n        },\n        \"course\": null,\n        \"promocode\": null\n      }\n    ],\n    \"related\": [\n      {\n        \"type\": \"package\",\n        \"id\": 6,\n        \"slug\": \"package-c-mwlxkd4d8\",\n        \"title\": \"Package C\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 5000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      },\n      {\n        \"type\": \"package\",\n        \"id\": 5,\n        \"slug\": \"package-b-mwlxkd3z7\",\n        \"title\": \"Package B\",\n        \"bannerImageUrl\": null,\n        \"language\": null,\n        \"duration\": null,\n        \"price\": 10000,\n        \"discountedPrice\": 0,\n        \"averageRating\": null,\n        \"ratingCount\": 0,\n        \"promocode\": {\n          \"id\": 4,\n          \"code\": \"YTGANEGT\",\n          \"discountType\": \"PERCENT\",\n          \"discountValue\": 5,\n          \"maxDiscountValue\": 0,\n          \"description\": null\n        }\n      }\n    ],\n    \"totals\": {\n      \"itemCount\": 1,\n      \"subtotalAmount\": 20000,\n      \"discountAmount\": 0,\n      \"payableAmount\": 20000\n    },\n    \"updatedAt\": \"2026-11-18T15:10:16.468+05:30\"\n  }\n}"
+            },
+            {
+              "name": "400 Validation failed",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"promocodeId\": [\n      \"Send either promocodeId or code\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "409 Promocode usage limit has been reached",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/cart/items/{{cartItemId}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"promocodeId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Promocode usage limit has been reached\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

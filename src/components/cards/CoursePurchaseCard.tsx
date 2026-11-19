@@ -1,9 +1,22 @@
 import { AppImage } from "@/components/ui/AppImage";
 import { Badge } from "@/components/ui/Badge";
+import { PackagePromocodeOffers } from "@/components/cards/PackagePromocodeOffers";
 import { PackagePurchaseActions } from "@/components/cards/PackagePurchaseActions";
+import { DiscountRequestCta } from "@/components/account/discount-requests/DiscountRequestCta";
+import type { DiscountStudentInfo } from "@/components/account/discount-requests/DiscountRequestDialog";
+import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
+import type { DiscountCurrentViewModel } from "@/lib/api/modules/student/discount-requests/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Course } from "@/lib/types";
+
+/** Request Discount CTA data for a package (API-backed course pages only). */
+export interface CoursePurchaseDiscountProps {
+  websiteCategoryId: number | null;
+  current: DiscountCurrentViewModel | null;
+  student: DiscountStudentInfo | null;
+  loginHref: string;
+}
 
 interface CoursePurchaseCardProps {
   course: Course;
@@ -12,6 +25,9 @@ interface CoursePurchaseCardProps {
   packageId?: number | null;
   isSelfEnrolled?: boolean;
   isLoggedIn?: boolean;
+  discount?: CoursePurchaseDiscountProps;
+  /** Listed package promocodes (logged-in); apply happens on checkout. */
+  promocodeOffers?: CheckoutPromocodeOption[];
 }
 
 /** Compact sticky purchase card — image, essentials, price, Buy Now. */
@@ -22,6 +38,8 @@ export function CoursePurchaseCard({
   packageId = null,
   isSelfEnrolled = false,
   isLoggedIn = false,
+  discount,
+  promocodeOffers = [],
 }: CoursePurchaseCardProps) {
   const posterSrc =
     course.thumbnail ||
@@ -29,11 +47,20 @@ export function CoursePurchaseCard({
     COURSE_IMAGE_FALLBACK;
   const enrollHref = course.externalLink || course.enrollmentUrl || "#";
   const usePackageCheckout = packageId != null || isSelfEnrolled;
+  const appliedCode = course.appliedCouponCode?.trim() || "";
+  const bestOffer =
+    promocodeOffers.find((offer) => offer.isBest) ?? promocodeOffers[0] ?? null;
+  const chipCode = appliedCode || bestOffer?.code || "";
+  const isBestChip =
+    Boolean(bestOffer) &&
+    (!appliedCode ||
+      appliedCode.toUpperCase() === bestOffer!.code.toUpperCase());
+  const showCouponChip = Boolean(chipCode) && !isSelfEnrolled;
 
   return (
     <aside
       className={cn(
-        "flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-[6px] border border-section-beige bg-white shadow-sm shadow-orange-500/10",
+        "flex flex-col rounded-[6px] border border-section-beige bg-white shadow-sm shadow-orange-500/10",
         className
       )}
     >
@@ -47,7 +74,7 @@ export function CoursePurchaseCard({
         />
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 md:p-5">
+      <div className="flex flex-col p-4 md:p-5">
         <div className="flex flex-wrap gap-2">
           <Badge
             variant="default"
@@ -85,8 +112,8 @@ export function CoursePurchaseCard({
           )}
         </div>
 
-        <div className="flex justify-between items-center gap-2">
-          <div className="mt-4 flex flex-wrap items-end gap-2">
+        <div className="mt-4 flex items-end justify-between gap-2">
+          <div className="flex flex-wrap items-end gap-2">
             <span className="text-[1.5rem] font-bold leading-none text-orange-500">
               {course.price === 0 ? "FREE" : formatPrice(course.price)}
             </span>
@@ -97,17 +124,34 @@ export function CoursePurchaseCard({
                 </span>
               )}
           </div>
-          {course.appliedCouponCode?.trim() && (
-            <div className="flex flex-col gap-1 items-end">
-              <span className="text-caption font-bold text-orange-500">Coupon:</span>
-                <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 ">
-                  <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
-                    {course.appliedCouponCode.trim()}
-                  </span>
-                </div>
+          {showCouponChip ? (
+            <div className="flex max-w-[50%] flex-col items-end gap-1">
+              {isBestChip ? (
+                <span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700">
+                  Best offer
+                </span>
+              ) : (
+                <span className="rounded-full bg-orange-50 px-1.5 py-0.5 text-[9px] font-semibold text-orange-600">
+                  Applied
+                </span>
+              )}
+              <div className="flex w-fit max-w-full items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+                <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
+                  {chipCode}
+                </span>
+              </div>
             </div>
-          )}
+          ) : null}
         </div>
+
+        {promocodeOffers.length > 0 && !isSelfEnrolled ? (
+          <PackagePromocodeOffers
+            className="mt-3"
+            offers={promocodeOffers}
+            appliedCode={appliedCode || null}
+          />
+        ) : null}
+
         {usePackageCheckout ? (
           <div className="mt-4">
             <PackagePurchaseActions
@@ -117,6 +161,22 @@ export function CoursePurchaseCard({
               isLoggedIn={isLoggedIn}
               className="btn-primary-premium premium-border-glow glow-accent-orange h-11 rounded-md bg-orange-500 px-6 text-body font-semibold text-white hover:bg-orange-600"
             />
+            {discount &&
+            packageId != null &&
+            !isSelfEnrolled &&
+            course.price > 0 ? (
+              <DiscountRequestCta
+                className="mt-2.5"
+                packageId={packageId}
+                packageTitle={course.title}
+                websiteCategoryId={discount.websiteCategoryId}
+                isLoggedIn={isLoggedIn}
+                current={discount.current}
+                student={discount.student}
+                loginHref={discount.loginHref}
+                variant="website"
+              />
+            ) : null}
           </div>
         ) : (
           <a

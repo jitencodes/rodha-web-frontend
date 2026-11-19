@@ -291,6 +291,8 @@ function mapPackageTestimonials(
 export interface PackageDetailViewModel {
   course: Course;
   packageId: number | null;
+  /** Website vertical of the package; `null` when the API omits it. */
+  websiteCategoryId: number | null;
   isSelfEnrolled: boolean;
   faqs: FaqItem[];
   similar: PackageCardViewModel[];
@@ -352,6 +354,8 @@ export function mapPackageDetail(
   return {
     course,
     packageId: card.packageId,
+    websiteCategoryId:
+      typeof data.websiteCategoryId === "number" ? data.websiteCategoryId : null,
     isSelfEnrolled: card.isSelfEnrolled,
     faqs: mapPackageFaqs(data.faqs),
     similar: mapPackageListItems(data.similarPackages),

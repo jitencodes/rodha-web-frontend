@@ -621,3 +621,10 @@ Format:
 - **Decision:** The forum uses the light website surfaces (cream page, white cards, beige zebra rows) with dark header, footer and title bands, matching the website mixed theme. The public website exposes only `doubt_forum` discussions; study groups (`group_chat`) and channels (`broadcast_channel`) are removed from the website.
 - **Rationale:** Product request for theme consistency with the main site; group chats and channels are not part of the website scope.
 - **Consequences:** Forum components use neutral/orange light classes, not the dark `bg-bg-*` / `text-text-*` tokens. Group chat / channel APIs stay available to the app, but the website has no UI or service code for them.
+
+---
+
+### 2026-11-19 — `x-website-category-id` source for student promocode / discount APIs
+- **Decision:** Package-scoped student calls (package promocodes, cart promocode PATCH, checkout, discount `current` / submit / resubmit) send the package's own `websiteCategoryId` from package detail. Calls with no package context (my discount requests list, form config, request detail, proof links) send `DEFAULT_WEBSITE_CATEGORY_ID` (1), or the request's `item.websiteCategoryId` when known.
+- **Rationale:** The website does not track a "current vertical" for logged-in students; the integration guide says the header is harmless where not checked.
+- **Consequences:** If the backend starts filtering the student request list by this header, the dashboard would only show MBA requests — revisit then. The checkout page makes one extra package-detail call to learn the vertical (cart items do not carry it).

@@ -92,6 +92,8 @@ export interface PackageCourseNodeApi {
 }
 
 export interface PackageDetailApi extends PackageListItemApi {
+  /** Website vertical (MBA = 1, …) — drives `x-website-category-id` on student APIs. */
+  websiteCategoryId?: number | null;
   description?: string | null;
   duration?: string | null;
   mode?: string | null;

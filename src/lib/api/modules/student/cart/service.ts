@@ -11,6 +11,7 @@ import type {
   VerifyPaymentRequest,
   VerifyPaymentResponseApi,
 } from "@/lib/api/modules/student/cart/types";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 
 const CART_PATH = "api/website/student/cart";
 const CHECKOUT_PATH = "api/website/student/checkout";
@@ -42,37 +43,55 @@ export async function addPackageToCart(
   );
 }
 
+/** Exactly one of `code` (typed, case-insensitive) or `promocodeId` (listed / `null` = remove). */
+export type CartItemPromocodeBody =
+  | { code: string }
+  | { promocodeId: number | string | null };
+
 export async function setCartItemPromocode(
   accessToken: string,
   cartItemId: number | string,
-  promocodeId: number | string | null
+  body: CartItemPromocodeBody,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentCartApi> {
-  return apiPatch<StudentCartApi, { promocodeId: number | string | null }>(
+  return apiPatch<StudentCartApi, CartItemPromocodeBody>(
     `${CART_PATH}/items/${cartItemId}`,
-    { promocodeId },
-    { accessToken }
+    body,
+    { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
 }
 
 export async function getPackagePromocodes(
   accessToken: string,
-  packageId: number | string
+  packageId: number | string,
+  websiteCategoryId?: number | string | null
 ): Promise<PackagePromocodesDataApi> {
   return apiGet<PackagePromocodesDataApi>(
     `api/website/student/packages/${packageId}/promocodes`,
-    { accessToken, cache: "no-store" }
+    {
+      accessToken,
+      cache: "no-store",
+      headers: websiteCategoryHeaders(websiteCategoryId),
+    }
   );
 }
 
 /** UTM fields plus an optional checkout-only `stateName`. Does not update the profile. */
 export async function checkoutStudentCart(
   accessToken: string,
-  body: Record<string, string> = {}
+  body: Record<string, string> = {},
+  websiteCategoryId?: number | string | null
 ): Promise<CheckoutResponseApi> {
   return apiPost<CheckoutResponseApi, Record<string, string>>(
     CHECKOUT_PATH,
     { ...body, channel: "WEB" },
-    { accessToken, headers: { "x-channel": "WEB" } }
+    {
+      accessToken,
+      headers: {
+        "x-channel": "WEB",
+        ...websiteCategoryHeaders(websiteCategoryId),
+      },
+    }
   );
 }
 

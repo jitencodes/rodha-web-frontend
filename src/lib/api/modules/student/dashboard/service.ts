@@ -4,6 +4,7 @@ import {
   getApiKey,
   getApiSource,
 } from "@/lib/api/env";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 import { ApiError } from "@/lib/api/types";
 import {
   mapContinueWatchingItems,
@@ -171,6 +172,7 @@ export async function fetchStudentDashboardRegistrationStatus(
     Accept: "application/json",
     "x-source": getApiSource(),
     Authorization: `Bearer ${accessToken}`,
+    ...websiteCategoryHeaders(),
   };
   const apiKey = getApiKey();
   if (apiKey) headers["x-api-key"] = apiKey;
@@ -233,6 +235,7 @@ export async function getStudentDashboard(
     const data = await apiGet<DashboardApi>("api/website/student/dashboard", {
       accessToken,
       cache: "no-store",
+      headers: websiteCategoryHeaders(),
     });
     return mapDashboardPayload(data ?? {});
   } catch (error) {

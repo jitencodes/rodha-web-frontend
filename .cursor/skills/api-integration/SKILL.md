@@ -123,6 +123,8 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
 | student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
 | student | `GET api/website/student/orders` | My Orders |
+| student/cart | `GET api/website/student/packages/:id/promocodes` + `PATCH .../cart/items/:id` | Checkout Available offers (`mapCheckoutPromocodeOptions`) + coupon box: `{ code }` typed or `{ promocodeId }` listed / `null` remove, via `/api/checkout/promocode` (keeps 400/409) |
+| student/discount-requests | `GET .../discount-requests/config`, `/current?packageId=`, list, `/:id`, `/:id/files/:fileId`; `POST` submit / `/:id/resubmit` (multipart) | `DiscountRequestCta` (course purchase card + checkout), `DiscountRequestDialog`, dashboard `DiscountRequestsSection`; BFF `/api/discount-requests/*` |
 | student | `GET api/website/student/profile` + `PATCH .../password` | My Profile |
 | graphy | `GET api/graphy/sso` | Account header Open Graphy (new tab) |
 | search | `GET api/website/search` | Global search dialog via `GET /api/search` (`scope=website\|account`). Unregistered entity types return an empty filter state |
@@ -132,6 +134,8 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | resources | `GET api/website/resources` | `/resources` (`general=true` for the general category) |
 | promotional-banner | `GET api/website/promotional-banner` | Site promo dialog (date window; IMAGE/VIDEO + link); hidden when empty |
 | recent-purchases | `GET api/website/recent-purchases` | `data.items[]` → bottom-left purchase toast, shown sequentially; package items link to `/courses/{itemSlug}`; hidden when empty |
+
+Student promocode / discount / checkout calls send `x-website-category-id` (`src/lib/api/website-category.ts`; `apiGet` and mutations take `headers`): the package `websiteCategoryId` when the call is about a package, else the default `1`. BFF field errors: `bffErrorResponse` (`src/lib/http/bff-response.ts`) returns `{ ok:false, error, errors:{ field: msg } }` with the API status.
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
 

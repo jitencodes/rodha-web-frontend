@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useAtomValue } from "jotai";
 import { Input } from "@/components/ui/Input";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { CATEGORIES } from "@/lib/constants";
+import { categoriesAtom } from "@/lib/store/categories";
 import type { ContactFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/submit-lead";
@@ -38,6 +39,15 @@ interface ContactFieldErrors {
 }
 
 export function ContactForm({ className, variant = "light" }: ContactFormProps) {
+  const categories = useAtomValue(categoriesAtom);
+  const examOptions = useMemo(
+    () =>
+      categories.map((category) => ({
+        value: category.counsellingExamId ?? category.slug,
+        label: category.menuLabel || category.name,
+      })),
+    [categories]
+  );
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
@@ -61,7 +71,7 @@ export function ContactForm({ className, variant = "light" }: ContactFormProps) 
       name: validateName(formData.name),
       phone: validatePhone(formData.phone),
       email: validateEmail(formData.email),
-      exam: validateExam(formData.exam),
+      exam: examOptions.length > 0 ? validateExam(formData.exam) : undefined,
       message: validateMessage(formData.message),
     };
     setFieldErrors(nextErrors);
@@ -202,21 +212,26 @@ export function ContactForm({ className, variant = "light" }: ContactFormProps) 
           aria-required
           error={fieldErrors.email}
         />
-        <DropdownSelect
-          variant={variant}
-          label="Category of Interest"
-          placeholder="Select a category"
-          value={formData.exam}
-          onChange={(exam) => {
-            setFormData((prev) => ({ ...prev, exam: exam as ContactFormData["exam"] }));
-            setFieldErrors((prev) => ({ ...prev, exam: undefined }));
-          }}
-          options={CATEGORIES.map((c) => ({ value: c.id, label: c.menuLabel }))}
-          prefixIcon={<Icon src="/assets/icons/book.svg" size={16} />}
-          error={fieldErrors.exam}
-          className="w-full relative z-20"
-          triggerClassName="h-[42px] w-full min-w-0 text-body"
-        />
+        {examOptions.length > 0 ? (
+          <DropdownSelect
+            variant={variant}
+            label="Category of Interest"
+            placeholder="Select a category"
+            value={formData.exam}
+            onChange={(exam) => {
+              setFormData((prev) => ({
+                ...prev,
+                exam: exam as ContactFormData["exam"],
+              }));
+              setFieldErrors((prev) => ({ ...prev, exam: undefined }));
+            }}
+            options={examOptions}
+            prefixIcon={<Icon src="/assets/icons/book.svg" size={16} />}
+            error={fieldErrors.exam}
+            className="w-full relative z-20"
+            triggerClassName="h-[42px] w-full min-w-0 text-body"
+          />
+        ) : null}
         <Textarea
           variant={variant}
           label="Message"

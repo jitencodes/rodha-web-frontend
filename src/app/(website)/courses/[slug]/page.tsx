@@ -6,8 +6,14 @@ import {
   getCoursePath,
   withCourseDetailDefaults,
 } from "@/data/course-details";
+import type { CoursePurchaseDiscountProps } from "@/components/cards/CoursePurchaseCard";
+import type { PackageDetailViewModel } from "@/lib/api/modules/packages/mapper";
 import { getPackageBySlug } from "@/lib/api/modules/packages/service";
-import { getAccessToken } from "@/lib/auth/server-session";
+import { mapCheckoutPromocodeOptions } from "@/lib/api/modules/student/cart/mapper";
+import { getPackagePromocodes } from "@/lib/api/modules/student/cart/service";
+import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
+import { getCurrentDiscountRequestOrNull } from "@/lib/api/modules/student/discount-requests/service";
+import { getAccessToken, getSessionUser } from "@/lib/auth/server-session";
 import { getCategoryLandingById } from "@/data/category-landings";
 import { withCategoryLandingDefaults } from "@/data/category-landing-defaults";
 import { buildPageMetadata } from "@/lib/seo";
@@ -31,6 +37,60 @@ function fallbackLanding(name = "Courses"): CategoryLandingConfig {
   return withCategoryLandingDefaults(
     getCategoryLandingById("ipmat") as CategoryLandingConfig
   );
+}
+
+/** Request Discount button state (packages only, not for enrolled students). */
+async function loadDiscountCta(
+  pkg: PackageDetailViewModel,
+  slug: string,
+  accessToken: string | null
+): Promise<CoursePurchaseDiscountProps | undefined> {
+  if (pkg.packageId == null || pkg.isSelfEnrolled) return undefined;
+  const loginHref = `/login?next=${encodeURIComponent(getCoursePath(slug))}`;
+  if (!accessToken) {
+    return {
+      websiteCategoryId: pkg.websiteCategoryId,
+      current: null,
+      student: null,
+      loginHref,
+    };
+  }
+  const [current, user] = await Promise.all([
+    getCurrentDiscountRequestOrNull(
+      accessToken,
+      pkg.packageId,
+      pkg.websiteCategoryId
+    ),
+    getSessionUser(),
+  ]);
+  return {
+    websiteCategoryId: pkg.websiteCategoryId,
+    current,
+    student: {
+      name: user?.fullName ?? "",
+      email: user?.email ?? "",
+      mobile: user?.mobile ?? "",
+    },
+    loginHref,
+  };
+}
+
+/** Listed promocodes for the purchase card (logged-in, purchasable packages). */
+async function loadPromocodeOffers(
+  pkg: PackageDetailViewModel,
+  accessToken: string | null
+): Promise<CheckoutPromocodeOption[]> {
+  if (!accessToken || pkg.packageId == null || pkg.isSelfEnrolled) return [];
+  try {
+    const promos = await getPackagePromocodes(
+      accessToken,
+      pkg.packageId,
+      pkg.websiteCategoryId
+    );
+    return mapCheckoutPromocodeOptions(promos);
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -77,6 +137,10 @@ export default async function CourseDetailPage({
     const categoryLabel =
       pkg.graphyCategories[0] || pkg.course.exam || "Courses";
     const landing = fallbackLanding(categoryLabel);
+    const [discount, promocodeOffers] = await Promise.all([
+      loadDiscountCta(pkg, slug, accessToken),
+      loadPromocodeOffers(pkg, accessToken),
+    ]);
     return (
       <CourseDetailPageView
         course={pkg.course}
@@ -84,6 +148,8 @@ export default async function CourseDetailPage({
         packageId={pkg.packageId}
         isSelfEnrolled={pkg.isSelfEnrolled}
         isLoggedIn={Boolean(accessToken)}
+        discount={discount}
+        promocodeOffers={promocodeOffers}
         faqsOverride={pkg.faqs}
         similarPackages={pkg.similar}
         facultyOverride={pkg.faculty}

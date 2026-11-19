@@ -2,12 +2,17 @@ export interface StudentCartPromocodeApi {
   id?: number | string;
   code?: string;
   title?: string;
+  discountType?: "PERCENT" | "FLAT" | string;
+  discountValue?: number | null;
+  maxDiscountValue?: number | null;
+  description?: string | null;
 }
 
 export interface StudentCartItemApi {
   id: number | string;
   packageId?: number | null;
   courseId?: number | null;
+  promocodeId?: number | null;
   listPrice?: number | null;
   salePrice?: number | null;
   discountAmount?: number | null;
@@ -87,15 +92,42 @@ export interface VerifyPaymentResponseApi {
   } | null;
 }
 
+/** Item of `GET /student/packages/:packageId/promocodes` (Promocodes FE Postman). */
 export interface PackagePromocodeApi {
   id: number | string;
   code?: string;
+  /** Legacy field — kept for older payloads. */
   title?: string;
-  discountAmount?: number;
-  discountPercent?: number;
+  source?: "GRAPHY" | "RODHA" | string;
+  websiteCategoryId?: number | null;
+  discountType?: "PERCENT" | "FLAT" | string;
+  discountValue?: number | null;
+  maxDiscountValue?: number | null;
+  minCartValue?: number | null;
+  validFrom?: string | null;
+  validTill?: string | null;
+  description?: string | null;
+  autoApply?: boolean;
+  estimatedDiscount?: number | null;
+  estimatedPayable?: number | null;
+  applicable?: boolean;
+}
+
+/** Listed code shown on the checkout (cart) page. */
+export interface CheckoutPromocodeOption {
+  id: string;
+  code: string;
+  /** "20% off up to ₹3,000" / "₹500 off" */
+  offerLabel: string;
+  description: string;
+  estimatedDiscount: number;
+  validTill: string | null;
+  autoApply: boolean;
+  isBest: boolean;
 }
 
 export interface PackagePromocodesDataApi {
+  packageId?: number;
   items?: PackagePromocodeApi[];
   listPrice?: number;
   salePrice?: number;

@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-10-23 (complete profile dialog)
+**Last updated:** 2026-11-20 (PackagePromocodeOffers dialog CTA)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -156,7 +156,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | BlogCard | `BlogCard.tsx` (`variant?: "overlay" \| "article"`; overlay = dark legacy homepage card; article = light listing/detail card with category link, calendar/clock meta) |
 | CourseCard | `CourseCard.tsx` |
 | CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; optional `href`; optional `ctaLabel`, default "View Details") |
-| CoursePurchaseCard | `CoursePurchaseCard.tsx` (sticky enrol card: thumbnail, benefits, price, Buy Now, Rodha Buddy) |
+| CoursePurchaseCard | `CoursePurchaseCard.tsx` (sticky enrol card: thumbnail, price, single applied-coupon chip, Buy Now, optional offers CTA + Request Discount) |
+| PackagePromocodeOffers | `PackagePromocodeOffers.tsx` (client: View available offers CTA → Modal; `variant` website\|account; account supports Apply) |
 | PricingPlanCard | `PricingPlanCard.tsx` (light pricing tier card; optional Most Popular) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
 | FacultyCard | `FacultyCard.tsx` |
@@ -220,7 +221,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
 | RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
 | ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
-| Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload`, `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
+| Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload` (passport-photo defaults; `accept` / `validate` / `uploadLabel` / `existingFileName` for documents), `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
 | EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
 | CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
 | RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
@@ -246,6 +247,12 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | CartPageClient | `CartPageClient.tsx` (cart/coupon state, recommended rail) |
 | CartItemCard | `CartItemCard.tsx` (line item + remove) |
 | CartOrderSummary | `CartOrderSummary.tsx` (sticky totals, coupon, Continue to Pay) |
+| AccountThemedPortal | `AccountThemedPortal.tsx` (portals overlays to `body` inside `.account-shell`; follows account theme, light on website pages) |
+| DiscountRequestCta | `discount-requests/DiscountRequestCta.tsx` (Request Discount button/status per package; `variant` website | account) |
+| DiscountRequestDialog | `discount-requests/DiscountRequestDialog.tsx` (config-driven discount form, submit + resubmit, multipart BFF) |
+| DiscountRequestsSection | `discount-requests/DiscountRequestsSection.tsx` (dashboard list + drawer + `?discountRequestId=` deep link) |
+| DiscountRequestDetailDrawer | `discount-requests/DiscountRequestDetailDrawer.tsx` (right drawer: details, proofs via signed link) |
+| DiscountRequestStatusBadge / DiscountValidityCountdown | `discount-requests/*` (status pill on `--account-status-*` tokens; "Expires in …" for inclusive IST `validTill`) |
 | account-theme.css | Account-scoped CSS variables (light/dark; welcome/status/progress tokens) |
 
 ## Hooks — `src/hooks/`
