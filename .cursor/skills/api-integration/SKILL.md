@@ -16,6 +16,7 @@ Default reference for all website API work. Read Postman first; type real payloa
 - Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS)
 - Student auth: `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (`api/auth/user/signup`, `api/auth/user/login` on `NEXT_PUBLIC_API_BASE_URL`)
 - Student registration: `docs/api-collection/Rodha Website Student Registration & Books.postman_collection.json` (`GET`/`POST api/website/student/registration`, `GET api/website/student/profile`)
+- Package upgrade: `docs/api-collection/Rodha CR  package upgrade.postman_collection.json` (`GET student/packages`, quote, checkout, verify)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
 - Base URL: `NEXT_PUBLIC_API_BASE_URL` with trailing slash (Postman `{{baseUrl}}`)

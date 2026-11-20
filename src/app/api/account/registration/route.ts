@@ -6,14 +6,13 @@ import {
 import { getAccessToken } from "@/lib/auth/server-session";
 import { ApiError } from "@/lib/api/types";
 import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
+import { bffErrorResponse, bffUnauthorized } from "@/lib/http/bff-response";
 
 export const runtime = "nodejs";
 
 export async function GET() {
   const accessToken = await getAccessToken();
-  if (!accessToken) {
-    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-  }
+  if (!accessToken) return bffUnauthorized();
 
   try {
     const data = await getStudentRegistration(accessToken);
@@ -26,25 +25,15 @@ export async function GET() {
     return NextResponse.json({ ok: true, data });
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      return bffUnauthorized();
     }
-    const message =
-      error instanceof ApiError
-        ? error.message
-        : "Unable to load registration form.";
-    const status =
-      error instanceof ApiError && error.status >= 400 && error.status < 600
-        ? error.status
-        : 502;
-    return NextResponse.json({ ok: false, error: message }, { status });
+    return bffErrorResponse(error, "Unable to load registration form.");
   }
 }
 
 export async function POST(request: Request) {
   const accessToken = await getAccessToken();
-  if (!accessToken) {
-    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-  }
+  if (!accessToken) return bffUnauthorized();
 
   let formData: FormData;
   try {
@@ -61,16 +50,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, data }, { status: 201 });
   } catch (error) {
     if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      return bffUnauthorized();
     }
-    const message =
-      error instanceof ApiError
-        ? error.message
-        : "Unable to submit registration.";
-    const status =
-      error instanceof ApiError && error.status >= 400 && error.status < 600
-        ? error.status
-        : 502;
-    return NextResponse.json({ ok: false, error: message }, { status });
+    return bffErrorResponse(error, "Unable to submit registration.");
   }
 }

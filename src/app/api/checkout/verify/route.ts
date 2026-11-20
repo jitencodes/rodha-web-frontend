@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { verifyRazorpayPayment } from "@/lib/api/modules/student/cart/service";
+import { resolveWebsiteCategoryId } from "@/lib/api/website-category";
 import { ApiError } from "@/lib/api/types";
 
 export const runtime = "nodejs";
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
     typeof payload.razorpay_signature === "string"
       ? payload.razorpay_signature
       : "";
+  const websiteCategoryId = resolveWebsiteCategoryId(payload.websiteCategoryId);
 
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
     return NextResponse.json(
@@ -43,11 +45,15 @@ export async function POST(request: Request) {
   }
 
   try {
-    const verified = await verifyRazorpayPayment(accessToken, {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-    });
+    const verified = await verifyRazorpayPayment(
+      accessToken,
+      {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      },
+      websiteCategoryId
+    );
     return NextResponse.json({ ok: true, ...verified });
   } catch (error) {
     const message =

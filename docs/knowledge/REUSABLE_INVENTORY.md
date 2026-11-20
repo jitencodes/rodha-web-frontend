@@ -1,7 +1,7 @@
 # Reusable Inventory
 
 **Search this file and the codebase before creating anything new.**  
-**Last updated:** 2026-11-20 (PackagePromocodeOffers dialog CTA)
+**Last updated:** 2026-11-20 (Manage Packages / package upgrade)
 
 After adding a reusable component, hook, util, type, or asset, update this inventory.
 
@@ -208,7 +208,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Component | File |
 |-----------|------|
 | AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme + `AccountUserProvider` / `userAtom`) |
-| AccountSidebar | `AccountSidebar.tsx` (nav accordion, cart badge, Need Help) |
+| AccountSidebar | `AccountSidebar.tsx` (nav accordion incl. Manage Packages, Need Help) |
+| PackageUpgradeCheckoutClient | `PackageUpgradeCheckoutClient.tsx` (upgrade quote summary + free/Razorpay pay; reuses location/UTM dialogs) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
 | AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |
@@ -307,7 +308,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 
 | Module | File |
 |--------|------|
-| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; local draft persistence (localStorage values + IndexedDB passport photo) in `src/lib/account/registration-draft.ts`; passport photo rules (5 MB, JPG/JPEG/PNG) in `src/lib/account/passport-photo.ts`; registration API module `src/lib/api/modules/student/registration/` |
+| account | `account/` — `user`, `dashboard`, `continue-watching`, `courses`, `test-series`, `orders`, `cart`, `recommended`, `profile`, `profile-options` (enum-only registration constants); registration helpers in `src/lib/account/registration-form.ts`; local draft persistence (localStorage values + IndexedDB passport photo) in `src/lib/account/registration-draft.ts`; passport photo rules (2 MB, JPG/PNG only) in `src/lib/account/passport-photo.ts`; registration API module `src/lib/api/modules/student/registration/` |
 | blog | `blog.ts` |
 | about | `about.ts` |
 | contact | `contact.ts` (page-only channels/address; does not replace Footer `CONTACT_INFO`) |

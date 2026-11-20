@@ -6,14 +6,21 @@ import {
   clearStudentCart,
 } from "@/lib/api/modules/student/cart/service";
 import { ApiError } from "@/lib/api/types";
+import { readWebsiteCategoryId } from "@/lib/api/website-category";
 import { publicUrl } from "@/lib/http/public-origin";
 
 export const runtime = "nodejs";
 
-function redirectToLogin(request: Request, packageId: string, slug: string) {
+function redirectToLogin(
+  request: Request,
+  packageId: string,
+  slug: string,
+  categoryId: number
+) {
   const url = publicUrl(request, "/login");
   const buyParams = new URLSearchParams({ packageId });
   if (slug) buyParams.set("slug", slug);
+  if (categoryId) buyParams.set("categoryId", String(categoryId));
   url.searchParams.set(
     "next",
     `/api/checkout/buy?${buyParams.toString()}`
@@ -30,6 +37,7 @@ export async function GET(request: Request) {
   const packageIdRaw = searchParams.get("packageId")?.trim() || "";
   const slug = searchParams.get("slug")?.trim() || "";
   const packageId = Number.parseInt(packageIdRaw, 10);
+  const websiteCategoryId = readWebsiteCategoryId(request);
 
   if (!packageIdRaw || !Number.isFinite(packageId)) {
     return NextResponse.redirect(publicUrl(request, "/courses"));
@@ -38,12 +46,12 @@ export async function GET(request: Request) {
   const jar = await cookies();
   const accessToken = jar.get(AUTH_COOKIE_NAME)?.value?.trim();
   if (!accessToken) {
-    return redirectToLogin(request, packageIdRaw, slug);
+    return redirectToLogin(request, packageIdRaw, slug, websiteCategoryId);
   }
 
   try {
-    await clearStudentCart(accessToken);
-    await addPackageToCart(accessToken, packageId);
+    await clearStudentCart(accessToken, websiteCategoryId);
+    await addPackageToCart(accessToken, packageId, websiteCategoryId);
     return NextResponse.redirect(publicUrl(request, "/account/checkout"));
   } catch (error) {
     console.error("[api/checkout/buy]", error);

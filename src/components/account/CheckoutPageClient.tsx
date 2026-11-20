@@ -288,7 +288,10 @@ export function CheckoutPageClient({
           const verifyRes = await fetchAuthed("/api/checkout/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
+            body: JSON.stringify({
+              ...response,
+              ...(websiteCategoryId != null ? { websiteCategoryId } : {}),
+            }),
           });
           const verifyData = (await verifyRes.json()) as {
             ok: boolean;

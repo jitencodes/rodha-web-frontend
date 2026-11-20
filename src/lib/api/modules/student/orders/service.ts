@@ -6,6 +6,7 @@ import type {
   AccountPaymentStatus,
 } from "@/lib/account/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 
 interface OrderItemApi {
   title?: string;
@@ -117,12 +118,17 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
 export async function getStudentOrders(
   accessToken: string,
   page = 1,
-  limit = 20
+  limit = 20,
+  websiteCategoryId?: number | string | null
 ): Promise<{ items: AccountOrder[]; totalPages: number; page: number }> {
   const qs = buildApiQuery({ page, limit });
   const data = await apiGet<OrdersDataApi>(
     `api/website/student/orders${qs}`,
-    { accessToken, cache: "no-store" }
+    {
+      accessToken,
+      cache: "no-store",
+      headers: websiteCategoryHeaders(websiteCategoryId),
+    }
   );
   return {
     items: (data.items ?? []).map(mapStudentOrder),

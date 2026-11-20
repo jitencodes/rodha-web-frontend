@@ -628,3 +628,8 @@ Format:
 - **Decision:** Package-scoped student calls (package promocodes, cart promocode PATCH, checkout, discount `current` / submit / resubmit) send the package's own `websiteCategoryId` from package detail. Calls with no package context (my discount requests list, form config, request detail, proof links) send `DEFAULT_WEBSITE_CATEGORY_ID` (1), or the request's `item.websiteCategoryId` when known.
 - **Rationale:** The website does not track a "current vertical" for logged-in students; the integration guide says the header is harmless where not checked.
 - **Consequences:** If the backend starts filtering the student request list by this header, the dashboard would only show MBA requests — revisit then. The checkout page makes one extra package-detail call to learn the vertical (cart items do not carry it).
+
+### 2026-11-20 — Account student APIs always send `x-website-category-id`
+- **Decision:** Every `api/website/student/*` account call (cart CRUD, checkout pay/verify, orders, profile, password, registration, discount, dashboard, courses, package upgrades) sends `x-website-category-id` via `websiteCategoryHeaders()` (package vertical when known, else default `1`). Auth `api/auth/me*` and Graphy SSO stay without it.
+- **Rationale:** Backend requires the header on account-side vertical APIs (discount form, checkout); sending it consistently avoids missing-header 400s.
+- **Consequences:** Buy Now BFF reads `categoryId` query / header (default 1). Verify accepts `websiteCategoryId` in the JSON body like pay.

@@ -37,7 +37,7 @@ import type {
   DiscountRequestApi,
   DiscountTypeCode,
 } from "@/lib/api/modules/student/discount-requests/types";
-import { WEBSITE_CATEGORY_HEADER } from "@/lib/api/website-category";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { cn } from "@/lib/utils";
 
@@ -135,10 +135,7 @@ export function DiscountRequestDialog({
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const categoryHeader = useMemo(
-    () =>
-      websiteCategoryId != null
-        ? { [WEBSITE_CATEGORY_HEADER]: String(websiteCategoryId) }
-        : undefined,
+    () => websiteCategoryHeaders(websiteCategoryId),
     [websiteCategoryId]
   );
   const carried = useMemo(() => carriedOverFiles(resubmitRequest), [resubmitRequest]);

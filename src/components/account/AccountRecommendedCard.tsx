@@ -105,18 +105,17 @@ export function AccountRecommendedCard({
         {/* Coupon + CTA aligned together */}
       <div className="flex min-w-0 flex-col items-end gap-2">
         {product.appliedCouponCode?.trim() && (
-          <div className="flex max-w-full flex-col items-end gap-1">
+          <div className="flex max-w-full min-w-0 flex-col items-end gap-1">
             <span className="text-caption whitespace-nowrap font-medium text-orange-500">
               Eligible Coupon
             </span>
-            
-            <div className="max-w-full rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
-              <span
-                title={product.appliedCouponCode?.trim()}
-                className="block w-[80px] max-w-fit truncate text-[10px] font-bold tracking-wide text-orange-600 cursor-default"
-              >
-                {product.appliedCouponCode?.trim()}
-              </span>
+            <div className="w-full max-w-[120px] min-w-0 rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+              <ClampTooltip
+                text={product.appliedCouponCode.trim()}
+                lines={1}
+                className="block min-w-0 w-full text-[10px] font-bold tracking-wide text-orange-600"
+                tooltipClassName="border-orange-300 bg-white text-orange-700 shadow-sm"
+              />
             </div>
           </div>
         )}

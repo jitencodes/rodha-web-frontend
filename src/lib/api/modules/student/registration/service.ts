@@ -5,6 +5,7 @@ import {
   getApiSource,
 } from "@/lib/api/env";
 import { ApiError, type ApiEnvelope } from "@/lib/api/types";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 import { mapStudentRegistrationForm } from "./mapper";
 import type {
   RegistrationFormApi,
@@ -12,12 +13,17 @@ import type {
 } from "./types";
 
 export async function getStudentRegistration(
-  accessToken: string
+  accessToken: string,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentRegistrationFormViewModel | null> {
   try {
     const data = await apiGet<RegistrationFormApi>(
       "api/website/student/registration",
-      { accessToken, cache: "no-store" }
+      {
+        accessToken,
+        cache: "no-store",
+        headers: websiteCategoryHeaders(websiteCategoryId),
+      }
     );
     return mapStudentRegistrationForm(data ?? {});
   } catch (error) {
@@ -30,7 +36,8 @@ export async function getStudentRegistration(
 
 export async function submitStudentRegistration(
   accessToken: string,
-  formData: FormData
+  formData: FormData,
+  websiteCategoryId?: number | string | null
 ): Promise<unknown> {
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) {
@@ -41,6 +48,7 @@ export async function submitStudentRegistration(
     Accept: "application/json",
     "x-source": getApiSource(),
     Authorization: `Bearer ${accessToken}`,
+    ...websiteCategoryHeaders(websiteCategoryId),
   };
   const apiKey = getApiKey();
   if (apiKey) headers["x-api-key"] = apiKey;

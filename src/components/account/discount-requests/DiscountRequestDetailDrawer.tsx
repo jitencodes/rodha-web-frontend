@@ -18,7 +18,7 @@ import type {
   DiscountRequestFileLinkApi,
   DiscountRequestSchoolApi,
 } from "@/lib/api/modules/student/discount-requests/types";
-import { WEBSITE_CATEGORY_HEADER } from "@/lib/api/website-category";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 
 type DiscountRequestDetailDrawerProps = {
@@ -31,8 +31,7 @@ type DiscountRequestDetailDrawerProps = {
 };
 
 function categoryHeaders(request: DiscountRequestApi | null) {
-  const id = request?.item?.websiteCategoryId;
-  return id != null ? { [WEBSITE_CATEGORY_HEADER]: String(id) } : undefined;
+  return websiteCategoryHeaders(request?.item?.websiteCategoryId);
 }
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {

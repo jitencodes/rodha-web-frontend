@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-20 (checkout offers dialog, sticky scroll, PREV_ATTEMPT UI)
+**Last updated:** 2026-11-20 (registration photo + category headers + Recommended rail)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,13 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Registration photo, category headers, Recommended rail (2026-11-20):**
+  - **Passport photo:** frontend limit aligned to backend — JPG/PNG only, max **2 MB** (`passport-photo.ts`); re-validated on final submit; BFF registration errors return field `errors` via `bffErrorResponse` and map to the upload field (no more unclear toast-only “passport photo must be”).
+  - **`x-website-category-id`:** now on remaining account student APIs — cart get/clear/add, payment verify, orders, profile, password, registration GET/POST; checkout BFF `buy` / `verify` forward category; discount dialog/drawer always send the header (default `1`); `apiDelete` / `apiPostFormData` pass extra headers.
+  - **Dashboard Recommended for You:** horizontal scroll below `sm` with `min-w-[200px]` cards; from `sm` a 2/4-col grid; coupon code truncates in the dashed box with `ClampTooltip` on hover.
+- **Manage Packages / package upgrade (2026-11-20):** student APIs from `Rodha CR package upgrade` Postman — `GET /student/packages`, quote, checkout, verify.
+  - Sidebar **Manage Packages** → `/account/packages` lists enrolled packages with `CourseCardV2` (Available upgrades CTA when targets exist).
+  - `/account/packages/upgrade` picks a target, shows iconized quote summary, then pays via BFF (`/api/account/packages/upgrades/checkout` + verify); `mode=free` / payable ≤ 0 skips Razorpay (same success page as buy checkout).
 - **Checkout offers dialog + purchase card polish + PREV_ATTEMPT (2026-11-20):**
   - Checkout coupon heading is dynamic (`Have a coupon?` / `Coupon applied · {code}`); Available offers moved into `PackagePromocodeOffers` account-variant dialog with Apply.
   - Course sticky shell no longer uses `max-h` + `overflow-y-auto` (page scrolls instead of nested card scrollbar).

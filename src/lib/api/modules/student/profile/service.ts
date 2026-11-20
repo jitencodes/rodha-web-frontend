@@ -6,13 +6,15 @@ import {
 } from "@/lib/api/env";
 import { ApiError, type ApiEnvelope } from "@/lib/api/types";
 import type { StudentProfileDetailApi } from "@/lib/api/modules/student/registration/types";
+import { websiteCategoryHeaders } from "@/lib/api/website-category";
 import { mapStudentProfileDetail } from "./mapper";
 import type { StudentProfileViewModel } from "./types";
 
 export type { StudentProfileViewModel } from "./types";
 
 export async function getStudentProfile(
-  accessToken: string
+  accessToken: string,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentProfileViewModel | null> {
   try {
     const data = await apiGet<StudentProfileDetailApi>(
@@ -20,6 +22,7 @@ export async function getStudentProfile(
       {
         accessToken,
         cache: "no-store",
+        headers: websiteCategoryHeaders(websiteCategoryId),
       }
     );
     return mapStudentProfileDetail(data ?? {});
@@ -34,7 +37,8 @@ export async function getStudentProfile(
 export async function updateStudentPassword(
   accessToken: string,
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
+  websiteCategoryId?: number | string | null
 ): Promise<void> {
   await apiPatch(
     "api/website/student/password",
@@ -42,7 +46,7 @@ export async function updateStudentPassword(
       currentPassword,
       newPassword,
     },
-    { accessToken }
+    { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
 }
 

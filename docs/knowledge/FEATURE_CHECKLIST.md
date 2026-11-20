@@ -95,12 +95,13 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Header chrome | Complete | Mobile search overlay, Ctrl+K, theme, notifications dot, Live Dashboard, profile/Logout |
 | Settings stub | Complete | `/account/settings` placeholder card |
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
+| Manage Packages | Complete | `/account/packages` enrolled list (`CourseCardV2` + Available upgrades); `/account/packages/upgrade` targets + quote summary; free/Razorpay via upgrade checkout BFF |
 | Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
-| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor), progress ring, orders preview, quick links |
+| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor; below `sm` horizontal scroll `min-w-[200px]`, coupon truncates + hover tooltip), progress ring, orders preview, quick links |
 | Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |
 | Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
-| Profile | Complete | `/account/profile` avatar; sidebar Complete registration CTA while incomplete; registration draft saved locally until submit; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
+| Profile | Complete | `/account/profile` avatar; sidebar Complete registration CTA while incomplete; registration draft saved locally until submit; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); passport photo JPG/PNG max 2 MB with submit re-check + field errors; View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
 | Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie (server + client capture, replace-only, single source at pay) and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
 | Checkout coupons (Promocodes) | Complete | Typed code `{ code }` (any code incl. bulk); dynamic heading when applied; Available offers via dialog CTA with Apply; 400/409 under input; 409 at pay → message + cart refresh |

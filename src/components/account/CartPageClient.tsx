@@ -209,7 +209,7 @@ export function CartPageClient({
                 {recommendedVisible.map((product) => (
                   <div
                     key={product.id}
-                    className="w-[220px] shrink-0 sm:w-[240px]"
+                    className="min-w-[200px] w-[200px] shrink-0 sm:w-[240px]"
                   >
                     <AccountRecommendedCard
                       product={product}

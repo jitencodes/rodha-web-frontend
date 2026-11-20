@@ -208,7 +208,10 @@ export async function apiDelete<TResponse>(
 
   const response = await fetch(url, {
     method: "DELETE",
-    headers: buildHeaders({ accessToken: options.accessToken }),
+    headers: buildHeaders({
+      accessToken: options.accessToken,
+      extra: options.headers,
+    }),
     signal: options.signal,
     cache: "no-store",
   });
@@ -238,7 +241,10 @@ export async function apiPostFormData<TResponse>(
 
   const response = await fetch(url, {
     method: "POST",
-    headers: buildHeaders({ accessToken: options.accessToken }),
+    headers: buildHeaders({
+      accessToken: options.accessToken,
+      extra: options.headers,
+    }),
     body: form,
     signal: options.signal,
     cache: "no-store",

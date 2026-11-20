@@ -366,6 +366,22 @@ export function RegistrationDialog({
       toast.error("Please fix the highlighted fields.");
       return;
     }
+
+    // Re-check passport photo on final submit (not only on step 1).
+    const photoFieldErrors: RegistrationFieldErrors = {};
+    if (!passportFile) {
+      photoFieldErrors.passportPhoto = "Passport-size photo is required.";
+    } else {
+      const photoError = validatePassportPhoto(passportFile);
+      if (photoError) photoFieldErrors.passportPhoto = photoError;
+    }
+    if (Object.keys(photoFieldErrors).length) {
+      setErrors((prev) => ({ ...prev, ...photoFieldErrors }));
+      setStep(1);
+      toast.error("Please fix the passport photo and try again.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const formData = buildRegistrationFormData(values, passportFile, {
@@ -380,8 +396,13 @@ export function RegistrationDialog({
       const data = (await res.json().catch(() => null)) as {
         ok?: boolean;
         error?: string;
+        errors?: Record<string, string>;
       } | null;
       if (!res.ok || !data?.ok) {
+        if (data?.errors && Object.keys(data.errors).length) {
+          setErrors((prev) => ({ ...prev, ...data.errors }));
+          if (data.errors.passportPhoto) setStep(1);
+        }
         throw new Error(data?.error || "Unable to submit registration.");
       }
       clearRegistrationDraft(draftAccountKey);

@@ -146,13 +146,14 @@ export default async function AccountDashboardPage({
               viewAllHref="/account/courses?tab=buy"
             />
             {recommended.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="flex gap-4 overflow-x-auto pb-2 scroll-smooth [scrollbar-width:thin] max-sm:-mx-1 max-sm:px-1 sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
                 {recommended.map((product) => (
-                  <AccountRecommendedCard
+                  <div
                     key={product.id}
-                    product={product}
-                    showCta
-                  />
+                    className="min-w-[200px] shrink-0 sm:min-w-0 sm:shrink"
+                  >
+                    <AccountRecommendedCard product={product} showCta />
+                  </div>
                 ))}
               </div>
             ) : (

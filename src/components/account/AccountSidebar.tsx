@@ -28,6 +28,7 @@ type AccountSidebarProps = {
 function isProductsRoute(pathname: string) {
   return (
     pathname.startsWith("/account/courses") ||
+    pathname.startsWith("/account/packages") ||
     pathname.startsWith("/account/test-series")
   );
 }
@@ -55,6 +56,7 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
   const buyActive =
     pathname.startsWith("/account/courses") &&
     (tab === "buy" || tab === "buy-courses");
+  const managePackagesActive = pathname.startsWith("/account/packages");
   const testSeriesActive = pathname.startsWith("/account/test-series");
   const registrationIncomplete = useRegistrationIncomplete();
 
@@ -132,6 +134,13 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
                 onClick={onClose}
               >
                 Buy Courses
+              </SidebarSubLink>
+              <SidebarSubLink
+                href="/account/packages"
+                active={managePackagesActive}
+                onClick={onClose}
+              >
+                Manage Packages
               </SidebarSubLink>
               {/* Test Series hidden from My Products (Graphy integration). */}
               {false && (

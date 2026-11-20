@@ -18,28 +18,35 @@ const CHECKOUT_PATH = "api/website/student/checkout";
 const VERIFY_PATH = "api/website/student/payments/verify";
 
 export async function getStudentCart(
-  accessToken: string
+  accessToken: string,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentCartApi> {
   return apiGet<StudentCartApi>(CART_PATH, {
     accessToken,
     cache: "no-store",
+    headers: websiteCategoryHeaders(websiteCategoryId),
   });
 }
 
 export async function clearStudentCart(
-  accessToken: string
+  accessToken: string,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentCartApi> {
-  return apiDelete<StudentCartApi>(CART_PATH, { accessToken });
+  return apiDelete<StudentCartApi>(CART_PATH, {
+    accessToken,
+    headers: websiteCategoryHeaders(websiteCategoryId),
+  });
 }
 
 export async function addPackageToCart(
   accessToken: string,
-  packageId: number
+  packageId: number,
+  websiteCategoryId?: number | string | null
 ): Promise<StudentCartApi> {
   return apiPost<StudentCartApi, { packageId: number }>(
     `${CART_PATH}/items`,
     { packageId },
-    { accessToken }
+    { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
 }
 
@@ -97,11 +104,12 @@ export async function checkoutStudentCart(
 
 export async function verifyRazorpayPayment(
   accessToken: string,
-  body: VerifyPaymentRequest
+  body: VerifyPaymentRequest,
+  websiteCategoryId?: number | string | null
 ): Promise<VerifyPaymentResponseApi> {
   return apiPost<VerifyPaymentResponseApi, VerifyPaymentRequest>(
     VERIFY_PATH,
     body,
-    { accessToken }
+    { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
 }
