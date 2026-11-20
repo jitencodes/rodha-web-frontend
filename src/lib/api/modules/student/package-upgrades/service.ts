@@ -49,16 +49,19 @@ export async function getUpgradeQuote(
   return mapUpgradeQuote(data);
 }
 
+export type UpgradeCheckoutRequestBody = {
+  sourceEnrollmentId: number;
+  targetPackageId: number;
+  stateName?: string;
+  channel?: string;
+} & Record<string, string | number | undefined>;
+
 export async function checkoutPackageUpgrade(
   accessToken: string,
-  body: {
-    sourceEnrollmentId: number;
-    targetPackageId: number;
-    stateName?: string;
-  } & Record<string, string>,
+  body: UpgradeCheckoutRequestBody,
   websiteCategoryId?: CategoryId
 ): Promise<UpgradeCheckoutResponseApi> {
-  return apiPost<UpgradeCheckoutResponseApi, typeof body>(
+  return apiPost<UpgradeCheckoutResponseApi, UpgradeCheckoutRequestBody>(
     `${UPGRADES_PATH}/checkout`,
     { ...body, channel: "WEB" },
     {
