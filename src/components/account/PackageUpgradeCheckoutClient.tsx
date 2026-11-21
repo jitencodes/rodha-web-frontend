@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
 import {
+  ArrowRight,
   ArrowRightLeft,
   BadgePercent,
   CircleDollarSign,
@@ -23,6 +24,7 @@ import { userAtom } from "@/lib/store/user";
 import { storePendingPurchase } from "@/lib/tracking/purchase";
 import { readStoredUtm } from "@/lib/tracking/utm";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type PackageUpgradeCheckoutClientProps = {
   quote: UpgradeQuoteViewModel;
@@ -281,14 +283,33 @@ export function PackageUpgradeCheckoutClient({
   return (
     <>
       <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
-        <div className="flex flex-wrap items-center gap-2 text-[13px] text-[var(--account-text-muted)]">
-          <span className="font-medium text-[var(--account-text)]">
-            {quote.sourceTitle}
-          </span>
-          <ArrowRightLeft className="size-4 text-[var(--account-accent)]" />
+        
+        <div className="flex items-center gap-2 text-[13px] text-[var(--account-text-muted)]">
+          <div className="flex items-center gap-2">
+            <Image
+              src={quote.sourceImageUrl}
+              alt={quote.sourceTitle}
+              width={100}
+              height={100}
+              className="rounded-[var(--account-radius)]"
+            />
+            <span className="font-semibold text-[var(--account-accent)]">
+              {quote.sourceTitle}
+            </span>
+          </div>
+          <ArrowRight className="size-4 flex-shrink-0 text-[var(--account-accent)]" />
+          <div className="flex items-center gap-2">
+            <Image
+            src={quote.targetImageUrl}
+            alt={quote.targetTitle}
+            width={100}
+            height={100}
+            className="rounded-[var(--account-radius)]"
+          />
           <span className="font-semibold text-[var(--account-accent)]">
             {quote.targetTitle}
           </span>
+          </div>
         </div>
 
         <div className="mt-4 divide-y divide-[var(--account-border)]">
@@ -347,7 +368,7 @@ export function PackageUpgradeCheckoutClient({
             type="button"
             onClick={() => void handlePay()}
             disabled={pending}
-            className="inline-flex h-11 flex-1 cursor-pointer items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="block h-11 md:flex-1 cursor-pointer items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pending ? "Processing…" : payLabel}
           </button>

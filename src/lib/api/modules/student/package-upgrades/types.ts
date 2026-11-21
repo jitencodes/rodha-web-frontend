@@ -12,6 +12,7 @@ export interface AvailableUpgradeApi {
   id?: number;
   slug?: string;
   title?: string;
+  bannerImageUrl?: string | null;
   price?: number | null;
   discountedPrice?: number | null;
   salePrice?: number | null;
@@ -74,6 +75,7 @@ export interface UpgradePackageRefApi {
   id?: number;
   slug?: string;
   title?: string;
+  bannerImageUrl?: string | null;
   graphyProductId?: string | null;
   websiteCategoryId?: number | null;
   price?: number | null;
@@ -138,6 +140,7 @@ export interface AvailableUpgradeViewModel {
   id: number;
   slug: string;
   title: string;
+  bannerImageUrl: string;
   listPrice: number;
   salePrice: number;
   promoDiscount: number;
@@ -167,9 +170,11 @@ export interface EnrolledPackageViewModel {
 export interface UpgradeQuoteViewModel {
   sourceEnrollmentId: number;
   sourceTitle: string;
+  sourceImageUrl: string;
   sourceSlug: string;
   sourcePackageId: number;
   targetTitle: string;
+  targetImageUrl: string;
   targetSlug: string;
   targetPackageId: number;
   websiteCategoryId: number | null;

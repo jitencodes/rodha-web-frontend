@@ -15,6 +15,7 @@ import {
   withStudentAuth,
 } from "@/lib/auth/require-student";
 import { buildPageMetadata } from "@/lib/seo";
+import Image from "next/image";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Upgrade package — Rodha",
@@ -130,6 +131,13 @@ export default async function PackageUpgradePage({
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
+                    <Image
+                      src={upgrade.bannerImageUrl}
+                      alt={upgrade.title}
+                      width={100}
+                      height={100}
+                      className="rounded-[var(--account-radius)]"
+                    />
                     <p className="text-[15px] font-semibold text-[var(--account-text)]">
                       {upgrade.title}
                     </p>

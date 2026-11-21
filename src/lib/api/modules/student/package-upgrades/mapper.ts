@@ -49,6 +49,7 @@ export function mapAvailableUpgrade(
     id,
     slug: asString(item?.slug),
     title,
+    bannerImageUrl: asString(item?.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     listPrice,
     salePrice,
     promoDiscount: asNumber(item?.promoDiscount),
@@ -156,6 +157,8 @@ export function mapUpgradeQuote(
   const targetPackageId = asId(data?.targetPackage?.id);
   const sourceTitle = asString(data?.sourcePackage?.title);
   const targetTitle = asString(data?.targetPackage?.title);
+  const sourceImageUrl = asString(data?.sourcePackage?.bannerImageUrl || COURSE_IMAGE_FALLBACK);
+  const targetImageUrl = asString(data?.targetPackage?.bannerImageUrl || COURSE_IMAGE_FALLBACK);
   if (
     sourceEnrollmentId == null ||
     sourcePackageId == null ||
@@ -178,9 +181,11 @@ export function mapUpgradeQuote(
   return {
     sourceEnrollmentId,
     sourceTitle,
+    sourceImageUrl,
     sourceSlug: asString(data?.sourcePackage?.slug),
     sourcePackageId,
     targetTitle,
+    targetImageUrl,
     targetSlug: asString(data?.targetPackage?.slug),
     targetPackageId,
     websiteCategoryId,
