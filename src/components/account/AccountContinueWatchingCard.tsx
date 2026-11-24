@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Play } from "lucide-react";
 import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import { cn } from "@/lib/utils";
@@ -8,15 +9,24 @@ import type { ContinueWatchingItem } from "@/lib/account/types";
 const TITLE_TOOLTIP =
   "border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]";
 
+const CTA_CLASS =
+  "inline-flex items-center gap-1.5 rounded-lg border border-[var(--account-accent)] px-3 py-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]";
+
 type AccountContinueWatchingCardProps = {
   item: ContinueWatchingItem;
   className?: string;
+  /**
+   * Replaces View: the card stops linking to the course and hides progress
+   * (e.g. a course the student may switch to).
+   */
+  action?: { label: string; icon?: ReactNode; onClick: () => void };
 };
 
 /** In-progress learning card for dashboard + Courses Continue Watching tab. */
 export function AccountContinueWatchingCard({
   item,
   className,
+  action,
 }: AccountContinueWatchingCardProps) {
   const percent =
     item.progressTotal > 0
@@ -36,6 +46,24 @@ export function AccountContinueWatchingCard({
     item.language ? { label: "Language", value: item.language } : null,
   ].filter(Boolean) as { label: string; value: string }[];
 
+  const poster = (
+    <Image
+      src={item.thumbnail}
+      alt=""
+      fill
+      className="object-cover"
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+    />
+  );
+  const title = (
+    <ClampTooltip
+      text={item.title}
+      lines={2}
+      className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]"
+      tooltipClassName={TITLE_TOOLTIP}
+    />
+  );
+
   return (
     <article
       className={cn(
@@ -43,25 +71,25 @@ export function AccountContinueWatchingCard({
         className
       )}
     >
-      <Link
-        href={item.href}
-        className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--account-border)]"
-        aria-label={`Continue ${item.title}`}
-      >
-        <Image
-          src={item.thumbnail}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-        />
-        <span
-          className="absolute bottom-3 left-3 inline-flex size-9 items-center justify-center rounded-full bg-white text-[var(--account-accent)] shadow-sm"
-          aria-hidden
+      {action ? (
+        <div className="relative aspect-video w-full overflow-hidden bg-[var(--account-border)]">
+          {poster}
+        </div>
+      ) : (
+        <Link
+          href={item.href}
+          className="relative aspect-video w-full overflow-hidden bg-[var(--account-border)]"
+          aria-label={`Continue ${item.title}`}
         >
-          <Play className="size-4 fill-current" strokeWidth={0} />
-        </span>
-      </Link>
+          {poster}
+          <span
+            className="absolute bottom-3 left-3 inline-flex size-9 items-center justify-center rounded-full bg-white text-[var(--account-accent)] shadow-sm"
+            aria-hidden
+          >
+            <Play className="size-4 fill-current" strokeWidth={0} />
+          </span>
+        </Link>
+      )}
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--account-accent)]">
@@ -69,14 +97,13 @@ export function AccountContinueWatchingCard({
         </span>
 
         <h3 className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]">
-          <Link href={item.href} className="hover:text-[var(--account-accent)]">
-            <ClampTooltip
-              text={item.title}
-              lines={2}
-              className="font-montserrat text-[15px] font-semibold leading-snug text-[var(--account-text)]"
-              tooltipClassName={TITLE_TOOLTIP}
-            />
-          </Link>
+          {action ? (
+            title
+          ) : (
+            <Link href={item.href} className="hover:text-[var(--account-accent)]">
+              {title}
+            </Link>
+          )}
         </h3>
 
         {metaItems.length > 0 ? (
@@ -92,35 +119,46 @@ export function AccountContinueWatchingCard({
           </dl>
         ) : null}
 
-        <div className="mt-auto space-y-2">
-          {item.progressLabel ? (
-            <p className="text-[12px] text-[var(--account-text-muted)]">
-              {item.progressLabel}
-            </p>
-          ) : null}
-          <div
-            className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--account-border)]"
-            role="progressbar"
-            aria-valuenow={percent}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label={`${percent}% complete`}
-          >
+        {action ? null : (
+          <div className="mt-auto space-y-2">
+            {item.progressLabel ? (
+              <p className="text-[12px] text-[var(--account-text-muted)]">
+                {item.progressLabel}
+              </p>
+            ) : null}
             <div
-              className="h-full rounded-full bg-[var(--account-accent)] transition-[width]"
-              style={{ width: `${percent}%` }}
-            />
+              className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--account-border)]"
+              role="progressbar"
+              aria-valuenow={percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${percent}% complete`}
+            >
+              <div
+                className="h-full rounded-full bg-[var(--account-accent)] transition-[width]"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex justify-end pt-1">
-          <Link
-            href={item.href}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--account-accent)] px-3 py-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
-          >
-            <Play className="size-3 fill-current" strokeWidth={0} />
-            View
-          </Link>
+        <div className={cn("flex justify-end pt-1", action && "mt-auto")}>
+          {action ? (
+            <button
+              type="button"
+              onClick={action.onClick}
+              aria-label={`${action.label} to ${item.title}`}
+              className={cn(CTA_CLASS, "cursor-pointer")}
+            >
+              {action.icon}
+              {action.label}
+            </button>
+          ) : (
+            <Link href={item.href} className={CTA_CLASS}>
+              <Play className="size-3 fill-current" strokeWidth={0} />
+              View
+            </Link>
+          )}
         </div>
       </div>
     </article>

@@ -211,6 +211,9 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountSidebar | `AccountSidebar.tsx` (nav accordion incl. Manage Packages, Need Help) |
 | PackageUpgradeCheckoutClient | `PackageUpgradeCheckoutClient.tsx` (upgrade quote summary + free/Razorpay pay; reuses location/UTM dialogs) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
+| CourseChangeCta / CourseChangeDialog | `course-changes/*` (request a course change) |
+| CourseChangeRequestsTable | `course-changes/CourseChangeRequestsTable.tsx` (history + Cancel) |
+| AccountContinueWatchingCard `action` | Replaces View with a custom CTA and hides progress / links |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
 | AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |
 | AccountQuickActionTiles | `AccountQuickActionTiles.tsx` (Continue Watching → Quick Content types) |

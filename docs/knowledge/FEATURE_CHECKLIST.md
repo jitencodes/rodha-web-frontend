@@ -97,6 +97,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
 | Manage Packages | Complete | `/account/packages` enrolled list (`CourseCardV2` + Available upgrades); `/account/packages/upgrade` targets + quote summary; free/Razorpay via upgrade checkout BFF |
 | Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
+| Course switch requests | Complete (backend listing params pending) | Course detail CTA → options dialog → confirm with reason; `/account/course-changes` table with Cancel. API changes: `docs/API_CHANGES_COURSE_CHANGE_LISTING.md` |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
 | Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor; below `sm` horizontal scroll `min-w-[200px]`, coupon truncates + hover tooltip), progress ring, orders preview, quick links |
 | Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |

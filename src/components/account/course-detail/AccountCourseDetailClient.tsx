@@ -8,6 +8,7 @@ import { AccountContentTypeTabs } from "@/components/account/AccountContentTypeT
 import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
 import { AccountQuickContentToolbar } from "@/components/account/AccountQuickContentToolbar";
+import { CourseChangeCta } from "@/components/account/course-changes/CourseChangeCta";
 import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
 import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
 import { AccountCourseProgressCard } from "@/components/account/course-detail/AccountCourseProgressCard";
@@ -260,6 +261,13 @@ export function AccountCourseDetailClient() {
         language={detail.language}
         categoryLabel={detail.categoryLabel}
         openCourseHref={openCourseHref || undefined}
+        actions={
+          <CourseChangeCta
+            key={detail.courseId}
+            courseId={detail.courseId}
+            courseTitle={detail.title}
+          />
+        }
       />
 
       <AccountCourseProgressCard
