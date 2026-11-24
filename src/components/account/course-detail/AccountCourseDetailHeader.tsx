@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 
 type AccountCourseDetailHeaderProps = {
@@ -5,6 +6,8 @@ type AccountCourseDetailHeaderProps = {
   language?: string;
   categoryLabel?: string;
   openCourseHref?: string;
+  /** Extra CTAs before Start Learning. */
+  actions?: ReactNode;
 };
 
 export function AccountCourseDetailHeader({
@@ -12,6 +15,7 @@ export function AccountCourseDetailHeader({
   language,
   categoryLabel,
   openCourseHref,
+  actions,
 }: AccountCourseDetailHeaderProps) {
   const chips = [categoryLabel, language].filter(Boolean);
 
@@ -43,16 +47,19 @@ export function AccountCourseDetailHeader({
           </div>
         </div>
 
-        {openCourseHref ? (
-          <a
-            href={openCourseHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] px-4 text-[13px] font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            Start Learning
-          </a>
-        ) : null}
+        <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+          {actions}
+          {openCourseHref ? (
+            <a
+              href={openCourseHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] px-4 text-[13px] font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              Start Learning
+            </a>
+          ) : null}
+        </div>
       </header>
     </div>
   );

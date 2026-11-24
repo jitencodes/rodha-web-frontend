@@ -1,0 +1,1319 @@
+{
+  "info": {
+    "name": "Rodha Course Changes (FE)",
+    "description": "Student swaps one course for another inside a package they own; admin approves or rejects. Approve gives the new course on Graphy first, then removes the old one; the new course starts fresh. Free — no payment.\n\nStudent APIs need header `x-website-category-id`. Errors: 400 {errors:{field:[msg]}}, 404, 409 (blocked / already reviewed), 502 (Graphy failed → request FAILED, approve again to retry).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "Eligibility (what can I switch?)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/course-changes/eligibility?packageId={{websitePackageId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Drives the student 'Change course' screen. `packageId` is optional (omit → all active packages in the category).\n\n- `canRequest=false` → disable the form and show `blockedMessage`.\n- `blockedReason`: `DISABLED` | `PENDING_EXISTS` | `MAX_REACHED` | `COOLDOWN`.\n- `nextAllowedAt` is set while in cooldown.\n- `packages[].courses[]` lists only courses that have at least one option; `options` are the courses the student may switch to."
+          },
+          "response": [
+            {
+              "name": "200 can request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/eligibility?packageId={{websitePackageId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change eligibility fetched\",\n  \"data\": {\n    \"enabled\": true,\n    \"canRequest\": true,\n    \"blockedReason\": null,\n    \"blockedMessage\": null,\n    \"nextAllowedAt\": null,\n    \"used\": 0,\n    \"max\": 1,\n    \"remaining\": 1,\n    \"cooldownDays\": 30,\n    \"pendingRequestId\": null,\n    \"packages\": [\n      {\n        \"package\": {\n          \"id\": 130,\n          \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\"\n        },\n        \"courses\": [\n          {\n            \"course\": {\n              \"id\": 85,\n              \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n              \"slug\": \"cat-2027-varc-r1-live-classes-\",\n              \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n              \"bannerImageUrl\": null,\n              \"isActive\": false\n            },\n            \"options\": [\n              {\n                \"id\": 112,\n                \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n                \"slug\": \"cat-2027-varc-r2-live-classes-\",\n                \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n                \"bannerImageUrl\": null,\n                \"isActive\": false\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "200 in cooldown",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/eligibility?packageId={{websitePackageId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change eligibility fetched\",\n  \"data\": {\n    \"enabled\": true,\n    \"canRequest\": false,\n    \"blockedReason\": \"COOLDOWN\",\n    \"blockedMessage\": \"You can raise your next course change request later.\",\n    \"nextAllowedAt\": \"2026-12-20T10:15:00.000+05:30\",\n    \"used\": 1,\n    \"max\": 3,\n    \"remaining\": 2,\n    \"cooldownDays\": 30,\n    \"pendingRequestId\": null,\n    \"packages\": []\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Submit request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/course-changes/requests",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"packageId\": 130,\n  \"fromCourseId\": 85,\n  \"toCourseId\": 112,\n  \"reason\": \"Batch timing clashes with college\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "JSON body. `reason` optional (max 1000). One open request per student. 409 when blocked (pending / max / cooldown / disabled) with `errors.blockedReason`."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"packageId\": 130,\n  \"fromCourseId\": 85,\n  \"toCourseId\": 112,\n  \"reason\": \"Batch timing clashes with college\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change request submitted\",\n  \"data\": {\n    \"id\": 1,\n    \"status\": \"PENDING\",\n    \"reason\": \"Batch timing clashes with college\",\n    \"adminRemark\": null,\n    \"package\": {\n      \"id\": 130,\n      \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\"\n    },\n    \"fromCourse\": {\n      \"id\": 85,\n      \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r1-live-classes-\",\n      \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"toCourse\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"reviewedAt\": null,\n    \"cancelledAt\": null,\n    \"createdAt\": \"2026-11-20T10:15:00.000+05:30\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "409 pending exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"packageId\": 130,\n  \"fromCourseId\": 85,\n  \"toCourseId\": 112,\n  \"reason\": \"Batch timing clashes with college\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You already have a course change request under review.\",\n  \"errors\": {\n    \"blockedReason\": [\n      \"PENDING_EXISTS\"\n    ]\n  },\n  \"statusCode\": 409\n}"
+            },
+            {
+              "name": "400 not eligible",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"packageId\": 130,\n  \"fromCourseId\": 85,\n  \"toCourseId\": 112,\n  \"reason\": \"Batch timing clashes with college\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"toCourseId\": [\n      \"You cannot switch to this course\"\n    ]\n  },\n  \"statusCode\": 400\n}"
+            }
+          ]
+        },
+        {
+          "name": "My requests (history)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/course-changes/requests",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Newest first. A request whose approval hit a Graphy error shows as `PENDING` to the student. `adminRemark` is only filled for `REJECTED`."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change requests fetched\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 1,\n        \"status\": \"APPROVED\",\n        \"reason\": \"Batch timing clashes with college\",\n        \"adminRemark\": null,\n        \"package\": {\n          \"id\": 130,\n          \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\"\n        },\n        \"fromCourse\": {\n          \"id\": 85,\n          \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r1-live-classes-\",\n          \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"toCourse\": {\n          \"id\": 112,\n          \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r2-live-classes-\",\n          \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"reviewedAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"cancelledAt\": null,\n        \"createdAt\": \"2026-11-20T10:15:00.000+05:30\"\n      }\n    ]\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Cancel request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/course-changes/requests/{{courseChangeRequestId}}/cancel",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Only `PENDING`. A cancelled request still counts toward the max and the cooldown."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests/{{courseChangeRequestId}}/cancel"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change request cancelled\",\n  \"data\": {\n    \"id\": 1,\n    \"status\": \"CANCELLED\",\n    \"reason\": \"Batch timing clashes with college\",\n    \"adminRemark\": null,\n    \"package\": {\n      \"id\": 130,\n      \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\"\n    },\n    \"fromCourse\": {\n      \"id\": 85,\n      \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r1-live-classes-\",\n      \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"toCourse\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"reviewedAt\": null,\n    \"cancelledAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"createdAt\": \"2026-11-20T10:15:00.000+05:30\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "409 not pending",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/course-changes/requests/{{courseChangeRequestId}}/cancel"
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Only a pending request can be cancelled\",\n  \"statusCode\": 409\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Requests",
+      "item": [
+        {
+          "name": "List requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/requests?page=1&limit=10&status=PENDING&search=&websiteCategoryId={{websiteCategoryId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Filters (all optional): `status` (PENDING | APPROVED | REJECTED | CANCELLED | FAILED), `userId`, `packageId`, `courseId` (from or to), `websiteCategoryId`, `search` (student name/email/mobile, course titles), `page`, `limit` (≤100), `sortOrder` (asc|desc, by createdAt).\n\nStudent detail page history: call with `userId={{studentUserId}}` and no status."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests?page=1&limit=10&status=PENDING&search=&websiteCategoryId={{websiteCategoryId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change requests fetched\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 1,\n        \"status\": \"PENDING\",\n        \"websiteCategoryId\": 1,\n        \"reason\": \"Batch timing clashes with college\",\n        \"adminRemark\": null,\n        \"graphyError\": null,\n        \"graphyAssignedAt\": null,\n        \"graphyUnassignedAt\": null,\n        \"student\": {\n          \"id\": \"c02bde0a-7277-43cf-bb1f-fd57320c9c4f\",\n          \"name\": \"Priya Sharma\",\n          \"email\": \"priya@example.com\",\n          \"mobile\": \"9876543210\"\n        },\n        \"package\": {\n          \"id\": 130,\n          \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\",\n          \"graphyProductId\": \"6ac3c027e1685aa80870e276\"\n        },\n        \"fromCourse\": {\n          \"id\": 85,\n          \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r1-live-classes-\",\n          \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"toCourse\": {\n          \"id\": 112,\n          \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r2-live-classes-\",\n          \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"reviewer\": null,\n        \"reviewedAt\": null,\n        \"cancelledAt\": null,\n        \"createdAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\"\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Student course change history (student detail page)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/requests?userId={{studentUserId}}&limit=50",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Same list API filtered by student."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests?userId={{studentUserId}}&limit=50"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change requests fetched\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 1,\n        \"status\": \"APPROVED\",\n        \"websiteCategoryId\": 1,\n        \"reason\": \"Batch timing clashes with college\",\n        \"adminRemark\": null,\n        \"graphyError\": null,\n        \"graphyAssignedAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"graphyUnassignedAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"student\": {\n          \"id\": \"c02bde0a-7277-43cf-bb1f-fd57320c9c4f\",\n          \"name\": \"Priya Sharma\",\n          \"email\": \"priya@example.com\",\n          \"mobile\": \"9876543210\"\n        },\n        \"package\": {\n          \"id\": 130,\n          \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\",\n          \"graphyProductId\": \"6ac3c027e1685aa80870e276\"\n        },\n        \"fromCourse\": {\n          \"id\": 85,\n          \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r1-live-classes-\",\n          \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"toCourse\": {\n          \"id\": 112,\n          \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n          \"slug\": \"cat-2027-varc-r2-live-classes-\",\n          \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n          \"bannerImageUrl\": null,\n          \"isActive\": false\n        },\n        \"reviewer\": {\n          \"id\": \"admin-1\",\n          \"name\": \"Admin\"\n        },\n        \"reviewedAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"cancelledAt\": null,\n        \"createdAt\": \"2026-11-20T10:15:00.000+05:30\",\n        \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\"\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 50,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get request",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Full detail incl. Graphy step timestamps and `graphyError`."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change request fetched\",\n  \"data\": {\n    \"id\": 1,\n    \"status\": \"PENDING\",\n    \"websiteCategoryId\": 1,\n    \"reason\": \"Batch timing clashes with college\",\n    \"adminRemark\": null,\n    \"graphyError\": null,\n    \"graphyAssignedAt\": null,\n    \"graphyUnassignedAt\": null,\n    \"student\": {\n      \"id\": \"c02bde0a-7277-43cf-bb1f-fd57320c9c4f\",\n      \"name\": \"Priya Sharma\",\n      \"email\": \"priya@example.com\",\n      \"mobile\": \"9876543210\"\n    },\n    \"package\": {\n      \"id\": 130,\n      \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\",\n      \"graphyProductId\": \"6ac3c027e1685aa80870e276\"\n    },\n    \"fromCourse\": {\n      \"id\": 85,\n      \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r1-live-classes-\",\n      \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"toCourse\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"reviewer\": null,\n    \"reviewedAt\": null,\n    \"cancelledAt\": null,\n    \"createdAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Approve (or retry a FAILED one)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/approve",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"remark\": \"Approved\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "`remark` optional. Order: give new course on Graphy → remove old course on Graphy → revoke old enrollment + create a fresh one in Rodha.\n\nOn a Graphy error the request becomes `FAILED` with `graphyError` and the API returns 502; calling approve again retries only the step that is left. Target courses must be 'available for sale' on Graphy (can be hidden) or Graphy rejects the assign."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/approve",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"remark\": \"Approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change approved\",\n  \"data\": {\n    \"id\": 1,\n    \"status\": \"APPROVED\",\n    \"websiteCategoryId\": 1,\n    \"reason\": \"Batch timing clashes with college\",\n    \"adminRemark\": \"Approved\",\n    \"graphyError\": null,\n    \"graphyAssignedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"graphyUnassignedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"student\": {\n      \"id\": \"c02bde0a-7277-43cf-bb1f-fd57320c9c4f\",\n      \"name\": \"Priya Sharma\",\n      \"email\": \"priya@example.com\",\n      \"mobile\": \"9876543210\"\n    },\n    \"package\": {\n      \"id\": 130,\n      \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\",\n      \"graphyProductId\": \"6ac3c027e1685aa80870e276\"\n    },\n    \"fromCourse\": {\n      \"id\": 85,\n      \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r1-live-classes-\",\n      \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"toCourse\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"reviewer\": {\n      \"id\": \"admin-1\",\n      \"name\": \"Admin\"\n    },\n    \"reviewedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"cancelledAt\": null,\n    \"createdAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "502 Graphy failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/approve",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"remark\": \"Approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Could not give the new course on Graphy: Graphy assign failed: The course must be available for sale.\",\n  \"statusCode\": 502\n}"
+            },
+            {
+              "name": "409 already reviewed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/approve",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"remark\": \"Approved\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Request is already approved\",\n  \"statusCode\": 409\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"remark\": \"Target batch is full\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "`remark` required. Works on PENDING or FAILED, except when the new course was already given on Graphy (then approve again to finish)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/reject",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"remark\": \"Target batch is full\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change rejected\",\n  \"data\": {\n    \"id\": 1,\n    \"status\": \"REJECTED\",\n    \"websiteCategoryId\": 1,\n    \"reason\": \"Batch timing clashes with college\",\n    \"adminRemark\": \"Target batch is full\",\n    \"graphyError\": null,\n    \"graphyAssignedAt\": null,\n    \"graphyUnassignedAt\": null,\n    \"student\": {\n      \"id\": \"c02bde0a-7277-43cf-bb1f-fd57320c9c4f\",\n      \"name\": \"Priya Sharma\",\n      \"email\": \"priya@example.com\",\n      \"mobile\": \"9876543210\"\n    },\n    \"package\": {\n      \"id\": 130,\n      \"title\": \"CAT 2027 | R1 (Hinglish) | Complete Batch\",\n      \"graphyProductId\": \"6ac3c027e1685aa80870e276\"\n    },\n    \"fromCourse\": {\n      \"id\": 85,\n      \"title\": \"CAT 2027 VARC - R1 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r1-live-classes-\",\n      \"graphyProductId\": \"6ac3b5226cfbb9bbca6d584c\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"toCourse\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    },\n    \"reviewer\": {\n      \"id\": \"admin-1\",\n      \"name\": \"Admin\"\n    },\n    \"reviewedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"cancelledAt\": null,\n    \"createdAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "400 remark missing",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/requests/{{courseChangeRequestId}}/reject",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"remark\": \"Target batch is full\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"remark\": [\n      \"Remark is required\"\n    ]\n  },\n  \"statusCode\": 400\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Settings",
+      "item": [
+        {
+          "name": "Get settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/settings",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Single settings row."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/settings"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change settings fetched\",\n  \"data\": {\n    \"isEnabled\": true,\n    \"cooldownDays\": 30,\n    \"maxRequests\": 1,\n    \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"updatedBy\": null\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/settings",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isEnabled\": true,\n  \"cooldownDays\": 30,\n  \"maxRequests\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Partial update. `cooldownDays` 0–3650 (0 = no wait; counted from the student's last request of any status). `maxRequests` 0–100 (every request counts, rejected and cancelled included)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/settings",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isEnabled\": true,\n  \"cooldownDays\": 30,\n  \"maxRequests\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change settings updated\",\n  \"data\": {\n    \"isEnabled\": true,\n    \"cooldownDays\": 30,\n    \"maxRequests\": 2,\n    \"updatedAt\": \"2026-11-20T10:15:00.000+05:30\",\n    \"updatedBy\": \"admin-1\"\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Course Edit",
+      "item": [
+        {
+          "name": "Get change options of a course",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/courses/{{websiteCourseId}}/options",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Admin → Course → Edit. Courses a student holding this course may switch to."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/courses/{{websiteCourseId}}/options"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change options fetched\",\n  \"data\": {\n    \"courseId\": 85,\n    \"items\": [\n      {\n        \"id\": 112,\n        \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n        \"slug\": \"cat-2027-varc-r2-live-classes-\",\n        \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n        \"bannerImageUrl\": null,\n        \"isActive\": false\n      }\n    ]\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Replace change options of a course",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/courses/{{websiteCourseId}}/options",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"toCourseIds\": [\n    112\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Replaces the whole list (order kept). Send `[]` to clear. Must be courses of the same website category and not the course itself."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/courses/{{websiteCourseId}}/options",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"toCourseIds\": [\n    112\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course change options updated\",\n  \"data\": {\n    \"courseId\": 85,\n    \"items\": [\n      {\n        \"id\": 112,\n        \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n        \"slug\": \"cat-2027-varc-r2-live-classes-\",\n        \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n        \"bannerImageUrl\": null,\n        \"isActive\": false\n      }\n    ]\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "400 invalid",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/courses/{{websiteCourseId}}/options",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"toCourseIds\": [\n    112\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"toCourseIds\": [\n      \"A course cannot be its own change option\"\n    ]\n  },\n  \"statusCode\": 400\n}"
+            }
+          ]
+        },
+        {
+          "name": "Import hidden Graphy course by product id",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/admin/course-changes/courses/import",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"websiteCategoryId\": 1,\n  \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Pulls one Graphy course (with its items) into Rodha. New courses come in inactive (hidden on the website). Use it for hidden target courses the catalog sync may miss."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/courses/import",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"websiteCategoryId\": 1,\n  \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course imported from Graphy\",\n  \"data\": {\n    \"action\": \"created\",\n    \"itemsCreated\": 24,\n    \"itemsUpdated\": 0,\n    \"course\": {\n      \"id\": 112,\n      \"title\": \"CAT 2027 VARC - R2 (Live Classes)\",\n      \"slug\": \"cat-2027-varc-r2-live-classes-\",\n      \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\",\n      \"bannerImageUrl\": null,\n      \"isActive\": false\n    }\n  },\n  \"timestamp\": \"2026-11-20T10:15:00.000+05:30\"\n}"
+            },
+            {
+              "name": "404 not a course",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/admin/course-changes/courses/import",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"websiteCategoryId\": 1,\n  \"graphyProductId\": \"6af10c2e9b1d4a0012ab34cd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Graphy product 6ac3c027e1685aa80870e276 is not a course (it may be a package or not exist)\",\n  \"statusCode\": 404\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/rodha/"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": ""
+    },
+    {
+      "key": "studentAccessToken",
+      "value": ""
+    },
+    {
+      "key": "websiteCategoryId",
+      "value": "1"
+    },
+    {
+      "key": "websitePackageId",
+      "value": ""
+    },
+    {
+      "key": "websiteCourseId",
+      "value": ""
+    },
+    {
+      "key": "courseChangeRequestId",
+      "value": ""
+    },
+    {
+      "key": "studentUserId",
+      "value": ""
+    }
+  ]
+}

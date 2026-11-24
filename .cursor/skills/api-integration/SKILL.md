@@ -16,6 +16,7 @@ Default reference for all website API work. Read Postman first; type real payloa
 - Collection: `docs/api-collection/Rodha website Api's.postman_collection (4).json` (CMS)
 - Student auth: `docs/api-collection/Rodha Graphy - Share.postman_collection.json` (`api/auth/user/signup`, `api/auth/user/login` on `NEXT_PUBLIC_API_BASE_URL`)
 - Student registration: `docs/api-collection/Rodha Website Student Registration & Books.postman_collection.json` (`GET`/`POST api/website/student/registration`, `GET api/website/student/profile`)
+- Course changes: `docs/api-collection/Rodha_Course_Changes_FE.postman_collection.json` + requested changes in `docs/API_CHANGES_COURSE_CHANGE_LISTING.md`
 - Package upgrade: `docs/api-collection/Rodha CR  package upgrade.postman_collection.json` (`GET student/packages`, quote, checkout, verify)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
@@ -122,6 +123,7 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/dashboard` | Account dashboard |
 | student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
+| student/course-changes | `GET eligibility`, `GET/POST requests`, `POST requests/:id/cancel` | Course detail dialog, `/account/course-changes` |
 | student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
 | student | `GET api/website/student/orders` | My Orders |
 | student/cart | `GET api/website/student/packages/:id/promocodes` + `PATCH .../cart/items/:id` | Checkout Available offers (`mapCheckoutPromocodeOptions`) + coupon box: `{ code }` typed or `{ promocodeId }` listed / `null` remove, via `/api/checkout/promocode` (keeps 400/409) |

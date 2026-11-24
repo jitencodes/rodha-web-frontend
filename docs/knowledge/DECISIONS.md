@@ -14,6 +14,11 @@ Format:
 
 ---
 
+### 2026-11-23 — Course change listing works before the API does
+- **Decision:** The service sends the requested listing params and uses `data.options` / `data.pagination` when present; otherwise it filters and pages the full response, retrying without the params after a 400.
+- **Rationale:** The UI ships now and moves to server listing with no frontend release.
+- **Consequences:** Remove the fallback in `course-changes/mapper.ts` and `service.ts` once the backend is live. The backend must send `pagination` on `/requests` only when it applied the filters.
+
 ### 2026-11-12 — UTM: server-side capture, replace-only, single source at checkout
 - **Decision:** `rodha_utm` is written by `middleware.ts` (all pages + `/api/checkout/buy`) and by `UtmCapture` on the client. Any URL with `utm_*` replaces the whole stored set (lowercased keys); URLs without UTM leave it alone. Checkout sends one set: the body UTM when present, else the cookie.
 - **Rationale:** Client-only capture lost UTMs on server redirects (unauthenticated `/account/*`, Buy Now → login). Merging cookie + header + body could mix two campaigns.
