@@ -9,17 +9,22 @@ import {
   ArrowRightLeft,
   BadgePercent,
   CircleDollarSign,
+  PackagePlus,
   Receipt,
   Tag,
   Wallet,
 } from "lucide-react";
-import { CheckoutLocationDialog } from "@/components/account/CheckoutLocationDialog";
-import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
+import { AddonPicker } from "@/components/checkout/AddonPicker";
+import { usePayGate } from "@/components/checkout/usePayGate";
 import { formatCartMoney } from "@/lib/account/cart-totals";
+import type { AddonViewModel } from "@/lib/api/modules/addons/types";
 import type { UpgradeQuoteViewModel } from "@/lib/api/modules/student/package-upgrades/types";
-import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import { fetchAuthed } from "@/lib/auth/session-expired";
-import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
+import { openRazorpay } from "@/lib/checkout/razorpay";
+import type {
+  CheckoutPayResponse,
+  CheckoutVerifyResponse,
+} from "@/lib/checkout/types";
 import { userAtom } from "@/lib/store/user";
 import { storePendingPurchase } from "@/lib/tracking/purchase";
 import { readStoredUtm } from "@/lib/tracking/utm";
@@ -29,27 +34,6 @@ import Image from "next/image";
 type PackageUpgradeCheckoutClientProps = {
   quote: UpgradeQuoteViewModel;
 };
-
-declare global {
-  interface Window {
-    Razorpay?: new (options: Record<string, unknown>) => {
-      open: () => void;
-      on: (event: string, cb: () => void) => void;
-    };
-  }
-}
-
-async function loadRazorpay(): Promise<boolean> {
-  if (typeof window === "undefined") return false;
-  if (window.Razorpay) return true;
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-}
 
 function SummaryRow({
   icon,
@@ -94,23 +78,60 @@ export function PackageUpgradeCheckoutClient({
   const authUser = useAtomValue(userAtom);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  /** Razorpay took the payment but verification failed: block a second payment. */
+  const [unconfirmed, setUnconfirmed] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const payStartedRef = useRef(false);
-  const [mobileDialogOpen, setMobileDialogOpen] = useState(false);
-  const [resumePayAfterMobile, setResumePayAfterMobile] = useState(false);
-  const [locationDialogOpen, setLocationDialogOpen] = useState(false);
-  const [locationPermissionDenied, setLocationPermissionDenied] =
-    useState(false);
+
+  // After a refresh an add-on may be owned or withdrawn: only sellable ones count.
+  const selectedAddons = quote.addons.filter(
+    (addon) => addon.selectable && selectedIds.includes(addon.id)
+  );
+  const addonAmount = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+  // The quote excludes add-ons.
+  const upgradeAmount = quote.isFree ? 0 : Math.max(0, quote.payableAmount);
+  const payableNow = upgradeAmount + addonAmount;
+
+  function toggleAddon(addon: AddonViewModel) {
+    setError(null);
+    setSelectedIds((prev) =>
+      prev.includes(addon.id)
+        ? prev.filter((id) => id !== addon.id)
+        : [...prev, addon.id]
+    );
+  }
 
   function releasePay() {
     payStartedRef.current = false;
     setPending(false);
   }
 
+  function finishPurchase(
+    checkout: CheckoutPayResponse,
+    verified?: CheckoutVerifyResponse
+  ) {
+    const orderId = verified?.orderId ?? checkout.orderId;
+    storePendingPurchase({
+      transaction_id:
+        verified?.orderNumber ||
+        checkout.orderNumber ||
+        (typeof orderId === "number" ? String(orderId) : ""),
+      value: verified?.payableAmount ?? checkout.payableAmount ?? payableNow,
+      currency: checkout.currency || "INR",
+    });
+    router.push("/account/checkout/success");
+    router.refresh();
+  }
+
   async function submitPayment(stateName: string | null) {
-    if (payStartedRef.current) return;
+    if (payStartedRef.current || unconfirmed) return;
     payStartedRef.current = true;
     setPending(true);
     setError(null);
+    const category =
+      quote.websiteCategoryId != null
+        ? { websiteCategoryId: quote.websiteCategoryId }
+        : {};
     try {
       const res = await fetchAuthed("/api/account/packages/upgrades/checkout", {
         method: "POST",
@@ -118,199 +139,122 @@ export function PackageUpgradeCheckoutClient({
         body: JSON.stringify({
           sourceEnrollmentId: quote.sourceEnrollmentId,
           targetPackageId: quote.targetPackageId,
+          addonIds: selectedAddons.map((addon) => addon.id),
           ...readStoredUtm(),
           ...(stateName ? { stateName } : {}),
-          ...(quote.websiteCategoryId != null
-            ? { websiteCategoryId: quote.websiteCategoryId }
-            : {}),
+          ...category,
         }),
       });
-      const data = (await res.json()) as {
-        ok: boolean;
-        error?: string;
-        mode?: string;
-        keyId?: string;
-        razorpayOrderId?: string;
-        amountPaise?: number;
-        currency?: string;
-        orderId?: number;
-        orderNumber?: string;
-        payableAmount?: number;
-        prefill?: { name?: string; email?: string; contact?: string };
-      };
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Upgrade checkout failed");
-      }
-
-      const payable =
-        typeof data.payableAmount === "number"
-          ? data.payableAmount
-          : quote.payableAmount;
-      const isFree =
-        data.mode === "free" || quote.isFree || payable <= 0;
-
-      if (isFree) {
-        storePendingPurchase({
-          transaction_id:
-            data.orderNumber ||
-            (typeof data.orderId === "number" ? String(data.orderId) : ""),
-          value: payable > 0 ? payable : 0,
-          currency: data.currency || "INR",
-        });
-        router.push("/account/checkout/success");
-        router.refresh();
+      const data = (await res.json().catch(() => null)) as CheckoutPayResponse | null;
+      if (!res.ok || !data?.ok) {
+        setError(data?.error || "Upgrade checkout failed");
+        releasePay();
+        // 400 / 409: the target, an add-on or the enrollment changed meanwhile.
+        if (res.status === 400 || res.status === 409) router.refresh();
         return;
       }
 
-      const loaded = await loadRazorpay();
-      if (!loaded || !window.Razorpay) {
-        throw new Error("Unable to load Razorpay");
+      // Top-level payable includes add-ons, so a free upgrade can still be paid.
+      if (data.mode === "free" || (data.payableAmount ?? payableNow) <= 0) {
+        finishPurchase(data);
+        return;
       }
 
-      const rzp = new window.Razorpay({
-        key: data.keyId,
-        amount: data.amountPaise,
-        currency: data.currency || "INR",
-        name: "Rodha",
+      const payment = await openRazorpay({
+        ...data,
         description: `Upgrade to ${quote.targetTitle}`,
-        order_id: data.razorpayOrderId,
-        prefill: data.prefill,
-        handler: async (response: {
-          razorpay_order_id: string;
-          razorpay_payment_id: string;
-          razorpay_signature: string;
-        }) => {
-          const verifyRes = await fetchAuthed(
-            "/api/account/packages/upgrades/verify",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                ...response,
-                ...(quote.websiteCategoryId != null
-                  ? { websiteCategoryId: quote.websiteCategoryId }
-                  : {}),
-              }),
-            }
-          );
-          const verifyData = (await verifyRes.json()) as {
-            ok: boolean;
-            error?: string;
-            orderId?: number;
-            orderNumber?: string;
-            payableAmount?: number;
-          };
-          if (!verifyRes.ok || !verifyData.ok) {
-            setError(verifyData.error || "Payment verification failed");
-            releasePay();
-            return;
-          }
-          storePendingPurchase({
-            transaction_id:
-              verifyData.orderNumber ||
-              data.orderNumber ||
-              (typeof verifyData.orderId === "number"
-                ? String(verifyData.orderId)
-                : typeof data.orderId === "number"
-                  ? String(data.orderId)
-                  : ""),
-            value:
-              typeof verifyData.payableAmount === "number"
-                ? verifyData.payableAmount
-                : payable,
-            currency: data.currency || "INR",
-          });
-          router.push("/account/checkout/success");
-          router.refresh();
-        },
-        modal: {
-          ondismiss: () => {
-            setError("Payment cancelled");
-            releasePay();
-          },
-        },
       });
-      rzp.open();
+      if (!payment) {
+        setError("Payment cancelled");
+        releasePay();
+        return;
+      }
+
+      let verified: CheckoutVerifyResponse | null = null;
+      try {
+        const verifyRes = await fetchAuthed("/api/account/packages/upgrades/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...payment, ...category }),
+        });
+        verified = (await verifyRes.json().catch(() => null)) as CheckoutVerifyResponse | null;
+      } catch {
+        verified = null;
+      }
+      if (!verified?.ok) {
+        setUnconfirmed(true);
+        setError(
+          "We could not confirm your payment yet. If money was debited, check My Orders before paying again."
+        );
+        releasePay();
+        return;
+      }
+      finishPurchase(data, verified);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upgrade checkout failed");
+      setError(
+        err instanceof TypeError
+          ? "Something went wrong. Check your connection and try again."
+          : err instanceof Error
+            ? err.message
+            : "Upgrade checkout failed"
+      );
       releasePay();
     }
   }
 
-  async function handlePay(options?: {
-    skipMobileCheck?: boolean;
-    stateName?: string | null;
-  }) {
-    if (authUser && !options?.skipMobileCheck && !userHasMobile(authUser)) {
-      setResumePayAfterMobile(true);
-      setMobileDialogOpen(true);
-      setError("Please add your mobile number before continuing to pay.");
-      return;
-    }
+  const { startPay, dialogs } = usePayGate({
+    user: authUser,
+    submit: submitPayment,
+    setPending,
+    setError,
+  });
 
-    if (options?.stateName !== undefined) {
-      await submitPayment(options.stateName);
-      return;
-    }
-
-    setPending(true);
-    setError(null);
-    const resolution = await resolveCheckoutState();
-    if (resolution.status !== "resolved") {
-      setPending(false);
-      setLocationPermissionDenied(resolution.status === "permission_denied");
-      setLocationDialogOpen(true);
-      return;
-    }
-    await submitPayment(resolution.stateName);
-  }
-
-  async function retryCheckoutLocation() {
-    const resolution = await resolveCheckoutState();
-    setLocationPermissionDenied(resolution.status === "permission_denied");
-    if (resolution.status === "resolved") {
-      setLocationDialogOpen(false);
-      await submitPayment(resolution.stateName);
-    }
-    return resolution;
-  }
-
-  const payLabel =
-    quote.isFree || quote.payableAmount <= 0
-      ? "Complete upgrade"
-      : "Continue to Pay";
+  const payLabel = payableNow <= 0 ? "Complete upgrade" : "Continue to Pay";
 
   return (
     <>
       <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-5 shadow-[var(--account-shadow)] sm:p-6">
         
         <div className="flex items-center gap-2 text-[13px] text-[var(--account-text-muted)]">
-          <div className="flex items-center gap-2">
-            <Image
-              src={quote.sourceImageUrl}
-              alt={quote.sourceTitle}
-              width={100}
-              height={100}
-              className="rounded-[var(--account-radius)]"
-            />
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative aspect-video w-24 max-w-full shrink-0 overflow-hidden rounded-[var(--account-radius)] bg-[var(--account-border)]">
+              <Image
+                src={quote.sourceImageUrl}
+                alt={quote.sourceTitle}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            </div>
             <span className="font-semibold text-[var(--account-accent)]">
               {quote.sourceTitle}
             </span>
           </div>
           <ArrowRight className="size-4 flex-shrink-0 text-[var(--account-accent)]" />
-          <div className="flex items-center gap-2">
-            <Image
-            src={quote.targetImageUrl}
-            alt={quote.targetTitle}
-            width={100}
-            height={100}
-            className="rounded-[var(--account-radius)]"
-          />
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative aspect-video w-24 max-w-full shrink-0 overflow-hidden rounded-[var(--account-radius)] bg-[var(--account-border)]">
+              <Image
+                src={quote.targetImageUrl}
+                alt={quote.targetTitle}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            </div>
           <span className="font-semibold text-[var(--account-accent)]">
             {quote.targetTitle}
           </span>
           </div>
         </div>
+
+        <AddonPicker
+          className="mt-4 shadow-none"
+          addons={quote.addons}
+          selectedIds={selectedAddons.map((addon) => addon.id)}
+          onToggle={toggleAddon}
+          disabled={pending || unconfirmed}
+          description="Add extras to your upgraded package. Offers and credit apply to the package only."
+        />
 
         <div className="mt-4 divide-y divide-[var(--account-border)]">
           <SummaryRow
@@ -345,30 +289,48 @@ export function PackageUpgradeCheckoutClient({
               value={`−${formatCartMoney(quote.oldPaidCredit)}`}
             />
           ) : null}
+          {selectedAddons.length > 0 ? (
+            <>
+              <SummaryRow
+                icon={<ArrowRightLeft className="size-4" strokeWidth={1.75} />}
+                label="Upgrade amount"
+                value={upgradeAmount > 0 ? formatCartMoney(upgradeAmount) : "FREE"}
+              />
+              <SummaryRow
+                icon={<PackagePlus className="size-4" strokeWidth={1.75} />}
+                label={`Add-ons (${selectedAddons.length})`}
+                value={formatCartMoney(addonAmount)}
+              />
+            </>
+          ) : null}
           <SummaryRow
             icon={<Receipt className="size-4" strokeWidth={1.75} />}
             label="Payable now"
-            value={
-              quote.isFree || quote.payableAmount <= 0
-                ? "FREE"
-                : formatCartMoney(quote.payableAmount)
-            }
+            value={payableNow > 0 ? formatCartMoney(payableNow) : "FREE"}
             emphasize
           />
         </div>
 
         {error ? (
-          <p className="mt-4 text-[13px] text-red-500" role="alert">
-            {error}
-          </p>
+          <div className="mt-4 text-[13px] text-red-500" role="alert">
+            <p>{error}</p>
+            {unconfirmed ? (
+              <Link
+                href="/account/orders"
+                className="mt-1 inline-block font-semibold text-[var(--account-accent)]"
+              >
+                Open My Orders →
+              </Link>
+            ) : null}
+          </div>
         ) : null}
 
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
           <button
             type="button"
-            onClick={() => void handlePay()}
-            disabled={pending}
-            className="block h-11 md:flex-1 cursor-pointer items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={startPay}
+            disabled={pending || unconfirmed}
+            className="block h-11 w-full cursor-pointer sm:flex-1 items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pending ? "Processing…" : payLabel}
           </button>
@@ -381,38 +343,7 @@ export function PackageUpgradeCheckoutClient({
         </div>
       </div>
 
-      <UpdateStateDialog
-        open={mobileDialogOpen}
-        required={resumePayAfterMobile}
-        fields={["mobile"]}
-        initialMobile={authUser?.mobile}
-        onClose={() => {
-          setMobileDialogOpen(false);
-          setResumePayAfterMobile(false);
-        }}
-        onUpdated={() => {
-          setMobileDialogOpen(false);
-          setError(null);
-          if (resumePayAfterMobile) {
-            setResumePayAfterMobile(false);
-            void handlePay({ skipMobileCheck: true });
-          }
-        }}
-      />
-
-      <CheckoutLocationDialog
-        open={locationDialogOpen}
-        permissionDenied={locationPermissionDenied}
-        onUseCurrentLocation={retryCheckoutLocation}
-        onConfirm={(stateName) => {
-          setLocationDialogOpen(false);
-          void handlePay({ stateName });
-        }}
-        onSkip={() => {
-          setLocationDialogOpen(false);
-          void handlePay({ stateName: null });
-        }}
-      />
+      {dialogs}
     </>
   );
 }

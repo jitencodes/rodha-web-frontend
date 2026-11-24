@@ -150,6 +150,9 @@ export default async function CourseDetailPage({
         isLoggedIn={Boolean(accessToken)}
         discount={discount}
         promocodeOffers={promocodeOffers}
+        availableAddonCount={
+          pkg.addons.filter((addon) => addon.selectable).length
+        }
         faqsOverride={pkg.faqs}
         similarPackages={pkg.similar}
         facultyOverride={pkg.faculty}

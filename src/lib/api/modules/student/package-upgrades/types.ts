@@ -1,3 +1,8 @@
+import type {
+  AddonCarrierApi,
+  AddonViewModel,
+} from "@/lib/api/modules/addons/types";
+
 /** Student package upgrade — shapes from Rodha CR package upgrade Postman. */
 
 export interface UpgradeNamedRefApi {
@@ -34,7 +39,7 @@ export interface EnrolledPackageCourseApi {
   isActive?: boolean;
 }
 
-export interface EnrolledPackageApi {
+export interface EnrolledPackageApi extends AddonCarrierApi {
   enrollmentId?: number;
   status?: string;
   assignedAt?: string | null;
@@ -71,7 +76,7 @@ export interface EnrolledPackagesListApi {
   items?: EnrolledPackageApi[];
 }
 
-export interface UpgradePackageRefApi {
+export interface UpgradePackageRefApi extends AddonCarrierApi {
   id?: number;
   slug?: string;
   title?: string;
@@ -99,6 +104,8 @@ export interface UpgradeQuoteApi {
   promoDiscount?: number | null;
   oldPaidCredit?: number | null;
   creditSource?: string | null;
+  upgradePayableAmount?: number | null;
+  /** Excludes add-ons. */
   payableAmount?: number | null;
   isFree?: boolean;
 }
@@ -164,6 +171,8 @@ export interface EnrolledPackageViewModel {
   courseCount: number;
   websiteCategoryId: number | null;
   status: string;
+  /** Add-ons the student can still buy for this package. */
+  availableAddons: AddonViewModel[];
   availableUpgrades: AvailableUpgradeViewModel[];
 }
 
@@ -184,6 +193,9 @@ export interface UpgradeQuoteViewModel {
   promoDiscount: number;
   oldPaidCredit: number;
   creditSource: string | null;
+  /** Upgrade amount only; selected add-ons are charged on top. */
   payableAmount: number;
   isFree: boolean;
+  /** Add-ons of the target package. */
+  addons: AddonViewModel[];
 }

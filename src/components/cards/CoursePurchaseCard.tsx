@@ -28,6 +28,8 @@ interface CoursePurchaseCardProps {
   discount?: CoursePurchaseDiscountProps;
   /** Listed package promocodes (logged-in); apply happens on checkout. */
   promocodeOffers?: CheckoutPromocodeOption[];
+  /** Add-ons the viewer can still buy with this package. */
+  availableAddonCount?: number;
 }
 
 /** Compact sticky purchase card — image, essentials, price, Buy Now. */
@@ -40,6 +42,7 @@ export function CoursePurchaseCard({
   isLoggedIn = false,
   discount,
   promocodeOffers = [],
+  availableAddonCount = 0,
 }: CoursePurchaseCardProps) {
   const posterSrc =
     course.thumbnail ||
@@ -158,10 +161,11 @@ export function CoursePurchaseCard({
               packageId={packageId}
               slug={course.slug}
               isSelfEnrolled={isSelfEnrolled}
-              isLoggedIn={isLoggedIn}
+              hasAddons={availableAddonCount > 0}
               className="btn-primary-premium premium-border-glow glow-accent-orange h-11 rounded-md bg-orange-500 px-6 text-body font-semibold text-white hover:bg-orange-600"
             />
-            {discount &&
+            {isLoggedIn &&
+            discount &&
             packageId != null &&
             !isSelfEnrolled &&
             course.price > 0 ? (

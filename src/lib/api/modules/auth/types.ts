@@ -46,6 +46,34 @@ export interface AuthGoogleRequest {
   is_web: true;
 }
 
+/** Sign-in methods returned by `POST api/auth/purchase/identify`. */
+export type PurchaseAuthOption = "EMAIL_OTP" | "PASSWORD" | "GOOGLE";
+
+export interface PurchaseIdentifyRequest {
+  fullName: string;
+  email: string;
+  mobile: string;
+  stateName: string;
+  countryCode: string;
+  packageId?: number;
+}
+
+export interface PurchaseIdentifyApi {
+  journeyId?: number | string;
+  next?: string;
+  authOptions?: string[];
+  /** `NEW` | `EXISTING_VERIFIED` | … */
+  emailStatus?: string;
+}
+
+export interface PurchaseIdentifyViewModel {
+  journeyId: number;
+  /** Suggested first method. */
+  next: PurchaseAuthOption;
+  options: PurchaseAuthOption[];
+  isNewUser: boolean;
+}
+
 export interface AuthForgotPasswordRequest {
   email: string;
   is_web: true;

@@ -96,11 +96,12 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Settings stub | Complete | `/account/settings` placeholder card |
 | Courses tabs | Complete | `/account/courses?tab=continue\|buy` (+ aliases); Continue/Buy search + Postman filters + mobile bottom sheet; Continue cards + Buy `CourseCardV2`; theme-aware pagination |
 | Manage Packages | Complete | `/account/packages` enrolled list (`CourseCardV2` + Available upgrades); `/account/packages/upgrade` targets + quote summary; free/Razorpay via upgrade checkout BFF |
+| Package add-ons | Complete | Checkout (sidebar + page), buy later on owned packages, upgrade quote, My Orders + Retry delivery |
 | Course detail (assigned) | Complete | `/account/courses/[courseId]` client island + BFF; progress, content-type tabs (not chapters), filters, paginated items → Graphy `takeUrl` + SSO |
 | Test Series listing | Complete | `/account/test-series` `TestSeriesCardV2` grid + theme-aware pagination |
-| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy is a native `/api/checkout/buy` anchor; below `sm` horizontal scroll `min-w-[200px]`, coupon truncates + hover tooltip), progress ring, orders preview, quick links |
+| Dashboard | Complete | Welcome, todayContents Live Classes, continue watching, recommended (Buy Now opens the package page with the checkout sidebar, `?checkout=1`; below `sm` horizontal scroll `min-w-[200px]`, coupon truncates + hover tooltip), progress ring, orders preview, quick links |
 | Quick Content | Complete | `/account/content` tabs + search/filters + server pagination via Quick Actions API |
-| Orders | Complete | `/account/orders` table + mobile cards; product image fallback; no Payment column |
+| Orders | Complete | `/account/orders` table + mobile cards; API pagination (`?page=`, 10 per page); product image fallback; no Payment column |
 | Profile | Complete | `/account/profile` avatar; sidebar Complete registration CTA while incomplete; registration draft saved locally until submit; site-wide registration gate (dashboard poll, 1h reminder, overdue mandatory on account); 3-step dialog (A–F / G–J / K–N); passport photo JPG/PNG max 2 MB with submit re-check + field errors; View Profile → `/account/profile/detail`; email update stub, phone/state pencils, change password |
 | Cart content | Complete | `/account/cart` computed summary, coupon, Continue to Pay UI, You May Also Like |
 | Checkout | Complete | Coupon confetti on an applied code; `utm_*` cookie (server + client capture, replace-only, single source at pay) and checkout-only `stateName` (GPS or states dropdown, not the profile) forwarded on pay; GTM container when `NEXT_PUBLIC_GTM_ID` is set; `dataLayer` `purchase` ecommerce after verified payment (`transaction_id`, `value`, `INR`) |
@@ -136,7 +137,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | Canonical route + SSG | Complete (`/courses/[slug]`; nested category course URLs redirect) |
 | Package Detail By Slug API | Complete (`getPackageBySlug` + mapper; empty sections hidden) |
 | Course hero | Complete (dark hero, breadcrumb, highlights, faculty avatars) |
-| Sticky purchase card | Complete (same-tab Buy Now → login or checkout; checkout errors surfaced; View available offers CTA → dialog when logged in) |
+| Sticky purchase card | Complete (Buy Now → checkout sidebar, guests included; checkout errors surfaced; View available offers CTA → dialog when logged in) |
 | Curriculum accordion | Complete (`CourseCurriculumAccordion`; hidden when no modules) |
 | Faculty for course | Complete (package `faculty[]` via `FacultyCardV2`; hidden when empty) |
 | What's included + schedule | Complete (API benefits/schedule only; no invented defaults on package path) |
@@ -146,7 +147,7 @@ Update when page/section status changes. Detail: [PROGRESS.md](PROGRESS.md) · S
 | FAQ | Complete (package FAQs; hidden when empty) |
 | Floating enquiry | Complete (`LeadCaptureForm` light Enquire Now + mobile sticky; active categories only) |
 | Course card discount % | Complete (derived from `price` / `discountedPrice` on `CourseCard` / `CourseCardV2`) |
-| Request Discount | Complete (`DiscountRequestCta` under Buy Now — request / resubmit / `Under review — {SLA}` / approved; 4-type form dialog; logged-out → login) |
+| Request Discount | Complete (`DiscountRequestCta` under Buy Now — request / resubmit / `Under review — {SLA}` / approved; 4-type form dialog; hidden for logged-out visitors) |
 | Package promocode list | Complete (CTA opens dialog with Best offer / saving / valid till; single applied chip on card; apply on checkout) |
 
 ---

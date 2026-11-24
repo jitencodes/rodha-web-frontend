@@ -1,3 +1,5 @@
+import type { OrderAddonViewModel } from "@/lib/api/modules/addons/types";
+
 /**
  * Typed models for the Student Account Dashboard (static foundation).
  * Listing pages that reuse marketing cards also use `Course` / `TestSeriesItem`
@@ -99,6 +101,12 @@ export interface AccountOrder {
   amount: number;
   thumbnail?: string;
   href?: string;
+  /** Add-ons bought in this order. */
+  addons?: OrderAddonViewModel[];
+  /** Add-ons for a package the student already owned. */
+  addonsOnly?: boolean;
+  /** Paid, but a course or add-on could not be given (retry available). */
+  deliveryFailed?: boolean;
 }
 
 export interface CartItemMeta {

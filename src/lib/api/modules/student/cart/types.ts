@@ -1,3 +1,5 @@
+import type { AddonApi, AddonCarrierApi } from "@/lib/api/modules/addons/types";
+
 export interface StudentCartPromocodeApi {
   id?: number | string;
   code?: string;
@@ -16,25 +18,35 @@ export interface StudentCartItemApi {
   listPrice?: number | null;
   salePrice?: number | null;
   discountAmount?: number | null;
+  /** Package only, after discount (0 for a package the student already owns). */
+  packagePayableAmount?: number | null;
+  addonAmount?: number | null;
+  /** Package + add-ons. */
   payableAmount?: number | null;
+  selectedAddons?: AddonApi[] | null;
   promocode?: StudentCartPromocodeApi | null;
-  package?: {
-    id?: number | string;
-    slug?: string;
-    title?: string;
-    bannerImageUrl?: string | null;
-    language?: string | null;
-  } | null;
+  package?:
+    | (AddonCarrierApi & {
+        id?: number | string;
+        slug?: string;
+        title?: string;
+        bannerImageUrl?: string | null;
+        language?: string | null;
+      })
+    | null;
   course?: {
     id?: number | string;
     slug?: string;
     title?: string;
     bannerImageUrl?: string | null;
   } | null;
-  product?: {
-    title?: string;
-    bannerImageUrl?: string | null;
-  } | null;
+  product?:
+    | (AddonCarrierApi & {
+        slug?: string;
+        title?: string;
+        bannerImageUrl?: string | null;
+      })
+    | null;
 }
 
 export interface StudentCartTotalsApi {

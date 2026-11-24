@@ -1,0 +1,716 @@
+{
+  "info": {
+    "_postman_id": "4df71e8d-0dc3-456d-ab3a-cf46e93a6eca",
+    "name": "Rodha CR Single page Purchase Flow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21766569"
+  },
+  "item": [
+    {
+      "name": "Identify guest",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"fullName\": \"Student\",\n    \"email\": \"student@example.com\",\n    \"mobile\": \"9876543210\",\n    \"stateName\": \"Maharashtra\",\n    \"countryCode\": \"+91\",\n    \"packageId\": 4\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/rodha/api/auth/purchase/identify",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "rodha",
+            "api",
+            "auth",
+            "purchase",
+            "identify"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Identify guest",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fullName\": \"Student\",\n    \"email\": \"student@example.com\",\n    \"mobile\": \"9876543210\",\n    \"stateName\": \"Maharashtra\",\n    \"countryCode\": \"+91\",\n    \"packageId\": 4\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/rodha/api/auth/purchase/identify",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "rodha",
+                "api",
+                "auth",
+                "purchase",
+                "identify"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": "Content-Type,x-request-id,X-Request-Id"
+            },
+            {
+              "key": "x-request-id",
+              "value": "95cc8cef-b54c-4900-b293-1c5fad918726"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "private, no-store"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "164"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"a4-+Fr5fCexxddft7YFvcbF/B03Arw\""
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 20 Nov 2026 11:35:23 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"success\": true,\n  \"message\": \"Purchase identity resolved\",\n  \"data\": {\n    \"journeyId\": 5,\n    \"next\": \"GOOGLE\",\n    \"authOptions\": [\n      \"GOOGLE\",\n      \"PASSWORD\"\n    ],\n    \"emailStatus\": \"EXISTING_VERIFIED\"\n  }\n}"
+        },
+        {
+          "name": "Identify guest",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fullName\": \"Student\",\n    \"email\": \"student@example.com\",\n    \"mobile\": \"9876543210\",\n    \"stateName\": \"Maharashtra\",\n    \"countryCode\": \"+91\",\n    \"packageId\": 4\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/rodha/api/auth/purchase/identify",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "rodha",
+                "api",
+                "auth",
+                "purchase",
+                "identify"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": "Content-Type,x-request-id,X-Request-Id"
+            },
+            {
+              "key": "x-request-id",
+              "value": "555882f7-e507-41bf-96e5-17507725e5ca"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "private, no-store"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "145"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"91-X7wqr7hwqp5tkkIdq72CTOjt5RM\""
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 20 Nov 2026 11:36:41 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"success\": true,\n  \"message\": \"Purchase identity resolved\",\n  \"data\": {\n    \"journeyId\": 6,\n    \"next\": \"EMAIL_OTP\",\n    \"authOptions\": [\n      \"EMAIL_OTP\"\n    ],\n    \"emailStatus\": \"NEW\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Resend email OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"journeyId\": 6,\n    \"email\": \"student@example.com\"\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/rodha/api/auth/purchase/email-otp/resend",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "rodha",
+            "api",
+            "auth",
+            "purchase",
+            "email-otp",
+            "resend"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Resend email OTP",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"journeyId\": 6,\n    \"email\": \"student@example.com\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/rodha/api/auth/purchase/email-otp/resend",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "rodha",
+                "api",
+                "auth",
+                "purchase",
+                "email-otp",
+                "resend"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": "Content-Type,x-request-id,X-Request-Id"
+            },
+            {
+              "key": "x-request-id",
+              "value": "afb1724b-2d9f-4f02-a598-de7c9f609c38"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "private, no-store"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "50"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"32-pRwUobPmRoJzFLVY41CvCHoem1Q\""
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 20 Nov 2026 11:37:15 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Verify email OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"journeyId\": 6,\n    \"email\": \"student@example.com\",\n    \"otp\": \"123456\"\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/rodha/api/auth/purchase/email-otp/verify",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "rodha",
+            "api",
+            "auth",
+            "purchase",
+            "email-otp",
+            "verify"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Verify email OTP",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"journeyId\": 6,\n    \"email\": \"student@example.com\",\n    \"otp\": \"123456\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/rodha/api/auth/purchase/email-otp/verify",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "rodha",
+                "api",
+                "auth",
+                "purchase",
+                "email-otp",
+                "verify"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": "Content-Type,x-request-id,X-Request-Id"
+            },
+            {
+              "key": "x-request-id",
+              "value": "3167de29-b1d9-4d8a-9544-507dc418a514"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "private, no-store"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1065"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"429-OtV3Ia+B5+oFm5jzJVcZbD9wz7k\""
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 20 Nov 2026 11:42:25 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"success\": true,\n  \"message\": \"Email verified successfully\",\n  \"data\": {\n    \"accessToken\": \"<redacted-token>\",\n    \"user\": {\n      \"id\": \"e4d762ad-804f-4a5a-bbf4-bf26b3edd3c5\",\n      \"email\": \"student@example.com\",\n      \"fullName\": \"Student\",\n      \"userType\": \"STUDENT\",\n      \"mobile\": \"9876543210\",\n      \"isActive\": true,\n      \"profilePicturePath\": null\n    },\n    \"roles\": [\n      \"student\"\n    ],\n    \"graphy\": {\n      \"ssoToken\": \"<redacted-token>\",\n      \"ssoUrl\": \"https://rodha.graphy.com/?ssoToken=<redacted-token>\",\n      \"graphyLearnerId\": \"6b00320a37f6e06393a27727\",\n      \"websiteCategoryId\": 1\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Password login (next: PASSWORD)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"ada@example.com\",\n    \"password\": \"YourPassword1!\",\n    \"is_web\": true\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/rodha/api/auth/user/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "rodha",
+            "api",
+            "auth",
+            "user",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Google login (next: GOOGLE)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}

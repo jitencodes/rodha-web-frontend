@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
+import { OrderRetryDelivery } from "@/components/account/OrderRetryDelivery";
 import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import type { AccountOrder, AccountPaymentStatus } from "@/lib/account/types";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
@@ -36,30 +37,69 @@ function StatusBadge({
   );
 }
 
+function productLabel(order: AccountOrder): string {
+  const count = order.addons?.length ?? 0;
+  if (order.addonsOnly) return count === 1 ? "Add-on" : "Add-ons";
+  const base = order.productType === "test-series" ? "Test series" : "Course";
+  return count > 0 ? `${base} + ${count} add-on${count === 1 ? "" : "s"}` : base;
+}
+
+/** Add-ons bought with the order, under the product row. */
+function OrderAddons({ order }: { order: AccountOrder }) {
+  if (!order.addons?.length) return null;
+  return (
+    <ul
+      aria-label="Add-ons in this order"
+      className="mt-2 space-y-1 border-l-2 border-[var(--account-accent)]/40 pl-3"
+    >
+      {order.addons.map((addon) => (
+        <li
+          key={addon.id}
+          className="flex items-baseline justify-between gap-3 text-caption text-[var(--account-text-muted)]"
+        >
+          <span className="min-w-0">
+            <span className="font-medium text-[var(--account-text-secondary)]">
+              {addon.name}
+            </span>{" "}
+            · {addon.typeLabel}
+          </span>
+          <span className="shrink-0">
+            {addon.price > 0 ? formatPrice(addon.price) : "FREE"}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function ProductCell({ order }: { order: AccountOrder }) {
   const thumbnail = order.thumbnail?.trim() || COURSE_IMAGE_FALLBACK;
   return (
-    <div className="flex min-w-0 items-center gap-3">
-      <span className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-[var(--account-nav-hover)]">
-        <Image
-          src={thumbnail}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="40px"
-        />
-      </span>
-      <div className="min-w-0">
-        <ClampTooltip
-          text={order.title}
-          lines={2}
-          className="text-body-sm font-medium text-[var(--account-text)]"
-          tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
-        />
-        <p className="truncate text-caption text-[var(--account-text-muted)] capitalize">
-          {order.productType === "test-series" ? "Test series" : "Course"}
-        </p>
+    <div className="min-w-0">
+      <div className="flex min-w-0 items-center gap-3">
+        <span className="relative aspect-video w-16 shrink-0 overflow-hidden rounded-lg bg-[var(--account-nav-hover)]">
+          <Image
+            src={thumbnail}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="64px"
+          />
+        </span>
+        <div className="min-w-0">
+          <ClampTooltip
+            text={order.title}
+            lines={2}
+            className="text-body-sm font-medium text-[var(--account-text)]"
+            tooltipClassName="border-[#3a2418] bg-[#1a0f08] text-[#f5ebe3]"
+          />
+          <p className="truncate text-caption text-[var(--account-text-muted)]">
+            {productLabel(order)}
+          </p>
+        </div>
       </div>
+      <OrderAddons order={order} />
+      {order.deliveryFailed ? <OrderRetryDelivery orderId={order.id} /> : null}
     </div>
   );
 }
@@ -144,7 +184,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                   key={order.id}
                   className="border-b border-[var(--account-border)] last:border-b-0"
                 >
-                  <td className="max-w-[280px] px-4 py-3.5">
+                  <td className="max-w-[340px] px-4 py-3.5">
                     <ProductCell order={order} />
                   </td>
                   <td className="whitespace-nowrap px-4 py-3.5 text-body-sm text-[var(--account-text-secondary)]">
@@ -176,10 +216,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
             key={order.id}
             className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] p-4 shadow-[var(--account-shadow)]"
           >
-            <div className="flex items-start justify-between gap-3">
-              <ProductCell order={order} />
-              <DownloadInvoiceAction href={order.href} />
-            </div>
+            <ProductCell order={order} />
 
             <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3">
               <div className="min-w-0">
@@ -210,6 +247,9 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                 </dd>
               </div>
             </dl>
+            <div className="mt-4">
+              <DownloadInvoiceAction href={order.href} />
+            </div>
           </li>
         ))}
       </ul>

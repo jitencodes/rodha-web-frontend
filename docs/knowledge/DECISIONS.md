@@ -633,3 +633,20 @@ Format:
 - **Decision:** Every `api/website/student/*` account call (cart CRUD, checkout pay/verify, orders, profile, password, registration, discount, dashboard, courses, package upgrades) sends `x-website-category-id` via `websiteCategoryHeaders()` (package vertical when known, else default `1`). Auth `api/auth/me*` and Graphy SSO stay without it.
 - **Rationale:** Backend requires the header on account-side vertical APIs (discount form, checkout); sending it consistently avoids missing-header 400s.
 - **Consequences:** Buy Now BFF reads `categoryId` query / header (default 1). Verify accepts `websiteCategoryId` in the JSON body like pay.
+
+### 2026-11-23 — One checkout session for the sidebar and the checkout page
+- **Decision:** `src/lib/checkout/load-session.ts` builds a `CheckoutSession` (cart, add-ons, offers, discount state, student) for `/account/checkout` and `/api/checkout/session`. `useCheckout` + `CheckoutPanel` render both. Opening the sidebar re-adds the line (live prices, best promocode) and carries over still-valid add-ons and a better typed coupon.
+- **Rationale:** The sidebar must match the checkout page in features and errors without a second implementation.
+- **Alternatives considered:** Embedding the account page; a separate drawer implementation; reusing the stale cart line.
+- **Consequences:** A coupon the student removed is re-applied when the sidebar is reopened, as the buy route already did. Razorpay lives in `src/lib/checkout/razorpay.ts`, shared with package upgrade.
+
+### 2026-11-23 — Card Buy Now deep-links to the package page sidebar
+- **Decision:** `packageBuyNowHref` returns `/courses/:slug?checkout=1`; `PackageCheckoutProvider` opens the sidebar while the param is present and removes it on close. The first OTP and every resend use `email-otp/resend`.
+- **Rationale:** One purchase flow for guests and students, with no second click on the purchase card.
+- **Consequences:** Card links no longer change the cart on navigation (the buy route did). A reload while the sidebar is open keeps it open. The buy route stays for packages without a slug and old links.
+
+### 2026-11-24 — Course and package images are 16:9
+- **Decision:** All course/package images render in an `aspect-video` box with `object-cover`, thumbnails included.
+- **Rationale:** Admin uploads every course and package image at 16:9, so the frame must match to avoid cropping.
+- **Alternatives considered:** `object-contain` (letterboxes any image that is not 16:9).
+- **Consequences:** An image uploaded in another ratio is still cropped; fix it in admin. Faculty, blog, resource and test series cards keep their own ratios.

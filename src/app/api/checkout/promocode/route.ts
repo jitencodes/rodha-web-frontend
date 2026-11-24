@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/auth/server-session";
-import { promocodeOfferLabel } from "@/lib/api/modules/student/cart/mapper";
 import {
   setCartItemPromocode,
   type CartItemPromocodeBody,
 } from "@/lib/api/modules/student/cart/service";
+import { mapCheckoutCart } from "@/lib/checkout/map-cart";
 import { bffErrorResponse } from "@/lib/http/bff-response";
 
 export const runtime = "nodejs";
@@ -62,20 +62,7 @@ export async function POST(request: Request) {
       update,
       readId(payload.websiteCategoryId)
     );
-    const item =
-      cart.items?.find((entry) => String(entry.id) === String(cartItemId)) ??
-      cart.items?.[0];
-    return NextResponse.json({
-      ok: true,
-      totals: {
-        subtotalAmount: cart.totals?.subtotalAmount ?? 0,
-        discountAmount: cart.totals?.discountAmount ?? 0,
-        payableAmount: cart.totals?.payableAmount ?? 0,
-      },
-      code: item?.promocode?.code ?? null,
-      offerLabel: item?.promocode ? promocodeOfferLabel(item.promocode) : "",
-      itemPayableAmount: item?.payableAmount ?? null,
-    });
+    return NextResponse.json({ ok: true, cart: mapCheckoutCart(cart) });
   } catch (error) {
     return bffErrorResponse(error, "Unable to update coupon");
   }

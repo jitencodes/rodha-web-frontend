@@ -418,7 +418,13 @@ function ResultLink({
   );
   const body = (
     <>
-      <span className="relative size-10 shrink-0 overflow-hidden rounded-md bg-black/10">
+      <span
+        className={cn(
+          "relative shrink-0 overflow-hidden rounded-md bg-black/10",
+          // Package images are 16:9.
+          item.entityType === "PACKAGE" ? "aspect-video w-16" : "size-10"
+        )}
+      >
         {item.imageUrl ? (
           // Search thumbnails come from many hosts; a plain img avoids the image optimizer allowlist.
           // eslint-disable-next-line @next/next/no-img-element

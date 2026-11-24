@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-20 (registration photo + category headers + Recommended rail)
+**Last updated:** 2026-11-24 (16:9 course images, orders pagination)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,16 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **16:9 course images, coupon tooltip, guest discount, orders pagination (2026-11-24):**
+  - **16:9:** every course/package image is `aspect-video`: `CourseCardV2`, continue watching, recommended, cart, checkout, orders (list + dashboard preview), course switch requests, package upgrade, and `PACKAGE` rows in global search. Admin uploads are 16:9, so `object-cover` does not crop.
+  - **`ClampTooltip`** also detects horizontal overflow (single-line `truncate` text), so the coupon chip on `AccountRecommendedCard` shows its tooltip.
+  - **Request Discount** on `CoursePurchaseCard` is hidden for logged-out visitors.
+  - **`/account/orders`** uses the API pagination (`?page=`, 10 per page); a page past the end redirects to the last one and a failed load shows an error instead of "no orders". Course switch requests (10), Continue Watching (8) and Buy Courses (8) already paginate.
+- **Checkout sidebar + guest purchase + add-ons (2026-11-23):** one checkout module for the sidebar and `/account/checkout`.
+  - **Sidebar:** Buy Now on the package page (`CoursePurchaseCard`) opens `CheckoutDrawer` instead of redirecting: product card, add-ons, coupon + offers, Request Discount, price summary, sticky pay footer, same confetti / full-screen coupon overlay. Buy Now on every course card (listing, category slider, related, account, dashboard) goes to `/courses/:slug?checkout=1`, which opens the sidebar on arrival; closing it drops the param. `/api/checkout/buy` → `/account/checkout` remains for packages without a slug and old links. The promo popup waits while a dialog is open.
+  - **Guests** (`Rodha CR Single page Purchase Flow` Postman): name, email, mobile, state (auto-detected) → `identify` → the methods in `authOptions` (email OTP, password, Google; `email-otp/resend` is used for the first send too, automatically, then with a 30s cooldown) → the same checkout. An expired session falls back to the guest form. The typed state is reused at pay (no GPS prompt). `router.refresh()` waits until the drawer closes so the registration gate cannot open over it.
+  - **Add-ons** (`Rodha_Package_Addons_FE` Postman): `AddonPicker` updates the cart; owned ones are disabled, withdrawn ones are flagged and removable. Buy later for owned packages (package page, Manage Packages). Upgrade quote adds `addonIds` on top of the quote amount. My Orders lists add-ons and offers Retry delivery on `graphyAssignStatus: FAILED`.
+  - **Errors:** BFF keeps API statuses; 400/404/409 reload the cart and show the reason. A payment that cannot be verified blocks a second payment and links to My Orders. Upgrade quote errors (400/409) are shown instead of a 404.
 - **Registration photo, category headers, Recommended rail (2026-11-20):**
   - **Passport photo:** frontend limit aligned to backend — JPG/PNG only, max **2 MB** (`passport-photo.ts`); re-validated on final submit; BFF registration errors return field `errors` via `bffErrorResponse` and map to the upload field (no more unclear toast-only “passport photo must be”).
   - **`x-website-category-id`:** now on remaining account student APIs — cart get/clear/add, payment verify, orders, profile, password, registration GET/POST; checkout BFF `buy` / `verify` forward category; discount dialog/drawer always send the header (default `1`); `apiDelete` / `apiPostFormData` pass extra headers.

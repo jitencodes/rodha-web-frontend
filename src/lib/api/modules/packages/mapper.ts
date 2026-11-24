@@ -1,3 +1,5 @@
+import { mapCarrierAddons } from "@/lib/api/modules/addons/mapper";
+import type { AddonViewModel } from "@/lib/api/modules/addons/types";
 import type {
   PackageCardViewModel,
   PackageDetailApi,
@@ -294,6 +296,8 @@ export interface PackageDetailViewModel {
   /** Website vertical of the package; `null` when the API omits it. */
   websiteCategoryId: number | null;
   isSelfEnrolled: boolean;
+  /** Add-ons sold with the package (owned ones included, not selectable). */
+  addons: AddonViewModel[];
   faqs: FaqItem[];
   similar: PackageCardViewModel[];
   graphyCategories: string[];
@@ -357,6 +361,7 @@ export function mapPackageDetail(
     websiteCategoryId:
       typeof data.websiteCategoryId === "number" ? data.websiteCategoryId : null,
     isSelfEnrolled: card.isSelfEnrolled,
+    addons: mapCarrierAddons(data),
     faqs: mapPackageFaqs(data.faqs),
     similar: mapPackageListItems(data.similarPackages),
     graphyCategories: asStringList(data.graphyCategories),

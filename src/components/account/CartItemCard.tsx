@@ -43,13 +43,13 @@ export function CartItemCard({ item, onRemove, className }: CartItemCardProps) {
         className
       )}
     >
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-lg bg-[var(--account-border)] sm:aspect-auto sm:h-[120px] sm:w-[160px]">
+      <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-[var(--account-border)] sm:w-[192px] sm:self-start">
         <Image
           src={item.thumbnail}
           alt=""
           fill
           className="object-cover"
-          sizes="(max-width: 640px) 100vw, 160px"
+          sizes="(max-width: 640px) 100vw, 192px"
         />
       </div>
 

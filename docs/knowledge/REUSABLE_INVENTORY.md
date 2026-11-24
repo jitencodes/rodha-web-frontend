@@ -20,7 +20,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Breadcrumb | `Breadcrumb.tsx` |
 | Button | `Button.tsx` |
 | Carousel | `Carousel.tsx` (arrow controls, responsive item sizing support, mouse drag, and native touch swipe) |
-| ClampTooltip | `ClampTooltip.tsx` (line-clamp + flips above/below on viewport space; portal tip) |
+| ClampTooltip | `ClampTooltip.tsx` (line-clamp or single-line `truncate`; flips above/below on viewport space; portal tip) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
 | DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`; menu portaled to `document.body`) |
@@ -156,7 +156,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | BlogCard | `BlogCard.tsx` (`variant?: "overlay" \| "article"`; overlay = dark legacy homepage card; article = light listing/detail card with category link, calendar/clock meta) |
 | CourseCard | `CourseCard.tsx` |
 | CourseCardV2 | `CourseCardV2.tsx` (MBA light poster cards; optional `href`; optional `ctaLabel`, default "View Details") |
-| CoursePurchaseCard | `CoursePurchaseCard.tsx` (sticky enrol card: thumbnail, price, single applied-coupon chip, Buy Now, optional offers CTA + Request Discount) |
+| CoursePurchaseCard | `CoursePurchaseCard.tsx` (sticky enrol card: thumbnail, price, single applied-coupon chip, Buy Now, optional offers CTA + Request Discount when logged in) |
 | PackagePromocodeOffers | `PackagePromocodeOffers.tsx` (client: View available offers CTA → Modal; `variant` website\|account; account supports Apply) |
 | PricingPlanCard | `PricingPlanCard.tsx` (light pricing tier card; optional Most Popular) |
 | ExamCard | `ExamCard.tsx` (optional `onCounsellingSelect` opens modal instead of category link) |
@@ -210,6 +210,12 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountShell | `AccountShell.tsx` (fixed sidebar + header; mobile drawer; wraps theme + `AccountUserProvider` / `userAtom`) |
 | AccountSidebar | `AccountSidebar.tsx` (nav accordion incl. Manage Packages, Need Help) |
 | PackageUpgradeCheckoutClient | `PackageUpgradeCheckoutClient.tsx` (upgrade quote summary + free/Razorpay pay; reuses location/UTM dialogs) |
+| CheckoutDrawer | `checkout/CheckoutDrawer.tsx` (right sidebar: guest details → sign in → checkout; `PackageCheckoutProvider` / `usePackageCheckout` open it from any Buy Now) |
+| CheckoutPanel | `checkout/CheckoutPanel.tsx` (`layout` page\|drawer; state in `useCheckout`, blocks in `CheckoutSections`) |
+| AddonPicker | `checkout/AddonPicker.tsx` (selectable add-on rows; checkout + upgrade) |
+| usePayGate | `checkout/usePayGate.tsx` (mobile + state steps before payment; checkout + upgrade) |
+| PackageAddonsButton | `checkout/PackageAddonsButton.tsx` (buy add-ons for an owned package) |
+| OrderRetryDelivery | `OrderRetryDelivery.tsx` (retry a failed delivery) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
 | AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |

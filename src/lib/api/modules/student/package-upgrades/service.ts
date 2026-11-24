@@ -54,7 +54,9 @@ export type UpgradeCheckoutRequestBody = {
   targetPackageId: number;
   stateName?: string;
   channel?: string;
-} & Record<string, string | number | undefined>;
+  /** Linked to the target package and not owned. */
+  addonIds?: number[];
+} & Record<string, string | number | number[] | undefined>;
 
 export async function checkoutPackageUpgrade(
   accessToken: string,

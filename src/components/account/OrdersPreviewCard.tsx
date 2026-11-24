@@ -52,14 +52,14 @@ export function OrdersPreviewCard({
         <ul className="mt-3 divide-y divide-[var(--account-border)]">
           {orders.map((order) => (
             <li key={order.id} className="flex items-center gap-3 py-3 first:pt-1 last:pb-0">
-              <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-[var(--account-progress-track)]">
+              <div className="relative aspect-video w-16 shrink-0 overflow-hidden rounded-lg bg-[var(--account-progress-track)]">
                 {order.thumbnail ? (
                   <Image
                     src={order.thumbnail}
                     alt=""
                     fill
                     className="object-cover"
-                    sizes="44px"
+                    sizes="64px"
                   />
                 ) : null}
               </div>

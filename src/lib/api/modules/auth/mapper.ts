@@ -5,6 +5,9 @@ import type {
   AuthSessionViewModel,
   AuthUserApi,
   AuthUserViewModel,
+  PurchaseAuthOption,
+  PurchaseIdentifyApi,
+  PurchaseIdentifyViewModel,
 } from "@/lib/api/modules/auth/types";
 import { mapAuthState } from "@/lib/api/modules/states/mapper";
 
@@ -72,6 +75,34 @@ export function mapAuthSession(
       : [],
     graphy: mapAuthGraphy(data.graphy),
   };
+}
+
+const PURCHASE_AUTH_OPTIONS: readonly PurchaseAuthOption[] = [
+  "EMAIL_OTP",
+  "PASSWORD",
+  "GOOGLE",
+];
+
+function asPurchaseAuthOption(value: unknown): PurchaseAuthOption | null {
+  return PURCHASE_AUTH_OPTIONS.find((option) => option === value) ?? null;
+}
+
+export function mapPurchaseIdentify(
+  data: PurchaseIdentifyApi | null | undefined
+): PurchaseIdentifyViewModel | null {
+  const journeyId = Number(data?.journeyId);
+  if (!Number.isInteger(journeyId) || journeyId <= 0) return null;
+
+  const isNewUser = asString(data?.emailStatus).toUpperCase() === "NEW";
+  const listed = (Array.isArray(data?.authOptions) ? data.authOptions : [])
+    .map(asPurchaseAuthOption)
+    .filter((option): option is PurchaseAuthOption => option != null);
+  const suggested = asPurchaseAuthOption(data?.next);
+  const options = [...new Set(suggested ? [suggested, ...listed] : listed)];
+  if (options.length === 0) {
+    options.push(...(isNewUser ? (["EMAIL_OTP"] as const) : (["PASSWORD", "GOOGLE"] as const)));
+  }
+  return { journeyId, next: suggested ?? options[0], options, isNewUser };
 }
 
 /** True when the user has a persisted state selection. */

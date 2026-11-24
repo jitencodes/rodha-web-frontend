@@ -44,10 +44,19 @@ export function PromoDialog({
 
   useEffect(() => {
     if (!popup || wasStoredWithinDay(PROMO_SHOWN_KEY)) return;
-    const timer = window.setTimeout(() => {
-      rememberNow(PROMO_SHOWN_KEY);
-      setOpen(true);
-    }, delayMs);
+    let timer = 0;
+    const schedule = () => {
+      timer = window.setTimeout(() => {
+        // Never compete with an open dialog (e.g. the checkout sidebar).
+        if (document.querySelector('[aria-modal="true"]')) {
+          schedule();
+          return;
+        }
+        rememberNow(PROMO_SHOWN_KEY);
+        setOpen(true);
+      }, delayMs);
+    };
+    schedule();
     return () => window.clearTimeout(timer);
   }, [popup, delayMs]);
 

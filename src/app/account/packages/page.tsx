@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
+import { PackageAddonsButton } from "@/components/checkout/PackageAddonsButton";
 import {
   enrolledPackageToCourse,
 } from "@/lib/api/modules/student/package-upgrades/mapper";
@@ -63,19 +64,35 @@ export default async function AccountPackagesPage() {
             const course = enrolledPackageToCourse(pkg);
             const hasUpgrades = pkg.availableUpgrades.length > 0;
             return (
-              <CourseCardV2
-                key={pkg.enrollmentId}
-                course={course}
-                href={pkg.slug ? `/courses/${pkg.slug}` : undefined}
-                ctaHref={
-                  hasUpgrades
-                    ? `/account/packages/upgrade?enrollmentId=${pkg.enrollmentId}`
-                    : pkg.slug
-                      ? `/courses/${pkg.slug}`
-                      : undefined
-                }
-                ctaLabel={hasUpgrades ? "Available upgrades" : "View package"}
-              />
+              <div key={pkg.enrollmentId} className="flex h-full flex-col gap-2.5">
+                <CourseCardV2
+                  className="flex-1"
+                  course={course}
+                  href={pkg.slug ? `/courses/${pkg.slug}` : undefined}
+                  ctaHref={
+                    hasUpgrades
+                      ? `/account/packages/upgrade?enrollmentId=${pkg.enrollmentId}`
+                      : pkg.slug
+                        ? `/courses/${pkg.slug}`
+                        : undefined
+                  }
+                  ctaLabel={hasUpgrades ? "Available upgrades" : "View package"}
+                />
+                {pkg.availableAddons.length > 0 ? (
+                  <PackageAddonsButton
+                    count={pkg.availableAddons.length}
+                    product={{
+                      packageId: pkg.packageId,
+                      slug: pkg.slug,
+                      title: pkg.title,
+                      thumbnail: pkg.bannerImageUrl,
+                      detailsHref: pkg.slug ? `/courses/${pkg.slug}` : "/courses",
+                      price: pkg.price,
+                      originalPrice: pkg.originalPrice,
+                    }}
+                  />
+                ) : null}
+              </div>
             );
           })}
         </div>

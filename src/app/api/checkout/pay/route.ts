@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { checkoutStudentCart } from "@/lib/api/modules/student/cart/service";
-import { ApiError } from "@/lib/api/types";
+import { bffErrorResponse } from "@/lib/http/bff-response";
 import {
   resolveCheckoutUtm,
   UTM_COOKIE_NAME,
@@ -72,11 +72,8 @@ export async function POST(request: Request) {
       invoice: checkout.invoice,
     });
   } catch (error) {
-    const message =
-      error instanceof ApiError ? error.message : "Checkout failed";
-    // 409 = a code valid in the cart was refused (e.g. usage limit reached meanwhile).
-    const status =
-      error instanceof ApiError && error.status === 409 ? 409 : 502;
-    return NextResponse.json({ ok: false, error: message }, { status });
+    // 400 = cart empty / add-on withdrawn; 409 = a code was refused or an
+    // add-on is already owned. The client reloads the cart for both.
+    return bffErrorResponse(error, "Checkout failed");
   }
 }

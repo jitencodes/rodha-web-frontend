@@ -44,6 +44,12 @@ export function CourseRelatedSection({
                 <CourseCardV2
                   course={course}
                   href={getCoursePath(course.slug)}
+                  // API packages carry an internal CTA (Buy Now / View Course).
+                  ctaHref={
+                    course.enrollmentUrl?.startsWith("/")
+                      ? course.enrollmentUrl
+                      : undefined
+                  }
                   className="h-full bg-white"
                 />
               </div>

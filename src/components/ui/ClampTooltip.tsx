@@ -64,7 +64,11 @@ export function ClampTooltip({
   const measure = useCallback(() => {
     const el = textRef.current;
     if (!el) return;
-    setTruncated(el.scrollHeight > el.clientHeight + 1);
+    // Width catches single-line text that cannot wrap (`truncate`, long codes).
+    setTruncated(
+      el.scrollHeight > el.clientHeight + 1 ||
+        el.scrollWidth > el.clientWidth + 1
+    );
   }, []);
 
   const updateCoords = useCallback(() => {
