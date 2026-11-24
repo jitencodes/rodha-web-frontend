@@ -217,7 +217,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | PackageAddonsButton | `checkout/PackageAddonsButton.tsx` (buy add-ons for an owned package) |
 | OrderRetryDelivery | `OrderRetryDelivery.tsx` (retry a failed delivery) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
-| CourseChangeCta / CourseChangeDialog | `course-changes/*` (request a course change) |
+| CourseChangeCta / CourseChangeDialog | `course-changes/*` (request a course change; disabled with a reason when blocked) |
 | CourseChangeRequestsTable | `course-changes/CourseChangeRequestsTable.tsx` (history + Cancel) |
 | AccountContinueWatchingCard `action` | Replaces View with a custom CTA and hides progress / links |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |

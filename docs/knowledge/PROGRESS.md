@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-24 (16:9 course images, orders pagination)
+**Last updated:** 2026-11-25 (course change CTA states, compact account cards)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,9 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Course change CTA states + compact account cards (2026-11-25):**
+  - **CTA on `/account/courses/:id`:** eligibility is per student, so "Course switch under review" shows only when `pendingRequestId` is a request from this course (matched in the request history, `pendingForCourse`). Any other `canRequest: false` (cooldown, limit, request for another course) shows the CTA disabled with `blockedMessage` and the next allowed date. Feature off, or nothing to switch to, hides it.
+  - **Cards below 2xl:** smaller price / coupon / CTA text on `AccountRecommendedCard` and on Buy Courses (`CourseCardV2 compactPricing`). Dashboard Continue Watching and Recommended stay 2 columns until 2xl, then 4.
 - **16:9 course images, coupon tooltip, guest discount, orders pagination (2026-11-24):**
   - **16:9:** every course/package image is `aspect-video`: `CourseCardV2`, continue watching, recommended, cart, checkout, orders (list + dashboard preview), course switch requests, package upgrade, and `PACKAGE` rows in global search. Admin uploads are 16:9, so `object-cover` does not crop.
   - **`ClampTooltip`** also detects horizontal overflow (single-line `truncate` text), so the coupon chip on `AccountRecommendedCard` shows its tooltip.

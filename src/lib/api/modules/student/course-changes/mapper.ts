@@ -141,6 +141,7 @@ export function mapCourseChangeOptions(
       .filter(isOption);
     return {
       summary,
+      pendingForCourse: false,
       changeable: total > 0 || current != null,
       packageId: options.package?.id ?? null,
       packageTitle: current?.label ?? "",
@@ -187,6 +188,7 @@ export function mapCourseChangeOptions(
 
   return {
     summary,
+    pendingForCourse: false,
     changeable: group != null,
     packageId: group ? Number(group.option.value) : null,
     packageTitle: group?.option.label ?? "",
@@ -217,6 +219,8 @@ export function mapCourseChangeRequest(
     reason: asString(request.reason),
     adminRemark: status === "REJECTED" ? asString(request.adminRemark) : "",
     packageTitle: asString(request.package?.title),
+    fromCourseId:
+      typeof request.fromCourse?.id === "number" ? request.fromCourse.id : null,
     fromTitle: asString(request.fromCourse?.title) || "Course",
     fromImageUrl: asString(request.fromCourse?.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
     toTitle: asString(request.toCourse?.title) || "Course",

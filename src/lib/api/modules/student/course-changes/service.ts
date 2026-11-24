@@ -75,7 +75,36 @@ export async function getCourseChangeOptions(
       authed(accessToken)
     );
   }
-  return mapCourseChangeOptions(data, { ...query, limit });
+  const view = mapCourseChangeOptions(data, { ...query, limit });
+  return {
+    ...view,
+    pendingForCourse: await isPendingForCourse(
+      accessToken,
+      view.summary.pendingRequestId,
+      query.courseId
+    ),
+  };
+}
+
+/**
+ * Eligibility is per student, so `pendingRequestId` may belong to another
+ * course; only the history says which one.
+ */
+async function isPendingForCourse(
+  accessToken: string,
+  pendingRequestId: number | null,
+  courseId: number
+): Promise<boolean> {
+  if (pendingRequestId == null) return false;
+  try {
+    // Newest first, and nothing can be raised after an open request.
+    const { items } = await getCourseChangeRequests(accessToken);
+    return items.some(
+      (item) => item.id === pendingRequestId && item.fromCourseId === courseId
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function getCourseChangeRequests(

@@ -138,6 +138,8 @@ export interface CourseChangeFilterOption {
 
 export interface CourseChangeOptionsViewModel {
   summary: CourseChangeSummary;
+  /** The open request is for this course (not another course of the student). */
+  pendingForCourse: boolean;
   /** The course has at least one option in some package. */
   changeable: boolean;
   /** Package the request is for. */
@@ -160,6 +162,7 @@ export interface CourseChangeRequestViewModel {
   packageTitle: string;
   fromTitle: string;
   fromImageUrl: string;
+  fromCourseId: number | null;
   toTitle: string;
   toImageUrl: string;
   requestedLabel: string;

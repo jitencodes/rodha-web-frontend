@@ -18,7 +18,27 @@ interface CourseCardV2Props {
   ctaHref?: string;
   /** CTA link label; defaults to `course.detailsLabel` or "View Details". */
   ctaLabel?: string;
+  /** Smaller price / coupon / CTA text below 2xl (dense account grids). */
+  compactPricing?: boolean;
 }
+
+const PRICING_TEXT = {
+  price: "text-[1.4rem]",
+  originalPrice: "text-body-sm",
+  discount: "text-caption",
+  couponLabel: "text-caption",
+  couponCode: "text-[10px]",
+  cta: "text-body-sm",
+};
+
+const COMPACT_PRICING_TEXT: typeof PRICING_TEXT = {
+  price: "text-[1.1rem] 2xl:text-[1.4rem]",
+  originalPrice: "text-[12px] 2xl:text-body-sm",
+  discount: "text-[10px] 2xl:text-caption",
+  couponLabel: "text-[10px] 2xl:text-caption",
+  couponCode: "text-[9px] 2xl:text-[10px]",
+  cta: "text-[12px] 2xl:text-body-sm",
+};
 
 function stopCarouselDrag(event: SyntheticEvent) {
   event.stopPropagation();
@@ -31,6 +51,7 @@ export function CourseCardV2({
   href,
   ctaHref,
   ctaLabel,
+  compactPricing = false,
 }: CourseCardV2Props) {
   const hasDiscount =
     course.originalPrice != null && course.originalPrice > course.price;
@@ -56,6 +77,7 @@ export function CourseCardV2({
     COURSE_IMAGE_FALLBACK;
   const label = ctaLabel || course.detailsLabel || "View Details";
   const ctaIsDistinct = actionHref !== courseHref;
+  const pricing = compactPricing ? COMPACT_PRICING_TEXT : PRICING_TEXT;
 
   return (
     <article
@@ -120,15 +142,15 @@ export function CourseCardV2({
           </div>
           <div className="mt-auto flex items-end justify-between gap-3 pt-5">
             <div className="min-w-0">
-              <span className="block text-[1.4rem] font-bold leading-none text-neutral-900">
+              <span className={cn("block font-bold text-neutral-900", pricing.price, "leading-none")}>
                 {course.price === 0 ? "FREE" : formatPrice(course.price)}
               </span>
               {hasDiscount && discountPercent > 0 ? (
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                  <span className="text-body-sm text-neutral-400 line-through">
+                  <span className={cn("text-neutral-400 line-through", pricing.originalPrice)}>
                     {formatPrice(course.originalPrice!)}
                   </span>
-                  <span className="text-caption font-bold text-orange-500">
+                  <span className={cn("font-bold text-orange-500", pricing.discount)}>
                     {discountPercent}% OFF
                   </span>
                 </div>
@@ -138,11 +160,11 @@ export function CourseCardV2({
             <div className="flex flex-col items-end gap-2">
               {course.appliedCouponCode?.trim() ? (
                 <div className="flex flex-col items-end gap-1">
-                  <span className="text-caption font-bold text-orange-500">
+                  <span className={cn("font-bold text-orange-500", pricing.couponLabel)}>
                     Eligible Coupon
                   </span>
                   <div className="flex w-fit items-center justify-center rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
-                    <span className="truncate text-center text-[10px] font-bold tracking-wide text-orange-600">
+                    <span className={cn("truncate text-center font-bold tracking-wide text-orange-600", pricing.couponCode)}>
                       {course.appliedCouponCode.trim()}
                     </span>
                   </div>
@@ -155,7 +177,7 @@ export function CourseCardV2({
                   data-carousel-ignore
                   onPointerDown={stopCarouselDrag}
                   onClick={stopCarouselDrag}
-                  className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
+                  className={cn("pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80", pricing.cta)}
                 >
                   {label}
                   <svg
@@ -179,7 +201,7 @@ export function CourseCardV2({
                   data-carousel-ignore
                   onPointerDown={stopCarouselDrag}
                   onClick={stopCarouselDrag}
-                  className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80"
+                  className={cn("pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1.5 font-semibold text-orange-500 transition-all duration-300 hover:gap-2.5 hover:text-orange-500/80", pricing.cta)}
                 >
                   {label}
                   <svg
@@ -197,7 +219,7 @@ export function CourseCardV2({
                 </Link>
               )
             ) : (
-              <span className="inline-flex shrink-0 items-center gap-1.5 text-body-sm font-semibold text-orange-500 transition-all duration-300 group-hover:gap-2.5 group-hover:text-orange-500/80">
+              <span className={cn("inline-flex shrink-0 items-center gap-1.5 font-semibold text-orange-500 transition-all duration-300 group-hover:gap-2.5 group-hover:text-orange-500/80", pricing.cta)}>
                 {label}
                 <svg
                   className="h-3.5 w-3.5"

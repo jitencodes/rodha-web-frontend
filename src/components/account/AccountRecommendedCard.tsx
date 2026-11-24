@@ -86,16 +86,16 @@ export function AccountRecommendedCard({
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
         {/* Existing price section — unchanged */}
         <div className="min-w-0">
-          <span className="block text-base font-bold leading-none text-[var(--account-text)]">
+          <span className="block text-sm leading-none font-bold text-[var(--account-text)] 2xl:text-base 2xl:leading-none">
             {formatPrice(product.price)}
           </span>
 
           {hasDiscount ? (
             <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span className="text-[12px] text-[var(--account-text-muted)] line-through">
+              <span className="text-[11px] text-[var(--account-text-muted)] line-through 2xl:text-[12px]">
                 {formatPrice(product.originalPrice)}
               </span>
-              <span className="text-[11px] font-bold text-[var(--account-accent)]">
+              <span className="text-[10px] font-bold text-[var(--account-accent)] 2xl:text-[11px]">
                 {product.discountPercent}% OFF
               </span>
             </div>
@@ -106,14 +106,14 @@ export function AccountRecommendedCard({
       <div className="flex min-w-0 flex-col items-end gap-2">
         {product.appliedCouponCode?.trim() && (
           <div className="flex max-w-full min-w-0 flex-col items-end gap-1">
-            <span className="text-caption whitespace-nowrap font-medium text-orange-500">
+            <span className="text-[10px] whitespace-nowrap font-medium text-orange-500 2xl:text-caption">
               Eligible Coupon
             </span>
             <div className="w-full flex justify-end">
               <ClampTooltip
                 text={product.appliedCouponCode.trim()}
                 lines={1}
-                className="block rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 min-w-0 w-20 truncate whitespace-nowrap text-[10px] font-bold tracking-wide text-orange-600"
+                className="block rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 min-w-0 w-20 truncate whitespace-nowrap text-[9px] font-bold tracking-wide text-orange-600 2xl:text-[10px]"
                 tooltipClassName="border-orange-300 bg-white text-orange-700 shadow-sm"
               />
             </div>
@@ -125,7 +125,7 @@ export function AccountRecommendedCard({
               <button
                 type="button"
                 onClick={() => onAddToCart(product)}
-                className="flex shrink-0 flex-nowrap cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
+                className="flex shrink-0 flex-nowrap cursor-pointer items-center gap-1.5 text-[12px] font-semibold text-[var(--account-accent)] 2xl:text-[13px] transition-opacity hover:opacity-80"
               >
                 <ShoppingCart className="size-3.5" aria-hidden />
                 <span className="whitespace-nowrap">{label}</span>
@@ -133,7 +133,7 @@ export function AccountRecommendedCard({
             ) : actionHref.startsWith("/api/") ? (
               <a
                 href={actionHref}
-                className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
+                className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-semibold text-[var(--account-accent)] 2xl:text-[13px] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 <span className="whitespace-nowrap">{label}</span>
                 <svg
@@ -152,7 +152,7 @@ export function AccountRecommendedCard({
             ) : (
               <Link
                 href={actionHref}
-                className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
+                className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-semibold text-[var(--account-accent)] 2xl:text-[13px] transition-all hover:gap-2.5 hover:opacity-80"
               >
                 <span className="whitespace-nowrap">{label}</span>
                 <svg

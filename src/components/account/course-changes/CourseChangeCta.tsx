@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { ArrowRightLeft, Clock3 } from "lucide-react";
 import { CourseChangeDialog } from "@/components/account/course-changes/CourseChangeDialog";
@@ -32,10 +32,17 @@ async function fetchOptions(
   }
 }
 
-/** "Request course change" on the course page; hidden when it can't apply. */
+/**
+ * "Request course change" on the course page.
+ * - Feature off, or nothing to switch to: hidden.
+ * - Open request for this course: "under review" link.
+ * - Any other block (cooldown, limit, request for another course): disabled
+ *   with the reason.
+ */
 export function CourseChangeCta({ courseId, courseTitle }: CourseChangeCtaProps) {
   const [data, setData] = useState<CourseChangeOptionsViewModel | null>(null);
   const [open, setOpen] = useState(false);
+  const noteId = useId();
 
   useEffect(() => {
     let cancelled = false;
@@ -59,7 +66,7 @@ export function CourseChangeCta({ courseId, courseTitle }: CourseChangeCtaProps)
   const { summary } = data;
   if (!summary.enabled || summary.blockedReason === "DISABLED") return null;
 
-  if (summary.blockedReason === "PENDING_EXISTS") {
+  if (data.pendingForCourse) {
     return (
       <Link
         href="/account/course-changes"
@@ -70,8 +77,35 @@ export function CourseChangeCta({ courseId, courseTitle }: CourseChangeCtaProps)
       </Link>
     );
   }
+  if (!summary.canRequest) {
+    const reason =
+      summary.blockedMessage || "You cannot request a course change right now.";
+    const note =
+      summary.blockedReason === "COOLDOWN" && summary.nextAllowedLabel
+        ? `${reason} You can request again on ${summary.nextAllowedLabel}.`
+        : reason;
+    return (
+      <div className="flex flex-col gap-1 sm:max-w-64 sm:items-end">
+        <button
+          type="button"
+          disabled
+          aria-describedby={noteId}
+          className="inline-flex h-10 shrink-0 cursor-not-allowed items-center justify-center gap-2 rounded-[var(--account-radius)] border border-[var(--account-border-strong)] px-4 text-[13px] font-semibold text-[var(--account-text-muted)] opacity-60"
+        >
+          <ArrowRightLeft className="size-4" aria-hidden />
+          Request course change
+        </button>
+        <p
+          id={noteId}
+          className="text-[11px] leading-snug text-[var(--account-text-muted)] sm:text-right"
+        >
+          {note}
+        </p>
+      </div>
+    );
+  }
   // Allowed to request, but this course has nothing to switch to.
-  if (summary.canRequest && !data.changeable) return null;
+  if (!data.changeable) return null;
 
   return (
     <>

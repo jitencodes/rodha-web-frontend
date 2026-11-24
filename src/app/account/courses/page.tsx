@@ -345,6 +345,7 @@ export default async function AccountCoursesPage({
               href={`/courses/${course.slug}`}
               ctaHref={course.enrollmentUrl || `/courses/${course.slug}`}
               ctaLabel={course.detailsLabel || "Buy Now"}
+              compactPricing
             />
           ))}
         </div>
