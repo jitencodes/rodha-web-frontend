@@ -18,6 +18,8 @@ Default reference for all website API work. Read Postman first; type real payloa
 - Student registration: `docs/api-collection/Rodha Website Student Registration & Books.postman_collection.json` (`GET`/`POST api/website/student/registration`, `GET api/website/student/profile`)
 - Course changes: `docs/api-collection/Rodha_Course_Changes_FE.postman_collection.json` + requested changes in `docs/API_CHANGES_COURSE_CHANGE_LISTING.md`
 - Package upgrade: `docs/api-collection/Rodha CR  package upgrade.postman_collection.json` (`GET student/packages`, quote, checkout, verify)
+- Add-ons: `docs/api-collection/Rodha_Package_Addons_FE.postman_collection.json` (cart, upgrade, orders)
+- Guest purchase: `docs/api-collection/Rodha CR Single page Purchase Flow.postman_collection.json` (`api/auth/purchase/*`)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
 - Base URL: `NEXT_PUBLIC_API_BASE_URL` with trailing slash (Postman `{{baseUrl}}`)
@@ -125,6 +127,9 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
 | student/course-changes | `GET eligibility`, `GET/POST requests`, `POST requests/:id/cancel` | Course detail dialog, `/account/course-changes` |
 | student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
+| student/cart | `POST cart/items` (`addonIds`), `PATCH` / `DELETE cart/items/:id` | Checkout session + add-ons via `/api/checkout/session`, `/api/checkout/addons`, `/api/checkout/promocode` (all return `mapCheckoutCart`) |
+| auth/purchase | `POST api/auth/purchase/identify`, `email-otp/resend`, `email-otp/verify` | Guest checkout in `CheckoutDrawer` via `/api/auth/purchase/*` |
+| student | `POST orders/:id/retry-fulfill` | My Orders, Retry delivery |
 | student | `GET api/website/student/orders` | My Orders |
 | student/cart | `GET api/website/student/packages/:id/promocodes` + `PATCH .../cart/items/:id` | Checkout Available offers (`mapCheckoutPromocodeOptions`) + coupon box: `{ code }` typed or `{ promocodeId }` listed / `null` remove, via `/api/checkout/promocode` (keeps 400/409) |
 | student/discount-requests | `GET .../discount-requests/config`, `/current?packageId=`, list, `/:id`, `/:id/files/:fileId`; `POST` submit / `/:id/resubmit` (multipart) | `DiscountRequestCta` (course purchase card + checkout), `DiscountRequestDialog`, dashboard `DiscountRequestsSection`; BFF `/api/discount-requests/*` |

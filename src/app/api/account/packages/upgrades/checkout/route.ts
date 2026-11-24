@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { readAddonIds } from "@/lib/api/modules/addons/mapper";
 import { checkoutPackageUpgrade } from "@/lib/api/modules/student/package-upgrades/service";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { bffErrorResponse, bffUnauthorized } from "@/lib/http/bff-response";
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
   }
 
   const stateName = readStateName(body);
+  const addonIds = readAddonIds(record.addonIds);
   const websiteCategoryId =
     typeof record.websiteCategoryId === "number" ||
     typeof record.websiteCategoryId === "string"
@@ -66,6 +68,7 @@ export async function POST(request: Request) {
         targetPackageId,
         ...utm,
         ...(stateName ? { stateName } : {}),
+        ...(addonIds.length ? { addonIds } : {}),
       },
       websiteCategoryId
     );

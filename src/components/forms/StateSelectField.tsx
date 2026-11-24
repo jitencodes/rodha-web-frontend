@@ -22,6 +22,7 @@ type StateSelectFieldProps = {
   /** Auth forms use light; account shell uses `account` for theme tokens. */
   variant?: "dark" | "light" | "account";
   className?: string;
+  triggerClassName?: string;
   required?: boolean;
 };
 
@@ -50,6 +51,7 @@ export function StateSelectField({
   disabled = false,
   variant = "light",
   className,
+  triggerClassName,
   required = false,
 }: StateSelectFieldProps) {
   const [options, setOptions] = useState<
@@ -113,6 +115,7 @@ export function StateSelectField({
         error={error || loadError || undefined}
         aria-label={label}
         className="w-full"
+        triggerClassName={triggerClassName}
         triggerWidth="full"
         menuWidth="trigger"
       />

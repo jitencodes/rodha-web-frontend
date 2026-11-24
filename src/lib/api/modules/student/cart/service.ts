@@ -41,11 +41,12 @@ export async function clearStudentCart(
 export async function addPackageToCart(
   accessToken: string,
   packageId: number,
-  websiteCategoryId?: number | string | null
+  websiteCategoryId?: number | string | null,
+  addonIds: number[] = []
 ): Promise<StudentCartApi> {
-  return apiPost<StudentCartApi, { packageId: number }>(
+  return apiPost<StudentCartApi, { packageId: number; addonIds?: number[] }>(
     `${CART_PATH}/items`,
-    { packageId },
+    { packageId, ...(addonIds.length ? { addonIds } : {}) },
     { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
 }
@@ -66,6 +67,32 @@ export async function setCartItemPromocode(
     body,
     { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
   );
+}
+
+/** Replaces the selected add-ons; the applied promocode stays. */
+export async function setCartItemAddons(
+  accessToken: string,
+  cartItemId: number | string,
+  addonIds: number[],
+  websiteCategoryId?: number | string | null
+): Promise<StudentCartApi> {
+  return apiPatch<StudentCartApi, { addonIds: number[] }>(
+    `${CART_PATH}/items/${cartItemId}`,
+    { addonIds },
+    { accessToken, headers: websiteCategoryHeaders(websiteCategoryId) }
+  );
+}
+
+/** Removes the package line and its add-ons. */
+export async function removeCartItem(
+  accessToken: string,
+  cartItemId: number | string,
+  websiteCategoryId?: number | string | null
+): Promise<StudentCartApi> {
+  return apiDelete<StudentCartApi>(`${CART_PATH}/items/${cartItemId}`, {
+    accessToken,
+    headers: websiteCategoryHeaders(websiteCategoryId),
+  });
 }
 
 export async function getPackagePromocodes(

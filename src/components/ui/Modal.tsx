@@ -20,13 +20,13 @@ export function Modal({ isOpen, onClose, children, title, className }: ModalProp
   );
 
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
-    }
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen, handleEscape]);
 
@@ -36,6 +36,9 @@ export function Modal({ isOpen, onClose, children, title, className }: ModalProp
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         className={cn(
           "relative w-full max-w-lg bg-bg-tertiary border border-border-default rounded-lg shadow-lg animate-scale-in",
           className

@@ -3,6 +3,7 @@ import {
   CoursePurchaseCard,
   type CoursePurchaseDiscountProps,
 } from "@/components/cards/CoursePurchaseCard";
+import { PackageCheckoutProvider } from "@/components/checkout/PackageCheckoutProvider";
 import { CourseHeroSection } from "@/components/sections/course/CourseHeroSection";
 import { CourseDetailsCurriculumSection } from "@/components/sections/course/CourseDetailsCurriculumSection";
 import { CourseFacultySection } from "@/components/sections/course/CourseFacultySection";
@@ -24,6 +25,8 @@ import {
 import type { CheckoutPromocodeOption } from "@/lib/api/modules/student/cart/types";
 import type { PackageCardViewModel } from "@/lib/api/modules/packages/types";
 import { packageCardToCourse } from "@/lib/api/modules/packages/mapper";
+import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
+import { packageBuyNowHref, packageViewCourseHref } from "@/lib/packages/buy-now";
 import {
   breadcrumbJsonLd,
   courseJsonLd,
@@ -47,6 +50,8 @@ interface CourseDetailPageProps {
   discount?: CoursePurchaseDiscountProps;
   /** Listed package promocodes for the purchase card. */
   promocodeOffers?: CheckoutPromocodeOption[];
+  /** Add-ons the viewer can still buy with this package. */
+  availableAddonCount?: number;
   faqsOverride?: FaqItem[];
   similarPackages?: PackageCardViewModel[];
   facultyOverride?: Faculty[];
@@ -64,6 +69,7 @@ export function CourseDetailPageView({
   isLoggedIn = false,
   discount,
   promocodeOffers = [],
+  availableAddonCount = 0,
   faqsOverride,
   similarPackages,
   facultyOverride,
@@ -80,7 +86,14 @@ export function CourseDetailPageView({
       : getFacultyForCourse(course);
   const relatedCourses =
     similarPackages !== undefined
-      ? similarPackages.map((pkg) => packageCardToCourse(pkg, course.category))
+      ? similarPackages.map((pkg) => ({
+          ...packageCardToCourse(pkg, course.category),
+          enrollmentUrl: pkg.isSelfEnrolled
+            ? packageViewCourseHref(pkg.packageId)
+            : pkg.packageId != null
+              ? packageBuyNowHref(pkg.packageId, pkg.slug)
+              : "",
+        }))
       : getRelatedCourses(course, 8);
   const testimonials =
     testimonialsOverride !== undefined
@@ -100,7 +113,7 @@ export function CourseDetailPageView({
     { label: course.title },
   ];
 
-  return (
+  const content = (
     <>
       <script
         type="application/ld+json"
@@ -146,6 +159,7 @@ export function CourseDetailPageView({
                   isLoggedIn={isLoggedIn}
                   discount={discount}
                   promocodeOffers={promocodeOffers}
+                  availableAddonCount={availableAddonCount}
                 />
               </div>
             </div>
@@ -181,6 +195,7 @@ export function CourseDetailPageView({
                 isLoggedIn={isLoggedIn}
                 discount={discount}
                 promocodeOffers={promocodeOffers}
+                availableAddonCount={availableAddonCount}
               />
             </div>
           </Container>
@@ -205,5 +220,24 @@ export function CourseDetailPageView({
       <CourseFaqSection faqs={faqs} />
       <CourseEnquireStickyBar defaultExam={course.category} />
     </>
+  );
+
+  if (packageId == null) return content;
+
+  return (
+    <PackageCheckoutProvider
+      isLoggedIn={isLoggedIn}
+      product={{
+        packageId,
+        slug: course.slug,
+        title: course.title,
+        thumbnail: course.thumbnail || course.image || COURSE_IMAGE_FALLBACK,
+        detailsHref: coursePath,
+        price: course.price,
+        originalPrice: course.originalPrice ?? null,
+      }}
+    >
+      {content}
+    </PackageCheckoutProvider>
   );
 }

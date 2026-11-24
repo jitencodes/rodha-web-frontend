@@ -52,7 +52,7 @@ export function AccountRecommendedCard({
     >
       <Link
         href={product.href}
-        className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--account-border)]"
+        className="relative aspect-video w-full overflow-hidden bg-[var(--account-border)]"
         aria-label={product.title}
       >
         <Image
@@ -109,11 +109,11 @@ export function AccountRecommendedCard({
             <span className="text-caption whitespace-nowrap font-medium text-orange-500">
               Eligible Coupon
             </span>
-            <div className="w-full max-w-[120px] min-w-0 rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1">
+            <div className="w-full flex justify-end">
               <ClampTooltip
                 text={product.appliedCouponCode.trim()}
                 lines={1}
-                className="block min-w-0 w-full text-[10px] font-bold tracking-wide text-orange-600"
+                className="block rounded-sm border border-dashed border-orange-400 bg-white/70 px-2 py-1 min-w-0 w-20 truncate whitespace-nowrap text-[10px] font-bold tracking-wide text-orange-600"
                 tooltipClassName="border-orange-300 bg-white text-orange-700 shadow-sm"
               />
             </div>
@@ -128,14 +128,14 @@ export function AccountRecommendedCard({
                 className="flex shrink-0 flex-nowrap cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-opacity hover:opacity-80"
               >
                 <ShoppingCart className="size-3.5" aria-hidden />
-                {label}
+                <span className="whitespace-nowrap">{label}</span>
               </button>
             ) : actionHref.startsWith("/api/") ? (
               <a
                 href={actionHref}
                 className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
-                {label}
+                <span className="whitespace-nowrap">{label}</span>
                 <svg
                   className="h-3.5 w-3.5"
                   viewBox="0 0 20 20"
@@ -154,7 +154,7 @@ export function AccountRecommendedCard({
                 href={actionHref}
                 className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-[var(--account-accent)] transition-all hover:gap-2.5 hover:opacity-80"
               >
-                {label}
+                <span className="whitespace-nowrap">{label}</span>
                 <svg
                   className="h-3.5 w-3.5"
                   viewBox="0 0 20 20"

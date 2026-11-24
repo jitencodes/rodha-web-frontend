@@ -5,6 +5,7 @@ import { ArrowUpRight, BadgePercent } from "lucide-react";
 
 import { PackageUpgradeCheckoutClient } from "@/components/account/PackageUpgradeCheckoutClient";
 import { formatCartMoney } from "@/lib/account/cart-totals";
+import type { EnrolledPackageViewModel } from "@/lib/api/modules/student/package-upgrades/types";
 import {
   getStudentEnrolledPackages,
   getUpgradeQuote,
@@ -14,6 +15,7 @@ import {
   redirectSessionExpired,
   withStudentAuth,
 } from "@/lib/auth/require-student";
+import { ApiError } from "@/lib/api/types";
 import { buildPageMetadata } from "@/lib/seo";
 import Image from "next/image";
 
@@ -48,31 +50,40 @@ export default async function PackageUpgradePage({
   }
 
   const data = await withStudentAuth(async (accessToken) => {
+    const returnPath = `/account/packages/upgrade?enrollmentId=${enrollmentId}`;
+    let source: EnrolledPackageViewModel | null = null;
     try {
       const packages = await getStudentEnrolledPackages(accessToken);
-      const source = packages.find((pkg) => pkg.enrollmentId === enrollmentId);
-      if (!source) return { source: null, quote: null as null };
-
-      if (Number.isFinite(targetPackageId) && targetPackageId > 0) {
-        const quote = await getUpgradeQuote(
-          accessToken,
-          {
-            sourceEnrollmentId: enrollmentId,
-            targetPackageId,
-          },
-          source.websiteCategoryId
-        );
-        return { source, quote };
-      }
-
-      return { source, quote: null };
+      source = packages.find((pkg) => pkg.enrollmentId === enrollmentId) ?? null;
     } catch (error) {
-      if (isUnauthorizedError(error)) {
-        redirectSessionExpired(
-          `/account/packages/upgrade?enrollmentId=${enrollmentId}`
-        );
-      }
-      return { source: null, quote: null };
+      if (isUnauthorizedError(error)) redirectSessionExpired(returnPath);
+    }
+    if (!source || !(Number.isFinite(targetPackageId) && targetPackageId > 0)) {
+      return { source, quote: null, quoteError: null };
+    }
+
+    try {
+      const quote = await getUpgradeQuote(
+        accessToken,
+        { sourceEnrollmentId: enrollmentId, targetPackageId },
+        source.websiteCategoryId
+      );
+      return {
+        source,
+        quote,
+        quoteError: quote ? null : "Unable to load this upgrade right now.",
+      };
+    } catch (error) {
+      if (isUnauthorizedError(error)) redirectSessionExpired(returnPath);
+      // 400 not an upgrade target · 409 already enrolled in the target.
+      return {
+        source,
+        quote: null,
+        quoteError:
+          error instanceof ApiError && error.status < 500
+            ? error.message
+            : "Unable to load this upgrade right now.",
+      };
     }
   }, `/account/packages/upgrade?enrollmentId=${enrollmentId}`);
 
@@ -80,7 +91,7 @@ export default async function PackageUpgradePage({
     notFound();
   }
 
-  const { source, quote } = data;
+  const { source, quote, quoteError } = data;
   const upgrades = source.availableUpgrades;
 
   return (
@@ -105,6 +116,15 @@ export default async function PackageUpgradePage({
             : `Select a plan to upgrade from ${source.title}.`}
         </p>
       </header>
+
+      {quoteError ? (
+        <p
+          role="alert"
+          className="mb-4 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-status-pending-bg)] px-4 py-3 text-[13px] font-medium text-[var(--account-status-pending-text)]"
+        >
+          {quoteError}
+        </p>
+      ) : null}
 
       {!quote ? (
         upgrades.length === 0 ? (
@@ -131,13 +151,15 @@ export default async function PackageUpgradePage({
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
-                    <Image
-                      src={upgrade.bannerImageUrl}
-                      alt={upgrade.title}
-                      width={100}
-                      height={100}
-                      className="rounded-[var(--account-radius)]"
-                    />
+                    <div className="relative mb-3 aspect-video w-40 overflow-hidden rounded-[var(--account-radius)] bg-[var(--account-border)]">
+                      <Image
+                        src={upgrade.bannerImageUrl}
+                        alt={upgrade.title}
+                        fill
+                        className="object-cover"
+                        sizes="160px"
+                      />
+                    </div>
                     <p className="text-[15px] font-semibold text-[var(--account-text)]">
                       {upgrade.title}
                     </p>

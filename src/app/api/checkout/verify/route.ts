@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAccessToken } from "@/lib/auth/server-session";
 import { verifyRazorpayPayment } from "@/lib/api/modules/student/cart/service";
 import { resolveWebsiteCategoryId } from "@/lib/api/website-category";
-import { ApiError } from "@/lib/api/types";
+import { bffErrorResponse } from "@/lib/http/bff-response";
 
 export const runtime = "nodejs";
 
@@ -56,10 +56,6 @@ export async function POST(request: Request) {
     );
     return NextResponse.json({ ok: true, ...verified });
   } catch (error) {
-    const message =
-      error instanceof ApiError
-        ? error.message
-        : "Payment verification failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 502 });
+    return bffErrorResponse(error, "Payment verification failed");
   }
 }

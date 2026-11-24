@@ -1,5 +1,7 @@
+import type { AddonCarrierApi } from "@/lib/api/modules/addons/types";
+
 /** Package list item from `GET /website/packages`. */
-export interface PackageListItemApi {
+export interface PackageListItemApi extends AddonCarrierApi {
   id: number | string;
   slug: string;
   bannerImageUrl?: string | null;

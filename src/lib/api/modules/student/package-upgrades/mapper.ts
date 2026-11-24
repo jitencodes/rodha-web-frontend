@@ -1,3 +1,4 @@
+import { mapCarrierAddons } from "@/lib/api/modules/addons/mapper";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
 import type { Course } from "@/lib/types";
 import type {
@@ -104,6 +105,7 @@ export function mapEnrolledPackage(
     courseCount: Array.isArray(item?.courses) ? item.courses.length : 0,
     websiteCategoryId,
     status: asString(item?.status) || "ACTIVE",
+    availableAddons: mapCarrierAddons(item).filter((addon) => addon.selectable),
     availableUpgrades: upgrades,
   };
 }
@@ -199,5 +201,6 @@ export function mapUpgradeQuote(
     creditSource: asString(data?.creditSource) || null,
     payableAmount,
     isFree,
+    addons: mapCarrierAddons(data?.targetPackage),
   };
 }

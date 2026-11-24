@@ -13,12 +13,14 @@ export function packageViewCourseHref(packageId: number | string | null): string
   return `/account/courses?tab=continue&packageId=${encodeURIComponent(String(packageId))}`;
 }
 
+/** `/courses/:slug?checkout=1` opens the checkout sidebar on arrival. */
+export const CHECKOUT_OPEN_QUERY = "checkout";
+
+/** Buy Now from a card: the package page with the checkout sidebar open. */
 export function packageBuyNowHref(packageId: number | string, slug?: string): string {
-  const params = new URLSearchParams({
-    packageId: String(packageId),
-  });
-  if (slug) params.set("slug", slug);
-  return `/api/checkout/buy?${params.toString()}`;
+  if (slug) return `${packageDetailHref(slug)}?${CHECKOUT_OPEN_QUERY}=1`;
+  // No page to open the sidebar on: straight to the checkout page.
+  return `/api/checkout/buy?packageId=${encodeURIComponent(String(packageId))}`;
 }
 
 /** Keep checkout on the host the browser opened (IP, domain, or localhost). */
@@ -35,9 +37,4 @@ export function sameOriginBuyHref(href: string): string {
 
 export function isPackageBuyNowHref(href: string): boolean {
   return sameOriginBuyHref(href).startsWith("/api/checkout/buy");
-}
-
-export function packageLoginBuyHref(packageId: number | string, slug?: string): string {
-  const next = packageBuyNowHref(packageId, slug);
-  return `/login?next=${encodeURIComponent(next)}`;
 }

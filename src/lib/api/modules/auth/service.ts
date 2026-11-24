@@ -1,5 +1,9 @@
 import { apiGet, apiPatch, apiPost } from "@/lib/api/client";
-import { mapAuthSession, mapAuthUser } from "@/lib/api/modules/auth/mapper";
+import {
+  mapAuthSession,
+  mapAuthUser,
+  mapPurchaseIdentify,
+} from "@/lib/api/modules/auth/mapper";
 import type {
   AuthForgotPasswordRequest,
   AuthGoogleRequest,
@@ -11,6 +15,9 @@ import type {
   AuthSignupRequest,
   AuthUserApi,
   AuthUserViewModel,
+  PurchaseIdentifyApi,
+  PurchaseIdentifyRequest,
+  PurchaseIdentifyViewModel,
 } from "@/lib/api/modules/auth/types";
 import { ApiError } from "@/lib/api/types";
 
@@ -19,6 +26,7 @@ const LOGIN_PATH = "api/auth/user/login";
 const GOOGLE_PATH = "api/auth/user/google";
 const FORGOT_PASSWORD_PATH = "api/auth/user/forgot-password";
 const RESET_PASSWORD_PATH = "api/auth/user/reset-password";
+const PURCHASE_PATH = "api/auth/purchase";
 const ME_PATH = "api/auth/me";
 const ME_DETAILS_PATH = "api/auth/me/details";
 
@@ -71,6 +79,45 @@ export async function loginWithGoogle(input: {
     is_web: true,
   };
   return postSession(GOOGLE_PATH, body);
+}
+
+/** Guest checkout: start a purchase journey and learn how this email signs in. */
+export async function identifyPurchaseGuest(
+  body: PurchaseIdentifyRequest
+): Promise<PurchaseIdentifyViewModel> {
+  const data = await apiPost<PurchaseIdentifyApi, PurchaseIdentifyRequest>(
+    `${PURCHASE_PATH}/identify`,
+    body
+  );
+  const mapped = mapPurchaseIdentify(data);
+  if (!mapped) {
+    throw new ApiError("Purchase identity response was incomplete", 502, data);
+  }
+  return mapped;
+}
+
+/** Emails the purchase OTP; the API uses one endpoint to send and resend. */
+export async function sendPurchaseOtp(input: {
+  journeyId: number;
+  email: string;
+}): Promise<void> {
+  await apiPost<unknown, { journeyId: number; email: string }>(
+    `${PURCHASE_PATH}/email-otp/resend`,
+    { journeyId: input.journeyId, email: input.email.trim() }
+  );
+}
+
+/** Verifies the email OTP and signs the student in (creates new accounts). */
+export async function verifyPurchaseOtp(input: {
+  journeyId: number;
+  email: string;
+  otp: string;
+}): Promise<AuthSessionViewModel> {
+  return postSession(`${PURCHASE_PATH}/email-otp/verify`, {
+    journeyId: input.journeyId,
+    email: input.email.trim(),
+    otp: input.otp.trim(),
+  });
 }
 
 export async function forgotPassword(input: {

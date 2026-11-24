@@ -1,4 +1,6 @@
-import { apiGet } from "@/lib/api/client";
+import { apiGet, apiPost } from "@/lib/api/client";
+import { mapOrderAddons } from "@/lib/api/modules/addons/mapper";
+import type { OrderAddonApi } from "@/lib/api/modules/addons/types";
 import { buildApiQuery } from "@/lib/api/query";
 import type {
   AccountOrder,
@@ -13,7 +15,12 @@ interface OrderItemApi {
   packageTitle?: string;
   package?: { bannerImageUrl?: string | null; slug?: string } | null;
   course?: { bannerImageUrl?: string | null } | null;
+  listPrice?: number | null;
+  salePrice?: number | null;
   payableAmount?: number;
+  /** `ASSIGNED` | `FAILED` | … */
+  graphyAssignStatus?: string | null;
+  addons?: OrderAddonApi[] | null;
 }
 
 interface OrderApi {
@@ -93,6 +100,17 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
     "Order";
   const status = mapOrderStatus(order.status);
   const paymentStatus = mapPaymentStatus(order.status, order.payments);
+  const orderItems = order.items ?? [];
+  const addons = orderItems.flatMap((item) => mapOrderAddons(item.addons));
+  // Buying add-ons for an owned package zeroes every package price.
+  const addonsOnly =
+    addons.length > 0 &&
+    orderItems.every((item) => item.listPrice === 0 && item.salePrice === 0);
+  const deliveryFailed =
+    paymentStatus === "paid" &&
+    orderItems.some(
+      (item) => (item.graphyAssignStatus || "").toUpperCase() === "FAILED"
+    );
 
   return {
     id: String(order.id),
@@ -112,6 +130,9 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
       first?.course?.bannerImageUrl ||
       COURSE_IMAGE_FALLBACK,
     href: order.invoices?.[0]?.pdfUrl || undefined,
+    addons,
+    addonsOnly,
+    deliveryFailed,
   };
 }
 
@@ -135,4 +156,16 @@ export async function getStudentOrders(
     page: data.pagination?.page ?? page,
     totalPages: data.pagination?.totalPages ?? 1,
   };
+}
+
+/** Repeats only what failed. 409 = refunded or access removed. */
+export async function retryOrderFulfillment(
+  accessToken: string,
+  orderId: string
+): Promise<void> {
+  await apiPost<unknown, Record<string, never>>(
+    `api/website/student/orders/${encodeURIComponent(orderId)}/retry-fulfill`,
+    {},
+    { accessToken, headers: websiteCategoryHeaders() }
+  );
 }

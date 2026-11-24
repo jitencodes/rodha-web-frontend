@@ -74,7 +74,7 @@ export function CourseCardV2({
       />
 
       <div className="relative z-[1] flex h-full flex-col pointer-events-none">
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#FFF3E8]">
+        <div className="relative aspect-video w-full overflow-hidden bg-[#FFF3E8]">
           <Image
             src={posterSrc}
             alt={course.title}
