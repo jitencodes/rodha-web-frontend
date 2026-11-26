@@ -216,6 +216,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | usePayGate | `checkout/usePayGate.tsx` (mobile by OTP + state steps before payment; checkout + upgrade) |
 | PackageAddonsButton | `checkout/PackageAddonsButton.tsx` (buy add-ons for an owned package) |
 | OrderRetryDelivery | `OrderRetryDelivery.tsx` (retry a failed delivery) |
+| OrderInvoiceButton | `OrderInvoiceButton.tsx` (paid-order invoice: background poll while the PDF generates; click → retry-fulfill + poll, then open) |
+| PendingUpgradeNotice | `PendingUpgradeNotice.tsx` (unpaid upgrade: Complete payment via resume → Razorpay → verify, or Cancel; `compact` for Manage Packages cards) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
 | CourseChangeCta / CourseChangeDialog | `course-changes/*` (request a course change; disabled with a reason when blocked) |
 | CourseChangeRequestsTable | `course-changes/CourseChangeRequestsTable.tsx` (history + Cancel) |

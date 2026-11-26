@@ -5,7 +5,7 @@ import { bffErrorResponse, bffUnauthorized } from "@/lib/http/bff-response";
 
 export const runtime = "nodejs";
 
-/** Repeat only the delivery steps that failed for a paid order. */
+/** Repeat what failed for a paid order (delivery and/or invoice PDF). */
 export async function POST(
   _request: Request,
   { params }: { params: Promise<{ orderId: string }> }
@@ -19,8 +19,8 @@ export async function POST(
   }
 
   try {
-    await retryOrderFulfillment(accessToken, orderId);
-    return NextResponse.json({ ok: true });
+    const { invoicePdfUrl } = await retryOrderFulfillment(accessToken, orderId);
+    return NextResponse.json({ ok: true, invoicePdfUrl });
   } catch (error) {
     return bffErrorResponse(error, "Unable to retry delivery right now.");
   }

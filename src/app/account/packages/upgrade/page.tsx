@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowUpRight, BadgePercent } from "lucide-react";
 
 import { PackageUpgradeCheckoutClient } from "@/components/account/PackageUpgradeCheckoutClient";
+import { PendingUpgradeNotice } from "@/components/account/PendingUpgradeNotice";
 import { formatCartMoney } from "@/lib/account/cart-totals";
 import type { EnrolledPackageViewModel } from "@/lib/api/modules/student/package-upgrades/types";
 import {
@@ -58,7 +59,12 @@ export default async function PackageUpgradePage({
     } catch (error) {
       if (isUnauthorizedError(error)) redirectSessionExpired(returnPath);
     }
-    if (!source || !(Number.isFinite(targetPackageId) && targetPackageId > 0)) {
+    // A pending upgrade must be resumed or cancelled first (quote would 409).
+    if (
+      !source ||
+      source.pendingUpgrade ||
+      !(Number.isFinite(targetPackageId) && targetPackageId > 0)
+    ) {
       return { source, quote: null, quoteError: null };
     }
 
@@ -93,6 +99,37 @@ export default async function PackageUpgradePage({
 
   const { source, quote, quoteError } = data;
   const upgrades = source.availableUpgrades;
+  const pendingUpgrade = source.pendingUpgrade;
+
+  if (pendingUpgrade) {
+    return (
+      <div className="mx-auto w-full max-w-3xl">
+        <header className="mb-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wide text-[var(--account-text-muted)]">
+            <Link
+              href="/account/packages"
+              className="hover:text-[var(--account-accent)]"
+            >
+              Manage Packages
+            </Link>
+            <span className="mx-1.5">/</span>
+            Upgrade
+          </p>
+          <h1 className="mt-1 font-montserrat text-h3 font-bold text-[var(--account-text)]">
+            Complete your upgrade
+          </h1>
+          <p className="mt-1 text-body-sm text-[var(--account-text-muted)]">
+            Your last upgrade payment for {source.title} was not completed.
+          </p>
+        </header>
+        <PendingUpgradeNotice
+          pending={pendingUpgrade}
+          sourceTitle={source.title}
+          websiteCategoryId={source.websiteCategoryId}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-3xl">

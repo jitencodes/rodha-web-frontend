@@ -31,6 +31,28 @@ export interface AvailableUpgradeApi {
   sortOrder?: number | null;
 }
 
+/** Upgrade checkout left PENDING (Razorpay closed before paying). */
+export interface PendingUpgradeApi {
+  upgradeId?: number;
+  orderId?: number;
+  orderNumber?: string;
+  status?: string;
+  sourceEnrollmentId?: number;
+  sourcePackageId?: number;
+  targetPackageId?: number;
+  targetPackage?: {
+    id?: number;
+    slug?: string;
+    title?: string;
+    bannerImageUrl?: string | null;
+  } | null;
+  payableAmount?: number | null;
+  currency?: string;
+  razorpayOrderId?: string | null;
+  canResume?: boolean;
+  canCancel?: boolean;
+}
+
 export interface EnrolledPackageCourseApi {
   id?: number;
   graphyProductId?: string | null;
@@ -68,6 +90,10 @@ export interface EnrolledPackageApi extends AddonCarrierApi {
   batchEnrolled?: UpgradeNamedRefApi | null;
   courses?: EnrolledPackageCourseApi[];
   availableUpgrades?: AvailableUpgradeApi[];
+  /** Set while an upgrade is unpaid; `availableUpgrades` is then `[]`. */
+  pendingUpgrade?: PendingUpgradeApi | null;
+  /** `/enrollments` nests package fields here. */
+  package?: { pendingUpgrade?: PendingUpgradeApi | null } | null;
   order?: unknown;
   websiteCategoryId?: number | null;
 }
@@ -143,6 +169,33 @@ export interface UpgradeVerifyResponseApi {
   upgradeStatus?: string;
 }
 
+export interface UpgradeResumeResponseApi extends UpgradeCheckoutResponseApi {
+  targetPackageTitle?: string;
+}
+
+export interface UpgradeCancelResponseApi {
+  orderId?: number;
+  orderNumber?: string;
+  orderStatus?: string;
+  upgradeId?: number;
+  upgradeStatus?: string;
+}
+
+export interface PendingUpgradeViewModel {
+  orderId: number;
+  orderNumber: string;
+  upgradeId: number | null;
+  targetPackageId: number | null;
+  /** Empty when the API omits `targetPackage` (flat `/packages` shape). */
+  targetTitle: string;
+  targetSlug: string;
+  targetImageUrl: string;
+  payableAmount: number;
+  currency: string;
+  canResume: boolean;
+  canCancel: boolean;
+}
+
 export interface AvailableUpgradeViewModel {
   id: number;
   slug: string;
@@ -174,6 +227,8 @@ export interface EnrolledPackageViewModel {
   /** Add-ons the student can still buy for this package. */
   availableAddons: AddonViewModel[];
   availableUpgrades: AvailableUpgradeViewModel[];
+  /** Unpaid upgrade to resume or cancel; options stay hidden until it is cancelled. */
+  pendingUpgrade: PendingUpgradeViewModel | null;
 }
 
 export interface UpgradeQuoteViewModel {

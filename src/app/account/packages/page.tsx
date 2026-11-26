@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { PendingUpgradeNotice } from "@/components/account/PendingUpgradeNotice";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
 import { PackageAddonsButton } from "@/components/checkout/PackageAddonsButton";
 import {
@@ -62,7 +63,9 @@ export default async function AccountPackagesPage() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {packages.map((pkg) => {
             const course = enrolledPackageToCourse(pkg);
-            const hasUpgrades = pkg.availableUpgrades.length > 0;
+            // A pending upgrade empties `availableUpgrades` until resumed or cancelled.
+            const hasUpgrades =
+              pkg.pendingUpgrade != null || pkg.availableUpgrades.length > 0;
             return (
               <div key={pkg.enrollmentId} className="flex h-full flex-col gap-2.5">
                 <CourseCardV2
@@ -76,8 +79,16 @@ export default async function AccountPackagesPage() {
                         ? `/courses/${pkg.slug}`
                         : undefined
                   }
-                  ctaLabel={hasUpgrades ? "Available upgrades" : "View package"}
+                  ctaLabel={course.detailsLabel}
                 />
+                {pkg.pendingUpgrade ? (
+                  <PendingUpgradeNotice
+                    compact
+                    pending={pkg.pendingUpgrade}
+                    sourceTitle={pkg.title}
+                    websiteCategoryId={pkg.websiteCategoryId}
+                  />
+                ) : null}
                 {pkg.availableAddons.length > 0 ? (
                   <PackageAddonsButton
                     count={pkg.availableAddons.length}

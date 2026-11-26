@@ -14,6 +14,7 @@ import {
   Tag,
   Wallet,
 } from "lucide-react";
+import { toast } from "sonner";
 import { AddonPicker } from "@/components/checkout/AddonPicker";
 import { usePayGate } from "@/components/checkout/usePayGate";
 import { formatCartMoney } from "@/lib/account/cart-totals";
@@ -165,8 +166,13 @@ export function PackageUpgradeCheckoutClient({
         description: `Upgrade to ${quote.targetTitle}`,
       });
       if (!payment) {
-        setError("Payment cancelled");
+        // The order is now a pending upgrade: show Complete payment / Cancel.
         releasePay();
+        toast.info("Payment not completed. You can resume or cancel this upgrade.");
+        router.replace(
+          `/account/packages/upgrade?enrollmentId=${quote.sourceEnrollmentId}`
+        );
+        router.refresh();
         return;
       }
 

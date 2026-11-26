@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-25 (archive courses, email / mobile verification, package add-ons, registration gate)
+**Last updated:** 2026-11-26 (pending package upgrade resume / cancel, invoice PDF polling)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,9 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Pending package upgrade + invoice PDF (2026-11-26):** per `docs/FE_INTEGRATION_PACKAGE_UPGRADE_PENDING_INVOICE.md` and the `Rodha_Package_Upgrade_Pending_Invoice_FE` Postman collection.
+  - **Pending upgrade:** closing Razorpay leaves the upgrade PENDING and the API returns `pendingUpgrade` with `availableUpgrades: []`. Manage Packages keeps the card CTA ("Complete upgrade") and shows `PendingUpgradeNotice` (Complete payment / Cancel upgrade). `/account/packages/upgrade` shows the same panel instead of the options and skips the quote (it would 409). Resume → `/api/account/packages/upgrades/resume` → Razorpay → existing verify; 409 (session missing) leaves only Cancel. Cancel → `/api/account/packages/upgrades/cancel` → refresh, options return. Dismissing Razorpay in upgrade checkout now lands on the pending panel.
+  - **Invoices:** every paid order has an active Download Invoice. When `invoices[].pdfUrl` is null the button polls `/api/account/orders/:id/invoice` (3s, 60s cap) in the background if an invoice row exists; a click calls `retry-fulfill` (re-queues the PDF), uses its `invoice.pdfUrl` or polls, then opens the PDF. Unpaid orders keep a disabled button. Orders with `kind: UPGRADE` are labelled "Upgrade".
 - **Archive courses, email / mobile verification, WEBSITE_PACKAGE add-ons, registration gate (2026-11-25):**
   - **Archive:** `/account/courses?tab=archived` (count in the tab, same filters / pagination as Continue Watching, no live classes or quick actions). `CourseArchiveButton` on cards and `/account/courses/:id`, with Undo. An emptied last page redirects to the previous one. Continue Watching links to Archived when a filter finds nothing.
   - **Verification:** `StudentGateProvider` (was `RegistrationGateProvider`) reads `GET auth/me` through `/api/account/gate-status` and shows one gate at a time: overdue first, then email → mobile → registration. Reminders are dismissible (1h); overdue ones block `/account`. `VerifyContactDialog` sends and verifies the OTP through `/api/account/verification/[channel]/send|verify`.

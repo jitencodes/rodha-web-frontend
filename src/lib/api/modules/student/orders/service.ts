@@ -27,6 +27,8 @@ interface OrderApi {
   id: number | string;
   orderNumber?: string;
   status?: string;
+  /** `PURCHASE` | `UPGRADE` */
+  kind?: string;
   payableAmount?: number;
   subtotalAmount?: number;
   discountAmount?: number;
@@ -91,6 +93,13 @@ function formatDate(iso: string | null | undefined): string {
   });
 }
 
+function readInvoicePdfUrl(
+  order: Pick<OrderApi, "invoices"> | null | undefined
+): string | null {
+  const url = order?.invoices?.find((invoice) => invoice.pdfUrl?.trim())?.pdfUrl;
+  return url?.trim() || null;
+}
+
 export function mapStudentOrder(order: OrderApi): AccountOrder {
   const first = order.items?.[0];
   const title =
@@ -129,7 +138,14 @@ export function mapStudentOrder(order: OrderApi): AccountOrder {
       first?.package?.bannerImageUrl ||
       first?.course?.bannerImageUrl ||
       COURSE_IMAGE_FALLBACK,
-    href: order.invoices?.[0]?.pdfUrl || undefined,
+    href: readInvoicePdfUrl(order) ?? undefined,
+    // The PDF is built on a queue after payment, so `pdfUrl` can lag behind.
+    invoiceAvailable: paymentStatus === "paid",
+    invoiceGenerating:
+      paymentStatus === "paid" &&
+      (order.invoices?.length ?? 0) > 0 &&
+      !readInvoicePdfUrl(order),
+    isUpgrade: (order.kind || "").toUpperCase() === "UPGRADE",
     addons,
     addonsOnly,
     deliveryFailed,
@@ -158,14 +174,38 @@ export async function getStudentOrders(
   };
 }
 
-/** Repeats only what failed. 409 = refunded or access removed. */
+/** Invoice PDF link of one order, or `null` while the PDF is still generating. */
+export async function getStudentOrderInvoiceUrl(
+  accessToken: string,
+  orderId: string
+): Promise<string | null> {
+  const order = await apiGet<OrderApi>(
+    `api/website/student/orders/${encodeURIComponent(orderId)}`,
+    {
+      accessToken,
+      cache: "no-store",
+      headers: websiteCategoryHeaders(),
+    }
+  );
+  return readInvoicePdfUrl(order);
+}
+
+interface RetryFulfillApi {
+  invoice?: { pdfUrl?: string | null } | null;
+}
+
+/**
+ * Repeats only what failed: delivery and/or a missing invoice PDF (re-queued).
+ * Returns the PDF link when it is already there. 409 = refunded or access removed.
+ */
 export async function retryOrderFulfillment(
   accessToken: string,
   orderId: string
-): Promise<void> {
-  await apiPost<unknown, Record<string, never>>(
+): Promise<{ invoicePdfUrl: string | null }> {
+  const data = await apiPost<RetryFulfillApi | null, Record<string, never>>(
     `api/website/student/orders/${encodeURIComponent(orderId)}/retry-fulfill`,
     {},
     { accessToken, headers: websiteCategoryHeaders() }
   );
+  return { invoicePdfUrl: data?.invoice?.pdfUrl?.trim() || null };
 }

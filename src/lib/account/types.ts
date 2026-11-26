@@ -100,7 +100,14 @@ export interface AccountOrder {
   paymentStatusLabel: string;
   amount: number;
   thumbnail?: string;
+  /** Invoice PDF link, when generated. */
   href?: string;
+  /** Paid: an invoice can be fetched or (re)generated. */
+  invoiceAvailable?: boolean;
+  /** Invoice row exists but its PDF is still on the queue. */
+  invoiceGenerating?: boolean;
+  /** `kind: UPGRADE` order. */
+  isUpgrade?: boolean;
   /** Add-ons bought in this order. */
   addons?: OrderAddonViewModel[];
   /** Add-ons for a package the student already owned. */

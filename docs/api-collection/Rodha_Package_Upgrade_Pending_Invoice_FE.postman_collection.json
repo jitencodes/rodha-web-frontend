@@ -1,0 +1,518 @@
+{
+  "info": {
+    "name": "Rodha Package Upgrade Pending + Invoice PDF (FE)",
+    "description": "Abandoned Razorpay upgrade resume/cancel, pendingUpgrade on enrollments, order kind (PURCHASE|UPGRADE), async invoice PDF, admin packages upgradeTargets + active-only dropdown.\n\nDocs: docs/FE_INTEGRATION_PACKAGE_UPGRADE_PENDING_INVOICE.md\nImport with Rodha Local. Set studentAccessToken / adminAccessToken.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/rodha/" },
+    { "key": "studentAccessToken", "value": "" },
+    { "key": "adminAccessToken", "value": "" },
+    { "key": "websiteCategoryId", "value": "1" },
+    { "key": "sourceEnrollmentId", "value": "46596" },
+    { "key": "targetPackageId", "value": "130" },
+    { "key": "pendingUpgradeOrderId", "value": "47" },
+    { "key": "paidOrderId", "value": "46" },
+    { "key": "stateName", "value": "Maharashtra" }
+  ],
+  "item": [
+    {
+      "name": "01 — Student enrollments (pendingUpgrade)",
+      "item": [
+        {
+          "name": "GET enrollments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "x-website-category-id", "value": "{{websiteCategoryId}}", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/enrollments",
+            "description": "When a upgrade checkout is PENDING, availableUpgrades is [] and pendingUpgrade is set. Show Complete payment / Cancel — do not show empty options only."
+          },
+          "response": [
+            {
+              "name": "200 with pendingUpgrade",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  { "key": "x-website-category-id", "value": "{{websiteCategoryId}}" }
+                ],
+                "url": "{{baseUrl}}api/website/student/enrollments"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Enrollments fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 46596,\n        \"status\": \"ACTIVE\",\n        \"assignedAt\": \"2026-11-26T06:13:31.716Z\",\n        \"isSelfEnrolled\": true,\n        \"availableUpgrades\": [],\n        \"pendingUpgrade\": {\n          \"upgradeId\": 3,\n          \"orderId\": 47,\n          \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n          \"status\": \"PENDING\",\n          \"sourceEnrollmentId\": 46596,\n          \"sourcePackageId\": 129,\n          \"targetPackageId\": 130,\n          \"targetPackage\": {\n            \"id\": 130,\n            \"slug\": \"cat-2027-r1-hinglish-comprehensive-batch\",\n            \"title\": \"CAT 2027 | R1 (Hinglish) | Comprehensive Batch\",\n            \"bannerImageUrl\": null\n          },\n          \"payableAmount\": 14799.8,\n          \"currency\": \"INR\",\n          \"razorpayOrderId\": \"order_U4hZexample\",\n          \"canResume\": true,\n          \"canCancel\": true\n        },\n        \"package\": {\n          \"id\": 129,\n          \"title\": \"CAT 2027 | R1 QA Batch\",\n          \"availableUpgrades\": [],\n          \"pendingUpgrade\": {\n            \"upgradeId\": 3,\n            \"orderId\": 47,\n            \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n            \"status\": \"PENDING\",\n            \"canResume\": true,\n            \"canCancel\": true\n          }\n        },\n        \"order\": {\n          \"id\": 46,\n          \"orderNumber\": \"ORD-MWX5OQBS-35DC97\",\n          \"paidAt\": \"2026-11-26T06:13:31.075Z\"\n        }\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "200 with availableUpgrades (no pending)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  { "key": "x-website-category-id", "value": "{{websiteCategoryId}}" }
+                ],
+                "url": "{{baseUrl}}api/website/student/enrollments"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Enrollments fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 46596,\n        \"status\": \"ACTIVE\",\n        \"availableUpgrades\": [\n          {\n            \"id\": 130,\n            \"slug\": \"cat-2027-r1-hinglish-comprehensive-batch\",\n            \"title\": \"CAT 2027 | R1 Comprehensive\",\n            \"bannerImageUrl\": null,\n            \"price\": 28999,\n            \"discountedPrice\": 28999,\n            \"salePrice\": 28999,\n            \"promoDiscount\": 5000,\n            \"oldPaidCredit\": 9199.2,\n            \"payableAmount\": 14799.8,\n            \"isFree\": false,\n            \"sortOrder\": 0\n          }\n        ],\n        \"pendingUpgrade\": null,\n        \"package\": {\n          \"id\": 129,\n          \"title\": \"CAT 2027 | R1 QA Batch\",\n          \"availableUpgrades\": [],\n          \"pendingUpgrade\": null\n        }\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET packages (enrolled)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "x-website-category-id", "value": "{{websiteCategoryId}}", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/packages",
+            "description": "Same pendingUpgrade / availableUpgrades fields; flat package shape with enrollmentId."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  { "key": "x-website-category-id", "value": "{{websiteCategoryId}}" }
+                ],
+                "url": "{{baseUrl}}api/website/student/packages"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Enrolled packages fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"enrollmentId\": 46596,\n        \"status\": \"ACTIVE\",\n        \"id\": 129,\n        \"title\": \"CAT 2027 | R1 QA Batch\",\n        \"availableUpgrades\": [],\n        \"pendingUpgrade\": {\n          \"upgradeId\": 3,\n          \"orderId\": 47,\n          \"status\": \"PENDING\",\n          \"canResume\": true,\n          \"canCancel\": true,\n          \"payableAmount\": 14799.8\n        }\n      }\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 — Resume / Cancel pending upgrade",
+      "item": [
+        {
+          "name": "POST resume payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": {{pendingUpgradeOrderId}}\n}"
+            },
+            "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/resume",
+            "description": "Re-open Razorpay with the same razorpayOrderId. Then call payments/verify."
+          },
+          "response": [
+            {
+              "name": "200 resumed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 47\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/resume"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Pending upgrade payment resumed\",\n  \"data\": {\n    \"mode\": \"razorpay\",\n    \"orderId\": 47,\n    \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n    \"upgradeId\": 3,\n    \"status\": \"PENDING\",\n    \"sourceEnrollmentId\": 46596,\n    \"targetPackageId\": 130,\n    \"targetPackageTitle\": \"CAT 2027 | R1 Comprehensive\",\n    \"payableAmount\": 14799.8,\n    \"currency\": \"INR\",\n    \"keyId\": \"rzp_test_…\",\n    \"razorpayOrderId\": \"order_U4hZexample\",\n    \"amountPaise\": 1479980,\n    \"prefill\": {\n      \"name\": \"Jitendra\",\n      \"email\": \"jitendra1@innowrap.com\",\n      \"contact\": \"9999999999\"\n    }\n  }\n}"
+            },
+            {
+              "name": "404 not found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 99999\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/resume"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Pending upgrade order not found\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "409 missing razorpay session",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 47\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/resume"
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Payment session missing. Cancel this upgrade and start checkout again.\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST cancel pending",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": {{pendingUpgradeOrderId}}\n}"
+            },
+            "url": "{{baseUrl}}api/website/student/packages/upgrades/cancel",
+            "description": "Cancel abandoned PENDING upgrade. Then reload enrollments — availableUpgrades returns."
+          },
+          "response": [
+            {
+              "name": "200 cancelled",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 47\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/cancel"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Pending upgrade cancelled\",\n  \"data\": {\n    \"orderId\": 47,\n    \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n    \"orderStatus\": \"CANCELLED\",\n    \"upgradeId\": 3,\n    \"upgradeStatus\": \"FAILED\"\n  }\n}"
+            },
+            {
+              "name": "404 not found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 99999\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/cancel"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Pending upgrade order not found\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 — Upgrade quote / checkout / verify",
+      "item": [
+        {
+          "name": "GET quote",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/packages/upgrades/quote?sourceEnrollmentId={{sourceEnrollmentId}}&targetPackageId={{targetPackageId}}",
+            "description": "Fails with 409 if a pending upgrade already exists for this enrollment."
+          },
+          "response": [
+            {
+              "name": "200 quote",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/quote?sourceEnrollmentId=46596&targetPackageId=130"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Upgrade quote fetched successfully\",\n  \"data\": {\n    \"sourceEnrollmentId\": 46596,\n    \"sourcePackage\": { \"id\": 129, \"title\": \"CAT 2027 | R1 QA Batch\" },\n    \"targetPackage\": { \"id\": 130, \"title\": \"CAT 2027 | R1 Comprehensive\" },\n    \"salePrice\": 28999,\n    \"promoDiscount\": 5000,\n    \"oldPaidCredit\": 9199.2,\n    \"upgradePayableAmount\": 14799.8,\n    \"payableAmount\": 14799.8,\n    \"isFree\": false\n  }\n}"
+            },
+            {
+              "name": "409 pending exists",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/quote?sourceEnrollmentId=46596&targetPackageId=130"
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"You already have a pending upgrade payment for this package. Complete or cancel it first.\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceEnrollmentId\": {{sourceEnrollmentId}},\n  \"targetPackageId\": {{targetPackageId}},\n  \"stateName\": \"{{stateName}}\"\n}"
+            },
+            "url": "{{baseUrl}}api/website/student/packages/upgrades/checkout"
+          },
+          "response": [
+            {
+              "name": "200 razorpay mode",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceEnrollmentId\": 46596,\n  \"targetPackageId\": 130,\n  \"stateName\": \"Maharashtra\"\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/checkout"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Package upgrade checkout initiated\",\n  \"data\": {\n    \"mode\": \"razorpay\",\n    \"orderId\": 47,\n    \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n    \"upgradeId\": 3,\n    \"status\": \"PENDING\",\n    \"payableAmount\": 14799.8,\n    \"currency\": \"INR\",\n    \"keyId\": \"rzp_test_…\",\n    \"razorpayOrderId\": \"order_U4hZexample\",\n    \"amountPaise\": 1479980,\n    \"prefill\": {\n      \"name\": \"Jitendra\",\n      \"email\": \"jitendra1@innowrap.com\",\n      \"contact\": \"9999999999\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST verify upgrade payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-source", "value": "Postman", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_U4hZexample\",\n  \"razorpay_payment_id\": \"pay_U4hZexample\",\n  \"razorpay_signature\": \"sig_example\"\n}"
+            },
+            "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/verify",
+            "description": "Invoice row is sync; pdfUrl may be null until invoice-pdf queue finishes. Poll GET /orders/:id."
+          },
+          "response": [
+            {
+              "name": "200 verified (pdfUrl may be null)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"razorpay_order_id\": \"order_U4hZexample\",\n  \"razorpay_payment_id\": \"pay_U4hZexample\",\n  \"razorpay_signature\": \"sig_example\"\n}"
+                },
+                "url": "{{baseUrl}}api/website/student/packages/upgrades/payments/verify"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Upgrade payment verified successfully\",\n  \"data\": {\n    \"orderId\": 48,\n    \"orderNumber\": \"ORD-EXAMPLE\",\n    \"status\": \"PAID\",\n    \"payableAmount\": 14799.8,\n    \"upgradeId\": 4,\n    \"upgradeStatus\": \"PAID\",\n    \"invoice\": {\n      \"id\": 22,\n      \"invoiceNumber\": \"INV-48-EXAMPLE\",\n      \"pdfUrl\": null\n    }\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 — Orders + invoice PDF",
+      "item": [
+        {
+          "name": "GET orders (kind field)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/orders?page=1&limit=20",
+            "description": "kind is PURCHASE or UPGRADE. Upgrades appear in the same list."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/student/orders?page=1&limit=20"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Orders fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 47,\n        \"orderNumber\": \"ORD-MWX5UJE1-16D5AC\",\n        \"status\": \"PENDING\",\n        \"kind\": \"UPGRADE\",\n        \"payableAmount\": 14799.8,\n        \"currency\": \"INR\",\n        \"invoices\": []\n      },\n      {\n        \"id\": 46,\n        \"orderNumber\": \"ORD-MWX5OQBS-35DC97\",\n        \"status\": \"PAID\",\n        \"kind\": \"PURCHASE\",\n        \"payableAmount\": 9199.2,\n        \"currency\": \"INR\",\n        \"invoices\": [\n          {\n            \"id\": 21,\n            \"invoiceNumber\": \"INV-46-MWX5PERK8A37\",\n            \"pdfUrl\": null,\n            \"payableAmount\": 9199.2\n          }\n        ]\n      }\n    ],\n    \"pagination\": { \"page\": 1, \"limit\": 20, \"total\": 2, \"totalPages\": 1 }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET order by id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/orders/{{paidOrderId}}",
+            "description": "Poll until invoices[0].pdfUrl is set after verify."
+          },
+          "response": [
+            {
+              "name": "200 PAID pdf still generating",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/student/orders/46"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Order fetched successfully\",\n  \"data\": {\n    \"id\": 46,\n    \"orderNumber\": \"ORD-MWX5OQBS-35DC97\",\n    \"status\": \"PAID\",\n    \"kind\": \"PURCHASE\",\n    \"payableAmount\": 9199.2,\n    \"invoices\": [\n      {\n        \"id\": 21,\n        \"invoiceNumber\": \"INV-46-MWX5PERK8A37\",\n        \"pdfUrl\": null\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "200 PAID pdf ready",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/student/orders/46"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Order fetched successfully\",\n  \"data\": {\n    \"id\": 46,\n    \"orderNumber\": \"ORD-MWX5OQBS-35DC97\",\n    \"status\": \"PAID\",\n    \"kind\": \"PURCHASE\",\n    \"payableAmount\": 9199.2,\n    \"invoices\": [\n      {\n        \"id\": 21,\n        \"invoiceNumber\": \"INV-46-MWX5PERK8A37\",\n        \"pdfUrl\": \"https://rodha-dev-bucket.s3.ap-south-1.amazonaws.com/website/invoices/…INV-46….pdf\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST retry-fulfill (re-queue PDF)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{studentAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/student/orders/{{paidOrderId}}/retry-fulfill",
+            "description": "Safe for PAID orders missing enrollment repair and/or missing invoice PDF (re-enqueues invoice-pdf job)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}api/website/student/orders/46/retry-fulfill"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Order fulfillment retried successfully\",\n  \"data\": {\n    \"orderId\": 46,\n    \"orderNumber\": \"ORD-MWX5OQBS-35DC97\",\n    \"status\": \"PAID\",\n    \"payableAmount\": 9199.2,\n    \"invoice\": {\n      \"id\": 21,\n      \"invoiceNumber\": \"INV-46-MWX5PERK8A37\",\n      \"pdfUrl\": null\n    }\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 — Admin packages",
+      "item": [
+        {
+          "name": "GET packages list (upgradeTargets)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{adminAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/admin/packages?page=1&limit=100",
+            "description": "Each item includes upgradeTargets[] (active paths only)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/admin/packages?page=1&limit=100"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Packages fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 129,\n        \"graphyTitle\": \"CAT 2027 | R1 QA Batch\",\n        \"packageTitle\": \"CAT 2027 | R1 QA Batch\",\n        \"title\": \"CAT 2027 | R1 QA Batch\",\n        \"isActive\": true,\n        \"upgradeTargets\": [\n          {\n            \"id\": 130,\n            \"slug\": \"cat-2027-r1-hinglish-comprehensive-batch\",\n            \"title\": \"CAT 2027 | R1 Comprehensive\",\n            \"graphyTitle\": \"CAT 2027 | R1 Comprehensive\",\n            \"price\": 28999,\n            \"discountedPrice\": 28999,\n            \"isActive\": true,\n            \"sortOrder\": 0\n          },\n          {\n            \"id\": 128,\n            \"slug\": \"cat-2027-r1-lrdi\",\n            \"title\": \"CAT 2027 | R1 LRDI\",\n            \"graphyTitle\": \"CAT 2027 | R1 LRDI\",\n            \"price\": 11999,\n            \"discountedPrice\": 11499,\n            \"isActive\": true,\n            \"sortOrder\": 1\n          }\n        ]\n      }\n    ],\n    \"pagination\": { \"page\": 1, \"limit\": 100, \"total\": 1, \"totalPages\": 1 }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET packages dropdown (active only)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-source", "value": "Postman", "type": "text" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{adminAccessToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}api/website/admin/packages/dropdown?page=1&limit=100",
+            "description": "Always returns isActive=true packages only."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}api/website/admin/packages/dropdown?page=1&limit=100"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Package dropdown options fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 129,\n        \"graphyProductId\": \"6ac3bfcf08ef3c8c5cce2877\",\n        \"graphyTitle\": \"CAT 2027 | R1 QA Batch\",\n        \"title\": \"CAT 2027 | R1 QA Batch\",\n        \"sortOrder\": 0,\n        \"isSyncWatched\": false\n      }\n    ],\n    \"pagination\": { \"page\": 1, \"limit\": 100, \"total\": 1, \"totalPages\": 1 }\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

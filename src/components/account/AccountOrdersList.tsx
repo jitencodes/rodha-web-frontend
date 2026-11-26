@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Download } from "lucide-react";
+import { OrderInvoiceButton } from "@/components/account/OrderInvoiceButton";
 import { OrderRetryDelivery } from "@/components/account/OrderRetryDelivery";
 import { ClampTooltip } from "@/components/ui/ClampTooltip";
 import type { AccountOrder, AccountPaymentStatus } from "@/lib/account/types";
@@ -40,7 +40,11 @@ function StatusBadge({
 function productLabel(order: AccountOrder): string {
   const count = order.addons?.length ?? 0;
   if (order.addonsOnly) return count === 1 ? "Add-on" : "Add-ons";
-  const base = order.productType === "test-series" ? "Test series" : "Course";
+  const base = order.isUpgrade
+    ? "Upgrade"
+    : order.productType === "test-series"
+      ? "Test series"
+      : "Course";
   return count > 0 ? `${base} + ${count} add-on${count === 1 ? "" : "s"}` : base;
 }
 
@@ -104,41 +108,14 @@ function ProductCell({ order }: { order: AccountOrder }) {
   );
 }
 
-const invoiceBtnClass =
-  "inline-flex h-8 min-w-[9.5rem] items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-3 text-caption font-medium";
-
-function DownloadInvoiceAction({ href }: { href?: string }) {
-  if (!href) {
-    return (
-      <span
-        className={cn(
-          invoiceBtnClass,
-          "cursor-not-allowed border-[var(--account-border)] bg-[var(--account-nav-hover)] text-[var(--account-text-muted)] opacity-60"
-        )}
-        aria-disabled="true"
-      >
-        <Download className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
-        {ACCOUNT_ORDERS_PAGE_COPY.downloadInvoiceLabel}
-      </span>
-    );
-  }
-
+function InvoiceAction({ order }: { order: AccountOrder }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      download
-      className={cn(
-        invoiceBtnClass,
-        "cursor-pointer border-[var(--account-border-strong)] bg-[var(--account-surface)] text-[var(--account-text-secondary)]",
-        "transition-colors hover:border-[var(--account-accent)] hover:text-[var(--account-accent)]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--account-accent)]/40"
-      )}
-    >
-      <Download className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
-      {ACCOUNT_ORDERS_PAGE_COPY.downloadInvoiceLabel}
-    </a>
+    <OrderInvoiceButton
+      orderId={order.id}
+      href={order.href}
+      available={order.invoiceAvailable}
+      generating={order.invoiceGenerating}
+    />
   );
 }
 
@@ -200,7 +177,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
                     />
                   </td>
                   <td className="px-4 py-3.5 text-right">
-                    <DownloadInvoiceAction href={order.href} />
+                    <InvoiceAction order={order} />
                   </td>
                 </tr>
               ))}
@@ -248,7 +225,7 @@ export function AccountOrdersList({ orders }: AccountOrdersListProps) {
               </div>
             </dl>
             <div className="mt-4">
-              <DownloadInvoiceAction href={order.href} />
+              <InvoiceAction order={order} />
             </div>
           </li>
         ))}

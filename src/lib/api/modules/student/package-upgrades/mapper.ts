@@ -6,6 +6,8 @@ import type {
   AvailableUpgradeViewModel,
   EnrolledPackageApi,
   EnrolledPackageViewModel,
+  PendingUpgradeApi,
+  PendingUpgradeViewModel,
   UpgradeQuoteApi,
   UpgradeQuoteViewModel,
 } from "./types";
@@ -62,6 +64,29 @@ export function mapAvailableUpgrade(
   };
 }
 
+export function mapPendingUpgrade(
+  item: PendingUpgradeApi | null | undefined
+): PendingUpgradeViewModel | null {
+  const orderId = asId(item?.orderId);
+  if (orderId == null) return null;
+  const status = asString(item?.status).toUpperCase();
+  if (status && status !== "PENDING") return null;
+  const target = item?.targetPackage;
+  return {
+    orderId,
+    orderNumber: asString(item?.orderNumber) || String(orderId),
+    upgradeId: asId(item?.upgradeId),
+    targetPackageId: asId(item?.targetPackageId ?? target?.id),
+    targetTitle: asString(target?.title),
+    targetSlug: asString(target?.slug),
+    targetImageUrl: asString(target?.bannerImageUrl) || COURSE_IMAGE_FALLBACK,
+    payableAmount: asNumber(item?.payableAmount),
+    currency: asString(item?.currency) || "INR",
+    canResume: item?.canResume !== false,
+    canCancel: item?.canCancel !== false,
+  };
+}
+
 export function mapEnrolledPackage(
   item: EnrolledPackageApi | null | undefined
 ): EnrolledPackageViewModel | null {
@@ -107,6 +132,9 @@ export function mapEnrolledPackage(
     status: asString(item?.status) || "ACTIVE",
     availableAddons: mapCarrierAddons(item).filter((addon) => addon.selectable),
     availableUpgrades: upgrades,
+    pendingUpgrade: mapPendingUpgrade(
+      item?.pendingUpgrade ?? item?.package?.pendingUpgrade
+    ),
   };
 }
 
@@ -123,7 +151,8 @@ export function mapEnrolledPackages(
 export function enrolledPackageToCourse(
   pkg: EnrolledPackageViewModel
 ): Course {
-  const hasUpgrades = pkg.availableUpgrades.length > 0;
+  const hasUpgrades =
+    pkg.pendingUpgrade != null || pkg.availableUpgrades.length > 0;
   return {
     id: String(pkg.packageId),
     title: pkg.title,
@@ -146,7 +175,11 @@ export function enrolledPackageToCourse(
     thumbnail: pkg.bannerImageUrl,
     image: pkg.bannerImageUrl,
     tags: [],
-    detailsLabel: hasUpgrades ? "Available upgrades" : "View package",
+    detailsLabel: pkg.pendingUpgrade
+      ? "Complete upgrade"
+      : hasUpgrades
+        ? "Available upgrades"
+        : "View package",
     caourseCount: pkg.courseCount,
   };
 }

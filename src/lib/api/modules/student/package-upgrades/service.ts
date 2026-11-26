@@ -8,9 +8,11 @@ import {
 import type {
   EnrolledPackagesListApi,
   EnrolledPackageViewModel,
+  UpgradeCancelResponseApi,
   UpgradeCheckoutResponseApi,
   UpgradeQuoteApi,
   UpgradeQuoteViewModel,
+  UpgradeResumeResponseApi,
   UpgradeVerifyResponseApi,
 } from "./types";
 import type { VerifyPaymentRequest } from "@/lib/api/modules/student/cart/types";
@@ -88,5 +90,29 @@ export async function verifyPackageUpgradePayment(
       accessToken,
       headers: websiteCategoryHeaders(websiteCategoryId),
     }
+  );
+}
+
+/** Re-open Razorpay for a PENDING upgrade (same `razorpayOrderId`). 409 = session gone: cancel instead. */
+export async function resumePackageUpgradePayment(
+  accessToken: string,
+  orderId: number
+): Promise<UpgradeResumeResponseApi> {
+  return apiPost<UpgradeResumeResponseApi, { orderId: number }>(
+    `${UPGRADES_PATH}/payments/resume`,
+    { orderId },
+    { accessToken }
+  );
+}
+
+/** Cancel a PENDING upgrade so `availableUpgrades` returns. */
+export async function cancelPendingPackageUpgrade(
+  accessToken: string,
+  orderId: number
+): Promise<UpgradeCancelResponseApi> {
+  return apiPost<UpgradeCancelResponseApi, { orderId: number }>(
+    `${UPGRADES_PATH}/cancel`,
+    { orderId },
+    { accessToken }
   );
 }
