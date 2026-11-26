@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { Toaster } from "sonner";
 import {
   AccountThemeProvider,
   useAccountTheme,
@@ -13,7 +12,7 @@ import {
   type AccountHeaderUser,
 } from "@/components/account/AccountHeader";
 import { RequireStateGate } from "@/components/account/RequireStateGate";
-import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
+import { StudentGateProvider } from "@/components/account/StudentGateProvider";
 import { AccountUserProvider } from "@/components/providers/AccountUserProvider";
 import type { AuthUserViewModel } from "@/lib/api/modules/auth/types";
 
@@ -79,8 +78,7 @@ function AccountShellFrame({
         </main>
       </div>
       <RequireStateGate />
-      <RegistrationGateProvider enabled />
-      <Toaster position="top-center" richColors closeButton />
+      <StudentGateProvider enabled />
     </div>
   );
 }

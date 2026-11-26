@@ -4,6 +4,7 @@ import {
   getApiRevalidateSeconds,
   getApiSource,
 } from "@/lib/api/env";
+import { isSoftBlockBody, SOFT_BLOCK_STATUS } from "@/lib/api/soft-block";
 import { ApiError, type ApiEnvelope } from "@/lib/api/types";
 
 export interface ApiGetOptions {
@@ -76,7 +77,7 @@ async function parseEnvelope<T>(
   if (!envelope || envelope.success !== true) {
     throw new ApiError(
       envelope?.message || `API returned unsuccessful response for ${path}`,
-      response.status,
+      isSoftBlockBody(body) ? SOFT_BLOCK_STATUS : response.status,
       body
     );
   }

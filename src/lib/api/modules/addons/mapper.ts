@@ -11,6 +11,7 @@ const TYPE_LABEL: Record<AddonType, string> = {
   GRAPHY_COURSE: "Course",
   BUDDY_PACKAGE: "Rodha Buddy",
   BOOK: "Book",
+  WEBSITE_PACKAGE: "Package",
 };
 
 /** API limit for `addonIds`. */
@@ -46,7 +47,9 @@ function addonDetail(addon: AddonApi, name: string): string {
   const linked =
     asString(addon.course?.courseTitle) ||
     asString(addon.course?.graphyTitle) ||
-    asString(addon.book?.name);
+    asString(addon.book?.name) ||
+    asString(addon.websitePackage?.packageTitle) ||
+    asString(addon.websitePackage?.graphyTitle);
   return linked && linked.toLowerCase() !== name.toLowerCase() ? linked : "";
 }
 

@@ -12,6 +12,8 @@ import { CONTINUE_SORT_OPTIONS } from "@/lib/account/course-content-filters";
 type FilterOption = { value: string; label: string };
 
 type AccountContinueCoursesToolbarProps = {
+  /** List being filtered; both tabs take the same filters. */
+  tab: "continue" | "archived";
   initialSearch: string;
   activeCategoryId: string;
   categoryOptions: FilterOption[];
@@ -51,6 +53,7 @@ function FilterIconButton({
 }
 
 export function AccountContinueCoursesToolbar({
+  tab,
   initialSearch,
   activeCategoryId,
   categoryOptions,
@@ -88,7 +91,7 @@ export function AccountContinueCoursesToolbar({
     validTillTo?: string;
   } = {}): string {
     const params = new URLSearchParams();
-    params.set("tab", "continue");
+    params.set("tab", tab);
 
     const search = next.q !== undefined ? next.q : query;
     const categoryId =
@@ -275,7 +278,7 @@ export function AccountContinueCoursesToolbar({
               onChange={(e) => handleSearch(e.target.value)}
               onClear={() => handleSearch("")}
               placeholder="Search courses..."
-              aria-label="Search continue watching"
+              aria-label={tab === "archived" ? "Search archived courses" : "Search continue watching"}
               variant="account"
             />
           </div>
@@ -287,7 +290,7 @@ export function AccountContinueCoursesToolbar({
             onChange={(e) => handleSearch(e.target.value)}
             onClear={() => handleSearch("")}
             placeholder="Search courses..."
-            aria-label="Search continue watching"
+            aria-label={tab === "archived" ? "Search archived courses" : "Search continue watching"}
             variant="account"
           />
         </div>

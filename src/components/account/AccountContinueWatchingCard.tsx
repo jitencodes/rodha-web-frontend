@@ -20,6 +20,8 @@ type AccountContinueWatchingCardProps = {
    * (e.g. a course the student may switch to).
    */
   action?: { label: string; icon?: ReactNode; onClick: () => void };
+  /** Shown before View (e.g. Archive / Restore). */
+  secondaryAction?: ReactNode;
 };
 
 /** In-progress learning card for dashboard + Courses Continue Watching tab. */
@@ -27,6 +29,7 @@ export function AccountContinueWatchingCard({
   item,
   className,
   action,
+  secondaryAction,
 }: AccountContinueWatchingCardProps) {
   const percent =
     item.progressTotal > 0
@@ -142,7 +145,14 @@ export function AccountContinueWatchingCard({
           </div>
         )}
 
-        <div className={cn("flex justify-end pt-1", action && "mt-auto")}>
+        <div
+          className={cn(
+            "flex items-center justify-end gap-2 pt-1",
+            secondaryAction && "justify-between",
+            action && "mt-auto"
+          )}
+        >
+          {secondaryAction}
           {action ? (
             <button
               type="button"

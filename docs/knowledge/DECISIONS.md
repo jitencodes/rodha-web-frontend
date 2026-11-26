@@ -655,3 +655,19 @@ Format:
 - **Rationale:** Admin uploads every course and package image at 16:9, so the frame must match to avoid cropping.
 - **Alternatives considered:** `object-contain` (letterboxes any image that is not 16:9).
 - **Consequences:** An image uploaded in another ratio is still cropped; fix it in admin. Faculty, blog, resource and test series cards keep their own ratios.
+
+### 2026-11-25 — One student gate, read from `auth/me`
+- **Decision:** Email verification, mobile verification and registration are one gate (`StudentGateProvider`) fed by `GET auth/me`. The dashboard is no longer polled for registration status. Soft-block bodies (201 + `errors.code`) are raised as `ApiError` 423.
+- **Rationale:** `auth/me` has all three statuses and stays callable while soft-blocked; the dashboard does not. 423 is not 401/403 (which would log the student out) and not 400/409 (which the checkout treats as a stale cart).
+- **Alternatives considered:** A separate provider per gate (stacked dialogs); reading codes in each component.
+- **Consequences:** Public pages show overdue gates as reminders; they open at once when a call is refused. BFF routes should pass API statuses on (`bffErrorResponse`).
+
+### 2026-11-25 — A wrong OTP is 400 from the BFF
+- **Decision:** The API answers 401 to a wrong OTP. The verify BFF checks `auth/me`: session alive → 400 with the API message, otherwise 401.
+- **Rationale:** `fetchAuthed` ends the session on 401.
+- **Consequences:** One extra call on a wrong code.
+
+### 2026-11-25 — Every student may register; `required` only prompts
+- **Decision:** The sidebar and profile "Complete registration" buttons show until the form is submitted. The popup and the block follow `required` / `overdue` (registrationActive package, not submitted).
+- **Rationale:** Product decision: students with no registrationActive package may still fill the form.
+- **Consequences:** Without an enrolled package, Course / Batch Enrolled show "—" and Books is hidden unless the API sets `requiresBooks`.

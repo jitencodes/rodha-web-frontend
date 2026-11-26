@@ -156,6 +156,7 @@ export type AccountCourseDetailViewModel = {
   progressPercent?: number;
   learningStatus?: string;
   completed?: boolean;
+  archived: boolean;
   totalTimeLabel?: string;
   validTill?: string;
   startDate?: string;
@@ -403,6 +404,7 @@ export function mapStudentCourseDetail(
       typeof enrollment?.completed === "boolean"
         ? enrollment.completed
         : undefined,
+    archived: Boolean(asString(enrollment?.archivedAt)),
     totalTimeLabel,
     validTill: asString(enrollment?.validTill) || undefined,
     startDate: asString(enrollment?.startDate) || undefined,

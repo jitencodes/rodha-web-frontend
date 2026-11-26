@@ -1,6 +1,10 @@
 /** Package add-ons — shapes from `Rodha_Package_Addons_FE` Postman. */
 
-export type AddonType = "GRAPHY_COURSE" | "BUDDY_PACKAGE" | "BOOK";
+export type AddonType =
+  | "GRAPHY_COURSE"
+  | "BUDDY_PACKAGE"
+  | "BOOK"
+  | "WEBSITE_PACKAGE";
 
 export interface AddonApi {
   id?: number | string;
@@ -18,6 +22,10 @@ export interface AddonApi {
   } | null;
   buddyPackage?: { name?: string | null; doubtPoints?: number | null } | null;
   book?: { name?: string | null } | null;
+  websitePackage?: {
+    packageTitle?: string | null;
+    graphyTitle?: string | null;
+  } | null;
 }
 
 /** Add-on fields carried by packages, cart products and upgrade targets. */

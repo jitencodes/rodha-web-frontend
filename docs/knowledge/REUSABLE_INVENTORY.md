@@ -213,13 +213,13 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | CheckoutDrawer | `checkout/CheckoutDrawer.tsx` (right sidebar: guest details → sign in → checkout; `PackageCheckoutProvider` / `usePackageCheckout` open it from any Buy Now) |
 | CheckoutPanel | `checkout/CheckoutPanel.tsx` (`layout` page\|drawer; state in `useCheckout`, blocks in `CheckoutSections`) |
 | AddonPicker | `checkout/AddonPicker.tsx` (selectable add-on rows; checkout + upgrade) |
-| usePayGate | `checkout/usePayGate.tsx` (mobile + state steps before payment; checkout + upgrade) |
+| usePayGate | `checkout/usePayGate.tsx` (mobile by OTP + state steps before payment; checkout + upgrade) |
 | PackageAddonsButton | `checkout/PackageAddonsButton.tsx` (buy add-ons for an owned package) |
 | OrderRetryDelivery | `OrderRetryDelivery.tsx` (retry a failed delivery) |
 | AccountHeader | `AccountHeader.tsx` (search dialog, Ctrl+K, theme toggle, Live Classroom, profile/Logout) |
 | CourseChangeCta / CourseChangeDialog | `course-changes/*` (request a course change; disabled with a reason when blocked) |
 | CourseChangeRequestsTable | `course-changes/CourseChangeRequestsTable.tsx` (history + Cancel) |
-| AccountContinueWatchingCard `action` | Replaces View with a custom CTA and hides progress / links |
+| AccountContinueWatchingCard `action` / `secondaryAction` | `action` replaces View with a custom CTA and hides progress / links; `secondaryAction` sits beside View |
 | AccountLiveClassCard | `AccountLiveClassCard.tsx` (todayContents / productContents; Graphy SSO open) |
 | AccountLiveClassesSection | `AccountLiveClassesSection.tsx` (hides when empty) |
 | AccountQuickActionTiles | `AccountQuickActionTiles.tsx` (Continue Watching → Quick Content types) |
@@ -227,14 +227,17 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | AccountQuickContentToolbar | `AccountQuickContentToolbar.tsx` (search outside sheet; completion/live/result filters) |
 | AccountThemeProvider | `AccountThemeProvider.tsx` (`data-account-theme`; localStorage; circular transition) |
 | AccountUserProvider | `providers/AccountUserProvider.tsx` (Jotai store + hydrate `userAtom` from `/auth/me`) |
-| UpdateStateDialog | `UpdateStateDialog.tsx` (shows only missing or pencil-edited mobile/state; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
+| UpdateStateDialog | `UpdateStateDialog.tsx` (state only; BFF `PATCH /api/account/state` → `api/auth/me/details`) |
 | RegistrationDialog | `RegistrationDialog.tsx` (3-step student registration A–F / G–J / K–N; masters from GET registration; BFF `POST /api/account/registration` multipart; deadline/overdue banner) |
-| RegistrationGateProvider | `RegistrationGateProvider.tsx` (polls `/api/account/dashboard-status`; 1h dismiss reminder; overdue mandatory on `/account`; mounts on SiteFrame + AccountShell) |
+| StudentGateProvider | `StudentGateProvider.tsx` (email → mobile → registration gate; polls `/api/account/gate-status`; 1h dismiss reminder; overdue blocks `/account`; mounts on SiteFrame + AccountShell; `requestStudentGateCheck()` re-checks) |
+| VerifyContactDialog | `VerifyContactDialog.tsx` (email / mobile OTP: send, enter, resend; used by the gate, pay gate and profile) |
+| OtpField / OtpResend | `forms/OtpField.tsx` (code input + resend line; `useResendCooldown`) |
+| CourseArchiveButton | `CourseArchiveButton.tsx` (Archive / Restore with Undo; `variant` card \| header) |
 | ProfileDetailView | `ProfileDetailView.tsx` (read-only registration detail: hero card, personal/contact/address, Academics / Work / Books tabs) |
 | Account form controls | `forms/AccountTextField`, `AccountSelect` / `AccountMultiSelect` (searchable `react-select` + `accountReactSelectStyles` orange theme), `AccountRadioGroup`, `AccountCheckbox`, `AccountDateField`, `AccountFileUpload` (passport-photo defaults; `accept` / `validate` / `uploadLabel` / `existingFileName` for documents), `AccountFieldShell`; styles in `accountFieldStyles`; menu portal helper `src/lib/account/portal-parent.ts` |
 | EmailUpdateRequestDialog | `EmailUpdateRequestDialog.tsx` (request email update; stub BFF `POST /api/account/email-update-request`) |
 | CheckoutLocationDialog | `CheckoutLocationDialog.tsx` (checkout-only state from GPS or states dropdown; does not update the profile) |
-| RequireStateGate | `RequireStateGate.tsx` (blocking dialog for missing mobile and/or state) |
+| RequireStateGate | `RequireStateGate.tsx` (blocking dialog for a missing state) |
 | AccountPagination | `AccountPagination.tsx` (URL `Pagination` variant from account theme) |
 | AccountContinueWatchingCard | `AccountContinueWatchingCard.tsx` (Time Spent / Valid Till / Language in body; progress + Continue CTA) |
 | AccountContinueCoursesToolbar | `AccountContinueCoursesToolbar.tsx` (Continue tab search/filters + Reset Filters + mobile BottomSheet) |
@@ -253,7 +256,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | OrdersPreviewCard | `OrdersPreviewCard.tsx` (dashboard My Orders preview) |
 | QuickLinksCard | `QuickLinksCard.tsx` (dashboard quick links) |
 | AccountOrdersList | `AccountOrdersList.tsx` (desktop table + mobile cards; payment/order status badges) |
-| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, Complete registration / View Profile, email update request, phone/state pencils, change password) |
+| AccountProfilePanel | `AccountProfilePanel.tsx` (avatar summary, Complete registration / View Profile, email + mobile verify, state pencil, change password) |
 | CartPageClient | `CartPageClient.tsx` (cart/coupon state, recommended rail) |
 | CartItemCard | `CartItemCard.tsx` (line item + remove) |
 | CartOrderSummary | `CartOrderSummary.tsx` (sticky totals, coupon, Continue to Pay) |
@@ -272,7 +275,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | useCountdown | `useCountdown.ts` |
 | useCounsellingModal | `useCounsellingModal.ts` |
 | useInView | `useInView.ts` |
-| useRegistrationIncomplete | `useRegistrationIncomplete.ts` (true while the registration gate reports registration not completed) |
+| useRegistrationIncomplete | `useRegistrationIncomplete.ts` (true until registration is submitted, required or not) |
+| useResendCooldown | `useResendCooldown.ts` (seconds until an OTP can be resent) |
 
 ## Lib — `src/lib/`
 

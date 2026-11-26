@@ -36,6 +36,8 @@ export interface StudentEnrollmentListItemApi {
   lastAccessDate?: string | null;
   startDate?: string | null;
   assignedAt?: string | null;
+  /** Null = not archived. */
+  archivedAt?: string | null;
   includes?: StudentCourseIncludesApi | null;
   course?: StudentAssignedCourseApi | null;
 }
@@ -122,6 +124,14 @@ export interface StudentCourseDetailEnrollmentApi {
   lastAccessDate?: string | null;
   startDate?: string | null;
   assignedAt?: string | null;
+  archivedAt?: string | null;
+}
+
+/** `PATCH courses/:id/archive`. */
+export interface StudentCourseArchiveApi {
+  enrollmentId?: number;
+  courseId?: number;
+  archivedAt?: string | null;
 }
 
 export interface StudentCourseDetailDataApi {

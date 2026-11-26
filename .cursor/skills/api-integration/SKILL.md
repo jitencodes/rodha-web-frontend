@@ -19,6 +19,8 @@ Default reference for all website API work. Read Postman first; type real payloa
 - Course changes: `docs/api-collection/Rodha_Course_Changes_FE.postman_collection.json` + requested changes in `docs/API_CHANGES_COURSE_CHANGE_LISTING.md`
 - Package upgrade: `docs/api-collection/Rodha CR  package upgrade.postman_collection.json` (`GET student/packages`, quote, checkout, verify)
 - Add-ons: `docs/api-collection/Rodha_Package_Addons_FE.postman_collection.json` (cart, upgrade, orders)
+- Archive courses: `docs/api-collection/Rodha_Archive_Courses_FE.postman_collection.json`
+- Email / mobile verification + soft-block: `docs/api-collection/Rodha_Email_Verification_SoftBlock.postman_collection.json`, `Rodha_Mobile_Verification_SoftBlock.postman_collection.json`
 - Guest purchase: `docs/api-collection/Rodha CR Single page Purchase Flow.postman_collection.json` (`api/auth/purchase/*`)
 - Envelope: `{ success, message, data }`
 - Public GETs use `x-source` from `NEXT_PUBLIC_API_SOURCE` (optional `API_KEY` → `x-api-key` when set)
@@ -115,15 +117,17 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | auth | `POST api/auth/user/google` | `/api/auth/google` (`idToken`, `is_web: true`) |
 | auth | `POST api/auth/user/forgot-password` | `/api/auth/forgot-password` (`email`, `is_web: true`) |
 | auth | `POST api/auth/user/reset-password` | `/api/auth/reset-password` (`email`, `token`, `newPassword`, `is_web: true`) |
-| auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state` |
-| auth | `PATCH api/auth/me/details` | `/api/account/state` — send only a real `stateId` and/or `mobile`; omitted/empty keys stay unchanged; response is the updated student profile |
+| auth | `GET api/auth/me` | Account layout + `/api/auth/me` — includes `stateId` / `state`, `emailVerification`, `mobileVerification`, `registration`; `/api/account/gate-status` → `StudentGateProvider` |
+| auth | `POST api/auth/{email,mobile}-verification/otp/{send,verify}` | `/api/account/verification/[channel]/send\|verify` → `VerifyContactDialog`. Wrong OTP is 401 upstream, 400 from the BFF |
+| auth | `PATCH api/auth/me/details` | `/api/account/state` — `stateId` only (`mobile` is rejected; use the verification OTP) |
 | states | `GET api/website/states/dropdown` | `/api/states/dropdown` — registration + Update State dialog |
 | packages | `GET api/website/packages` | `/courses`, account buy tab; filters `search`, `categoryId`, `graphyCategory` (UI Type), `subCategory1`, `facultyId`, `subjectId`, `sortBy`, `sortOrder` (skip tag/language — no masters) |
 | packages | `GET api/website/packages/:slug` | `/courses/[slug]` — map faculty (`fullName`/`profileImageUrl`), testimonials, curriculum; hide empty sections; no Plans UI; discount % from `price`/`discountedPrice` |
 | packages | `GET api/website/packages/categories` | Type filter masters (`graphyCategory`); scoped by `categoryId` when set |
 | packages | `GET api/website/packages/subcategories` | Course tab masters (`subCategory1`); scoped by `categoryId` + `graphyCategory`; category landing tabs come from embedded `packages.groups` instead |
 | student | `GET api/website/student/dashboard` | Account dashboard |
-| student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`) |
+| student | `GET api/website/student/courses` | Continue Watching (`sortBy=continue_watching`); `archived=true` → Archived tab. Archived courses are left out otherwise |
+| student | `PATCH api/website/student/courses/:id/archive` | `/api/account/courses/[courseId]/archive` → `CourseArchiveButton` (`:id` = course id) |
 | student | `GET api/website/student/courses/:id` | Account course detail + takeUrl |
 | student/course-changes | `GET eligibility`, `GET/POST requests`, `POST requests/:id/cancel` | Course detail dialog, `/account/course-changes` |
 | student | cart / checkout / payments/verify | Single-package Buy Now → `/account/checkout`. Checkout body is stored `utm_*` fields plus optional checkout-only `stateName` (not a profile update) |
@@ -144,6 +148,8 @@ If a secret key must never reach the browser, proxy through a Route Handler.
 | recent-purchases | `GET api/website/recent-purchases` | `data.items[]` → bottom-left purchase toast, shown sequentially; package items link to `/courses/{itemSlug}`; hidden when empty |
 
 Student promocode / discount / checkout calls send `x-website-category-id` (`src/lib/api/website-category.ts`; `apiGet` and mutations take `headers`): the package `websiteCategoryId` when the call is about a package, else the default `1`. BFF field errors: `bffErrorResponse` (`src/lib/http/bff-response.ts`) returns `{ ok:false, error, errors:{ field: msg } }` with the API status.
+
+Soft-block: HTTP 201 + `success: false` + `errors.code` (`EMAIL_VERIFICATION_REQUIRED`, `MOBILE_VERIFICATION_REQUIRED`, `REGISTRATION_REQUIRED`) is thrown as `ApiError` 423 (`src/lib/api/soft-block.ts`). Client calls use `fetchAuthed`, which opens the student gate on 423.
 
 Authenticated GETs/mutations use `accessToken` via httpOnly cookie + BFF or RSC `apiGet(..., { accessToken })`.
 

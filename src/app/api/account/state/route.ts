@@ -1,100 +1,31 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { updateUserDetails } from "@/lib/api/modules/auth/service";
+import { updatedUserResponse } from "@/lib/auth/route-response";
 import { getAccessToken } from "@/lib/auth/server-session";
-import {
-  applySessionCookies,
-  AUTH_COOKIE_NAME,
-  AUTH_GRAPHY_COOKIE_NAME,
-  parseCookieJson,
-} from "@/lib/auth/session-cookie";
-import type { AuthGraphyViewModel } from "@/lib/api/modules/auth/types";
-import { ApiError } from "@/lib/api/types";
-import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
-import { validateIndianMobile } from "@/lib/form-validation";
+import { bffErrorResponse, bffUnauthorized } from "@/lib/http/bff-response";
 
 export const runtime = "nodejs";
 
+/** Save the student's state. A mobile number goes through the verification OTP. */
 export async function PATCH(request: Request) {
   const accessToken = await getAccessToken();
-  if (!accessToken) {
-    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-  }
+  if (!accessToken) return bffUnauthorized();
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json(
-      { ok: false, error: "Invalid JSON body." },
-      { status: 400 }
-    );
-  }
-
-  const record =
-    body && typeof body === "object"
-      ? (body as { stateId?: unknown; mobile?: unknown })
-      : {};
-
-  const hasState =
-    record.stateId != null && record.stateId !== "" && record.stateId !== "null";
-  const hasMobile =
-    typeof record.mobile === "string" && record.mobile.replace(/\D/g, "").length > 0;
-
-  if (!hasState && !hasMobile) {
-    return NextResponse.json(
-      { ok: false, error: "Nothing to update." },
-      { status: 400 }
-    );
-  }
-
-  const stateId = hasState ? Number(record.stateId) : undefined;
-  if (hasState && (!Number.isFinite(stateId) || (stateId ?? 0) <= 0)) {
+  const body = (await request.json().catch(() => null)) as {
+    stateId?: unknown;
+  } | null;
+  const stateId = Number(body?.stateId);
+  if (!Number.isInteger(stateId) || stateId <= 0) {
     return NextResponse.json(
       { ok: false, error: "Please select a valid state." },
       { status: 400 }
     );
   }
 
-  const mobile = hasMobile ? String(record.mobile).replace(/\D/g, "").slice(-10) : undefined;
-  const mobileError = hasMobile ? validateIndianMobile(mobile ?? "") : undefined;
-  if (mobileError) {
-    return NextResponse.json({ ok: false, error: mobileError }, { status: 400 });
-  }
-
   try {
-    const user = await updateUserDetails(accessToken, {
-      ...(hasState ? { stateId } : {}),
-      ...(hasMobile ? { mobile } : {}),
-    });
-    const jar = await cookies();
-    const token = jar.get(AUTH_COOKIE_NAME)?.value || accessToken;
-    const graphy = parseCookieJson<AuthGraphyViewModel>(
-      jar.get(AUTH_GRAPHY_COOKIE_NAME)?.value
-    );
-    const response = NextResponse.json({ ok: true, user });
-    applySessionCookies(
-      response,
-      {
-        accessToken: token,
-        user,
-        graphy,
-      },
-      request
-    );
-    return response;
+    const user = await updateUserDetails(accessToken, { stateId });
+    return await updatedUserResponse(user, request);
   } catch (error) {
-    if (error instanceof ApiError && isUnauthorizedStatus(error.status)) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-    }
-    const message =
-      error instanceof ApiError
-        ? error.message
-        : "Unable to update your profile right now.";
-    const status =
-      error instanceof ApiError && error.status >= 400 && error.status < 600
-        ? error.status
-        : 502;
-    return NextResponse.json({ ok: false, error: message }, { status });
+    return bffErrorResponse(error, "Unable to update your profile right now.");
   }
 }

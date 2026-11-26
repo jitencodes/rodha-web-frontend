@@ -1,0 +1,1469 @@
+{
+  "info": {
+    "name": "Rodha Mobile Verification & Soft Block",
+    "description": "Student mobile verification OTP (Azmarq) + soft-block messaging for Website and Rodha Buddy.\n\n**Captured from local DB/API** (`localhost:5000`, student `mobile.verify.docs@rodha.local`).\n\nUse environment **Rodha Local** (`{{baseUrl}}` = `http://localhost:5000/rodha/`).\n\n**Run order:** 00 Auth → 01 Admin settings → 02 Student OTP → 03 Me / popup → 04 Soft-block & errors.\n\n**FE docs:** `docs/FE_MOBILE_VERIFICATION_WEBSITE.md`, `docs/FE_MOBILE_VERIFICATION_BUDDY.md`.\n\n**Gate priority:** email → mobile → registration.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "adminAccessToken",
+      "value": ""
+    },
+    {
+      "key": "studentAccessToken",
+      "value": ""
+    },
+    {
+      "key": "rolePickToken",
+      "value": ""
+    },
+    {
+      "key": "roleId",
+      "value": "1"
+    },
+    {
+      "key": "websiteCategoryId",
+      "value": "1"
+    },
+    {
+      "key": "docsStudentEmail",
+      "value": "mobile.verify.docs@rodha.local"
+    },
+    {
+      "key": "docsStudentPassword",
+      "value": "Student@123"
+    },
+    {
+      "key": "docsMobile",
+      "value": "9685711771"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Auth",
+      "item": [
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data?.accessToken) { pm.collectionVariables.set('adminAccessToken', json.data.accessToken); pm.environment.set('adminAccessToken', json.data.accessToken); }",
+                  "if (json.data?.rolePickToken) pm.collectionVariables.set('rolePickToken', json.data.rolePickToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/admin/login",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "admin",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — login success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@rodha.com\",\n  \"password\": \"***\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/admin/login",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "admin",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"accessToken\": \"<jwt>\",\n    \"user\": {\n      \"id\": \"45f6dc4d-e059-4b31-b6f7-37a49f4692d9\",\n      \"email\": \"admin@rodha.com\",\n      \"fullName\": \"System Admin\",\n      \"userType\": \"ADMIN\",\n      \"mobile\": null,\n      \"isActive\": true,\n      \"profilePicturePath\": \"<s3-url>\"\n    },\n    \"roles\": [\n      \"admin\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Student Login (docs account)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data?.accessToken) { pm.collectionVariables.set('studentAccessToken', json.data.accessToken); pm.environment.set('studentAccessToken', json.data.accessToken); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{docsStudentEmail}}\",\n  \"password\": \"{{docsStudentPassword}}\",\n  \"is_web\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/user/login",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "user",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — student login (mobile.verify.docs@rodha.local)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"mobile.verify.docs@rodha.local\",\n  \"password\": \"***\",\n  \"is_web\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/user/login",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "user",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"accessToken\": \"<jwt>\",\n    \"user\": {\n      \"id\": \"98895ba4-4937-4aa4-a6c6-a38a06fad238\",\n      \"email\": \"mobile.verify.docs@rodha.local\",\n      \"fullName\": \"Mobile Verify Docs Student\",\n      \"userType\": \"STUDENT\",\n      \"mobile\": null,\n      \"isActive\": true,\n      \"profilePicturePath\": null\n    },\n    \"roles\": [\n      \"student\"\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 - Admin settings",
+      "item": [
+        {
+          "name": "GET mobile-verification-deadline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/settings/mobile-verification-deadline",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "settings",
+                "mobile-verification-deadline"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — hours from system_config (local)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/settings/mobile-verification-deadline",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "settings",
+                    "mobile-verification-deadline"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Mobile verification deadline fetched successfully\",\n  \"data\": {\n    \"mobileVerificationDeadlineHours\": 72,\n    \"updatedAt\": \"2026-11-24T11:23:40.693+05:30\",\n    \"updatedBy\": \"45f6dc4d-e059-4b31-b6f7-37a49f4692d9\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH mobile-verification-deadline",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobileVerificationDeadlineHours\": 72\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/settings/mobile-verification-deadline",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "settings",
+                "mobile-verification-deadline"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — updated to 72 hours",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobileVerificationDeadlineHours\": 72\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/settings/mobile-verification-deadline",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "settings",
+                    "mobile-verification-deadline"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Mobile verification deadline updated successfully\",\n  \"data\": {\n    \"mobileVerificationDeadlineHours\": 72,\n    \"updatedAt\": \"2026-11-24T11:23:40.738+05:30\",\n    \"updatedBy\": \"45f6dc4d-e059-4b31-b6f7-37a49f4692d9\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Student mobile OTP",
+      "item": [
+        {
+          "name": "POST mobile-verification/otp/send",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"{{docsMobile}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "mobile-verification",
+                "otp",
+                "send"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — OTP sent (not written to users.mobile yet)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "send"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\"\n}"
+            },
+            {
+              "name": "400 — mobile locked after verify",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711772\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "send"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Mobile number is locked and cannot be changed\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "409 — already verified on another account",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711772\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "send"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Mobile number is already verified on another account\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "429 — too many active OTPs",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "send"
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Too many active OTPs. Please wait before requesting a new one\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST mobile-verification/otp/verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"{{docsMobile}}\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/mobile-verification/otp/verify",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "mobile-verification",
+                "otp",
+                "verify"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — mobile verified (dev OTP 123456)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\",\n  \"otp\": \"123456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/verify",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "verify"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Mobile verified successfully\",\n  \"data\": {\n    \"mobileVerified\": true,\n    \"mobile\": \"9685711771\"\n  }\n}"
+            },
+            {
+              "name": "401 — invalid OTP",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\",\n  \"otp\": \"000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/verify",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "verify"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid OTP\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Me / popup status",
+      "item": [
+        {
+          "name": "GET /auth/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/me",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — popup window (required, not overdue)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/me",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Profile fetched successfully\",\n  \"data\": {\n    \"id\": \"98895ba4-4937-4aa4-a6c6-a38a06fad238\",\n    \"email\": \"mobile.verify.docs@rodha.local\",\n    \"fullName\": \"Mobile Verify Docs Student\",\n    \"userType\": \"STUDENT\",\n    \"mobile\": null,\n    \"isActive\": true,\n    \"profilePicturePath\": null,\n    \"stateId\": null,\n    \"state\": null,\n    \"defaultCategoryId\": null,\n    \"defaultExamId\": null,\n    \"defaultSubjectId\": null,\n    \"defaultWebsiteCategoryId\": 1,\n    \"categoryIds\": [],\n    \"examIds\": [],\n    \"subjectIds\": [],\n    \"categories\": [],\n    \"exams\": [],\n    \"subjects\": [],\n    \"roles\": [\n      \"student\"\n    ],\n    \"permissions\": [],\n    \"pending_notification\": false,\n    \"activePackages\": [],\n    \"emailVerification\": {\n      \"required\": false,\n      \"verified\": true,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"signupAt\": null\n    },\n    \"mobileVerification\": {\n      \"required\": true,\n      \"verified\": false,\n      \"overdue\": false,\n      \"deadlineAt\": \"2026-11-27T05:53:39.885+05:30\",\n      \"signupAt\": \"2026-11-24T05:53:39.885+05:30\"\n    },\n    \"registration\": {\n      \"completed\": false,\n      \"required\": false,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"firstEnrollmentAt\": null\n    }\n  }\n}"
+            },
+            {
+              "name": "200 — soft-block window (required + overdue)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/me",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Profile fetched successfully\",\n  \"data\": {\n    \"id\": \"98895ba4-4937-4aa4-a6c6-a38a06fad238\",\n    \"email\": \"mobile.verify.docs@rodha.local\",\n    \"fullName\": \"Mobile Verify Docs Student\",\n    \"userType\": \"STUDENT\",\n    \"mobile\": null,\n    \"isActive\": true,\n    \"profilePicturePath\": null,\n    \"stateId\": null,\n    \"state\": null,\n    \"defaultCategoryId\": null,\n    \"defaultExamId\": null,\n    \"defaultSubjectId\": null,\n    \"defaultWebsiteCategoryId\": 1,\n    \"categoryIds\": [],\n    \"examIds\": [],\n    \"subjectIds\": [],\n    \"categories\": [],\n    \"exams\": [],\n    \"subjects\": [],\n    \"roles\": [\n      \"student\"\n    ],\n    \"permissions\": [],\n    \"pending_notification\": false,\n    \"activePackages\": [],\n    \"emailVerification\": {\n      \"required\": false,\n      \"verified\": true,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"signupAt\": null\n    },\n    \"mobileVerification\": {\n      \"required\": true,\n      \"verified\": false,\n      \"overdue\": true,\n      \"deadlineAt\": \"2020-01-01T01:00:00.000+05:30\",\n      \"signupAt\": \"2020-01-01T00:00:00.000+05:30\"\n    },\n    \"registration\": {\n      \"completed\": false,\n      \"required\": false,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"firstEnrollmentAt\": null\n    }\n  }\n}"
+            },
+            {
+              "name": "200 — verified / locked",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/me",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Profile fetched successfully\",\n  \"data\": {\n    \"id\": \"98895ba4-4937-4aa4-a6c6-a38a06fad238\",\n    \"email\": \"mobile.verify.docs@rodha.local\",\n    \"fullName\": \"Mobile Verify Docs Student\",\n    \"userType\": \"STUDENT\",\n    \"mobile\": \"9685711771\",\n    \"isActive\": true,\n    \"profilePicturePath\": null,\n    \"stateId\": null,\n    \"state\": null,\n    \"defaultCategoryId\": null,\n    \"defaultExamId\": null,\n    \"defaultSubjectId\": null,\n    \"defaultWebsiteCategoryId\": 1,\n    \"categoryIds\": [],\n    \"examIds\": [],\n    \"subjectIds\": [],\n    \"categories\": [],\n    \"exams\": [],\n    \"subjects\": [],\n    \"roles\": [\n      \"student\"\n    ],\n    \"permissions\": [],\n    \"pending_notification\": false,\n    \"activePackages\": [],\n    \"emailVerification\": {\n      \"required\": false,\n      \"verified\": true,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"signupAt\": null\n    },\n    \"mobileVerification\": {\n      \"required\": false,\n      \"verified\": true,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"signupAt\": null\n    },\n    \"registration\": {\n      \"completed\": false,\n      \"required\": false,\n      \"overdue\": false,\n      \"deadlineAt\": null,\n      \"firstEnrollmentAt\": null\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /auth/me/details (mobile rejected)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"{{docsMobile}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/me/details",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "me",
+                "details"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "400 — must use mobile-verification OTP APIs",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/me/details",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "me",
+                    "details"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"mobile\": [\n      \"Use mobile verification OTP APIs to set or change mobile number\"\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Soft-block examples (HTTP 201)",
+      "item": [
+        {
+          "name": "Website — MOBILE_VERIFICATION_REQUIRED",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/website/student/dashboard",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "website",
+                "student",
+                "dashboard"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 — website mobile soft-block (captured)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "1",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/website/student/dashboard",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "website",
+                    "student",
+                    "dashboard"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Please verify your mobile number to continue on the Rodha website. Request an OTP and enter it to verify.\",\n  \"errors\": {\n    \"code\": \"MOBILE_VERIFICATION_REQUIRED\",\n    \"deadlineAt\": \"2020-01-01T01:00:00.000+05:30\",\n    \"signupAt\": \"2020-01-01T00:00:00.000+05:30\",\n    \"client\": \"website\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buddy — MOBILE_VERIFICATION_REQUIRED",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/doubts",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "doubts"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 — buddy mobile soft-block (captured)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/doubts",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "doubts"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Please verify your mobile number to continue in Rodha Buddy. Request an OTP and enter it to verify.\",\n  \"errors\": {\n    \"code\": \"MOBILE_VERIFICATION_REQUIRED\",\n    \"deadlineAt\": \"2020-01-01T01:00:00.000+05:30\",\n    \"signupAt\": \"2020-01-01T00:00:00.000+05:30\",\n    \"client\": \"buddy\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Allowlisted while soft-blocked — OTP send",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"{{docsMobile}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "auth",
+                "mobile-verification",
+                "otp",
+                "send"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 — still works during soft-block",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{studentAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mobile\": \"9685711771\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}api/auth/mobile-verification/otp/send",
+                  "host": [
+                    "{{baseUrl}}api"
+                  ],
+                  "path": [
+                    "auth",
+                    "mobile-verification",
+                    "otp",
+                    "send"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

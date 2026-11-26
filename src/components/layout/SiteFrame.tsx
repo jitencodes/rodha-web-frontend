@@ -8,7 +8,7 @@ import { FloatingCounsellingCta } from "@/components/layout/FloatingCounsellingC
 import { CounsellingModalProvider } from "@/components/layout/CounsellingModalProvider";
 import { PromoDialog } from "@/components/layout/PromoDialog";
 import { PurchaseToast } from "@/components/layout/PurchaseToast";
-import { RegistrationGateProvider } from "@/components/account/RegistrationGateProvider";
+import { StudentGateProvider } from "@/components/account/StudentGateProvider";
 import type { PromotionalBannerViewModel } from "@/lib/api/modules/promotional-banner/types";
 import type { RecentPurchaseViewModel } from "@/lib/api/modules/recent-purchases/types";
 import type { AnnouncementViewModel } from "@/lib/api/modules/announcements/types";
@@ -65,7 +65,7 @@ export function SiteFrame({
     return (
       <>
         {children}
-        <RegistrationGateProvider enabled={isLoggedIn} />
+        <StudentGateProvider enabled={isLoggedIn} />
       </>
     );
   }
@@ -93,7 +93,7 @@ export function SiteFrame({
         durationMs={purchaseToastMs}
         gapMs={purchaseToastGapMs}
       />
-      <RegistrationGateProvider enabled={isLoggedIn} />
+      <StudentGateProvider enabled={isLoggedIn} />
     </>
   );
 }

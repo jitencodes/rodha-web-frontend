@@ -24,15 +24,16 @@ export function paginateItems<T>(
   };
 }
 
-export type CoursesTab = "continue" | "buy";
+export type CoursesTab = "continue" | "archived" | "buy";
 
-/** Canonical tabs: `continue` | `buy`. Also accepts sidebar aliases. */
+/** Canonical tabs: `continue` | `archived` | `buy`. Also accepts sidebar aliases. */
 export function parseCoursesTab(
   raw: string | undefined | null
 ): CoursesTab {
   if (!raw) return "continue";
   const t = raw.toLowerCase();
   if (t === "buy" || t === "buy-courses") return "buy";
+  if (t === "archived") return "archived";
   if (t === "continue" || t === "continue-watching") return "continue";
   return "continue";
 }

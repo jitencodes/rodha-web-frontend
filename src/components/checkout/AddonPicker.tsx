@@ -6,6 +6,7 @@ import {
   GraduationCap,
   Loader2,
   MessageCircleQuestion,
+  Package,
   PackagePlus,
   Plus,
   X,
@@ -21,6 +22,7 @@ const TYPE_ICON: Record<AddonType, typeof BookOpen> = {
   GRAPHY_COURSE: GraduationCap,
   BUDDY_PACKAGE: MessageCircleQuestion,
   BOOK: BookOpen,
+  WEBSITE_PACKAGE: Package,
 };
 
 type AddonPickerProps = {

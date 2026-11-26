@@ -8,6 +8,7 @@ import { AccountContentTypeTabs } from "@/components/account/AccountContentTypeT
 import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
 import { AccountQuickContentToolbar } from "@/components/account/AccountQuickContentToolbar";
+import { CourseArchiveButton } from "@/components/account/CourseArchiveButton";
 import { CourseChangeCta } from "@/components/account/course-changes/CourseChangeCta";
 import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
 import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
@@ -261,12 +262,26 @@ export function AccountCourseDetailClient() {
         language={detail.language}
         categoryLabel={detail.categoryLabel}
         openCourseHref={openCourseHref || undefined}
+        archived={detail.archived}
         actions={
-          <CourseChangeCta
-            key={detail.courseId}
-            courseId={detail.courseId}
-            courseTitle={detail.title}
-          />
+          <>
+            <CourseArchiveButton
+              variant="header"
+              courseId={detail.courseId}
+              courseTitle={detail.title}
+              archived={detail.archived}
+              onChanged={(id, archived) =>
+                setDetail((prev) =>
+                  prev?.courseId === id ? { ...prev, archived } : prev
+                )
+              }
+            />
+            <CourseChangeCta
+              key={detail.courseId}
+              courseId={detail.courseId}
+              courseTitle={detail.title}
+            />
+          </>
         }
       />
 

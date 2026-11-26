@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { ACCOUNT_SUPPORT_CARD } from "@/data/account/user";
 import { ACCOUNT_PROFILE_PAGE_COPY } from "@/data/account/profile";
 import { useRegistrationIncomplete } from "@/hooks/useRegistrationIncomplete";
-import { requestOpenRegistrationDialog } from "@/lib/registration-gate";
+import { requestOpenRegistrationDialog } from "@/lib/student-gate";
 
 type AccountSidebarProps = {
   open: boolean;
@@ -53,7 +53,8 @@ export function AccountSidebar({ open, onClose }: AccountSidebarProps) {
     pathname.startsWith("/account/courses") &&
     (tab === null ||
       tab === "continue" ||
-      tab === "continue-watching");
+      tab === "continue-watching" ||
+      tab === "archived");
   const buyActive =
     pathname.startsWith("/account/courses") &&
     (tab === "buy" || tab === "buy-courses");

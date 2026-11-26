@@ -1,0 +1,706 @@
+{
+  "info": {
+    "name": "Rodha Archive Courses (FE)",
+    "description": "Student archives a course out of the enrolled course list and restores it. Student only, Rodha only (not synced with Graphy). Nothing else changes: access, progress and validity stay.\n\nAll calls need header `x-website-category-id`. Errors: 400 {errors:{field:[msg]}}, 404 (not enrolled / access removed / other category).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/rodha/"
+    },
+    {
+      "key": "studentAccessToken",
+      "value": ""
+    },
+    {
+      "key": "websiteCategoryId",
+      "value": "1"
+    },
+    {
+      "key": "websiteCourseId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Student - Lists",
+      "item": [
+        {
+          "name": "My Courses tab (not archived)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/courses?page=1&limit=10",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Archived courses are left out (`archived` omitted or `false`). Other filters unchanged: `search`, `packageIds`, `categoryId`, `subCategory1`, `validTillFrom`, `validTillTo`, `sortBy`."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses?page=1&limit=10"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Assigned courses fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"enrollmentId\": 5013,\n        \"learningStatus\": \"IN_PROGRESS\",\n        \"progress\": 42,\n        \"progressPercent\": 42,\n        \"totalTime\": 5400,\n        \"completed\": false,\n        \"validTill\": \"2027-12-31T00:00:00.000+05:30\",\n        \"lastAccessDate\": \"2026-10-02T00:00:00.000+05:30\",\n        \"startDate\": \"2026-06-01T00:00:00.000+05:30\",\n        \"assignedAt\": \"2026-06-01T10:00:00.000+05:30\",\n        \"archivedAt\": null,\n        \"includes\": {\n          \"liveClass\": 10,\n          \"video\": 40,\n          \"quiz\": 12,\n          \"pdf\": 8,\n          \"assignment\": 0\n        },\n        \"course\": {\n          \"id\": 113,\n          \"slug\": \"course-113\",\n          \"graphyProductId\": \"6a0000000000000000000113\",\n          \"title\": \"CAT 2027 VARC - R1\",\n          \"bannerImageUrl\": null,\n          \"language\": \"Hinglish\",\n          \"duration\": null,\n          \"price\": 4999,\n          \"discountedPrice\": 2999,\n          \"averageRating\": null,\n          \"ratingCount\": 0,\n          \"categories\": [\n            \"CAT\"\n          ],\n          \"subCategory1\": [\n            \"VARC\"\n          ],\n          \"courseTakeUrl\": \"https://example.graphy.com/s/courses/6a0000000000000000000113/take\",\n          \"courseTakeSsoLandingPath\": \"/s/courses/6a0000000000000000000113/take\"\n        }\n      }\n    ],\n    \"todayContents\": [],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "400 missing x-website-category-id",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses?page=1&limit=10"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"x-website-category-id header is required\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Archived tab",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/courses?archived=true&page=1&limit=10",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Archived courses only. Same filters, sorting and pagination as the main tab. `pagination.total` = tab count."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses?archived=true&page=1&limit=10"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Assigned courses fetched successfully\",\n  \"data\": {\n    \"items\": [\n      {\n        \"enrollmentId\": 5012,\n        \"learningStatus\": \"IN_PROGRESS\",\n        \"progress\": 42,\n        \"progressPercent\": 42,\n        \"totalTime\": 5400,\n        \"completed\": false,\n        \"validTill\": \"2027-12-31T00:00:00.000+05:30\",\n        \"lastAccessDate\": \"2026-10-02T00:00:00.000+05:30\",\n        \"startDate\": \"2026-06-01T00:00:00.000+05:30\",\n        \"assignedAt\": \"2026-06-01T10:00:00.000+05:30\",\n        \"archivedAt\": \"2026-11-23T15:10:00.000+05:30\",\n        \"includes\": {\n          \"liveClass\": 10,\n          \"video\": 40,\n          \"quiz\": 12,\n          \"pdf\": 8,\n          \"assignment\": 0\n        },\n        \"course\": {\n          \"id\": 112,\n          \"slug\": \"course-112\",\n          \"graphyProductId\": \"6a0000000000000000000112\",\n          \"title\": \"CAT 2026 Crash Course VARC\",\n          \"bannerImageUrl\": null,\n          \"language\": \"Hinglish\",\n          \"duration\": null,\n          \"price\": 4999,\n          \"discountedPrice\": 2999,\n          \"averageRating\": null,\n          \"ratingCount\": 0,\n          \"categories\": [\n            \"CAT\"\n          ],\n          \"subCategory1\": [\n            \"VARC\"\n          ],\n          \"courseTakeUrl\": \"https://example.graphy.com/s/courses/6a0000000000000000000112/take\",\n          \"courseTakeSsoLandingPath\": \"/s/courses/6a0000000000000000000112/take\"\n        }\n      }\n    ],\n    \"todayContents\": [],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "200 empty",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses?archived=true&page=1&limit=10"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Assigned courses fetched successfully\",\n  \"data\": {\n    \"items\": [],\n    \"todayContents\": [],\n    \"pagination\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 0,\n      \"totalPages\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "400 bad archived value",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses?archived=yes"
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"archived\": [\n      \"Invalid option: expected one of \\\"true\\\"|\\\"false\\\"\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Course detail (archive state)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Opens archived courses too. `enrollment.archivedAt` set → show Restore, `null` → show Archive. Example is shortened: `course` has more fields, unchanged."
+          },
+          "response": [
+            {
+              "name": "200 OK (shortened)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Assigned course fetched successfully\",\n  \"data\": {\n    \"enrollment\": {\n      \"id\": 5012,\n      \"status\": \"ACTIVE\",\n      \"learningStatus\": \"IN_PROGRESS\",\n      \"progress\": 42,\n      \"progressPercent\": 42,\n      \"totalTime\": 5400,\n      \"completed\": false,\n      \"validTill\": null,\n      \"lastAccessDate\": null,\n      \"startDate\": null,\n      \"assignedAt\": \"2026-06-01T10:00:00.000+05:30\",\n      \"archivedAt\": \"2026-11-23T15:10:00.000+05:30\"\n    },\n    \"course\": {\n      \"id\": 112,\n      \"displayTitle\": \"CAT 2026 Crash Course VARC\"\n    }\n  }\n}"
+            },
+            {
+              "name": "404 not enrolled",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}"
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Course not found or not assigned to you\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Student - Archive",
+      "item": [
+        {
+          "name": "Archive course",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"archived\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "`:id` is the **course id** (`items[].course.id`), not the enrollment id. `archived` must be a JSON boolean. Sending the same value again is safe. Only the student's own list changes; access and progress stay."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course archived successfully\",\n  \"data\": {\n    \"enrollmentId\": 5012,\n    \"courseId\": 112,\n    \"archivedAt\": \"2026-11-23T15:10:00.000+05:30\"\n  }\n}"
+            },
+            {
+              "name": "400 archived missing",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": {\n    \"archived\": [\n      \"Invalid input: expected boolean, received undefined\"\n    ]\n  }\n}"
+            },
+            {
+              "name": "400 invalid course id",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/abc/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid course id\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "400 missing x-website-category-id",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"x-website-category-id header is required\",\n  \"errors\": null\n}"
+            },
+            {
+              "name": "404 not enrolled",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Course not found or not assigned to you\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Restore course",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "x-source",
+                "value": "Postman",
+                "type": "text"
+              },
+              {
+                "key": "x-website-category-id",
+                "value": "{{websiteCategoryId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"archived\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{studentAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "`:id` is the **course id** (`items[].course.id`), not the enrollment id. `archived` must be a JSON boolean. Sending the same value again is safe. Only the student's own list changes; access and progress stay."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Course restored successfully\",\n  \"data\": {\n    \"enrollmentId\": 5012,\n    \"courseId\": 112,\n    \"archivedAt\": null\n  }\n}"
+            },
+            {
+              "name": "404 not enrolled",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "x-source",
+                    "value": "Postman",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-website-category-id",
+                    "value": "{{websiteCategoryId}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}api/website/student/courses/{{websiteCourseId}}/archive",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"archived\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Course not found or not assigned to you\",\n  \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

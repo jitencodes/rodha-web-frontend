@@ -159,52 +159,64 @@ export async function resetPassword(input: {
 }
 
 /**
- * GET api/auth/me — current user including `stateId` / `state`.
- * Envelope `data` may be the user object or `{ user }`.
+ * GET api/auth/me, unmapped. Envelope `data` may be the user object or `{ user }`.
  */
-export async function getCurrentUser(
-  accessToken: string
-): Promise<AuthUserViewModel | null> {
-  const data = await apiGet<AuthUserApi | { user?: AuthUserApi }>(ME_PATH, {
+export async function getMe(accessToken: string): Promise<AuthUserApi | null> {
+  const data = await apiGet<AuthUserApi | { user?: AuthUserApi } | null>(ME_PATH, {
     accessToken,
     cache: "no-store",
   });
+  if (data && typeof data === "object" && "user" in data) return data.user ?? null;
+  return data as AuthUserApi | null;
+}
 
-  if (data && typeof data === "object" && "user" in data) {
-    return mapAuthUser((data as { user?: AuthUserApi }).user);
-  }
-  return mapAuthUser(data as AuthUserApi);
+/** Current user including `stateId` / `state` and verification flags. */
+export async function getCurrentUser(
+  accessToken: string
+): Promise<AuthUserViewModel | null> {
+  return mapAuthUser(await getMe(accessToken));
+}
+
+/** Emails a code to the account address, or texts one to `mobile`. */
+export async function sendVerificationOtp(
+  accessToken: string,
+  input: { channel: "email" } | { channel: "mobile"; mobile: string }
+): Promise<void> {
+  await apiPost<unknown, { mobile?: string }>(
+    `api/auth/${input.channel}-verification/otp/send`,
+    input.channel === "mobile" ? { mobile: input.mobile } : {},
+    { accessToken }
+  );
+}
+
+/** Wrong code = 401. A verified mobile is saved on the account and locked. */
+export async function verifyVerificationOtp(
+  accessToken: string,
+  input:
+    | { channel: "email"; otp: string }
+    | { channel: "mobile"; otp: string; mobile: string }
+): Promise<void> {
+  await apiPost<unknown, { otp: string; mobile?: string }>(
+    `api/auth/${input.channel}-verification/otp/verify`,
+    input.channel === "mobile"
+      ? { mobile: input.mobile, otp: input.otp }
+      : { otp: input.otp },
+    { accessToken }
+  );
 }
 
 /**
- * PATCH api/auth/me/details — students only.
- * Send only fields with a real value. Null, "", or omitted keys stay unchanged.
- * Returns the updated profile.
+ * PATCH api/auth/me/details — students only, state only (a mobile number is
+ * set through the verification OTP). Returns the updated profile.
  */
 export async function updateUserDetails(
   accessToken: string,
-  patch: { stateId?: number | null; mobile?: string | null }
+  patch: { stateId: number }
 ): Promise<AuthUserViewModel> {
-  const body: { stateId?: number; mobile?: string } = {};
-  if (
-    typeof patch.stateId === "number" &&
-    Number.isFinite(patch.stateId) &&
-    patch.stateId > 0
-  ) {
-    body.stateId = patch.stateId;
-  }
-  const mobileDigits = (patch.mobile ?? "").replace(/\D/g, "");
-  if (mobileDigits.length >= 10) {
-    body.mobile = mobileDigits.slice(-10);
-  }
-  if (body.stateId == null && !body.mobile) {
-    throw new ApiError("At least one of state or mobile is required", 400);
-  }
-
   const data = await apiPatch<
     AuthUserApi | { user?: AuthUserApi },
-    { stateId?: number; mobile?: string }
-  >(ME_DETAILS_PATH, body, { accessToken });
+    { stateId: number }
+  >(ME_DETAILS_PATH, { stateId: patch.stateId }, { accessToken });
 
   const mapped =
     data && typeof data === "object" && "user" in data

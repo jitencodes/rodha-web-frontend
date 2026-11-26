@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { AccountBuyCoursesToolbar } from "@/components/account/AccountBuyCoursesToolbar";
 import { AccountContinueCoursesToolbar } from "@/components/account/AccountContinueCoursesToolbar";
@@ -7,6 +8,7 @@ import { AccountContinueWatchingCard } from "@/components/account/AccountContinu
 import { AccountLiveClassesSection } from "@/components/account/AccountLiveClassesSection";
 import { AccountPagination } from "@/components/account/AccountPagination";
 import { AccountQuickActionTiles } from "@/components/account/AccountQuickActionTiles";
+import { CourseArchiveButton } from "@/components/account/CourseArchiveButton";
 import { CourseCardV2 } from "@/components/cards/CourseCardV2";
 import type { AccountLiveContentItem } from "@/lib/api/modules/student/courses/mapper";
 import {
@@ -22,6 +24,7 @@ import {
   getPackageSubcategories,
 } from "@/lib/api/modules/packages/service";
 import {
+  getArchivedCourseCount,
   getStudentCourseFilterOptions,
   getStudentCourses,
 } from "@/lib/api/modules/student/courses/service";
@@ -66,6 +69,7 @@ interface AccountCoursesPageProps {
 
 const TABS: { id: CoursesTab; label: string }[] = [
   { id: "continue", label: "Continue Watching" },
+  { id: "archived", label: "Archived" },
   { id: "buy", label: "Buy Courses" },
 ];
 
@@ -83,6 +87,9 @@ export default async function AccountCoursesPage({
 }: AccountCoursesPageProps) {
   const params = await searchParams;
   const tab = parseCoursesTab(params.tab);
+  const isArchivedTab = tab === "archived";
+  /** Continue Watching and Archived: the same list, split by archive state. */
+  const isEnrolledTab = tab !== "buy";
   const page = parsePageParam(params.page);
   const packageId =
     params.packageId?.trim() && params.packageId !== "all"
@@ -114,12 +121,14 @@ export default async function AccountCoursesPage({
     continueItems,
     continueTotalPages,
     continuePage,
+    continueLoaded,
     buyItems,
     buyMeta,
     continueFilterOptions,
     buyCategoryOptions,
     buyTypeOptions,
     buySubCategoryOptions,
+    archivedCount,
   } = await withStudentAuth(async (accessToken) => {
     let todayContents: AccountLiveContentItem[] = [];
     let continueItems: Awaited<
@@ -127,6 +136,7 @@ export default async function AccountCoursesPage({
     >["items"] = [];
     let continueTotalPages = 1;
     let continuePage = page;
+    let continueLoaded = false;
     let buyItems: ReturnType<typeof packageCardToCourse>[] = [];
     let buyMeta = { page: 1, totalPages: 1 };
     let continueFilterOptions = {
@@ -139,7 +149,9 @@ export default async function AccountCoursesPage({
     let buyTypeOptions: { value: string; label: string }[] = [];
     let buySubCategoryOptions: { value: string; label: string }[] = [];
 
-    if (tab === "continue") {
+    const archivedCountPromise = getArchivedCourseCount(accessToken);
+
+    if (isEnrolledTab) {
       try {
         const [result, filterOptions] = await Promise.all([
           getStudentCourses(accessToken, {
@@ -152,13 +164,16 @@ export default async function AccountCoursesPage({
             subCategory1,
             validTillFrom,
             validTillTo,
+            archived: isArchivedTab,
           }),
           getStudentCourseFilterOptions(accessToken),
         ]);
-        todayContents = result.todayContents;
+        // Same on both tabs; shown on the main one only.
+        todayContents = isArchivedTab ? [] : result.todayContents;
         continueItems = result.items;
         continueTotalPages = result.totalPages;
         continuePage = result.page;
+        continueLoaded = true;
         continueFilterOptions = filterOptions;
       } catch (error) {
         if (isUnauthorizedError(error)) {
@@ -228,25 +243,26 @@ export default async function AccountCoursesPage({
       continueItems,
       continueTotalPages,
       continuePage,
+      continueLoaded,
       buyItems,
       buyMeta,
       continueFilterOptions,
       buyCategoryOptions,
       buyTypeOptions,
       buySubCategoryOptions,
+      archivedCount: await archivedCountPromise,
     };
   }, "/account/courses");
 
-  const currentPage = tab === "continue" ? continuePage : buyMeta.page;
-  const totalPages =
-    tab === "continue" ? continueTotalPages : buyMeta.totalPages;
+  const currentPage = isEnrolledTab ? continuePage : buyMeta.page;
+  const totalPages = isEnrolledTab ? continueTotalPages : buyMeta.totalPages;
 
   const paginationQuery: Record<string, string> = { tab };
   if (query) paginationQuery.q = query;
   if (categoryId) paginationQuery.categoryId = categoryId;
   if (subCategory1) paginationQuery.subCategory1 = subCategory1;
   if (packageId) paginationQuery.packageId = packageId;
-  if (tab === "continue") {
+  if (isEnrolledTab) {
     if (continueSort !== "continue_watching") {
       paginationQuery.sortBy = continueSort;
     }
@@ -258,6 +274,21 @@ export default async function AccountCoursesPage({
       paginationQuery.sort = buySortPreset.value;
     }
   }
+
+  // The last card of a page was archived / restored: show the previous page.
+  if (continueLoaded && continueItems.length === 0 && page > totalPages) {
+    const lastPageQuery = new URLSearchParams(paginationQuery);
+    if (totalPages > 1) lastPageQuery.set("page", String(totalPages));
+    redirect(`/account/courses?${lastPageQuery.toString()}`);
+  }
+
+  const isFiltered = Boolean(
+    query || categoryId || subCategory1 || packageId || validTillFrom || validTillTo
+  );
+  // e.g. View Course of a package whose courses are all archived.
+  const archivedHref = packageId
+    ? `/account/courses?tab=archived&packageId=${encodeURIComponent(packageId)}`
+    : "/account/courses?tab=archived";
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -273,7 +304,7 @@ export default async function AccountCoursesPage({
       <div
         role="tablist"
         aria-label="Course views"
-        className="mb-6 flex flex-wrap gap-2 border-b border-[var(--account-border)]"
+        className="mb-6 flex gap-2 overflow-x-auto overflow-y-hidden border-b border-[var(--account-border)] [scrollbar-width:none]"
       >
         {TABS.map((t) => {
           const active = tab === t.id;
@@ -284,23 +315,31 @@ export default async function AccountCoursesPage({
               role="tab"
               aria-selected={active}
               className={cn(
-                "-mb-px border-b-2 px-4 py-2.5 text-[14px] font-semibold transition-colors",
+                "shrink-0 whitespace-nowrap border-b-2 px-3 py-2.5 text-[14px] sm:px-4 font-semibold transition-colors",
                 active
                   ? "border-[var(--account-accent)] text-[var(--account-accent)]"
                   : "border-transparent text-[var(--account-text-muted)] hover:text-[var(--account-text)]"
               )}
             >
-              {t.label}
+              {t.id === "archived" && archivedCount
+                ? `${t.label} (${archivedCount})`
+                : t.label}
             </Link>
           );
         })}
       </div>
 
-      {tab === "continue" ? (
+      {isEnrolledTab ? (
         <>
-          <AccountLiveClassesSection items={todayContents} />
-          <AccountQuickActionTiles />
+          {isArchivedTab ? null : (
+            <>
+              <AccountLiveClassesSection items={todayContents} />
+              <AccountQuickActionTiles />
+            </>
+          )}
           <AccountContinueCoursesToolbar
+            key={tab}
+            tab={isArchivedTab ? "archived" : "continue"}
             initialSearch={query || ""}
             activeCategoryId={categoryId || "all"}
             categoryOptions={continueFilterOptions.categories}
@@ -326,15 +365,36 @@ export default async function AccountCoursesPage({
         />
       )}
 
-      {tab === "continue" ? (
+      {isEnrolledTab ? (
         continueItems.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {continueItems.map((item) => (
-              <AccountContinueWatchingCard key={item.id} item={item} />
+              <AccountContinueWatchingCard
+                key={item.id}
+                item={item}
+                secondaryAction={
+                  <CourseArchiveButton
+                    courseId={item.id}
+                    courseTitle={item.title}
+                    archived={isArchivedTab}
+                  />
+                }
+              />
             ))}
           </div>
         ) : (
-          <EmptyState message="No courses match these filters." />
+          <EmptyState
+            message={
+              isArchivedTab && !isFiltered
+                ? "No archived courses."
+                : "No courses match these filters."
+            }
+            link={
+              !isArchivedTab && archivedCount
+                ? { href: archivedHref, label: "View archived courses →" }
+                : undefined
+            }
+          />
         )
       ) : buyItems.length > 0 ? (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -366,10 +426,24 @@ export default async function AccountCoursesPage({
   );
 }
 
-function EmptyState({ message }: { message: string }) {
+function EmptyState({
+  message,
+  link,
+}: {
+  message: string;
+  link?: { href: string; label: string };
+}) {
   return (
     <div className="rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-surface)] px-6 py-12 text-center">
       <p className="text-body text-[var(--account-text-muted)]">{message}</p>
+      {link ? (
+        <Link
+          href={link.href}
+          className="mt-4 inline-block text-[13px] font-semibold text-[var(--account-accent)]"
+        >
+          {link.label}
+        </Link>
+      ) : null}
     </div>
   );
 }

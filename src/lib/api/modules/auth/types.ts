@@ -1,4 +1,8 @@
 import type { AuthStateApi } from "@/lib/api/modules/states/types";
+import type {
+  StudentRegistrationStatusApi,
+  StudentVerificationApi,
+} from "@/lib/api/modules/student/gate/types";
 
 /** Raw student user from signup / login / me `data.user` or `data`. */
 export interface AuthUserApi {
@@ -11,6 +15,10 @@ export interface AuthUserApi {
   profilePicturePath: string | null;
   stateId?: number | null;
   state?: AuthStateApi | null;
+  /** `GET auth/me` only. */
+  emailVerification?: StudentVerificationApi | null;
+  mobileVerification?: StudentVerificationApi | null;
+  registration?: StudentRegistrationStatusApi | null;
 }
 
 /** Optional Graphy SSO payload — mapped but unused in the auth UI. */
@@ -106,6 +114,10 @@ export interface AuthUserViewModel {
   profilePicturePath: string | null;
   stateId: number | null;
   state: AuthStateViewModel | null;
+  /** Null / missing = unknown (only `auth/me` reports it). */
+  emailVerified?: boolean | null;
+  /** A verified mobile is locked. */
+  mobileVerified?: boolean | null;
 }
 
 export interface AuthGraphyViewModel {

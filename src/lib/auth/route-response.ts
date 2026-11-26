@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { getAccessToken, getSessionGraphy } from "@/lib/auth/server-session";
 import { applySessionCookies } from "@/lib/auth/session-cookie";
 import { ApiError } from "@/lib/api/types";
-import type { AuthSessionViewModel } from "@/lib/api/modules/auth/types";
+import type {
+  AuthSessionViewModel,
+  AuthUserViewModel,
+} from "@/lib/api/modules/auth/types";
 
 export function jsonError(message: string, status: number) {
   return NextResponse.json({ ok: false, error: message }, { status });
@@ -30,6 +34,23 @@ export function sessionResponse(
     },
     request
   );
+  return response;
+}
+
+/** `{ ok, user }` with the user cookie refreshed; the Graphy session is kept. */
+export async function updatedUserResponse(
+  user: AuthUserViewModel,
+  request: Request
+) {
+  const response = NextResponse.json({ ok: true, user });
+  const accessToken = await getAccessToken();
+  if (accessToken) {
+    applySessionCookies(
+      response,
+      { accessToken, user, graphy: await getSessionGraphy() },
+      request
+    );
+  }
   return response;
 }
 

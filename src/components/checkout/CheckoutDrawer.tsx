@@ -19,12 +19,14 @@ import type {
   AuthUserViewModel,
   PurchaseIdentifyViewModel,
 } from "@/lib/api/modules/auth/types";
+import { SOFT_BLOCK_STATUS } from "@/lib/api/soft-block";
 import { isUnauthorizedStatus } from "@/lib/auth/session-expired";
 import type {
   CheckoutProduct,
   CheckoutSession,
   CheckoutSessionResponse,
 } from "@/lib/checkout/types";
+import { requestStudentGateCheck } from "@/lib/student-gate";
 
 export type CheckoutDrawerProduct = CheckoutProduct & {
   packageId: number;
@@ -100,6 +102,7 @@ export function CheckoutDrawer({
       const data = (await res.json().catch(() => null)) as CheckoutSessionResponse | null;
       if (request !== requestRef.current) return;
       if (!res.ok || !data?.ok || !data.session) {
+        if (res.status === SOFT_BLOCK_STATUS) requestStudentGateCheck(true);
         setView({ step: "error", message: data?.error || "Unable to start checkout" });
         return;
       }

@@ -1,4 +1,4 @@
-import { apiGet } from "@/lib/api/client";
+import { apiGet, apiPatch } from "@/lib/api/client";
 import { buildApiQuery } from "@/lib/api/query";
 import {
   mapContinueWatchingItems,
@@ -15,6 +15,7 @@ import {
 import type {
   QuickActionsDataApi,
   QuickActionsQuery,
+  StudentCourseArchiveApi,
   StudentCourseChapterOptionsDataApi,
   StudentCourseContentTypeQuery,
   StudentCourseDetailDataApi,
@@ -39,6 +40,8 @@ export interface StudentCoursesQuery {
   subCategory1?: string;
   validTillFrom?: string;
   validTillTo?: string;
+  /** True lists archived courses only; otherwise they are left out. */
+  archived?: boolean;
 }
 
 export interface StudentCourseDetailQuery {
@@ -74,6 +77,7 @@ export async function getStudentCourses(
     subCategory1: query.subCategory1,
     validTillFrom: query.validTillFrom,
     validTillTo: query.validTillTo,
+    archived: query.archived ? "true" : undefined,
   });
 
   const data = await apiGet<StudentCoursesListDataApi>(`${COURSES_PATH}${qs}`, {
@@ -89,6 +93,31 @@ export async function getStudentCourses(
     total: data.pagination?.total ?? 0,
     totalPages: data.pagination?.totalPages ?? 1,
   };
+}
+
+/** Archived tab count; null when it cannot be loaded. */
+export async function getArchivedCourseCount(
+  accessToken: string
+): Promise<number | null> {
+  try {
+    return (await getStudentCourses(accessToken, { archived: true, limit: 1 })).total;
+  } catch {
+    return null;
+  }
+}
+
+/** Returns the archive date, or null once restored. */
+export async function setStudentCourseArchived(
+  accessToken: string,
+  courseId: string,
+  archived: boolean
+): Promise<string | null> {
+  const data = await apiPatch<StudentCourseArchiveApi, { archived: boolean }>(
+    `${COURSES_PATH}/${encodeURIComponent(courseId)}/archive`,
+    { archived },
+    { accessToken, headers: websiteCategoryHeaders() }
+  );
+  return data?.archivedAt ?? null;
 }
 
 export async function getStudentCourseDetail(

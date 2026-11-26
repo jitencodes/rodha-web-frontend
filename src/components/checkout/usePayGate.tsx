@@ -2,10 +2,11 @@
 
 import { useState, type ReactNode } from "react";
 import { CheckoutLocationDialog } from "@/components/account/CheckoutLocationDialog";
-import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
+import { VerifyContactDialog } from "@/components/account/VerifyContactDialog";
 import { userHasMobile } from "@/lib/api/modules/auth/mapper";
 import type { AuthUserViewModel } from "@/lib/api/modules/auth/types";
 import { resolveCheckoutState } from "@/lib/geo/detect-current-state";
+import { requestStudentGateCheck } from "@/lib/student-gate";
 
 type PayGateOptions = {
   user: AuthUserViewModel | null;
@@ -20,7 +21,7 @@ type PayGateOptions = {
 
 /**
  * Steps before payment, shared by checkout and package upgrade: a mobile
- * number is required, then the buyer's state (GPS, else picked or skipped).
+ * number is required (added by OTP), then the buyer's state (GPS, else picked or skipped).
  */
 export function usePayGate({
   user,
@@ -78,19 +79,21 @@ export function usePayGate({
 
   const dialogs = (
     <>
-      <UpdateStateDialog
-        open={mobileDialogOpen}
-        required
-        fields={["mobile"]}
-        initialMobile={user?.mobile || initialMobile}
-        onClose={() => setMobileDialogOpen(false)}
-        onUpdated={(updated) => {
-          setMobileDialogOpen(false);
-          setError(null);
-          onUserUpdated?.(updated);
-          void resolveStateAndSubmit();
-        }}
-      />
+      {mobileDialogOpen ? (
+        <VerifyContactDialog
+          channel="mobile"
+          initialMobile={user?.mobile || initialMobile}
+          onClose={() => setMobileDialogOpen(false)}
+          onVerified={({ user: updated, mobile }) => {
+            setMobileDialogOpen(false);
+            setError(null);
+            if (updated) onUserUpdated?.(updated);
+            else if (user) onUserUpdated?.({ ...user, mobile, mobileVerified: true });
+            requestStudentGateCheck();
+            void resolveStateAndSubmit();
+          }}
+        />
+      ) : null}
       <CheckoutLocationDialog
         open={locationDialogOpen}
         permissionDenied={permissionDenied}

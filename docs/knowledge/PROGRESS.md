@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-25 (course change CTA states, compact account cards)
+**Last updated:** 2026-11-25 (archive courses, email / mobile verification, package add-ons, registration gate)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -9,6 +9,14 @@ Update this file after every meaningful implementation task.
 
 ## Completed
 
+- **Archive courses, email / mobile verification, WEBSITE_PACKAGE add-ons, registration gate (2026-11-25):**
+  - **Archive:** `/account/courses?tab=archived` (count in the tab, same filters / pagination as Continue Watching, no live classes or quick actions). `CourseArchiveButton` on cards and `/account/courses/:id`, with Undo. An emptied last page redirects to the previous one. Continue Watching links to Archived when a filter finds nothing.
+  - **Verification:** `StudentGateProvider` (was `RegistrationGateProvider`) reads `GET auth/me` through `/api/account/gate-status` and shows one gate at a time: overdue first, then email → mobile → registration. Reminders are dismissible (1h); overdue ones block `/account`. `VerifyContactDialog` sends and verifies the OTP through `/api/account/verification/[channel]/send|verify`.
+  - **Soft-block:** 201 + `errors.code` becomes `ApiError` 423 (`SOFT_BLOCK_STATUS`); `fetchAuthed` opens the matching dialog on 423. After a block is cleared the page reloads.
+  - **Mobile is OTP only:** `PATCH auth/me/details` rejects `mobile`, so `UpdateStateDialog`, `RequireStateGate` and `/api/account/state` are state only. The pay gate and the profile page use `VerifyContactDialog`. A verified number shows a Verified badge and cannot be edited.
+  - **Add-ons:** type `WEBSITE_PACKAGE` ("Package", linked package title) in checkout, upgrade, Manage Packages and My Orders.
+  - **Registration:** `required` now means "enrolled in a registrationActive package and not submitted", and drives only the popup and the block. Any student who has not submitted can open the form from the sidebar or profile.
+  - **Toasts:** the second `Toaster` in `AccountShell` is gone (the root `AppToaster` covers it); each toast was mounted twice.
 - **Course change CTA states + compact account cards (2026-11-25):**
   - **CTA on `/account/courses/:id`:** eligibility is per student, so "Course switch under review" shows only when `pendingRequestId` is a request from this course (matched in the request history, `pendingForCourse`). Any other `canRequest: false` (cooldown, limit, request for another course) shows the CTA disabled with `blockedMessage` and the next allowed date. Feature off, or nothing to switch to, hides it.
   - **Cards below 2xl:** smaller price / coupon / CTA text on `AccountRecommendedCard` and on Buy Courses (`CourseCardV2 compactPricing`). Dashboard Continue Watching and Recommended stay 2 columns until 2xl, then 4.

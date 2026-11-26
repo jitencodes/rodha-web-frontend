@@ -24,13 +24,17 @@ import { toast } from "sonner";
 import { EmailUpdateRequestDialog } from "@/components/account/EmailUpdateRequestDialog";
 import { ProfileAvatarCropModal } from "@/components/account/ProfileAvatarCropModal";
 import { UpdateStateDialog } from "@/components/account/UpdateStateDialog";
-import type { AccountProfileField } from "@/lib/api/modules/auth/mapper";
+import { VerifyContactDialog } from "@/components/account/VerifyContactDialog";
+import type { VerificationChannel } from "@/lib/api/modules/student/gate/types";
 import type { StudentRegistrationFormViewModel } from "@/lib/api/modules/student/registration/types";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import type { AccountProfile } from "@/lib/account/types";
 import { fetchAuthed } from "@/lib/auth/session-expired";
 import { getInitials } from "@/lib/initials";
-import { requestOpenRegistrationDialog } from "@/lib/registration-gate";
+import {
+  requestOpenRegistrationDialog,
+  requestStudentGateCheck,
+} from "@/lib/student-gate";
 import { userAtom } from "@/lib/store/user";
 import { cn } from "@/lib/utils";
 import {
@@ -89,6 +93,15 @@ const inputClassName = cn(
   "disabled:cursor-not-allowed disabled:opacity-60"
 );
 
+function VerifiedBadge() {
+  return (
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[var(--account-status-active-bg)] px-2 py-0.5 text-[11px] font-semibold text-[var(--account-status-active-text)]">
+      <CheckCircle2 className="size-3" aria-hidden />
+      Verified
+    </span>
+  );
+}
+
 export function AccountProfilePanel({
   initialProfile,
   registration,
@@ -100,7 +113,8 @@ export function AccountProfilePanel({
   const [profile, setProfile] = useState(initialProfile);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [profileEdit, setProfileEdit] = useState<AccountProfileField | null>(null);
+  const [stateEditOpen, setStateEditOpen] = useState(false);
+  const [verifying, setVerifying] = useState<VerificationChannel | null>(null);
   const alreadySubmitted = Boolean(registration?.alreadySubmitted);
   const [emailUpdateOpen, setEmailUpdateOpen] = useState(false);
 
@@ -316,6 +330,17 @@ export function AccountProfilePanel({
                 </span>
               )}
             </span>
+            {authUser?.emailVerified === true ? (
+              <VerifiedBadge />
+            ) : authUser?.emailVerified === false ? (
+              <button
+                type="button"
+                onClick={() => setVerifying("email")}
+                className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] px-2.5 py-1.5 text-[12px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              >
+                Verify
+              </button>
+            ) : null}
             {/* <button
               type="button"
               onClick={() => setEmailUpdateOpen(true)}
@@ -347,14 +372,18 @@ export function AccountProfilePanel({
                 </span>
               )}
             </span>
-            <button
-              type="button"
-              onClick={() => setProfileEdit("mobile")}
-              aria-label="Update mobile"
-              className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
-            >
-              <Pencil className="size-3.5" strokeWidth={1.75} aria-hidden />
-            </button>
+            {authUser?.mobileVerified === true ? (
+              <VerifiedBadge />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setVerifying("mobile")}
+                aria-label={profile.phone ? "Verify mobile" : "Add mobile"}
+                className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] px-2.5 py-1.5 text-[12px] font-semibold text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
+              >
+                {profile.phone ? "Verify" : "Add"}
+              </button>
+            )}
           </div>
           <div className="flex items-start gap-3 rounded-[var(--account-radius)] border border-[var(--account-border)] bg-[var(--account-bg)] px-3.5 py-3 sm:col-span-2">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--account-accent-soft)] text-[var(--account-accent)]">
@@ -370,7 +399,7 @@ export function AccountProfilePanel({
             </div>
             <button
               type="button"
-              onClick={() => setProfileEdit("state")}
+              onClick={() => setStateEditOpen(true)}
               aria-label="Update state"
               className="shrink-0 cursor-pointer rounded-lg border border-[var(--account-accent)] p-2 text-[var(--account-accent)] transition-colors hover:bg-[var(--account-nav-active-bg)]"
             >
@@ -566,15 +595,12 @@ export function AccountProfilePanel({
       />
 
       <UpdateStateDialog
-        open={profileEdit != null}
-        fields={profileEdit ? [profileEdit] : []}
+        open={stateEditOpen}
         initialStateId={stateId}
-        initialMobile={profile.phone || authUser?.mobile || ""}
-        onClose={() => setProfileEdit(null)}
+        onClose={() => setStateEditOpen(false)}
         onUpdated={(user) => {
           setProfile((prev) => ({
             ...prev,
-            phone: user.mobile || prev.phone,
             stateId: user.stateId,
             stateName: user.state?.name || "",
             stateCode: user.state?.code || "",
@@ -582,6 +608,23 @@ export function AccountProfilePanel({
           router.refresh();
         }}
       />
+
+      {verifying ? (
+        <VerifyContactDialog
+          channel={verifying}
+          email={profile.email}
+          initialMobile={profile.phone || authUser?.mobile || ""}
+          onClose={() => setVerifying(null)}
+          onVerified={({ mobile }) => {
+            if (verifying === "mobile") {
+              setProfile((prev) => ({ ...prev, phone: mobile }));
+            }
+            setVerifying(null);
+            requestStudentGateCheck();
+            router.refresh();
+          }}
+        />
+      ) : null}
 
       <EmailUpdateRequestDialog
         open={emailUpdateOpen}

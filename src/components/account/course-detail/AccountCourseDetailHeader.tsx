@@ -6,6 +6,7 @@ type AccountCourseDetailHeaderProps = {
   language?: string;
   categoryLabel?: string;
   openCourseHref?: string;
+  archived?: boolean;
   /** Extra CTAs before Start Learning. */
   actions?: ReactNode;
 };
@@ -15,6 +16,7 @@ export function AccountCourseDetailHeader({
   language,
   categoryLabel,
   openCourseHref,
+  archived = false,
   actions,
 }: AccountCourseDetailHeaderProps) {
   const chips = [categoryLabel, language].filter(Boolean);
@@ -23,10 +25,10 @@ export function AccountCourseDetailHeader({
     <div className="mb-6">
       <div className="mb-4">
         <Link
-          href="/account/courses?tab=continue"
+          href={`/account/courses?tab=${archived ? "archived" : "continue"}`}
           className="text-[13px] font-medium text-[var(--account-accent)] hover:underline"
         >
-          ← Back to Continue Watching
+          ← Back to {archived ? "Archived" : "Continue Watching"}
         </Link>
       </div>
 

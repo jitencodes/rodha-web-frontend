@@ -5,9 +5,9 @@ import {
   getRegistrationIncomplete,
   getRegistrationIncompleteServer,
   subscribeRegistrationIncomplete,
-} from "@/lib/registration-gate";
+} from "@/lib/student-gate";
 
-/** True once the registration gate reports the student has not finished registration. */
+/** True until the student has submitted the registration form (required or not). */
 export function useRegistrationIncomplete(): boolean {
   return useSyncExternalStore(
     subscribeRegistrationIncomplete,

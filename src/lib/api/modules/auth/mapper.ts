@@ -10,9 +10,17 @@ import type {
   PurchaseIdentifyViewModel,
 } from "@/lib/api/modules/auth/types";
 import { mapAuthState } from "@/lib/api/modules/states/mapper";
+import type { StudentVerificationApi } from "@/lib/api/modules/student/gate/types";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function mapVerified(
+  raw: StudentVerificationApi | null | undefined
+): boolean | null {
+  if (!raw) return null;
+  return raw.verified === true || raw.required === false;
 }
 
 export function mapAuthUser(
@@ -42,6 +50,8 @@ export function mapAuthUser(
         : null,
     stateId,
     state,
+    emailVerified: mapVerified(user.emailVerification),
+    mobileVerified: mapVerified(user.mobileVerification),
   };
 }
 
@@ -114,17 +124,4 @@ export function userHasState(user: AuthUserViewModel | null | undefined): boolea
 export function userHasMobile(user: AuthUserViewModel | null | undefined): boolean {
   const digits = (user?.mobile ?? "").replace(/\D/g, "");
   return digits.length >= 10;
-}
-
-export type AccountProfileField = "state" | "mobile";
-
-/** Fields the blocking account dialog should ask for. */
-export function missingAccountProfileFields(
-  user: AuthUserViewModel | null | undefined
-): AccountProfileField[] {
-  if (!user) return [];
-  const fields: AccountProfileField[] = [];
-  if (!userHasState(user)) fields.push("state");
-  if (!userHasMobile(user)) fields.push("mobile");
-  return fields;
 }

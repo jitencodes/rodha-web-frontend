@@ -7,6 +7,8 @@ import {
   accountInputClassName,
   accountLabelClassName,
 } from "@/components/account/forms/accountFieldStyles";
+import { OTP_LENGTH, OtpField, OtpResend } from "@/components/forms/OtpField";
+import { useResendCooldown } from "@/hooks/useResendCooldown";
 import type {
   AuthUserViewModel,
   PurchaseAuthOption,
@@ -14,9 +16,6 @@ import type {
 } from "@/lib/api/modules/auth/types";
 import { validatePassword } from "@/lib/form-validation";
 import { cn } from "@/lib/utils";
-
-const OTP_LENGTH = 6;
-const RESEND_SECONDS = 30;
 
 type GuestVerifyProps = {
   identity: PurchaseIdentifyViewModel;
@@ -35,12 +34,6 @@ type AuthResponse = { ok?: boolean; error?: string; user?: AuthUserViewModel };
 
 const PRIMARY_BUTTON =
   "inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-[var(--account-radius)] bg-[var(--account-accent)] px-4 text-[14px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60";
-
-function resendSecondsLeft(sentAt: number | null, now: number): number {
-  if (sentAt == null) return 0;
-  const elapsed = Math.max(0, Math.floor((now - sentAt) / 1000));
-  return Math.max(0, RESEND_SECONDS - elapsed);
-}
 
 // Plain `fetch`: a 401 here means wrong credentials, not an expired session.
 async function postAuth(url: string, body: unknown, fallback: string): Promise<AuthResponse> {
@@ -79,17 +72,10 @@ export function GuestVerify({
   const [notice, setNotice] = useState("");
   const [pending, setPending] = useState(false);
   const [resending, setResending] = useState(false);
-  const [now, setNow] = useState(() => Date.now());
   const otpSent = otpSentAt != null;
-  const secondsLeft = resendSecondsLeft(otpSentAt, now);
+  const secondsLeft = useResendCooldown(otpSentAt);
   const inFlightRef = useRef(false);
   const locked = disabled || pending;
-
-  useEffect(() => {
-    if (otpSentAt == null) return;
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
-  }, [otpSentAt]);
 
   // `identify` does not email a code: send the first one when OTP is the method.
   useEffect(() => {
@@ -157,7 +143,6 @@ export function GuestVerify({
       );
       onOtpSent();
       setOtp("");
-      setNow(Date.now());
       if (otpSent) setNotice("We sent a new code to your email.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to send the code right now.");
@@ -216,29 +201,16 @@ export function GuestVerify({
       <form onSubmit={submitOtp} noValidate className="space-y-3">
         {otpSent ? (
           <>
-            <div>
-              <label htmlFor="guest-otp" className={accountLabelClassName}>
-                Verification code
-              </label>
-              <input
-                id="guest-otp"
-                value={otp}
-                onChange={(e) => {
-                  setOtp(e.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH));
-                  setError("");
-                }}
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                autoFocus
-                placeholder="000000"
-                disabled={locked}
-                aria-invalid={Boolean(error)}
-                className={cn(
-                  accountInputClassName,
-                  "text-center font-mono !text-[20px] tracking-[0.5em]"
-                )}
-              />
-            </div>
+            <OtpField
+              id="guest-otp"
+              value={otp}
+              onChange={(value) => {
+                setOtp(value);
+                setError("");
+              }}
+              disabled={locked}
+              invalid={Boolean(error)}
+            />
             <button
               type="submit"
               disabled={locked || otp.length !== OTP_LENGTH}
@@ -246,21 +218,12 @@ export function GuestVerify({
             >
               {pending ? "Verifying…" : "Verify and continue"}
             </button>
-            <p className="text-center text-[12px] text-[var(--account-text-muted)]">
-              Didn&apos;t get it?{" "}
-              <button
-                type="button"
-                onClick={() => void sendCode()}
-                disabled={resending || secondsLeft > 0 || locked}
-                className="cursor-pointer font-semibold text-[var(--account-accent)] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {resending
-                  ? "Sending…"
-                  : secondsLeft > 0
-                    ? `Resend in ${secondsLeft}s`
-                    : "Resend code"}
-              </button>
-            </p>
+            <OtpResend
+              onResend={() => void sendCode()}
+              resending={resending}
+              secondsLeft={secondsLeft}
+              disabled={locked}
+            />
           </>
         ) : (
           <button
