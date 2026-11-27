@@ -1,6 +1,7 @@
 import { FacultyIcon } from "@/lib/faculty-icons";
 import { SectionHeaderV2 } from "@/components/sections/SectionHeaderV2";
 import { CourseCurriculumAccordion } from "@/components/sections/course/CourseCurriculumAccordion";
+import { RichTextContent } from "@/components/ui/RichTextContent";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/lib/types";
 
@@ -28,15 +29,10 @@ export function CourseDetailsCurriculumSection({
           title="Course Details"
           className="!mb-6"
         />
-        <p className="max-w-3xl text-body leading-relaxed text-neutral-600">
-          {course.description}
-        </p>
-        {/* Static Demo Class Link */}
-        <div className="mt-2">
-          <a href="https://www.rodha.co.in/courses/CAT-2027-Free-Course-6ac92652096a0dd757979b6f" className="text-body-sm text-orange-500">
-          Check our demo classes for free
-          </a>
-        </div>
+        <RichTextContent
+          html={course.description}
+          className="max-w-3xl text-body"
+        />
         {detailRows.length > 0 && (
           <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {detailRows.map((row) => (

@@ -12,6 +12,7 @@ import type {
 import type { FacultyApi } from "@/lib/api/modules/faculty/types";
 import { mapFacultyCards } from "@/lib/api/modules/faculty/mapper";
 import { COURSE_IMAGE_FALLBACK } from "@/lib/constants";
+import { htmlToPlainText } from "@/lib/rich-text";
 import type {
   Course,
   CourseModule,
@@ -330,7 +331,7 @@ export function mapPackageDetail(
   const course: Course = {
     ...packageCardToCourse(card),
     description,
-    shortDescription: card.subtitle || description,
+    shortDescription: card.subtitle || htmlToPlainText(description),
     duration,
     mode,
     level,

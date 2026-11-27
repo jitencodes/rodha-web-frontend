@@ -118,6 +118,9 @@ export function StateSelectField({
         triggerClassName={triggerClassName}
         triggerWidth="full"
         menuWidth="trigger"
+        searchable
+        searchPlaceholder="Search state…"
+        emptySearchLabel="No state matches your search"
       />
     </div>
   );

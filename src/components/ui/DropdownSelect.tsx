@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -65,6 +66,19 @@ interface DropdownSelectProps {
   menuMaxWidth?: number;
 
   variant?: "dark" | "light" | "account";
+
+  /**
+   * Shows a filter input at the top of the open menu (long lists such as
+   * states). Typing narrows options; ↑/↓ + Enter select.
+   */
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  /** Shown when the filter matches nothing. */
+  emptySearchLabel?: string;
+}
+
+function normaliseSearch(value: string): string {
+  return value.toLowerCase().replace(/\s+/g, " ").trim();
 }
 
 export function DropdownSelect({
@@ -87,11 +101,58 @@ export function DropdownSelect({
   menuMaxWidth,
 
   variant = "dark",
+  searchable = false,
+  searchPlaceholder = "Type to search…",
+  emptySearchLabel = "No matches found",
 }: DropdownSelectProps) {
   const resolvedAriaLabel = ariaLabel ?? label;
 
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [query, setQuery] = useState("");
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const listboxId = `${useId()}-listbox`;
+
+  // Focus the filter as soon as the searchable menu is positioned.
+  useEffect(() => {
+    if (!open || !searchable) return;
+    const frame = window.requestAnimationFrame(() => {
+      searchRef.current?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [open, searchable]);
+
+  const normalisedQuery = searchable ? normaliseSearch(query) : "";
+  const visibleOptions = normalisedQuery
+    ? (() => {
+        const matches = options.filter((option) =>
+          normaliseSearch(option.label).includes(normalisedQuery)
+        );
+        // Prefix matches first ("ma" → Maharashtra before Himachal).
+        return [
+          ...matches.filter((option) =>
+            normaliseSearch(option.label).startsWith(normalisedQuery)
+          ),
+          ...matches.filter(
+            (option) =>
+              !normaliseSearch(option.label).startsWith(normalisedQuery)
+          ),
+        ];
+      })()
+    : options;
+
+  const closeMenu = () => {
+    setOpen(false);
+    setQuery("");
+    setHighlightIndex(0);
+  };
+
+  const selectOption = (next: string) => {
+    onChange(next);
+    closeMenu();
+    triggerRef.current?.focus();
+  };
 
   const [coords, setCoords] = useState<{
     top: number;
@@ -264,11 +325,15 @@ export function DropdownSelect({
       }
 
       setOpen(false);
+      setQuery("");
+      setHighlightIndex(0);
     }
 
     function handleKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setOpen(false);
+        setQuery("");
+        setHighlightIndex(0);
       }
     }
 
@@ -310,8 +375,8 @@ export function DropdownSelect({
     createPortal(
       <div
         ref={menuRef}
-        role="listbox"
-        aria-label={resolvedAriaLabel}
+        role={searchable ? undefined : "listbox"}
+        aria-label={searchable ? undefined : resolvedAriaLabel}
         style={{
           position: "fixed",
           top: coords.top,
@@ -320,27 +385,120 @@ export function DropdownSelect({
           maxWidth: "calc(100vw - 16px)",
         }}
         className={cn(
-          "z-[1000] min-w-0 max-h-60 overflow-y-auto overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
+          "z-[1000] min-w-0 overflow-x-hidden animate-[dropdown-in_180ms_var(--ease-premium)]",
+          searchable
+            ? "flex max-h-72 flex-col overflow-y-hidden"
+            : "max-h-60 overflow-y-auto",
           isAccount
             ? "rounded-[6px] border border-[var(--account-border,#ebe7e0)] bg-[var(--account-surface,#ffffff)] py-1 shadow-[var(--account-shadow,0_1px_3px_rgba(0,0,0,0.12))]"
             : isLight
               ? "rounded-[6px] border border-neutral-200 bg-white py-1 shadow-lg"
-              : "dropdown-menu"
+              : "dropdown-menu",
+          searchable && "!pt-0"
         )}
       >
-        {options.map((option) => {
+        {searchable && (
+          <div
+            className={cn(
+              "shrink-0 border-b p-2",
+              isAccount
+                ? "border-[var(--account-border,#ebe7e0)]"
+                : isLight
+                  ? "border-neutral-200"
+                  : "border-white/10"
+            )}
+          >
+            <input
+              ref={searchRef}
+              type="text"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setHighlightIndex(0);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowDown") {
+                  event.preventDefault();
+                  setHighlightIndex((index) =>
+                    Math.min(index + 1, Math.max(visibleOptions.length - 1, 0))
+                  );
+                } else if (event.key === "ArrowUp") {
+                  event.preventDefault();
+                  setHighlightIndex((index) => Math.max(index - 1, 0));
+                } else if (event.key === "Enter") {
+                  event.preventDefault();
+                  const match = visibleOptions[highlightIndex];
+                  if (match) selectOption(match.value);
+                } else if (event.key === "Tab") {
+                  closeMenu();
+                }
+              }}
+              placeholder={searchPlaceholder}
+              aria-label={`Search ${resolvedAriaLabel ?? "options"}`}
+              aria-controls={listboxId}
+              aria-activedescendant={
+                visibleOptions[highlightIndex]
+                  ? `${listboxId}-${highlightIndex}`
+                  : undefined
+              }
+              role="combobox"
+              aria-expanded
+              aria-autocomplete="list"
+              autoComplete="off"
+              spellCheck={false}
+              className={cn(
+                "h-9 w-full rounded-[6px] border px-3 text-body-sm outline-none transition-colors",
+                isAccount
+                  ? "border-[var(--account-input-border,#e5e5e5)] bg-[var(--account-input-bg,#ffffff)] text-[var(--account-text,#171717)] placeholder:text-[var(--account-text-muted,#737373)] focus:border-[var(--account-accent,#f97316)]"
+                  : isLight
+                    ? "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-orange-500"
+                    : "border-white/20 bg-bg-tertiary text-text-primary placeholder:text-text-dimmed focus:border-orange-500"
+              )}
+            />
+          </div>
+        )}
+
+        <div
+          id={listboxId}
+          role={searchable ? "listbox" : undefined}
+          aria-label={searchable ? resolvedAriaLabel : undefined}
+          className={cn(searchable && "min-h-0 flex-1 overflow-y-auto py-1")}
+        >
+        {searchable && visibleOptions.length === 0 ? (
+          <p
+            className={cn(
+              "px-4 py-3 text-body-sm",
+              isAccount
+                ? "text-[var(--account-text-muted,#737373)]"
+                : isLight
+                  ? "text-neutral-500"
+                  : "text-text-dimmed"
+            )}
+          >
+            {emptySearchLabel}
+          </p>
+        ) : null}
+        {visibleOptions.map((option, index) => {
           const isActive = option.value === value;
+          const isHighlighted = searchable && index === highlightIndex;
 
           return (
             <button
               key={option.value || "__all__"}
+              id={`${listboxId}-${index}`}
+              ref={
+                isHighlighted
+                  ? (node) => node?.scrollIntoView({ block: "nearest" })
+                  : undefined
+              }
               type="button"
               role="option"
+              tabIndex={searchable ? -1 : undefined}
               aria-selected={isActive}
-              onClick={() => {
-                onChange(option.value);
-                setOpen(false);
-              }}
+              onMouseEnter={
+                searchable ? () => setHighlightIndex(index) : undefined
+              }
+              onClick={() => selectOption(option.value)}
               className={cn(
                 /**
                  * IMPORTANT:
@@ -368,13 +526,20 @@ export function DropdownSelect({
                         "dropdown-option hover:bg-orange-500/12 hover:text-orange-400",
                         isActive &&
                           "dropdown-option--active"
-                      )
+                      ),
+                isHighlighted &&
+                  (isAccount
+                    ? "bg-[var(--account-nav-active-bg,#fff3e8)] text-[var(--account-accent,#f97316)]"
+                    : isLight
+                      ? "bg-orange-500/10 text-orange-600"
+                      : "bg-orange-500/12 text-orange-400")
               )}
             >
               {option.label}
             </button>
           );
         })}
+        </div>
       </div>,
       portalParent
     );
@@ -432,9 +597,13 @@ export function DropdownSelect({
         aria-haspopup="listbox"
         aria-label={resolvedAriaLabel}
         aria-invalid={Boolean(error)}
-        onClick={() =>
-          setOpen((current) => !current)
-        }
+        onClick={() => {
+          if (open) {
+            closeMenu();
+          } else {
+            setOpen(true);
+          }
+        }}
         style={triggerStyle}
         className={cn(
           "flex h-9 items-center justify-between gap-2 whitespace-nowrap rounded-[6px] border px-3 text-body-sm font-medium transition-colors",

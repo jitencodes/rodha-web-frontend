@@ -23,7 +23,8 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ClampTooltip | `ClampTooltip.tsx` (line-clamp or single-line `truncate`; flips above/below on viewport space; portal tip) |
 | CountdownTimer | `CountdownTimer.tsx` |
 | Divider | `Divider.tsx` |
-| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light"`, `prefixIcon`, `error`; menu portaled to `document.body`) |
+| DropdownSelect | `DropdownSelect.tsx` (optional `variant?: "dark" \| "light" \| "account"`, `prefixIcon`, `error`; `searchable` adds a filter input (prefix matches first, ↑/↓/Enter); menu portaled) |
+| RichTextContent | `RichTextContent.tsx` (CMS editor HTML or plain text → sanitized, themed `.rich-text`; `variant?: "light" \| "account"`) |
 | BottomSheet | `BottomSheet.tsx` (mobile slide-up panel; portaled; body scroll lock) |
 | Input | `Input.tsx` (optional `variant?: "dark" \| "light"`; default dark) |
 | CounsellingCtaButton | `CounsellingCtaButton.tsx` |
@@ -193,7 +194,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | ContactForm | `ContactForm.tsx` (light/dark `variant`; +91 phone chrome matching counselling; prefix icons; stub submit) |
 | LeadCaptureForm | `LeadCaptureForm.tsx` (optional light variant, defaultExam, exam year, custom CTA — course Enquire Now) |
 | NewsletterSignup | `NewsletterSignup.tsx` |
-| StateSelectField | `StateSelectField.tsx` (loads `/api/states/dropdown`; wraps `DropdownSelect`) |
+| StateSelectField | `StateSelectField.tsx` (loads `/api/states/dropdown`; wraps searchable `DropdownSelect`) |
 
 ## Auth — `src/components/auth/`
 
@@ -285,6 +286,7 @@ After adding a reusable component, hook, util, type, or asset, update this inven
 | Module | File | Role |
 |--------|------|------|
 | constants | `constants.ts` | Site config, categories, trust metrics, value props |
+| rich-text | `rich-text.ts` | `toSafeRichHtml` (strips scripts / handlers / inline styles; external links open in a new tab), `htmlToPlainText` (cards, hero, SEO) |
 | api client | `api/client.ts`, `api/env.ts`, `api/types.ts`, `api/query.ts` | Shared `apiGet` / `apiGetOrNull` / `apiPost`, env, envelope |
 | api announcements | `api/modules/announcements/*` | Active announcements service + mapper |
 | api banners | `api/modules/banners/*` | Shared `mapWebsiteBanner` (video over image) |

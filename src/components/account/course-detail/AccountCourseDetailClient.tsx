@@ -13,6 +13,7 @@ import { CourseChangeCta } from "@/components/account/course-changes/CourseChang
 import { AccountCourseContentCard } from "@/components/account/course-detail/AccountCourseContentCard";
 import { AccountCourseDetailHeader } from "@/components/account/course-detail/AccountCourseDetailHeader";
 import { AccountCourseProgressCard } from "@/components/account/course-detail/AccountCourseProgressCard";
+import { RichTextContent } from "@/components/ui/RichTextContent";
 import { Skeleton } from "@/components/ui/Skeleton";
 import {
   DEFAULT_CONTENT_TYPE,
@@ -301,9 +302,11 @@ export function AccountCourseDetailClient() {
           <h2 className="font-montserrat text-[15px] font-bold text-[var(--account-text)]">
             Description
           </h2>
-          <p className="mt-2 text-body-sm leading-relaxed text-[var(--account-text-muted)] whitespace-pre-wrap">
-            {detail.syllabus}
-          </p>
+          <RichTextContent
+            html={detail.syllabus}
+            variant="account"
+            className="mt-2 text-body-sm"
+          />
         </section>
       ) : null}
 

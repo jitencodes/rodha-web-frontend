@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { FacultyIcon } from "@/lib/faculty-icons";
+import { htmlToPlainText } from "@/lib/rich-text";
 import { cn } from "@/lib/utils";
 import type { Course, Faculty } from "@/lib/types";
 
@@ -24,6 +25,7 @@ export function CourseHeroSection({
   className,
 }: CourseHeroSectionProps) {
   const highlights = course.highlights ?? [];
+  const plainDescription = htmlToPlainText(course.description);
 
   return (
     <div className={cn("relative", className)}>
@@ -55,9 +57,11 @@ export function CourseHeroSection({
         </p>
       )}
 
-      <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted line-clamp-2">
-        {course.description}
-      </p>
+      {plainDescription ? (
+        <p className="mt-3 max-w-2xl text-body leading-relaxed text-text-muted line-clamp-2">
+          {plainDescription}
+        </p>
+      ) : null}
 
       {highlights.length > 0 && (
         <ul className="mt-6 flex flex-wrap gap-3 md:gap-4">

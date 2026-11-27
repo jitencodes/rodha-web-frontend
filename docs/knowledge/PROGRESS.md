@@ -1,6 +1,6 @@
 # Progress Tracker
 
-**Last updated:** 2026-11-26 (pending package upgrade resume / cancel, invoice PDF polling)
+**Last updated:** 2026-11-27 (rich text descriptions, searchable state select, category slider card height)
 **Phase:** Phase 1 — Active Development
 
 Update this file after every meaningful implementation task.
@@ -8,6 +8,12 @@ Update this file after every meaningful implementation task.
 ---
 
 ## Completed
+
+- **Rich text descriptions, searchable state select, slider cards (2026-11-27):**
+  - **Descriptions:** the package description on `/courses/[slug]` and the course description (`syllabus`) on `/account/courses/:id` render as editor content through `RichTextContent` (paragraphs, lists, links, headings; website and account themes). Plain-text descriptions still render as paragraphs. The hardcoded "Check our demo classes for free" link is removed; admins add it inside the description. The hero snippet and `shortDescription` (cards, SEO) use `htmlToPlainText`.
+  - **State select:** `StateSelectField` (auth, guest checkout, checkout location, update state) uses `DropdownSelect searchable`: the filter input is focused on open, prefix matches come first, ↑/↓/Enter select.
+  - **Category courses slider:** carousel items stretch to the tallest card, so all cards have the same height and the pricing row sits at the bottom.
+  - **MBA copy:** courses badge "MBA Courses", title "Flagship Programs".
 
 - **Pending package upgrade + invoice PDF (2026-11-26):** per `docs/FE_INTEGRATION_PACKAGE_UPGRADE_PENDING_INVOICE.md` and the `Rodha_Package_Upgrade_Pending_Invoice_FE` Postman collection.
   - **Pending upgrade:** closing Razorpay leaves the upgrade PENDING and the API returns `pendingUpgrade` with `availableUpgrades: []`. Manage Packages keeps the card CTA ("Complete upgrade") and shows `PendingUpgradeNotice` (Complete payment / Cancel upgrade). `/account/packages/upgrade` shows the same panel instead of the options and skips the quote (it would 409). Resume → `/api/account/packages/upgrades/resume` → Razorpay → existing verify; 409 (session missing) leaves only Cancel. Cancel → `/api/account/packages/upgrades/cancel` → refresh, options return. Dismissing Razorpay in upgrade checkout now lands on the pending panel.

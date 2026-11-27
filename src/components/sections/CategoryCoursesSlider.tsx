@@ -177,11 +177,11 @@ export function CategoryCoursesSlider({
               return (
                 <div
                   key={course.id}
-                  className={`h-full min-w-0 shrink-0 snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
+                  className={`flex min-w-0 shrink-0 flex-col snap-start basis-full sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.75rem)/4)] reveal-child reveal-delay-${(index % 4) + 1}`}
                 >
                   <CourseCardV2
                     course={course}
-                    className="h-full bg-white"
+                    className="h-full flex-1 bg-white"
                     href={detailHref}
                     ctaHref={ctaHref}
                     ctaLabel={
